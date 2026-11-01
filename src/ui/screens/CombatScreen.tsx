@@ -1,9 +1,10 @@
-import { useState, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Tabs } from 'radix-ui';
 import { ActionRow } from '../components/ActionRow';
 import { AttackCard, FeatureCard, RuleCard, SpellCard } from '../components/cards';
 import { ConcentrationChip, EffectChip } from '../components/chips';
 import { CostBadge } from '../components/CostBadge';
+import { CastFooter } from '../components/CastFooter';
 import { EconomyBar } from '../components/EconomyBar';
 import { HpButtons, HpPanel, type HpKind } from '../components/HpControl';
 import { LastLogLine, LogList } from '../components/LogList';
@@ -26,6 +27,7 @@ import {
 } from '../fixtures/the-fool';
 import { useFixtureAction } from '../fixtures/useFixtureAction';
 import { signed, spellLevelLabel } from '../format';
+import { useDetail } from '../layout/detail-context';
 
 const { combat } = fool;
 const economy = combat.economy;
@@ -52,8 +54,6 @@ const TABS = [
   { value: 'items', label: 'Items' },
 ] as const;
 
-const faerieFire = spells.find((s) => s.id === fool.concentration.id);
-
 /**
  * Frame C (DESIGN.md §8). Tracks your own turn: what action, bonus action, reaction, and
  * movement you still have (no initiative order, D42). Mobile: one column, HP buttons and tabs
@@ -61,17 +61,34 @@ const faerieFire = spells.find((s) => s.id === fool.concentration.id);
  */
 export function CombatScreen() {
   const act = useFixtureAction();
-  const [detail, setDetail] = useState<ReactNode>(() =>
-    faerieFire ? <SpellCard spell={faerieFire} dc={fool.spellDc} links /> : null,
-  );
+  const { pin: setDetail } = useDetail();
 
   const pinSpell = (spell: SpellView) =>
-    setDetail(<SpellCard spell={spell} dc={fool.spellDc} links />);
+    setDetail(
+      <div className="flex flex-col gap-4">
+        <SpellCard spell={spell} dc={fool.spellDc} />
+        <CastFooter
+          key={spell.id}
+          spell={spell}
+          slots={fool.slots}
+          onCast={(level) => castSpell(spell, level)}
+        />
+      </div>,
+    );
   const pinAttack = (attack: AttackView) => setDetail(<AttackCard attack={attack} />);
   const pinFeature = (feature: FeatureView) => setDetail(<FeatureCard feature={feature} />);
   const castSpell = (spell: SpellView, level: number) =>
     act(level > 0 ? `Cast ${spell.name} (L${level} slot)` : `Cast ${spell.name}`);
   const applyHp = (kind: HpKind, amount: number) => act(`${HP_LABEL[kind]} ${amount}`);
+  const ruleFooter = (name: string) => (
+    <button
+      type="button"
+      onClick={() => act(name)}
+      className="min-h-14 w-full rounded-btn bg-accent font-semibold text-bg"
+    >
+      Take {name}
+    </button>
+  );
 
   const spellRow = (spell: SpellView) => (
     <SpellRow
@@ -150,7 +167,7 @@ export function CombatScreen() {
   );
 
   return (
-    <div className="mx-auto grid max-w-screen-2xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-6 lg:px-6 xl:grid-cols-[minmax(0,1fr)_24rem]">
+    <div className="mx-auto grid max-w-screen-2xl gap-4 px-4 py-4 lg:px-6 @min-[900px]:grid-cols-[minmax(0,1fr)_20rem] @min-[1100px]:gap-6 @min-[1100px]:grid-cols-[minmax(0,1fr)_24rem]">
       <h1 className="sr-only">Combat</h1>
 
       <div className="flex min-w-0 flex-col gap-4">
@@ -182,7 +199,7 @@ export function CombatScreen() {
           />
         </section>
 
-        <div className="lg:hidden">
+        <div className="@min-[900px]:hidden">
           <HpButtons onApply={applyHp} />
         </div>
 
@@ -215,16 +232,15 @@ export function CombatScreen() {
                   <Preview
                     title={rule.name}
                     content={<RuleCard name={rule.name} lines={rule.lines} />}
-                    onPin={() => setDetail(<RuleCard name={rule.name} lines={rule.lines} />)}
-                    sheetFooter={
-                      <button
-                        type="button"
-                        onClick={() => act(rule.name)}
-                        className="min-h-14 w-full rounded-btn bg-accent font-semibold text-bg"
-                      >
-                        Take {rule.name}
-                      </button>
+                    onPin={() =>
+                      setDetail(
+                        <div className="flex flex-col gap-4">
+                          <RuleCard name={rule.name} lines={rule.lines} />
+                          {ruleFooter(rule.name)}
+                        </div>,
+                      )
                     }
+                    sheetFooter={ruleFooter(rule.name)}
                   >
                     {({ ref, props }) => (
                       <button
@@ -318,22 +334,17 @@ export function CombatScreen() {
           </Tabs.Content>
         </Tabs.Root>
 
-        <div className="flex flex-col gap-3 lg:hidden">
+        <div className="flex flex-col gap-3 @min-[900px]:hidden">
           {effects}
           <LastLogLine entries={fool.log} onUndo={() => act('Undo')} />
         </div>
       </div>
 
-      <aside aria-label="Status and log" className="hidden min-w-0 flex-col gap-5 lg:flex">
+      <aside
+        aria-label="Status and log"
+        className="hidden min-w-0 flex-col gap-5 @min-[900px]:flex"
+      >
         <HpPanel hp={fool.hp} onApply={applyHp} />
-        {detail && (
-          <section
-            aria-label="Pinned detail"
-            className="rounded-card border border-border bg-surface p-3"
-          >
-            {detail}
-          </section>
-        )}
         {effects}
         <section className="flex flex-col gap-2">
           <div className="flex items-center justify-between">

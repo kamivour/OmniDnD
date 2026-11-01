@@ -1,31 +1,49 @@
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { cx } from '../cx';
 import { useCharacterBase } from '../hooks/useCharacterBase';
 import { NAV, NAV_DIVIDER_BEFORE, navPath } from './nav';
 
 const item =
-  'flex min-h-11 items-center gap-3 rounded-btn px-3 transition-colors duration-(--omni-motion-hover) justify-center lg:justify-start';
+  'flex min-h-11 items-center gap-3 rounded-btn px-3 transition-colors duration-(--omni-motion-hover) justify-center';
 
 /** 640–1023 px: 64 px icon rail. ≥ 1024 px: 220 px with labels. */
 export function SideNav() {
   const base = useCharacterBase();
+  const [collapsed, setCollapsed] = useState(false);
+  const labels = collapsed ? 'sr-only' : 'sr-only lg:not-sr-only';
   return (
     <nav
       aria-label="Main"
-      className="sticky top-0 hidden h-dvh w-16 shrink-0 flex-col gap-1 border-r border-border bg-bg p-2 sm:flex lg:w-55"
+      className={cx(
+        'sticky top-0 hidden h-dvh w-16 shrink-0 flex-col gap-1 overflow-y-auto border-r border-border bg-bg p-2 sm:flex',
+        !collapsed && 'lg:w-55',
+      )}
     >
-      <p className="mb-1 hidden px-2 py-1 font-display text-lg text-accent lg:block">OmniDnD</p>
-      <p aria-hidden className="mb-1 py-1 text-center font-display text-lg text-accent lg:hidden">
+      {!collapsed && (
+        <p className="mb-1 hidden px-2 py-1 font-display text-lg text-accent lg:block">OmniDnD</p>
+      )}
+      <p
+        aria-hidden
+        className={cx(
+          'mb-1 py-1 text-center font-display text-lg text-accent',
+          !collapsed && 'lg:hidden',
+        )}
+      >
         O
       </p>
       <Link
         to="/"
         title="All campaigns"
-        className={cx(item, 'mb-2 text-text-muted hover:bg-surface hover:text-text')}
+        className={cx(
+          item,
+          !collapsed && 'lg:justify-start',
+          'mb-2 text-text-muted hover:bg-surface hover:text-text',
+        )}
       >
         <ChevronLeft size={20} aria-hidden />
-        <span className="sr-only lg:not-sr-only">All campaigns</span>
+        <span className={labels}>All campaigns</span>
       </Link>
       {NAV.map(({ to, label, icon: Glyph }) => (
         <div key={to} className="contents">
@@ -37,6 +55,7 @@ export function SideNav() {
             className={({ isActive }) =>
               cx(
                 item,
+                !collapsed && 'lg:justify-start',
                 isActive
                   ? 'bg-surface-2 text-accent'
                   : 'text-text-muted hover:bg-surface hover:text-text',
@@ -44,10 +63,25 @@ export function SideNav() {
             }
           >
             <Glyph size={20} aria-hidden />
-            <span className="sr-only lg:not-sr-only">{label}</span>
+            <span className={labels}>{label}</span>
           </NavLink>
         </div>
       ))}
+      <button
+        type="button"
+        aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
+        onClick={() => setCollapsed(!collapsed)}
+        className="mt-auto hidden min-h-11 items-center justify-center gap-2 rounded-btn text-text-muted hover:bg-surface hover:text-text lg:flex"
+      >
+        {collapsed ? (
+          <PanelLeftOpen size={20} aria-hidden />
+        ) : (
+          <>
+            <PanelLeftClose size={20} aria-hidden />
+            <span>Collapse</span>
+          </>
+        )}
+      </button>
     </nav>
   );
 }

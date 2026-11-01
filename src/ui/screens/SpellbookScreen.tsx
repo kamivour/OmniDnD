@@ -9,6 +9,7 @@ import { cx } from '../cx';
 import { fool, spells, type Cost, type SpellView } from '../fixtures/the-fool';
 import { useFixtureAction } from '../fixtures/useFixtureAction';
 import { signed } from '../format';
+import { useDetail } from '../layout/detail-context';
 import { SPELL_TYPE_ORDER, SPELL_TYPES, type SpellType } from '../spellTypes';
 
 /** Bard 3 limits (PHB Bard table). Hard-coded for the static frame; the engine owns them from M2. */
@@ -61,9 +62,7 @@ function matches(spell: SpellView, f: Filters): boolean {
 export function SpellbookScreen() {
   const act = useFixtureAction();
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
-  const [pinned, setPinned] = useState<SpellView | undefined>(() =>
-    spells.find((s) => s.id === fool.concentration.id),
-  );
+  const { pin } = useDetail();
 
   const set = <K extends keyof Filters>(key: K, value: Filters[K]) =>
     setFilters((f) => ({ ...f, [key]: value }));
@@ -72,6 +71,19 @@ export function SpellbookScreen() {
 
   const castSpell = (spell: SpellView, level: number) =>
     act(level > 0 ? `Cast ${spell.name} (L${level} slot)` : `Cast ${spell.name}`);
+
+  const setPinned = (spell: SpellView) =>
+    pin(
+      <div className="flex flex-col gap-4">
+        <SpellCard spell={spell} dc={fool.spellDc} />
+        <CastFooter
+          key={spell.id}
+          spell={spell}
+          slots={fool.slots}
+          onCast={(level) => castSpell(spell, level)}
+        />
+      </div>,
+    );
 
   const levels = [
     ...new Set([0, ...spells.map((s) => s.level), ...fool.slots.map((s) => s.level)]),
@@ -82,7 +94,7 @@ export function SpellbookScreen() {
   const filtered = JSON.stringify(filters) !== JSON.stringify(NO_FILTERS);
 
   return (
-    <div className="mx-auto grid max-w-screen-2xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-6 lg:px-6">
+    <div className="mx-auto max-w-screen-2xl px-4 py-4 lg:px-6">
       <div className="flex min-w-0 flex-col gap-4">
         <header className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
           <h1 className="font-display text-lg text-text">Spells</h1>
@@ -223,24 +235,6 @@ export function SpellbookScreen() {
           );
         })}
       </div>
-
-      <aside aria-label="Pinned spell" className="hidden lg:block">
-        <div className="sticky top-28 rounded-card border border-border bg-surface p-3">
-          {pinned ? (
-            <div className="flex flex-col gap-4">
-              <SpellCard spell={pinned} dc={fool.spellDc} />
-              <CastFooter
-                key={pinned.id}
-                spell={pinned}
-                slots={fool.slots}
-                onCast={(level) => castSpell(pinned, level)}
-              />
-            </div>
-          ) : (
-            <p className="text-text-muted">Click a spell to pin it here.</p>
-          )}
-        </div>
-      </aside>
     </div>
   );
 }

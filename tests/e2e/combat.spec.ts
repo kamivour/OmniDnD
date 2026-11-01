@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/characters/the-fool/combat');
@@ -64,7 +64,7 @@ test.describe('desktop', () => {
     await row.hover();
     await expect(page.getByRole('tooltip')).toContainText('3d6 psychic');
     await row.click();
-    await expect(page.getByRole('region', { name: 'Pinned detail' })).toContainText(
+    await expect(page.getByRole('complementary', { name: 'Pinned detail' })).toContainText(
       'Dissonant Whispers',
     );
   });

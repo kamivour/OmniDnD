@@ -1,6 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
 const PORT = 4173;
+const ORIGIN = `http://127.0.0.1:${PORT}`;
 
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -9,7 +10,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: 'list',
   use: {
-    baseURL: `http://localhost:${PORT}`,
+    baseURL: ORIGIN,
     browserName: 'chromium',
     trace: 'on-first-retry',
   },
@@ -25,8 +26,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `npm run build && npm run preview -- --port ${PORT} --strictPort`,
-    url: `http://localhost:${PORT}`,
+    command: `npm run build && npm run preview -- --host 127.0.0.1 --port ${PORT} --strictPort`,
+    url: ORIGIN,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

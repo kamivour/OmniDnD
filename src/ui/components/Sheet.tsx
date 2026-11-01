@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 import { Dialog } from 'radix-ui';
 import { X } from 'lucide-react';
 import { cx } from '../cx';
@@ -11,18 +11,35 @@ interface SheetProps {
   description?: ReactNode;
   children: ReactNode;
   className?: string;
+  placement?: 'sheet' | 'detail';
+  onOpenAutoFocus?: ComponentProps<typeof Dialog.Content>['onOpenAutoFocus'];
+  onCloseAutoFocus?: ComponentProps<typeof Dialog.Content>['onCloseAutoFocus'];
 }
 
 /** Bottom sheet on mobile, centered dialog from 640 px. Esc and backdrop close it. */
-export function Sheet({ open, onOpenChange, title, description, children, className }: SheetProps) {
+export function Sheet({
+  open,
+  onOpenChange,
+  title,
+  description,
+  children,
+  className,
+  placement = 'sheet',
+  onOpenAutoFocus,
+  onCloseAutoFocus,
+}: SheetProps) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-bg/70" />
         <Dialog.Content
+          onOpenAutoFocus={onOpenAutoFocus}
+          onCloseAutoFocus={onCloseAutoFocus}
           className={cx(
             'omni-sheet fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-y-auto rounded-t-card border-t border-border bg-surface-2 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-pop',
-            'sm:inset-x-auto sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:w-96 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-card sm:border',
+            placement === 'detail'
+              ? 'sm:inset-y-0 sm:right-0 sm:left-auto sm:max-h-dvh sm:w-90 sm:rounded-none sm:border-l'
+              : 'sm:inset-x-auto sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:w-96 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-card sm:border',
             className,
           )}
         >

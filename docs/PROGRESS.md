@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M3 — Shell, HUD, persistence.
-**Next up:** M3 Layouts: desktop sidebar + detail panel, tablet drawer, mobile bottom nav.
+**Next up:** M3 routes: all screens routed, with Phase 2+ placeholders.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -80,7 +80,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Unit test: full acceptance scenario (TEST_CHARACTER §6)
 
 ### M3 — Shell, HUD, persistence
-- [ ] Layouts: desktop sidebar + detail panel, tablet drawer, mobile bottom nav
+- [x] Layouts: desktop sidebar + detail panel, tablet drawer, mobile bottom nav
 - [ ] All screens routed; Phase 2+ screens show "Coming in Phase N"
 - [ ] Global HUD wired to store; adjust popovers
 - [ ] Dexie save after each command; load on start
@@ -140,6 +140,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-02 — M3 layouts: shared collapsible Details panel, desktop sidebar collapse, tablet right drawer (touch/mouse), mobile sheets/nav, focus restoration and container-sized workspaces. 224 unit tests; 69 browser checks pass with optional real-HTTP forwarding after Windows socket failures (D63–D64). Manual checks in MANUAL_QA.md. Next: routes and phase placeholders.
 
 - 2026-11-02 — Change tracking: `docs/CHANGELOG.md` (timestamped, plain language, backfilled from this log) and the first git commit (M0–M2). AGENTS workflow now adds a changelog entry and one commit per task (D62). Next: M3 layouts.
 - 2026-11-02 — M2 done: `src/engine/commands/acceptance.test.ts` runs TEST_CHARACTER §6 steps 1–16 in order on one session (combat, concentration swap, Cutting Words, reaction override, bonus-action spell rule, expiry, both rests, Hit Dice cap, undo, manual slot fix, seed checks). §6 steps 1–3 reworded for D41 (concentration only, no effect on you) and D42 (no initiative). Rest previews and "Choose Pass" are UI steps (M5, M6). 224 tests. Next: M3 layouts.

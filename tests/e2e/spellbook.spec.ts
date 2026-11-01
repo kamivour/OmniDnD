@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/characters/the-fool/spells');
@@ -62,7 +62,7 @@ test.describe('desktop', () => {
 
   test('click pins the spell with a slot picker', async ({ page }) => {
     await row(page, 'Healing Word').click();
-    const panel = page.getByRole('complementary', { name: 'Pinned spell' });
+    const panel = page.getByRole('complementary', { name: 'Pinned detail' });
     await expect(panel).toContainText('1d4 + 5 HP');
     await expect(panel.getByRole('button', { name: 'Cast Healing Word (L1)' })).toBeVisible();
   });

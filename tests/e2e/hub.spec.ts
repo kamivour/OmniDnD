@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('landing lists campaigns and opens a character', async ({ page }) => {
   await page.goto('/');

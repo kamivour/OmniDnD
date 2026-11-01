@@ -40,6 +40,7 @@ interface PreviewProps {
  */
 export function Preview({ title, content, sheetFooter, onPin, children }: PreviewProps) {
   const popover = useMediaQuery(POPOVER_QUERY);
+  const sidebar = useMediaQuery('(min-width: 640px)');
   const reduced = useReducedMotion();
   const [open, setOpen] = useState(false);
 
@@ -70,7 +71,7 @@ export function Preview({ title, content, sheetFooter, onPin, children }: Previe
   });
 
   const onClick = () => {
-    if (popover) {
+    if (sidebar && onPin) {
       setOpen(false);
       onPin?.();
     } else {
@@ -102,7 +103,7 @@ export function Preview({ title, content, sheetFooter, onPin, children }: Previe
           </div>
         </FloatingPortal>
       )}
-      {!popover && (
+      {!popover && !(sidebar && onPin) && (
         <Sheet open={open} onOpenChange={setOpen} title={title}>
           {content}
           {sheetFooter && <div className="mt-4">{sheetFooter}</div>}

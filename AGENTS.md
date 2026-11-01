@@ -47,6 +47,8 @@ npm run build       # typecheck + production build to dist/
 npm run import:srd  # regenerate data/srd/ from the pinned SRD source (--from <dir> for a local copy)
 ```
 
+If Windows intermittently denies Chromium loopback sockets (`ERR_NETWORK_ACCESS_DENIED`, Winsock 10013), run browser checks with `OMNI_E2E_FORWARD_HTTP=1`. In PowerShell: `$env:OMNI_E2E_FORWARD_HTTP='1'; npm run e2e`. This forwards actual local server responses through Playwright's request client; it does not mock the app. Native browser networking and offline operation still need separate checks. Default tests use normal browser HTTP.
+
 First run on a new machine: `npm install` then `npx playwright install chromium`.
 
 Styling: only token classes exist (`bg-surface`, `text-accent`, `rounded-card`, `text-hp`, ...). Tailwind's default palette is disabled. Tokens live in `src/theme/tokens.css`; the Tailwind mapping is in `src/index.css`.

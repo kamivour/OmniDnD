@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 
 async function expectNoHorizontalScroll(page: Page) {
   const overflow = await page.evaluate(

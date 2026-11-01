@@ -4,6 +4,15 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-02 03:18 — Responsive shell and shared Details
+
+- Desktop navigation collapses to icons. Selected details open in one shared panel and remain available when you switch screens.
+- Tablets open details in a drawer on the right, including spell slot choices and action buttons. Phones keep their bottom navigation and sheets.
+- Layouts adapt when Details reduces the available space. Closing details restores keyboard focus.
+- Added `docs/MANUAL_QA.md` with checks for phone, tablet, desktop, keyboard, and normal browser loading.
+- Validation: 224 unit tests and 69 browser checks pass; typecheck, lint, and production build pass. Windows intermittently denies Chromium sockets, so browser checks use an optional real-server HTTP forwarder. Normal networking remains a manual check.
+- Next: route the remaining screens and label future-phase placeholders.
+
 ## 2026-11-02 02:59 — Changelog and git history
 
 - Added this changelog.

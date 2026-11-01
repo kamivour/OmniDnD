@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Plus } from 'lucide-react';
 import { AttackCard, FeatureCard, ResourceCard, SpellCard } from '../components/cards';
 import { ConcentrationChip, EffectChip } from '../components/chips';
@@ -10,6 +10,7 @@ import { SectionLabel } from '../components/SectionLabel';
 import { attacks, features, fool, spells } from '../fixtures/the-fool';
 import { useFixtureAction } from '../fixtures/useFixtureAction';
 import { signed } from '../format';
+import { useDetail } from '../layout/detail-context';
 
 /** TEST_CHARACTER §4. Hard-coded for the static frame; computed by the engine from M2. */
 const PASSIVES = [
@@ -127,14 +128,14 @@ const RESOURCE_GROUPS: { title: string; items: Resource[] }[] = [
  */
 export function DashboardScreen() {
   const act = useFixtureAction();
-  const [detail, setDetail] = useState<ReactNode>(() => QUICK[0]?.card ?? null);
+  const { pin: setDetail } = useDetail();
 
   return (
-    <div className="mx-auto grid max-w-screen-2xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-6 lg:px-6">
+    <div className="mx-auto max-w-screen-2xl px-4 py-4 lg:px-6">
       <h1 className="sr-only">Home</h1>
 
       <div className="flex min-w-0 flex-col gap-6">
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 @min-[680px]:grid-cols-2">
           <section aria-label="Resources" className="flex flex-col gap-4">
             {RESOURCE_GROUPS.map((g) => (
               <div key={g.title} className="flex flex-col gap-1">
@@ -195,7 +196,7 @@ export function DashboardScreen() {
 
         <section className="flex flex-col gap-2">
           <SectionLabel>Quick access</SectionLabel>
-          <ul className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <ul className="grid grid-cols-2 gap-2 @min-[640px]:grid-cols-4">
             {QUICK.map((q) => (
               <li key={q.id}>
                 <Preview title={q.name} content={q.card} onPin={() => setDetail(q.card)}>
@@ -221,7 +222,7 @@ export function DashboardScreen() {
 
         <section className="flex flex-col gap-2">
           <SectionLabel>Abilities</SectionLabel>
-          <ul className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+          <ul className="grid grid-cols-3 gap-2 @min-[640px]:grid-cols-6">
             {fool.abilities.map((a) => (
               <li
                 key={a.key}
@@ -245,12 +246,6 @@ export function DashboardScreen() {
 
         <LastLogLine entries={fool.log} onUndo={() => act('Undo')} />
       </div>
-
-      <aside aria-label="Pinned detail" className="hidden lg:block">
-        <div className="sticky top-28 rounded-card border border-border bg-surface p-3">
-          {detail ?? <p className="text-text-muted">Click an item to pin it here.</p>}
-        </div>
-      </aside>
     </div>
   );
 }
