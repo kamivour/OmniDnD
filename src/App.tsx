@@ -32,6 +32,10 @@ export function App() {
               path="settings"
               element={<PlaceholderScreen title="Settings" milestone="M3" />}
             />
+            <Route
+              path="reference/credits"
+              element={<PlaceholderScreen title="Credits" milestone="M3" />}
+            />
             <Route path="*" element={<PlaceholderScreen title="Not found" />} />
           </Route>
           <Route path="characters/:characterId" element={<AppFrame />}>
@@ -42,9 +46,19 @@ export function App() {
               <Route
                 key={n.to}
                 path={n.to}
-                element={<PlaceholderScreen title={n.label} milestone={n.milestone ?? 'later'} />}
+                element={
+                  <PlaceholderScreen
+                    title={n.label}
+                    milestone={n.milestone ?? 'later'}
+                    phase={n.phase}
+                  />
+                }
               />
             ))}
+            <Route
+              path="reference/credits"
+              element={<PlaceholderScreen title="Credits" milestone="M3" />}
+            />
             <Route path="*" element={<PlaceholderScreen title="Not found" />} />
           </Route>
         </Routes>

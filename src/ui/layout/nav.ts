@@ -4,6 +4,7 @@ import {
   Compass,
   House,
   Library,
+  PawPrint,
   ScrollText,
   Settings,
   Sparkles,
@@ -20,6 +21,7 @@ export interface NavItem {
   icon: LucideIcon;
   /** Milestone that builds the real screen. Undefined = built (key frame). */
   milestone?: string;
+  phase?: 2 | 3 | 4;
 }
 
 /** Character screens in sidebar order (DESIGN.md Frame A). The divider sits before Inventory. */
@@ -29,9 +31,17 @@ export const NAV: NavItem[] = [
   { to: 'spells', label: 'Spells', short: 'Spells', icon: Sparkles },
   { to: 'combat', label: 'Combat', short: 'Combat', icon: Swords },
   { to: 'explore', label: 'Explore', short: 'Explore', icon: Compass, milestone: 'M7' },
-  { to: 'inventory', label: 'Inventory', short: 'Inv', icon: Backpack, milestone: 'M9' },
-  { to: 'features', label: 'Features', short: 'Features', icon: Star, milestone: 'M9' },
-  { to: 'journal', label: 'Journal', short: 'Journal', icon: BookOpen, milestone: 'M12' },
+  { to: 'inventory', label: 'Inventory', short: 'Inv', icon: Backpack, milestone: 'M9', phase: 2 },
+  { to: 'features', label: 'Features', short: 'Features', icon: Star, milestone: 'M9', phase: 2 },
+  {
+    to: 'companions',
+    label: 'Companions',
+    short: 'Companions',
+    icon: PawPrint,
+    milestone: 'M12',
+    phase: 2,
+  },
+  { to: 'journal', label: 'Journal', short: 'Journal', icon: BookOpen, milestone: 'M12', phase: 2 },
   { to: 'reference', label: 'Reference', short: 'Ref', icon: Library, milestone: 'M3' },
   { to: 'settings', label: 'Settings', short: 'Settings', icon: Settings, milestone: 'M3' },
 ];

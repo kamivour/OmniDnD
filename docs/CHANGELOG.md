@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-02 03:20 — All screens have routes
+
+- Added Companions to the sidebar and mobile More menu, plus routes for Credits.
+- Inventory, Features, Companions, and Journal clearly say "Coming in Phase 2". Remaining Phase 1 placeholders name their milestone.
+- Validation: 224 unit tests and 47 focused browser checks pass; typecheck, lint, and build pass.
+- Manual check: open Companions from navigation, and confirm future screens show their phase rather than a broken page.
+- Next: connect the global HUD to real character state and engine commands.
+
 ## 2026-11-02 03:18 — Responsive shell and shared Details
 
 - Desktop navigation collapses to icons. Selected details open in one shared panel and remain available when you switch screens.
