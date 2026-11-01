@@ -2,9 +2,9 @@
 
 What changed, newest first, in plain language. One entry per finished task, written when its git commit is made. Times are local (UTC+7).
 
-Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 03:00) there is no git history for them.
+Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
-## 2026-11-02 03:00 — Changelog and git history
+## 2026-11-02 02:59 — Changelog and git history
 
 - Added this changelog.
 - First git commit: everything built so far (M0 to M2).
