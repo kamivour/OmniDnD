@@ -27,7 +27,7 @@ export function PipStepper({
 }: PipStepperProps) {
   return (
     <span className={cx('inline-flex shrink-0 items-center gap-2', className)}>
-      <StepButton label={`Use one: ${label}`} onClick={onUse}>
+      <StepButton label={`Use one: ${label}`} onClick={onUse} disabled={used >= max}>
         −
       </StepButton>
       <span className="flex w-28 items-center justify-center gap-2">
@@ -36,7 +36,7 @@ export function PipStepper({
           {max - used}/{max}
         </span>
       </span>
-      <StepButton label={`Restore one: ${label}`} onClick={onRestore}>
+      <StepButton label={`Restore one: ${label}`} onClick={onRestore} disabled={used <= 0}>
         +
       </StepButton>
     </span>
@@ -47,17 +47,20 @@ function StepButton({
   label,
   onClick,
   children,
+  disabled,
 }: {
   label: string;
   onClick: () => void;
   children: string;
+  disabled: boolean;
 }) {
   return (
     <button
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="hover-lift grid size-11 shrink-0 place-items-center rounded-btn border border-border bg-surface text-text"
+      disabled={disabled}
+      className="hover-lift grid size-11 shrink-0 place-items-center rounded-btn border border-border bg-surface text-text disabled:opacity-40"
     >
       {children}
     </button>

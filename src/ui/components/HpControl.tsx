@@ -111,12 +111,18 @@ function NumberPadSheet({
       description="Enter the amount the DM or your dice give you."
     >
       {/* Remount per open so the pad starts empty. */}
-      {kind && <NumberPad key={kind} kind={kind} onApply={(n) => onApply(kind, n)} />}
+      {kind && <HpNumberPad key={kind} kind={kind} onApply={(n) => onApply(kind, n)} />}
     </Sheet>
   );
 }
 
-function NumberPad({ kind, onApply }: { kind: HpKind; onApply: (amount: number) => void }) {
+export function HpNumberPad({
+  kind,
+  onApply,
+}: {
+  kind: HpKind;
+  onApply: (amount: number) => void;
+}) {
   const [digits, setDigits] = useState('');
   const amount = Number(digits || '0');
   const press = (d: string) => setDigits((s) => (s.length < 3 ? (s + d).replace(/^0+/, '') : s));

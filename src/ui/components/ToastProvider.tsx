@@ -37,8 +37,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <button
                 type="button"
                 onClick={() => {
-                  toast.onUndo?.();
                   setToast(null);
+                  toast.onUndo?.();
                 }}
                 className="min-h-11 rounded-btn px-3 font-semibold text-accent hover:bg-surface"
               >

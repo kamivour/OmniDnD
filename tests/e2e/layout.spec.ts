@@ -98,8 +98,9 @@ for (const touch of [false, true]) {
       await trigger.press('Enter');
       await expect(drawer).toBeVisible();
       await expect(drawer.getByRole('button', { name: 'Close', exact: true })).toBeFocused();
-      if (touch) await page.touchscreen.tap(120, 200);
-      else await page.mouse.click(120, 200);
+      const backdrop = page.getByTestId('sheet-backdrop');
+      if (touch) await backdrop.tap({ position: { x: 120, y: 200 } });
+      else await backdrop.click({ position: { x: 120, y: 200 } });
       await expect(drawer).toBeHidden();
       await expect(trigger).toBeFocused();
 

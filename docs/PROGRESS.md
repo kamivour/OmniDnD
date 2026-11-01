@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M3 — Shell, HUD, persistence.
-**Next up:** M3 global HUD wired to the store, with adjust popovers.
+**Next up:** M3 Dexie save after each command and load on start.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -82,7 +82,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ### M3 — Shell, HUD, persistence
 - [x] Layouts: desktop sidebar + detail panel, tablet drawer, mobile bottom nav
 - [x] All screens routed; Phase 2+ screens show "Coming in Phase N"
-- [ ] Global HUD wired to store; adjust popovers
+- [x] Global HUD wired to store; adjust popovers
 - [ ] Dexie save after each command; load on start
 - [ ] Campaigns hub (live): list campaigns + characters, seed #273 with The Fool, create blank, duplicate, delete, import/export JSON
 - [ ] Campaign Setup (Phase 1 part, live): leveling, HP method, ability method. New character entry follows these methods
@@ -140,6 +140,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-02 — M3 live HUD: validated seed loader and Zustand command store; derived stats, HP/slot/resource adjustments, basic conditions/effects, warnings, command notes, toast Undo and focus restoration (D65). 234 unit tests and 108 browser checks pass; typecheck, lint and build pass. Manual HUD QA added. Next: Dexie persistence; other screen bodies remain static until M4–M6.
 
 - 2026-11-02 — M3 routes: added Companions to sidebar/More, Credits aliases, and explicit future-phase notices. All navigation screens are routed. 224 unit tests and 47 focused browser checks pass; typecheck, lint and build pass. Next: live HUD and shared command store.
 

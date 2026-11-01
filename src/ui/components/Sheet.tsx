@@ -31,7 +31,7 @@ export function Sheet({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-bg/70" />
+        <Dialog.Overlay data-testid="sheet-backdrop" className="fixed inset-0 z-40 bg-bg/70" />
         <Dialog.Content
           onOpenAutoFocus={onOpenAutoFocus}
           onCloseAutoFocus={onCloseAutoFocus}

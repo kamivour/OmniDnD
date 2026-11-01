@@ -4,6 +4,15 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-02 03:33 — Live HUD and command store
+
+- The HUD now shows The Fool's saved seed: HP 11/19, level 1 slots 0/4, level 2 slots 2/2, and Bardic Inspiration 3/5. Stats come from the rules engine.
+- Tap HP, slots, or class resources to adjust them. Changes are logged and undoable. Temp HP replacement warns before applying; Cancel keeps the old value.
+- AC, initiative, and speed show their calculation parts. The status control handles basic conditions, 2014 exhaustion, and ending effects. Value overrides wait for M7.
+- Undo keeps its confirmation message. Closing warning dialogs returns keyboard focus. The tablet backdrop test now waits for an actionable backdrop rather than racing its listener.
+- Validation: 234 unit tests and 108 browser checks pass, with no retries in the final run. Typecheck, lint, and production build pass. Browser tests use the optional real-HTTP forwarder on this host.
+- Manual checks are in `docs/MANUAL_QA.md`. Saving is next: HUD changes currently reset on refresh. Dashboard, Spellbook, and Combat content stays static until its scheduled live milestone.
+
 ## 2026-11-02 03:20 — All screens have routes
 
 - Added Companions to the sidebar and mobile More menu, plus routes for Credits.
