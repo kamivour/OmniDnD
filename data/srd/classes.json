@@ -1,0 +1,1498 @@
+[
+  {
+    "kind": "class",
+    "id": "class.barbarian",
+    "name": "Barbarian",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d12",
+    "saves": [
+      "STR",
+      "CON"
+    ],
+    "subclassLevel": 3,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.barbarian.rage"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.barbarian.unarmored-defense"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.barbarian.reckless-attack"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.barbarian.danger-sense"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.barbarian.primal-path"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.barbarian.ability-score-improvement"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.barbarian.extra-attack"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.barbarian.fast-movement"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.barbarian.primal-path-improvement"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.barbarian.feral-instinct"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.barbarian.ability-score-improvement"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.barbarian.brutal-critical"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.barbarian.primal-path-improvement"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.barbarian.relentless-rage"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.barbarian.ability-score-improvement"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.barbarian.brutal-critical"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.barbarian.primal-path-improvement"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.barbarian.persistent-rage"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.barbarian.ability-score-improvement"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.barbarian.brutal-critical"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.barbarian.indomitable-might"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.barbarian.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.barbarian.primal-champion"
+      }
+    ]
+  },
+  {
+    "kind": "class",
+    "id": "class.bard",
+    "name": "Bard",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d8",
+    "saves": [
+      "DEX",
+      "CHA"
+    ],
+    "spellcasting": {
+      "ability": "CHA",
+      "progression": "full",
+      "cantripsKnown": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "spellsKnown": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        15,
+        16,
+        18,
+        19,
+        19,
+        20,
+        22,
+        22,
+        22
+      ],
+      "ritual": "known"
+    },
+    "subclassLevel": 3,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.bard.spellcasting"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.bard.bardic-inspiration"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.bard.jack-of-all-trades"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.bard.song-of-rest"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.bard.expertise"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.bard.college"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.bard.ability-score-improvement"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.bard.bardic-inspiration"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.bard.font-of-inspiration"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.bard.countercharm"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.bard.college-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.bard.ability-score-improvement"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.bard.song-of-rest"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.bard.expertise"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.bard.bardic-inspiration"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.bard.magical-secrets"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.bard.ability-score-improvement"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.bard.song-of-rest"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.bard.magical-secrets"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.bard.college-improvement"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.bard.bardic-inspiration"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.bard.ability-score-improvement"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.bard.song-of-rest"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.bard.magical-secrets"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.bard.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.bard.superior-inspiration"
+      }
+    ]
+  },
+  {
+    "kind": "class",
+    "id": "class.cleric",
+    "name": "Cleric",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d8",
+    "saves": [
+      "WIS",
+      "CHA"
+    ],
+    "spellcasting": {
+      "ability": "WIS",
+      "progression": "full",
+      "cantripsKnown": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "ritual": "prepared"
+    },
+    "subclassLevel": 1,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.spellcasting"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.divine-domain"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.domain-spells"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.channel-divinity"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.channel-divinity-turn-undead"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.divine-domain-improvement"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.cleric.domain-spells"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.cleric.ability-score-improvement"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.cleric.domain-spells"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.cleric.destroy-undead"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.channel-divinity"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.divine-domain-improvement"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.cleric.domain-spells"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.ability-score-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.destroy-undead"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.divine-domain-improvement"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.cleric.domain-spells"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.cleric.divine-intervention"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.cleric.destroy-undead"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.cleric.ability-score-improvement"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.cleric.destroy-undead"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.cleric.ability-score-improvement"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.destroy-undead"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.divine-domain-improvement"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.cleric.channel-divinity"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.cleric.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.cleric.divine-intervention-improvement"
+      }
+    ]
+  },
+  {
+    "kind": "class",
+    "id": "class.druid",
+    "name": "Druid",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d8",
+    "saves": [
+      "INT",
+      "WIS"
+    ],
+    "spellcasting": {
+      "ability": "WIS",
+      "progression": "full",
+      "cantripsKnown": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "ritual": "prepared"
+    },
+    "subclassLevel": 2,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.druid.spellcasting"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.druid.druidic"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.druid.wild-shape"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.druid.circle"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.druid.wild-shape"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.druid.ability-score-improvement"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.druid.circle-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.druid.wild-shape"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.druid.ability-score-improvement"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.druid.circle-improvement"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.druid.ability-score-improvement"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.druid.circle-improvement"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.druid.ability-score-improvement"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.druid.timeless-body"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.druid.beast-spells"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.druid.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.druid.archdruid"
+      }
+    ]
+  },
+  {
+    "kind": "class",
+    "id": "class.fighter",
+    "name": "Fighter",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d10",
+    "saves": [
+      "STR",
+      "CON"
+    ],
+    "subclassLevel": 3,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.fighter.fighting-style"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.fighter.second-wind"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.fighter.action-surge"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.martial-archetype"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.fighter.ability-score-improvement"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.fighter.extra-attack"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.fighter.ability-score-improvement"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.fighter.martial-archetype-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.fighter.ability-score-improvement"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.fighter.indomitable"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.fighter.martial-archetype-improvement"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.fighter.extra-attack"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.fighter.ability-score-improvement"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.fighter.indomitable"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.fighter.ability-score-improvement"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.fighter.martial-archetype-improvement"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.fighter.ability-score-improvement"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.fighter.action-surge"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.fighter.indomitable"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.fighter.martial-archetype-improvement"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.fighter.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.fighter.extra-attack"
+      }
+    ]
+  },
+  {
+    "kind": "class",
+    "id": "class.monk",
+    "name": "Monk",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d8",
+    "saves": [
+      "STR",
+      "DEX"
+    ],
+    "subclassLevel": 3,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.monk.unarmored-defense"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.monk.martial-arts"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.monk.ki"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.monk.flurry-of-blows"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.monk.patient-defense"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.monk.step-of-the-wind"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.monk.unarmored-movement"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.monk.monastic-tradition"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.monk.deflect-missiles"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.monk.ability-score-improvement"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.monk.slow-fall"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.monk.extra-attack"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.monk.stunning-strike"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.monk.ki-empowered-strikes"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.monk.monastic-tradition-improvement"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.monk.evasion"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.monk.stillness-of-mind"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.monk.ability-score-improvement"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.monk.unarmored-movement"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.monk.purity-of-body"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.monk.monastic-tradition-improvement"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.monk.ability-score-improvement"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.monk.tongue-of-the-sun-and-moon"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.monk.diamond-soul"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.monk.timeless-body"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.monk.ability-score-improvement"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.monk.monastic-tradition-improvement"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.monk.empty-body"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.monk.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.monk.perfect-self"
+      }
+    ]
+  },
+  {
+    "kind": "class",
+    "id": "class.paladin",
+    "name": "Paladin",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d10",
+    "saves": [
+      "WIS",
+      "CHA"
+    ],
+    "spellcasting": {
+      "ability": "CHA",
+      "progression": "half",
+      "ritual": "none"
+    },
+    "subclassLevel": 3,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.paladin.divine-sense"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.paladin.lay-on-hands"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.paladin.fighting-style"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.paladin.spellcasting"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.paladin.divine-smite"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.divine-health"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.sacred-oath"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.oath-spells"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.channel-divinity"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.paladin.ability-score-improvement"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.paladin.extra-attack"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.paladin.aura-of-protection"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.paladin.sacred-oath-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.paladin.ability-score-improvement"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.paladin.aura-of-courage"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.paladin.improved-divine-smite"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.paladin.ability-score-improvement"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.paladin.cleansing-touch"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.paladin.sacred-oath-improvement"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.paladin.ability-score-improvement"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.paladin.aura-improvements"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.paladin.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.paladin.sacred-oath-improvement"
+      }
+    ]
+  },
+  {
+    "kind": "class",
+    "id": "class.ranger",
+    "name": "Ranger",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d10",
+    "saves": [
+      "STR",
+      "DEX"
+    ],
+    "spellcasting": {
+      "ability": "WIS",
+      "progression": "half",
+      "spellsKnown": [
+        0,
+        2,
+        3,
+        3,
+        4,
+        4,
+        5,
+        5,
+        6,
+        6,
+        7,
+        7,
+        8,
+        8,
+        9,
+        9,
+        10,
+        10,
+        11,
+        11
+      ],
+      "ritual": "none"
+    },
+    "subclassLevel": 3,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.ranger.favored-enemy"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.ranger.natural-explorer"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.ranger.fighting-style"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.ranger.spellcasting"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.ranger.archetype"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.ranger.primeval-awareness"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.ranger.ability-score-improvement"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.ranger.extra-attack"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.ranger.favored-enemy"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.ranger.natural-explorer"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.ranger.archetype-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.ranger.ability-score-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.ranger.lands-stride"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.ranger.natural-explorer"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.ranger.hide-in-plain-sight"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.ranger.archetype-improvement"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.ranger.ability-score-improvement"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.ranger.favored-enemy"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.ranger.vanish"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.ranger.archetype-improvement"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.ranger.ability-score-improvement"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.ranger.feral-senses"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.ranger.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.ranger.foe-slayer"
+      }
+    ]
+  },
+  {
+    "kind": "class",
+    "id": "class.rogue",
+    "name": "Rogue",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d8",
+    "saves": [
+      "DEX",
+      "INT"
+    ],
+    "subclassLevel": 3,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.rogue.expertise"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.rogue.sneak-attack"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.rogue.thieves-cant"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.rogue.cunning-action"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.roguish-archetype"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.rogue.ability-score-improvement"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.rogue.uncanny-dodge"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.rogue.expertise"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.rogue.evasion"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.rogue.ability-score-improvement"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.rogue.roguish-archetype-improvement"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.rogue.ability-score-improvement"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.rogue.reliable-talent"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.rogue.ability-score-improvement"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.rogue.roguish-archetype-improvement"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.rogue.blindsense"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.rogue.slippery-mind"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.rogue.ability-score-improvement"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.rogue.roguish-archetype-improvement"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.rogue.elusive"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.rogue.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.rogue.stroke-of-luck"
+      }
+    ]
+  },
+  {
+    "kind": "class",
+    "id": "class.sorcerer",
+    "name": "Sorcerer",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d6",
+    "saves": [
+      "CON",
+      "CHA"
+    ],
+    "spellcasting": {
+      "ability": "CHA",
+      "progression": "full",
+      "cantripsKnown": [
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "spellsKnown": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        12,
+        13,
+        13,
+        14,
+        14,
+        15,
+        15,
+        15,
+        15
+      ],
+      "ritual": "none"
+    },
+    "subclassLevel": 1,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.spellcasting"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.sorcerous-origin"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.sorcerer.font-of-magic"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.sorcerer.flexible-casting-creating-spell-slots"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.sorcerer.flexible-casting-converting-spell-slot"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.sorcerer.metamagic"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.sorcerer.ability-score-improvement"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.sorcerer.sorcerous-origin-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.sorcerer.ability-score-improvement"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.sorcerer.metamagic"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.sorcerer.ability-score-improvement"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.sorcerer.sorcerous-origin-improvement"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.sorcerer.ability-score-improvement"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.sorcerer.metamagic"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.sorcerer.sorcerous-origin-improvement"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.sorcerer.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.sorcerer.sorcerous-restoration"
+      }
+    ]
+  },
+  {
+    "kind": "class",
+    "id": "class.warlock",
+    "name": "Warlock",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d8",
+    "saves": [
+      "WIS",
+      "CHA"
+    ],
+    "spellcasting": {
+      "ability": "CHA",
+      "progression": "pact",
+      "cantripsKnown": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "spellsKnown": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        10,
+        11,
+        11,
+        12,
+        12,
+        13,
+        13,
+        14,
+        14,
+        15,
+        15
+      ],
+      "ritual": "none"
+    },
+    "subclassLevel": 1,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.warlock.otherworldly-patron"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.warlock.pact-magic"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.warlock.eldritch-invocations"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.warlock.pact-boon"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.warlock.ability-score-improvement"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.warlock.otherworldly-patron-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.warlock.ability-score-improvement"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.warlock.otherworldly-patron-improvement"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.warlock.mystic-arcanum"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.warlock.ability-score-improvement"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.warlock.mystic-arcanum"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.warlock.otherworldly-patron-improvement"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.warlock.mystic-arcanum"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.warlock.ability-score-improvement"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.warlock.mystic-arcanum"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.warlock.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.warlock.eldritch-master"
+      }
+    ]
+  },
+  {
+    "kind": "class",
+    "id": "class.wizard",
+    "name": "Wizard",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "hitDie": "d6",
+    "saves": [
+      "INT",
+      "WIS"
+    ],
+    "spellcasting": {
+      "ability": "INT",
+      "progression": "full",
+      "cantripsKnown": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "ritual": "known"
+    },
+    "subclassLevel": 2,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.wizard.spellcasting"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.wizard.arcane-recovery"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.wizard.arcane-tradition"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.wizard.ability-score-improvement"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.wizard.arcane-tradition-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.wizard.ability-score-improvement"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.wizard.arcane-tradition-improvement"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.wizard.ability-score-improvement"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.wizard.arcane-tradition-improvement"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.wizard.ability-score-improvement"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.wizard.spell-mastery"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.wizard.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.wizard.signature-spell"
+      }
+    ]
+  }
+]

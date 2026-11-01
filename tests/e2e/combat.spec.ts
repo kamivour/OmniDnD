@@ -1,0 +1,78 @@
+import { expect, test } from '@playwright/test';
+
+test.beforeEach(async ({ page }) => {
+  await page.goto('/characters/the-fool/combat');
+});
+
+test('no initiative order; the turn header shows the round', async ({ page }) => {
+  await expect(page.getByText('Turn order')).toHaveCount(0);
+  await expect(page.getByText('Round 3')).toBeVisible();
+});
+
+test('economy shows Action used, Bonus and Reaction available', async ({ page }) => {
+  await expect(page.getByRole('button', { name: 'Action used', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await expect(page.getByRole('button', { name: 'Bonus available', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'false',
+  );
+  await expect(page.getByRole('button', { name: 'React available', exact: true })).toBeVisible();
+});
+
+test('tabs switch between action groups', async ({ page }) => {
+  await expect(page.getByRole('button', { name: 'Rapier' })).toBeVisible();
+  await page.getByRole('tab', { name: 'Bonus' }).click();
+  await expect(page.getByRole('button', { name: /Healing Word/ })).toBeVisible();
+  await page.getByRole('tab', { name: 'React' }).click();
+  await expect(page.getByRole('button', { name: /Cutting Words/ })).toBeVisible();
+});
+
+test('fixture buttons show a toast instead of changing state', async ({ page }) => {
+  await page.getByRole('button', { name: 'End Turn' }).click();
+  await expect(page.getByRole('status')).toContainText('End turn');
+});
+
+test.describe('mobile', () => {
+  test.skip(({ isMobile }) => !isMobile, 'mobile only');
+
+  test('tapping a spell opens a sheet with slot picker and Cast', async ({ page }) => {
+    await page.getByRole('tab', { name: 'Bonus' }).click();
+    await page.getByRole('button', { name: /Healing Word/ }).tap();
+    const sheet = page.getByRole('dialog', { name: 'Healing Word' });
+    await expect(sheet).toBeVisible();
+    await expect(sheet.getByRole('button', { name: /^L1/ })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await expect(sheet.getByRole('button', { name: 'Cast Healing Word (L1)' })).toBeVisible();
+  });
+
+  test('HP buttons open the number pad', async ({ page }) => {
+    await page.getByRole('button', { name: 'Damage' }).first().tap();
+    await expect(page.getByRole('dialog', { name: 'Damage' })).toBeVisible();
+  });
+});
+
+test.describe('desktop', () => {
+  test.skip(({ isMobile }) => isMobile, 'desktop only');
+
+  test('hover previews a spell, click pins it', async ({ page }) => {
+    await page.getByRole('tab', { name: 'Spells' }).click();
+    const row = page.getByRole('button', { name: /Dissonant Whispers/ });
+    await row.hover();
+    await expect(page.getByRole('tooltip')).toContainText('3d6 psychic');
+    await row.click();
+    await expect(page.getByRole('region', { name: 'Pinned detail' })).toContainText(
+      'Dissonant Whispers',
+    );
+  });
+
+  test('status column shows concentration, effects on you, and the full log', async ({ page }) => {
+    const aside = page.getByRole('complementary', { name: 'Status and log' });
+    await expect(aside.getByRole('heading', { name: 'Concentration' })).toBeVisible();
+    await expect(aside.getByRole('heading', { name: 'Effects on you' })).toBeVisible();
+    await expect(aside.getByText('Took 4 damage (HP 19 → 15)')).toBeVisible();
+  });
+});

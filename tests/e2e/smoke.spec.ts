@@ -1,0 +1,55 @@
+import { expect, test, type Page } from '@playwright/test';
+
+async function expectNoHorizontalScroll(page: Page) {
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
+}
+
+async function expectTokens(page: Page) {
+  const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  expect(bg).toBe('rgb(16, 21, 33)');
+}
+
+const HUB_ROUTES = [
+  { path: '/', heading: 'Campaigns' },
+  { path: '/campaigns/new', heading: 'New campaign' },
+  { path: '/campaigns/273/settings', heading: 'Campaign settings' },
+  { path: '/campaigns/273/characters/new', heading: 'New character' },
+];
+
+const CHARACTER_ROUTES = [
+  { path: '/characters/the-fool', heading: 'Home' },
+  { path: '/characters/the-fool/combat', heading: 'Combat' },
+  { path: '/characters/the-fool/spells', heading: 'Spells' },
+  { path: '/characters/the-fool/journal', heading: 'Journal' },
+];
+
+for (const { path, heading } of HUB_ROUTES) {
+  test(`${path} renders with tokens and no horizontal scroll`, async ({ page }) => {
+    await page.goto(path);
+    await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible();
+    await expectTokens(page);
+    await expectNoHorizontalScroll(page);
+  });
+}
+
+for (const { path, heading } of CHARACTER_ROUTES) {
+  test(`${path} renders in the character frame`, async ({ page }) => {
+    await page.goto(path);
+    await expect(page.getByRole('heading', { level: 1, name: heading })).toBeAttached();
+    await expect(page.getByText('The Fool').first()).toBeVisible();
+    await expectTokens(page);
+    await expectNoHorizontalScroll(page);
+  });
+}
+
+test('unknown routes show not found', async ({ page }) => {
+  await page.goto('/nope');
+  await expect(page.getByRole('heading', { name: 'Not found' })).toBeVisible();
+  await page.goto('/characters/the-fool/nope');
+  await expect(page.getByRole('heading', { name: 'Not found' })).toBeVisible();
+  await page.goto('/characters/nobody');
+  await expect(page.getByRole('heading', { name: 'Character not found' })).toBeVisible();
+});

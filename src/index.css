@@ -1,0 +1,94 @@
+@import 'tailwindcss';
+@import './theme/tokens.css';
+
+/* Only token colors exist, so raw palette classes (bg-red-500) fail to build. */
+@theme {
+  --color-*: initial;
+  --text-*: initial;
+
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
+  --font-display: 'Cinzel Variable', Georgia, serif;
+
+  /* Type scale: 12 / 14 / 16 / 20 / 28, plus 40 for the Combat HP number. */
+  --text-xs: 12px;
+  --text-xs--line-height: 16px;
+  --text-sm: 14px;
+  --text-sm--line-height: 20px;
+  --text-base: 16px;
+  --text-base--line-height: 24px;
+  --text-lg: 20px;
+  --text-lg--line-height: 28px;
+  --text-xl: 28px;
+  --text-xl--line-height: 36px;
+  --text-hp: 40px;
+  --text-hp--line-height: 44px;
+}
+
+@theme inline {
+  --color-bg: var(--omni-bg);
+  --color-surface: var(--omni-surface);
+  --color-surface-2: var(--omni-surface-2);
+  --color-border: var(--omni-border);
+  --color-text: var(--omni-text);
+  --color-text-muted: var(--omni-text-muted);
+  --color-accent: var(--omni-accent);
+  --color-magic: var(--omni-magic);
+  --color-danger: var(--omni-danger);
+  --color-heal: var(--omni-heal);
+  --color-temp: var(--omni-temp);
+  --color-warn: var(--omni-warn);
+  --color-type-damage: var(--omni-type-damage);
+  --color-type-control: var(--omni-type-control);
+  --color-type-healing: var(--omni-type-healing);
+  --color-type-buff: var(--omni-type-buff);
+  --color-type-debuff: var(--omni-type-debuff);
+  --color-type-utility: var(--omni-type-utility);
+
+  --radius-card: var(--omni-radius-card);
+  --radius-btn: var(--omni-radius-btn);
+  --shadow-pop: var(--omni-shadow-pop);
+}
+
+@layer base {
+  html,
+  body {
+    background-color: var(--omni-bg);
+    color: var(--omni-text);
+  }
+
+  body {
+    @apply font-sans text-sm antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--omni-accent);
+    outline-offset: 2px;
+  }
+}
+
+/* Bottom sheet slide-up (DESIGN.md §5). Mobile only; the 640 px+ dialog just appears. */
+@keyframes omni-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@media (width < 640px) {
+  .omni-sheet[data-state='open'] {
+    animation: omni-sheet-in var(--omni-motion-sheet) ease-out;
+  }
+}
+
+/* Hoverable card / button: lift 2 px + accent border (DESIGN.md §5). */
+@utility hover-lift {
+  transition:
+    translate var(--omni-motion-hover) ease-out,
+    border-color var(--omni-motion-hover) ease-out;
+  @media (hover: hover) {
+    &:hover {
+      translate: 0 -2px;
+      border-color: var(--omni-accent);
+    }
+  }
+}

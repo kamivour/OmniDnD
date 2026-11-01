@@ -1,0 +1,64 @@
+/*
+ * Design tokens (docs/DESIGN.md §2, §3, §5).
+ * Components never use raw hex. A theme is one set of these variables.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Color */
+  --omni-bg: #101521;
+  --omni-surface: #1a2332;
+  --omni-surface-2: #222d40;
+  --omni-border: #2c3850;
+  --omni-text: #e6e8ee;
+  --omni-text-muted: #8b95a8;
+  --omni-accent: #cfae72;
+  --omni-magic: #64cdd2;
+  --omni-danger: #d7606c;
+  --omni-heal: #7fc08f;
+  --omni-temp: #8fa8e0;
+  --omni-warn: #e0a458;
+
+  /* Spell types (DESIGN.md §2). Box tint + left border + label text. */
+  --omni-type-damage: #e5767f;
+  --omni-type-control: #b79af0;
+  --omni-type-healing: #7fc08f;
+  --omni-type-buff: #7fb2ea;
+  --omni-type-debuff: #e0a458;
+  --omni-type-utility: #a3adbf;
+
+  /* Shape */
+  --omni-radius-card: 8px;
+  --omni-radius-btn: 6px;
+  --omni-shadow-pop: 0 8px 24px rgb(0 0 0 / 0.45);
+
+  /* Motion budget. Nothing else animates. */
+  --omni-motion-hover: 120ms;
+  --omni-motion-preview: 120ms;
+  --omni-motion-sheet: 180ms;
+  --omni-motion-pip: 150ms;
+  --omni-motion-bar: 200ms;
+  --omni-motion-dim: 120ms;
+  --omni-preview-delay: 250ms;
+}
+
+/* Reduced motion: OS setting, or the Settings toggle (sets data-reduced-motion on <html>). */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --omni-motion-hover: 0ms;
+    --omni-motion-preview: 0ms;
+    --omni-motion-sheet: 0ms;
+    --omni-motion-pip: 0ms;
+    --omni-motion-bar: 0ms;
+    --omni-motion-dim: 0ms;
+  }
+}
+
+:root[data-reduced-motion='true'] {
+  --omni-motion-hover: 0ms;
+  --omni-motion-preview: 0ms;
+  --omni-motion-sheet: 0ms;
+  --omni-motion-pip: 0ms;
+  --omni-motion-bar: 0ms;
+  --omni-motion-dim: 0ms;
+}

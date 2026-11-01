@@ -1,0 +1,147 @@
+[
+  {
+    "id": "feature.bard.ability-score-improvement",
+    "summary": {
+      "effect": "Raise one ability score by 2, or two scores by 1 each. No score can go above 20. Bards get this at levels 4, 8, 12, 16, and 19."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "feature.bard.bardic-inspiration",
+    "summary": {
+      "effect": "One creature other than you within 60 ft that can hear you gets an Inspiration die. Within 10 min it may add the die to one attack roll, ability check, or save, after rolling but before the result.",
+      "scaling": "Die: d6, d8 at level 5, d10 at 10, d12 at 15. Uses: CHA mod (min 1), long rest; short rest from level 5."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "feature.bard.bonus-proficiencies",
+    "summary": { "effect": "Gain proficiency in three skills of your choice." },
+    "summaryReviewed": false
+  },
+  {
+    "id": "feature.bard.college",
+    "summary": {
+      "effect": "Choose a bard college at level 3 (the SRD has Lore). It grants features at levels 3, 6, and 14."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "feature.bard.cutting-words",
+    "summary": {
+      "effect": "Subtract your Bardic Inspiration die from an attack roll, ability check, or damage roll by a creature you can see within 60 ft. Use after the roll, before the result. Fails if it can't hear you or can't be charmed."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "feature.bard.expertise",
+    "summary": {
+      "effect": "Pick two skills you are proficient in: your proficiency bonus is doubled for checks with them. Pick two more at level 10."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "feature.bard.jack-of-all-trades",
+    "summary": {
+      "effect": "Add half your proficiency bonus, rounded down, to any ability check that doesn't already include your proficiency bonus. Initiative counts; saves and attacks do not."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "feature.bard.song-of-rest",
+    "summary": {
+      "effect": "During a short rest, if you perform, you and friendly creatures who hear you and spend Hit Dice each regain an extra 1d6 HP.",
+      "scaling": "d8 at level 9, d10 at 13, d12 at 17."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "feature.bard.spellcasting",
+    "summary": {
+      "effect": "Cast bard spells with CHA: save DC 8 + proficiency + CHA mod, attack bonus proficiency + CHA mod. Swap one known spell on level-up. Cast known rituals as rituals. Use an instrument as focus."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "feature.darkvision",
+    "summary": {
+      "effect": "Within 60 ft you see in dim light as if it were bright, and in darkness as if it were dim. In darkness you see only shades of gray."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "feature.fey-ancestry",
+    "summary": {
+      "effect": "Advantage on saves against being charmed. Magic can't put you to sleep."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "feature.skill-versatility",
+    "summary": { "effect": "Gain proficiency in two skills of your choice." },
+    "summaryReviewed": false
+  },
+  {
+    "id": "spell.disguise-self",
+    "summary": {
+      "effect": "Change your look, including clothes, armor, weapons, and gear: up to 1 ft shorter or taller, thinner or heavier, same body shape. Touch reveals it. An Investigation check (action) vs your spell save DC sees through it."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/disguise-self"
+  },
+  {
+    "id": "spell.faerie-fire",
+    "summary": {
+      "effect": "Each object and creature in a 20-ft cube within range makes a DEX save.",
+      "fail": "Outlined in light (dim light, 10 ft) until the spell ends. Attacks against it have advantage if the attacker can see it, and it can't benefit from being invisible."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/faerie-fire"
+  },
+  {
+    "id": "spell.healing-word",
+    "summary": {
+      "effect": "A creature you can see within range regains 1d4 + your spellcasting modifier HP. No effect on undead or constructs.",
+      "upcast": "+1d4 per slot level above 1."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/healing-word"
+  },
+  {
+    "id": "spell.invisibility",
+    "summary": {
+      "effect": "A creature you touch, with what it wears and carries, becomes invisible until the spell ends. The spell ends for a target that attacks or casts a spell.",
+      "upcast": "+1 target per slot level above 2."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/invisibility"
+  },
+  {
+    "id": "spell.minor-illusion",
+    "summary": {
+      "effect": "Create one sound, or one image of an object that fits in a 5-ft cube. The image has no sound, light, or smell, and touch reveals it. An Investigation check (action) vs your spell save DC sees through it."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/minor-illusion"
+  },
+  {
+    "id": "spell.suggestion",
+    "summary": {
+      "effect": "Suggest a reasonable-sounding course of action to a creature within range that can hear and understand you. Immune if it can't be charmed. An obviously harmful suggestion ends the spell.",
+      "fail": "It follows the suggestion until it is done or the spell ends."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/suggestion"
+  },
+  {
+    "id": "spell.vicious-mockery",
+    "summary": {
+      "effect": "One creature within range that can hear you makes a WIS save. It need not understand you.",
+      "fail": "1d4 psychic, and disadvantage on its next attack roll before the end of its next turn.",
+      "success": "Nothing.",
+      "scaling": "2d4 at character level 5, 3d4 at 11, 4d4 at 17."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/vicious-mockery"
+  }
+]

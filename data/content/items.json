@@ -1,0 +1,15 @@
+[
+  {
+    "kind": "item",
+    "id": "item.deck-of-marked-cards",
+    "name": "Deck of marked cards",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Playing cards with hidden marks you can read. One of the Charlatan's con tools; no listed cost or game rules."
+    },
+    "summaryReviewed": false,
+    "category": "gear"
+  }
+]

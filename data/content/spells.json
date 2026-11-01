@@ -1,0 +1,29 @@
+[
+  {
+    "kind": "spell",
+    "id": "spell.dissonant-whispers",
+    "name": "Dissonant Whispers",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "One creature you choose within range that can hear you makes a WIS save. A deafened creature succeeds automatically.",
+      "fail": "3d6 psychic. It must use its reaction, if it has one, to move as far as its speed allows away from you, avoiding obvious danger. This movement can provoke opportunity attacks.",
+      "success": "Half damage and no forced movement.",
+      "upcast": "+1d6 per slot level above 1."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/dissonant-whispers",
+    "level": 1,
+    "school": "enchantment",
+    "casting": { "cost": "action" },
+    "range": "60 ft",
+    "components": { "v": true, "s": false },
+    "duration": { "text": "Instant", "concentration": false },
+    "ritual": false,
+    "save": "WIS",
+    "classes": ["class.bard"],
+    "tags": ["damage", "control"],
+    "damage": { "dice": "3d6", "upcastPerLevel": "1d6", "type": "psychic" }
+  }
+]

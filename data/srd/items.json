@@ -1,0 +1,3341 @@
+[
+  {
+    "kind": "item",
+    "id": "item.abacus",
+    "name": "Abacus",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 2,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.acid-vial",
+    "name": "Acid (vial)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "As an action, you can splash the contents of this vial onto a creature within 5 feet of you or throw the vial up to 20 feet, shattering it on impact. In either case, make a ranged attack against a creature or object, treating the acid as an improvised weapon.\n\nOn a hit, the target takes 2d6 acid damage.",
+    "category": "consumable",
+    "weight": 1,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.alchemists-fire-flask",
+    "name": "Alchemist's fire (flask)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This sticky, adhesive fluid ignites when exposed to air.\n\nAs an action, you can throw this flask up to 20 feet, shattering it on impact. Make a ranged attack against a creature or object, treating the alchemist's fire as an improvised weapon.\n\nOn a hit, the target takes 1d4 fire damage at the start of each of its turns. A creature can end this damage by using its action to make a DC 10 Dexterity check to extinguish the flames.",
+    "category": "consumable",
+    "weight": 1,
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.alchemists-supplies",
+    "name": "Alchemist's Supplies",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 8,
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.alms-box",
+    "name": "Alms box",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A small box for alms, typically found in a priest's pack.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 0,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.amulet",
+    "name": "Amulet",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A holy symbol is a representation of a god or pantheon. It might be an amulet depicting a symbol representing a deity, the same symbol carefully engraved or inlaid as an emblem on a shield, or a tiny box holding a fragment of a sacred relic.\n\nAppendix B lists the symbols commonly associated with many gods in the multiverse. A cleric or paladin can use a holy symbol as a spellcasting focus. To use the symbol in this way, the caster must hold it in hand, wear it visibly, or bear it on a shield.",
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.antitoxin-vial",
+    "name": "Antitoxin (vial)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A creature that drinks this vial of liquid gains advantage on saving throws against poison for 1 hour. It confers no benefit to undead or constructs.",
+    "category": "consumable",
+    "weight": 0,
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.arrow",
+    "name": "Arrow",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "consumable",
+    "weight": 1,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "bundle": 20
+  },
+  {
+    "kind": "item",
+    "id": "item.backpack",
+    "name": "Backpack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "container",
+    "weight": 5,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.bagpipes",
+    "name": "Bagpipes",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Several of the most common types of musical instruments are shown on the table as examples. If you have proficiency with a given musical instrument, you can add your proficiency bonus to any ability checks you make to play music with the instrument. A bard can use a musical instrument as a spellcasting focus. Each type of musical instrument requires a separate proficiency.",
+    "category": "instrument",
+    "weight": 6,
+    "cost": {
+      "amount": 30,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.ball-bearings-bag-of-1000",
+    "name": "Ball bearings (bag of 1,000)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "As an action, you can spill these tiny metal balls from their pouch to cover a level, square area that is 10 feet on a side.\n\nA creature moving across the covered area must succeed on a DC 10 Dexterity saving throw or fall prone.\n\nA creature moving through the area at half speed doesn't need to make the save.",
+    "category": "gear",
+    "weight": 2,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.barrel",
+    "name": "Barrel",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "container",
+    "weight": 70,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.basket",
+    "name": "Basket",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "container",
+    "weight": 2,
+    "cost": {
+      "amount": 4,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.battleaxe",
+    "name": "Battleaxe",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 4,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d8",
+      "damageType": "slashing",
+      "properties": [
+        "versatile"
+      ],
+      "versatile": "1d10"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.bedroll",
+    "name": "Bedroll",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 7,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.bell",
+    "name": "Bell",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.blanket",
+    "name": "Blanket",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 3,
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.block-and-tackle",
+    "name": "Block and tackle",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A set of pulleys with a cable threaded through them and a hook to attach to objects, a block and tackle allows you to hoist up to four times the weight you can normally lift.",
+    "category": "gear",
+    "weight": 5,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.block-of-incense",
+    "name": "Block of incense",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A block of incense, typically found in a priest's pack.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 0,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.blowgun",
+    "name": "Blowgun",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 1,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "ranged",
+      "damage": 1,
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "loading"
+      ],
+      "range": {
+        "normal": 25,
+        "long": 100
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.blowgun-needle",
+    "name": "Blowgun needle",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "consumable",
+    "weight": 1,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "bundle": 50
+  },
+  {
+    "kind": "item",
+    "id": "item.book",
+    "name": "Book",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A book might contain poetry, historical accounts, information pertaining to a particular field of lore, diagrams and notes on gnomish contraptions, or just about anything else that can be represented using text or pictures. A book of spells is a spellbook (described later in this section).",
+    "category": "gear",
+    "weight": 5,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.bottle-glass",
+    "name": "Bottle, glass",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 2,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.breastplate",
+    "name": "Breastplate",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 20,
+    "cost": {
+      "amount": 400,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "medium",
+      "baseAc": 14,
+      "stealthDisadvantage": false
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.brewers-supplies",
+    "name": "Brewer's Supplies",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 9,
+    "cost": {
+      "amount": 20,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.bucket",
+    "name": "Bucket",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "container",
+    "weight": 2,
+    "cost": {
+      "amount": 5,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.burglars-pack",
+    "name": "Burglar's Pack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "cost": {
+      "amount": 16,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.calligraphers-supplies",
+    "name": "Calligrapher's Supplies",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 5,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.caltrops",
+    "name": "Caltrops",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "As an action, you can spread a bag of caltrops to cover a square area that is 5 feet on a side.\n\nAny creature that enters the area must succeed on a DC 15 Dexterity saving throw or stop moving this turn and take 1 piercing damage.\n\nTaking this damage reduces the creature's walking speed by 10 feet until the creature regains at least 1 hit point.\n\nA creature moving through the area at half speed doesn't need to make the save.",
+    "category": "gear",
+    "weight": 2,
+    "cost": {
+      "amount": 5,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.candle",
+    "name": "Candle",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "For 1 hour, a candle sheds bright light in a 5-foot radius and dim light for an additional 5 feet.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 1,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.carpenters-tools",
+    "name": "Carpenter's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 6,
+    "cost": {
+      "amount": 8,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.cartographers-tools",
+    "name": "Cartographer's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 6,
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.case-crossbow-bolt",
+    "name": "Case, crossbow bolt",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This wooden case can hold up to twenty crossbow bolts.",
+    "category": "container",
+    "weight": 1,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.case-map-or-scroll",
+    "name": "Case, map or scroll",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This cylindrical leather case can hold up to ten rolled-up sheets of paper or five rolled-up sheets of parchment.",
+    "category": "container",
+    "weight": 1,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.censer",
+    "name": "Censer",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A censer, typically found in a priest's pack.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 0,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.chain-10-feet",
+    "name": "Chain (10 feet)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A chain has 10 hit points. It can be burst with a successful DC 20 Strength check.",
+    "category": "gear",
+    "weight": 10,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.chain-mail",
+    "name": "Chain Mail",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 55,
+    "cost": {
+      "amount": 75,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "heavy",
+      "baseAc": 16,
+      "strMin": 13,
+      "stealthDisadvantage": true
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.chain-shirt",
+    "name": "Chain Shirt",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 20,
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "medium",
+      "baseAc": 13,
+      "stealthDisadvantage": false
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.chalk-1-piece",
+    "name": "Chalk (1 piece)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 1,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.chest",
+    "name": "Chest",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "container",
+    "weight": 25,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.climbers-kit",
+    "name": "Climber's Kit",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A climber's kit includes special pitons, boot tips, gloves, and a harness. You can use the climber's kit as an action to anchor yourself; when you do, you can't fall more than 25 feet from the point where you anchored yourself, and you can't climb more than 25 feet away from that point without undoing the anchor.",
+    "category": "gear",
+    "weight": 12,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.clothes-common",
+    "name": "Clothes, common",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 3,
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.clothes-costume",
+    "name": "Clothes, costume",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 4,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.clothes-fine",
+    "name": "Clothes, fine",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 6,
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.clothes-travelers",
+    "name": "Clothes, traveler's",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 4,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.club",
+    "name": "Club",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 1,
+      "unit": "sp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "melee",
+      "damage": "1d4",
+      "damageType": "bludgeoning",
+      "properties": [
+        "light"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.cobblers-tools",
+    "name": "Cobbler's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 5,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.component-pouch",
+    "name": "Component pouch",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A component pouch is a small, watertight leather belt pouch that has compartments to hold all the material components and other special items you need to cast your spells, except for those components that have a specific cost (as indicated in a spell's description).",
+    "category": "gear",
+    "weight": 2,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.cooks-utensils",
+    "name": "Cook's utensils",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 8,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.crossbow-bolt",
+    "name": "Crossbow bolt",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "consumable",
+    "weight": 1.5,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "bundle": 20
+  },
+  {
+    "kind": "item",
+    "id": "item.crossbow-hand",
+    "name": "Crossbow, hand",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 3,
+    "cost": {
+      "amount": 75,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "ranged",
+      "damage": "1d6",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "light",
+        "loading"
+      ],
+      "range": {
+        "normal": 30,
+        "long": 120
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.crossbow-heavy",
+    "name": "Crossbow, heavy",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 18,
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "ranged",
+      "damage": "1d10",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "heavy",
+        "loading",
+        "two-handed"
+      ],
+      "range": {
+        "normal": 100,
+        "long": 400
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.crossbow-light",
+    "name": "Crossbow, light",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 5,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "ranged",
+      "damage": "1d8",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "loading",
+        "two-handed"
+      ],
+      "range": {
+        "normal": 80,
+        "long": 320
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.crowbar",
+    "name": "Crowbar",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Using a crowbar grants advantage to Strength checks where the crowbar's leverage can be applied.",
+    "category": "gear",
+    "weight": 5,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.crystal",
+    "name": "Crystal",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "An arcane focus is a special item--an orb, a crystal, a rod, a specially constructed staff, a wand-like length of wood, or some similar item--designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus.",
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.dagger",
+    "name": "Dagger",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 1,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "melee",
+      "damage": "1d4",
+      "damageType": "piercing",
+      "properties": [
+        "finesse",
+        "light",
+        "thrown"
+      ],
+      "range": {
+        "normal": 20,
+        "long": 60
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.dart",
+    "name": "Dart",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 0.25,
+    "cost": {
+      "amount": 5,
+      "unit": "cp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "ranged",
+      "damage": "1d4",
+      "damageType": "piercing",
+      "properties": [
+        "finesse",
+        "thrown"
+      ],
+      "range": {
+        "normal": 20,
+        "long": 60
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.dice-set",
+    "name": "Dice Set",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This item encompasses a wide range of game pieces, including dice and decks of cards (for games such as Three-Dragon Ante). A few common examples appear on the Tools table, but other kinds of gaming sets exist. If you are proficient with a gaming set, you can add your proficiency bonus to ability checks you make to play a game with that set. Each type of gaming set requires a separate proficiency.",
+    "category": "tool",
+    "weight": 0,
+    "cost": {
+      "amount": 1,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.diplomats-pack",
+    "name": "Diplomat's Pack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "cost": {
+      "amount": 39,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.disguise-kit",
+    "name": "Disguise Kit",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This pouch of cosmetics, hair dye, and small props lets you create disguises that change your physical appearance. Proficiency with this kit lets you add your proficiency bonus to any ability checks you make to create a visual disguise.",
+    "category": "tool",
+    "weight": 3,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.drum",
+    "name": "Drum",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Several of the most common types of musical instruments are shown on the table as examples. If you have proficiency with a given musical instrument, you can add your proficiency bonus to any ability checks you make to play music with the instrument. A bard can use a musical instrument as a spellcasting focus. Each type of musical instrument requires a separate proficiency.",
+    "category": "instrument",
+    "weight": 3,
+    "cost": {
+      "amount": 6,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.dulcimer",
+    "name": "Dulcimer",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Several of the most common types of musical instruments are shown on the table as examples. If you have proficiency with a given musical instrument, you can add your proficiency bonus to any ability checks you make to play music with the instrument. A bard can use a musical instrument as a spellcasting focus. Each type of musical instrument requires a separate proficiency.",
+    "category": "instrument",
+    "weight": 10,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.dungeoneers-pack",
+    "name": "Dungeoneer's Pack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "cost": {
+      "amount": 12,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.emblem",
+    "name": "Emblem",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A holy symbol is a representation of a god or pantheon. It might be an amulet depicting a symbol representing a deity, the same symbol carefully engraved or inlaid as an emblem on a shield, or a tiny box holding a fragment of a sacred relic.\n\nAppendix B lists the symbols commonly associated with many gods in the multiverse. A cleric or paladin can use a holy symbol as a spellcasting focus. To use the symbol in this way, the caster must hold it in hand, wear it visibly, or bear it on a shield.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.entertainers-pack",
+    "name": "Entertainer's Pack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "cost": {
+      "amount": 40,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.explorers-pack",
+    "name": "Explorer's Pack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.fishing-tackle",
+    "name": "Fishing tackle",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This kit includes a wooden rod, silken line, corkwood bobbers, steel hooks, lead sinkers, velvet lures, and narrow netting.",
+    "category": "gear",
+    "weight": 4,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.flail",
+    "name": "Flail",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d8",
+      "damageType": "bludgeoning",
+      "properties": []
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.flask-or-tankard",
+    "name": "Flask or tankard",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 2,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.flute",
+    "name": "Flute",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Several of the most common types of musical instruments are shown on the table as examples. If you have proficiency with a given musical instrument, you can add your proficiency bonus to any ability checks you make to play music with the instrument. A bard can use a musical instrument as a spellcasting focus. Each type of musical instrument requires a separate proficiency.",
+    "category": "instrument",
+    "weight": 1,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.forgery-kit",
+    "name": "Forgery Kit",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This small box contains a variety of papers and parchments, pens and inks, seals and sealing wax, gold and silver leaf, and other supplies necessary to create convincing forgeries of physical documents. Proficiency with this kit lets you add your proficiency bonus to any ability checks you make to create a physical forgery of a document.",
+    "category": "tool",
+    "weight": 5,
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.glaive",
+    "name": "Glaive",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 6,
+    "cost": {
+      "amount": 20,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d10",
+      "damageType": "slashing",
+      "properties": [
+        "heavy",
+        "reach",
+        "two-handed"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.glassblowers-tools",
+    "name": "Glassblower's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 5,
+    "cost": {
+      "amount": 30,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.grappling-hook",
+    "name": "Grappling hook",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 4,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.greataxe",
+    "name": "Greataxe",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 7,
+    "cost": {
+      "amount": 30,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d12",
+      "damageType": "slashing",
+      "properties": [
+        "heavy",
+        "two-handed"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.greatclub",
+    "name": "Greatclub",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 10,
+    "cost": {
+      "amount": 2,
+      "unit": "sp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "melee",
+      "damage": "1d8",
+      "damageType": "bludgeoning",
+      "properties": [
+        "two-handed"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.greatsword",
+    "name": "Greatsword",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 6,
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "2d6",
+      "damageType": "slashing",
+      "properties": [
+        "heavy",
+        "two-handed"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.halberd",
+    "name": "Halberd",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 6,
+    "cost": {
+      "amount": 20,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d10",
+      "damageType": "slashing",
+      "properties": [
+        "heavy",
+        "reach",
+        "two-handed"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.half-plate-armor",
+    "name": "Half Plate Armor",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 40,
+    "cost": {
+      "amount": 750,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "medium",
+      "baseAc": 15,
+      "stealthDisadvantage": true
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.hammer",
+    "name": "Hammer",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 3,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.hammer-sledge",
+    "name": "Hammer, sledge",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 10,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.handaxe",
+    "name": "Handaxe",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "melee",
+      "damage": "1d6",
+      "damageType": "slashing",
+      "properties": [
+        "light",
+        "thrown"
+      ],
+      "range": {
+        "normal": 20,
+        "long": 60
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.healers-kit",
+    "name": "Healer's Kit",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This kit is a leather pouch containing bandages, salves, and splints. The kit has ten uses. As an action, you can expend one use of the kit to stabilize a creature that has 0 hit points, without needing to make a Wisdom (Medicine) check.",
+    "category": "gear",
+    "weight": 3,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.herbalism-kit",
+    "name": "Herbalism Kit",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This kit contains a variety of instruments such as clippers, mortar and pestle, and pouches and vials used by herbalists to create remedies and potions. Proficiency with this kit lets you add your proficiency bonus to any ability checks you make to identify or apply herbs. Also, proficiency with this kit is required to create antitoxin and potions of healing.",
+    "category": "tool",
+    "weight": 3,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.hide-armor",
+    "name": "Hide Armor",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 12,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "medium",
+      "baseAc": 12,
+      "stealthDisadvantage": false
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.holy-water-flask",
+    "name": "Holy water (flask)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "As an action, you can splash the contents of this flask onto a creature within 5 feet of you or throw it up to 20 feet, shattering it on impact. In either case, make a ranged attack against a target creature, treating the holy water as an improvised weapon.\n\nIf the target is a fiend or undead, it takes 2d6 radiant damage.\n\nA cleric or paladin may create holy water by performing a special ritual.\n\nThe ritual takes 1 hour to perform, uses 25 gp worth of powdered silver, and requires the caster to expend a 1st-level spell slot.",
+    "category": "consumable",
+    "weight": 1,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.horn",
+    "name": "Horn",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Several of the most common types of musical instruments are shown on the table as examples. If you have proficiency with a given musical instrument, you can add your proficiency bonus to any ability checks you make to play music with the instrument. A bard can use a musical instrument as a spellcasting focus. Each type of musical instrument requires a separate proficiency.",
+    "category": "instrument",
+    "weight": 2,
+    "cost": {
+      "amount": 3,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.hourglass",
+    "name": "Hourglass",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.hunting-trap",
+    "name": "Hunting trap",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "When you use your action to set it, this trap forms a saw-toothed steel ring that snaps shut when a creature steps on a pressure plate in the center. The trap is affixed by a heavy chain to an immobile object, such as a tree or a spike driven into the ground.\n\nA creature that steps on the plate must succeed on a DC 13 Dexterity saving throw or take 1d4 piercing damage and stop moving. Thereafter, until the creature breaks free of the trap, its movement is limited by the length of the chain (typically 3 feet long).\n\nA creature can use its action to make a DC 13 Strength check, freeing itself or another creature within its reach on a success. Each failed check deals 1 piercing damage to the trapped creature.",
+    "category": "gear",
+    "weight": 25,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.ink-1-ounce-bottle",
+    "name": "Ink (1 ounce bottle)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.ink-pen",
+    "name": "Ink pen",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 2,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.javelin",
+    "name": "Javelin",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "melee",
+      "damage": "1d6",
+      "damageType": "piercing",
+      "properties": [
+        "thrown"
+      ],
+      "range": {
+        "normal": 30,
+        "long": 120
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.jewelers-tools",
+    "name": "Jeweler's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 2,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.jug-or-pitcher",
+    "name": "Jug or pitcher",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 4,
+    "cost": {
+      "amount": 2,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.ladder-10-foot",
+    "name": "Ladder (10-foot)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 25,
+    "cost": {
+      "amount": 1,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.lamp",
+    "name": "Lamp",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A lamp casts bright light in a 15-foot radius and dim light for an additional 30 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil.",
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.lance",
+    "name": "Lance",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "You have disadvantage when you use a lance to attack a target within 5 feet of you. Also, a lance requires two hands to wield when you aren't mounted.",
+    "category": "weapon",
+    "weight": 6,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d12",
+      "damageType": "piercing",
+      "properties": [
+        "reach",
+        "special"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.lantern-bullseye",
+    "name": "Lantern, bullseye",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A bullseye lantern casts bright light in a 60-foot cone and dim light for an additional 60 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil.",
+    "category": "gear",
+    "weight": 2,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.lantern-hooded",
+    "name": "Lantern, hooded",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A hooded lantern casts bright light in a 30-foot radius and dim light for an additional 30 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil. As an action, you can lower the hood, reducing the light to dim light in a 5-foot radius.",
+    "category": "gear",
+    "weight": 2,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.leather-armor",
+    "name": "Leather Armor",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 10,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "light",
+      "baseAc": 11,
+      "stealthDisadvantage": false
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.leatherworkers-tools",
+    "name": "Leatherworker's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 5,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.light-hammer",
+    "name": "Light hammer",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "melee",
+      "damage": "1d4",
+      "damageType": "bludgeoning",
+      "properties": [
+        "light",
+        "thrown"
+      ],
+      "range": {
+        "normal": 20,
+        "long": 60
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.little-bag-of-sand",
+    "name": "Little bag of sand",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A small bag of sand, typically found in a scholar's pack.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 0,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.lock",
+    "name": "Lock",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A key is provided with the lock. Without the key, a creature proficient with thieves' tools can pick this lock with a successful DC 15 Dexterity check. Your GM may decide that better locks are available for higher prices.",
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.longbow",
+    "name": "Longbow",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "ranged",
+      "damage": "1d8",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "heavy",
+        "two-handed"
+      ],
+      "range": {
+        "normal": 150,
+        "long": 600
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.longsword",
+    "name": "Longsword",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 3,
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d8",
+      "damageType": "slashing",
+      "properties": [
+        "versatile"
+      ],
+      "versatile": "1d10"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.lute",
+    "name": "Lute",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Several of the most common types of musical instruments are shown on the table as examples. If you have proficiency with a given musical instrument, you can add your proficiency bonus to any ability checks you make to play music with the instrument. A bard can use a musical instrument as a spellcasting focus. Each type of musical instrument requires a separate proficiency.",
+    "category": "instrument",
+    "weight": 2,
+    "cost": {
+      "amount": 35,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.lyre",
+    "name": "Lyre",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Several of the most common types of musical instruments are shown on the table as examples. If you have proficiency with a given musical instrument, you can add your proficiency bonus to any ability checks you make to play music with the instrument. A bard can use a musical instrument as a spellcasting focus. Each type of musical instrument requires a separate proficiency.",
+    "category": "instrument",
+    "weight": 2,
+    "cost": {
+      "amount": 30,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.mace",
+    "name": "Mace",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 4,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "melee",
+      "damage": "1d6",
+      "damageType": "bludgeoning",
+      "properties": []
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.magnifying-glass",
+    "name": "Magnifying glass",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This lens allows a closer look at small objects. It is also useful as a substitute for flint and steel when starting fires. Lighting a fire with a magnifying glass requires light as bright as sunlight to focus, tinder to ignite, and about 5 minutes for the fire to ignite.\n\nA magnifying glass grants advantage on any ability check made to appraise or inspect an item that is small or highly detailed.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 100,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.manacles",
+    "name": "Manacles",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These metal restraints can bind a Small or Medium creature. Escaping the manacles requires a successful DC 20 Dexterity check. Breaking them requires a successful DC 20 Strength check.\n\nEach set of manacles comes with one key. Without the key, a creature proficient with thieves' tools can pick the manacles' lock with a successful DC 15 Dexterity check. Manacles have 15 hit points.",
+    "category": "gear",
+    "weight": 6,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.masons-tools",
+    "name": "Mason's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 8,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.maul",
+    "name": "Maul",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 10,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "2d6",
+      "damageType": "bludgeoning",
+      "properties": [
+        "heavy",
+        "two-handed"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.mess-kit",
+    "name": "Mess Kit",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This tin box contains a cup and simple cutlery. The box clamps together, and one side can be used as a cooking pan and the other as a plate or shallow bowl.",
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 2,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.mirror-steel",
+    "name": "Mirror, steel",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0.5,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.morningstar",
+    "name": "Morningstar",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 4,
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d8",
+      "damageType": "piercing",
+      "properties": []
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.navigators-tools",
+    "name": "Navigator's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This set of instruments is used for navigation at sea. Proficiency with navigator's tools lets you chart a ship's course and follow navigation charts. In addition, these tools allow you to add your proficiency bonus to any ability check you make to avoid getting lost at sea.",
+    "category": "tool",
+    "weight": 2,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.net",
+    "name": "Net",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A Large or smaller creature hit by a net is restrained until it is freed. A net has no effect on creatures that are formless, or creatures that are Huge or larger. A creature can use its action to make a DC 10 Strength check, freeing itself or another creature within its reach on a success. Dealing 5 slashing damage to the net (AC 10) also frees the creature without harming it, ending the effect and destroying the net. When you use an action, bonus action, or reaction to attack with a net, you can make only one attack regardless of the number of attacks you can normally make.",
+    "category": "weapon",
+    "weight": 3,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "ranged",
+      "properties": [
+        "thrown",
+        "special"
+      ],
+      "range": {
+        "normal": 5,
+        "long": 15
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.oil-flask",
+    "name": "Oil (flask)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Oil usually comes in a clay flask that holds 1 pint.\n\nAs an action, you can splash the oil in this flask onto a creature within 5 feet of you or throw it up to 20 feet, shattering it on impact. Make a ranged attack against a target creature or object, treating the oil as an improvised weapon.\n\nOn a hit, the target is covered in oil. If the target takes any fire damage before the oil dries (after 1 minute), the target takes an additional 5 fire damage from the burning oil.\n\nYou can also pour a flask of oil on the ground to cover a 5-foot-square area, provided that the surface is level.\n\nIf lit, the oil burns for 2 rounds and deals 5 fire damage to any creature that enters the area or ends its turn in the area. A creature can take this damage only once per turn.",
+    "category": "consumable",
+    "weight": 1,
+    "cost": {
+      "amount": 1,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.orb",
+    "name": "Orb",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "An arcane focus is a special item--an orb, a crystal, a rod, a specially constructed staff, a wand-like length of wood, or some similar item--designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus.",
+    "category": "gear",
+    "weight": 3,
+    "cost": {
+      "amount": 20,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.padded-armor",
+    "name": "Padded Armor",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 8,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "light",
+      "baseAc": 11,
+      "stealthDisadvantage": true
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.painters-supplies",
+    "name": "Painter's Supplies",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 5,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.pan-flute",
+    "name": "Pan flute",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Several of the most common types of musical instruments are shown on the table as examples. If you have proficiency with a given musical instrument, you can add your proficiency bonus to any ability checks you make to play music with the instrument. A bard can use a musical instrument as a spellcasting focus. Each type of musical instrument requires a separate proficiency.",
+    "category": "instrument",
+    "weight": 2,
+    "cost": {
+      "amount": 12,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.paper-one-sheet",
+    "name": "Paper (one sheet)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 2,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.parchment-one-sheet",
+    "name": "Parchment (one sheet)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 1,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.perfume-vial",
+    "name": "Perfume (vial)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.pick-miners",
+    "name": "Pick, miner's",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 10,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.pike",
+    "name": "Pike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 18,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d10",
+      "damageType": "piercing",
+      "properties": [
+        "heavy",
+        "reach",
+        "two-handed"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.piton",
+    "name": "Piton",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0.25,
+    "cost": {
+      "amount": 5,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.plate-armor",
+    "name": "Plate Armor",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 65,
+    "cost": {
+      "amount": 1500,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "heavy",
+      "baseAc": 18,
+      "strMin": 15,
+      "stealthDisadvantage": true
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.playing-card-set",
+    "name": "Playing Card Set",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This item encompasses a wide range of game pieces, including dice and decks of cards (for games such as Three-Dragon Ante). A few common examples appear on the Tools table, but other kinds of gaming sets exist. If you are proficient with a gaming set, you can add your proficiency bonus to ability checks you make to play a game with that set. Each type of gaming set requires a separate proficiency.",
+    "category": "tool",
+    "weight": 0,
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.poison-basic-vial",
+    "name": "Poison, basic (vial)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "You can use the poison in this vial to coat one slashing or piercing weapon or up to three pieces of ammunition. Applying the poison takes an action. A creature hit by the poisoned weapon or ammunition must make a DC 10 Constitution saving throw or take 1d4 poison damage. Once applied, the poison retains potency for 1 minute before drying.",
+    "category": "consumable",
+    "weight": 0,
+    "cost": {
+      "amount": 100,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.poisoners-kit",
+    "name": "Poisoner's Kit",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A poisoner's kit includes the vials, chemicals, and other equipment necessary for the creation of poisons. Proficiency with this kit lets you add your proficiency bonus to any ability checks you make to craft or use poisons.",
+    "category": "tool",
+    "weight": 2,
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.pole-10-foot",
+    "name": "Pole (10-foot)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 7,
+    "cost": {
+      "amount": 5,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.pot-iron",
+    "name": "Pot, iron",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 10,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.potters-tools",
+    "name": "Potter's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 3,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.pouch",
+    "name": "Pouch",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A cloth or leather pouch can hold up to 20 sling bullets or 50 blowgun needles, among other things. A compartmentalized pouch for holding spell components is called a component pouch (described earlier in this section).",
+    "category": "container",
+    "weight": 1,
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.priests-pack",
+    "name": "Priest's Pack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "cost": {
+      "amount": 19,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.quarterstaff",
+    "name": "Quarterstaff",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 4,
+    "cost": {
+      "amount": 2,
+      "unit": "sp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "melee",
+      "damage": "1d6",
+      "damageType": "bludgeoning",
+      "properties": [
+        "versatile"
+      ],
+      "versatile": "1d8"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.quiver",
+    "name": "Quiver",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A quiver can hold up to 20 arrows.",
+    "category": "container",
+    "weight": 1,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.ram-portable",
+    "name": "Ram, portable",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "You can use a portable ram to break down doors. When doing so, you gain a +4 bonus on the Strength check. One other character can help you use the ram, giving you advantage on this check.",
+    "category": "gear",
+    "weight": 35,
+    "cost": {
+      "amount": 4,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.rapier",
+    "name": "Rapier",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d8",
+      "damageType": "piercing",
+      "properties": [
+        "finesse"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.rations-1-day",
+    "name": "Rations (1 day)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Rations consist of dry foods suitable for extended travel, including jerky, dried fruit, hardtack, and nuts.",
+    "category": "consumable",
+    "weight": 2,
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.reliquary",
+    "name": "Reliquary",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A holy symbol is a representation of a god or pantheon. It might be an amulet depicting a symbol representing a deity, the same symbol carefully engraved or inlaid as an emblem on a shield, or a tiny box holding a fragment of a sacred relic.\n\nAppendix B lists the symbols commonly associated with many gods in the multiverse. A cleric or paladin can use a holy symbol as a spellcasting focus. To use the symbol in this way, the caster must hold it in hand, wear it visibly, or bear it on a shield.",
+    "category": "gear",
+    "weight": 2,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.ring-mail",
+    "name": "Ring Mail",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 40,
+    "cost": {
+      "amount": 30,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "heavy",
+      "baseAc": 14,
+      "stealthDisadvantage": true
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.robes",
+    "name": "Robes",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 4,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.rod",
+    "name": "Rod",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "An arcane focus is a special item--an orb, a crystal, a rod, a specially constructed staff, a wand-like length of wood, or some similar item--designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus.",
+    "category": "gear",
+    "weight": 2,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.rope-hempen-50-feet",
+    "name": "Rope, hempen (50 feet)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Rope, whether made of hemp or silk, has 2 hit points and can be burst with a DC 17 Strength check.",
+    "category": "gear",
+    "weight": 10,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.rope-silk-50-feet",
+    "name": "Rope, silk (50 feet)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Rope, whether made of hemp or silk, has 2 hit points and can be burst with a DC 17 Strength check.",
+    "category": "gear",
+    "weight": 5,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.sack",
+    "name": "Sack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "container",
+    "weight": 0.5,
+    "cost": {
+      "amount": 1,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.scale-mail",
+    "name": "Scale Mail",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 45,
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "medium",
+      "baseAc": 14,
+      "stealthDisadvantage": true
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.scale-merchants",
+    "name": "Scale, merchant's",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A scale includes a small balance, pans, and a suitable assortment of weights up to 2 pounds. With it, you can measure the exact weight of small objects, such as raw precious metals or trade goods, to help determine their worth.",
+    "category": "gear",
+    "weight": 3,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.scholars-pack",
+    "name": "Scholar's Pack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "cost": {
+      "amount": 40,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.scimitar",
+    "name": "Scimitar",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 3,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d6",
+      "damageType": "slashing",
+      "properties": [
+        "finesse",
+        "light"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.sealing-wax",
+    "name": "Sealing wax",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.shawm",
+    "name": "Shawm",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Several of the most common types of musical instruments are shown on the table as examples. If you have proficiency with a given musical instrument, you can add your proficiency bonus to any ability checks you make to play music with the instrument. A bard can use a musical instrument as a spellcasting focus. Each type of musical instrument requires a separate proficiency.",
+    "category": "instrument",
+    "weight": 1,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.shield",
+    "name": "Shield",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 6,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "shield",
+      "baseAc": 2,
+      "stealthDisadvantage": false
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.shortbow",
+    "name": "Shortbow",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "ranged",
+      "damage": "1d6",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "two-handed"
+      ],
+      "range": {
+        "normal": 80,
+        "long": 320
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.shortsword",
+    "name": "Shortsword",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d6",
+      "damageType": "piercing",
+      "properties": [
+        "finesse",
+        "light"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.shovel",
+    "name": "Shovel",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 5,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.sickle",
+    "name": "Sickle",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "melee",
+      "damage": "1d4",
+      "damageType": "slashing",
+      "properties": [
+        "light"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.signal-whistle",
+    "name": "Signal whistle",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 5,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.signet-ring",
+    "name": "Signet ring",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.sling",
+    "name": "Sling",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 0,
+    "cost": {
+      "amount": 1,
+      "unit": "sp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "ranged",
+      "damage": "1d4",
+      "damageType": "bludgeoning",
+      "properties": [
+        "ammunition"
+      ],
+      "range": {
+        "normal": 30,
+        "long": 120
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.sling-bullet",
+    "name": "Sling bullet",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "consumable",
+    "weight": 1.5,
+    "cost": {
+      "amount": 4,
+      "unit": "cp"
+    },
+    "bundle": 20
+  },
+  {
+    "kind": "item",
+    "id": "item.small-knife",
+    "name": "Small knife",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A small knife, typically found in a scholar's pack.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 0,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.smiths-tools",
+    "name": "Smith's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 8,
+    "cost": {
+      "amount": 20,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.soap",
+    "name": "Soap",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 2,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.spear",
+    "name": "Spear",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 3,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "simple",
+      "type": "melee",
+      "damage": "1d6",
+      "damageType": "piercing",
+      "properties": [
+        "thrown",
+        "versatile"
+      ],
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "versatile": "1d8"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.spellbook",
+    "name": "Spellbook",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Essential for wizards, a spellbook is a leather-bound tome with 100 blank vellum pages suitable for recording spells.",
+    "category": "gear",
+    "weight": 3,
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.spike-iron",
+    "name": "Spike, iron",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 5,
+    "cost": {
+      "amount": 1,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.splint-armor",
+    "name": "Splint Armor",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 60,
+    "cost": {
+      "amount": 200,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "heavy",
+      "baseAc": 17,
+      "strMin": 15,
+      "stealthDisadvantage": true
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.sprig-of-mistletoe",
+    "name": "Sprig of mistletoe",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A druidic focus might be a sprig of mistletoe or holly, a wand or scepter made of yew or another special wood, a staff drawn whole out of a living tree, or a totem object incorporating feathers, fur, bones, and teeth from sacred animals. A druid can use such an object as a spellcasting focus.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.spyglass",
+    "name": "Spyglass",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Objects viewed through a spyglass are magnified to twice their size.",
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 1000,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.staff",
+    "name": "Staff",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "An arcane focus is a special item--an orb, a crystal, a rod, a specially constructed staff, a wand-like length of wood, or some similar item--designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus.",
+    "category": "gear",
+    "weight": 4,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.string-10-feet",
+    "name": "String (10 feet)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A 10-foot length of string, typically found in a burglar's pack.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 0,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.studded-leather-armor",
+    "name": "Studded Leather Armor",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "armor",
+    "weight": 13,
+    "cost": {
+      "amount": 45,
+      "unit": "gp"
+    },
+    "armor": {
+      "category": "light",
+      "baseAc": 12,
+      "stealthDisadvantage": false
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.tent-two-person",
+    "name": "Tent, two-person",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A simple and portable canvas shelter, a tent sleeps two.",
+    "category": "gear",
+    "weight": 20,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.thieves-tools",
+    "name": "Thieves' Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This set of tools includes a small file, a set of lock picks, a small mirror mounted on a metal handle, a set of narrow-bladed scissors, and a pair of pliers. Proficiency with these tools lets you add your proficiency bonus to any ability checks you make to disarm traps or open locks.",
+    "category": "tool",
+    "weight": 1,
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.tinderbox",
+    "name": "Tinderbox",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "This small container holds flint, fire steel, and tinder (usually dry cloth soaked in light oil) used to kindle a fire. Using it to light a torch--or anything else with abundant, exposed fuel--takes an action.\n\nLighting any other fire takes 1 minute.",
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.tinkers-tools",
+    "name": "Tinker's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 10,
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.torch",
+    "name": "Torch",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A torch burns for 1 hour, providing bright light in a 20-foot radius and dim light for an additional 20 feet. If you make a melee attack with a burning torch and hit, it deals 1 fire damage.",
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 1,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.totem",
+    "name": "Totem",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A druidic focus might be a sprig of mistletoe or holly, a wand or scepter made of yew or another special wood, a staff drawn whole out of a living tree, or a totem object incorporating feathers, fur, bones, and teeth from sacred animals. A druid can use such an object as a spellcasting focus.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.trident",
+    "name": "Trident",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 4,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d6",
+      "damageType": "piercing",
+      "properties": [
+        "thrown",
+        "versatile"
+      ],
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "versatile": "1d8"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.vestments",
+    "name": "Vestments",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Religious clothing, typically found in a priest's pack.",
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 0,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.vial",
+    "name": "Vial",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 0,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.viol",
+    "name": "Viol",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "Several of the most common types of musical instruments are shown on the table as examples. If you have proficiency with a given musical instrument, you can add your proficiency bonus to any ability checks you make to play music with the instrument. A bard can use a musical instrument as a spellcasting focus. Each type of musical instrument requires a separate proficiency.",
+    "category": "instrument",
+    "weight": 1,
+    "cost": {
+      "amount": 30,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.wand",
+    "name": "Wand",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "An arcane focus is a special item--an orb, a crystal, a rod, a specially constructed staff, a wand-like length of wood, or some similar item--designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus.",
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.war-pick",
+    "name": "War pick",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d8",
+      "damageType": "piercing",
+      "properties": []
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.warhammer",
+    "name": "Warhammer",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 2,
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d8",
+      "damageType": "bludgeoning",
+      "properties": [
+        "versatile"
+      ],
+      "versatile": "1d10"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.waterskin",
+    "name": "Waterskin",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 5,
+    "cost": {
+      "amount": 2,
+      "unit": "sp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.weavers-tools",
+    "name": "Weaver's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 5,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.whetstone",
+    "name": "Whetstone",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 1,
+      "unit": "cp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.whip",
+    "name": "Whip",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "category": "weapon",
+    "weight": 3,
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    },
+    "weapon": {
+      "category": "martial",
+      "type": "melee",
+      "damage": "1d4",
+      "damageType": "slashing",
+      "properties": [
+        "finesse",
+        "reach"
+      ]
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.woodcarvers-tools",
+    "name": "Woodcarver's Tools",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "These special tools include the items needed to pursue a craft or trade. The table shows examples of the most common types of tools, each providing items related to a single craft. Proficiency with a set of artisan's tools lets you add your proficiency bonus to any ability checks you make using the tools in your craft. Each type of artisan's tools requires a separate proficiency.",
+    "category": "tool",
+    "weight": 5,
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.wooden-staff",
+    "name": "Wooden staff",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A druidic focus might be a sprig of mistletoe or holly, a wand or scepter made of yew or another special wood, a staff drawn whole out of a living tree, or a totem object incorporating feathers, fur, bones, and teeth from sacred animals. A druid can use such an object as a spellcasting focus.",
+    "category": "gear",
+    "weight": 4,
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.yew-wand",
+    "name": "Yew wand",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "fullText": "A druidic focus might be a sprig of mistletoe or holly, a wand or scepter made of yew or another special wood, a staff drawn whole out of a living tree, or a totem object incorporating feathers, fur, bones, and teeth from sacred animals. A druid can use such an object as a spellcasting focus.",
+    "category": "gear",
+    "weight": 1,
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    }
+  }
+]

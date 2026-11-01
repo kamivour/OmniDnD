@@ -1,0 +1,17 @@
+[
+  {
+    "kind": "background",
+    "id": "background.charlatan",
+    "name": "Charlatan",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Skills: Deception, Sleight of Hand. Tools: disguise kit, forgery kit. Feature: False Identity. Starts with fine clothes, a disguise kit, one con tool, and a belt pouch with 15 gp."
+    },
+    "summaryReviewed": false,
+    "skills": ["deception", "sleight-of-hand"],
+    "tools": ["item.disguise-kit", "item.forgery-kit"],
+    "featureIds": ["feature.false-identity"]
+  }
+]

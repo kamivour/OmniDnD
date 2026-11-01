@@ -1,0 +1,35 @@
+[
+  { "id": "feature.bard.ability-score-improvement", "activation": "passive" },
+  {
+    "id": "feature.bard.bardic-inspiration",
+    "activation": "bonus",
+    "uses": {
+      "max": { "abilityMod": "CHA", "min": 1 },
+      "recharge": { "1": "long", "5": "short" }
+    },
+    "die": { "1": "d6", "5": "d8", "10": "d10", "15": "d12" }
+  },
+  { "id": "feature.bard.bonus-proficiencies", "activation": "passive" },
+  { "id": "feature.bard.college", "activation": "passive" },
+  {
+    "id": "feature.bard.cutting-words",
+    "activation": "reaction",
+    "trigger": "A creature you can see within 60 ft makes an attack roll, ability check, or damage roll",
+    "usesFrom": "feature.bard.bardic-inspiration"
+  },
+  { "id": "feature.bard.expertise", "activation": "passive" },
+  {
+    "id": "feature.bard.jack-of-all-trades",
+    "activation": "passive",
+    "modifiers": [{ "target": "unproficient-checks", "value": { "proficiency": "half" } }]
+  },
+  {
+    "id": "feature.bard.song-of-rest",
+    "activation": "special",
+    "die": { "2": "d6", "9": "d8", "13": "d10", "17": "d12" }
+  },
+  { "id": "feature.bard.spellcasting", "activation": "passive" },
+  { "id": "feature.darkvision", "activation": "passive" },
+  { "id": "feature.fey-ancestry", "activation": "passive" },
+  { "id": "feature.skill-versatility", "activation": "passive" }
+]

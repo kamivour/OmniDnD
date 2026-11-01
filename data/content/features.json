@@ -1,0 +1,16 @@
+[
+  {
+    "kind": "feature",
+    "id": "feature.false-identity",
+    "name": "False Identity",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "You keep a second identity with its own papers, acquaintances, and disguises. You can forge official papers or personal letters if you have seen an example of that document or handwriting."
+    },
+    "summaryReviewed": false,
+    "origin": "background",
+    "activation": "passive"
+  }
+]

@@ -1,0 +1,22 @@
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+
+# Local env
+*.local
+.env*
+
+# Copied book text and personal notes. Never commit (repo is public).
+data/private/*
+!data/private/README.md
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,172 @@
+{
+  "app": "omnidnd",
+  "schemaVersion": 1,
+  "exportedAt": "2026-11-01T00:00:00.000Z",
+  "campaign": {
+    "id": "campaign-273",
+    "schemaVersion": 1,
+    "name": "Campaign #273",
+    "ruleset": "5e-2014",
+    "leveling": "milestone",
+    "hpMethod": "rolled",
+    "hpLevelFloor": "none",
+    "abilityMethod": "rolled",
+    "sources": ["PHB", "XGE", "TCE"],
+    "optionalRules": {}
+  },
+  "build": {
+    "id": "the-fool",
+    "schemaVersion": 1,
+    "campaignId": "campaign-273",
+    "name": "The Fool",
+    "portrait": "character.the-fool",
+    "raceId": "race.half-elf",
+    "backgroundId": "background.charlatan",
+    "alignment": "Chaotic Neutral",
+    "classes": [{ "classId": "class.bard", "subclassId": "subclass.bard.lore", "level": 3 }],
+    "abilityScores": {
+      "base": { "STR": 11, "DEX": 14, "CON": 12, "INT": 12, "WIS": 12, "CHA": 18 },
+      "bonuses": [
+        { "source": "race.half-elf", "ability": "CHA", "value": 2 },
+        { "source": "race.half-elf", "ability": "DEX", "value": 1 },
+        { "source": "race.half-elf", "ability": "CON", "value": 1 }
+      ]
+    },
+    "hpEntries": [
+      { "level": 1, "classId": "class.bard", "value": 8, "method": "max" },
+      { "level": 2, "classId": "class.bard", "value": 4, "method": "rolled" },
+      { "level": 3, "classId": "class.bard", "value": 4, "method": "rolled" }
+    ],
+    "proficiencies": {
+      "saves": ["DEX", "CHA"],
+      "skills": [
+        "deception",
+        "sleight-of-hand",
+        "acrobatics",
+        "perception",
+        "persuasion",
+        "intimidation",
+        "investigation",
+        "insight",
+        "performance",
+        "stealth"
+      ],
+      "expertise": ["deception", "sleight-of-hand"],
+      "armor": ["light"],
+      "weapons": [
+        "simple",
+        "item.crossbow-hand",
+        "item.longsword",
+        "item.rapier",
+        "item.shortsword"
+      ],
+      "tools": ["item.flute", "item.lute", "item.drum", "item.disguise-kit", "item.forgery-kit"],
+      "languages": ["Common", "Elvish", "Celestial"]
+    },
+    "spells": [
+      {
+        "classId": "class.bard",
+        "known": [
+          "spell.vicious-mockery",
+          "spell.minor-illusion",
+          "spell.healing-word",
+          "spell.dissonant-whispers",
+          "spell.faerie-fire",
+          "spell.disguise-self",
+          "spell.suggestion",
+          "spell.invisibility"
+        ]
+      }
+    ],
+    "favorites": [],
+    "featureIds": [],
+    "choices": {},
+    "items": [
+      { "instanceId": "rapier-1", "itemId": "item.rapier" },
+      { "instanceId": "dagger-1", "itemId": "item.dagger" },
+      { "instanceId": "leather-armor-1", "itemId": "item.leather-armor" },
+      { "instanceId": "flute-1", "itemId": "item.flute", "notes": "Spellcasting focus" },
+      { "instanceId": "backpack-1", "itemId": "item.backpack" },
+      { "instanceId": "bedroll-1", "itemId": "item.bedroll" },
+      { "instanceId": "costume-1", "itemId": "item.clothes-costume" },
+      { "instanceId": "candle-1", "itemId": "item.candle" },
+      { "instanceId": "rations-1", "itemId": "item.rations-1-day" },
+      { "instanceId": "waterskin-1", "itemId": "item.waterskin", "notes": "Full" },
+      { "instanceId": "fine-clothes-1", "itemId": "item.clothes-fine" },
+      {
+        "instanceId": "disguise-kit-1",
+        "itemId": "item.disguise-kit",
+        "notes": "Nobleman's elegant suit"
+      },
+      {
+        "instanceId": "disguise-kit-2",
+        "itemId": "item.disguise-kit",
+        "notes": "Brown bear costume (looks very real)"
+      },
+      {
+        "instanceId": "marked-cards-1",
+        "itemId": "item.deck-of-marked-cards",
+        "notes": "Charlatan con tool"
+      },
+      { "instanceId": "pouch-1", "itemId": "item.pouch" },
+      {
+        "instanceId": "signet-ring-1",
+        "itemId": "item.signet-ring",
+        "notes": "From the dying nobleman (False Identity)"
+      }
+    ],
+    "journal": {
+      "personality": "Quiet and observant without the mask. \"Sly, irrelevant and fearless once the Fool takes the stage.\"",
+      "ideals": "No magic or authority is absolute. Every trick has a flaw, and every flaw can be discovered.",
+      "bonds": "I seek my missing shifu who vanished somewhere beyond the ocean.",
+      "flaws": "Curiousity killed the cat.",
+      "backstory": "False Identity: Veyne Lobien. The Fool met a dying nobleman on a sea expedition, promised to deliver his last words to his daughter, and took his signet ring and personal details.",
+      "appearance": {
+        "age": "22",
+        "sex": "Male",
+        "size": "Medium",
+        "height": "1.82 m",
+        "weight": "84 kg",
+        "eyes": "Purple-orange",
+        "hair": "Long and black, half-up in a loose topknot with face-framing strands",
+        "skin": "Marbled light and dark"
+      },
+      "notes": "Spell history: Tasha's Hideous Laughter replaced by Invisibility."
+    },
+    "overrides": []
+  },
+  "live": {
+    "characterId": "the-fool",
+    "schemaVersion": 1,
+    "hp": 11,
+    "tempHp": 0,
+    "deathSaves": { "success": 0, "fail": 0 },
+    "hitDiceSpent": {},
+    "slotsUsed": [0, 4, 0, 0, 0, 0, 0, 0, 0, 0],
+    "featureUsesSpent": { "feature.bard.bardic-inspiration": 2 },
+    "effects": [],
+    "conditions": [],
+    "exhaustion": 0,
+    "items": {
+      "rapier-1": { "qty": 1, "equipped": true, "attuned": false },
+      "dagger-1": { "qty": 1, "equipped": true, "attuned": false },
+      "leather-armor-1": { "qty": 1, "equipped": true, "attuned": false },
+      "flute-1": { "qty": 1, "equipped": false, "attuned": false },
+      "backpack-1": { "qty": 1, "equipped": false, "attuned": false },
+      "bedroll-1": { "qty": 1, "equipped": false, "attuned": false },
+      "costume-1": { "qty": 2, "equipped": false, "attuned": false },
+      "candle-1": { "qty": 5, "equipped": false, "attuned": false },
+      "rations-1": { "qty": 6, "equipped": false, "attuned": false },
+      "waterskin-1": { "qty": 1, "equipped": false, "attuned": false },
+      "fine-clothes-1": { "qty": 1, "equipped": false, "attuned": false },
+      "disguise-kit-1": { "qty": 1, "equipped": false, "attuned": false },
+      "disguise-kit-2": { "qty": 1, "equipped": false, "attuned": false },
+      "marked-cards-1": { "qty": 1, "equipped": false, "attuned": false },
+      "pouch-1": { "qty": 1, "equipped": false, "attuned": false },
+      "signet-ring-1": { "qty": 1, "equipped": false, "attuned": false }
+    },
+    "currency": { "cp": 0, "sp": 5, "ep": 0, "gp": 49, "pp": 0 },
+    "clock": { "seconds": 28800 }
+  },
+  "events": []
+}

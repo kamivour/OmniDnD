@@ -1,0 +1,9 @@
+dist
+coverage
+playwright-report
+test-results
+data/srd
+data/private
+**/*.md
+package-lock.json
+src/ui/icons/game-icons.ts

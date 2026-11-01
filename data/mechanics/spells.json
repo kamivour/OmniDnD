@@ -1,0 +1,28 @@
+[
+  {
+    "id": "spell.disguise-self",
+    "tags": ["utility"],
+    "effect": { "target": "self", "note": "Disguised: touch or an Investigation check reveals it" }
+  },
+  {
+    "id": "spell.faerie-fire",
+    "tags": ["debuff", "utility"],
+    "effect": {
+      "target": "any",
+      "note": "Outlined: attacks against it have advantage; no benefit from invisible"
+    }
+  },
+  { "id": "spell.healing-word", "tags": ["healing"] },
+  {
+    "id": "spell.invisibility",
+    "tags": ["buff", "utility"],
+    "effect": {
+      "target": "any",
+      "conditions": ["invisible"],
+      "note": "Ends for the target when it attacks or casts a spell"
+    }
+  },
+  { "id": "spell.minor-illusion", "tags": ["utility"] },
+  { "id": "spell.suggestion", "tags": ["control"] },
+  { "id": "spell.vicious-mockery", "tags": ["damage", "debuff"] }
+]

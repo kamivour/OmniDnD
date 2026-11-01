@@ -1,0 +1,18 @@
+[
+  {
+    "kind": "background",
+    "id": "background.acolyte",
+    "name": "Acolyte",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": true,
+    "skills": [
+      "insight",
+      "religion"
+    ],
+    "tools": [],
+    "featureIds": [
+      "feature.shelter-of-the-faithful"
+    ]
+  }
+]
