@@ -1,5 +1,7 @@
-import type { ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { Tabs } from 'radix-ui';
+import { startCombat } from '../../engine/commands';
+import { useCommand } from '../commands/command-context';
 import { ActionRow } from '../components/ActionRow';
 import { AttackCard, FeatureCard, RuleCard, SpellCard } from '../components/cards';
 import { ConcentrationChip, EffectChip } from '../components/chips';
@@ -27,6 +29,7 @@ import {
 } from '../fixtures/the-fool';
 import { useFixtureAction } from '../fixtures/useFixtureAction';
 import { signed, spellLevelLabel } from '../format';
+import { useCharacter } from '../hooks/useCharacter';
 import { useDetail } from '../layout/detail-context';
 
 const { combat } = fool;
@@ -61,7 +64,19 @@ const TABS = [
  */
 export function CombatScreen() {
   const act = useFixtureAction();
+  const { state, sheet, events } = useCharacter();
+  const { run } = useCommand();
+  const combatStatus = useRef<HTMLDivElement>(null);
+  const restoreStatusFocus = useRef(false);
+  const liveCombat = state.live.combat;
   const { pin: setDetail } = useDetail();
+
+  useEffect(() => {
+    if (restoreStatusFocus.current) {
+      restoreStatusFocus.current = false;
+      combatStatus.current?.focus();
+    }
+  }, [events]);
 
   const pinSpell = (spell: SpellView) =>
     setDetail(
@@ -171,24 +186,53 @@ export function CombatScreen() {
       <h1 className="sr-only">Combat</h1>
 
       <div className="flex min-w-0 flex-col gap-4">
-        <section aria-label="Turn" className="flex flex-col gap-3">
-          <div className="flex items-center gap-3">
-            <p className="min-w-0 flex-1">
-              <span className="font-display text-base text-text">Round {combat.round}</span>
-              <span className="text-text-muted"> · </span>
-              <span className="text-accent">{combat.yourTurn ? 'Your turn' : 'Waiting'}</span>
-              <span className="block truncate text-xs text-text-muted">
-                Start Turn next round restores action, bonus action, reaction, movement.
-              </span>
+        <section className="flex flex-wrap items-center gap-3 rounded-card border border-border bg-surface p-3">
+          <div
+            ref={combatStatus}
+            tabIndex={-1}
+            role="status"
+            aria-label="Combat status"
+            className="min-w-0 flex-1"
+          >
+            {liveCombat ? (
+              <>
+                <p className="font-display text-base text-text">
+                  Round {Math.max(1, liveCombat.round)}
+                </p>
+                <p className="text-sm text-accent">
+                  {liveCombat.round === 0
+                    ? 'Before your first turn'
+                    : liveCombat.turnActive
+                      ? 'Your turn'
+                      : 'Waiting for your turn'}
+                </p>
+              </>
+            ) : (
+              <p className="font-display text-base text-text">No active combat</p>
+            )}
+            <p className="text-xs text-text-muted">
+              Initiative {signed(sheet.initiative.value)} · reference
             </p>
+          </div>
+          {!liveCombat && (
             <button
               type="button"
-              onClick={() => act('End turn')}
-              className="hover-lift min-h-11 rounded-btn border border-border bg-surface-2 px-4 font-semibold text-text"
+              onClick={() =>
+                run(startCombat, null, combatStatus.current ?? undefined, () => {
+                  restoreStatusFocus.current = true;
+                })
+              }
+              className="min-h-11 rounded-btn bg-accent px-4 font-semibold text-bg"
             >
-              End Turn
+              Start combat
             </button>
-          </div>
+          )}
+        </section>
+
+        <section aria-label="Action preview" className="flex flex-col gap-3">
+          <p role="note" className="text-xs text-text-muted">
+            Action preview. Use the HUD and Spellbook for saved changes.
+          </p>
           <EconomyBar
             economy={economy}
             movement={{ left: fool.speed - combat.movementUsed, max: fool.speed }}

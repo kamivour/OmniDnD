@@ -119,3 +119,12 @@ Preview controls now track live availability. Applying casts through the engine 
 - [ ] In one normal browser session, adjust slots, cast from a row and preview, replace concentration, star/filter spells, and change selections/tags. Refresh between changes and verify HUD and Spellbook agree. Undo should restore each saved command exactly.
 
 M4 implementation is complete; the checklist above is the manual follow-up. Standard-slot Spellbook casting and management are live; Pact Magic Spellbook controls remain Phase 3. Native browser networking and offline operation need separate checks because automated browser runs on this Windows host use the real-HTTP forwarder. Offline/PWA work remains M8.
+
+## Phase 1 — M5: combat start
+
+- [ ] Open Combat with no saved fight. Check No active combat and the computed initiative reference (+3 for The Fool). There should be no turn-order list or initiative-roll input.
+- [ ] Start combat. Check Round 1 and Before your first turn. HP, slots, resources, concentration, and the game clock should stay unchanged. Starting combat does not start your turn.
+- [ ] Navigate to Spells and back, then refresh. The same round/status should remain. Undo last command should remove the started fight and retain all previous character values after another refresh.
+- [ ] Start combat by keyboard at desktop and 375 px widths. Focus should move to the updated combat status; no controls should overflow the viewport.
+
+Combat startup is live. The action preview remains separate while the remaining M5 controls are wired to saved state.

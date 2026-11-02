@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M5 — Combat (live).
-**Next up:** Start combat and show the saved round counter (no turn order, D42).
+**Next up:** Live economy bar and Start/End Turn controls.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -97,7 +97,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Manage mode (known count vs limit, replace spell)
 
 ### M5 — Combat (live)
-- [ ] Start combat, round counter (no turn order, D42)
+- [x] Start combat, round counter (no turn order, D42)
 - [ ] Economy bar; Start/End Turn resets
 - [ ] Action tabs; standard actions; weapon attacks
 - [ ] HP panel; concentration save prompt; death saves at 0 HP
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M5 combat start: saved combat state and round/turn display replace the fixture header; initiative is derived and remains a reference. Starting combat is one logged command, preserves resources/clock, focuses the updated status, and supports reload/Undo. Other Combat controls remain an explicit preview. 620 unit tests and 18 focused Combat browser checks pass (4 expected width skips); typecheck, lint and build pass. 375/1440 layouts checked; startup manual QA added. Next: economy bar and Start/End Turn.
 
 - 2026-11-03 — M4 complete: Manage adds/removes known and prepared spells, derives separate class limits, replaces atomically, retains imported conflicts for explicit cleanup, and edits ordered character tag overrides (D76). Selection/tag changes preserve play state and support reload/Undo. 620 unit tests and 216 full browser checks pass without retries; typecheck, lint and build pass. Manage/tag layouts checked at 375/1440; final M4 manual QA added. Next: M5 Start combat and saved round counter.
 

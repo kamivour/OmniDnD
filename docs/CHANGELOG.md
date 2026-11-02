@@ -4,6 +4,13 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 03:02 — Combat starts from saved character state
+
+- Start combat from the Combat screen. The header shows the saved round and whether your turn is active, waiting, or has not started yet. Initiative is computed for reference; there is no initiative order or roll entry.
+- Starting combat saves one undoable command without spending resources or advancing the clock. Reload and navigation retain the same fight; keyboard focus moves to the updated status.
+- Validation: 620 unit tests and 18 focused Combat browser checks pass without retries (4 expected width skips); typecheck, lint, and build pass. Phone and desktop layouts checked using the optional real-HTTP forwarder.
+- Startup manual checks are in `docs/MANUAL_QA.md`. Other Combat controls remain a labeled preview while M5 continues. Next: live turn controls and economy.
+
 ## 2026-11-03 02:59 — Manage spells live; M4 complete
 
 - Add, remove, or replace known and prepared spells from the class list and enabled sources. Separate cantrip, known, prepared, and Wizard spellbook counts use the character's own class level. Base limits warn and allow explicit exceptions.

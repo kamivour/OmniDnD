@@ -4,9 +4,11 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/characters/the-fool/combat');
 });
 
-test('no initiative order; the turn header shows the round', async ({ page }) => {
+test('no initiative order; the live header starts outside combat', async ({ page }) => {
   await expect(page.getByText('Turn order')).toHaveCount(0);
-  await expect(page.getByText('Round 3')).toBeVisible();
+  const turn = page.getByRole('status', { name: 'Combat status', exact: true });
+  await expect(turn).toContainText('No active combat');
+  await expect(page.getByRole('button', { name: 'Start combat', exact: true })).toBeVisible();
 });
 
 test('economy shows Action used, Bonus and Reaction available', async ({ page }) => {
@@ -30,8 +32,8 @@ test('tabs switch between action groups', async ({ page }) => {
 });
 
 test('fixture buttons show a toast instead of changing state', async ({ page }) => {
-  await page.getByRole('button', { name: 'End Turn' }).click();
-  await expect(page.getByRole('status', { name: 'Command feedback' })).toContainText('End turn');
+  await page.getByRole('button', { name: 'Use 5 ft of movement', exact: true }).click();
+  await expect(page.getByRole('status', { name: 'Command feedback' })).toContainText('Move 5 ft');
 });
 
 test.describe('mobile', () => {
