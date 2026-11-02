@@ -21,7 +21,7 @@ test('the character frame links back to all campaigns', async ({ page, isMobile 
 });
 
 test('campaign settings show the saved methods', async ({ page }) => {
-  await page.goto('/campaigns/273/settings');
+  await page.goto('/campaigns/campaign-273/settings');
   await expect(page.getByLabel('Name')).toHaveValue('Campaign #273');
   await expect(page.getByRole('radio', { name: /^Milestone/ })).toBeChecked();
   await expect(
@@ -38,7 +38,7 @@ test('new campaign starts from XP, average HP, standard array', async ({ page })
 });
 
 test('new character computes max HP from typed rolls', async ({ page }) => {
-  await page.goto('/campaigns/273/characters/new');
+  await page.goto('/campaigns/campaign-273/characters/new');
   const total = page.getByRole('row', { name: /Max HP/ });
 
   await page.getByLabel('Level', { exact: true }).fill('3');
@@ -52,7 +52,7 @@ test('new character computes max HP from typed rolls', async ({ page }) => {
 });
 
 test('a low roll with negative CON lowers max HP (campaign allows negative)', async ({ page }) => {
-  await page.goto('/campaigns/273/characters/new');
+  await page.goto('/campaigns/campaign-273/characters/new');
   await page.getByLabel('Level', { exact: true }).fill('2');
   await page.getByLabel('Level 2 roll (d8)').fill('1');
   await page.getByLabel('CON base').fill('6');

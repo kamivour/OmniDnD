@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { seedFile } from '../data/seed';
 import { applyDamage, heal } from '../engine/commands/hp';
+import { deleteCharacter, duplicateCharacter } from '../engine/commands/management';
 import type { ExportFile } from '../engine/schema';
 import { createCharacterStore } from '../state/character-store';
 import {
@@ -65,7 +66,12 @@ describe('persisted workspace validation', () => {
   });
 
   it('preserves an intentionally empty workspace', () => {
-    const empty = { characters: {}, campaigns: {}, automation: 'manual' as const };
+    const empty = {
+      characters: {},
+      campaigns: {},
+      automation: 'manual' as const,
+      managementEvents: [],
+    };
     expect(deserializeWorkspace(serializeWorkspace(empty))).toEqual(empty);
   });
 
@@ -181,4 +187,114 @@ describe('persisted workspace validation', () => {
       expect(saved).toEqual(before);
     },
   );
+});
+
+describe('persisted workspace management history', () => {
+  function managementRows() {
+    const store = createCharacterStore();
+    store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, metadata('damage'));
+    for (const id of ['copy-one', 'copy-two']) {
+      const result = store
+        .getState()
+        .dispatchManagement(
+          duplicateCharacter,
+          { sourceId: FOOL, id, name: id },
+          metadata(`duplicate-${id}`),
+        );
+      expect(result.result).toBe('ok');
+    }
+    return serializeWorkspace(store.getState());
+  }
+
+  it('round-trips active and undone management events with working management and character Undo', () => {
+    const store = createCharacterStore();
+    store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, metadata('damage'));
+    store
+      .getState()
+      .dispatchManagement(
+        duplicateCharacter,
+        { sourceId: FOOL, id: 'copy', name: 'Copy' },
+        metadata('duplicate'),
+      );
+    store.getState().dispatchManagement(deleteCharacter, { characterId: FOOL }, metadata('delete'));
+    store.getState().undoManagement(metadata('restore'));
+    const current = store.getState();
+    const saved = serializeWorkspace(current);
+    const before = structuredClone(saved);
+    const loaded = deserializeWorkspace(saved);
+
+    expect(loaded.managementEvents).toEqual(current.managementEvents);
+    expect(loaded.managementEvents).toMatchObject([
+      { id: 'duplicate' },
+      { id: 'delete', undoneBy: 'restore' },
+      { id: 'restore', command: 'undo' },
+    ]);
+    expect(loaded.characters).toEqual(current.characters);
+    expect(saved).toEqual(before);
+    const restored = createCharacterStore([]);
+    restored.setState(loaded);
+    expect(restored.getState().undoManagement(metadata('undo-duplicate')).result).toBe('ok');
+    expect(restored.getState().characters).not.toHaveProperty('copy');
+    expect(restored.getState().undo(FOOL, metadata('undo-damage')).result).toBe('ok');
+    expect(restored.getState().characters[FOOL]?.live.hp).toBe(11);
+    expect(saved).toEqual(before);
+  });
+
+  it('loads legacy saves that omitted management history as an empty history', () => {
+    const saved = rows();
+    delete saved.managementEvents;
+    const before = structuredClone(saved);
+    expect(deserializeWorkspace(saved).managementEvents).toEqual([]);
+    expect(saved).toEqual(before);
+    expect(saved).not.toHaveProperty('managementEvents');
+  });
+
+  it.each(['patches', 'inversePatches'] as const)(
+    'rejects management %s outside workspace roots without changing saved data',
+    (field) => {
+      const saved = managementRows();
+      const target = saved.managementEvents?.[0];
+      if (!target) throw new Error('Saved management event missing');
+      target[field] = [{ op: 'replace', path: ['automation'], value: 'manual' }];
+      const before = structuredClone(saved);
+      expect(() => deserializeWorkspace(saved)).toThrow(/Management patches must start/);
+      expect(saved).toEqual(before);
+    },
+  );
+
+  it.each(['invalid value', 'invalid path', 'changed identity'] as const)(
+    'rejects an older corrupt management inverse after validating newer history: %s',
+    (kind) => {
+      const saved = managementRows();
+      const oldest = saved.managementEvents?.[0];
+      if (!oldest) throw new Error('Saved management event missing');
+      oldest.inversePatches =
+        kind === 'invalid value'
+          ? [{ op: 'replace', path: ['characters', 'copy-one', 'live', 'hp'], value: -1 }]
+          : kind === 'invalid path'
+            ? [{ op: 'replace', path: ['characters', 'copy-one', 'missing', 'hp'], value: 11 }]
+            : [
+                {
+                  op: 'replace',
+                  path: ['characters', 'copy-one', 'build', 'id'],
+                  value: 'different-id',
+                },
+              ];
+      const before = structuredClone(saved);
+
+      expect(() => deserializeWorkspace(saved)).toThrow(/management undo history is invalid/);
+      expect(saved).toEqual(before);
+    },
+  );
+
+  it('rejects duplicate management event IDs without changing saved data', () => {
+    const saved = managementRows();
+    const first = saved.managementEvents?.[0];
+    const second = saved.managementEvents?.[1];
+    if (!first || !second) throw new Error('Saved management events missing');
+    second.id = first.id;
+    const before = structuredClone(saved);
+    expect(() => deserializeWorkspace(saved)).toThrow('Duplicate saved management event');
+    expect(saved).toEqual(before);
+  });
 });

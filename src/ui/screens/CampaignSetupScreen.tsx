@@ -1,5 +1,10 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router';
+import { useStore } from 'zustand';
+import { characterStore } from '../../state/character-store';
+import { computeSheet } from '../../engine/calc/sheet';
+import { registry } from '../../data/registry';
+import { useCampaign } from '../hooks/useCampaign';
 import { Lock } from 'lucide-react';
 import { ChoiceGroup, Field, inputClass } from '../components/fields';
 import {
@@ -8,7 +13,7 @@ import {
   HP_OPTIONS,
   LEVELING_OPTIONS,
 } from '../campaignOptions';
-import { findCampaign, newCampaign } from '../fixtures/campaigns';
+import { newCampaign, type CampaignView } from '../fixtures/campaigns';
 import { useFixtureAction } from '../fixtures/useFixtureAction';
 import { PlaceholderScreen } from './PlaceholderScreen';
 
@@ -18,7 +23,37 @@ import { PlaceholderScreen } from './PlaceholderScreen';
  */
 export function CampaignSetupScreen() {
   const { campaignId } = useParams();
-  const existing = findCampaign(campaignId);
+  const saved = useCampaign();
+  const records = useStore(characterStore, (state) => state.characters);
+  const existing: CampaignView | undefined = saved
+    ? {
+        ...saved,
+        hpFloor: saved.hpLevelFloor,
+        abilityMethod:
+          saved.abilityMethod === 'standard-array'
+            ? 'standard'
+            : saved.abilityMethod === 'point-buy'
+              ? 'pointBuy'
+              : 'rolled',
+        characters: Object.values(records)
+          .filter((record) => record.build.campaignId === saved.id)
+          .map((record) => ({
+            id: record.build.id,
+            name: record.build.name,
+            iconId: `character.${record.build.id}`,
+            line: record.build.classes
+              .map((entry) => `${registry.get('class', entry.classId).name} ${entry.level}`)
+              .join(' / '),
+            hp: {
+              current: record.live.hp,
+              max: computeSheet(
+                { campaign: saved, build: record.build, live: record.live },
+                registry,
+              ).maxHp.value,
+            },
+          })),
+      }
+    : undefined;
   if (campaignId && !existing) return <PlaceholderScreen title="Campaign not found" />;
   return <CampaignForm key={campaignId ?? 'new'} campaign={existing ?? newCampaign} />;
 }

@@ -201,6 +201,8 @@ interface LogEvent {
 - **Stored rows (M3):** `{ id, schemaVersion, data }`; event rows also have `characterId` and a stable `order`, with compound primary key `[characterId + id]`. This keeps identical imported event IDs on different characters separate.
 - **Atomic saves:** a serialized queue writes the workspace's builds, live states, logs, and campaigns together. The UI shows pending or failed saves; success feedback waits for the queue. Saved records and remaining undo history validate before startup hydration. Invalid records are preserved and show a load error.
 - **Window conflicts:** a `workspaceRevision` setting is checked and advanced inside each save transaction. A stale window cannot replace another window's saved changes. Its local changes remain unsaved with an explicit conflict message; retry never forces an overwrite.
+- **Management history:** creation, duplication, deletion, and import use pure engine commands with a separate 500-event workspace log in the `managementEvents` setting. The log saves atomically with character data. Undo warns before replacing character changes made since a management action. Character exports retain the documented single-character export shape.
+- **Import collisions:** matching character IDs add a new copy; conflicting campaign rules add a new campaign. Remapped copies keep current values and choices but start fresh character-action histories, because old inverse patches may reference the old identity. The import preview explains this before saving.
 
 ## 7. Summary style (house style)
 

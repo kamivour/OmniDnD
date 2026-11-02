@@ -7,7 +7,7 @@ const LOOPBACK_HTTP = 'http://127.0.0.1:4173/**';
 
 export const test = base.extend<{ forwardLoopbackHttp: void }>({
   forwardLoopbackHttp: [
-    async ({ context }, use) => {
+    async ({ context }, runTest) => {
       if (process.env.OMNI_E2E_FORWARD_HTTP === '1') {
         // Optional transport workaround for hosts that deny Chromium loopback connections.
         // Node requests the real production server; no responses or application data are mocked.
@@ -18,7 +18,12 @@ export const test = base.extend<{ forwardLoopbackHttp: void }>({
           await route.fulfill({ response });
         });
       }
-      await use();
+      try {
+        await runTest();
+      } finally {
+        if (process.env.OMNI_E2E_FORWARD_HTTP === '1')
+          await context.unrouteAll({ behavior: 'wait' });
+      }
     },
     { auto: true },
   ],

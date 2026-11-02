@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from 'react-router';
 import { Library, Settings } from 'lucide-react';
 import { cx } from '../cx';
+import { StorageStatus } from '../storage/StorageStatus';
 
 const LINKS = [
   { to: '/reference', label: 'Reference', icon: Library },
@@ -37,7 +38,10 @@ export function HubFrame() {
           </nav>
         </div>
       </header>
-      <main className="mx-auto max-w-5xl px-4 py-6">
+      <div className="mx-auto max-w-5xl px-4">
+        <StorageStatus />
+      </div>
+      <main id="hub-workspace" tabIndex={-1} className="mx-auto max-w-5xl px-4 py-6">
         <Outlet />
       </main>
     </div>

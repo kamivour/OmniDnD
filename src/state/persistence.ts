@@ -11,6 +11,7 @@ import {
   type WorkspaceRows,
 } from '../db/database';
 import { characterStore, createCharacterStore } from './character-store';
+import { ManagementEventSchema } from '../engine/commands/management';
 
 interface StorageStatus {
   ready: boolean;
@@ -73,6 +74,7 @@ async function replaceRows(rows: WorkspaceRows) {
     database.campaigns.bulkPut(rows.campaigns),
     database.settings.put(storedRecord('automation', rows.automation)),
     database.settings.put(storedRecord('initialized', true)),
+    database.settings.put(storedRecord('managementEvents', rows.managementEvents ?? [])),
   ]);
 }
 
@@ -109,6 +111,7 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
       const savedSettings = settings.map((row) => parseStoredRecord(row, z.unknown(), 'setting'));
       const initialized = savedSettings.find(({ id }) => id === 'initialized');
       const automation = savedSettings.find(({ id }) => id === 'automation');
+      const management = savedSettings.find(({ id }) => id === 'managementEvents');
       const mode = automation ? AutomationSchema.parse(automation.data) : 'assisted';
       if (initialized) {
         if (initialized.data !== true) throw new Error('Saved initialization marker is invalid');
@@ -118,6 +121,7 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
           events,
           campaigns,
           automation: mode,
+          managementEvents: management ? z.array(ManagementEventSchema).parse(management.data) : [],
         });
         return { workspace, revision: await readRevision() };
       }
@@ -175,12 +179,14 @@ export function initializePersistence(): Promise<void> {
           if (
             next.characters !== previous.characters ||
             next.campaigns !== previous.campaigns ||
-            next.automation !== previous.automation
+            next.automation !== previous.automation ||
+            next.managementEvents !== previous.managementEvents
           ) {
             enqueueSave({
               characters: next.characters,
               campaigns: next.campaigns,
               automation: next.automation,
+              managementEvents: next.managementEvents,
             });
           }
         });
@@ -216,7 +222,7 @@ export async function flushPersistence(): Promise<void> {
 /** Recover a failed startup, or save the latest in-memory workspace after a write failure. */
 export async function retryPersistence(): Promise<void> {
   if (!storageStatusStore.getState().ready) return initializePersistence();
-  const { campaigns, characters, automation } = characterStore.getState();
-  enqueueSave({ campaigns, characters, automation });
+  const { campaigns, characters, automation, managementEvents } = characterStore.getState();
+  enqueueSave({ campaigns, characters, automation, managementEvents });
   await flushPersistence();
 }

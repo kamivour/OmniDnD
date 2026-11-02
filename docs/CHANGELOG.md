@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-02 15:02 — Live Campaigns hub and character management
+
+- Campaign cards now show saved characters and computed HP. New blank characters follow campaign methods; racial bonuses, scores, HP, and XP baselines are computed from choices.
+- Copy and delete controls are live, with confirmation and a separate management Undo that survives refresh. Undo warns before replacing later character changes.
+- Export downloads validated JSON. Import previews the character before saving, keeps existing characters intact, and creates separate copies or campaigns when IDs or rules conflict. Remapped copies start fresh game-action histories, as explained in the preview.
+- Added phone, desktop, keyboard-focus, reload, import-error, and unusual-ID navigation checks. Validation: 343 unit tests, 132 full browser checks, and two final corrected-form checks pass; typecheck, lint, and build pass. Browser checks use the optional real-HTTP forwarder.
+- Manual QA is in `docs/MANUAL_QA.md`. Saved campaign settings display correctly; their Save/Create actions are the next M3 task. Optional build choices remain unselected in new blank characters.
+
 ## 2026-11-02 14:26 — Local saving and undo survive refresh
 
 - HUD changes and their undo history now save together in IndexedDB and reload on startup. The Fool is seeded only on first use.

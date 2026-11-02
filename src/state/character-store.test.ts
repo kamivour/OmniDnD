@@ -3,6 +3,7 @@ import { registry } from '../data/registry';
 import { seedFile } from '../data/seed';
 import { computeSheet } from '../engine/calc/sheet';
 import { applyDamage, heal, setTempHp } from '../engine/commands/hp';
+import { addCharacter, deleteCharacter, duplicateCharacter } from '../engine/commands/management';
 import { adjustSlot } from '../engine/commands/spells';
 import type { ExportFile } from '../engine/schema';
 import { characterState, createCharacterStore, type CharacterStore } from './character-store';
@@ -181,5 +182,130 @@ describe('character command store', () => {
     );
     expect(() => store.getState().undo('missing')).toThrow('Character "missing" not found');
     expect(store.getState()).toBe(before);
+  });
+});
+
+describe('workspace management command store', () => {
+  function importedFile(id = 'new-bard'): ExportFile {
+    const file = structuredClone(seedFile);
+    file.build.id = id;
+    file.live.characterId = id;
+    return file;
+  }
+
+  it('commits successful engine results and management logs, while blocked calls leave the store untouched', () => {
+    const store = createCharacterStore();
+    const before = store.getState();
+    const file = importedFile();
+    const fileBefore = structuredClone(file);
+    expect(store.getState().dispatchManagement(addCharacter, { file }, event('add')).result).toBe(
+      'ok',
+    );
+    expect(before.characters).not.toHaveProperty(file.build.id);
+    expect(record(store, file.build.id)).toEqual({
+      build: file.build,
+      live: file.live,
+      events: file.events,
+    });
+    expect(store.getState().managementEvents).toMatchObject([
+      { id: 'add', command: 'addCharacter', realTime: TIME },
+    ]);
+    expect(file).toEqual(fileBefore);
+
+    const current = store.getState();
+    expect(
+      store.getState().dispatchManagement(addCharacter, { file }, event('collision')).result,
+    ).toBe('blocked');
+    expect(
+      store
+        .getState()
+        .dispatchManagement(deleteCharacter, { characterId: 'missing' }, event('missing')).result,
+    ).toBe('blocked');
+    expect(store.getState()).toBe(current);
+    expect(store.getState().managementEvents).toHaveLength(1);
+
+    expect(store.getState().undoManagement(event('undo-add')).result).toBe('ok');
+    expect(store.getState().characters).toEqual(before.characters);
+    expect(store.getState().managementEvents).toMatchObject([
+      { id: 'add', undoneBy: 'undo-add' },
+      { id: 'undo-add', command: 'undo' },
+    ]);
+    const undone = store.getState();
+    expect(store.getState().undoManagement(event('empty')).result).toBe('blocked');
+    expect(store.getState()).toBe(undone);
+  });
+
+  it('restores a deleted character with its exact game history and keeps character Undo usable', () => {
+    const store = createCharacterStore();
+    store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, event('damage'));
+    store.getState().dispatch(FOOL, heal, { amount: 1 }, event('heal'));
+    const beforeDelete = structuredClone(record(store));
+
+    expect(
+      store.getState().dispatchManagement(deleteCharacter, { characterId: FOOL }, event('delete'))
+        .result,
+    ).toBe('ok');
+    expect(store.getState().characters).not.toHaveProperty(FOOL);
+    expect(store.getState().undoManagement(event('restore')).result).toBe('ok');
+    expect(record(store)).toEqual(beforeDelete);
+    expect(store.getState().undo(FOOL, event('undo-heal')).result).toBe('ok');
+    expect(record(store).live.hp).toBe(9);
+    expect(record(store).events).toMatchObject([
+      { id: 'damage' },
+      { id: 'heal', undoneBy: 'undo-heal' },
+      { id: 'undo-heal', command: 'undo' },
+    ]);
+    expect(store.getState().managementEvents).toHaveLength(2);
+  });
+
+  it('warns before undoing an add that would discard subsequent game commands', () => {
+    const store = createCharacterStore();
+    const file = importedFile();
+    const original = record(store);
+    store.getState().dispatchManagement(addCharacter, { file }, event('add'));
+    store.getState().dispatch(file.build.id, applyDamage, { amount: 4 }, event('damage-new'));
+    expect(record(store, file.build.id).live.hp).toBe(7);
+    expect(record(store)).toBe(original);
+    expect(store.getState().managementEvents).toHaveLength(1);
+    const current = store.getState();
+
+    const warning = store.getState().undoManagement(event('cancelled'));
+    expect(warning.result).toBe('warn');
+    if (warning.result !== 'warn') throw new Error('Expected a management undo warning');
+    expect(warning.reasons[0]).toMatch(/later changes/);
+    expect(store.getState()).toBe(current);
+    expect(record(store, file.build.id).events.at(-1)?.id).toBe('damage-new');
+
+    expect(store.getState().undoManagement({ ...event('forced'), force: true }).result).toBe('ok');
+    expect(store.getState().characters).not.toHaveProperty(file.build.id);
+    expect(record(store)).toBe(original);
+    expect(store.getState().managementEvents).toMatchObject([
+      { id: 'add', undoneBy: 'forced' },
+      { id: 'forced', command: 'undo', override: true },
+    ]);
+  });
+
+  it('keeps existing-character game changes independent from duplicate history and its undo', () => {
+    const store = createCharacterStore();
+    store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, event('first-damage'));
+    expect(
+      store
+        .getState()
+        .dispatchManagement(
+          duplicateCharacter,
+          { sourceId: FOOL, id: 'copy', name: 'The Other Fool' },
+          event('duplicate'),
+        ).result,
+    ).toBe('ok');
+    expect(record(store, 'copy').live.hp).toBe(9);
+    expect(record(store, 'copy').events).toEqual([]);
+    store.getState().dispatch(FOOL, heal, { amount: 1 }, event('later-heal'));
+    const original = record(store);
+
+    expect(store.getState().undoManagement(event('undo-duplicate')).result).toBe('ok');
+    expect(store.getState().characters).not.toHaveProperty('copy');
+    expect(record(store)).toBe(original);
+    expect(record(store).live.hp).toBe(10);
+    expect(record(store).events.map(({ id }) => id)).toEqual(['first-damage', 'later-heal']);
   });
 });

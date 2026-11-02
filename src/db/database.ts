@@ -4,6 +4,11 @@ import { registry } from '../data/registry';
 import { computeSheet } from '../engine/calc/sheet';
 import { EVENT_LIMIT, undo, type Automation } from '../engine/commands/runner';
 import {
+  ManagementEventSchema,
+  undoManagement,
+  type ManagementEvent,
+} from '../engine/commands/management';
+import {
   CampaignSchema,
   CharacterBuildSchema,
   ExportFileSchema,
@@ -29,7 +34,10 @@ export interface StoredEvent extends StoredRecord<LogEvent> {
   order: number;
 }
 
-export type Workspace = Pick<CharacterStoreState, 'campaigns' | 'characters' | 'automation'>;
+export type Workspace = Pick<
+  CharacterStoreState,
+  'campaigns' | 'characters' | 'automation' | 'managementEvents'
+>;
 
 export interface WorkspaceRows {
   builds: StoredRecord<CharacterBuild>[];
@@ -37,6 +45,8 @@ export interface WorkspaceRows {
   events: StoredEvent[];
   campaigns: StoredRecord<Campaign>[];
   automation: Automation;
+  /** Missing in the first M3 saves; they contain no management history. */
+  managementEvents?: ManagementEvent[];
 }
 
 class OmniDatabase extends Dexie {
@@ -191,6 +201,10 @@ export function serializeWorkspace(workspace: Workspace): WorkspaceRows {
     events,
     campaigns,
     automation: AutomationSchema.parse(workspace.automation),
+    managementEvents: z
+      .array(ManagementEventSchema)
+      .max(EVENT_LIMIT)
+      .parse(workspace.managementEvents),
   };
 }
 
@@ -248,9 +262,35 @@ export function deserializeWorkspace(rows: WorkspaceRows): Workspace {
     validateUndoHistory(file);
     return [id, { build: file.build, live: file.live, events: file.events }];
   });
-  return {
+  const workspace = {
     campaigns,
     characters: Object.fromEntries(characters),
     automation: AutomationSchema.parse(rows.automation),
+    managementEvents: z
+      .array(ManagementEventSchema)
+      .max(EVENT_LIMIT)
+      .parse(rows.managementEvents ?? []),
   };
+  let check = { campaigns: workspace.campaigns, characters: workspace.characters };
+  let history = workspace.managementEvents;
+  const ids = new Set(history.map((event) => event.id));
+  if (ids.size !== history.length) throw new Error('Duplicate saved management event');
+  try {
+    for (let index = 0; index < EVENT_LIMIT; index += 1) {
+      if (!history.some((event) => event.command !== 'undo' && !event.undoneBy)) break;
+      const result = undoManagement(
+        check,
+        history,
+        registry,
+        { eventId: `load-management-${index}`, realTime: '1970-01-01T00:00:00.000Z' },
+        true,
+      );
+      if (result.result !== 'ok') throw new Error('Saved management command cannot be undone');
+      check = result.next;
+      history = result.events;
+    }
+  } catch {
+    throw new Error('Saved management undo history is invalid');
+  }
+  return workspace;
 }

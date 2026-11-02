@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M3 — Shell, HUD, persistence.
-**Next up:** M3 live Campaigns hub: character management and JSON import/export.
+**Next up:** M3 live Campaign Setup: save character rules and create campaigns.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -84,7 +84,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] All screens routed; Phase 2+ screens show "Coming in Phase N"
 - [x] Global HUD wired to store; adjust popovers
 - [x] Dexie save after each command; load on start
-- [ ] Campaigns hub (live): list campaigns + characters, seed #273 with The Fool, create blank, duplicate, delete, import/export JSON
+- [x] Campaigns hub (live): list campaigns + characters, seed #273 with The Fool, create blank, duplicate, delete, import/export JSON
 - [ ] Campaign Setup (Phase 1 part, live): leveling, HP method, ability method. New character entry follows these methods
 - [ ] Reference: link cards + bookmarks + Credits page
 - [ ] Settings: reduced motion, automation level, export/import
@@ -140,6 +140,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-02 — M3 live hub and blank creation: saved campaign/character cards, copy/delete confirmation, durable management Undo, validated JSON preview/import/export, collision-safe copies, and source-filtered creation with derived racial bonuses/HP/XP (D67–D68). 343 unit tests and 132 full browser checks pass; the final corrected-form checks also pass at both widths. Typecheck, lint and build pass. Manual management QA added. Next: live Campaign Setup save/create.
 
 - 2026-11-02 — M3 persistence: atomic IndexedDB workspace saves, startup validation/hydration, serialized queue, save status/Retry, durable toolbar Undo, seed-once marker, and stale-window revision guard (D66). Invalid data and undo histories are preserved with a load error. 253 unit tests and 118 browser checks pass; typecheck, lint and build pass. Manual persistence QA added. Next: live Campaigns hub and character management.
 

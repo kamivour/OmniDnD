@@ -1,4 +1,5 @@
 import type { HpLevelFloor } from '../engine/calc/hp';
+import type { Campaign } from '../engine/schema';
 import type { AbilityMethod, CampaignView, HpMethod, Leveling } from './fixtures/campaigns';
 
 /** Campaign Setup choices (SPEC §5 Campaign Setup). Labels and one-line hints, own words. */
@@ -43,12 +44,18 @@ export function optionLabel<T extends string>(options: Option<T>[], value: T): s
 }
 
 /** One-line rules summary, e.g. "5e 2014 · Milestone · HP rolled · Abilities rolled · PHB, XGE, TCE". */
-export function rulesSummary(c: CampaignView): string {
+export function rulesSummary(c: CampaignView | Campaign): string {
+  const abilityMethod =
+    c.abilityMethod === 'standard-array'
+      ? 'standard'
+      : c.abilityMethod === 'point-buy'
+        ? 'pointBuy'
+        : c.abilityMethod;
   return [
     '5e 2014',
     optionLabel(LEVELING_OPTIONS, c.leveling),
     `HP ${optionLabel(HP_OPTIONS, c.hpMethod).toLowerCase()}`,
-    `Abilities ${optionLabel(ABILITY_OPTIONS, c.abilityMethod).toLowerCase()}`,
+    `Abilities ${optionLabel(ABILITY_OPTIONS, abilityMethod).toLowerCase()}`,
     c.sources.join(', '),
   ].join(' · ');
 }

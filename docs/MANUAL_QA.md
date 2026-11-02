@@ -28,4 +28,13 @@ Check these items in a normal browser after each completed milestone. Unchecked 
 - [ ] Check the save indicator and Undo button remain readable and reachable at 375 px, including when Details is open.
 - [ ] In a throwaway browser profile, open two windows before changing anything. Save a change in the first window, then edit the stale second window. The second should show "Save conflict"; it must not overwrite the first window's saved change. Reloading the stale window warns about its unsaved change.
 
-The HUD and its local saving are live. Dashboard, Spellbook, and Combat content still uses the approved static frames until M4–M6. Automated checks cover failed-write rollback, Retry, and rejecting damaged records without erasing them.
+## Phase 1 — M3: campaigns and character management
+
+- [ ] Open a character, adjust its HP from the HUD, return to All campaigns, and confirm the card shows the same HP after a refresh.
+- [ ] Make a named copy. Change the copy's HP and confirm the original stays unchanged. The copy should keep choices and current resources while starting its own game-action history.
+- [ ] Delete the copy: first Cancel, then confirm deletion. Refresh, use Undo management, and confirm the character and its saved history return. Cancel and close buttons should restore keyboard focus.
+- [ ] Export a character, then import that JSON. Review the preview before adding it. An existing character ID should create a separate copy; existing characters must remain intact. Conflicting campaign rules should create a separate imported campaign.
+- [ ] Create a blank Half-Elf Bard with Charlatan background in #273. For level 1, use bases STR 11, DEX 14, CON 12, INT 12, WIS 12, CHA 18; choose DEX and CON for the two racial bonuses. The form should compute CON 13, CHA 20, and max HP 9. Create it and confirm the HUD shows 9/9 after refresh. Optional build choices remain unselected.
+- [ ] Check import/copy/delete controls and creation fields at 375 px and desktop width. Invalid creation choices should show useful errors, which clear when you correct the inputs.
+
+The hub, blank character creation, HUD, and local saving are live. Campaign settings can display saved rules; saving settings and creating campaigns come next. Dashboard, Spellbook, and Combat content still uses the approved static frames until M4–M6. Automated checks cover failed-write rollback, Retry, and rejecting damaged records without erasing them.
