@@ -12,6 +12,7 @@ import {
 } from '../db/database';
 import { characterStore, createCharacterStore } from './character-store';
 import { ManagementEventSchema } from '../engine/commands/management';
+import { BookmarkSchema } from '../engine/schema';
 
 interface StorageStatus {
   ready: boolean;
@@ -75,6 +76,7 @@ async function replaceRows(rows: WorkspaceRows) {
     database.settings.put(storedRecord('automation', rows.automation)),
     database.settings.put(storedRecord('initialized', true)),
     database.settings.put(storedRecord('managementEvents', rows.managementEvents ?? [])),
+    database.settings.put(storedRecord('bookmarks', rows.bookmarks ?? [])),
   ]);
 }
 
@@ -112,6 +114,7 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
       const initialized = savedSettings.find(({ id }) => id === 'initialized');
       const automation = savedSettings.find(({ id }) => id === 'automation');
       const management = savedSettings.find(({ id }) => id === 'managementEvents');
+      const bookmarks = savedSettings.find(({ id }) => id === 'bookmarks');
       const mode = automation ? AutomationSchema.parse(automation.data) : 'assisted';
       if (initialized) {
         if (initialized.data !== true) throw new Error('Saved initialization marker is invalid');
@@ -122,10 +125,11 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
           campaigns,
           automation: mode,
           managementEvents: management ? z.array(ManagementEventSchema).parse(management.data) : [],
+          bookmarks: bookmarks ? z.array(BookmarkSchema).parse(bookmarks.data) : [],
         });
         return { workspace, revision: await readRevision() };
       }
-      if (builds.length || live.length || events.length || campaigns.length) {
+      if (builds.length || live.length || events.length || campaigns.length || bookmarks) {
         throw new Error('Saved workspace is missing its initialization marker');
       }
       const initial = { ...createCharacterStore().getState(), automation: mode };
@@ -180,13 +184,15 @@ export function initializePersistence(): Promise<void> {
             next.characters !== previous.characters ||
             next.campaigns !== previous.campaigns ||
             next.automation !== previous.automation ||
-            next.managementEvents !== previous.managementEvents
+            next.managementEvents !== previous.managementEvents ||
+            next.bookmarks !== previous.bookmarks
           ) {
             enqueueSave({
               characters: next.characters,
               campaigns: next.campaigns,
               automation: next.automation,
               managementEvents: next.managementEvents,
+              bookmarks: next.bookmarks,
             });
           }
         });
@@ -222,7 +228,8 @@ export async function flushPersistence(): Promise<void> {
 /** Recover a failed startup, or save the latest in-memory workspace after a write failure. */
 export async function retryPersistence(): Promise<void> {
   if (!storageStatusStore.getState().ready) return initializePersistence();
-  const { campaigns, characters, automation, managementEvents } = characterStore.getState();
-  enqueueSave({ campaigns, characters, automation, managementEvents });
+  const { campaigns, characters, automation, managementEvents, bookmarks } =
+    characterStore.getState();
+  enqueueSave({ campaigns, characters, automation, managementEvents, bookmarks });
   await flushPersistence();
 }

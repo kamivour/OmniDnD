@@ -6,15 +6,18 @@ import { EVENT_LIMIT, undo, type Automation } from '../engine/commands/runner';
 import {
   ManagementEventSchema,
   undoManagement,
+  type ManagementData,
   type ManagementEvent,
 } from '../engine/commands/management';
 import {
+  BookmarkSchema,
   CampaignSchema,
   CharacterBuildSchema,
   ExportFileSchema,
   LiveStateSchema,
   LogEventSchema,
   SCHEMA_VERSION,
+  type Bookmark,
   type Campaign,
   type CharacterBuild,
   type ExportFile,
@@ -36,7 +39,7 @@ export interface StoredEvent extends StoredRecord<LogEvent> {
 
 export type Workspace = Pick<
   CharacterStoreState,
-  'campaigns' | 'characters' | 'automation' | 'managementEvents'
+  'campaigns' | 'characters' | 'automation' | 'managementEvents' | 'bookmarks'
 >;
 
 export interface WorkspaceRows {
@@ -47,6 +50,8 @@ export interface WorkspaceRows {
   automation: Automation;
   /** Missing in the first M3 saves; they contain no management history. */
   managementEvents?: ManagementEvent[];
+  /** Missing before Reference bookmarks were introduced. */
+  bookmarks?: Bookmark[];
 }
 
 class OmniDatabase extends Dexie {
@@ -109,6 +114,16 @@ export function parseStoredRecord<T>(
 
 export function storedRecord<T>(id: string, data: T): StoredRecord<T> {
   return { id, schemaVersion: SCHEMA_VERSION, data };
+}
+
+function parseBookmarks(value: unknown): Bookmark[] {
+  const bookmarks = z.array(BookmarkSchema).parse(value);
+  const ids = new Set<string>();
+  for (const bookmark of bookmarks) {
+    if (ids.has(bookmark.id)) throw new Error(`Duplicate saved bookmark "${bookmark.id}"`);
+    ids.add(bookmark.id);
+  }
+  return bookmarks;
 }
 
 function validateCharacter(record: CharacterRecord, campaign: Campaign | undefined) {
@@ -205,6 +220,7 @@ export function serializeWorkspace(workspace: Workspace): WorkspaceRows {
       .array(ManagementEventSchema)
       .max(EVENT_LIMIT)
       .parse(workspace.managementEvents),
+    bookmarks: parseBookmarks(workspace.bookmarks),
   };
 }
 
@@ -270,8 +286,13 @@ export function deserializeWorkspace(rows: WorkspaceRows): Workspace {
       .array(ManagementEventSchema)
       .max(EVENT_LIMIT)
       .parse(rows.managementEvents ?? []),
+    bookmarks: parseBookmarks(rows.bookmarks === undefined ? [] : rows.bookmarks),
   };
-  let check = { campaigns: workspace.campaigns, characters: workspace.characters };
+  let check: ManagementData = {
+    campaigns: workspace.campaigns,
+    characters: workspace.characters,
+    bookmarks: workspace.bookmarks,
+  };
   let history = workspace.managementEvents;
   const ids = new Set(history.map((event) => event.id));
   if (ids.size !== history.length) throw new Error('Duplicate saved management event');

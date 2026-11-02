@@ -23,6 +23,7 @@ import {
 } from '../engine/commands/runner';
 import {
   ExportFileSchema,
+  type Bookmark,
   type Campaign,
   type CharacterBuild,
   type ExportFile,
@@ -39,6 +40,7 @@ export interface CharacterRecord {
 export interface CharacterStoreState {
   campaigns: Record<string, Campaign>;
   characters: Record<string, CharacterRecord>;
+  bookmarks: Bookmark[];
   automation: Automation;
   managementEvents: ManagementEvent[];
   dispatchManagement: <Payload>(
@@ -87,6 +89,7 @@ export function createCharacterStore(files: ExportFile[] = [seedFile]) {
   return createStore<CharacterStoreState>()((set, get) => ({
     campaigns,
     characters,
+    bookmarks: [],
     automation: 'assisted',
     managementEvents: [],
     dispatchManagement: (command, payload, options) => {

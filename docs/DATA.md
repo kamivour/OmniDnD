@@ -206,6 +206,7 @@ interface LogEvent {
 - **Window conflicts:** a `workspaceRevision` setting is checked and advanced inside each save transaction. A stale window cannot replace another window's saved changes. Its local changes remain unsaved with an explicit conflict message; retry never forces an overwrite.
 - **Management history:** creation, duplication, deletion, and import use pure engine commands with a separate 500-event workspace log in the `managementEvents` setting. The log saves atomically with character data. Undo warns before replacing character changes made since a management action. Character exports retain the documented single-character export shape.
 - **Import collisions:** matching character IDs add a new copy; conflicting campaign rules add a new campaign. Remapped copies keep current values and choices but start fresh character-action histories, because old inverse patches may reference the old identity. The import preview explains this before saving.
+- **Reference bookmarks (D70):** a shared `bookmarks` setting stores `{ id, title, url }[]`, with unique IDs and HTTP(S) URLs only. Add/edit/remove use management commands and the same durable Undo. The setting saves atomically with the workspace and management history. Missing legacy bookmarks default to an empty list; malformed saved bookmarks show a load error. Bookmarks are device-wide and are not part of single-character exports.
 
 ## 7. Summary style (house style)
 

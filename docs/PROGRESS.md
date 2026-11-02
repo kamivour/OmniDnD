@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M3 — Shell, HUD, persistence.
-**Next up:** M3 Reference links, bookmarks, and Credits.
+**Next up:** M3 Settings: reduced motion, automation, and character export/import.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -86,7 +86,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Dexie save after each command; load on start
 - [x] Campaigns hub (live): list campaigns + characters, seed #273 with The Fool, create blank, duplicate, delete, import/export JSON
 - [x] Campaign Setup (Phase 1 part, live): leveling, HP method, ability method. New character entry follows these methods
-- [ ] Reference: link cards + bookmarks + Credits page
+- [x] Reference: link cards + bookmarks + Credits page
 - [ ] Settings: reduced motion, automation level, export/import
 
 ### M4 — Spellbook (live)
@@ -140,6 +140,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-02 — M3 Reference: eight external cards with 2014 destinations/edition notes, shared HTTP(S) bookmarks with durable management Undo, and Credits with SRD attribution, icon sources/authors, and local icon/font license notices (D70). 454 unit tests pass; 148 browser checks pass after focused reruns for a fixed removal-focus race and two transport errors. Typecheck, lint and build pass; 375/1440 layouts checked. Manual Reference QA added. Next: Settings.
 
 - 2026-11-02 — M3 live Campaign Setup: create/save through management commands, retained-entry notes, and new-character inputs following saved methods. Per-entry HP floors preserve legacy low rolls and negative-CON HP when rules change (D69). Management Undo also survives character Undo removing an older level. 379 unit tests and 140 browser checks pass; one host transport error in a skipped case cleared on rerun. Typecheck, lint and build pass; phone/desktop visually checked. Manual campaign QA added. Next: Reference links/bookmarks and Credits.
 

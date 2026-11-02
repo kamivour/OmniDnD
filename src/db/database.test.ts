@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { seedFile } from '../data/seed';
 import { applyDamage, heal } from '../engine/commands/hp';
+import { addBookmark, deleteBookmark, updateBookmark } from '../engine/commands/bookmarks';
 import { deleteCharacter, duplicateCharacter } from '../engine/commands/management';
-import type { ExportFile } from '../engine/schema';
+import type { Bookmark, ExportFile } from '../engine/schema';
 import { createCharacterStore } from '../state/character-store';
 import {
   deserializeWorkspace,
@@ -36,6 +37,7 @@ describe('persisted workspace validation', () => {
     expect(loaded.characters).toEqual(store.getState().characters);
     expect(loaded.campaigns).toEqual(store.getState().campaigns);
     expect(loaded.automation).toBe('assisted');
+    expect(loaded.bookmarks).toEqual([]);
     expect(loaded.characters[FOOL]?.events[0]?.undoneBy).toBe('undo');
   });
 
@@ -71,6 +73,7 @@ describe('persisted workspace validation', () => {
       campaigns: {},
       automation: 'manual' as const,
       managementEvents: [],
+      bookmarks: [],
     };
     expect(deserializeWorkspace(serializeWorkspace(empty))).toEqual(empty);
   });
@@ -297,4 +300,142 @@ describe('persisted workspace management history', () => {
     expect(() => deserializeWorkspace(saved)).toThrow('Duplicate saved management event');
     expect(saved).toEqual(before);
   });
+});
+
+describe('persisted Reference bookmarks', () => {
+  const bookmark: Bookmark = {
+    id: '2014-rules',
+    title: '2014 rules',
+    url: 'https://example.com/2014-rules',
+  };
+
+  function reload(store: ReturnType<typeof createCharacterStore>) {
+    const saved = serializeWorkspace(store.getState());
+    const before = structuredClone(saved);
+    const restored = createCharacterStore([]);
+    restored.setState(deserializeWorkspace(saved));
+    expect(saved).toEqual(before);
+    return restored;
+  }
+
+  it('round-trips add, edit, delete and each Undo alongside character state and history', () => {
+    let store = createCharacterStore();
+    store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, metadata('damage'));
+    expect(
+      store.getState().dispatchManagement(addBookmark, { bookmark }, metadata('add-bookmark'))
+        .result,
+    ).toBe('ok');
+    store = reload(store);
+    expect(store.getState().bookmarks).toEqual([bookmark]);
+
+    const edited = { ...bookmark, title: 'Session rules', url: 'https://example.com/session' };
+    expect(
+      store
+        .getState()
+        .dispatchManagement(updateBookmark, { bookmark: edited }, metadata('edit-bookmark')).result,
+    ).toBe('ok');
+    store = reload(store);
+    expect(store.getState().bookmarks).toEqual([edited]);
+
+    expect(
+      store
+        .getState()
+        .dispatchManagement(
+          deleteBookmark,
+          { bookmarkId: bookmark.id },
+          metadata('delete-bookmark'),
+        ).result,
+    ).toBe('ok');
+    store = reload(store);
+    expect(store.getState().bookmarks).toEqual([]);
+
+    for (const [eventId, expected] of [
+      ['restore-bookmark', [edited]],
+      ['undo-edit', [bookmark]],
+      ['undo-add', []],
+    ] as const) {
+      expect(store.getState().undoManagement(metadata(eventId)).result).toBe('ok');
+      store = reload(store);
+      expect(store.getState().bookmarks).toEqual(expected);
+      expect(store.getState().characters[FOOL]?.live.hp).toBe(9);
+    }
+    expect(store.getState().managementEvents).toMatchObject([
+      { id: 'add-bookmark', undoneBy: 'undo-add' },
+      { id: 'edit-bookmark', undoneBy: 'undo-edit' },
+      { id: 'delete-bookmark', undoneBy: 'restore-bookmark' },
+      { id: 'restore-bookmark', command: 'undo' },
+      { id: 'undo-edit', command: 'undo' },
+      { id: 'undo-add', command: 'undo' },
+    ]);
+    expect(store.getState().undo(FOOL, metadata('undo-damage')).result).toBe('ok');
+    expect(store.getState().characters[FOOL]?.live.hp).toBe(11);
+  });
+
+  it('loads legacy rows without bookmarks without changing the saved input', () => {
+    const saved = rows();
+    delete saved.bookmarks;
+    const before = structuredClone(saved);
+    const loaded = deserializeWorkspace(saved);
+    expect(loaded.bookmarks).toEqual([]);
+    expect(loaded.characters[FOOL]?.events).toHaveLength(2);
+    expect(saved).toEqual(before);
+    expect(saved).not.toHaveProperty('bookmarks');
+  });
+
+  it.each([
+    ['unsafe URL', [{ ...bookmark, url: 'javascript:alert(1)' }]],
+    ['missing title', [{ id: bookmark.id, url: bookmark.url }]],
+    ['duplicate IDs', [bookmark, { ...bookmark, title: 'Duplicate' }]],
+    ['non-array data', { bookmark }],
+    ['null data', null],
+  ])('rejects %s without changing saved bookmarks', (_label, bookmarks) => {
+    const saved = rows();
+    Object.assign(saved, { bookmarks });
+    const before = structuredClone(saved);
+    expect(() => deserializeWorkspace(saved)).toThrow();
+    expect(saved).toEqual(before);
+  });
+
+  it('rejects duplicate in-memory bookmark IDs before writing any rows', () => {
+    const store = createCharacterStore();
+    store.setState({ bookmarks: [bookmark, { ...bookmark }] });
+    const before = structuredClone(store.getState().bookmarks);
+    expect(() => serializeWorkspace(store.getState())).toThrow('Duplicate saved bookmark');
+    expect(store.getState().bookmarks).toEqual(before);
+  });
+
+  it.each(['unsafe URL', 'duplicate ID', 'invalid path'] as const)(
+    'rejects corrupted bookmark Undo: %s',
+    (kind) => {
+      const store = createCharacterStore();
+      store.getState().dispatchManagement(addBookmark, { bookmark }, metadata('add-first'));
+      store
+        .getState()
+        .dispatchManagement(
+          addBookmark,
+          { bookmark: { ...bookmark, id: 'second' } },
+          metadata('add-second'),
+        );
+      store
+        .getState()
+        .dispatchManagement(
+          updateBookmark,
+          { bookmark: { ...bookmark, title: 'Edited title' } },
+          metadata('edit-first'),
+        );
+      const saved = serializeWorkspace(store.getState());
+      const edited = saved.managementEvents?.at(-1);
+      if (!edited) throw new Error('Saved bookmark event missing');
+      edited.inversePatches = [
+        kind === 'unsafe URL'
+          ? { op: 'replace', path: ['bookmarks', 0, 'url'], value: 'javascript:alert(1)' }
+          : kind === 'duplicate ID'
+            ? { op: 'replace', path: ['bookmarks', 0, 'id'], value: 'second' }
+            : { op: 'replace', path: ['bookmarks', 0, 'missing', 'url'], value: bookmark.url },
+      ];
+      const before = structuredClone(saved);
+      expect(() => deserializeWorkspace(saved)).toThrow('Saved management undo history is invalid');
+      expect(saved).toEqual(before);
+    },
+  );
 });

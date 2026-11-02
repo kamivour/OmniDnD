@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-02 15:44 — Reference, bookmarks, and Credits
+
+- Reference now has eight external rule/tool cards, with direct 2014 Basic Rules, SRD 5.1, and 5e.tools destinations plus edition notes for mixed libraries.
+- Add, edit, and remove personal HTTP(S) bookmarks. The list is shared across campaigns on this device, survives refresh, and uses management Undo without changing character play history.
+- Credits shows the required SRD attribution, each bundled game-icon author/source, and local Lucide/Inter/Cinzel license notices. Both screens preserve hub or character navigation context.
+- Validation: 454 unit tests pass; 148 browser checks pass after focused reruns for a fixed removal-focus race and two transport errors. Typecheck, lint, and build pass; phone and desktop layouts were checked. Browser tests use the optional real-HTTP forwarder.
+- Manual Reference checks are in `docs/MANUAL_QA.md`. Next: Settings preferences and character JSON transfer.
+
 ## 2026-11-02 15:32 — Campaign rules save and guide new characters
 
 - Create campaigns and save their name, leveling, HP method, low-roll floor, and ability method. New characters follow the saved methods; sources stay read-only until M11.

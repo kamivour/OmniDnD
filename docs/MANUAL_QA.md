@@ -46,4 +46,13 @@ Check these items in a normal browser after each completed milestone. Unchecked 
 - [ ] For a character with low HP rolls and negative CON, change the campaign's low-roll floor. Its existing max HP must stay unchanged; new characters and later levels use the new floor. Confirm Undo management restores the earlier settings.
 - [ ] Check Save, Cancel, sources, and retained-entry notes at 375 px and desktop width. Sources stay read-only until M11.
 
-The hub, blank character creation, campaign settings, HUD, and local saving are live. Dashboard, Spellbook, and Combat content still uses the approved static frames until M4–M6. Automated checks cover failed-write rollback, Retry, and rejecting damaged records without erasing them.
+## Phase 1 — M3: Reference and Credits
+
+- [ ] Open Reference from the hub and from a character. Check the eight link cards. Open the Basic Rules, SRD PDF, and 5e.tools cards; confirm each goes to its 2014 destination in a new tab.
+- [ ] Add a named HTTP or HTTPS bookmark. Refresh and open Reference from another character; the same bookmark should appear. Edit its title and URL, remove it, then use the toast's Undo.
+- [ ] Remove a bookmark, refresh, and use Undo management. Confirm the bookmark returns. The character's HP and game-action Undo should remain unchanged.
+- [ ] Enter a `javascript:` or `file:` URL. Save should show a useful error and keep existing bookmarks unchanged. Correct the URL and save. Cancel, Escape, and the close button should return focus to the editor's opener; removing a bookmark should focus Add bookmark.
+- [ ] Open Credits from both the hub and a character. Check the SRD attribution, icon authors/source links, and local Lucide/Inter/Cinzel license notices. Back to Reference should preserve the current character context.
+- [ ] At 375 px and desktop width, check long bookmark titles and URLs wrap without horizontal scrolling. Use Tab/Enter to open and save the bookmark editor.
+
+The hub, blank character creation, campaign settings, Reference, HUD, and local saving are live. Dashboard, Spellbook, and Combat content still uses the approved static frames until M4–M6. Automated checks cover failed-write rollback, Retry, and rejecting damaged records without erasing them.

@@ -10,9 +10,11 @@ import { DashboardScreen } from './ui/screens/DashboardScreen';
 import { NewCharacterScreen } from './ui/screens/NewCharacterScreen';
 import { PlaceholderScreen } from './ui/screens/PlaceholderScreen';
 import { SpellbookScreen } from './ui/screens/SpellbookScreen';
+import { ReferenceScreen } from './ui/screens/ReferenceScreen';
+import { CreditsScreen } from './ui/screens/CreditsScreen';
 import { StorageGate } from './ui/storage/StorageGate';
 
-const BUILT = new Set(['', 'combat', 'spells']);
+const BUILT = new Set(['', 'combat', 'spells', 'reference']);
 
 /** Hub routes (no character open) and character routes under `/characters/:characterId`. */
 export function App() {
@@ -26,24 +28,19 @@ export function App() {
               <Route path="campaigns/new" element={<CampaignSetupScreen />} />
               <Route path="campaigns/:campaignId/settings" element={<CampaignSetupScreen />} />
               <Route path="campaigns/:campaignId/characters/new" element={<NewCharacterScreen />} />
-              <Route
-                path="reference"
-                element={<PlaceholderScreen title="Reference" milestone="M3" />}
-              />
+              <Route path="reference" element={<ReferenceScreen />} />
               <Route
                 path="settings"
                 element={<PlaceholderScreen title="Settings" milestone="M3" />}
               />
-              <Route
-                path="reference/credits"
-                element={<PlaceholderScreen title="Credits" milestone="M3" />}
-              />
+              <Route path="reference/credits" element={<CreditsScreen />} />
               <Route path="*" element={<PlaceholderScreen title="Not found" />} />
             </Route>
             <Route path="characters/:characterId" element={<AppFrame />}>
               <Route index element={<DashboardScreen />} />
               <Route path="combat" element={<CombatScreen />} />
               <Route path="spells" element={<SpellbookScreen />} />
+              <Route path="reference" element={<ReferenceScreen />} />
               {NAV.filter((n) => !BUILT.has(n.to)).map((n) => (
                 <Route
                   key={n.to}
@@ -57,10 +54,7 @@ export function App() {
                   }
                 />
               ))}
-              <Route
-                path="reference/credits"
-                element={<PlaceholderScreen title="Credits" milestone="M3" />}
-              />
+              <Route path="reference/credits" element={<CreditsScreen />} />
               <Route path="*" element={<PlaceholderScreen title="Not found" />} />
             </Route>
           </Routes>

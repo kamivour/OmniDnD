@@ -32,6 +32,7 @@ function roundTrip(file: ExportFile) {
       characters: { [file.build.id]: { build: file.build, live: file.live, events: file.events } },
       automation: 'assisted',
       managementEvents: [],
+      bookmarks: [],
     }),
   );
 }

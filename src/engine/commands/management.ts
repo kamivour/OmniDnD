@@ -3,10 +3,12 @@ import { z } from 'zod';
 import { computeSheet } from '../calc/sheet';
 import type { Registry } from '../registry';
 import {
+  BookmarkSchema,
   CampaignSchema,
   ExportFileSchema,
   PatchSchema,
   SCHEMA_VERSION,
+  type Bookmark,
   type Campaign,
   type CharacterBuild,
   type ExportFile,
@@ -24,11 +26,12 @@ const RESERVED_IDS = new Set(['__proto__', 'constructor', 'prototype']);
 export interface ManagementData {
   campaigns: Record<string, Campaign>;
   characters: Record<string, { build: CharacterBuild; live: LiveState; events: LogEvent[] }>;
+  bookmarks?: Bookmark[];
 }
 
 const ManagementPatchSchema = PatchSchema.refine(
-  ({ path }) => path[0] === 'campaigns' || path[0] === 'characters',
-  'Management patches must start at campaigns or characters',
+  ({ path }) => ['campaigns', 'characters', 'bookmarks'].includes(String(path[0])),
+  'Management patches must start at campaigns, characters, or bookmarks',
 ).refine(
   ({ path }) => !path.some((key) => typeof key === 'string' && RESERVED_IDS.has(key)),
   'Management patches cannot contain reserved object keys',
@@ -88,7 +91,11 @@ export function runManagement<Payload>(
 
   let text = '';
   const [next, patches, inversePatches] = produceWithPatches(
-    { campaigns: state.campaigns, characters: state.characters },
+    {
+      campaigns: state.campaigns,
+      characters: state.characters,
+      ...(Object.hasOwn(state, 'bookmarks') ? { bookmarks: state.bookmarks } : {}),
+    },
     (draft) => {
       text = command.apply(draft, payload, ctx);
     },
@@ -134,7 +141,11 @@ export function undoManagement(
 
   try {
     const [next, patches, inversePatches] = produceWithPatches(
-      { campaigns: state.campaigns, characters: state.characters },
+      {
+        campaigns: state.campaigns,
+        characters: state.characters,
+        ...(Object.hasOwn(state, 'bookmarks') ? { bookmarks: state.bookmarks } : {}),
+      },
       (draft) => {
         for (const patch of target.inversePatches) {
           // Later character undo can remove an entry that received management metadata.
@@ -173,6 +184,14 @@ export function appendManagementEvent(
 
 /** Validate source state, crosslinks, and every explicit reference before saving or importing. */
 export function validateManagementData(state: ManagementData, registry: Registry): void {
+  if (Object.hasOwn(state, 'bookmarks')) {
+    const bookmarks = z.array(BookmarkSchema).parse(state.bookmarks);
+    const ids = new Set<string>();
+    for (const bookmark of bookmarks) {
+      if (ids.has(bookmark.id)) throw new Error(`Duplicate bookmark id "${bookmark.id}"`);
+      ids.add(bookmark.id);
+    }
+  }
   for (const [id, value] of Object.entries(state.campaigns)) {
     if (RESERVED_IDS.has(id)) throw new Error(`Campaign id "${id}" is reserved`);
     const campaign = CampaignSchema.parse(value);
