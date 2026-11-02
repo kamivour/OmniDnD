@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M3 — Shell, HUD, persistence.
-**Next up:** M3 live Campaign Setup: save character rules and create campaigns.
+**Next up:** M3 Reference links, bookmarks, and Credits.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -85,7 +85,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Global HUD wired to store; adjust popovers
 - [x] Dexie save after each command; load on start
 - [x] Campaigns hub (live): list campaigns + characters, seed #273 with The Fool, create blank, duplicate, delete, import/export JSON
-- [ ] Campaign Setup (Phase 1 part, live): leveling, HP method, ability method. New character entry follows these methods
+- [x] Campaign Setup (Phase 1 part, live): leveling, HP method, ability method. New character entry follows these methods
 - [ ] Reference: link cards + bookmarks + Credits page
 - [ ] Settings: reduced motion, automation level, export/import
 
@@ -140,6 +140,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-02 — M3 live Campaign Setup: create/save through management commands, retained-entry notes, and new-character inputs following saved methods. Per-entry HP floors preserve legacy low rolls and negative-CON HP when rules change (D69). Management Undo also survives character Undo removing an older level. 379 unit tests and 140 browser checks pass; one host transport error in a skipped case cleared on rerun. Typecheck, lint and build pass; phone/desktop visually checked. Manual campaign QA added. Next: Reference links/bookmarks and Credits.
 
 - 2026-11-02 — M3 live hub and blank creation: saved campaign/character cards, copy/delete confirmation, durable management Undo, validated JSON preview/import/export, collision-safe copies, and source-filtered creation with derived racial bonuses/HP/XP (D67–D68). 343 unit tests and 132 full browser checks pass; the final corrected-form checks also pass at both widths. Typecheck, lint and build pass. Manual management QA added. Next: live Campaign Setup save/create.
 

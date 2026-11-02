@@ -58,9 +58,9 @@ describe('createCharacter', () => {
       ],
     });
     expect(created.build.hpEntries).toEqual([
-      { classId: 'class.bard', level: 1, value: 8, method: 'max' },
-      { classId: 'class.bard', level: 2, value: 4, method: 'rolled' },
-      { classId: 'class.bard', level: 3, value: 4, method: 'rolled' },
+      { classId: 'class.bard', level: 1, value: 8, method: 'max', floor: 'none' },
+      { classId: 'class.bard', level: 2, value: 4, method: 'rolled', floor: 'none' },
+      { classId: 'class.bard', level: 3, value: 4, method: 'rolled', floor: 'none' },
     ]);
     expect(sheet.maxHp.value).toBe(19);
     expect(sheet.hitDice).toEqual([{ die: 'd8', max: 3 }]);
@@ -105,10 +105,12 @@ describe('createCharacter', () => {
       }),
       registry,
     );
-    expect(created.build.hpEntries.map(({ value, method }) => ({ value, method }))).toEqual([
-      { value: 10, method: 'max' },
-      { value: 6, method: 'average' },
-      { value: 6, method: 'average' },
+    expect(
+      created.build.hpEntries.map(({ value, method, floor }) => ({ value, method, floor })),
+    ).toEqual([
+      { value: 10, method: 'max', floor: 'none' },
+      { value: 6, method: 'average', floor: 'none' },
+      { value: 6, method: 'average', floor: 'none' },
     ]);
     expect(created.live.hp).toBe(25);
     expect(created.build.proficiencies.saves).toEqual(['STR', 'CON']);
@@ -128,6 +130,28 @@ describe('createCharacter', () => {
       ).live.hp,
     ).toBe(7);
   });
+
+  it.each(['none', 'one'] as const)(
+    'locks the %s floor on every created level despite later campaign changes',
+    (floor) => {
+      const choices = input({
+        campaign: { ...seedFile.campaign, hpLevelFloor: floor },
+        abilityBases: { STR: 10, DEX: 10, CON: 5, INT: 10, WIS: 10, CHA: 10 },
+        hpRolls: [1, 1],
+      });
+      const created = createCharacter(choices, registry);
+      expect(created.build.hpEntries.map((entry) => entry.floor)).toEqual([floor, floor, floor]);
+      expect(
+        computeSheet(
+          {
+            campaign: { ...choices.campaign, hpLevelFloor: floor === 'none' ? 'one' : 'none' },
+            ...created,
+          },
+          registry,
+        ).maxHp.value,
+      ).toBe(floor === 'none' ? 4 : 8);
+    },
+  );
 
   it('enforces all six standard-array scores exactly once, before racial bonuses', () => {
     const choices = input({

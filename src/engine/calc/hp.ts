@@ -19,14 +19,19 @@ export function levelHp(entry: number, conMod: number, floor: HpLevelFloor = 'no
 /**
  * Max HP from locked per-level entries (D15). `entries[0]` is level 1 (the die maximum);
  * each later entry is the roll or average chosen at that level-up. The current CON modifier
- * applies to every level. Max HP never drops below 1 (D44).
+ * applies to every level. Entry floors take precedence over the campaign fallback, which
+ * preserves older entries without a saved floor. Max HP never drops below 1 (D44).
  */
 export function maxHp(
   entries: readonly number[],
   conMod: number,
   floor: HpLevelFloor = 'none',
+  entryFloors: readonly (HpLevelFloor | undefined)[] = [],
 ): number {
   if (entries.length === 0) return 0;
-  const total = entries.reduce((sum, entry) => sum + levelHp(entry, conMod, floor), 0);
+  const total = entries.reduce(
+    (sum, entry, index) => sum + levelHp(entry, conMod, entryFloors[index] ?? floor),
+    0,
+  );
   return Math.max(1, total);
 }

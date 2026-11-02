@@ -384,7 +384,7 @@ test('new blank character validates racial choices and opens a saved HUD with co
   const created = saved.builds.find(({ data }) => data.name === 'First Verse')!;
   expect(created.data.classes).toEqual([{ classId: 'class.bard', level: 1 }]);
   expect(created.data.hpEntries).toEqual([
-    { level: 1, classId: 'class.bard', value: 8, method: 'max' },
+    { level: 1, classId: 'class.bard', value: 8, method: 'max', floor: 'none' },
   ]);
   expect(created.data.spells).toEqual([]);
   expect(created.data.items).toEqual([]);

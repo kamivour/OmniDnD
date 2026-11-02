@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-02 15:32 — Campaign rules save and guide new characters
+
+- Create campaigns and save their name, leveling, HP method, low-roll floor, and ability method. New characters follow the saved methods; sources stay read-only until M11.
+- Existing scores, HP rolls, XP, resources, and character histories are retained. Settings explain which old entries differ from the selected methods.
+- Changing the low-roll floor preserves earlier levels, including negative-CON characters. New entries remember their floor. Campaign Undo survives refresh and also handles a later character Undo removing an older HP level.
+- Validation: 379 unit tests and 140 browser checks pass; typecheck, lint, and build pass. Phone and desktop layouts were visually checked. One host HTTP transport error in a skipped browser case cleared on rerun; tests use the optional real-HTTP forwarder.
+- Manual campaign checks are in `docs/MANUAL_QA.md`. Next: Reference links, bookmarks, and Credits.
+
 ## 2026-11-02 15:02 — Live Campaigns hub and character management
 
 - Campaign cards now show saved characters and computed HP. New blank characters follow campaign methods; racial bonuses, scores, HP, and XP baselines are computed from choices.

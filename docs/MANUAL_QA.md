@@ -37,4 +37,13 @@ Check these items in a normal browser after each completed milestone. Unchecked 
 - [ ] Create a blank Half-Elf Bard with Charlatan background in #273. For level 1, use bases STR 11, DEX 14, CON 12, INT 12, WIS 12, CHA 18; choose DEX and CON for the two racial bonuses. The form should compute CON 13, CHA 20, and max HP 9. Create it and confirm the HUD shows 9/9 after refresh. Optional build choices remain unselected.
 - [ ] Check import/copy/delete controls and creation fields at 375 px and desktop width. Invalid creation choices should show useful errors, which clear when you correct the inputs.
 
-The hub, blank character creation, HUD, and local saving are live. Campaign settings can display saved rules; saving settings and creating campaigns come next. Dashboard, Spellbook, and Combat content still uses the approved static frames until M4–M6. Automated checks cover failed-write rollback, Retry, and rejecting damaged records without erasing them.
+## Phase 1 — M3: campaign settings
+
+- [ ] Create a campaign. Confirm defaults are XP, average HP, allow negative level HP, standard array, and PHB. Refresh and confirm the campaign remains.
+- [ ] Open #273 settings. Change HP to Average and abilities to Point buy. Confirm retained-entry notes appear for The Fool. Save, refresh, and confirm The Fool's HP, ability scores, and resources stay unchanged. Undo management should restore the settings after another refresh.
+- [ ] Create a level 2 character in a standard-array campaign. Repeated scores should fail validation. Assign 15, 14, 13, 12, 10, and 8 once each; confirm HP is computed without asking for a roll.
+- [ ] Change a campaign to point buy and average HP. Confirm new characters use numeric bases from 8 to 15 with a 27-point budget. Change to rolled methods and confirm roll fields appear. Saved existing characters must retain their choices.
+- [ ] For a character with low HP rolls and negative CON, change the campaign's low-roll floor. Its existing max HP must stay unchanged; new characters and later levels use the new floor. Confirm Undo management restores the earlier settings.
+- [ ] Check Save, Cancel, sources, and retained-entry notes at 375 px and desktop width. Sources stay read-only until M11.
+
+The hub, blank character creation, campaign settings, HUD, and local saving are live. Dashboard, Spellbook, and Combat content still uses the approved static frames until M4–M6. Automated checks cover failed-write rollback, Retry, and rejecting damaged records without erasing them.

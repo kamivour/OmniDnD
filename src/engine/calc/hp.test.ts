@@ -32,6 +32,24 @@ describe('maxHp', () => {
     expect(maxHp([6, 1], -2, 'one')).toBe(4 + 1);
   });
 
+  it('uses each saved floor, falling back to the campaign for legacy entries', () => {
+    expect(maxHp([8, 1, 1], -2, 'none', ['none', 'one', 'none'])).toBe(6 + 1 - 1);
+    expect(maxHp([8, 1, 1], -2, 'none', [undefined, 'one'])).toBe(6 + 1 - 1);
+    expect(maxHp([8, 1, 1], -2, 'one', ['none', 'none'])).toBe(6 - 1 + 1);
+  });
+
+  it('keeps frozen levels unchanged when the campaign floor changes', () => {
+    expect(maxHp([8, 1, 1], -2, 'none', ['none', 'none', 'none'])).toBe(4);
+    expect(maxHp([8, 1, 1], -2, 'one', ['none', 'none', 'none'])).toBe(4);
+    expect(maxHp([8, 1, 1], -2, 'none', ['one', 'one', 'one'])).toBe(8);
+    expect(maxHp([8, 1, 1], -2, 'one', ['one', 'one', 'one'])).toBe(8);
+  });
+
+  it('still applies CON changes to every entry with its saved floor', () => {
+    expect(maxHp([8, 1, 1], -2, 'one', ['none', 'one', 'none'])).toBe(6);
+    expect(maxHp([8, 1, 1], 0, 'one', ['none', 'one', 'none'])).toBe(10);
+  });
+
   it('never drops below 1 max HP', () => {
     expect(maxHp([6, 1, 1, 1], -4)).toBe(1);
   });

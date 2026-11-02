@@ -44,6 +44,7 @@ export const levelUp: Command<LevelUpPayload> = {
       classId,
       value: roll ?? averageHpRoll(faces(def.hitDie) as HitDie),
       method: roll === undefined ? 'average' : 'rolled',
+      floor: ctx.campaign.hpLevelFloor,
     };
     build.hpEntries.push(hpEntry);
 

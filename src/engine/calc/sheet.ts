@@ -147,12 +147,13 @@ export function computeSheet({ campaign, build, live }: CharacterState, registry
   const race = registry.get('race', build.subraceId ?? build.raceId);
   const hpParts = build.hpEntries.map((entry) => ({
     label: `Level ${entry.level}`,
-    value: levelHp(entry.value, mods.CON, campaign.hpLevelFloor),
+    value: levelHp(entry.value, mods.CON, entry.floor ?? campaign.hpLevelFloor),
   }));
   const fullHp = maxHp(
     build.hpEntries.map((entry) => entry.value),
     mods.CON,
     campaign.hpLevelFloor,
+    build.hpEntries.map((entry) => entry.floor),
   );
   const halvedHp = live.exhaustion >= 4 ? Math.max(1, Math.floor(fullHp / 2)) : fullHp;
   const maxHpStat: Stat = {

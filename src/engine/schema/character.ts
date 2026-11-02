@@ -41,6 +41,8 @@ const HpEntrySchema = z.strictObject({
   /** The die result (or max / average). CON is added by the engine, never stored. */
   value: z.int().min(1).max(12),
   method: z.enum(['max', 'average', 'rolled']),
+  /** Locked when the entry is made. Older entries use the campaign floor until frozen. */
+  floor: HpLevelFloorSchema.optional(),
 });
 
 const SKILL_SET: ReadonlySet<string> = new Set(SKILLS);

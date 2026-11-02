@@ -122,7 +122,8 @@ interface CharacterBuild {
     base: Record<Ability, number>;                 // entered per campaign method
     bonuses: { source: string; ability: Ability; value: number }[];  // racial, ASI, feat, item
   };                                               // final = base + bonuses (computed)
-  hpEntries: { level: number; classId: string; value: number; method: 'max' | 'average' | 'rolled' }[];
+  hpEntries: { level: number; classId: string; value: number; method: 'max' | 'average' | 'rolled';
+               floor?: 'none' | 'one' }[];
                                                    // one per level; level 1 = 'max'; locked once added
   proficiencies: { saves: Ability[]; skills: string[]; expertise: string[];
                    armor: string[]; weapons: string[]; tools: string[]; languages: string[] };
@@ -170,6 +171,8 @@ interface LiveState {
 **Store "used", not "remaining".** Maximums are computed from the build, so a level-up or override never desyncs live values.
 
 **Max HP is never stored.** It is computed from `hpEntries` + current CON modifier + modifiers (e.g., exhaustion 4 halves it).
+
+**HP floors (D69):** new entries save the current campaign floor. Older entries without `floor` use the campaign fallback. Before changing that fallback, the campaign command records the previous floor on those entries so their HP stays unchanged. Raw rolls and methods remain intact; CON changes still apply to every level. This optional field preserves existing version 1 files.
 
 ## 5. Commands and event log
 

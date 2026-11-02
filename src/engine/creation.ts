@@ -176,6 +176,7 @@ export function createCharacter(input: CreateCharacterInput, registry: Registry)
       value:
         index === 0 ? die : campaign.hpMethod === 'average' ? averageHpRoll(die) : rolls[index - 1],
       method: index === 0 ? 'max' : campaign.hpMethod,
+      floor: campaign.hpLevelFloor,
     })),
     proficiencies: {
       saves: classDef.saves,

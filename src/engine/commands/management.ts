@@ -136,7 +136,12 @@ export function undoManagement(
     const [next, patches, inversePatches] = produceWithPatches(
       { campaigns: state.campaigns, characters: state.characters },
       (draft) => {
-        applyPatches(draft, target.inversePatches);
+        for (const patch of target.inversePatches) {
+          // Later character undo can remove an entry that received management metadata.
+          // Removing that now-absent field is already satisfied, including absent parents.
+          if (patch.op === 'remove' && !atPath(draft, patch.path).exists) continue;
+          applyPatches(draft, [patch]);
+        }
       },
     );
     validateManagementData(next, registry);
