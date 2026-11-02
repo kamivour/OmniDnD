@@ -198,6 +198,9 @@ interface LogEvent {
 - `schemaVersion` on every saved record. Migrations in `src/db/migrations/` as pure functions (vN → vN+1), unit-tested.
 - **Export:** `{ app: 'omnidnd', schemaVersion, exportedAt, build, live, events, campaign }` (`ExportFileSchema`; the seed `data/characters/the-fool.json` uses the same shape, D49). **Import:** zod-validate → migrate → preview → save.
 - **Auto backups:** before import, before reset, after each long rest. Keep the last 10.
+- **Stored rows (M3):** `{ id, schemaVersion, data }`; event rows also have `characterId` and a stable `order`, with compound primary key `[characterId + id]`. This keeps identical imported event IDs on different characters separate.
+- **Atomic saves:** a serialized queue writes the workspace's builds, live states, logs, and campaigns together. The UI shows pending or failed saves; success feedback waits for the queue. Saved records and remaining undo history validate before startup hydration. Invalid records are preserved and show a load error.
+- **Window conflicts:** a `workspaceRevision` setting is checked and advanced inside each save transaction. A stale window cannot replace another window's saved changes. Its local changes remain unsaved with an explicit conflict message; retry never forces an overwrite.
 
 ## 7. Summary style (house style)
 

@@ -1,6 +1,7 @@
-import { useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Command, RunResult } from '../../engine/commands';
 import { characterStore } from '../../state/character-store';
+import { flushPersistence, storageStatusStore } from '../../state/persistence';
 import { Sheet } from '../components/Sheet';
 import { useToast } from '../components/toast-context';
 import { CommandContext } from './command-context';
@@ -17,13 +18,44 @@ export function CommandProvider({
   const [notes, setNotes] = useState<string[]>([]);
   const [warning, setWarning] = useState<{ reasons: string[]; confirm: () => void } | null>(null);
   const warningOpener = useRef<HTMLElement | null>(null);
+  const feedbackSequence = useRef(0);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      feedbackSequence.current += 1;
+    };
+  }, []);
+  const events = () => characterStore.getState().characters[characterId]?.events ?? [];
+  const canPublish = (sequence: number, eventId: string) =>
+    mounted.current && feedbackSequence.current === sequence && events().at(-1)?.id === eventId;
 
-  const undo = () => {
+  const runUndo = async (expectedEventId?: string) => {
+    const sequence = ++feedbackSequence.current;
+    const target = events().findLast((event) => event.command !== 'undo' && !event.undoneBy);
+    if (expectedEventId && target?.id !== expectedEventId) {
+      toast({ text: 'A newer command is available. Use Undo in the toolbar.' });
+      return;
+    }
     const result = characterStore.getState().undo(characterId);
     if (result.result === 'ok') {
       setNotes([]);
-      toast({ text: result.event.text });
+      try {
+        await flushPersistence();
+        if (canPublish(sequence, result.event.id)) toast({ text: result.event.text });
+      } catch {
+        if (canPublish(sequence, result.event.id))
+          toast({
+            text: storageStatusStore.getState().conflict
+              ? 'Save conflict. Undo remains in memory; saved data is unchanged.'
+              : 'Undo is in memory. Retry saving before leaving.',
+          });
+      }
     } else toast({ text: result.reasons.join(' · ') });
+  };
+  const undo = () => {
+    void runUndo();
   };
 
   const execute = <P,>(
@@ -32,10 +64,37 @@ export function CommandProvider({
     returnFocusTo?: HTMLElement,
     force = false,
   ): RunResult => {
+    const sequence = ++feedbackSequence.current;
+    if (storageStatusStore.getState().conflict) {
+      const reasons = ['Another window saved changes. Reload this window before editing.'];
+      toast({ text: reasons[0]! });
+      return { result: 'blocked', reasons };
+    }
     const result = characterStore.getState().dispatch(characterId, command, payload, { force });
     if (result.result === 'ok') {
       setNotes(result.reasons);
-      toast({ text: result.event.text, onUndo: undo });
+      void flushPersistence().then(
+        () => {
+          if (canPublish(sequence, result.event.id))
+            toast({
+              text: result.event.text,
+              onUndo: () => {
+                void runUndo(result.event.id);
+              },
+            });
+        },
+        () => {
+          if (canPublish(sequence, result.event.id))
+            toast({
+              text: storageStatusStore.getState().conflict
+                ? 'Save conflict. Changes remain in this window.'
+                : 'Changes are in memory. Retry saving before leaving.',
+              onUndo: () => {
+                void runUndo(result.event.id);
+              },
+            });
+        },
+      );
     } else if (result.result === 'warn') {
       warningOpener.current = returnFocusTo ?? (document.activeElement as HTMLElement);
       setWarning({

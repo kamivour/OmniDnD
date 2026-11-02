@@ -10,10 +10,9 @@ test('landing lists campaigns and opens a character', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Spell slots' })).toBeVisible();
 });
 
-test('the character frame links back to all campaigns', async ({ page }) => {
+test('the character frame links back to all campaigns', async ({ page, isMobile }) => {
   await page.goto('/characters/the-fool');
-  const back = page.getByRole('link', { name: 'All campaigns' }).filter({ visible: true });
-  if ((await back.count()) === 0) {
+  if (isMobile) {
     // Mobile: the link lives in the More sheet.
     await page.getByRole('button', { name: 'More' }).click();
   }

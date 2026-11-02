@@ -29,7 +29,9 @@ test('pips sit between the − and + buttons', async ({ page }) => {
   expect(p.x + p.width).toBeLessThanOrEqual(r.x);
 
   await use.click();
-  await expect(page.getByRole('status')).toContainText('Use one: Level 1 spell slots');
+  await expect(page.getByRole('status', { name: 'Command feedback' })).toContainText(
+    'Use one: Level 1 spell slots',
+  );
 });
 
 test('concentration is separate from effects on you', async ({ page }) => {

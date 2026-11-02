@@ -4,6 +4,15 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-02 14:26 — Local saving and undo survive refresh
+
+- HUD changes and their undo history now save together in IndexedDB and reload on startup. The Fool is seeded only on first use.
+- The toolbar shows save status and lets you undo after a refresh. Success messages wait for saving; rapid changes keep their feedback and Undo linked to the latest command.
+- Failed writes leave saved data intact and retain changes in memory for Retry. A stale second window shows a conflict instead of overwriting another window's saved session.
+- Damaged or unsupported saved records show an error without being erased. Saved undo history is validated before opening the character.
+- Validation: 253 unit tests and 118 browser checks pass; typecheck, lint, and build pass. Phone and desktop layouts were visually checked. Browser tests use this host's optional real-HTTP forwarder.
+- Manual checks are in `docs/MANUAL_QA.md`. Next: make the Campaigns hub live, with character management and JSON import/export.
+
 ## 2026-11-02 03:33 — Live HUD and command store
 
 - The HUD now shows The Fool's saved seed: HP 11/19, level 1 slots 0/4, level 2 slots 2/2, and Bardic Inspiration 3/5. Stats come from the rules engine.

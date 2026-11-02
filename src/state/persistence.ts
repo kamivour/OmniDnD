@@ -1,0 +1,222 @@
+import { z } from 'zod';
+import { createStore } from 'zustand/vanilla';
+import {
+  AutomationSchema,
+  database,
+  deserializeWorkspace,
+  parseStoredRecord,
+  serializeWorkspace,
+  storedRecord,
+  type Workspace,
+  type WorkspaceRows,
+} from '../db/database';
+import { characterStore, createCharacterStore } from './character-store';
+
+interface StorageStatus {
+  ready: boolean;
+  pending: number;
+  error: string | null;
+  conflict: boolean;
+  /** IndexedDB has successfully loaded or saved this workspace; this is not a quota permission. */
+  persistent: boolean;
+}
+
+export const storageStatusStore = createStore<StorageStatus>()(() => ({
+  ready: false,
+  pending: 0,
+  error: null,
+  conflict: false,
+  persistent: false,
+}));
+
+let initialization: Promise<void> | undefined;
+let subscribed = false;
+let writeQueue: Promise<void> = Promise.resolve();
+let workspaceRevision = 0;
+
+export class WorkspaceConflictError extends Error {
+  constructor() {
+    super(
+      'Saved data changed in another window. Changes here remain unsaved. Reload this window before editing.',
+    );
+    this.name = 'WorkspaceConflictError';
+  }
+}
+
+async function readRevision(): Promise<number> {
+  const row = await database.settings.get('workspaceRevision');
+  return row ? parseStoredRecord(row, z.int().nonnegative(), 'workspace revision').data : 0;
+}
+
+function storageError(error: unknown): Error {
+  if (error instanceof z.ZodError) {
+    const issue = error.issues[0];
+    return new Error(
+      `Saved data is invalid: ${issue?.path.join('.') || 'record'}: ${issue?.message || 'validation failed'}`,
+    );
+  }
+  return error instanceof Error ? error : new Error(String(error));
+}
+
+/** Replace the workspace atomically. Unrelated settings, packs, and backups stay untouched. */
+async function replaceRows(rows: WorkspaceRows) {
+  await Promise.all([
+    database.builds.clear(),
+    database.live.clear(),
+    database.events.clear(),
+    database.campaigns.clear(),
+  ]);
+  await Promise.all([
+    database.builds.bulkPut(rows.builds),
+    database.live.bulkPut(rows.live),
+    database.events.bulkPut(rows.events),
+    database.campaigns.bulkPut(rows.campaigns),
+    database.settings.put(storedRecord('automation', rows.automation)),
+    database.settings.put(storedRecord('initialized', true)),
+  ]);
+}
+
+async function saveWorkspace(snapshot: Workspace) {
+  const rows = serializeWorkspace(snapshot);
+  const nextRevision = await database.transaction(
+    'rw',
+    [database.builds, database.live, database.events, database.campaigns, database.settings],
+    async () => {
+      const currentRevision = await readRevision();
+      if (currentRevision !== workspaceRevision) throw new WorkspaceConflictError();
+      await replaceRows(rows);
+      const next = currentRevision + 1;
+      await database.settings.put(storedRecord('workspaceRevision', next));
+      return next;
+    },
+  );
+  // Advance only after the transaction commits; a failed write keeps the old expectation.
+  workspaceRevision = nextRevision;
+}
+
+async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: number }> {
+  return database.transaction(
+    'rw',
+    [database.builds, database.live, database.events, database.campaigns, database.settings],
+    async () => {
+      const [builds, live, events, campaigns, settings] = await Promise.all([
+        database.builds.toArray(),
+        database.live.toArray(),
+        database.events.toArray(),
+        database.campaigns.toArray(),
+        database.settings.toArray(),
+      ]);
+      const savedSettings = settings.map((row) => parseStoredRecord(row, z.unknown(), 'setting'));
+      const initialized = savedSettings.find(({ id }) => id === 'initialized');
+      const automation = savedSettings.find(({ id }) => id === 'automation');
+      const mode = automation ? AutomationSchema.parse(automation.data) : 'assisted';
+      if (initialized) {
+        if (initialized.data !== true) throw new Error('Saved initialization marker is invalid');
+        const workspace = deserializeWorkspace({
+          builds,
+          live,
+          events,
+          campaigns,
+          automation: mode,
+        });
+        return { workspace, revision: await readRevision() };
+      }
+      if (builds.length || live.length || events.length || campaigns.length) {
+        throw new Error('Saved workspace is missing its initialization marker');
+      }
+      const initial = { ...createCharacterStore().getState(), automation: mode };
+      const rows = serializeWorkspace(initial);
+      await replaceRows(rows);
+      await database.settings.put(storedRecord('workspaceRevision', 1));
+      return { workspace: deserializeWorkspace(rows), revision: 1 };
+    },
+  );
+}
+
+function enqueueSave(snapshot: Workspace) {
+  storageStatusStore.setState((status) => ({ pending: status.pending + 1 }));
+  const operation = writeQueue
+    .catch(() => undefined)
+    .then(async () => {
+      try {
+        await saveWorkspace(snapshot);
+        storageStatusStore.setState({ error: null, persistent: true, conflict: false });
+      } catch (cause) {
+        const error = storageError(cause);
+        storageStatusStore.setState({
+          error: error.message,
+          persistent: false,
+          conflict: error instanceof WorkspaceConflictError,
+        });
+        throw error;
+      } finally {
+        storageStatusStore.setState((status) => ({ pending: status.pending - 1 }));
+      }
+    });
+  writeQueue = operation;
+  // The caller observes failures through flush/status; background writes must not reject unhandled.
+  void operation.catch(() => undefined);
+}
+
+/** Hydrate once before UI commands can run. Failed startup is retryable and never resets data. */
+export function initializePersistence(): Promise<void> {
+  if (storageStatusStore.getState().ready) return Promise.resolve();
+  if (initialization) return initialization;
+  storageStatusStore.setState({ error: null, persistent: false, conflict: false });
+  initialization = (async () => {
+    try {
+      await database.open();
+      const loaded = await loadOrSeedWorkspace();
+      const { workspace } = loaded;
+      workspaceRevision = loaded.revision;
+      characterStore.setState(workspace);
+      if (!subscribed) {
+        characterStore.subscribe((next, previous) => {
+          if (
+            next.characters !== previous.characters ||
+            next.campaigns !== previous.campaigns ||
+            next.automation !== previous.automation
+          ) {
+            enqueueSave({
+              characters: next.characters,
+              campaigns: next.campaigns,
+              automation: next.automation,
+            });
+          }
+        });
+        subscribed = true;
+      }
+      storageStatusStore.setState({ ready: true, error: null, persistent: true, conflict: false });
+    } catch (cause) {
+      const error = storageError(cause);
+      storageStatusStore.setState({ ready: false, error: error.message, persistent: false });
+      throw error;
+    } finally {
+      initialization = undefined;
+    }
+  })();
+  return initialization;
+}
+
+/** Wait through writes queued while waiting; report failure only if the latest snapshot is unsaved. */
+export async function flushPersistence(): Promise<void> {
+  if (!storageStatusStore.getState().ready) await initializePersistence();
+  for (;;) {
+    const current = writeQueue;
+    try {
+      await current;
+    } catch (error) {
+      if (current !== writeQueue) continue;
+      throw error;
+    }
+    if (current === writeQueue) return;
+  }
+}
+
+/** Recover a failed startup, or save the latest in-memory workspace after a write failure. */
+export async function retryPersistence(): Promise<void> {
+  if (!storageStatusStore.getState().ready) return initializePersistence();
+  const { campaigns, characters, automation } = characterStore.getState();
+  enqueueSave({ campaigns, characters, automation });
+  await flushPersistence();
+}

@@ -121,7 +121,7 @@ for (const touch of [false, true]) {
       await page.getByRole('tab', { name: 'Actions', exact: true }).click();
       await page.getByRole('main').getByRole('button', { name: /^Dash/ }).click();
       await drawer.getByRole('button', { name: 'Take Dash', exact: true }).click();
-      await expect(page.getByRole('status')).toContainText('Dash');
+      await expect(page.getByRole('status', { name: 'Command feedback' })).toContainText('Dash');
     });
   });
 }

@@ -31,7 +31,7 @@ test('tabs switch between action groups', async ({ page }) => {
 
 test('fixture buttons show a toast instead of changing state', async ({ page }) => {
   await page.getByRole('button', { name: 'End Turn' }).click();
-  await expect(page.getByRole('status')).toContainText('End turn');
+  await expect(page.getByRole('status', { name: 'Command feedback' })).toContainText('End turn');
 });
 
 test.describe('mobile', () => {

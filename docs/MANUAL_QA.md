@@ -14,11 +14,18 @@ Check these items in a normal browser after each completed milestone. Unchecked 
 
 ## Phase 1 — M3: live HUD
 
-- [ ] On a fresh load, check the HUD shows HP 11/19, L1 slots 0/4, L2 slots 2/2, and Bardic Inspiration 3/5. AC is 13, initiative +3, and speed 30 ft.
+- [ ] On first use in a new browser profile, check the HUD shows HP 11/19, L1 slots 0/4, L2 slots 2/2, and Bardic Inspiration 3/5. AC is 13, initiative +3, and speed 30 ft.
 - [ ] Open HP, apply 5 damage, then use the toast's Undo. HP should return to 11, with an Undo confirmation.
 - [ ] Restore a level 1 slot from the HUD, switch between Home, Spells, and Combat, and confirm the HUD keeps the new count. Adjust Bardic Inspiration and undo it too.
 - [ ] Give yourself 10 temp HP, then try replacing it with 5. Cancel should keep 10; Do anyway should set 5. Undo should restore 10. Closing the warning should return focus to the HP button.
 - [ ] Open AC, initiative, and speed. Check their calculation breakdowns. Overrides are scheduled for Character Sheet edit mode in M7.
 - [ ] Add Poisoned from the HUD status control, close it, and undo the change. Check conditions stay separate from concentration and effects on you.
 
-The HUD is live. Dashboard, Spellbook, and Combat content still uses the approved static frames until M4–M6. Saving follows in the next M3 task; HUD changes currently reset on refresh.
+## Phase 1 — M3: local saving
+
+- [ ] Change HP and slots from the HUD. Wait for "Saved locally", refresh, then close and reopen the app in the same browser. Confirm the HUD keeps those values.
+- [ ] After a refresh, use "Undo last command" in the toolbar. Refresh again and confirm the undo remains saved.
+- [ ] Check the save indicator and Undo button remain readable and reachable at 375 px, including when Details is open.
+- [ ] In a throwaway browser profile, open two windows before changing anything. Save a change in the first window, then edit the stale second window. The second should show "Save conflict"; it must not overwrite the first window's saved change. Reloading the stale window warns about its unsaved change.
+
+The HUD and its local saving are live. Dashboard, Spellbook, and Combat content still uses the approved static frames until M4–M6. Automated checks cover failed-write rollback, Retry, and rejecting damaged records without erasing them.

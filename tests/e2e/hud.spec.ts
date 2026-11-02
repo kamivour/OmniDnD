@@ -42,9 +42,12 @@ test('damage changes HUD hit points and toast Undo restores them', async ({ page
   await enterHitPoints(page, 'Damage', 5, info.outputPath('hp-adjustment.png'));
   await expect(hp(page)).toHaveText(/6\s*\/\s*19/);
   await expect(page.getByRole('dialog', { name: 'Hit points', exact: true })).toBeHidden();
-  await page.getByRole('status').getByRole('button', { name: 'Undo', exact: true }).click();
+  await page
+    .getByRole('status', { name: 'Command feedback' })
+    .getByRole('button', { name: 'Undo', exact: true })
+    .click();
   await expect(hp(page)).toHaveText(/11\s*\/\s*19/);
-  await expect(page.getByRole('status')).toContainText('Undo:');
+  await expect(page.getByRole('status', { name: 'Command feedback' })).toContainText('Undo:');
 });
 
 test('slot adjustment follows the character between screens', async ({ page }) => {
@@ -87,7 +90,10 @@ test('replacing temp HP warns; Cancel preserves it and override remains undoable
   await warning.getByRole('button', { name: 'Do anyway', exact: true }).click();
   await expect(hp(page)).toBeFocused();
   await expect(hp(page)).toContainText('+5');
-  await page.getByRole('status').getByRole('button', { name: 'Undo', exact: true }).click();
+  await page
+    .getByRole('status', { name: 'Command feedback' })
+    .getByRole('button', { name: 'Undo', exact: true })
+    .click();
   await expect(hp(page)).toContainText('+10');
 });
 
@@ -109,7 +115,10 @@ test('conditions use commands and remain undoable', async ({ page }, info) => {
   await expect(
     hud(page).getByRole('button', { name: 'Adjust conditions and effects' }),
   ).not.toContainText('Status');
-  await page.getByRole('status').getByRole('button', { name: 'Undo', exact: true }).click();
+  await page
+    .getByRole('status', { name: 'Command feedback' })
+    .getByRole('button', { name: 'Undo', exact: true })
+    .click();
   await expect(
     hud(page).getByRole('button', { name: 'Adjust conditions and effects' }),
   ).toContainText('Status');

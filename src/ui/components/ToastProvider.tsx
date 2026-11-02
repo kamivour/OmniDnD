@@ -24,6 +24,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       <div
         role="status"
+        aria-label="Command feedback"
         aria-live="polite"
         className="pointer-events-none fixed inset-x-0 bottom-20 z-50 flex justify-center px-4 sm:bottom-6"
       >
