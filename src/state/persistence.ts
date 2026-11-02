@@ -12,7 +12,7 @@ import {
 } from '../db/database';
 import { characterStore, createCharacterStore } from './character-store';
 import { ManagementEventSchema } from '../engine/commands/management';
-import { BookmarkSchema } from '../engine/schema';
+import { BookmarkSchema, PreferencesSchema } from '../engine/schema';
 
 interface StorageStatus {
   ready: boolean;
@@ -74,6 +74,7 @@ async function replaceRows(rows: WorkspaceRows) {
     database.events.bulkPut(rows.events),
     database.campaigns.bulkPut(rows.campaigns),
     database.settings.put(storedRecord('automation', rows.automation)),
+    database.settings.put(storedRecord('reducedMotion', rows.reducedMotion ?? false)),
     database.settings.put(storedRecord('initialized', true)),
     database.settings.put(storedRecord('managementEvents', rows.managementEvents ?? [])),
     database.settings.put(storedRecord('bookmarks', rows.bookmarks ?? [])),
@@ -113,9 +114,13 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
       const savedSettings = settings.map((row) => parseStoredRecord(row, z.unknown(), 'setting'));
       const initialized = savedSettings.find(({ id }) => id === 'initialized');
       const automation = savedSettings.find(({ id }) => id === 'automation');
+      const reducedMotion = savedSettings.find(({ id }) => id === 'reducedMotion');
       const management = savedSettings.find(({ id }) => id === 'managementEvents');
       const bookmarks = savedSettings.find(({ id }) => id === 'bookmarks');
       const mode = automation ? AutomationSchema.parse(automation.data) : 'assisted';
+      const motion = reducedMotion
+        ? PreferencesSchema.shape.reducedMotion.parse(reducedMotion.data)
+        : false;
       if (initialized) {
         if (initialized.data !== true) throw new Error('Saved initialization marker is invalid');
         const workspace = deserializeWorkspace({
@@ -124,6 +129,7 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
           events,
           campaigns,
           automation: mode,
+          reducedMotion: motion,
           managementEvents: management ? z.array(ManagementEventSchema).parse(management.data) : [],
           bookmarks: bookmarks ? z.array(BookmarkSchema).parse(bookmarks.data) : [],
         });
@@ -132,7 +138,11 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
       if (builds.length || live.length || events.length || campaigns.length || bookmarks) {
         throw new Error('Saved workspace is missing its initialization marker');
       }
-      const initial = { ...createCharacterStore().getState(), automation: mode };
+      const initial = {
+        ...createCharacterStore().getState(),
+        automation: mode,
+        reducedMotion: motion,
+      };
       const rows = serializeWorkspace(initial);
       await replaceRows(rows);
       await database.settings.put(storedRecord('workspaceRevision', 1));
@@ -184,6 +194,7 @@ export function initializePersistence(): Promise<void> {
             next.characters !== previous.characters ||
             next.campaigns !== previous.campaigns ||
             next.automation !== previous.automation ||
+            next.reducedMotion !== previous.reducedMotion ||
             next.managementEvents !== previous.managementEvents ||
             next.bookmarks !== previous.bookmarks
           ) {
@@ -191,6 +202,7 @@ export function initializePersistence(): Promise<void> {
               characters: next.characters,
               campaigns: next.campaigns,
               automation: next.automation,
+              reducedMotion: next.reducedMotion,
               managementEvents: next.managementEvents,
               bookmarks: next.bookmarks,
             });
@@ -228,8 +240,8 @@ export async function flushPersistence(): Promise<void> {
 /** Recover a failed startup, or save the latest in-memory workspace after a write failure. */
 export async function retryPersistence(): Promise<void> {
   if (!storageStatusStore.getState().ready) return initializePersistence();
-  const { campaigns, characters, automation, managementEvents, bookmarks } =
+  const { campaigns, characters, automation, reducedMotion, managementEvents, bookmarks } =
     characterStore.getState();
-  enqueueSave({ campaigns, characters, automation, managementEvents, bookmarks });
+  enqueueSave({ campaigns, characters, automation, reducedMotion, managementEvents, bookmarks });
   await flushPersistence();
 }

@@ -1,4 +1,6 @@
 import { useSyncExternalStore } from 'react';
+import { useStore } from 'zustand';
+import { characterStore } from '../../state/character-store';
 
 /** Desktop-style preview: wide enough and a real hover pointer. Otherwise use sheets. */
 export const POPOVER_QUERY = '(min-width: 640px) and (hover: hover)';
@@ -19,5 +21,6 @@ export function useMediaQuery(query: string): boolean {
 /** True when the OS asks for reduced motion or the Settings toggle is on. */
 export function useReducedMotion(): boolean {
   const os = useMediaQuery(REDUCED_MOTION_QUERY);
-  return os || document.documentElement.dataset.reducedMotion === 'true';
+  const preference = useStore(characterStore, (state) => state.reducedMotion);
+  return os || preference;
 }

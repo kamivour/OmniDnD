@@ -42,6 +42,7 @@ export interface CharacterStoreState {
   characters: Record<string, CharacterRecord>;
   bookmarks: Bookmark[];
   automation: Automation;
+  reducedMotion: boolean;
   managementEvents: ManagementEvent[];
   dispatchManagement: <Payload>(
     command: ManagementCommand<Payload>,
@@ -91,6 +92,7 @@ export function createCharacterStore(files: ExportFile[] = [seedFile]) {
     characters,
     bookmarks: [],
     automation: 'assisted',
+    reducedMotion: false,
     managementEvents: [],
     dispatchManagement: (command, payload, options) => {
       const current = get();

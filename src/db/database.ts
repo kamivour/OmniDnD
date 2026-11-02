@@ -10,12 +10,14 @@ import {
   type ManagementEvent,
 } from '../engine/commands/management';
 import {
+  AutomationSchema,
   BookmarkSchema,
   CampaignSchema,
   CharacterBuildSchema,
   ExportFileSchema,
   LiveStateSchema,
   LogEventSchema,
+  PreferencesSchema,
   SCHEMA_VERSION,
   type Bookmark,
   type Campaign,
@@ -39,7 +41,7 @@ export interface StoredEvent extends StoredRecord<LogEvent> {
 
 export type Workspace = Pick<
   CharacterStoreState,
-  'campaigns' | 'characters' | 'automation' | 'managementEvents' | 'bookmarks'
+  'campaigns' | 'characters' | 'automation' | 'reducedMotion' | 'managementEvents' | 'bookmarks'
 >;
 
 export interface WorkspaceRows {
@@ -48,6 +50,8 @@ export interface WorkspaceRows {
   events: StoredEvent[];
   campaigns: StoredRecord<Campaign>[];
   automation: Automation;
+  /** Missing before app preferences were introduced. */
+  reducedMotion?: boolean;
   /** Missing in the first M3 saves; they contain no management history. */
   managementEvents?: ManagementEvent[];
   /** Missing before Reference bookmarks were introduced. */
@@ -78,7 +82,7 @@ class OmniDatabase extends Dexie {
 }
 
 export const database = new OmniDatabase();
-export const AutomationSchema = z.enum(['assisted', 'manual']);
+export { AutomationSchema };
 
 const StoredRecordSchema = z.strictObject({
   id: z.string().min(1),
@@ -216,6 +220,7 @@ export function serializeWorkspace(workspace: Workspace): WorkspaceRows {
     events,
     campaigns,
     automation: AutomationSchema.parse(workspace.automation),
+    reducedMotion: PreferencesSchema.shape.reducedMotion.parse(workspace.reducedMotion),
     managementEvents: z
       .array(ManagementEventSchema)
       .max(EVENT_LIMIT)
@@ -282,6 +287,9 @@ export function deserializeWorkspace(rows: WorkspaceRows): Workspace {
     campaigns,
     characters: Object.fromEntries(characters),
     automation: AutomationSchema.parse(rows.automation),
+    reducedMotion: PreferencesSchema.shape.reducedMotion.parse(
+      rows.reducedMotion === undefined ? false : rows.reducedMotion,
+    ),
     managementEvents: z
       .array(ManagementEventSchema)
       .max(EVENT_LIMIT)
@@ -292,6 +300,8 @@ export function deserializeWorkspace(rows: WorkspaceRows): Workspace {
     campaigns: workspace.campaigns,
     characters: workspace.characters,
     bookmarks: workspace.bookmarks,
+    automation: workspace.automation,
+    reducedMotion: workspace.reducedMotion,
   };
   let history = workspace.managementEvents;
   const ids = new Set(history.map((event) => event.id));

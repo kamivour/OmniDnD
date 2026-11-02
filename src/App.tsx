@@ -12,9 +12,11 @@ import { PlaceholderScreen } from './ui/screens/PlaceholderScreen';
 import { SpellbookScreen } from './ui/screens/SpellbookScreen';
 import { ReferenceScreen } from './ui/screens/ReferenceScreen';
 import { CreditsScreen } from './ui/screens/CreditsScreen';
+import { SettingsScreen } from './ui/screens/SettingsScreen';
+import { MotionPreference } from './ui/components/MotionPreference';
 import { StorageGate } from './ui/storage/StorageGate';
 
-const BUILT = new Set(['', 'combat', 'spells', 'reference']);
+const BUILT = new Set(['', 'combat', 'spells', 'reference', 'settings']);
 
 /** Hub routes (no character open) and character routes under `/characters/:characterId`. */
 export function App() {
@@ -22,6 +24,7 @@ export function App() {
     <BrowserRouter>
       <ToastProvider>
         <StorageGate>
+          <MotionPreference />
           <Routes>
             <Route element={<HubFrame />}>
               <Route index element={<CampaignsScreen />} />
@@ -29,10 +32,7 @@ export function App() {
               <Route path="campaigns/:campaignId/settings" element={<CampaignSetupScreen />} />
               <Route path="campaigns/:campaignId/characters/new" element={<NewCharacterScreen />} />
               <Route path="reference" element={<ReferenceScreen />} />
-              <Route
-                path="settings"
-                element={<PlaceholderScreen title="Settings" milestone="M3" />}
-              />
+              <Route path="settings" element={<SettingsScreen />} />
               <Route path="reference/credits" element={<CreditsScreen />} />
               <Route path="*" element={<PlaceholderScreen title="Not found" />} />
             </Route>
@@ -41,6 +41,7 @@ export function App() {
               <Route path="combat" element={<CombatScreen />} />
               <Route path="spells" element={<SpellbookScreen />} />
               <Route path="reference" element={<ReferenceScreen />} />
+              <Route path="settings" element={<SettingsScreen />} />
               {NAV.filter((n) => !BUILT.has(n.to)).map((n) => (
                 <Route
                   key={n.to}

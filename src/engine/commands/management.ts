@@ -3,10 +3,12 @@ import { z } from 'zod';
 import { computeSheet } from '../calc/sheet';
 import type { Registry } from '../registry';
 import {
+  AutomationSchema,
   BookmarkSchema,
   CampaignSchema,
   ExportFileSchema,
   PatchSchema,
+  PreferencesSchema,
   SCHEMA_VERSION,
   type Bookmark,
   type Campaign,
@@ -16,7 +18,7 @@ import {
   type LogEvent,
   type Patch,
 } from '../schema';
-import { EVENT_LIMIT, undo, type Check, type RunOptions } from './runner';
+import { EVENT_LIMIT, undo, type Automation, type Check, type RunOptions } from './runner';
 
 enablePatches();
 
@@ -27,11 +29,16 @@ export interface ManagementData {
   campaigns: Record<string, Campaign>;
   characters: Record<string, { build: CharacterBuild; live: LiveState; events: LogEvent[] }>;
   bookmarks?: Bookmark[];
+  automation?: Automation;
+  reducedMotion?: boolean;
 }
 
 const ManagementPatchSchema = PatchSchema.refine(
-  ({ path }) => ['campaigns', 'characters', 'bookmarks'].includes(String(path[0])),
-  'Management patches must start at campaigns, characters, or bookmarks',
+  ({ path }) =>
+    ['campaigns', 'characters', 'bookmarks', 'automation', 'reducedMotion'].includes(
+      String(path[0]),
+    ),
+  'Management patches must start at campaigns, characters, bookmarks, automation, or reducedMotion',
 ).refine(
   ({ path }) => !path.some((key) => typeof key === 'string' && RESERVED_IDS.has(key)),
   'Management patches cannot contain reserved object keys',
@@ -95,6 +102,8 @@ export function runManagement<Payload>(
       campaigns: state.campaigns,
       characters: state.characters,
       ...(Object.hasOwn(state, 'bookmarks') ? { bookmarks: state.bookmarks } : {}),
+      ...(Object.hasOwn(state, 'automation') ? { automation: state.automation } : {}),
+      ...(Object.hasOwn(state, 'reducedMotion') ? { reducedMotion: state.reducedMotion } : {}),
     },
     (draft) => {
       text = command.apply(draft, payload, ctx);
@@ -145,6 +154,8 @@ export function undoManagement(
         campaigns: state.campaigns,
         characters: state.characters,
         ...(Object.hasOwn(state, 'bookmarks') ? { bookmarks: state.bookmarks } : {}),
+        ...(Object.hasOwn(state, 'automation') ? { automation: state.automation } : {}),
+        ...(Object.hasOwn(state, 'reducedMotion') ? { reducedMotion: state.reducedMotion } : {}),
       },
       (draft) => {
         for (const patch of target.inversePatches) {
@@ -184,6 +195,9 @@ export function appendManagementEvent(
 
 /** Validate source state, crosslinks, and every explicit reference before saving or importing. */
 export function validateManagementData(state: ManagementData, registry: Registry): void {
+  if (Object.hasOwn(state, 'automation')) AutomationSchema.parse(state.automation);
+  if (Object.hasOwn(state, 'reducedMotion'))
+    PreferencesSchema.shape.reducedMotion.parse(state.reducedMotion);
   if (Object.hasOwn(state, 'bookmarks')) {
     const bookmarks = z.array(BookmarkSchema).parse(state.bookmarks);
     const ids = new Set<string>();

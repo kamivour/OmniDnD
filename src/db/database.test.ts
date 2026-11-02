@@ -3,6 +3,7 @@ import { seedFile } from '../data/seed';
 import { applyDamage, heal } from '../engine/commands/hp';
 import { addBookmark, deleteBookmark, updateBookmark } from '../engine/commands/bookmarks';
 import { deleteCharacter, duplicateCharacter } from '../engine/commands/management';
+import { updatePreferences } from '../engine/commands/preferences';
 import type { Bookmark, ExportFile } from '../engine/schema';
 import { createCharacterStore } from '../state/character-store';
 import {
@@ -37,6 +38,7 @@ describe('persisted workspace validation', () => {
     expect(loaded.characters).toEqual(store.getState().characters);
     expect(loaded.campaigns).toEqual(store.getState().campaigns);
     expect(loaded.automation).toBe('assisted');
+    expect(loaded.reducedMotion).toBe(false);
     expect(loaded.bookmarks).toEqual([]);
     expect(loaded.characters[FOOL]?.events[0]?.undoneBy).toBe('undo');
   });
@@ -72,6 +74,7 @@ describe('persisted workspace validation', () => {
       characters: {},
       campaigns: {},
       automation: 'manual' as const,
+      reducedMotion: false,
       managementEvents: [],
       bookmarks: [],
     };
@@ -258,7 +261,7 @@ describe('persisted workspace management history', () => {
       const saved = managementRows();
       const target = saved.managementEvents?.[0];
       if (!target) throw new Error('Saved management event missing');
-      target[field] = [{ op: 'replace', path: ['automation'], value: 'manual' }];
+      target[field] = [{ op: 'replace', path: ['unrelatedSetting'], value: 'manual' }];
       const before = structuredClone(saved);
       expect(() => deserializeWorkspace(saved)).toThrow(/Management patches must start/);
       expect(saved).toEqual(before);
@@ -438,4 +441,147 @@ describe('persisted Reference bookmarks', () => {
       expect(saved).toEqual(before);
     },
   );
+});
+
+describe('persisted app preferences', () => {
+  function reload(store: ReturnType<typeof createCharacterStore>) {
+    const saved = serializeWorkspace(store.getState());
+    const before = structuredClone(saved);
+    const restored = createCharacterStore([]);
+    restored.setState(deserializeWorkspace(saved));
+    expect(saved).toEqual(before);
+    return restored;
+  }
+
+  it('round-trips preference changes and each Undo while retaining characters, bookmarks and history', () => {
+    let store = createCharacterStore();
+    store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, metadata('damage'));
+    store
+      .getState()
+      .dispatchManagement(
+        addBookmark,
+        { bookmark: { id: 'rules', title: 'Rules', url: 'https://example.com/rules' } },
+        metadata('bookmark'),
+      );
+    const { campaigns, characters, bookmarks } = store.getState();
+    const unrelated = structuredClone({ campaigns, characters, bookmarks });
+
+    expect(
+      store
+        .getState()
+        .dispatchManagement(
+          updatePreferences,
+          { automation: 'manual', reducedMotion: true },
+          metadata('manual-motion'),
+        ).result,
+    ).toBe('ok');
+    store = reload(store);
+    expect(store.getState()).toMatchObject({
+      automation: 'manual',
+      reducedMotion: true,
+      ...unrelated,
+    });
+
+    expect(
+      store
+        .getState()
+        .dispatchManagement(
+          updatePreferences,
+          { automation: 'assisted', reducedMotion: true },
+          metadata('assisted-motion'),
+        ).result,
+    ).toBe('ok');
+    store = reload(store);
+    expect(store.getState()).toMatchObject({
+      automation: 'assisted',
+      reducedMotion: true,
+      ...unrelated,
+    });
+
+    expect(store.getState().undoManagement(metadata('undo-assisted')).result).toBe('ok');
+    store = reload(store);
+    expect(store.getState()).toMatchObject({
+      automation: 'manual',
+      reducedMotion: true,
+      ...unrelated,
+    });
+    expect(store.getState().undoManagement(metadata('undo-preferences')).result).toBe('ok');
+    store = reload(store);
+    expect(store.getState()).toMatchObject({
+      automation: 'assisted',
+      reducedMotion: false,
+      ...unrelated,
+    });
+    expect(store.getState().managementEvents).toMatchObject([
+      { id: 'bookmark' },
+      { id: 'manual-motion', undoneBy: 'undo-preferences' },
+      { id: 'assisted-motion', undoneBy: 'undo-assisted' },
+      { id: 'undo-assisted', command: 'undo' },
+      { id: 'undo-preferences', command: 'undo' },
+    ]);
+    expect(store.getState().undoManagement(metadata('undo-bookmark')).result).toBe('ok');
+    expect(store.getState().bookmarks).toEqual([]);
+    expect(store.getState().characters).toEqual(unrelated.characters);
+    expect(store.getState().undo(FOOL, metadata('undo-damage')).result).toBe('ok');
+    expect(store.getState().characters[FOOL]?.live.hp).toBe(11);
+  });
+
+  it('loads legacy rows without reduced motion as false and retains their automation and history', () => {
+    const saved = rows();
+    saved.automation = 'manual';
+    delete saved.reducedMotion;
+    const before = structuredClone(saved);
+    const loaded = deserializeWorkspace(saved);
+    expect(loaded.reducedMotion).toBe(false);
+    expect(loaded.automation).toBe('manual');
+    expect(loaded.characters[FOOL]?.events).toHaveLength(2);
+    expect(saved).toEqual(before);
+    expect(saved).not.toHaveProperty('reducedMotion');
+  });
+
+  it.each([
+    ['automation', 'automatic'],
+    ['automation', null],
+    ['reducedMotion', 'false'],
+    ['reducedMotion', null],
+    ['reducedMotion', 0],
+  ])('rejects invalid %s value %s without changing saved data', (key, value) => {
+    const saved = rows();
+    Object.assign(saved, { [key]: value });
+    const before = structuredClone(saved);
+    expect(() => deserializeWorkspace(saved)).toThrow();
+    expect(saved).toEqual(before);
+  });
+
+  it.each(['automation', 'reducedMotion'] as const)(
+    'rejects invalid in-memory %s before writing rows',
+    (key) => {
+      const state = createCharacterStore().getState();
+      Object.assign(state, { [key]: null });
+      const before = { automation: state.automation, reducedMotion: state.reducedMotion };
+      expect(() => serializeWorkspace(state)).toThrow();
+      expect({ automation: state.automation, reducedMotion: state.reducedMotion }).toEqual(before);
+    },
+  );
+
+  it.each([
+    ['automation', 'automatic'],
+    ['reducedMotion', null],
+  ])('rejects corrupted %s inverse patches without changing saved data', (key, value) => {
+    const store = createCharacterStore();
+    store
+      .getState()
+      .dispatchManagement(
+        updatePreferences,
+        { automation: 'manual', reducedMotion: true },
+        metadata('preferences'),
+      );
+    const saved = serializeWorkspace(store.getState());
+    const event = saved.managementEvents?.at(-1);
+    if (!event) throw new Error('Saved preferences event missing');
+    event.inversePatches = [{ op: 'replace', path: [String(key)], value }];
+    const before = structuredClone(saved);
+    expect(() => deserializeWorkspace(saved)).toThrow('Saved management undo history is invalid');
+    expect(saved).toEqual(before);
+  });
 });

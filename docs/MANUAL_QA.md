@@ -55,4 +55,14 @@ Check these items in a normal browser after each completed milestone. Unchecked 
 - [ ] Open Credits from both the hub and a character. Check the SRD attribution, icon authors/source links, and local Lucide/Inter/Cinzel license notices. Back to Reference should preserve the current character context.
 - [ ] At 375 px and desktop width, check long bookmark titles and URLs wrap without horizontal scrolling. Use Tab/Enter to open and save the bookmark editor.
 
-The hub, blank character creation, campaign settings, Reference, HUD, and local saving are live. Dashboard, Spellbook, and Combat content still uses the approved static frames until M4–M6. Automated checks cover failed-write rollback, Retry, and rejecting damaged records without erasing them.
+## Phase 1 — M3: Settings and final milestone check
+
+- [ ] Open Settings from the hub and from a character. Change Assisted to Manual, wait for Saved locally, refresh, and confirm Manual stays selected. Undo management should restore Assisted after another refresh.
+- [ ] Give a character 10 temp HP, then replace it with 5. Assisted should ask first; Cancel should retain 10. Manual should replace it without a rule warning. Game-action Undo should restore the earlier temp HP independently of preference Undo.
+- [ ] Turn Always reduce motion on. Open and close a preview or dialog; motion should stop. Refresh and confirm the preference remains. Turn the switch off and enable reduced motion in the OS; the app should still reduce motion.
+- [ ] Use Tab, arrow keys, and Space to change preference controls. Focus should stay on the control after saving. Check Settings at 375 px and desktop width.
+- [ ] From hub Settings, select a character and export JSON. From character Settings, export the active character. Import the file, inspect the preview, close it without saving, then import and add it. Existing IDs should create a copy. Refresh and undo the import with Undo management.
+- [ ] Import malformed JSON and confirm an error appears without changing saved characters. Exported files contain one character and its campaign/history; device preferences and bookmarks stay local.
+- [ ] Recheck navigation, HUD adjustments, campaign/character management, Reference, and Settings in one normal browser session. Refresh between changes and confirm saved values agree across screens. Dashboard, Spellbook, and Combat bodies still use approved static frames until M4–M6.
+
+M3 is complete. The hub, blank character creation, campaign settings, Reference, Settings, HUD, and local saving are live. Automated checks cover failed-write rollback, Retry, and rejecting damaged records without erasing them. Installability and offline operation remain M8 work.

@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M3 — Shell, HUD, persistence.
-**Next up:** M3 Settings: reduced motion, automation, and character export/import.
+**Current milestone:** M4 — Spellbook (live).
+**Next up:** M4 spell groups and live slot controls, synced with the HUD.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -23,8 +23,8 @@ Status: `todo` · `doing` · `done` · `blocked`
 | M0 | Project setup | 1 | done | App runs, tests run, tokens in place |
 | M1 | Key frames (static) | 1 | done | User signs off hub, Dashboard, Spellbook, Combat look |
 | M2 | Rules engine core (headless) | 1 | done | Scenario passes as Vitest test |
-| M3 | Shell, HUD, persistence | 1 | doing | Nav works on all breakpoints, data survives reload |
-| M4 | Spellbook (live) | 1 | todo | Cast/adjust slots synced with HUD |
+| M3 | Shell, HUD, persistence | 1 | done | Nav works on all breakpoints, data survives reload |
+| M4 | Spellbook (live) | 1 | doing | Cast/adjust slots synced with HUD |
 | M5 | Combat (live) | 1 | todo | Scenario steps 1–8 work in UI |
 | M6 | Rest + Dashboard (live) | 1 | todo | Scenario steps 9–14 work in UI |
 | M7 | Character Sheet + Exploration + level-up | 1 | todo | All computed values match TEST_CHARACTER §4 |
@@ -87,7 +87,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Campaigns hub (live): list campaigns + characters, seed #273 with The Fool, create blank, duplicate, delete, import/export JSON
 - [x] Campaign Setup (Phase 1 part, live): leveling, HP method, ability method. New character entry follows these methods
 - [x] Reference: link cards + bookmarks + Credits page
-- [ ] Settings: reduced motion, automation level, export/import
+- [x] Settings: reduced motion, automation level, export/import
 
 ### M4 — Spellbook (live)
 - [ ] Groups, slot rows with `− / +` and pip toggle
@@ -125,6 +125,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [ ] Keyboard pass; contrast check; reduced motion check
 - [ ] No dead buttons
 - [ ] Auto backups (before import/reset, after long rest)
+- [ ] Settings reset behavior (Q20), with backup and confirmation
 - [ ] SPEC §8 checklist all true
 
 ## Backlog (not scheduled)
@@ -140,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-02 — M3 complete: Settings now saves automation/reduced motion through logged commands with durable Undo, respects OS motion preferences, and reuses hub character JSON transfer controls (D71). Preference controls retain keyboard focus while saving. 488 unit tests and 158 full browser checks pass without retries; typecheck, lint and build pass. Phone/desktop Settings and import previews checked. M3 manual QA consolidated in MANUAL_QA.md. Reset scope recorded as Q20 for M8. Next: M4 live Spellbook groups/slot controls.
 
 - 2026-11-02 — M3 Reference: eight external cards with 2014 destinations/edition notes, shared HTTP(S) bookmarks with durable management Undo, and Credits with SRD attribution, icon sources/authors, and local icon/font license notices (D70). 454 unit tests pass; 148 browser checks pass after focused reruns for a fixed removal-focus race and two transport errors. Typecheck, lint and build pass; 375/1440 layouts checked. Manual Reference QA added. Next: Settings.
 

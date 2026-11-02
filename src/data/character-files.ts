@@ -28,6 +28,7 @@ function validateFile(file: ExportFile) {
       automation: 'assisted',
       managementEvents: [],
       bookmarks: [],
+      reducedMotion: false,
     }),
   );
 }

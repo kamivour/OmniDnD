@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-02 15:55 — Settings live; M3 complete
+
+- Settings now saves Assisted/Manual automation and Always reduce motion for every character on this device. Changes are logged and can be undone after refresh.
+- Reduced motion follows the OS preference or the saved switch, including mounted previews. Preference controls retain keyboard focus during saving. Manual tracks game actions without rule warnings while still blocking invalid inputs.
+- Export and import character JSON from hub or character Settings. These controls share the hub's validated transfer flow, including collision previews, existing-data preservation, errors, and focus restoration.
+- Validation: 488 unit tests and 158 full browser checks pass without retries; typecheck, lint, and build pass. Phone and desktop Settings/import layouts were visually checked. Browser tests use the optional real-HTTP forwarder.
+- M3 is complete. Manual checks are in `docs/MANUAL_QA.md`; installability/offline checks remain M8. Next: M4 live Spellbook groups and slot controls.
+
 ## 2026-11-02 15:44 — Reference, bookmarks, and Credits
 
 - Reference now has eight external rule/tool cards, with direct 2014 Basic Rules, SRD 5.1, and 5e.tools destinations plus edition notes for mixed libraries.

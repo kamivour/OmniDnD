@@ -1,24 +1,18 @@
 import { useRef, useState } from 'react';
 import { useStore } from 'zustand';
-import { ZodError } from 'zod';
 import { Link } from 'react-router';
 import { Copy, Download, Plus, Settings2, Trash2, Undo2, Upload } from 'lucide-react';
 import { registry } from '../../data/registry';
-import { characterExport, prepareCharacterImport } from '../../data/character-files';
 import { computeSheet } from '../../engine/calc/sheet';
-import {
-  addCharacter,
-  deleteCharacter,
-  duplicateCharacter,
-} from '../../engine/commands/management';
-import type { Campaign, ExportFile } from '../../engine/schema';
+import { deleteCharacter, duplicateCharacter } from '../../engine/commands/management';
+import type { Campaign } from '../../engine/schema';
 import { characterState, characterStore, type CharacterRecord } from '../../state/character-store';
 import { HpBar } from '../components/HpBar';
 import { Icon } from '../components/Icon';
 import { Sheet } from '../components/Sheet';
 import { SectionLabel } from '../components/SectionLabel';
 import { inputClass } from '../components/fields';
-import { useToast } from '../components/toast-context';
+import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { useManagement } from '../commands/useManagement';
 import { rulesSummary } from '../campaignOptions';
 
@@ -29,9 +23,9 @@ const path = (id: string) => encodeURIComponent(id);
 /** The landing page reads the same saved characters as the HUD. */
 export function CampaignsScreen() {
   const state = useStore(characterStore);
-  const { run, undo, confirmation, pending } = useManagement();
-  const toast = useToast();
-  const input = useRef<HTMLInputElement>(null);
+  const management = useManagement();
+  const { run, undo, confirmation, pending } = management;
+  const { openImport, exportCharacter, importControls } = useCharacterTransfer(management);
   const opener = useRef<HTMLElement | null>(null);
   const restoreFocus = (event: Event) => {
     event.preventDefault();
@@ -45,27 +39,9 @@ export function CampaignsScreen() {
   const [duplicateId, setDuplicateId] = useState('');
   const [name, setName] = useState('');
   const [deleting, setDeleting] = useState<string | null>(null);
-  const [importing, setImporting] = useState<{ file: ExportFile; notes: string[] } | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const last = state.managementEvents.findLast(
     (event) => event.command !== 'undo' && !event.undoneBy,
   );
-
-  const exportFile = (id: string) => {
-    try {
-      const file = characterExport(characterStore.getState(), id, new Date().toISOString());
-      const url = URL.createObjectURL(
-        new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' }),
-      );
-      const download = document.createElement('a');
-      download.href = url;
-      download.download = `${file.build.name.replace(/[^a-z0-9_-]+/gi, '-').replace(/^-|-$/g, '') || 'character'}.json`;
-      download.click();
-      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    } catch (cause) {
-      toast({ text: cause instanceof Error ? cause.message : 'Export failed' });
-    }
-  };
 
   return (
     <section className="flex flex-col gap-6">
@@ -84,10 +60,7 @@ export function CampaignsScreen() {
           </button>
           <button
             type="button"
-            onClick={(event) => {
-              opener.current = event.currentTarget;
-              input.current?.click();
-            }}
+            onClick={(event) => openImport(event.currentTarget)}
             disabled={pending}
             className={button}
           >
@@ -99,42 +72,8 @@ export function CampaignsScreen() {
             New campaign
           </Link>
         </div>
-        <input
-          ref={input}
-          type="file"
-          accept="application/json,.json"
-          aria-label="Import character JSON"
-          className="hidden"
-          onChange={async (event) => {
-            const selected = event.target.files?.[0];
-            event.target.value = '';
-            if (!selected) return;
-            setError(null);
-            try {
-              setImporting(
-                prepareCharacterImport(
-                  JSON.parse(await selected.text()),
-                  characterStore.getState(),
-                  () => crypto.randomUUID(),
-                ),
-              );
-            } catch (cause) {
-              setError(
-                cause instanceof ZodError
-                  ? 'This file is not a supported OmniDnD character export for D&D 5e (2014).'
-                  : cause instanceof Error
-                    ? cause.message
-                    : 'This file could not be imported.',
-              );
-            }
-          }}
-        />
       </header>
-      {error && (
-        <p role="alert" className="rounded-card border border-warn p-3 text-sm text-warn">
-          Import failed: {error}
-        </p>
-      )}
+      {importControls}
       {state.managementEvents.length > 0 && (
         <p aria-label="Recent management change" className="text-xs text-text-muted">
           {state.managementEvents.at(-1)?.text}
@@ -163,7 +102,7 @@ export function CampaignsScreen() {
             opener.current = document.activeElement as HTMLElement;
             setDeleting(id);
           }}
-          onExport={exportFile}
+          onExport={exportCharacter}
         />
       ))}
 
@@ -227,47 +166,6 @@ export function CampaignsScreen() {
             Delete character
           </button>
         </div>
-      </Sheet>
-      <Sheet
-        open={importing !== null}
-        onOpenChange={(open) => !open && setImporting(null)}
-        title="Import character"
-        onCloseAutoFocus={restoreFocus}
-      >
-        {importing && (
-          <>
-            <p className="font-semibold">{importing.file.build.name}</p>
-            <p className="mb-3 text-sm text-text-muted">
-              {importing.file.campaign.name} · HP {importing.file.live.hp}/
-              {
-                computeSheet(
-                  {
-                    campaign: importing.file.campaign,
-                    build: importing.file.build,
-                    live: importing.file.live,
-                  },
-                  registry,
-                ).maxHp.value
-              }
-            </p>
-            <ul className="mb-4 list-disc space-y-2 pl-5 text-sm text-warn">
-              {importing.notes.map((note) => (
-                <li key={note}>{note}</li>
-              ))}
-            </ul>
-            <p className="mb-4 text-sm text-text-muted">
-              Existing characters and campaign rules remain saved.
-            </p>
-            <button
-              type="button"
-              disabled={pending}
-              onClick={() => run(addCharacter, { file: importing.file }, () => setImporting(null))}
-              className={`${button} w-full`}
-            >
-              Add character
-            </button>
-          </>
-        )}
       </Sheet>
       {confirmation}
     </section>

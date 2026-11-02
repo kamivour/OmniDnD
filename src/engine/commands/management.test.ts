@@ -460,7 +460,7 @@ describe('workspace warnings and undo', () => {
     const added = run(addCharacter, empty, { file: seedFile });
     const invalid = {
       ...added.event,
-      inversePatches: [{ op: 'remove' as const, path: ['automation'] }],
+      inversePatches: [{ op: 'remove' as const, path: ['unexpectedSetting'] }],
     };
     expect(ManagementEventSchema.safeParse(invalid).success).toBe(false);
     expect(undoManagement(added.next, [invalid], registry, metadata('u1'))).toEqual({

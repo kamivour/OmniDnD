@@ -63,7 +63,6 @@ const CHARACTER_ROUTES: { path: string; heading: string; notice?: string }[] = [
   {
     path: '/characters/the-fool/settings',
     heading: 'Settings',
-    notice: 'Coming in milestone M3.',
   },
 ];
 
