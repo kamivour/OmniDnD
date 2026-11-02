@@ -66,3 +66,13 @@ Check these items in a normal browser after each completed milestone. Unchecked 
 - [ ] Recheck navigation, HUD adjustments, campaign/character management, Reference, and Settings in one normal browser session. Refresh between changes and confirm saved values agree across screens. Dashboard, Spellbook, and Combat bodies still use approved static frames until M4–M6.
 
 M3 is complete. The hub, blank character creation, campaign settings, Reference, Settings, HUD, and local saving are live. Automated checks cover failed-write rollback, Retry, and rejecting damaged records without erasing them. Installability and offline operation remain M8 work.
+
+## Phase 1 — M4: spell groups and slots
+
+- [ ] Open The Fool's Spellbook. Confirm DC 15, attack +7, cantrips 2/2, known spells 6/6, and saved slots matching the HUD. A fresh seed has level 1 slots 0/4 and level 2 slots 2/2.
+- [ ] Use − and + on both slot rows. Confirm the HUD changes immediately. Refresh, then Undo last command; both the row and HUD should restore the previous value after another refresh.
+- [ ] Tap a pip to set the remaining count. Tapping a filled pip clears that pip and later pips; tapping an empty pip fills through it. Use Tab and Space on a pip too, then undo the adjustment.
+- [ ] Open a newly created blank Bard. Confirm no spells from The Fool appear, limits match that character, and the level 1 slot row is available even with no selected spells.
+- [ ] At 375 px and desktop width, confirm slot controls fit without horizontal scrolling and every control remains reachable. Concentration's Active badge should match saved state and disappear when concentration ends from the HUD.
+
+Spell groups and standard slot adjustments are live. Casting, favorites, and Manage are the next M4 tasks. Pact Magic Spellbook support remains Phase 3; pact slot adjustments already exist in the HUD.

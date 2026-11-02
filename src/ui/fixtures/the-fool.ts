@@ -5,7 +5,7 @@
 
 import type { SpellType } from '../spellTypes';
 
-export type Cost = 'A' | 'BA' | 'R';
+export type Cost = 'A' | 'BA' | 'R' | `${number} min` | `${number} h`;
 
 export interface SpellView {
   id: string;

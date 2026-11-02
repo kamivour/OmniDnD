@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M4 — Spellbook (live).
-**Next up:** M4 spell groups and live slot controls, synced with the HUD.
+**Next up:** M4 live spell previews and pinned details.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -90,7 +90,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Settings: reduced motion, automation level, export/import
 
 ### M4 — Spellbook (live)
-- [ ] Groups, slot rows with `− / +` and pip toggle
+- [x] Groups, slot rows with `− / +` and pip toggle
 - [ ] Preview (hover / tap / focus) + pin to detail panel
 - [ ] Cast flow with slot-level picker and upcast text; ritual option
 - [ ] Filters, search, favorites
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-02 — M4 spell groups/slots: selected registry spells, engine-derived DC/attack/limits, actual concentration, empty-book slot rows, and logged −/+ or pip adjustments shared with the HUD and durable Undo (D72). Unsupported imported casting associations keep metadata without invented stats; Pact Magic Spellbook support remains Phase 3. 500 unit tests and 168 full browser checks pass without retries; the final phone screenshot check also passes. Typecheck, lint and build pass; 375/1440 layouts checked. Manual slot QA added. Next: live previews/pinned details, then casting.
 
 - 2026-11-02 — M3 complete: Settings now saves automation/reduced motion through logged commands with durable Undo, respects OS motion preferences, and reuses hub character JSON transfer controls (D71). Preference controls retain keyboard focus while saving. 488 unit tests and 158 full browser checks pass without retries; typecheck, lint and build pass. Phone/desktop Settings and import previews checked. M3 manual QA consolidated in MANUAL_QA.md. Reset scope recorded as Q20 for M8. Next: M4 live Spellbook groups/slot controls.
 

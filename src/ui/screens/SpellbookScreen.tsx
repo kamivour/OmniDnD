@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { Search } from 'lucide-react';
+import { registry } from '../../data/registry';
+import { adjustSlot } from '../../engine/commands';
+import { useCommand } from '../commands/command-context';
 import { SpellCard } from '../components/cards';
 import { CastFooter } from '../components/CastFooter';
 import { PipStepper } from '../components/PipStepper';
 import { SectionLabel } from '../components/SectionLabel';
 import { SpellRow } from '../components/SpellRow';
 import { cx } from '../cx';
-import { fool, spells, type Cost, type SpellView } from '../fixtures/the-fool';
+import { type Cost, type SpellView } from '../fixtures/the-fool';
 import { useFixtureAction } from '../fixtures/useFixtureAction';
+import { useCharacter } from '../hooks/useCharacter';
 import { signed } from '../format';
 import { useDetail } from '../layout/detail-context';
 import { SPELL_TYPE_ORDER, SPELL_TYPES, type SpellType } from '../spellTypes';
-
-/** Bard 3 limits (PHB Bard table). Hard-coded for the static frame; the engine owns them from M2. */
-const KNOWN = { cantrips: 2, spells: 6 };
+import { spellbookModel } from '../spells/spellbook-model';
 
 interface Filters {
   query: string;
@@ -38,19 +40,26 @@ const NO_FILTERS: Filters = {
 
 const COSTS: Cost[] = ['A', 'BA', 'R'];
 
-function hasSlotFor(spell: SpellView): boolean {
+function hasSlotFor(
+  spell: SpellView,
+  slots: readonly { level: number; max: number; used: number }[],
+): boolean {
   if (spell.level === 0) return true;
-  return fool.slots.some((s) => s.level >= spell.level && s.max - s.used > 0);
+  return slots.some((s) => s.level >= spell.level && s.max - s.used > 0);
 }
 
-function matches(spell: SpellView, f: Filters): boolean {
+function matches(
+  spell: SpellView,
+  f: Filters,
+  slots: readonly { level: number; max: number; used: number }[],
+): boolean {
   if (f.query && !spell.name.toLowerCase().includes(f.query.trim().toLowerCase())) return false;
   if (f.level !== 'all' && spell.level !== f.level) return false;
   if (f.costs.length > 0 && !f.costs.includes(spell.cost)) return false;
   if (f.types.length > 0 && !spell.tags.some((t) => f.types.includes(t))) return false;
   if (f.concentration && !spell.concentration) return false;
   if (f.ritual && !spell.ritual) return false;
-  if (f.castableNow && !hasSlotFor(spell)) return false;
+  if (f.castableNow && !hasSlotFor(spell, slots)) return false;
   return true;
 }
 
@@ -61,6 +70,10 @@ function matches(spell: SpellView, f: Filters): boolean {
  */
 export function SpellbookScreen() {
   const act = useFixtureAction();
+  const { state, sheet } = useCharacter();
+  const { run } = useCommand();
+  const model = spellbookModel(state, sheet, registry);
+  const { slots, levels } = model;
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
   const { pin } = useDetail();
 
@@ -72,25 +85,10 @@ export function SpellbookScreen() {
   const castSpell = (spell: SpellView, level: number) =>
     act(level > 0 ? `Cast ${spell.name} (L${level} slot)` : `Cast ${spell.name}`);
 
-  const setPinned = (spell: SpellView) =>
-    pin(
-      <div className="flex flex-col gap-4">
-        <SpellCard spell={spell} dc={fool.spellDc} />
-        <CastFooter
-          key={spell.id}
-          spell={spell}
-          slots={fool.slots}
-          onCast={(level) => castSpell(spell, level)}
-        />
-      </div>,
-    );
+  const setPinned = (spell: SpellView, classId: string) =>
+    pin(<LiveSpellDetail spellId={spell.id} classId={classId} />);
 
-  const levels = [
-    ...new Set([0, ...spells.map((s) => s.level), ...fool.slots.map((s) => s.level)]),
-  ].sort((a, b) => a - b);
-  const visible = spells.filter((s) => matches(s, filters));
-  const cantripCount = spells.filter((s) => s.level === 0).length;
-  const knownCount = spells.length - cantripCount;
+  const visible = model.entries.filter(({ spell }) => matches(spell, filters, slots));
   const filtered = JSON.stringify(filters) !== JSON.stringify(NO_FILTERS);
 
   return (
@@ -98,11 +96,19 @@ export function SpellbookScreen() {
       <div className="flex min-w-0 flex-col gap-4">
         <header className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
           <h1 className="font-display text-lg text-text">Spells</h1>
-          <p className="text-xs text-text-muted">
-            Save DC <span className="font-semibold text-text">{fool.spellDc}</span> · Attack{' '}
-            <span className="font-semibold text-text">{signed(fool.spellAttack)}</span> · Cantrips{' '}
-            {cantripCount} / {KNOWN.cantrips} · Known {knownCount} / {KNOWN.spells}
-          </p>
+          <div className="flex flex-col gap-1 text-xs text-text-muted">
+            {model.classes.map((casting) => (
+              <p key={casting.classId}>
+                {model.classes.length > 1 && `${casting.name} · `}
+                Save DC <span className="font-semibold text-text">{casting.dc}</span> · Attack{' '}
+                <span className="font-semibold text-text">{signed(casting.attack)}</span> · Cantrips{' '}
+                {casting.cantrips}
+                {casting.cantripLimit === undefined ? '' : ` / ${casting.cantripLimit}`} · Known{' '}
+                {casting.known}
+                {casting.knownLimit === undefined ? '' : ` / ${casting.knownLimit}`}
+              </p>
+            ))}
+          </div>
           <button
             type="button"
             onClick={() => act('Manage spells')}
@@ -111,6 +117,20 @@ export function SpellbookScreen() {
             Manage
           </button>
         </header>
+
+        {model.unsupportedClassIds.length > 0 && (
+          <p role="note" className="text-sm text-warn">
+            Selected spells for{' '}
+            {model.unsupportedClassIds.map((id) => registry.get('class', id).name).join(', ')} have
+            no class spellcasting stats. Their DC and attack calculations are unavailable.
+          </p>
+        )}
+
+        {sheet.slots.pact && (
+          <p role="note" className="text-sm text-text-muted">
+            Pact Magic Spellbook support is coming in Phase 3. Adjust pact slots from the HUD.
+          </p>
+        )}
 
         <section aria-label="Filters" className="flex flex-col gap-2">
           <div className="flex gap-2">
@@ -196,38 +216,58 @@ export function SpellbookScreen() {
         </section>
 
         {visible.length === 0 && (
-          <p className="py-8 text-center text-text-muted">No spells match these filters.</p>
+          <p className="py-8 text-center text-text-muted">
+            {model.entries.length === 0
+              ? 'No spells selected yet.'
+              : 'No spells match these filters.'}
+          </p>
+        )}
+
+        {slots.length > 0 && (
+          <p className="text-xs text-text-muted">
+            Tap a pip to set remaining slots. − uses one; + restores one.
+          </p>
         )}
 
         {levels.map((level) => {
-          const group = visible.filter((s) => s.level === level);
-          if (group.length === 0) return null;
-          const slot = fool.slots.find((s) => s.level === level);
+          const group = visible.filter(({ spell }) => spell.level === level);
+          const slot = slots.find((s) => s.level === level);
+          if (group.length === 0 && !slot) return null;
           return (
-            <section key={level} className="flex flex-col gap-2">
-              <div className="flex min-h-11 items-center gap-3">
+            <section
+              key={level}
+              aria-label={level === 0 ? 'Cantrips' : `Level ${level}`}
+              className="flex flex-col gap-2"
+            >
+              <div className="flex min-h-11 flex-wrap items-center gap-3">
                 <SectionLabel>{level === 0 ? 'Cantrips' : `Level ${level}`}</SectionLabel>
                 {slot && (
                   <PipStepper
                     label={`Level ${level} spell slots`}
                     max={slot.max}
                     used={slot.used}
-                    onUse={() => act(`Use one: Level ${level} spell slots`)}
-                    onRestore={() => act(`Restore one: Level ${level} spell slots`)}
+                    onUse={() => run(adjustSlot, { level, used: slot.used + 1 })}
+                    onRestore={() => run(adjustSlot, { level, used: slot.used - 1 })}
+                    onSetUsed={(used) => run(adjustSlot, { level, used })}
                     className="ml-auto"
                   />
                 )}
               </div>
               <ul className="flex flex-col gap-2">
-                {group.map((spell) => (
+                {group.map(({ spell, classId, dc }) => (
                   <SpellRow
-                    key={spell.id}
+                    key={`${classId}:${spell.id}`}
                     spell={spell}
-                    dc={fool.spellDc}
-                    slots={fool.slots}
-                    concentrating={spell.id === fool.concentration.id}
+                    dc={dc}
+                    castingClass={
+                      model.classes.length + model.unsupportedClassIds.length > 1
+                        ? registry.get('class', classId).name
+                        : undefined
+                    }
+                    slots={slots}
+                    concentrating={spell.id === state.live.concentration?.spellId}
                     onCast={castSpell}
-                    onPin={setPinned}
+                    onPin={(spell) => setPinned(spell, classId)}
                   />
                 ))}
               </ul>
@@ -235,6 +275,30 @@ export function SpellbookScreen() {
           );
         })}
       </div>
+    </div>
+  );
+}
+
+/** Pinned content reads current values instead of retaining a snapshot of the slot pool. */
+function LiveSpellDetail({ spellId, classId }: { spellId: string; classId: string }) {
+  const { state, sheet } = useCharacter();
+  const model = spellbookModel(state, sheet, registry);
+  const entry = model.entries.find(
+    (entry) => entry.spell.id === spellId && entry.classId === classId,
+  );
+  const act = useFixtureAction();
+  if (!entry) return <p className="text-sm text-text-muted">This spell is no longer selected.</p>;
+  return (
+    <div className="flex flex-col gap-4">
+      <SpellCard spell={entry.spell} dc={entry.dc} />
+      <CastFooter
+        key={spellId}
+        spell={entry.spell}
+        slots={model.slots}
+        onCast={(level) =>
+          act(level > 0 ? `Cast ${entry.spell.name} (L${level} slot)` : `Cast ${entry.spell.name}`)
+        }
+      />
     </div>
   );
 }

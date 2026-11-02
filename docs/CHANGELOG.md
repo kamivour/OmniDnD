@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-02 21:23 — Saved Spellbook groups and slot controls
+
+- Spellbook now shows the active character's selected spells, registry summaries, casting stats, known limits, and saved concentration. Blank characters no longer inherit The Fool's spells; slot rows remain available even with no selected spells.
+- Use −/+ or tap pips to adjust remaining standard slots. Every adjustment uses the engine, updates the HUD, saves locally, and supports Undo after refresh. Pip controls have 44 px targets and keyboard support.
+- Imported spell associations without supported casting stats stay visible with an explanation. Pact Magic Spellbook support remains Phase 3; existing HUD adjustments remain available.
+- Validation: 500 unit tests and 168 full browser checks pass without retries; the final phone screenshot check also passes. Typecheck, lint, and build pass. Phone/desktop layouts were checked using the optional real-HTTP test forwarder.
+- Manual slot checks are in `docs/MANUAL_QA.md`. Next: live previews/pinned details, then casting. Cast and Manage actions still use the approved static frame behavior during this work.
+
 ## 2026-11-02 15:55 — Settings live; M3 complete
 
 - Settings now saves Assisted/Manual automation and Always reduce motion for every character on this device. Changes are logged and can be undone after refresh.

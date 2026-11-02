@@ -48,7 +48,15 @@ function Card({
   );
 }
 
-export function SpellCard({ spell, dc, links }: { spell: SpellView; dc: number; links?: boolean }) {
+export function SpellCard({
+  spell,
+  dc,
+  links,
+}: {
+  spell: SpellView;
+  dc?: number;
+  links?: boolean;
+}) {
   const header = (
     <>
       <span className="flex flex-wrap items-center gap-1.5">
@@ -61,7 +69,7 @@ export function SpellCard({ spell, dc, links }: { spell: SpellView; dc: number; 
       {/* Own line: as a wrapped tail of the line above it would start with a stray "·". */}
       {spell.save && (
         <span className="mt-0.5 block">
-          {spell.save} save DC {dc}
+          {spell.save} save {dc === undefined ? '(DC unavailable)' : `DC ${dc}`}
         </span>
       )}
       <span className="mt-0.5 flex items-center gap-1.5">

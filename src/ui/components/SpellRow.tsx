@@ -8,7 +8,8 @@ import { ConcBadge, CostBadge } from './CostBadge';
 
 interface SpellRowProps {
   spell: SpellView;
-  dc: number;
+  dc?: number;
+  castingClass?: string;
   slots: readonly { level: number; max: number; used: number }[];
   /** Economy slot this spell needs is spent ("Action", "Bonus action", ...). */
   spent?: string;
@@ -18,10 +19,19 @@ interface SpellRowProps {
 }
 
 /** Spell list row: icon, name, cost, C / Rit, main type, save or range, Cast. Box tinted by main type. */
-export function SpellRow({ spell, dc, slots, spent, concentrating, onCast, onPin }: SpellRowProps) {
+export function SpellRow({
+  spell,
+  dc,
+  castingClass,
+  slots,
+  spent,
+  concentrating,
+  onCast,
+  onPin,
+}: SpellRowProps) {
   const type = SPELL_TYPES[spell.type];
   const details = [
-    spell.save && `${spell.save} ${dc}`,
+    spell.save && `${spell.save} ${dc === undefined ? 'save (DC unavailable)' : dc}`,
     spell.range,
     spell.duration !== 'Instant' && spell.duration,
   ]
@@ -29,6 +39,7 @@ export function SpellRow({ spell, dc, slots, spent, concentrating, onCast, onPin
     .join(' · ');
   const meta = (
     <>
+      {castingClass && `${castingClass} · `}
       <span className={type.text}>{type.label}</span> · {details}
     </>
   );

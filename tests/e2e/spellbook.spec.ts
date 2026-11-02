@@ -11,14 +11,14 @@ const row = (page: Page, name: string) =>
 test('groups spells by level with slot pips', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Cantrips' })).toBeVisible();
   const main = page.getByRole('main');
-  await expect(main.getByRole('img', { name: 'Level 1 spell slots: 3 of 4 left' })).toBeVisible();
-  await expect(main.getByRole('img', { name: 'Level 2 spell slots: 1 of 2 left' })).toBeVisible();
+  await expect(main.getByLabel('Level 1 spell slots: 0 of 4 left', { exact: true })).toBeVisible();
+  await expect(main.getByLabel('Level 2 spell slots: 2 of 2 left', { exact: true })).toBeVisible();
   await expect(main.getByRole('button', { name: 'Use one: Level 2 spell slots' })).toBeVisible();
 });
 
-test('rows show their main type; the concentrating spell is marked Active', async ({ page }) => {
+test('rows show their main type and the saved seed has no active concentration', async ({ page }) => {
   await expect(row(page, 'Healing Word')).toContainText('Healing ·');
-  await expect(row(page, 'Faerie Fire')).toContainText('Active');
+  await expect(row(page, 'Faerie Fire')).not.toContainText('Active');
   await expect(row(page, 'Suggestion')).not.toContainText('Active');
 });
 
@@ -63,7 +63,8 @@ test.describe('desktop', () => {
   test('click pins the spell with a slot picker', async ({ page }) => {
     await row(page, 'Healing Word').click();
     const panel = page.getByRole('complementary', { name: 'Pinned detail' });
-    await expect(panel).toContainText('1d4 + 5 HP');
-    await expect(panel.getByRole('button', { name: 'Cast Healing Word (L1)' })).toBeVisible();
+    await expect(panel).toContainText('1d4 + your spellcasting modifier HP');
+    await expect(panel).toContainText('Upcast: +1d4 per slot level above 1.');
+    await expect(panel.getByRole('button', { name: 'Cast Healing Word (L2)' })).toBeVisible();
   });
 });
