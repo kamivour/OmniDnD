@@ -1,4 +1,5 @@
 import type { SpellcastingStats } from '../calc/sheet';
+import { isPreparedCaster2014 } from '../calc/spell-selections';
 import type { DamageType } from '../rules2014';
 import type { SpellDef } from '../schema';
 import type { CommandContext } from './runner';
@@ -35,19 +36,6 @@ export interface SpellCastDetails {
   damage?: SpellRollDetails & { type: DamageType };
   upcastText?: string;
 }
-
-/**
- * Explicit 2014 policy: do not infer preparation from optional known-spell tables.
- * Basic Rules classes (Cleric, Wizard): https://www.dndbeyond.com/sources/dnd/basic-rules-2014/classes
- * Legacy Druid: https://www.dndbeyond.com/classes/3-druid
- * Legacy Paladin: https://www.dndbeyond.com/classes/4-paladin
- */
-const PREPARED_CASTERS_2014: ReadonlySet<string> = new Set([
-  'class.cleric',
-  'class.druid',
-  'class.paladin',
-  'class.wizard',
-]);
 
 /** Derives dice from mechanics, never from reference prose. */
 function rollDetails(
@@ -104,7 +92,7 @@ export function spellCastDetails(
   const classDef = classEntry ? ctx.registry.get('class', classEntry.classId) : undefined;
   const casting = ctx.sheet.spellcasting.find((stats) => stats.classId === classEntry?.classId);
   const needsPreparation =
-    spell.level > 0 && classDef !== undefined && PREPARED_CASTERS_2014.has(classDef.id);
+    spell.level > 0 && classDef !== undefined && isPreparedCaster2014(classDef.id);
   const preparedForCasting =
     !needsPreparation || selections.some((list) => list.prepared?.includes(spell.id));
   const ritual = classDef?.spellcasting?.ritual;

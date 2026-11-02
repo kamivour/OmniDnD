@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 02:59 — Manage spells live; M4 complete
+
+- Add, remove, or replace known and prepared spells from the class list and enabled sources. Separate cantrip, known, prepared, and Wizard spellbook counts use the character's own class level. Base limits warn and allow explicit exceptions.
+- Replacements save as one command and undo together. Existing off-list, disabled-source, over-level, and unsupported selections remain visible for explicit cleanup. Favorites, tag references, and current play resources stay intact.
+- Edit character-specific spell tags and their main type. Clearing all tags displays Utility; Reset tags restores defaults. Selection and tag changes save locally and support Undo after refresh.
+- Validation: 620 unit tests and 216 full browser checks pass without retries; typecheck, lint, and build pass. Manage and tag layouts were checked at 375 px and desktop width using the optional real-HTTP forwarder.
+- M4 is complete. Final Spellbook manual checks are in `docs/MANUAL_QA.md`. Next: M5 live Combat, starting with combat state and the round counter.
+
 ## 2026-11-03 02:39 — Spell filters and saved favorites
 
 - Combine school, casting time, type, level, concentration, ritual, available casting resources, and favorites with name search. Clear resets the whole filter view without changing character data.

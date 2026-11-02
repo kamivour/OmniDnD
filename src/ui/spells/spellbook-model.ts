@@ -1,4 +1,5 @@
 import type { CharacterState, Sheet } from '../../engine/calc/sheet';
+import { spellSelectionDetails, type SpellSelectionMode } from '../../engine/calc/spell-selections';
 import type { Registry } from '../../engine/registry';
 import type { SpellDef } from '../../engine/schema';
 import type { Cost, SpellView } from '../fixtures/the-fool';
@@ -19,6 +20,9 @@ export interface SpellbookClass {
   cantripLimit?: number;
   known: number;
   knownLimit?: number;
+  mode: SpellSelectionMode;
+  prepared: number;
+  preparedLimit?: number;
 }
 
 export interface SpellbookModel {
@@ -38,16 +42,24 @@ export function spellbookModel(
   sheet: Sheet,
   registry: Registry,
 ): SpellbookModel {
-  const classes: SpellbookClass[] = sheet.spellcasting.map((casting) => ({
-    classId: casting.classId,
-    name: registry.get('class', casting.classId).name,
-    dc: casting.saveDc.value,
-    attack: casting.attack.value,
-    cantrips: 0,
-    ...(casting.cantripsKnown === undefined ? {} : { cantripLimit: casting.cantripsKnown }),
-    known: 0,
-    ...(casting.spellsKnown === undefined ? {} : { knownLimit: casting.spellsKnown }),
-  }));
+  const classes: SpellbookClass[] = sheet.spellcasting.map((casting) => {
+    const selection = spellSelectionDetails({ ...state, sheet, registry }, casting.classId);
+    return {
+      classId: casting.classId,
+      name: registry.get('class', casting.classId).name,
+      dc: casting.saveDc.value,
+      attack: casting.attack.value,
+      cantrips: selection.cantrips.count,
+      ...(selection.cantrips.limit === undefined ? {} : { cantripLimit: selection.cantrips.limit }),
+      known: selection.known.count,
+      ...(selection.known.limit === undefined ? {} : { knownLimit: selection.known.limit }),
+      mode: selection.mode,
+      prepared: selection.prepared.count,
+      ...(selection.prepared.limit === undefined
+        ? {}
+        : { preparedLimit: selection.prepared.limit }),
+    };
+  });
   const byClass = new Map(classes.map((casting) => [casting.classId, casting]));
   const selected = new Set<string>();
   const entries: SpellbookEntry[] = [];
@@ -55,7 +67,8 @@ export function spellbookModel(
 
   for (const selection of state.build.spells) {
     const casting = byClass.get(selection.classId);
-    if (!casting) unsupportedClassIds.add(selection.classId);
+    if (!casting && (selection.known.length > 0 || (selection.prepared?.length ?? 0) > 0))
+      unsupportedClassIds.add(selection.classId);
     for (const id of [...selection.known, ...(selection.prepared ?? [])]) {
       const key = `${selection.classId}:${id}`;
       if (selected.has(key)) continue;
@@ -88,10 +101,6 @@ export function spellbookModel(
         classId: selection.classId,
         ...(casting ? { dc: casting.dc, attack: casting.attack } : {}),
       });
-      if (casting) {
-        if (def.level === 0) casting.cantrips += 1;
-        else casting.known += 1;
-      }
     }
   }
 

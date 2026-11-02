@@ -106,3 +106,16 @@ Preview controls now track live availability. Applying casts through the engine 
 - [ ] Enable Favorites, remove the last visible favorite, and confirm focus returns to the Favorites filter so you can turn it off. Check 44 px star targets and readable rows at 375 px and desktop width.
 - [ ] If the character knows spells with longer casting times, check the minute/hour filter options. An empty tag override should display and filter as Utility.
 - [ ] With standard slots depleted, Castable now should retain cantrips and eligible known/prepared rituals outside combat. Other leveled spells should hide until slots are restored.
+
+## Phase 1 — M4: Manage spells and final milestone check
+
+- [ ] Open Manage for The Fool. Confirm 2/2 cantrips and 6/6 known spells. Search available spells by name, school, or source; the selected list must stay visible while searching.
+- [ ] Try adding a seventh known spell. Cancel should retain all choices and resources; Do anyway should add one spell and log an override. Refresh, then use Undo last command. Confirm the previous selection returns without changing HP, slots, concentration, or other favorites.
+- [ ] Replace a known spell. Pick the replacement explicitly; the count should remain 6/6 and one Undo should restore the old spell. Cancel replacement should make no saved change. Removing and replacing cantrips should use their separate count.
+- [ ] On a prepared caster, check learned cantrips and prepared spells have separate counts. For a Wizard, add a spell to the book before preparing it. Removing a prepared spell from the book should warn and retain the separate prepared choice until you change it.
+- [ ] If testing imported choices, confirm off-list, disabled-source, and over-level spells remain visible and removable. An unsupported class association should offer cleanup without inventing new spell choices or limits. Manage must not silently trim existing selections.
+- [ ] Edit a spell's tags, choose several types, then change Main type. Check the row label, tint, and type filters after closing Manage. Clear every tag: the spell should display as Utility. Reset tags should restore the registry defaults. Refresh and Undo each kind of change.
+- [ ] Use keyboard controls through Manage, a rule warning, replacement, and the nested tag editor. Cancel should preserve the current flow. Closing tags should return to its Edit tags button; Done should return to Manage. Confirm the footer stays reachable at 375 px and desktop width without horizontal scrolling.
+- [ ] In one normal browser session, adjust slots, cast from a row and preview, replace concentration, star/filter spells, and change selections/tags. Refresh between changes and verify HUD and Spellbook agree. Undo should restore each saved command exactly.
+
+M4 implementation is complete; the checklist above is the manual follow-up. Standard-slot Spellbook casting and management are live; Pact Magic Spellbook controls remain Phase 3. Native browser networking and offline operation need separate checks because automated browser runs on this Windows host use the real-HTTP forwarder. Offline/PWA work remains M8.

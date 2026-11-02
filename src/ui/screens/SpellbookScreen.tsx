@@ -11,13 +11,13 @@ import { SectionLabel } from '../components/SectionLabel';
 import { SpellRow } from '../components/SpellRow';
 import { cx } from '../cx';
 import { type Cost, type SpellView } from '../fixtures/the-fool';
-import { useFixtureAction } from '../fixtures/useFixtureAction';
 import { useCharacter } from '../hooks/useCharacter';
 import { signed } from '../format';
 import { useDetail } from '../layout/detail-context';
 import { SPELL_TYPE_ORDER, SPELL_TYPES, type SpellType } from '../spellTypes';
 import { spellbookModel } from '../spells/spellbook-model';
 import { SpellCastControls } from '../spells/SpellCastControls';
+import { SpellManage } from '../spells/SpellManage';
 
 interface Filters {
   query: string;
@@ -79,7 +79,6 @@ function matches(
  * Mobile: tap opens the sheet with the same slot picker.
  */
 export function SpellbookScreen() {
-  const act = useFixtureAction();
   const { state, sheet, events } = useCharacter();
   const { run } = useCommand();
   const model = spellbookModel(state, sheet, registry);
@@ -92,6 +91,8 @@ export function SpellbookScreen() {
       spellCastDetails(context, { spellId: entry.spell.id, classId: entry.classId }).ritualEligible,
   }));
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
+  const [manageOpen, setManageOpen] = useState(false);
+  const manageOpener = useRef<HTMLButtonElement>(null);
   const [casting, setCasting] = useState<{
     spellId: string;
     classId: string;
@@ -134,15 +135,28 @@ export function SpellbookScreen() {
                 Save DC <span className="font-semibold text-text">{casting.dc}</span> · Attack{' '}
                 <span className="font-semibold text-text">{signed(casting.attack)}</span> · Cantrips{' '}
                 {casting.cantrips}
-                {casting.cantripLimit === undefined ? '' : ` / ${casting.cantripLimit}`} · Known{' '}
-                {casting.known}
-                {casting.knownLimit === undefined ? '' : ` / ${casting.knownLimit}`}
+                {casting.cantripLimit === undefined ? '' : ` / ${casting.cantripLimit}`}
+                {casting.mode !== 'prepared' && (
+                  <>
+                    {' '}
+                    · {casting.mode === 'spellbook' ? 'Book' : 'Known'} {casting.known}
+                    {casting.knownLimit === undefined ? '' : ` / ${casting.knownLimit}`}
+                  </>
+                )}
+                {(casting.mode === 'prepared' || casting.mode === 'spellbook') && (
+                  <>
+                    {' '}
+                    · Prepared {casting.prepared}
+                    {casting.preparedLimit === undefined ? '' : ` / ${casting.preparedLimit}`}
+                  </>
+                )}
               </p>
             ))}
           </div>
           <button
+            ref={manageOpener}
             type="button"
-            onClick={() => act('Manage spells')}
+            onClick={() => setManageOpen(true)}
             className="ml-auto min-h-11 rounded-btn px-2 text-sm text-accent"
           >
             Manage
@@ -354,6 +368,20 @@ export function SpellbookScreen() {
           );
         })}
       </div>
+      <Sheet
+        open={manageOpen}
+        onOpenChange={setManageOpen}
+        title="Manage spells"
+        onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          (manageOpener.current?.isConnected
+            ? manageOpener.current
+            : document.getElementById('character-workspace')
+          )?.focus();
+        }}
+      >
+        <SpellManage onClose={() => setManageOpen(false)} />
+      </Sheet>
       <Sheet
         open={casting !== null}
         onOpenChange={(open) => !open && setCasting(null)}

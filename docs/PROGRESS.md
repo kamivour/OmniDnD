@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M4 — Spellbook (live).
-**Next up:** M4 Manage mode: spell selections, limits, replacements, and tag overrides.
+**Current milestone:** M5 — Combat (live).
+**Next up:** Start combat and show the saved round counter (no turn order, D42).
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -24,8 +24,8 @@ Status: `todo` · `doing` · `done` · `blocked`
 | M1 | Key frames (static) | 1 | done | User signs off hub, Dashboard, Spellbook, Combat look |
 | M2 | Rules engine core (headless) | 1 | done | Scenario passes as Vitest test |
 | M3 | Shell, HUD, persistence | 1 | done | Nav works on all breakpoints, data survives reload |
-| M4 | Spellbook (live) | 1 | doing | Cast/adjust slots synced with HUD |
-| M5 | Combat (live) | 1 | todo | Scenario steps 1–8 work in UI |
+| M4 | Spellbook (live) | 1 | done | Cast/adjust slots synced with HUD |
+| M5 | Combat (live) | 1 | doing | Scenario steps 1–8 work in UI |
 | M6 | Rest + Dashboard (live) | 1 | todo | Scenario steps 9–14 work in UI |
 | M7 | Character Sheet + Exploration + level-up | 1 | todo | All computed values match TEST_CHARACTER §4 |
 | M8 | Phase 1 hardening | 1 | todo | Definition of done (SPEC §8) met |
@@ -94,7 +94,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Preview (hover / tap / focus) + pin to detail panel
 - [x] Cast flow with slot-level picker and upcast text; ritual option
 - [x] Filters, search, favorites
-- [ ] Manage mode (known count vs limit, replace spell)
+- [x] Manage mode (known count vs limit, replace spell)
 
 ### M5 — Combat (live)
 - [ ] Start combat, round counter (no turn order, D42)
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M4 complete: Manage adds/removes known and prepared spells, derives separate class limits, replaces atomically, retains imported conflicts for explicit cleanup, and edits ordered character tag overrides (D76). Selection/tag changes preserve play state and support reload/Undo. 620 unit tests and 216 full browser checks pass without retries; typecheck, lint and build pass. Manage/tag layouts checked at 375/1440; final M4 manual QA added. Next: M5 Start combat and saved round counter.
 
 - 2026-11-03 — M4 filters/favorites: school and actual minute/hour costs join search, level, type, concentration, ritual, castable resources and saved favorites. Stars use strict logged commands with reload/Undo and retain unrelated references; removing a filtered row restores focus (D75). 559 unit tests and 204 full browser checks pass without retries; typecheck, lint and build pass. 375/1440 layouts and manual QA checked. Next: Manage selections/limits/replacement/tag overrides.
 

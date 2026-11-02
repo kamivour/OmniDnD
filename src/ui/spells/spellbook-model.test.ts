@@ -70,6 +70,8 @@ describe('spellbookModel', () => {
         cantripLimit: 2,
         known: 6,
         knownLimit: 6,
+        mode: 'known',
+        prepared: 0,
       },
     ]);
     for (const { spell, classId, dc, attack } of book.entries) {
@@ -121,6 +123,8 @@ describe('spellbookModel', () => {
         cantripLimit: 5,
         known: 2,
         knownLimit: 7,
+        mode: 'known',
+        prepared: 0,
       },
     ]);
     expect(book.slots).toEqual([
@@ -235,6 +239,30 @@ describe('spellbookModel', () => {
     expect(book.levels).toEqual([0, 1, 9]);
     expect(book.slots).toEqual([{ level: 1, max: 2, used: 0 }]);
     expect(book.classes[0]).not.toHaveProperty('knownLimit');
+  });
+
+  it('keeps spellbook and prepared counts separate without hiding retained prepared entries', () => {
+    const state = character('class.wizard', 3);
+    state.build.spells = [
+      {
+        classId: 'class.wizard',
+        known: ['spell.mage-hand', 'spell.shield'],
+        prepared: ['spell.shield', 'spell.detect-magic'],
+      },
+    ];
+    const book = model(state);
+    expect(book.classes[0]).toMatchObject({
+      mode: 'spellbook',
+      cantrips: 1,
+      known: 1,
+      prepared: 2,
+    });
+    expect(book.classes[0]).not.toHaveProperty('knownLimit');
+    expect(book.entries.map(({ spell }) => spell.id)).toEqual([
+      'spell.mage-hand',
+      'spell.detect-magic',
+      'spell.shield',
+    ]);
   });
 
   it('deduplicates known and prepared selections within each class and keeps class-specific casting stats', () => {

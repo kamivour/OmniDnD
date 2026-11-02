@@ -9,5 +9,7 @@ export * from './level';
 export * from './rest';
 export * from './spells';
 export * from './spell-options';
+export * from './spell-selection';
+export * from '../calc/spell-selections';
 export * from './time';
 export type { EconomySlot } from './shared';
