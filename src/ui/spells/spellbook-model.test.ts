@@ -132,6 +132,29 @@ describe('spellbookModel', () => {
     expect(book.entries.find(({ spell }) => spell.name === 'Shield')?.spell.cost).toBe('R');
   });
 
+  it('preserves SRD melee and ranged spell attacks with the selected caster’s live bonus', () => {
+    const state = character();
+    state.build.spells = [
+      {
+        classId: 'class.sorcerer',
+        known: ['spell.fire-bolt', 'spell.shocking-grasp', 'spell.fireball'],
+      },
+    ];
+    const book = model(state);
+    for (const [id, attack] of [
+      ['spell.fire-bolt', 'ranged'],
+      ['spell.shocking-grasp', 'melee'],
+    ] as const) {
+      expect(registry.get('spell', id).attack).toBe(attack);
+      const entry = book.entries.find(({ spell }) => spell.id === id);
+      expect(entry).toMatchObject({ attack: 5, spell: { attack } });
+      expect(entry?.spell).not.toHaveProperty('save');
+    }
+    const saveSpell = book.entries.find(({ spell }) => spell.id === 'spell.fireball')?.spell;
+    expect(saveSpell).toMatchObject({ save: 'DEX' });
+    expect(saveSpell).not.toHaveProperty('attack');
+  });
+
   it('retains slot-only groups for an empty book and has no groups for a noncaster', () => {
     const blank = model(character());
     expect(blank.entries).toEqual([]);
@@ -170,6 +193,7 @@ describe('spellbookModel', () => {
         'spell.fire-bolt',
         'spell.shield',
       ]);
+      expect(book.entries[0]?.spell.attack).toBe('ranged');
       for (const entry of book.entries) {
         expect(entry.classId).toBe(classId);
         expect(entry).not.toHaveProperty('dc');
@@ -196,6 +220,8 @@ describe('spellbookModel', () => {
     expect(book.unsupportedClassIds).toEqual([]);
 
     // Display arrays also belong to the adapter, rather than its source records.
+    expect(book.entries[0]?.spell.attack).toBe('ranged');
+    book.entries[0]!.spell.attack = 'melee';
     book.entries[0]!.spell.tags.push('utility');
     book.entries[0]!.spell.lines.push('Display-only line.');
     expect(state).toEqual(beforeState);

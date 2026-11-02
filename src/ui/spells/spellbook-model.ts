@@ -71,6 +71,7 @@ export function spellbookModel(
         cost: castingCost(def),
         range: def.range,
         ...(def.save === undefined ? {} : { save: def.save }),
+        ...(def.attack === undefined ? {} : { attack: def.attack }),
         duration: def.duration.text,
         concentration: def.duration.concentration,
         ritual: def.ritual,

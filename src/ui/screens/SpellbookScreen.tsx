@@ -254,11 +254,12 @@ export function SpellbookScreen() {
                 )}
               </div>
               <ul className="flex flex-col gap-2">
-                {group.map(({ spell, classId, dc }) => (
+                {group.map(({ spell, classId, dc, attack }) => (
                   <SpellRow
                     key={`${classId}:${spell.id}`}
                     spell={spell}
                     dc={dc}
+                    attack={attack}
                     castingClass={
                       model.classes.length + model.unsupportedClassIds.length > 1
                         ? registry.get('class', classId).name
@@ -290,7 +291,7 @@ function LiveSpellDetail({ spellId, classId }: { spellId: string; classId: strin
   if (!entry) return <p className="text-sm text-text-muted">This spell is no longer selected.</p>;
   return (
     <div className="flex flex-col gap-4">
-      <SpellCard spell={entry.spell} dc={entry.dc} />
+      <SpellCard spell={entry.spell} dc={entry.dc} attack={entry.attack} />
       <CastFooter
         key={spellId}
         spell={entry.spell}

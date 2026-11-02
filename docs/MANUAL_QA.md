@@ -76,3 +76,14 @@ M3 is complete. The hub, blank character creation, campaign settings, Reference,
 - [ ] At 375 px and desktop width, confirm slot controls fit without horizontal scrolling and every control remains reachable. Concentration's Active badge should match saved state and disappear when concentration ends from the HUD.
 
 Spell groups and standard slot adjustments are live. Casting, favorites, and Manage are the next M4 tasks. Pact Magic Spellbook support remains Phase 3; pact slot adjustments already exist in the HUD.
+
+## Phase 1 — M4: spell previews
+
+- [ ] At desktop width, hover a spell to read its registry summary, then use keyboard focus and Enter to pin its details. At 375 px, tap the name and close with the close button or Escape; focus should return to that spell.
+- [ ] Pin a level 1 spell while level 1 slots are empty. It should select level 2 if available. Restore a level 1 slot from the HUD, choose level 2 manually, then spend the final level 2 slot. Selection should fall back to the available level 1 slot. Deplete that too; the leveled Cast control should become disabled. Cantrip Cast controls remain available without slots.
+- [ ] Keep a pinned detail selected, navigate to another screen, then reopen Details. Slot availability and casting stats should still reflect the current character, including changes made from the HUD.
+- [ ] If your character knows an attack spell, check the row and preview show the engine's spell attack bonus. Saving throw spells should show the character's save DC. The full-reference link should open in a new tab.
+- [ ] Check the same pinned detail at tablet width and after resizing to 375 px. Confirm no clipped controls or horizontal scrolling, and verify selected-slot counts against the HUD.
+- [ ] For a high-level character, confirm all available slot levels wrap into reachable options rather than shrinking into tiny targets.
+
+Preview controls now track live availability. Applying casts through the engine is the next M4 task.

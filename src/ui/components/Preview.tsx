@@ -45,7 +45,7 @@ export function Preview({ title, content, sheetFooter, onPin, children }: Previe
   const [open, setOpen] = useState(false);
 
   const {
-    refs: { setReference, setFloating },
+    refs: { setReference, setFloating, domReference },
     floatingStyles,
     context,
   } = useFloating({
@@ -104,7 +104,21 @@ export function Preview({ title, content, sheetFooter, onPin, children }: Previe
         </FloatingPortal>
       )}
       {!popover && !(sidebar && onPin) && (
-        <Sheet open={open} onOpenChange={setOpen} title={title}>
+        <Sheet
+          open={open}
+          onOpenChange={setOpen}
+          title={title}
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+            const opener = domReference.current;
+            const target =
+              opener instanceof HTMLElement && opener.isConnected && opener.getClientRects().length
+                ? opener
+                : (document.getElementById('character-workspace') ??
+                  document.getElementById('detail-toggle'));
+            target?.focus();
+          }}
+        >
           {content}
           {sheetFooter && <div className="mt-4">{sheetFooter}</div>}
         </Sheet>

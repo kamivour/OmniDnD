@@ -1,5 +1,5 @@
 import type { SpellView } from '../fixtures/the-fool';
-import { schoolIconId } from '../format';
+import { schoolIconId, signed } from '../format';
 import { SPELL_TYPES } from '../spellTypes';
 import { ActionRow } from './ActionRow';
 import { CastFooter } from './CastFooter';
@@ -9,6 +9,7 @@ import { ConcBadge, CostBadge } from './CostBadge';
 interface SpellRowProps {
   spell: SpellView;
   dc?: number;
+  attack?: number;
   castingClass?: string;
   slots: readonly { level: number; max: number; used: number }[];
   /** Economy slot this spell needs is spent ("Action", "Bonus action", ...). */
@@ -22,6 +23,7 @@ interface SpellRowProps {
 export function SpellRow({
   spell,
   dc,
+  attack,
   castingClass,
   slots,
   spent,
@@ -32,6 +34,8 @@ export function SpellRow({
   const type = SPELL_TYPES[spell.type];
   const details = [
     spell.save && `${spell.save} ${dc === undefined ? 'save (DC unavailable)' : dc}`,
+    spell.attack &&
+      (attack === undefined ? 'spell attack unavailable' : `${signed(attack)} spell attack`),
     spell.range,
     spell.duration !== 'Instant' && spell.duration,
   ]
@@ -65,7 +69,7 @@ export function SpellRow({
       onPin={onPin && (() => onPin(spell))}
       preview={{
         title: spell.name,
-        content: <SpellCard spell={spell} dc={dc} />,
+        content: <SpellCard spell={spell} dc={dc} attack={attack} />,
         sheetFooter: (
           <CastFooter spell={spell} slots={slots} onCast={(level) => onCast(spell, level)} />
         ),

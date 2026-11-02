@@ -51,10 +51,12 @@ function Card({
 export function SpellCard({
   spell,
   dc,
+  attack,
   links,
 }: {
   spell: SpellView;
   dc?: number;
+  attack?: number;
   links?: boolean;
 }) {
   const header = (
@@ -70,6 +72,12 @@ export function SpellCard({
       {spell.save && (
         <span className="mt-0.5 block">
           {spell.save} save {dc === undefined ? '(DC unavailable)' : `DC ${dc}`}
+        </span>
+      )}
+      {spell.attack && (
+        <span className="mt-0.5 block">
+          {spell.attack === 'melee' ? 'Melee' : 'Ranged'} spell attack{' '}
+          {attack === undefined ? 'unavailable' : signed(attack)}
         </span>
       )}
       <span className="mt-0.5 flex items-center gap-1.5">

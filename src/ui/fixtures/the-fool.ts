@@ -15,6 +15,7 @@ export interface SpellView {
   cost: Cost;
   range: string;
   save?: string;
+  attack?: 'melee' | 'ranged';
   duration: string;
   concentration: boolean;
   ritual: boolean;

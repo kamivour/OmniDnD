@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-02 21:42 — Live spell previews and accessible slot choices
+
+- Hover, tap, keyboard focus, and pinned details now show actual spell attack metadata and the active character's casting values. Mobile previews return focus to the spell when closed.
+- Slot selection follows saved availability, keeps a usable higher-level choice, and falls back when that slot runs out. Leveled Cast controls disable without available slots; cantrips remain available.
+- All nine slot levels wrap into usable touch targets on phones. Full-reference links use a source-neutral label.
+- Validation: 501 unit tests and 176 full browser checks pass without retries; typecheck, lint, and build pass. Layouts were checked at phone, tablet, and desktop widths using the optional real-HTTP forwarder.
+- Manual preview checks are in `docs/MANUAL_QA.md`. Next: apply casts through the engine, including upcasting and eligible rituals.
+
 ## 2026-11-02 21:23 — Saved Spellbook groups and slot controls
 
 - Spellbook now shows the active character's selected spells, registry summaries, casting stats, known limits, and saved concentration. Blank characters no longer inherit The Fool's spells; slot rows remain available even with no selected spells.

@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M4 — Spellbook (live).
-**Next up:** M4 live spell previews and pinned details.
+**Next up:** M4 live casting with slot selection, upcast details, and ritual options.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -91,7 +91,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 ### M4 — Spellbook (live)
 - [x] Groups, slot rows with `− / +` and pip toggle
-- [ ] Preview (hover / tap / focus) + pin to detail panel
+- [x] Preview (hover / tap / focus) + pin to detail panel
 - [ ] Cast flow with slot-level picker and upcast text; ritual option
 - [ ] Filters, search, favorites
 - [ ] Manage mode (known count vs limit, replace spell)
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-02 — M4 previews: live class-specific spell attack metadata, current slot selection/fallback, no-slot disabled Cast, source-neutral references, and mobile focus restoration (D73). Slot levels wrap into 56×48 px minimum targets; a level 20 regression reproduced 31 px targets before the fix. 501 unit tests and 176 full browser checks pass without retries; typecheck, lint and build pass. Preview layouts checked at 375/768/1440 px; manual QA added. Next: live casting and rituals.
 
 - 2026-11-02 — M4 spell groups/slots: selected registry spells, engine-derived DC/attack/limits, actual concentration, empty-book slot rows, and logged −/+ or pip adjustments shared with the HUD and durable Undo (D72). Unsupported imported casting associations keep metadata without invented stats; Pact Magic Spellbook support remains Phase 3. 500 unit tests and 168 full browser checks pass without retries; the final phone screenshot check also passes. Typecheck, lint and build pass; 375/1440 layouts checked. Manual slot QA added. Next: live previews/pinned details, then casting.
 
