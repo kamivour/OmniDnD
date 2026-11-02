@@ -7,5 +7,6 @@ export * from './hp';
 export * from './level';
 export * from './rest';
 export * from './spells';
+export * from './spell-options';
 export * from './time';
 export type { EconomySlot } from './shared';

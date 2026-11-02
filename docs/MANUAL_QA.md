@@ -87,3 +87,14 @@ Spell groups and standard slot adjustments are live. Casting, favorites, and Man
 - [ ] For a high-level character, confirm all available slot levels wrap into reachable options rather than shrinking into tiny targets.
 
 Preview controls now track live availability. Applying casts through the engine is the next M4 task.
+
+## Phase 1 — M4: casting
+
+- [ ] With The Fool's fresh seed slots, press a row's Cast button. The flow should choose level 2 because level 1 is depleted, show upcast information and derived dice, and spend exactly one level 2 slot after confirmation. Refresh and undo; slots should restore in both HUD and Spellbook.
+- [ ] Cast a cantrip. It should use no slot. Cast from a phone preview and from pinned desktop details as well as the row action.
+- [ ] Cast Healing Word with Apply to me off: HP should stay unchanged. Then turn it on, enter a rolled dice total within the displayed range, and check the computed healing preview before confirming. Invalid totals should keep the flow open without spending a slot. Undo should restore both HP and the slot.
+- [ ] In pinned details, cast self healing once and confirm the rolled total clears before the next cast. Spell dice and modifier should reflect the chosen slot and casting class.
+- [ ] Cast Invisibility with Apply to me off, then with it on. Concentration should track the spell in either case; the personal effect should appear only when applied to you. Replacing concentration and Undo should update effects and resource counts together.
+- [ ] For a known eligible ritual such as Comprehend Languages, deplete normal slots and choose Cast as ritual. Confirm no slot is spent and the game clock advances by the normal casting time plus ten minutes. The ritual option should be absent for an ineligible class or during combat.
+- [ ] Trigger a rule warning, such as an already-used action. Cancel should keep choices, counts, and focus on the open flow's confirmation button. Do anyway should cast once, close the flow, and restore the original row/preview opener. If a pinned confirmation becomes disabled after the last slot, focus should move to a usable workspace control.
+- [ ] Check phone and desktop flows for readable upcast text, reachable choices, visible errors, and no horizontal scrolling. Hits, saves, and other creatures' results remain decisions at the table.

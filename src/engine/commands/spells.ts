@@ -1,10 +1,10 @@
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from '../rules2014';
 import type { SpellDef } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
+import { previewSpellHealing, spellCastDetails, type SpellCastDetails } from './spell-options';
 import {
   block,
   deadCheck,
-  diceRange,
   dropConcentration,
   economyChecks,
   info,
@@ -95,18 +95,13 @@ function slotChecks(ctx: CommandContext, spell: SpellDef, payload: CastSpellPayl
   return [];
 }
 
-function healChecks(spell: SpellDef, slotLevel: number | undefined, roll: number): Check[] {
-  const heal = spell.heal;
+function healChecks(spell: SpellDef, details: SpellCastDetails, roll: number): Check[] {
+  const heal = details.healing;
   if (!heal) return [block(`${spell.name} does not heal`)];
-  const base = diceRange(heal.dice);
-  const extra = heal.upcastPerLevel ? diceRange(heal.upcastPerLevel) : { min: 0, max: 0 };
-  const above = Math.max(0, (slotLevel ?? spell.level) - spell.level);
-  return rangeCheck(
-    'Healing roll',
-    roll,
-    base.min + extra.min * above,
-    base.max + extra.max * above,
-  );
+  const checks = rangeCheck('Healing roll', roll, heal.minRoll, heal.maxRoll);
+  if (heal.modifier === undefined)
+    checks.push(block(`${spell.name}'s healing modifier is unavailable for this casting class`));
+  return checks;
 }
 
 /**
@@ -139,10 +134,20 @@ export const castSpell: Command<CastSpellPayload> = {
   name: 'castSpell',
   check: (ctx, payload) => {
     const spell = ctx.registry.get('spell', payload.spellId);
+    const details = spellCastDetails(ctx, {
+      ...payload,
+      slotLevel: castLevel(ctx, spell, payload),
+    });
     const checks = [...deadCheck(ctx), ...slotChecks(ctx, spell, payload)];
-    if (!knowsSpell(ctx, spell.id)) checks.push(warn(`You don't know ${spell.name}`));
+    if (details.classId !== undefined && !details.selected)
+      checks.push(warn(`${spell.name} is not selected for this casting class`));
+    else if (!knowsSpell(ctx, spell.id)) checks.push(warn(`You don't know ${spell.name}`));
+    if (!payload.ritual && details.needsPreparation && !details.preparedForCasting)
+      checks.push(warn(`${spell.name} is not prepared for this casting class`));
+    if (payload.ritual && details.classId !== undefined && details.ritualReason)
+      checks.push(warn(details.ritualReason));
     if (payload.healRoll !== undefined) {
-      checks.push(...healChecks(spell, castLevel(ctx, spell, payload), payload.healRoll));
+      checks.push(...healChecks(spell, details, payload.healRoll));
     }
     if (payload.onSelf && !spell.effect) {
       checks.push(block(`${spell.name} puts no effect on a target`));
@@ -212,13 +217,12 @@ export const castSpell: Command<CastSpellPayload> = {
     }
 
     if (payload.healRoll !== undefined && spell.heal) {
-      const classId = payload.classId ?? knowsSpell(ctx, spell.id);
-      const casting =
-        ctx.sheet.spellcasting.find((stats) => stats.classId === classId) ??
-        ctx.sheet.spellcasting[0];
-      const mod =
-        spell.heal.addCastingMod && casting ? ctx.sheet.abilities[casting.ability].mod : 0;
-      const amount = Math.max(0, payload.healRoll + mod);
+      // Validation already proved the modifier and rolled total are available.
+      const { amount } = previewSpellHealing(
+        ctx,
+        { ...payload, slotLevel: level },
+        payload.healRoll,
+      )!;
       const { before, after } = restoreHp(live, amount, ctx.sheet.maxHp.value);
       notes.push(`healed ${amount} (HP ${before} → ${after})`);
     }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { cx } from '../cx';
 import type { SpellView } from '../fixtures/the-fool';
@@ -17,10 +17,16 @@ export function CastFooter({
   spell,
   slots,
   onCast,
+  allowRitual = false,
+  upcastText,
+  renderChoices,
 }: {
   spell: SpellView;
   slots: readonly Slot[];
-  onCast: (level: number) => void;
+  onCast: (level: number, ritual?: boolean) => void;
+  allowRitual?: boolean;
+  upcastText?: string;
+  renderChoices?: (selection: { level: number; ritual: boolean }) => ReactNode;
 }) {
   const options =
     spell.level === 0
@@ -28,12 +34,29 @@ export function CastFooter({
       : slots.filter((s) => s.level >= spell.level).sort((a, b) => a.level - b.level);
   const available = options.filter((s) => s.max - s.used > 0);
   const [requestedLevel, setRequestedLevel] = useState<number>();
-  const level =
-    available.find((s) => s.level === requestedLevel)?.level ?? available[0]?.level ?? spell.level;
+  const [requestedRitual, setRequestedRitual] = useState(false);
+  const ritual = spell.level > 0 && allowRitual && requestedRitual;
+  const level = ritual
+    ? spell.level
+    : (available.find((s) => s.level === requestedLevel)?.level ??
+      available[0]?.level ??
+      spell.level);
 
   return (
     <div className="flex flex-col gap-3">
-      {options.length > 0 && (
+      {allowRitual && spell.level > 0 && (
+        <label className="flex min-h-11 items-center gap-2 text-sm text-text">
+          <input
+            type="checkbox"
+            checked={ritual}
+            onChange={(event) => setRequestedRitual(event.target.checked)}
+            className="size-4 accent-(--omni-accent)"
+          />
+          Cast as ritual (+10 minutes)
+        </label>
+      )}
+      {ritual && <p className="text-xs text-text-muted">Ritual casting uses no spell slot.</p>}
+      {!ritual && options.length > 0 && (
         <fieldset>
           <legend className="mb-1.5 text-xs text-text-muted">Slot level</legend>
           <div className="flex flex-wrap gap-2">
@@ -59,19 +82,27 @@ export function CastFooter({
           </div>
           {level > spell.level && (
             <p className="mt-1.5 text-xs text-magic">
-              Upcast to L{level}: review the spell's higher-level effects in the full reference.
+              Upcast to L{level}:{' '}
+              {upcastText || "review the spell's higher-level effects in the full reference."}
             </p>
           )}
         </fieldset>
       )}
+      {!ritual && spell.level > 0 && available.length === 0 && (
+        <p className="text-xs text-text-muted">No available spell slots at this level or higher.</p>
+      )}
+      {renderChoices?.({ level, ritual })}
       <button
         type="button"
-        disabled={spell.level > 0 && available.length === 0}
-        onClick={() => onCast(level)}
+        disabled={!ritual && spell.level > 0 && available.length === 0}
+        onClick={(event) => {
+          event.currentTarget.focus();
+          onCast(level, ritual);
+        }}
         className="min-h-14 rounded-btn bg-accent text-base font-semibold text-bg disabled:opacity-40"
       >
         Cast {spell.name}
-        {spell.level > 0 && ` (L${level})`}
+        {ritual ? ' (ritual)' : spell.level > 0 && ` (L${level})`}
       </button>
       <a
         href={spell.url}

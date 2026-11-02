@@ -23,12 +23,15 @@ export interface PreviewTrigger {
   props: Record<string, unknown>;
 }
 
+export type PreviewFooter =
+  ReactNode | ((controls: { close: () => void; trigger?: HTMLElement }) => ReactNode);
+
 interface PreviewProps {
   title: string;
   /** Card body shown in both the popover and the sheet. */
   content: ReactNode;
   /** Extra controls for the mobile sheet (big Cast button, slot picker, links). */
-  sheetFooter?: ReactNode;
+  sheetFooter?: PreviewFooter;
   /** Desktop click: pin full detail in the side panel. */
   onPin?: () => void;
   children: (trigger: PreviewTrigger) => ReactNode;
@@ -46,6 +49,7 @@ export function Preview({ title, content, sheetFooter, onPin, children }: Previe
 
   const {
     refs: { setReference, setFloating, domReference },
+    elements,
     floatingStyles,
     context,
   } = useFloating({
@@ -120,7 +124,21 @@ export function Preview({ title, content, sheetFooter, onPin, children }: Previe
           }}
         >
           {content}
-          {sheetFooter && <div className="mt-4">{sheetFooter}</div>}
+          {sheetFooter && (
+            <div className="mt-4">
+              {typeof sheetFooter === 'function'
+                ? sheetFooter({
+                    close: () => setOpen(false),
+                    trigger:
+                      elements.domReference instanceof HTMLElement &&
+                      elements.domReference.isConnected &&
+                      elements.domReference.getClientRects().length
+                        ? elements.domReference
+                        : undefined,
+                  })
+                : sheetFooter}
+            </div>
+          )}
         </Sheet>
       )}
     </>

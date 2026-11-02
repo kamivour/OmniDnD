@@ -4,6 +4,15 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 02:22 — Casting, healing, and rituals are live
+
+- Cast from a row, phone preview, or pinned details using one shared flow. The engine spends one slot, handles concentration and personal effects, logs the cast, and supports Undo after refresh.
+- Choose a slot and see actual upcast information and computed dice. Apply healing or variable-target effects to yourself explicitly; enter only the rolled healing dice total and preview the resulting HP. Invalid totals spend nothing.
+- Eligible known/prepared rituals use no slot and advance the game clock by their casting time plus ten minutes. Ordinary ritual controls stay outside combat. Prepared-caster restrictions warn while preserving Manual mode and explicit overrides; missing healing modifiers are never borrowed from another class.
+- Warning cancellation keeps choices and returns focus inside the flow. Successful casting restores its opener; pinned controls that run out of slots use a usable focus fallback.
+- Validation: 537 unit tests and 196 full browser checks pass without retries; typecheck, lint, and build pass. Casting layouts were checked at phone and desktop widths using the optional real-HTTP forwarder.
+- Manual casting checks are in `docs/MANUAL_QA.md`. Next: filters, search, and saved favorites.
+
 ## 2026-11-02 21:42 — Live spell previews and accessible slot choices
 
 - Hover, tap, keyboard focus, and pinned details now show actual spell attack metadata and the active character's casting values. Mobile previews return focus to the spell when closed.

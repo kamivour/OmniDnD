@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
 import { cx } from '../cx';
 import { Icon } from './Icon';
-import { Preview } from './Preview';
+import { Preview, type PreviewFooter } from './Preview';
 
 interface ActionRowProps {
   iconId: string;
@@ -12,14 +12,16 @@ interface ActionRowProps {
   /** Badges after the name (cost, C, Rit). */
   badges?: ReactNode;
   actionLabel: string;
-  onAction: () => void;
+  onAction: MouseEventHandler<HTMLButtonElement>;
   /** The economy slot this costs is spent. Dims the button; it still works (warns later, D10). */
   spent?: string;
+  /** Keep choices reachable while indicating an unavailable resource. */
+  unavailable?: boolean;
   /** Box color classes, e.g. the spell's main type (SPELL_TYPES[type].box). */
   tone?: string;
   /** Concentrating on this right now: teal outline and an "Active" badge. */
   concentrating?: boolean;
-  preview: { title: string; content: ReactNode; sheetFooter?: ReactNode };
+  preview: { title: string; content: ReactNode; sheetFooter?: PreviewFooter };
   onPin?: () => void;
 }
 
@@ -36,6 +38,7 @@ export function ActionRow({
   actionLabel,
   onAction,
   spent,
+  unavailable,
   tone,
   concentrating,
   preview,
@@ -83,7 +86,7 @@ export function ActionRow({
         className={cx(
           'hover-lift min-h-11 shrink-0 rounded-btn border border-border bg-surface-2 px-3 font-semibold text-accent',
           'transition-opacity duration-(--omni-motion-dim)',
-          spent && 'opacity-40',
+          (spent || unavailable) && 'opacity-40',
         )}
       >
         {actionLabel}

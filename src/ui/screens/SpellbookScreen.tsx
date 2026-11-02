@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Search } from 'lucide-react';
 import { registry } from '../../data/registry';
-import { adjustSlot } from '../../engine/commands';
+import { adjustSlot, spellCastDetails } from '../../engine/commands';
 import { useCommand } from '../commands/command-context';
 import { SpellCard } from '../components/cards';
-import { CastFooter } from '../components/CastFooter';
+import { Sheet } from '../components/Sheet';
 import { PipStepper } from '../components/PipStepper';
 import { SectionLabel } from '../components/SectionLabel';
 import { SpellRow } from '../components/SpellRow';
@@ -16,6 +16,7 @@ import { signed } from '../format';
 import { useDetail } from '../layout/detail-context';
 import { SPELL_TYPE_ORDER, SPELL_TYPES, type SpellType } from '../spellTypes';
 import { spellbookModel } from '../spells/spellbook-model';
+import { SpellCastControls } from '../spells/SpellCastControls';
 
 interface Filters {
   query: string;
@@ -52,6 +53,7 @@ function matches(
   spell: SpellView,
   f: Filters,
   slots: readonly { level: number; max: number; used: number }[],
+  ritualAvailable = false,
 ): boolean {
   if (f.query && !spell.name.toLowerCase().includes(f.query.trim().toLowerCase())) return false;
   if (f.level !== 'all' && spell.level !== f.level) return false;
@@ -59,7 +61,7 @@ function matches(
   if (f.types.length > 0 && !spell.tags.some((t) => f.types.includes(t))) return false;
   if (f.concentration && !spell.concentration) return false;
   if (f.ritual && !spell.ritual) return false;
-  if (f.castableNow && !hasSlotFor(spell, slots)) return false;
+  if (f.castableNow && !hasSlotFor(spell, slots) && !ritualAvailable) return false;
   return true;
 }
 
@@ -74,7 +76,20 @@ export function SpellbookScreen() {
   const { run } = useCommand();
   const model = spellbookModel(state, sheet, registry);
   const { slots, levels } = model;
+  const context = { ...state, sheet, registry };
+  const entries = model.entries.map((entry) => ({
+    ...entry,
+    ritualAvailable:
+      !state.live.combat &&
+      spellCastDetails(context, { spellId: entry.spell.id, classId: entry.classId }).ritualEligible,
+  }));
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
+  const [casting, setCasting] = useState<{
+    spellId: string;
+    classId: string;
+    opener?: HTMLElement;
+  } | null>(null);
+  const castOpener = useRef<HTMLElement | null>(null);
   const { pin } = useDetail();
 
   const set = <K extends keyof Filters>(key: K, value: Filters[K]) =>
@@ -82,13 +97,12 @@ export function SpellbookScreen() {
   const toggle = <T,>(list: T[], value: T) =>
     list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 
-  const castSpell = (spell: SpellView, level: number) =>
-    act(level > 0 ? `Cast ${spell.name} (L${level} slot)` : `Cast ${spell.name}`);
-
   const setPinned = (spell: SpellView, classId: string) =>
     pin(<LiveSpellDetail spellId={spell.id} classId={classId} />);
 
-  const visible = model.entries.filter(({ spell }) => matches(spell, filters, slots));
+  const visible = entries.filter(({ spell, ritualAvailable }) =>
+    matches(spell, filters, slots, ritualAvailable),
+  );
   const filtered = JSON.stringify(filters) !== JSON.stringify(NO_FILTERS);
 
   return (
@@ -254,7 +268,7 @@ export function SpellbookScreen() {
                 )}
               </div>
               <ul className="flex flex-col gap-2">
-                {group.map(({ spell, classId, dc, attack }) => (
+                {group.map(({ spell, classId, dc, attack, ritualAvailable }) => (
                   <SpellRow
                     key={`${classId}:${spell.id}`}
                     spell={spell}
@@ -267,7 +281,19 @@ export function SpellbookScreen() {
                     }
                     slots={slots}
                     concentrating={spell.id === state.live.concentration?.spellId}
-                    onCast={castSpell}
+                    unavailable={!hasSlotFor(spell, slots) && !ritualAvailable}
+                    onCast={(selected, _level, opener) => {
+                      castOpener.current = opener ?? (document.activeElement as HTMLElement);
+                      setCasting({ spellId: selected.id, classId, opener: castOpener.current });
+                    }}
+                    sheetFooter={({ close, trigger }) => (
+                      <SpellCastControls
+                        spellId={spell.id}
+                        classId={classId}
+                        returnFocusTo={trigger}
+                        onApplied={close}
+                      />
+                    )}
                     onPin={(spell) => setPinned(spell, classId)}
                   />
                 ))}
@@ -276,29 +302,59 @@ export function SpellbookScreen() {
           );
         })}
       </div>
+      <Sheet
+        open={casting !== null}
+        onOpenChange={(open) => !open && setCasting(null)}
+        title={casting ? `Cast ${registry.get('spell', casting.spellId).name}` : 'Cast spell'}
+        onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          (castOpener.current?.isConnected
+            ? castOpener.current
+            : document.getElementById('character-workspace')
+          )?.focus();
+        }}
+      >
+        {casting && (
+          <LiveSpellDetail
+            key={`${casting.classId}:${casting.spellId}`}
+            spellId={casting.spellId}
+            classId={casting.classId}
+            returnFocusTo={casting.opener}
+            onApplied={() => setCasting(null)}
+          />
+        )}
+      </Sheet>
     </div>
   );
 }
 
 /** Pinned content reads current values instead of retaining a snapshot of the slot pool. */
-function LiveSpellDetail({ spellId, classId }: { spellId: string; classId: string }) {
+function LiveSpellDetail({
+  spellId,
+  classId,
+  returnFocusTo,
+  onApplied,
+}: {
+  spellId: string;
+  classId: string;
+  returnFocusTo?: HTMLElement;
+  onApplied?: () => void;
+}) {
   const { state, sheet } = useCharacter();
   const model = spellbookModel(state, sheet, registry);
   const entry = model.entries.find(
     (entry) => entry.spell.id === spellId && entry.classId === classId,
   );
-  const act = useFixtureAction();
   if (!entry) return <p className="text-sm text-text-muted">This spell is no longer selected.</p>;
   return (
     <div className="flex flex-col gap-4">
       <SpellCard spell={entry.spell} dc={entry.dc} attack={entry.attack} />
-      <CastFooter
-        key={spellId}
-        spell={entry.spell}
-        slots={model.slots}
-        onCast={(level) =>
-          act(level > 0 ? `Cast ${entry.spell.name} (L${level} slot)` : `Cast ${entry.spell.name}`)
-        }
+      <SpellCastControls
+        key={`${classId}:${spellId}`}
+        spellId={spellId}
+        classId={classId}
+        returnFocusTo={returnFocusTo}
+        onApplied={onApplied}
       />
     </div>
   );

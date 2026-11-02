@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M4 — Spellbook (live).
-**Next up:** M4 live casting with slot selection, upcast details, and ritual options.
+**Next up:** M4 filters, search, and saved spell favorites.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -92,7 +92,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ### M4 — Spellbook (live)
 - [x] Groups, slot rows with `− / +` and pip toggle
 - [x] Preview (hover / tap / focus) + pin to detail panel
-- [ ] Cast flow with slot-level picker and upcast text; ritual option
+- [x] Cast flow with slot-level picker and upcast text; ritual option
 - [ ] Filters, search, favorites
 - [ ] Manage mode (known count vs limit, replace spell)
 
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M4 live casting: shared row/mobile/pinned flow with one logged engine command, exact class modifiers, computed dice/healing preview, opt-in self results, eligible rituals and clock advancement (D74). Unknown/unprepared spell warnings retain override/Manual behavior; unavailable healing modifiers block. Warning Cancel preserves choices/focus, success closes correctly, and depleted pinned controls get a usable focus fallback. 537 unit tests and 196 full browser checks pass without retries; typecheck, lint and build pass. Phone/desktop casting QA added. Next: filters/search/favorites.
 
 - 2026-11-02 — M4 previews: live class-specific spell attack metadata, current slot selection/fallback, no-slot disabled Cast, source-neutral references, and mobile focus restoration (D73). Slot levels wrap into 56×48 px minimum targets; a level 20 regression reproduced 31 px targets before the fix. 501 unit tests and 176 full browser checks pass without retries; typecheck, lint and build pass. Preview layouts checked at 375/768/1440 px; manual QA added. Next: live casting and rituals.
 

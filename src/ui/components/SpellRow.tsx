@@ -5,6 +5,7 @@ import { ActionRow } from './ActionRow';
 import { CastFooter } from './CastFooter';
 import { SpellCard } from './cards';
 import { ConcBadge, CostBadge } from './CostBadge';
+import type { PreviewFooter } from './Preview';
 
 interface SpellRowProps {
   spell: SpellView;
@@ -14,9 +15,11 @@ interface SpellRowProps {
   slots: readonly { level: number; max: number; used: number }[];
   /** Economy slot this spell needs is spent ("Action", "Bonus action", ...). */
   spent?: string;
+  unavailable?: boolean;
   concentrating?: boolean;
-  onCast: (spell: SpellView, level: number) => void;
+  onCast: (spell: SpellView, level: number, returnFocusTo?: HTMLElement) => void;
   onPin?: (spell: SpellView) => void;
+  sheetFooter?: PreviewFooter;
 }
 
 /** Spell list row: icon, name, cost, C / Rit, main type, save or range, Cast. Box tinted by main type. */
@@ -27,9 +30,11 @@ export function SpellRow({
   castingClass,
   slots,
   spent,
+  unavailable,
   concentrating,
   onCast,
   onPin,
+  sheetFooter,
 }: SpellRowProps) {
   const type = SPELL_TYPES[spell.type];
   const details = [
@@ -62,15 +67,16 @@ export function SpellRow({
       }
       meta={meta}
       actionLabel="Cast"
-      onAction={() => onCast(spell, spell.level)}
+      onAction={(event) => onCast(spell, spell.level, event.currentTarget)}
       spent={spent}
+      unavailable={unavailable}
       tone={type.box}
       concentrating={concentrating}
       onPin={onPin && (() => onPin(spell))}
       preview={{
         title: spell.name,
         content: <SpellCard spell={spell} dc={dc} attack={attack} />,
-        sheetFooter: (
+        sheetFooter: sheetFooter ?? (
           <CastFooter spell={spell} slots={slots} onCast={(level) => onCast(spell, level)} />
         ),
       }}

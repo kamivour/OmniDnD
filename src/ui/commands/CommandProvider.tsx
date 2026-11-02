@@ -18,6 +18,7 @@ export function CommandProvider({
   const [notes, setNotes] = useState<string[]>([]);
   const [warning, setWarning] = useState<{ reasons: string[]; confirm: () => void } | null>(null);
   const warningOpener = useRef<HTMLElement | null>(null);
+  const warningFallback = useRef<HTMLElement | null>(null);
   const feedbackSequence = useRef(0);
   const mounted = useRef(true);
   useEffect(() => {
@@ -62,6 +63,7 @@ export function CommandProvider({
     command: Command<P>,
     payload: P,
     returnFocusTo?: HTMLElement,
+    onApplied?: () => void,
     force = false,
   ): RunResult => {
     const sequence = ++feedbackSequence.current;
@@ -72,6 +74,7 @@ export function CommandProvider({
     }
     const result = characterStore.getState().dispatch(characterId, command, payload, { force });
     if (result.result === 'ok') {
+      onApplied?.();
       setNotes(result.reasons);
       void flushPersistence().then(
         () => {
@@ -96,12 +99,13 @@ export function CommandProvider({
         },
       );
     } else if (result.result === 'warn') {
-      warningOpener.current = returnFocusTo ?? (document.activeElement as HTMLElement);
+      warningOpener.current = document.activeElement as HTMLElement;
+      warningFallback.current = returnFocusTo ?? null;
       setWarning({
         reasons: result.reasons,
         confirm: () => {
           setWarning(null);
-          execute(command, payload, returnFocusTo, true);
+          execute(command, payload, returnFocusTo, onApplied, true);
         },
       });
     } else toast({ text: result.reasons.join(' · ') });
@@ -117,9 +121,16 @@ export function CommandProvider({
         title="Check this action"
         onCloseAutoFocus={(event) => {
           event.preventDefault();
-          const target = warningOpener.current?.isConnected
-            ? warningOpener.current
-            : document.getElementById('character-workspace');
+          const target =
+            warningOpener.current?.isConnected &&
+            warningOpener.current.getClientRects().length &&
+            !warningOpener.current.matches(':disabled')
+              ? warningOpener.current
+              : warningFallback.current?.isConnected &&
+                  warningFallback.current.getClientRects().length &&
+                  !warningFallback.current.matches(':disabled')
+                ? warningFallback.current
+                : document.getElementById('character-workspace');
           target?.focus();
         }}
       >
