@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState, type Ref } from 'react';
 import { Search } from 'lucide-react';
 import { registry } from '../../data/registry';
-import { adjustSlot, spellCastDetails } from '../../engine/commands';
+import { adjustSlot, setSpellFavorite, spellCastDetails } from '../../engine/commands';
+import { SchoolSchema } from '../../engine/schema';
 import { useCommand } from '../commands/command-context';
 import { SpellCard } from '../components/cards';
 import { Sheet } from '../components/Sheet';
@@ -27,6 +28,8 @@ interface Filters {
   concentration: boolean;
   ritual: boolean;
   castableNow: boolean;
+  school: string;
+  favorites: boolean;
 }
 
 const NO_FILTERS: Filters = {
@@ -37,6 +40,8 @@ const NO_FILTERS: Filters = {
   concentration: false,
   ritual: false,
   castableNow: false,
+  school: 'all',
+  favorites: false,
 };
 
 const COSTS: Cost[] = ['A', 'BA', 'R'];
@@ -54,6 +59,7 @@ function matches(
   f: Filters,
   slots: readonly { level: number; max: number; used: number }[],
   ritualAvailable = false,
+  favorite = false,
 ): boolean {
   if (f.query && !spell.name.toLowerCase().includes(f.query.trim().toLowerCase())) return false;
   if (f.level !== 'all' && spell.level !== f.level) return false;
@@ -61,6 +67,8 @@ function matches(
   if (f.types.length > 0 && !spell.tags.some((t) => f.types.includes(t))) return false;
   if (f.concentration && !spell.concentration) return false;
   if (f.ritual && !spell.ritual) return false;
+  if (f.school !== 'all' && spell.school.toLowerCase() !== f.school) return false;
+  if (f.favorites && !favorite) return false;
   if (f.castableNow && !hasSlotFor(spell, slots) && !ritualAvailable) return false;
   return true;
 }
@@ -72,7 +80,7 @@ function matches(
  */
 export function SpellbookScreen() {
   const act = useFixtureAction();
-  const { state, sheet } = useCharacter();
+  const { state, sheet, events } = useCharacter();
   const { run } = useCommand();
   const model = spellbookModel(state, sheet, registry);
   const { slots, levels } = model;
@@ -90,6 +98,14 @@ export function SpellbookScreen() {
     opener?: HTMLElement;
   } | null>(null);
   const castOpener = useRef<HTMLElement | null>(null);
+  const favoritesFilter = useRef<HTMLButtonElement>(null);
+  const restoreFavoritesFocus = useRef(false);
+  useEffect(() => {
+    if (restoreFavoritesFocus.current) {
+      restoreFavoritesFocus.current = false;
+      favoritesFilter.current?.focus();
+    }
+  }, [events]);
   const { pin } = useDetail();
 
   const set = <K extends keyof Filters>(key: K, value: Filters[K]) =>
@@ -101,8 +117,9 @@ export function SpellbookScreen() {
     pin(<LiveSpellDetail spellId={spell.id} classId={classId} />);
 
   const visible = entries.filter(({ spell, ritualAvailable }) =>
-    matches(spell, filters, slots, ritualAvailable),
+    matches(spell, filters, slots, ritualAvailable, state.build.favorites.includes(spell.id)),
   );
+  const costs = [...new Set<Cost>([...COSTS, ...entries.map(({ spell }) => spell.cost)])];
   const filtered = JSON.stringify(filters) !== JSON.stringify(NO_FILTERS);
 
   return (
@@ -178,8 +195,33 @@ export function SpellbookScreen() {
               ))}
             </select>
           </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="sr-only" htmlFor="spell-school">
+              School
+            </label>
+            <select
+              id="spell-school"
+              value={filters.school}
+              onChange={(event) => set('school', event.target.value)}
+              className="min-h-11 min-w-0 flex-1 rounded-btn border border-border bg-surface px-2 text-sm text-text sm:max-w-xs"
+            >
+              <option value="all">All schools</option>
+              {SchoolSchema.options.map((school) => (
+                <option key={school} value={school}>
+                  {school[0]!.toUpperCase() + school.slice(1)}
+                </option>
+              ))}
+            </select>
+            <FilterChip
+              buttonRef={favoritesFilter}
+              pressed={filters.favorites}
+              onClick={() => set('favorites', !filters.favorites)}
+            >
+              Favorites
+            </FilterChip>
+          </div>
           <div className="flex flex-wrap gap-2">
-            {COSTS.map((c) => (
+            {costs.map((c) => (
               <FilterChip
                 key={c}
                 pressed={filters.costs.includes(c)}
@@ -274,6 +316,16 @@ export function SpellbookScreen() {
                     spell={spell}
                     dc={dc}
                     attack={attack}
+                    favorite={state.build.favorites.includes(spell.id)}
+                    onFavorite={() => {
+                      const favorite = state.build.favorites.includes(spell.id);
+                      restoreFavoritesFocus.current = filters.favorites && favorite;
+                      const result = run(setSpellFavorite, {
+                        spellId: spell.id,
+                        favorite: !favorite,
+                      });
+                      if (result.result !== 'ok') restoreFavoritesFocus.current = false;
+                    }}
                     castingClass={
                       model.classes.length + model.unsupportedClassIds.length > 1
                         ? registry.get('class', classId).name
@@ -367,6 +419,7 @@ function FilterChip({
   className = 'text-text-muted',
   pressedClassName = 'border-accent bg-surface-2 text-accent',
   children,
+  buttonRef,
 }: {
   pressed: boolean;
   onClick: () => void;
@@ -375,9 +428,11 @@ function FilterChip({
   className?: string;
   pressedClassName?: string;
   children: string;
+  buttonRef?: Ref<HTMLButtonElement>;
 }) {
   return (
     <button
+      ref={buttonRef}
       type="button"
       aria-pressed={pressed}
       onClick={onClick}

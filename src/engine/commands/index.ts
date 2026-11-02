@@ -3,6 +3,7 @@ export * from './runner';
 export * from './combat';
 export * from './effects';
 export * from './features';
+export * from './favorites';
 export * from './hp';
 export * from './level';
 export * from './rest';

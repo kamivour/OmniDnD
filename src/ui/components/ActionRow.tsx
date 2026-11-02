@@ -11,6 +11,8 @@ interface ActionRowProps {
   meta: ReactNode;
   /** Badges after the name (cost, C, Rit). */
   badges?: ReactNode;
+  /** Optional secondary control beside the preview, before the primary action. */
+  auxiliaryAction?: ReactNode;
   actionLabel: string;
   onAction: MouseEventHandler<HTMLButtonElement>;
   /** The economy slot this costs is spent. Dims the button; it still works (warns later, D10). */
@@ -35,6 +37,7 @@ export function ActionRow({
   name,
   meta,
   badges,
+  auxiliaryAction,
   actionLabel,
   onAction,
   spent,
@@ -80,6 +83,7 @@ export function ActionRow({
           </button>
         )}
       </Preview>
+      {auxiliaryAction}
       <button
         type="button"
         onClick={onAction}

@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 02:39 — Spell filters and saved favorites
+
+- Combine school, casting time, type, level, concentration, ritual, available casting resources, and favorites with name search. Clear resets the whole filter view without changing character data.
+- Star spells by pointer or keyboard. Favorites save per character and support Undo after refresh, while preserving other favorite references and existing play state.
+- Known minute/hour casting times appear as filter choices. Eligible rituals remain castable without standard slots outside combat. Removing the last filtered favorite restores focus to the Favorites filter.
+- Validation: 559 unit tests and 204 full browser checks pass without retries; typecheck, lint, and build pass. Phone and desktop controls were visually checked using the optional real-HTTP forwarder.
+- Manual filter/favorite checks are in `docs/MANUAL_QA.md`. Next: Manage mode for spell selections, limits, replacement, and tag overrides.
+
 ## 2026-11-03 02:22 — Casting, healing, and rituals are live
 
 - Cast from a row, phone preview, or pinned details using one shared flow. The engine spends one slot, handles concentration and personal effects, logs the cast, and supports Undo after refresh.

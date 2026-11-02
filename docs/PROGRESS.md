@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M4 — Spellbook (live).
-**Next up:** M4 filters, search, and saved spell favorites.
+**Next up:** M4 Manage mode: spell selections, limits, replacements, and tag overrides.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -93,7 +93,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Groups, slot rows with `− / +` and pip toggle
 - [x] Preview (hover / tap / focus) + pin to detail panel
 - [x] Cast flow with slot-level picker and upcast text; ritual option
-- [ ] Filters, search, favorites
+- [x] Filters, search, favorites
 - [ ] Manage mode (known count vs limit, replace spell)
 
 ### M5 — Combat (live)
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M4 filters/favorites: school and actual minute/hour costs join search, level, type, concentration, ritual, castable resources and saved favorites. Stars use strict logged commands with reload/Undo and retain unrelated references; removing a filtered row restores focus (D75). 559 unit tests and 204 full browser checks pass without retries; typecheck, lint and build pass. 375/1440 layouts and manual QA checked. Next: Manage selections/limits/replacement/tag overrides.
 
 - 2026-11-03 — M4 live casting: shared row/mobile/pinned flow with one logged engine command, exact class modifiers, computed dice/healing preview, opt-in self results, eligible rituals and clock advancement (D74). Unknown/unprepared spell warnings retain override/Manual behavior; unavailable healing modifiers block. Warning Cancel preserves choices/focus, success closes correctly, and depleted pinned controls get a usable focus fallback. 537 unit tests and 196 full browser checks pass without retries; typecheck, lint and build pass. Phone/desktop casting QA added. Next: filters/search/favorites.
 

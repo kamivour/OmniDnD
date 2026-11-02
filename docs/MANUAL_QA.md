@@ -98,3 +98,11 @@ Preview controls now track live availability. Applying casts through the engine 
 - [ ] For a known eligible ritual such as Comprehend Languages, deplete normal slots and choose Cast as ritual. Confirm no slot is spent and the game clock advances by the normal casting time plus ten minutes. The ritual option should be absent for an ineligible class or during combat.
 - [ ] Trigger a rule warning, such as an already-used action. Cancel should keep choices, counts, and focus on the open flow's confirmation button. Do anyway should cast once, close the flow, and restore the original row/preview opener. If a pinned confirmation becomes disabled after the last slot, focus should move to a usable workspace control.
 - [ ] Check phone and desktop flows for readable upcast text, reachable choices, visible errors, and no horizontal scrolling. Hits, saves, and other creatures' results remain decisions at the table.
+
+## Phase 1 — M4: filters and favorites
+
+- [ ] Combine name search, level, school, casting time, concentration/ritual, and type filters. Search should ignore surrounding spaces and letter case; multiple type selections match either tag. Clear should reset every filter without changing spells, resources, or the log.
+- [ ] Star a spell by click and by keyboard Space. Refresh, then Undo last command; the star should restore its previous state without changing HP or slots.
+- [ ] Enable Favorites, remove the last visible favorite, and confirm focus returns to the Favorites filter so you can turn it off. Check 44 px star targets and readable rows at 375 px and desktop width.
+- [ ] If the character knows spells with longer casting times, check the minute/hour filter options. An empty tag override should display and filter as Utility.
+- [ ] With standard slots depleted, Castable now should retain cantrips and eligible known/prepared rituals outside combat. Other leveled spells should hide until slots are restored.
