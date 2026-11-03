@@ -72,6 +72,29 @@ describe('runCommand', () => {
     ).toEqual(blocked);
   });
 
+  it('passes deterministic event metadata to apply while leaving check/helper context unchanged', () => {
+    const metadata: Command<null> = {
+      name: 'metadata',
+      check: (ctx) => {
+        expect(Object.hasOwn(ctx, 'eventId')).toBe(false);
+        expect(Object.hasOwn(ctx, 'automation')).toBe(false);
+        return [];
+      },
+      apply: (_draft, _payload, ctx) => `${ctx.eventId}/${ctx.automation}`,
+    };
+    expect(
+      ok(runCommand(metadata, state, null, registry, options('default-event'))).event.text,
+    ).toBe('default-event/assisted');
+    expect(
+      ok(
+        runCommand(metadata, state, null, registry, {
+          ...options('manual-event'),
+          automation: 'manual',
+        }),
+      ).event.text,
+    ).toBe('manual-event/manual');
+  });
+
   it('asks before a Warn and logs an override on "Do anyway"', () => {
     const command = loseHp([{ level: 'warn', reason: 'Reaction already used' }]);
     expect(runCommand(command, state, 3, registry, options('e1'))).toEqual({

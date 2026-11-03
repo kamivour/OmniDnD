@@ -218,6 +218,12 @@ export const EconomySchema = z.strictObject({
   otherSpellCast: z.boolean(),
 });
 
+export const PendingConcentrationSaveSchema = z.strictObject({
+  /** The damage command's unique event id. */
+  id: z.string().min(1),
+  dc: z.int().min(10),
+});
+
 export const LiveStateSchema = z
   .strictObject({
     characterId: z.string().min(1),
@@ -237,6 +243,8 @@ export const LiveStateSchema = z
         slotLevel: z.int().min(1).max(9).optional(),
         endsAt: GameSeconds.optional(),
         effectId: z.string().optional(),
+        /** Optional in version 1 saves; replacing/ending concentration removes its requests. */
+        pendingSaves: z.array(PendingConcentrationSaveSchema).optional(),
       })
       .optional(),
     /** Only effects whose target is this character (D41). */
@@ -295,6 +303,17 @@ export const LiveStateSchema = z
         path: ['concentration', 'effectId'],
       });
     }
+    const saveIds = new Set<string>();
+    live.concentration?.pendingSaves?.forEach((save, index) => {
+      if (saveIds.has(save.id)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Duplicate concentration save ${save.id}`,
+          path: ['concentration', 'pendingSaves', index, 'id'],
+        });
+      }
+      saveIds.add(save.id);
+    });
   });
 
 export type HpLevelFloor = z.infer<typeof HpLevelFloorSchema>;
@@ -303,4 +322,5 @@ export type CharacterBuild = z.infer<typeof CharacterBuildSchema>;
 export type HpEntry = z.infer<typeof HpEntrySchema>;
 export type ActiveEffect = z.infer<typeof ActiveEffectSchema>;
 export type Economy = z.infer<typeof EconomySchema>;
+export type PendingConcentrationSave = z.infer<typeof PendingConcentrationSaveSchema>;
 export type LiveState = z.infer<typeof LiveStateSchema>;

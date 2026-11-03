@@ -3,6 +3,7 @@ import { useStore } from 'zustand';
 import { characterStore } from '../../state/character-store';
 import { CommandNotes, CommandProvider } from '../commands/CommandProvider';
 import { PlaceholderScreen } from '../screens/PlaceholderScreen';
+import { ConcentrationSaveBanner } from '../health/ConcentrationSaveBanner';
 import { BottomNav } from './BottomNav';
 import { HudBar } from './HudBar';
 import { SideNav } from './SideNav';
@@ -34,6 +35,7 @@ export function AppFrame() {
           <SideNav />
           <div className="flex min-w-0 flex-1 flex-col">
             <HudBar />
+            <ConcentrationSaveBanner />
             <DetailToggle />
             <div className="flex min-w-0 flex-1">
               <main

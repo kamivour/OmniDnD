@@ -4,6 +4,7 @@ import { registry } from '../../data/registry';
 import {
   combatMovement,
   endTurn,
+  endConcentration,
   STANDARD_ACTIONS,
   startCombat,
   startTurn,
@@ -24,7 +25,7 @@ import { AttackCard, FeatureCard, RuleCard } from '../components/cards';
 import { ConcentrationChip, EffectChip } from '../components/chips';
 import { CostBadge } from '../components/CostBadge';
 import { EconomyBar } from '../components/EconomyBar';
-import { HpButtons, HpPanel, type HpKind } from '../components/HpControl';
+import { HpButtons, HpPanel } from '../components/HpControl';
 import { LastLogLine, LogList } from '../components/LogList';
 import { PipRow } from '../components/PipRow';
 import { Preview } from '../components/Preview';
@@ -44,8 +45,6 @@ import type { SpellbookEntry } from '../spells/spellbook-model';
 const ECONOMY_NAME = { A: 'Action', BA: 'Bonus action', R: 'Reaction' };
 const actionButton =
   'min-h-14 w-full rounded-btn bg-accent px-3 font-semibold text-bg disabled:cursor-not-allowed disabled:opacity-40';
-
-const HP_LABEL: Record<HpKind, string> = { damage: 'Damage', heal: 'Heal', temp: 'Temp HP' };
 
 const TABS = [
   { value: 'actions', label: 'Actions' },
@@ -105,7 +104,6 @@ export function CombatScreen() {
     return available[cost] ? undefined : ECONOMY_NAME[cost];
   };
 
-  const applyHp = (kind: HpKind, amount: number) => act(`${HP_LABEL[kind]} ${amount}`);
   const spellRow = ({ spell, classId, dc, attack }: SpellbookEntry) => (
     <SpellRow
       key={`${classId}:${spell.id}`}
@@ -215,12 +213,19 @@ export function CombatScreen() {
     <>
       <section className="flex flex-col gap-2">
         <SectionLabel>Concentration</SectionLabel>
-        <ConcentrationChip
-          name={fool.concentration.name}
-          remaining={fool.concentration.remaining}
-          onEnd={() => act(`End concentration: ${fool.concentration.name}`)}
-          className="self-start"
-        />
+        {state.live.concentration ? (
+          <ConcentrationChip
+            name={registry.get('spell', state.live.concentration.spellId).name}
+            onEnd={() =>
+              run(endConcentration, null, combatStatus.current ?? undefined, () => {
+                restoreStatusFocus.current = true;
+              })
+            }
+            className="self-start"
+          />
+        ) : (
+          <p className="text-sm text-text-muted">None</p>
+        )}
       </section>
       <section className="flex flex-col gap-2">
         <SectionLabel>Effects on you</SectionLabel>
@@ -325,7 +330,7 @@ export function CombatScreen() {
 
         <div className="@min-[900px]:hidden">
           <StatusPreviewNote />
-          <HpButtons onApply={applyHp} />
+          <HpButtons />
         </div>
 
         <Tabs.Root value={tab} onValueChange={setTab} className="flex flex-col gap-3">
@@ -571,7 +576,7 @@ export function CombatScreen() {
         className="hidden min-w-0 flex-col gap-5 @min-[900px]:flex"
       >
         <StatusPreviewNote />
-        <HpPanel hp={fool.hp} onApply={applyHp} />
+        <HpPanel />
         {effects}
         <section className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
@@ -624,7 +629,7 @@ function SpentNote({ what }: { what: string }) {
 function StatusPreviewNote() {
   return (
     <p role="note" className="mb-3 text-xs text-text-muted">
-      HP, concentration, effects and log shown here are previews. Use the HUD for saved changes.
+      Effects and log shown here are previews. Use the HUD for saved changes.
     </p>
   );
 }

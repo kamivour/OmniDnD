@@ -17,7 +17,7 @@ Check these items in a normal browser after each completed milestone. Unchecked 
 - [ ] On first use in a new browser profile, check the HUD shows HP 11/19, L1 slots 0/4, L2 slots 2/2, and Bardic Inspiration 3/5. AC is 13, initiative +3, and speed 30 ft.
 - [ ] Open HP, apply 5 damage, then use the toast's Undo. HP should return to 11, with an Undo confirmation.
 - [ ] Restore a level 1 slot from the HUD, switch between Home, Spells, and Combat, and confirm the HUD keeps the new count. Adjust Bardic Inspiration and undo it too.
-- [ ] Give yourself 10 temp HP, then try replacing it with 5. Cancel should keep 10; Do anyway should set 5. Undo should restore 10. Closing the warning should return focus to the HP button.
+- [ ] Give yourself 10 temp HP, then try replacing it with 5. Cancel should keep 10 and return to Apply in the open editor with 5 still entered. Do anyway should set 5, close the editor, and restore the HP button. Undo should restore 10.
 - [ ] Open AC, initiative, and speed. Check their calculation breakdowns. Overrides are scheduled for Character Sheet edit mode in M7.
 - [ ] Add Poisoned from the HUD status control, close it, and undo the change. Check conditions stay separate from concentration and effects on you.
 
@@ -149,4 +149,18 @@ Combat startup and turn economy are live. The action preview remains separate wh
 - [ ] Cast ordinary level-2 Invisibility on yourself, then attack or cast a cantrip. Your personal Invisibility and its linked concentration should end together. Invisibility cast on an ally should survive your attack. For an upcast self effect, the self effect should end while concentration remains with a note for possible other targets; end concentration manually if none remain. Undo should restore the exact previous state.
 - [ ] Open a blank character: no spells, weapons, or Bard features should be inherited from The Fool. Items should state that its actions are coming in Phase 2. At 375 px, tablet, and desktop widths, check previews, pinned details, warning cancellation, disabled-resource reasons, keyboard focus, and horizontal scrolling.
 
-Action tabs are live. HP, concentration/effects presentation, and the Combat log remain the next M5 tasks; their current preview is labeled. Target results, contests, additional attacks from features, and readied-spell holding remain decisions at the table.
+Action tabs, HP, and concentration-save tracking are live. Effect countdowns and the Combat log remain scheduled M5 work; their current preview is labeled. Target results, contests, additional attacks from features, and readied-spell holding remain decisions at the table.
+
+## Phase 1 — M5: HP, concentration saves, and death saves
+
+- [ ] Check The Fool starts at HP 11/19 in both HUD and Combat. Apply 5 damage from Combat, heal, give temporary HP, and clear them. Refresh between changes; counts and Undo should agree everywhere. Use a copy for the 0-HP cases below.
+- [ ] From both HUD and Combat, give 10 temporary HP and try replacing them with 5. Cancel must retain the open editor, entered 5, old 10 temporary HP, and Apply focus. Do anyway applies once, closes the editor, and restores its opener. Undo should restore 10 after refresh. Recheck the desktop HUD popover as well as phone sheets.
+- [ ] While concentrating, take two separate damage instances. The banner should show the current spell, the oldest DC, and two pending checks. Navigate to another screen and refresh: both checks should remain. Pass removes only one; Fail ends concentration and its linked personal effects. Undo restores the exact checks and effects. The app must never choose Pass or Fail for you.
+- [ ] At HP 19 with 30 temporary HP, take 22 damage while concentrating. HP should stay 19, temporary HP become 8, and the save DC should be 11. Dropping to 0 instead should end concentration without leaving a save request. Replacing or manually ending the concentrated spell must remove old requests.
+- [ ] At 0 HP, enter natural d20 9 with Other bonus or penalty 1. It should record one success and clear both inputs. Natural 1 gives two failures; natural 20 restores 1 HP and resets the tracker regardless of a pending external modifier. Undo should restore the previous counters and unconscious state. At stable or dead states, illegal death-save actions should disable.
+- [ ] Reach three successes at 0 HP, give 8 temporary HP, then record 3 damage with Critical hit at 0 HP checked. Temporary HP should become 5, stability end, and two failures be recorded despite unchanged HP. A third failure should show Dead and disable ordinary healing; Undo must restore the prior state.
+- [ ] Open the HUD HP editor while dying and choose Natural 20. The editor should remain usable at HP 1, with keyboard focus inside it after the tracker disappears. Test this on phone and desktop, including typed rolls and shortcut buttons.
+- [ ] Create a pending save in Assisted, switch to Manual, and return. The saved check should remain behind Review concentration saves. Resolve it explicitly, then take more damage in Manual: no new automatic reminder should appear. Switching modes must not erase saved checks or HP history.
+- [ ] For Q21, already-zero HP plus temporary HP can produce competing instant-death interpretations. The current remainder-based default shows a DM-review note in Assisted when outcomes differ. Confirm the table's ruling; this default is not a settled ruling. Manual suppresses the reminder. Undo remains available.
+
+Current concentration and HP are live across character routes. Remaining effect countdowns and Combat log presentation are still previews until their scheduled M5 task.

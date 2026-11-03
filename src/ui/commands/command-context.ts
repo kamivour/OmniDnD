@@ -9,6 +9,8 @@ export interface CommandActions {
     onApplied?: () => void,
   ) => RunResult;
   undo: () => void;
+  /** A shared confirmation owns focus until it is resolved or cancelled. */
+  warningOpen: boolean;
   notes: string[];
   clearNotes: () => void;
 }

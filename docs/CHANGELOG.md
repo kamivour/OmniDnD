@@ -4,6 +4,15 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 15:55 — Live HP, concentration checks, and death saves
+
+- Combat and HUD now share saved damage, healing, temporary HP, and critical-at-zero controls. Warning Cancel keeps the editor, amount, and Apply focus; success closes it correctly. Desktop popover dismissal and focus after revival were reproduced and fixed.
+- Damage while concentrating creates saved Pass/Fail checks in Assisted mode, one per damage instance. They survive navigation and refresh; Pass removes one, Fail ends concentration and linked effects, and Undo restores everything. Manual creates no new reminders while keeping older checks available for explicit review.
+- At zero HP, record the natural d20 and any manual external bonus or penalty. Natural 1/20 keep their special outcomes. Stable/dead states disable illegal actions; damage absorbed by temporary HP still ends stability and adds the appropriate failures.
+- One instant-death interaction with temporary HP remains for DM review (Q21). The existing remainder-based default is retained and identified in Assisted feedback when the competing interpretations differ.
+- Validation: 758 unit tests and 266 full browser checks pass without retries (32 expected skips); typecheck, lint, and build pass. Phone/desktop HP, save, and focus layouts checked using the optional real-HTTP forwarder. Manual checks are in `docs/MANUAL_QA.md`.
+- Next: verify off-turn reactions and repeated-use warnings, then the bonus-action-spell flow. Effect countdowns and Combat log presentation remain scheduled M5 work.
+
 ## 2026-11-03 10:49 — Live Combat actions, spells, and weapons
 
 - Combat now uses equipped weapons and their computed attack/damage values, the character's selected spells, and actual feature pools. Blank characters no longer inherit The Fool's actions. Previews and pinned details keep current values.

@@ -308,7 +308,11 @@ test('Assisted warns before replacing temp HP and saved Manual mode replaces it 
   await expect(warning).toContainText("Temp HP don't stack");
   expect(await readDatabase(page)).toEqual(before);
   await warning.getByRole('button', { name: 'Cancel', exact: true }).click();
-  await expect(hp(page)).toBeFocused();
+  const editor = page.getByRole('dialog', { name: 'Hit points', exact: true });
+  await expect(editor).toBeVisible();
+  await expect(editor.getByRole('button', { name: 'Apply', exact: true })).toBeFocused();
+  await expect(editor.getByLabel('Temp HP amount', { exact: true })).toHaveText('5');
+  await editor.getByRole('button', { name: 'Close', exact: true }).click();
   await expect(hp(page)).toContainText('+10');
   await openCharacterSettings(page, isMobile);
   await automation(page, 'Manual').check();

@@ -82,11 +82,12 @@ test('replacing temp HP warns; Cancel preserves it and override remains undoable
   const warning = page.getByRole('dialog', { name: 'Check this action', exact: true });
   await expect(warning).toContainText("Temp HP don't stack");
   await warning.getByRole('button', { name: 'Cancel', exact: true }).click();
-  await expect(hp(page)).toBeFocused();
+  const editor = page.getByRole('dialog', { name: 'Hit points', exact: true });
+  await expect(editor).toBeVisible();
+  await expect(editor.getByRole('button', { name: 'Apply', exact: true })).toBeFocused();
+  await expect(editor.getByLabel('Temp HP amount', { exact: true })).toHaveText('5');
   await expect(hp(page)).toContainText('+10');
-  await page.keyboard.press('Escape');
-
-  await enterHitPoints(page, 'Temp HP', 5);
+  await editor.getByRole('button', { name: 'Apply', exact: true }).click();
   await warning.getByRole('button', { name: 'Do anyway', exact: true }).click();
   await expect(hp(page)).toBeFocused();
   await expect(hp(page)).toContainText('+5');

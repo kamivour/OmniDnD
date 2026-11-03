@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { endCombat, endTurn, startCombat, startTurn, useEconomy } from './combat';
 import { useFeature } from './features';
-import { applyDamage, concentrationSaveDc } from './hp';
+import { applyDamage, concentrationSaveDc, resolveConcentrationSave } from './hp';
 import { completeLongRest, completeShortRest } from './rest';
 import { adjustSlot, castSpell } from './spells';
 import { advanceTime } from './time';
@@ -97,8 +97,12 @@ describe('acceptance scenario (TEST_CHARACTER §6)', () => {
       reasons: ['Concentration save DC 10 (Invisibility)'],
     });
     expect(session.run(applyDamage, { amount: 12 })).toBe('Took 12 damage (HP 19 → 7)');
-    // Pass: the player does nothing, so concentration stays.
+    session.run(resolveConcentrationSave, {
+      saveId: session.live.concentration!.pendingSaves![0]!.id,
+      outcome: 'pass',
+    });
     expect(session.live.concentration?.spellId).toBe(INVISIBILITY);
+    expect(session.live.concentration?.pendingSaves).toBeUndefined();
   });
 
   it('8. bonus-action spell rule: Healing Word, then Dissonant Whispers warns, Vicious Mockery is fine', () => {

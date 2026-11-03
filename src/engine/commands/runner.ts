@@ -34,12 +34,18 @@ export interface CommandContext extends CharacterState {
   sheet: Sheet;
 }
 
+/** Caller-supplied metadata is available only when a command actually applies. */
+export interface CommandApplyContext extends CommandContext {
+  eventId: string;
+  automation: Automation;
+}
+
 export interface Command<Payload> {
   name: string;
   /** Rule checks against the state before the command runs. */
   check?: (ctx: CommandContext, payload: Payload) => Check[];
   /** Changes the draft and returns the log line, e.g. "Cast Faerie Fire (L1 slot)". */
-  apply: (draft: Draft<CharacterData>, payload: Payload, ctx: CommandContext) => string;
+  apply: (draft: Draft<CharacterData>, payload: Payload, ctx: CommandApplyContext) => string;
 }
 
 export interface RunOptions {
@@ -80,7 +86,7 @@ export function runCommand<Payload>(
   const [next, patches, inversePatches] = produceWithPatches(
     { build: state.build, live: state.live },
     (draft) => {
-      text = command.apply(draft, payload, ctx);
+      text = command.apply(draft, payload, { ...ctx, eventId, automation });
     },
   );
   assertValid(command.name, next);

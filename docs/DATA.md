@@ -147,7 +147,8 @@ interface LiveState {
   pactSlotsUsed?: number;
   featureUsesSpent: Record<string, number>;
   concentration?: { spellId: string; slotLevel?: number; endsAt?: number;
-                   effectId?: string };            // effectId only when the spell targets you
+                   effectId?: string;              // effectId only when the spell targets you
+                   pendingSaves?: { id: string; dc: number }[] };
   effects: ActiveEffect[]; conditions: string[]; exhaustion: number;
   items: Record<string, { qty: number; charges?: number; equipped: boolean; attuned: boolean }>;
   currency: { cp: number; sp: number; ep: number; gp: number; pp: number };
@@ -168,6 +169,8 @@ interface LiveState {
 **Campaign ↔ character (D38):** one campaign has many characters. `CharacterBuild.campaignId` is the only link; the hub lists characters by grouping on it.
 
 **Concentration vs effects (D41):** `concentration` is the caster's own state. `effects` holds only effects whose target is this character. Faerie Fire cast on enemies sets `concentration` and adds nothing to `effects`.
+
+**Pending concentration saves (M5):** Assisted damage records one `{ id, dc }` request per damage instance inside the current concentration object. The ID is the originating command's caller-supplied event ID; the DC uses damage after applicable reductions and before temporary HP. Explicit Pass removes one request, while Fail ends concentration and its linked effects. Replacing, ending, or expiring concentration removes its requests with it; Undo restores the exact object. Manual damage creates no Info-driven requests, but previously saved requests remain available for explicit review. The optional field preserves older version 1 files without rewriting them. The runner supplies event ID and automation only to command application; calculations and checks keep their existing context.
 
 **Store "used", not "remaining".** Maximums are computed from the build, so a level-up or override never desyncs live values.
 

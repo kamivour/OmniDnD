@@ -1,10 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Popover, Tabs } from 'radix-ui';
 import { X } from 'lucide-react';
 import {
-  applyDamage,
-  heal,
-  setTempHp,
   adjustSlot,
   adjustFeatureUses,
   removeEffect,
@@ -13,7 +10,8 @@ import {
 } from '../../engine/commands';
 import { CONDITIONS } from '../../engine/rules2014';
 import type { Stat } from '../../engine/calc/stat';
-import { HpNumberPad, type HpKind } from '../components/HpControl';
+import { HpAdjustmentBody, type HpKind } from '../components/HpControl';
+import { DeathSaveTracker } from '../health/DeathSaveTracker';
 import { PipStepper } from '../components/PipStepper';
 import { Sheet } from '../components/Sheet';
 import { useCommand } from '../commands/command-context';
@@ -43,17 +41,15 @@ export function HudAdjustments({
 }) {
   const desktop = useMediaQuery(POPOVER_QUERY);
   const { state, sheet } = useCharacter();
-  const { run } = useCommand();
+  const { run, warningOpen } = useCommand();
   const [kind, setKind] = useState<HpKind>('damage');
+  const hpBody = useRef<HTMLDivElement>(null);
   const title = selection ? TITLES[selection] : '';
   const { live } = state;
   const body = (
     <>
       {selection === 'hp' && (
-        <>
-          <p className="mb-3 text-sm text-text-muted">
-            HP {live.hp}/{sheet.maxHp.value} · Temp {live.tempHp}
-          </p>
+        <div ref={hpBody} tabIndex={-1}>
           <Tabs.Root value={kind} onValueChange={(value) => setKind(value as HpKind)}>
             <Tabs.List
               aria-label="HP adjustment"
@@ -70,28 +66,18 @@ export function HudAdjustments({
               ))}
             </Tabs.List>
             <Tabs.Content value={kind}>
-              <HpNumberPad
+              <HpAdjustmentBody
                 key={kind}
                 kind={kind}
-                onApply={(amount) => {
-                  const command =
-                    kind === 'damage' ? applyDamage : kind === 'heal' ? heal : setTempHp;
-                  const result = run(command, { amount }, anchor ?? undefined);
-                  if (result.result !== 'blocked') onClose();
-                }}
+                returnFocusTo={anchor ?? undefined}
+                onApplied={onClose}
               />
             </Tabs.Content>
           </Tabs.Root>
-          {live.tempHp > 0 && (
-            <button
-              type="button"
-              onClick={() => run(setTempHp, { amount: 0 })}
-              className="mt-2 min-h-11 w-full text-temp"
-            >
-              Clear temp HP
-            </button>
-          )}
-        </>
+          <div className="mt-3">
+            <DeathSaveTracker focusFallback={hpBody} />
+          </div>
+        </div>
       )}
       {selection === 'slots' && (
         <div className="flex flex-col gap-3">
@@ -272,6 +258,9 @@ export function HudAdjustments({
           align="end"
           sideOffset={6}
           collisionPadding={8}
+          onInteractOutside={(event) => {
+            if (warningOpen) event.preventDefault();
+          }}
           onCloseAutoFocus={(event) => {
             event.preventDefault();
             anchor?.focus();

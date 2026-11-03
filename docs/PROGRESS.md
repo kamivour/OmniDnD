@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M5 — Combat (live).
-**Next up:** Live HP panel, concentration-save prompt, and death saves at 0 HP.
+**Next up:** Verify off-turn reactions and the second-reaction warning in the live UI.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -100,7 +100,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Start combat, round counter (no turn order, D42)
 - [x] Economy bar; Start/End Turn resets
 - [x] Action tabs; standard actions; weapon attacks
-- [ ] HP panel; concentration save prompt; death saves at 0 HP
+- [x] HP panel; concentration save prompt; death saves at 0 HP
 - [ ] Reactions usable off-turn; second reaction warns
 - [ ] Bonus-action-spell rule
 - [ ] Effects with round countdown; log + Undo
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M5 HP/saves: shared live HUD/Combat damage, heal, temp and critical-at-zero inputs; durable per-damage concentration requests with explicit logged Pass/Fail and exact Undo (D79). Manual creates no new reminders and preserves old checks for explicit review. Death saves support natural d20 plus manual external modifiers, stable/dead states and natural1/20 outcomes; absorbed damage at0 still adds failures (D80), with Q21 flagged for the ambiguous massive-damage threshold. Real browser failures reproduced and fixed desktop HUD warning dismissal and revival focus. 758 unit tests and 266 full browser checks pass without retries (32 expected skips); typecheck, lint and build pass. 375/1440 HP/save layouts checked; manual QA added. Next: off-turn reactions/second-use warning.
 
 - 2026-11-03 — M5 actions: live equipped weapons, named standard actions, class-specific spells/shared casting, and owned feature pools replace action fixtures. Strict named commands validate weapon availability; Dash expires at End Turn with exact Undo, and spell-created self Invisibility ends on actual attacks/casts without deleting unknown ally targets (D77–D78). Default Spells view follows economy with a view-only Show all override. Zero-quantity gear and dead/missing-pool feature uses cannot grant actions; flat damage cannot be negative. 689 unit tests and 248 full browser checks pass without retries (32 expected skips); typecheck, lint and build pass. 375/768/1440 layouts checked; action manual QA added. Next: HP/concentration-save/death-save panel.
 

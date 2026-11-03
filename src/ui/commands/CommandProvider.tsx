@@ -113,7 +113,15 @@ export function CommandProvider({
   };
 
   return (
-    <CommandContext value={{ run: execute, undo, notes, clearNotes: () => setNotes([]) }}>
+    <CommandContext
+      value={{
+        run: execute,
+        undo,
+        warningOpen: warning !== null,
+        notes,
+        clearNotes: () => setNotes([]),
+      }}
+    >
       {children}
       <Sheet
         open={warning !== null}
