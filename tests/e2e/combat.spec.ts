@@ -36,11 +36,17 @@ test('tabs switch between action groups', async ({ page }) => {
   await expect(page.getByRole('button', { name: /Cutting Words/ })).toBeVisible();
 });
 
-test('fixture buttons show a toast instead of changing state', async ({ page }) => {
-  await page.getByRole('button', { name: 'Attack', exact: true }).first().click();
-  await expect(page.getByRole('status', { name: 'Command feedback' })).toContainText(
-    'Attack: Rapier',
-  );
+test('weapon actions require combat while previews remain available', async ({
+  page,
+  isMobile,
+}) => {
+  await expect(page.getByRole('button', { name: 'Attack', exact: true }).first()).toBeDisabled();
+  await expect(page.getByRole('main')).toContainText('Start combat');
+  await page.getByRole('button', { name: /^Rapier\b/ }).click();
+  const preview = isMobile
+    ? page.getByRole('dialog', { name: 'Rapier', exact: true })
+    : page.getByRole('complementary', { name: 'Pinned detail', exact: true });
+  await expect(preview).toContainText('+4 to hit');
 });
 
 test.describe('mobile', () => {
@@ -51,11 +57,11 @@ test.describe('mobile', () => {
     await page.getByRole('button', { name: /Healing Word/ }).tap();
     const sheet = page.getByRole('dialog', { name: 'Healing Word' });
     await expect(sheet).toBeVisible();
-    await expect(sheet.getByRole('button', { name: /^L1/ })).toHaveAttribute(
+    await expect(sheet.getByRole('button', { name: /^L2/ })).toHaveAttribute(
       'aria-pressed',
       'true',
     );
-    await expect(sheet.getByRole('button', { name: 'Cast Healing Word (L1)' })).toBeVisible();
+    await expect(sheet.getByRole('button', { name: 'Cast Healing Word (L2)' })).toBeVisible();
   });
 
   test('HP buttons open the number pad', async ({ page }) => {

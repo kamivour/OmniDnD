@@ -37,6 +37,7 @@ export interface WeaponAttack {
   instanceId: string;
   itemId: string;
   name: string;
+  type: 'melee' | 'ranged';
   ability: Ability;
   proficient: boolean;
   toHit: Stat;
@@ -136,7 +137,7 @@ export function computeSheet({ campaign, build, live }: CharacterState, registry
 
   const equipped = build.items.flatMap((item) => {
     const state = live.items[item.instanceId];
-    if (!state?.equipped) return [];
+    if (!state?.equipped || state.qty <= 0) return [];
     return [{ instanceId: item.instanceId, def: registry.get('item', item.itemId) }];
   });
 
@@ -312,6 +313,7 @@ function weaponAttack(
     instanceId,
     itemId: def.id,
     name: def.name,
+    type: weapon.type,
     ability,
     proficient,
     toHit: sumParts(proficient ? [abilityPart, proficiencyPart] : [abilityPart]),
@@ -320,7 +322,7 @@ function weaponAttack(
   if (weapon.damage !== undefined && weapon.damageType) {
     attack.damage =
       typeof weapon.damage === 'number'
-        ? { bonus: weapon.damage + mods[ability], type: weapon.damageType }
+        ? { bonus: Math.max(0, weapon.damage + mods[ability]), type: weapon.damageType }
         : { dice: weapon.damage, bonus: mods[ability], type: weapon.damageType };
   }
   if (weapon.versatile) attack.versatile = weapon.versatile;

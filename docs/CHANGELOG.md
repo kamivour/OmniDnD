@@ -4,6 +4,15 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 10:49 — Live Combat actions, spells, and weapons
+
+- Combat now uses equipped weapons and their computed attack/damage values, the character's selected spells, and actual feature pools. Blank characters no longer inherit The Fool's actions. Previews and pinned details keep current values.
+- Standard actions and weapon attacks save as validated, undoable commands. Dash adds current-speed movement only for the current turn; End Turn removes it and Undo restores it exactly. Rolls, targets, contests, additional attacks, and readied-spell holding remain manual.
+- Cast through the same phone, row, and pinned flow as Spellbook. The Spells tab follows current economy; Show all spells keeps explicit exceptions reachable without changing saved state. Shared feature uses update together, and depleted or unavailable uses disable with an explanation.
+- Actual attacks and casts end spell-created Invisibility on you. Concentration on an ally stays intact; upcast or uncertain extra targets retain concentration with a note. Zero-quantity gear grants no attacks or armor benefits, dead characters cannot use features, and fixed weapon damage never goes negative.
+- Validation: 689 unit tests and 248 full browser checks pass without retries (32 expected skips); typecheck, lint, and build pass. Phone, tablet, and desktop layouts checked using the optional real-HTTP forwarder. Manual action checks are in `docs/MANUAL_QA.md`.
+- Next: live HP controls, concentration saves, and death saves. Combat HP/status/log remain labeled previews until their M5 tasks are finished.
+
 ## 2026-11-03 10:19 — Live turn controls and movement
 
 - Start and end your own turns from Combat. The first turn stays in round 1 without advancing time; each later turn advances the round and clock by six seconds, restoring action, bonus action, reaction, and movement.

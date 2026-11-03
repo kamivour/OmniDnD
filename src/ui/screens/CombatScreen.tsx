@@ -1,38 +1,49 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Tabs } from 'radix-ui';
-import { endTurn, startCombat, startTurn, useEconomy } from '../../engine/commands';
+import { registry } from '../../data/registry';
+import {
+  combatMovement,
+  endTurn,
+  STANDARD_ACTIONS,
+  startCombat,
+  startTurn,
+  takeCombatAction,
+  useEconomy,
+  useFeature,
+  type StandardActionId,
+} from '../../engine/commands';
+import {
+  combatModel,
+  combatSpellsForEconomy,
+  type CombatFeature,
+  type CombatWeapon,
+} from '../combat/combat-model';
 import { useCommand } from '../commands/command-context';
 import { ActionRow } from '../components/ActionRow';
-import { AttackCard, FeatureCard, RuleCard, SpellCard } from '../components/cards';
+import { AttackCard, FeatureCard, RuleCard } from '../components/cards';
 import { ConcentrationChip, EffectChip } from '../components/chips';
 import { CostBadge } from '../components/CostBadge';
-import { CastFooter } from '../components/CastFooter';
 import { EconomyBar } from '../components/EconomyBar';
 import { HpButtons, HpPanel, type HpKind } from '../components/HpControl';
 import { LastLogLine, LogList } from '../components/LogList';
 import { PipRow } from '../components/PipRow';
 import { Preview } from '../components/Preview';
 import { SectionLabel } from '../components/SectionLabel';
+import { Sheet } from '../components/Sheet';
 import { SpellRow } from '../components/SpellRow';
 import { cx } from '../cx';
-import {
-  attacks,
-  features,
-  fool,
-  items,
-  spells,
-  standardActions,
-  type AttackView,
-  type Cost,
-  type FeatureView,
-  type SpellView,
-} from '../fixtures/the-fool';
+import { fool, type Cost } from '../fixtures/the-fool';
 import { useFixtureAction } from '../fixtures/useFixtureAction';
-import { signed, spellLevelLabel } from '../format';
+import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
 import { useDetail } from '../layout/detail-context';
+import { LiveSpellDetail } from '../spells/LiveSpellDetail';
+import { SpellCastControls } from '../spells/SpellCastControls';
+import type { SpellbookEntry } from '../spells/spellbook-model';
 
-const ECONOMY_NAME: Record<Cost, string> = { A: 'Action', BA: 'Bonus action', R: 'Reaction' };
+const ECONOMY_NAME = { A: 'Action', BA: 'Bonus action', R: 'Reaction' };
+const actionButton =
+  'min-h-14 w-full rounded-btn bg-accent px-3 font-semibold text-bg disabled:cursor-not-allowed disabled:opacity-40';
 
 const HP_LABEL: Record<HpKind, string> = { damage: 'Damage', heal: 'Heal', temp: 'Temp HP' };
 
@@ -55,13 +66,27 @@ export function CombatScreen() {
   const { run } = useCommand();
   const combatStatus = useRef<HTMLDivElement>(null);
   const restoreStatusFocus = useRef(false);
+  const castOpener = useRef<HTMLElement | null>(null);
+  const spellsTab = useRef<HTMLButtonElement>(null);
+  const [tab, setTab] = useState('actions');
+  const [showAllSpells, setShowAllSpells] = useState(false);
+  const [casting, setCasting] = useState<{
+    spellId: string;
+    classId: string;
+    opener?: HTMLElement;
+  } | null>(null);
   const liveCombat = state.live.combat;
+  const model = combatModel(state, sheet, registry);
+  const visibleSpells = showAllSpells
+    ? model.spells.entries
+    : combatSpellsForEconomy(model.spells.entries, liveCombat);
+  const movement = combatMovement({ live: state.live, sheet });
   const economy = {
     action: !liveCombat?.economy.actionUsed,
     bonus: !liveCombat?.economy.bonusUsed,
     reaction: !liveCombat?.economy.reactionUsed,
   };
-  const available: Record<Cost, boolean> = {
+  const available = {
     A: economy.action,
     BA: economy.bonus,
     R: economy.reaction,
@@ -75,90 +100,116 @@ export function CombatScreen() {
     }
   }, [events]);
 
-  /** Preview rows reflect the saved economy even before their actions become live. */
-  const spentFor = (cost: Cost | 'Passive' | 'Rest'): string | undefined => {
-    if (cost === 'Passive' || cost === 'Rest') return undefined;
+  const spentFor = (cost: Cost): string | undefined => {
+    if (cost !== 'A' && cost !== 'BA' && cost !== 'R') return undefined;
     return available[cost] ? undefined : ECONOMY_NAME[cost];
   };
 
-  const pinSpell = (spell: SpellView) =>
-    setDetail(
-      <div className="flex flex-col gap-4">
-        <SpellCard spell={spell} dc={fool.spellDc} />
-        <CastFooter
-          key={spell.id}
-          spell={spell}
-          slots={fool.slots}
-          onCast={(level) => castSpell(spell, level)}
-        />
-      </div>,
-    );
-  const pinAttack = (attack: AttackView) => setDetail(<AttackCard attack={attack} />);
-  const pinFeature = (feature: FeatureView) => setDetail(<FeatureCard feature={feature} />);
-  const castSpell = (spell: SpellView, level: number) =>
-    act(level > 0 ? `Cast ${spell.name} (L${level} slot)` : `Cast ${spell.name}`);
   const applyHp = (kind: HpKind, amount: number) => act(`${HP_LABEL[kind]} ${amount}`);
-  const ruleFooter = (name: string) => (
-    <button
-      type="button"
-      onClick={() => act(name)}
-      className="min-h-14 w-full rounded-btn bg-accent font-semibold text-bg"
-    >
-      Take {name}
-    </button>
-  );
-
-  const spellRow = (spell: SpellView) => (
+  const spellRow = ({ spell, classId, dc, attack }: SpellbookEntry) => (
     <SpellRow
-      key={spell.id}
+      key={`${classId}:${spell.id}`}
       spell={spell}
-      dc={fool.spellDc}
-      slots={fool.slots}
+      dc={dc}
+      attack={attack}
+      castingClass={
+        model.spells.classes.length + model.spells.unsupportedClassIds.length > 1
+          ? registry.get('class', classId).name
+          : undefined
+      }
+      slots={model.spells.slots}
       spent={spentFor(spell.cost)}
-      concentrating={spell.id === fool.concentration.id}
-      onCast={castSpell}
-      onPin={pinSpell}
+      unavailable={
+        spell.level > 0 &&
+        !model.spells.slots.some((slot) => slot.level >= spell.level && slot.used < slot.max)
+      }
+      concentrating={spell.id === state.live.concentration?.spellId}
+      onCast={(_selected, _level, opener) => {
+        castOpener.current = opener ?? (document.activeElement as HTMLElement);
+        setCasting({ spellId: spell.id, classId, opener: castOpener.current });
+      }}
+      sheetFooter={({ close, trigger }) => (
+        <SpellCastControls
+          spellId={spell.id}
+          classId={classId}
+          returnFocusTo={trigger}
+          onApplied={close}
+        />
+      )}
+      onPin={() => setDetail(<LiveSpellDetail spellId={spell.id} classId={classId} />)}
     />
   );
 
-  const attackRow = (attack: AttackView, label = 'Attack', cost: Cost = 'A') => (
+  const attackRow = ({ instanceId, attack }: CombatWeapon, reaction = false) => (
     <ActionRow
-      key={`${attack.id}-${cost}`}
+      key={`${instanceId}:${reaction}`}
       iconId={attack.id}
-      name={cost === 'R' ? `Opportunity Attack (${attack.name})` : attack.name}
-      badges={<CostBadge cost={cost} />}
-      meta={`${signed(attack.toHit)} to hit · ${attack.damage} ${attack.damageType} · ${attack.notes}`}
-      actionLabel={label}
-      onAction={() => act(`${label}: ${attack.name}`)}
-      spent={spentFor(cost)}
-      onPin={() => pinAttack(attack)}
-      preview={{ title: attack.name, content: <AttackCard attack={attack} /> }}
+      name={reaction ? `Opportunity Attack (${attack.name})` : attack.name}
+      badges={<CostBadge cost={reaction ? 'R' : 'A'} />}
+      meta={[
+        `${signed(attack.toHit)} to hit`,
+        attack.damage === undefined ? 'No direct damage' : `${attack.damage} ${attack.damageType}`,
+        attack.notes,
+      ].join(' · ')}
+      actionLabel="Attack"
+      disabled={!liveCombat}
+      onAction={(event) => {
+        event.currentTarget.focus();
+        run(
+          takeCombatAction,
+          { action: 'weapon-attack', instanceId, ...(reaction ? { reaction: true } : {}) },
+          combatStatus.current ?? undefined,
+        );
+      }}
+      unavailable={!liveCombat}
+      spent={spentFor(reaction ? 'R' : 'A')}
+      onPin={() => setDetail(<LiveWeaponDetail instanceId={instanceId} reaction={reaction} />)}
+      preview={{
+        title: attack.name,
+        content: <AttackCard attack={attack} />,
+        sheetFooter: ({ close, trigger }) => (
+          <LiveWeaponDetail
+            instanceId={instanceId}
+            reaction={reaction}
+            showCard={false}
+            onApplied={close}
+            returnFocusTo={trigger}
+          />
+        ),
+      }}
     />
   );
 
-  const featureRow = (feature: FeatureView) => {
-    const uses = feature.uses;
-    const meta = uses
-      ? `${uses.max - uses.used} / ${uses.max} left · ${uses.die} · ${uses.recharge}`
-      : feature.lines[0];
-    return (
-      <ActionRow
-        key={feature.id}
-        iconId={feature.id}
-        name={feature.name}
-        badges={<CostBadge cost={feature.cost} />}
-        meta={meta}
-        actionLabel="Use"
-        onAction={() => act(`Use ${feature.name}`)}
-        spent={spentFor(feature.cost)}
-        onPin={() => pinFeature(feature)}
-        preview={{ title: feature.name, content: <FeatureCard feature={feature} /> }}
-      />
-    );
-  };
-
-  const cantrips = spells.filter((s) => s.level === 0);
-  const bonusSpells = spells.filter((s) => s.cost === 'BA');
+  const featureRow = ({ feature, meta, remainingUses, unavailableReason }: CombatFeature) => (
+    <ActionRow
+      key={feature.id}
+      iconId={feature.id}
+      name={feature.name}
+      badges={<CostBadge cost={feature.cost} />}
+      meta={meta}
+      actionLabel="Use"
+      disabled={!!unavailableReason}
+      onAction={(event) => {
+        event.currentTarget.focus();
+        run(useFeature, { featureId: feature.id }, combatStatus.current ?? undefined);
+      }}
+      spent={spentFor(feature.cost)}
+      unavailable={!!unavailableReason}
+      onPin={() => setDetail(<LiveFeatureDetail featureId={feature.id} />)}
+      preview={{
+        title: feature.name,
+        content: <FeatureCard feature={feature} remainingUses={remainingUses} />,
+        sheetFooter: ({ close, trigger }) => (
+          <LiveFeatureDetail
+            featureId={feature.id}
+            showCard={false}
+            onApplied={close}
+            returnFocusTo={trigger}
+          />
+        ),
+      }}
+    />
+  );
 
   const effects = (
     <>
@@ -251,8 +302,8 @@ export function CombatScreen() {
             <EconomyBar
               economy={economy}
               movement={{
-                left: Math.max(0, sheet.speed.value - liveCombat.economy.movementUsed),
-                max: sheet.speed.value,
+                left: movement.remaining,
+                max: movement.maximum,
               }}
               onToggle={(slot) =>
                 run(
@@ -272,15 +323,12 @@ export function CombatScreen() {
           </section>
         )}
 
-        <p role="note" className="text-xs text-text-muted">
-          Action preview. Use the HUD and Spellbook for saved changes.
-        </p>
-
         <div className="@min-[900px]:hidden">
+          <StatusPreviewNote />
           <HpButtons onApply={applyHp} />
         </div>
 
-        <Tabs.Root defaultValue="actions" className="flex flex-col gap-3">
+        <Tabs.Root value={tab} onValueChange={setTab} className="flex flex-col gap-3">
           <Tabs.List
             aria-label="Combat options"
             className="grid grid-cols-5 rounded-card border border-border bg-surface p-1"
@@ -288,6 +336,7 @@ export function CombatScreen() {
             {TABS.map((t) => (
               <Tabs.Trigger
                 key={t.value}
+                ref={t.value === 'spells' ? spellsTab : undefined}
                 value={t.value}
                 className="min-h-11 rounded-btn text-sm text-text-muted data-[state=active]:bg-surface-2 data-[state=active]:font-semibold data-[state=active]:text-accent"
               >
@@ -298,26 +347,38 @@ export function CombatScreen() {
 
           <Tabs.Content value="actions" className="flex flex-col gap-3">
             {!economy.action && <SpentNote what="Action" />}
+            {!liveCombat && (
+              <p className="text-xs text-text-muted">
+                Start combat to use weapon and standard actions. Spells and features can be used
+                outside combat.
+              </p>
+            )}
+            <p className="text-xs text-text-muted">
+              Resolve attack rolls, targets and damage at the table.
+            </p>
+            <SectionLabel as="h3">Weapons</SectionLabel>
             <ul className="flex flex-col gap-2">
-              {attacks.map((a) => attackRow(a))}
-              {cantrips.map(spellRow)}
+              {model.weapons.map((weapon) => attackRow(weapon))}
             </ul>
+            {model.weapons.length === 0 && (
+              <p className="text-sm text-text-muted">No weapons equipped.</p>
+            )}
             <SectionLabel as="h3">Standard actions</SectionLabel>
             <ul className="flex flex-wrap gap-2">
-              {standardActions.map((rule) => (
-                <li key={rule.name}>
+              {STANDARD_ACTIONS.map((rule) => (
+                <li key={rule.id}>
                   <Preview
                     title={rule.name}
                     content={<RuleCard name={rule.name} lines={rule.lines} />}
-                    onPin={() =>
-                      setDetail(
-                        <div className="flex flex-col gap-4">
-                          <RuleCard name={rule.name} lines={rule.lines} />
-                          {ruleFooter(rule.name)}
-                        </div>,
-                      )
-                    }
-                    sheetFooter={ruleFooter(rule.name)}
+                    onPin={() => setDetail(<LiveStandardActionDetail actionId={rule.id} />)}
+                    sheetFooter={({ close, trigger }) => (
+                      <LiveStandardActionDetail
+                        actionId={rule.id}
+                        showCard={false}
+                        onApplied={close}
+                        returnFocusTo={trigger}
+                      />
+                    )}
                   >
                     {({ ref, props }) => (
                       <button
@@ -336,22 +397,95 @@ export function CombatScreen() {
                   </Preview>
                 </li>
               ))}
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTab('spells');
+                    spellsTab.current?.focus();
+                  }}
+                  className="min-h-11 rounded-btn border border-border bg-surface px-3 text-sm text-accent"
+                >
+                  Cast a Spell
+                </button>
+              </li>
             </ul>
+            <SectionLabel as="h3">Action spells</SectionLabel>
+            <ul className="flex flex-col gap-2">
+              {model.spells.entries.filter(({ spell }) => spell.cost === 'A').map(spellRow)}
+            </ul>
+            {!model.spells.entries.some(({ spell }) => spell.cost === 'A') && (
+              <p className="text-sm text-text-muted">No action spells selected.</p>
+            )}
+            {model.features.some(({ feature }) => feature.cost === 'A') && (
+              <>
+                <SectionLabel as="h3">Action features</SectionLabel>
+                <ul className="flex flex-col gap-2">
+                  {model.features.filter(({ feature }) => feature.cost === 'A').map(featureRow)}
+                </ul>
+              </>
+            )}
           </Tabs.Content>
 
           <Tabs.Content value="spells" className="flex flex-col gap-4">
-            {!economy.action && <SpentNote what="Action" />}
-            {[0, ...fool.slots.map((s) => s.level)].map((level) => {
-              const slot = fool.slots.find((s) => s.level === level);
+            <label className="flex min-h-11 items-center gap-2 text-sm text-text">
+              <input
+                type="checkbox"
+                checked={showAllSpells}
+                onChange={(event) => setShowAllSpells(event.target.checked)}
+                className="size-4 accent-(--omni-accent)"
+              />
+              Show all spells
+            </label>
+            {model.spells.classes.map((castingClass) => (
+              <p key={castingClass.classId} className="text-xs text-text-muted">
+                {castingClass.name} · Save DC {castingClass.dc} · Attack{' '}
+                {signed(castingClass.attack)}
+                {' · '}
+                {castingClass.cantrips}
+                {castingClass.cantripLimit === undefined ? '' : ` / ${castingClass.cantripLimit}`}
+                {' cantrips · '}
+                {castingClass.known}
+                {castingClass.knownLimit === undefined ? '' : ` / ${castingClass.knownLimit}`}
+                {castingClass.mode === 'spellbook' ? ' in spellbook' : ' known'}
+                {(castingClass.mode === 'prepared' || castingClass.mode === 'spellbook') &&
+                  ` · ${castingClass.prepared}${castingClass.preparedLimit === undefined ? '' : ` / ${castingClass.preparedLimit}`} prepared`}
+              </p>
+            ))}
+            {model.spells.unsupportedClassIds.length > 0 && (
+              <p role="note" className="text-xs text-warn">
+                Retained spells for{' '}
+                {model.spells.unsupportedClassIds
+                  .map((id) => registry.get('class', id).name)
+                  .join(', ')}{' '}
+                have unavailable casting stats. Review their class association in Spellbook.
+              </p>
+            )}
+            {model.spells.entries.length === 0 && (
+              <p className="text-sm text-text-muted">No spells selected yet.</p>
+            )}
+            {model.spells.entries.length > 0 && visibleSpells.length === 0 && (
+              <p className="text-sm text-text-muted">
+                No spells match your current economy. Show all spells to review exceptions.
+              </p>
+            )}
+            {model.spells.levels.map((level) => {
+              const slot = model.spells.slots.find((s) => s.level === level);
+              const group = visibleSpells.filter(({ spell }) => spell.level === level);
+              if (group.length === 0 && !slot) return null;
               return (
-                <section key={level} className="flex flex-col gap-2">
-                  <div className="flex items-center gap-3">
+                <section
+                  key={level}
+                  aria-label={level === 0 ? 'Cantrips' : `Level ${level}`}
+                  className="flex flex-col gap-2"
+                >
+                  <div className="flex flex-wrap items-center gap-3">
                     <SectionLabel as="h3">
                       {level === 0 ? 'Cantrips' : `Level ${level}`}
                     </SectionLabel>
                     {slot && (
                       <PipRow
-                        label={`${spellLevelLabel(level)} slots`}
+                        label={`Level ${level} spell slots`}
                         max={slot.max}
                         used={slot.used}
                         showLabel={false}
@@ -359,55 +493,70 @@ export function CombatScreen() {
                       />
                     )}
                   </div>
-                  <ul className="flex flex-col gap-2">
-                    {spells.filter((s) => s.level === level).map(spellRow)}
-                  </ul>
+                  <ul className="flex flex-col gap-2">{group.map(spellRow)}</ul>
                 </section>
               );
             })}
           </Tabs.Content>
 
           <Tabs.Content value="bonus" className="flex flex-col gap-3">
+            {!economy.bonus && <SpentNote what="Bonus action" />}
             <ul className="flex flex-col gap-2">
-              {bonusSpells.map(spellRow)}
-              {features.filter((f) => f.cost === 'BA').map(featureRow)}
+              {model.spells.entries.filter(({ spell }) => spell.cost === 'BA').map(spellRow)}
+              {model.features.filter(({ feature }) => feature.cost === 'BA').map(featureRow)}
             </ul>
-            <RuleNote>
-              Cast a bonus-action spell this turn? Any other spell you cast this turn must be a
-              cantrip with a casting time of 1 action.
-            </RuleNote>
+            {!model.spells.entries.some(({ spell }) => spell.cost === 'BA') &&
+              !model.features.some(({ feature }) => feature.cost === 'BA') && (
+                <p className="text-sm text-text-muted">
+                  No bonus-action spells or features selected.
+                </p>
+              )}
           </Tabs.Content>
 
           <Tabs.Content value="react" className="flex flex-col gap-3">
+            {!economy.reaction && <SpentNote what="Reaction" />}
             <ul className="flex flex-col gap-2">
-              {attacks.slice(0, 1).map((a) => attackRow(a, 'Attack', 'R'))}
-              {features.filter((f) => f.cost === 'R').map(featureRow)}
+              {model.weapons
+                .filter((weapon) => weapon.type === 'melee')
+                .map((weapon) => attackRow(weapon, true))}
+              {model.spells.entries.filter(({ spell }) => spell.cost === 'R').map(spellRow)}
+              {model.features.filter(({ feature }) => feature.cost === 'R').map(featureRow)}
+              <ActionRow
+                iconId="rule.Ready"
+                name="Readied action"
+                badges={<CostBadge cost="R" />}
+                meta="Resolve the chosen trigger and response at the table."
+                actionLabel="Use"
+                disabled={!liveCombat}
+                spent={spentFor('R')}
+                unavailable={!liveCombat}
+                onAction={(event) => {
+                  event.currentTarget.focus();
+                  run(
+                    useEconomy,
+                    { kind: 'reaction', label: 'Readied action' },
+                    combatStatus.current ?? undefined,
+                  );
+                }}
+                preview={{
+                  title: 'Readied action',
+                  content: (
+                    <p className="text-sm text-text">
+                      Use your reaction for a response you readied. The trigger, response and any
+                      held spell are resolved at the table.
+                    </p>
+                  ),
+                }}
+              />
             </ul>
-            <RuleNote>
-              One reaction per round. It comes back at the start of your turn and works on other
-              creatures&apos; turns.
-            </RuleNote>
+            <p className="text-xs text-text-muted">
+              A reaction returns at the start of your turn and can be used on another creature's
+              turn.
+            </p>
           </Tabs.Content>
 
           <Tabs.Content value="items" className="flex flex-col gap-3">
-            {!economy.action && <SpentNote what="Action" />}
-            <ul className="flex flex-col gap-2">
-              {items.map((item) => (
-                <ActionRow
-                  key={item.id}
-                  iconId={item.id}
-                  name={item.name}
-                  meta={`×${item.qty}`}
-                  actionLabel="Use"
-                  onAction={() => act(`Use ${item.name}`)}
-                  spent={spentFor('A')}
-                  preview={{
-                    title: item.name,
-                    content: <RuleCard name={item.name} lines={item.lines} />,
-                  }}
-                />
-              ))}
-            </ul>
+            <p className="text-sm text-text-muted">Item actions are coming in Phase 2.</p>
           </Tabs.Content>
         </Tabs.Root>
 
@@ -421,6 +570,7 @@ export function CombatScreen() {
         aria-label="Status and log"
         className="hidden min-w-0 flex-col gap-5 @min-[900px]:flex"
       >
+        <StatusPreviewNote />
         <HpPanel hp={fool.hp} onApply={applyHp} />
         {effects}
         <section className="flex flex-col gap-2">
@@ -437,6 +587,28 @@ export function CombatScreen() {
           <LogList entries={fool.log} />
         </section>
       </aside>
+      <Sheet
+        open={casting !== null}
+        onOpenChange={(open) => !open && setCasting(null)}
+        title={casting ? `Cast ${registry.get('spell', casting.spellId).name}` : 'Cast spell'}
+        onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          (castOpener.current?.isConnected && castOpener.current.getClientRects().length
+            ? castOpener.current
+            : combatStatus.current
+          )?.focus();
+        }}
+      >
+        {casting && (
+          <LiveSpellDetail
+            key={`${casting.classId}:${casting.spellId}`}
+            spellId={casting.spellId}
+            classId={casting.classId}
+            returnFocusTo={casting.opener}
+            onApplied={() => setCasting(null)}
+          />
+        )}
+      </Sheet>
     </div>
   );
 }
@@ -449,6 +621,136 @@ function SpentNote({ what }: { what: string }) {
   );
 }
 
-function RuleNote({ children }: { children: ReactNode }) {
-  return <p className="border-l-2 border-border pl-3 text-xs text-text-muted">{children}</p>;
+function StatusPreviewNote() {
+  return (
+    <p role="note" className="mb-3 text-xs text-text-muted">
+      HP, concentration, effects and log shown here are previews. Use the HUD for saved changes.
+    </p>
+  );
+}
+
+interface LiveActionProps {
+  showCard?: boolean;
+  returnFocusTo?: HTMLElement;
+  onApplied?: () => void;
+}
+
+/** Pinned actions and preview footers re-read combat state instead of retaining stale controls. */
+function LiveStandardActionDetail({
+  actionId,
+  showCard = true,
+  returnFocusTo,
+  onApplied,
+}: LiveActionProps & { actionId: StandardActionId }) {
+  const { state } = useCharacter();
+  const { run } = useCommand();
+  const container = useRef<HTMLDivElement>(null);
+  const rule = STANDARD_ACTIONS.find(({ id }) => id === actionId);
+  if (!rule) return null;
+  return (
+    <div ref={container} tabIndex={-1} className="flex flex-col gap-4">
+      {showCard && <RuleCard name={rule.name} lines={rule.lines} />}
+      {!state.live.combat && (
+        <p className="text-sm text-text-muted">Start combat to use this action.</p>
+      )}
+      <button
+        type="button"
+        disabled={!state.live.combat}
+        className={actionButton}
+        onClick={(event) => {
+          event.currentTarget.focus();
+          run(
+            takeCombatAction,
+            { action: actionId },
+            returnFocusTo ?? container.current ?? undefined,
+            onApplied,
+          );
+        }}
+      >
+        Take {rule.name}
+      </button>
+    </div>
+  );
+}
+
+function LiveWeaponDetail({
+  instanceId,
+  reaction = false,
+  showCard = true,
+  returnFocusTo,
+  onApplied,
+}: LiveActionProps & { instanceId: string; reaction?: boolean }) {
+  const { state, sheet } = useCharacter();
+  const { run } = useCommand();
+  const container = useRef<HTMLDivElement>(null);
+  const entry = combatModel(state, sheet, registry).weapons.find(
+    (weapon) => weapon.instanceId === instanceId,
+  );
+  if (!entry) return <p className="text-sm text-text-muted">This weapon is no longer equipped.</p>;
+  return (
+    <div ref={container} tabIndex={-1} className="flex flex-col gap-4">
+      {showCard && <AttackCard attack={entry.attack} />}
+      <p className="text-xs text-text-muted">
+        Resolve attack rolls, targets and damage at the table.
+      </p>
+      {!state.live.combat && (
+        <p className="text-sm text-text-muted">Start combat to use this attack.</p>
+      )}
+      <button
+        type="button"
+        className={actionButton}
+        disabled={!state.live.combat}
+        onClick={(event) => {
+          event.currentTarget.focus();
+          run(
+            takeCombatAction,
+            { action: 'weapon-attack', instanceId, ...(reaction ? { reaction: true } : {}) },
+            returnFocusTo ?? container.current ?? undefined,
+            onApplied,
+          );
+        }}
+      >
+        {reaction ? 'Opportunity Attack' : 'Attack'} with {entry.attack.name}
+      </button>
+    </div>
+  );
+}
+
+function LiveFeatureDetail({
+  featureId,
+  showCard = true,
+  returnFocusTo,
+  onApplied,
+}: LiveActionProps & { featureId: string }) {
+  const { state, sheet } = useCharacter();
+  const { run } = useCommand();
+  const container = useRef<HTMLDivElement>(null);
+  const entry = combatModel(state, sheet, registry).features.find(
+    ({ feature }) => feature.id === featureId,
+  );
+  if (!entry)
+    return <p className="text-sm text-text-muted">This feature is no longer available here.</p>;
+  return (
+    <div ref={container} tabIndex={-1} className="flex flex-col gap-4">
+      {showCard && <FeatureCard feature={entry.feature} remainingUses={entry.remainingUses} />}
+      <p className="text-xs text-text-muted">{entry.meta}</p>
+      {entry.unavailableReason && <p className="text-xs text-warn">{entry.unavailableReason}</p>}
+      <button
+        type="button"
+        className={actionButton}
+        disabled={!!entry.unavailableReason}
+        onClick={(event) => {
+          event.currentTarget.focus();
+          run(
+            useFeature,
+            { featureId },
+            returnFocusTo ?? container.current ?? undefined,
+            onApplied,
+          );
+        }}
+      >
+        Use {entry.feature.name}
+      </button>
+    </div>
+  );
 }

@@ -105,15 +105,21 @@ for (const touch of [false, true]) {
       await expect(trigger).toBeFocused();
 
       await navigation(page).getByRole('link', { name: 'Combat', exact: true }).click();
+      await page
+        .getByRole('main')
+        .getByRole('button', { name: 'Start combat', exact: true })
+        .click();
+      await page.getByRole('main').getByRole('button', { name: 'Start Turn', exact: true }).click();
       await page.getByRole('tab', { name: 'Bonus', exact: true }).click();
       if (touch) await healingWord(page).tap();
       else await healingWord(page).click();
-      await expect(drawer.getByRole('button', { name: /^L1/ })).toHaveAttribute(
+      await expect(drawer.getByRole('button', { name: /^L1/ })).toBeDisabled();
+      await expect(drawer.getByRole('button', { name: /^L2/ })).toHaveAttribute(
         'aria-pressed',
         'true',
       );
       await expect(
-        drawer.getByRole('button', { name: 'Cast Healing Word (L1)', exact: true }),
+        drawer.getByRole('button', { name: 'Cast Healing Word (L2)', exact: true }),
       ).toBeVisible();
       await expectNoOverflow(page);
       await page.screenshot({ path: info.outputPath('tablet-combat-cast.png'), fullPage: true });

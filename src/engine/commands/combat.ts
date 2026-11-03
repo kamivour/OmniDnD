@@ -1,6 +1,6 @@
 import { formatDuration } from '../clock';
 import { SECONDS_PER_ROUND } from '../rules2014';
-import type { Command } from './runner';
+import type { Command, CommandContext } from './runner';
 import {
   block,
   ECONOMY_LABEL,
@@ -60,6 +60,8 @@ export const endTurn: Command<null> = {
     // The bonus-action spell rule is per turn; the reaction stays spent until your next turn.
     combat.economy.bonusActionSpellCast = false;
     combat.economy.otherSpellCast = false;
+    // Dash grants movement only for the current turn; spent economy remains until Start Turn.
+    delete combat.economy.dashCount;
     return `End of turn (round ${Math.max(1, combat.round)})`;
   },
 };
@@ -74,6 +76,21 @@ export type UseEconomyPayload =
     }
   /** Feet moved; negative gives movement back. */
   | { kind: 'movement'; feet: number };
+
+/** Dash adds current speed to movement, rather than changing the character's speed. */
+export function combatMovement({ live, sheet }: Pick<CommandContext, 'live' | 'sheet'>): {
+  speed: number;
+  maximum: number;
+  used: number;
+  remaining: number;
+  dashCount: number;
+} {
+  const speed = sheet.speed.value;
+  const dashCount = live.combat?.economy.dashCount ?? 0;
+  const maximum = speed * (1 + dashCount);
+  const used = live.combat?.economy.movementUsed ?? 0;
+  return { speed, maximum, used, remaining: Math.max(0, maximum - used), dashCount };
+}
 
 /** Spend part of the turn economy on something that is not a spell or feature. */
 export const useEconomy: Command<UseEconomyPayload> = {
@@ -90,7 +107,7 @@ export const useEconomy: Command<UseEconomyPayload> = {
     }
     if (payload.feet > 0) {
       if (!combat.turnActive) checks.push(warn('Not your turn'));
-      const left = Math.max(0, ctx.sheet.speed.value - combat.economy.movementUsed);
+      const left = combatMovement(ctx).remaining;
       if (payload.feet > left) checks.push(warn(`Only ${left} ft of movement left`));
     }
     return checks;
@@ -102,7 +119,7 @@ export const useEconomy: Command<UseEconomyPayload> = {
       economy.movementUsed = Math.max(0, economy.movementUsed + payload.feet);
       const verb =
         payload.feet > 0 ? `Moved ${payload.feet} ft` : `Movement back ${-payload.feet} ft`;
-      return `${verb} (${economy.movementUsed}/${ctx.sheet.speed.value} ft used)`;
+      return `${verb} (${economy.movementUsed}/${combatMovement(ctx).maximum} ft used)`;
     }
     const label = ECONOMY_LABEL[payload.kind];
     spendEconomy(live, payload.kind, !payload.release);

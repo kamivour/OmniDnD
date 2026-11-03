@@ -7,6 +7,7 @@ import {
   deadCheck,
   dropConcentration,
   economyChecks,
+  endSelfInvisibility,
   info,
   passTime,
   rangeCheck,
@@ -170,7 +171,7 @@ export const castSpell: Command<CastSpellPayload> = {
     const spell = ctx.registry.get('spell', payload.spellId);
     const ritual = payload.ritual ?? false;
     const level = castLevel(ctx, spell, payload);
-    const notes: (string | undefined)[] = [];
+    const notes: (string | undefined)[] = endSelfInvisibility(live, 'cast');
 
     if (payload.pact) live.pactSlotsUsed = (live.pactSlotsUsed ?? 0) + 1;
     else if (level !== undefined) live.slotsUsed[level] = (live.slotsUsed[level] ?? 0) + 1;

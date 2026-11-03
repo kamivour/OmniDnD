@@ -113,18 +113,36 @@ export function SpellCard({
   );
 }
 
-export function AttackCard({ attack }: { attack: AttackView }) {
+export function AttackCard({
+  attack,
+}: {
+  attack: Pick<AttackView, 'id' | 'name' | 'toHit' | 'notes'> & {
+    damage?: string;
+    damageType?: string;
+  };
+}) {
   return (
     <Card
       iconId={attack.id}
       title={attack.name}
       header={`Weapon attack · ${signed(attack.toHit)} to hit`}
-      lines={[`Hit: ${attack.damage} ${damageTypeName(attack.damageType)}.`, attack.notes]}
+      lines={[
+        attack.damage === undefined
+          ? 'No direct damage.'
+          : `Hit: ${attack.damage} ${damageTypeName(attack.damageType ?? '')}.`,
+        attack.notes,
+      ]}
     />
   );
 }
 
-export function FeatureCard({ feature }: { feature: FeatureView }) {
+export function FeatureCard({
+  feature,
+  remainingUses,
+}: {
+  feature: FeatureView;
+  remainingUses?: number;
+}) {
   const uses = feature.uses;
   return (
     <Card
@@ -135,7 +153,9 @@ export function FeatureCard({ feature }: { feature: FeatureView }) {
           <CostBadge cost={feature.cost} />
           {uses && (
             <span>
-              {uses.max - uses.used} / {uses.max} · {uses.die} · {uses.recharge}
+              {[`${remainingUses ?? uses.max - uses.used} / ${uses.max}`, uses.die, uses.recharge]
+                .filter(Boolean)
+                .join(' · ')}
             </span>
           )}
         </span>

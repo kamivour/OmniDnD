@@ -84,6 +84,33 @@ export function removeEffects(live: Live, matches: (effect: ActiveEffect) => boo
   return names;
 }
 
+/**
+ * 2014 Invisibility ends for the target that attacks or casts, not for every invisible creature.
+ * https://www.dndbeyond.com/spells/2159-invisibility
+ * Only the local spell-created effects are known; possible upcast ally targets stay manual.
+ */
+export function endSelfInvisibility(live: Live, trigger: 'attack' | 'cast'): string[] {
+  const ids = new Set(
+    live.effects
+      .filter((effect) => effect.sourceId === 'spell.invisibility')
+      .map((effect) => effect.id),
+  );
+  if (ids.size === 0) return [];
+  const linked = live.concentration?.effectId !== undefined && ids.has(live.concentration.effectId);
+  removeEffects(live, (effect) => ids.has(effect.id));
+  const notes = [`Invisibility on you ended (${trigger})`];
+  if (linked && live.concentration) {
+    if (live.concentration.spellId === 'spell.invisibility' && live.concentration.slotLevel === 2) {
+      delete live.concentration;
+      notes.push('concentration on Invisibility ended');
+    } else {
+      delete live.concentration.effectId;
+      notes.push('concentration retained; other targets may still be affected');
+    }
+  }
+  return notes;
+}
+
 /** Ends your concentration and every effect that depends on it. Returns the spell's name. */
 export function dropConcentration(live: Live, registry: Registry): string | undefined {
   const concentration = live.concentration;

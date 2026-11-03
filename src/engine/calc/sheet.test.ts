@@ -156,6 +156,7 @@ describe('computeSheet: The Fool (TEST_CHARACTER §4)', () => {
     expect(sheet.attacks).toEqual([
       expect.objectContaining({
         name: 'Rapier',
+        type: 'melee',
         ability: 'DEX',
         proficient: true,
         toHit: expect.objectContaining({ value: 4 }),
@@ -292,11 +293,70 @@ describe('computeSheet: changes', () => {
     );
     // Martial ranged weapon: DEX, not proficient, flat 1 damage + DEX.
     expect(blowgun).toMatchObject({
+      type: 'ranged',
       ability: 'DEX',
       proficient: false,
       toHit: { value: 2 },
       damage: { bonus: 3, type: 'piercing' },
     });
     expect(blowgun?.damage?.dice).toBeUndefined();
+  });
+
+  it('ignores zero-quantity equipped weapons, armor and shields without rewriting imported inventory', () => {
+    const equipped = wearing('item.chain-mail', 'item.shield', 'item.shortbow');
+    const absent = new Set([
+      'rapier-1',
+      'dagger-1',
+      'item.chain-mail-test',
+      'item.shield-test',
+      'item.shortbow-test',
+    ]);
+    const imported = {
+      ...equipped,
+      live: {
+        ...equipped.live,
+        items: Object.fromEntries(
+          Object.entries(equipped.live.items).map(([id, item]) => [
+            id,
+            absent.has(id) ? { ...item, qty: 0, equipped: true } : item,
+          ]),
+        ),
+      },
+    };
+    const before = structuredClone(imported);
+    const result = computeSheet(imported, registry);
+    expect(result.attacks).toEqual([]);
+    expect(result.ac.value).toBe(12);
+    expect(result.speed.value).toBe(30);
+    expect(imported).toEqual(before);
+    expect(imported.live.items['rapier-1']).toMatchObject({ qty: 0, equipped: true });
+    expect(imported.live.items['item.chain-mail-test']).toMatchObject({ qty: 0, equipped: true });
+  });
+
+  it('floors resolved flat damage at zero while retaining penalties in variable dice formulas', () => {
+    const equipped = wearing('item.blowgun', 'item.shortbow');
+    const lowDex = computeSheet(
+      {
+        ...equipped,
+        build: {
+          ...equipped.build,
+          abilityScores: {
+            ...equipped.build.abilityScores,
+            base: { ...equipped.build.abilityScores.base, DEX: 1 },
+          },
+        },
+      },
+      registry,
+    );
+    expect(lowDex.abilities.DEX.mod).toBe(-4);
+    expect(lowDex.attacks.find((attack) => attack.itemId === 'item.blowgun')?.damage).toEqual({
+      bonus: 0,
+      type: 'piercing',
+    });
+    expect(lowDex.attacks.find((attack) => attack.itemId === 'item.shortbow')?.damage).toEqual({
+      dice: '1d6',
+      bonus: -4,
+      type: 'piercing',
+    });
   });
 });

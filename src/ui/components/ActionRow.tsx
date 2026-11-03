@@ -15,6 +15,8 @@ interface ActionRowProps {
   auxiliaryAction?: ReactNode;
   actionLabel: string;
   onAction: MouseEventHandler<HTMLButtonElement>;
+  /** Disable only actions that cannot be used in the current context. */
+  disabled?: boolean;
   /** The economy slot this costs is spent. Dims the button; it still works (warns later, D10). */
   spent?: string;
   /** Keep choices reachable while indicating an unavailable resource. */
@@ -40,6 +42,7 @@ export function ActionRow({
   auxiliaryAction,
   actionLabel,
   onAction,
+  disabled,
   spent,
   unavailable,
   tone,
@@ -87,9 +90,11 @@ export function ActionRow({
       <button
         type="button"
         onClick={onAction}
+        disabled={disabled}
         className={cx(
           'hover-lift min-h-11 shrink-0 rounded-btn border border-border bg-surface-2 px-3 font-semibold text-accent',
           'transition-opacity duration-(--omni-motion-dim)',
+          'disabled:cursor-not-allowed disabled:opacity-40',
           (spent || unavailable) && 'opacity-40',
         )}
       >

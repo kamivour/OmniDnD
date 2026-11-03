@@ -158,6 +158,7 @@ interface LiveState {
     turnActive: boolean;                           // between Start Turn and End Turn
     economy: { actionUsed: boolean; bonusUsed: boolean; reactionUsed: boolean;
                movementUsed: number; objectInteractionUsed: boolean;
+               dashCount?: number;                // extra movement allowances, removed at End Turn
                bonusActionSpellCast: boolean;      // bonus-action spell rule
                otherSpellCast: boolean };          // any spell but a 1-action cantrip
   };
@@ -169,6 +170,8 @@ interface LiveState {
 **Concentration vs effects (D41):** `concentration` is the caster's own state. `effects` holds only effects whose target is this character. Faerie Fire cast on enemies sets `concentration` and adds nothing to `effects`.
 
 **Store "used", not "remaining".** Maximums are computed from the build, so a level-up or override never desyncs live values.
+
+**Dash (M5):** optional `combat.economy.dashCount` counts extra allowances from the current turn. The engine derives movement capacity from current speed and this count. Older version 1 files omit it and read as zero; ordinary turns keep their existing shape. End Turn removes it, and Undo restores it through the existing patches. No database migration rewrites saved characters.
 
 **Max HP is never stored.** It is computed from `hpEntries` + current CON modifier + modifiers (e.g., exhaustion 4 halves it).
 

@@ -209,6 +209,8 @@ export const EconomySchema = z.strictObject({
   reactionUsed: z.boolean(),
   /** Feet moved this turn. */
   movementUsed: NonNegativeInt,
+  /** Extra movement allowances from Dash; absent in legacy/default turns. */
+  dashCount: NonNegativeInt.optional(),
   objectInteractionUsed: z.boolean(),
   /** Bonus-action spell rule: a spell was cast as a bonus action this turn. */
   bonusActionSpellCast: z.boolean(),

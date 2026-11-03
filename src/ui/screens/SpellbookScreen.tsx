@@ -4,7 +4,6 @@ import { registry } from '../../data/registry';
 import { adjustSlot, setSpellFavorite, spellCastDetails } from '../../engine/commands';
 import { SchoolSchema } from '../../engine/schema';
 import { useCommand } from '../commands/command-context';
-import { SpellCard } from '../components/cards';
 import { Sheet } from '../components/Sheet';
 import { PipStepper } from '../components/PipStepper';
 import { SectionLabel } from '../components/SectionLabel';
@@ -18,6 +17,7 @@ import { SPELL_TYPE_ORDER, SPELL_TYPES, type SpellType } from '../spellTypes';
 import { spellbookModel } from '../spells/spellbook-model';
 import { SpellCastControls } from '../spells/SpellCastControls';
 import { SpellManage } from '../spells/SpellManage';
+import { LiveSpellDetail } from '../spells/LiveSpellDetail';
 
 interface Filters {
   query: string;
@@ -404,38 +404,6 @@ export function SpellbookScreen() {
           />
         )}
       </Sheet>
-    </div>
-  );
-}
-
-/** Pinned content reads current values instead of retaining a snapshot of the slot pool. */
-function LiveSpellDetail({
-  spellId,
-  classId,
-  returnFocusTo,
-  onApplied,
-}: {
-  spellId: string;
-  classId: string;
-  returnFocusTo?: HTMLElement;
-  onApplied?: () => void;
-}) {
-  const { state, sheet } = useCharacter();
-  const model = spellbookModel(state, sheet, registry);
-  const entry = model.entries.find(
-    (entry) => entry.spell.id === spellId && entry.classId === classId,
-  );
-  if (!entry) return <p className="text-sm text-text-muted">This spell is no longer selected.</p>;
-  return (
-    <div className="flex flex-col gap-4">
-      <SpellCard spell={entry.spell} dc={entry.dc} attack={entry.attack} />
-      <SpellCastControls
-        key={`${classId}:${spellId}`}
-        spellId={spellId}
-        classId={classId}
-        returnFocusTo={returnFocusTo}
-        onApplied={onApplied}
-      />
     </div>
   );
 }

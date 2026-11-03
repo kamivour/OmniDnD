@@ -1,6 +1,7 @@
 /** Every state change goes through one of these commands and `runCommand` (logged, undoable). */
 export * from './runner';
 export * from './combat';
+export * from './actions';
 export * from './effects';
 export * from './features';
 export * from './favorites';
