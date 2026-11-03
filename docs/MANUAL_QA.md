@@ -127,4 +127,13 @@ M4 implementation is complete; the checklist above is the manual follow-up. Stan
 - [ ] Navigate to Spells and back, then refresh. The same round/status should remain. Undo last command should remove the started fight and retain all previous character values after another refresh.
 - [ ] Start combat by keyboard at desktop and 375 px widths. Focus should move to the updated combat status; no controls should overflow the viewport.
 
-Combat startup is live. The action preview remains separate while the remaining M5 controls are wired to saved state.
+Combat startup and turn economy are live. The action preview remains separate while the remaining M5 controls are wired to saved state.
+
+## Phase 1 — M5: turns and economy
+
+- [ ] Start combat, then Start Turn. Check Round 1, Your turn, all three economy controls available, and full computed movement. The first turn must not advance the clock.
+- [ ] Tap Action, Bonus, and React to spend each; tap again to restore it. Confirm HP, spell slots, and feature uses stay unchanged. Use −5 to spend movement and +5 to give it back; refresh and verify the saved values.
+- [ ] Spend the reaction and some movement, then End Turn. They should stay spent while waiting. Start Turn again: check Round 2, six seconds added to the game clock, and all economy/movement restored. Undo should restore the exact previous waiting state and clock after refresh.
+- [ ] While waiting, spend React. It should work without an off-turn warning. Try Action or movement: Cancel should preserve values and return focus to the same control, including a native phone tap. Do anyway should apply one logged override.
+- [ ] Spend all movement, then try another −5. Cancel should retain zero remaining; Do anyway should keep the displayed remainder at zero rather than negative. Undo should restore the previous used amount. A condition that reduces speed should immediately change the displayed maximum.
+- [ ] At 375 px and desktop width, use keyboard Enter/Space through Start Turn, End Turn, and economy toggles. Focus should remain on the changing turn button; warnings should preserve usable focus. Check there is no horizontal scrolling.

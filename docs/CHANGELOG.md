@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 10:19 — Live turn controls and movement
+
+- Start and end your own turns from Combat. The first turn stays in round 1 without advancing time; each later turn advances the round and clock by six seconds, restoring action, bonus action, reaction, and movement.
+- Tap economy controls to spend or restore them manually. Use −5/+5 to spend or return movement against the character's computed speed. End Turn keeps spent resources until the next turn starts.
+- Off-turn actions and excess movement use the existing warnings. Cancel preserves state and focus; Do anyway logs an override. Reactions remain usable off-turn. Every change saves and supports Undo after refresh.
+- Validation: 620 unit tests and 30 focused Combat browser checks pass without retries (4 expected width skips); typecheck, lint, and build pass. Phone/desktop layouts and native touch warning focus were checked using the optional real-HTTP forwarder.
+- Manual turn checks are in `docs/MANUAL_QA.md`. Combat actions, HP, and status/log are the next M5 work and remain labeled as a preview.
+
 ## 2026-11-03 03:02 — Combat starts from saved character state
 
 - Start combat from the Combat screen. The header shows the saved round and whether your turn is active, waiting, or has not started yet. Initiative is computed for reference; there is no initiative order or roll entry.

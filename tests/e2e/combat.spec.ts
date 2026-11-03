@@ -11,7 +11,12 @@ test('no initiative order; the live header starts outside combat', async ({ page
   await expect(page.getByRole('button', { name: 'Start combat', exact: true })).toBeVisible();
 });
 
-test('economy shows Action used, Bonus and Reaction available', async ({ page }) => {
+test('live economy shows a manually spent Action with Bonus and Reaction available', async ({
+  page,
+}) => {
+  await page.getByRole('button', { name: 'Start combat', exact: true }).click();
+  await page.getByRole('button', { name: 'Start Turn', exact: true }).click();
+  await page.getByRole('button', { name: 'Action available', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Action used', exact: true })).toHaveAttribute(
     'aria-pressed',
     'true',
@@ -32,8 +37,10 @@ test('tabs switch between action groups', async ({ page }) => {
 });
 
 test('fixture buttons show a toast instead of changing state', async ({ page }) => {
-  await page.getByRole('button', { name: 'Use 5 ft of movement', exact: true }).click();
-  await expect(page.getByRole('status', { name: 'Command feedback' })).toContainText('Move 5 ft');
+  await page.getByRole('button', { name: 'Attack', exact: true }).first().click();
+  await expect(page.getByRole('status', { name: 'Command feedback' })).toContainText(
+    'Attack: Rapier',
+  );
 });
 
 test.describe('mobile', () => {

@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M5 — Combat (live).
-**Next up:** Live economy bar and Start/End Turn controls.
+**Next up:** Live action tabs, standard actions, and weapon attacks.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -98,7 +98,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 ### M5 — Combat (live)
 - [x] Start combat, round counter (no turn order, D42)
-- [ ] Economy bar; Start/End Turn resets
+- [x] Economy bar; Start/End Turn resets
 - [ ] Action tabs; standard actions; weapon attacks
 - [ ] HP panel; concentration save prompt; death saves at 0 HP
 - [ ] Reactions usable off-turn; second reaction warns
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M5 turn controls/economy: Start/End Turn, manual action/bonus/reaction toggles, and movement use the existing engine commands. The first turn keeps the clock; later turns advance 6 seconds and reset economy. End Turn retains spent resources until the next turn. Derived speed and saved flags drive the screen; warnings preserve Cancel/override/focus behavior on touch and keyboard. 620 unit tests and 30 focused Combat browser checks pass without retries (4 expected width skips); typecheck, lint and build pass. 375/1440 layouts checked; manual turn QA added. Next: action tabs, standard actions, weapon attacks.
 
 - 2026-11-03 — M5 combat start: saved combat state and round/turn display replace the fixture header; initiative is derived and remains a reference. Starting combat is one logged command, preserves resources/clock, focuses the updated status, and supports reload/Undo. Other Combat controls remain an explicit preview. 620 unit tests and 18 focused Combat browser checks pass (4 expected width skips); typecheck, lint and build pass. 375/1440 layouts checked; startup manual QA added. Next: economy bar and Start/End Turn.
 

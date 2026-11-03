@@ -1,6 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { Tabs } from 'radix-ui';
-import { startCombat } from '../../engine/commands';
+import { endTurn, startCombat, startTurn, useEconomy } from '../../engine/commands';
 import { useCommand } from '../commands/command-context';
 import { ActionRow } from '../components/ActionRow';
 import { AttackCard, FeatureCard, RuleCard, SpellCard } from '../components/cards';
@@ -32,20 +32,7 @@ import { signed, spellLevelLabel } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
 import { useDetail } from '../layout/detail-context';
 
-const { combat } = fool;
-const economy = combat.economy;
 const ECONOMY_NAME: Record<Cost, string> = { A: 'Action', BA: 'Bonus action', R: 'Reaction' };
-const AVAILABLE: Record<Cost, boolean> = {
-  A: economy.action,
-  BA: economy.bonus,
-  R: economy.reaction,
-};
-
-/** Name of the spent economy slot this cost needs, or undefined if it is still free. */
-function spentFor(cost: Cost | 'Passive' | 'Rest'): string | undefined {
-  if (cost === 'Passive' || cost === 'Rest') return undefined;
-  return AVAILABLE[cost] ? undefined : ECONOMY_NAME[cost];
-}
 
 const HP_LABEL: Record<HpKind, string> = { damage: 'Damage', heal: 'Heal', temp: 'Temp HP' };
 
@@ -69,6 +56,16 @@ export function CombatScreen() {
   const combatStatus = useRef<HTMLDivElement>(null);
   const restoreStatusFocus = useRef(false);
   const liveCombat = state.live.combat;
+  const economy = {
+    action: !liveCombat?.economy.actionUsed,
+    bonus: !liveCombat?.economy.bonusUsed,
+    reaction: !liveCombat?.economy.reactionUsed,
+  };
+  const available: Record<Cost, boolean> = {
+    A: economy.action,
+    BA: economy.bonus,
+    R: economy.reaction,
+  };
   const { pin: setDetail } = useDetail();
 
   useEffect(() => {
@@ -77,6 +74,12 @@ export function CombatScreen() {
       combatStatus.current?.focus();
     }
   }, [events]);
+
+  /** Preview rows reflect the saved economy even before their actions become live. */
+  const spentFor = (cost: Cost | 'Passive' | 'Rest'): string | undefined => {
+    if (cost === 'Passive' || cost === 'Rest') return undefined;
+    return available[cost] ? undefined : ECONOMY_NAME[cost];
+  };
 
   const pinSpell = (spell: SpellView) =>
     setDetail(
@@ -214,7 +217,21 @@ export function CombatScreen() {
               Initiative {signed(sheet.initiative.value)} · reference
             </p>
           </div>
-          {!liveCombat && (
+          {liveCombat ? (
+            <button
+              type="button"
+              onClick={() =>
+                run(
+                  liveCombat.turnActive ? endTurn : startTurn,
+                  null,
+                  combatStatus.current ?? undefined,
+                )
+              }
+              className="min-h-14 rounded-btn bg-accent px-4 font-semibold text-bg sm:min-h-11"
+            >
+              {liveCombat.turnActive ? 'End Turn' : 'Start Turn'}
+            </button>
+          ) : (
             <button
               type="button"
               onClick={() =>
@@ -229,19 +246,35 @@ export function CombatScreen() {
           )}
         </section>
 
-        <section aria-label="Action preview" className="flex flex-col gap-3">
-          <p role="note" className="text-xs text-text-muted">
-            Action preview. Use the HUD and Spellbook for saved changes.
-          </p>
-          <EconomyBar
-            economy={economy}
-            movement={{ left: fool.speed - combat.movementUsed, max: fool.speed }}
-            onToggle={(slot) => act(`Toggle ${slot}`)}
-            onMove={(delta) =>
-              act(delta < 0 ? `Move ${-delta} ft` : `Undo ${delta} ft of movement`)
-            }
-          />
-        </section>
+        {liveCombat && (
+          <section aria-label="Turn economy">
+            <EconomyBar
+              economy={economy}
+              movement={{
+                left: Math.max(0, sheet.speed.value - liveCombat.economy.movementUsed),
+                max: sheet.speed.value,
+              }}
+              onToggle={(slot) =>
+                run(
+                  useEconomy,
+                  { kind: slot, release: !economy[slot] },
+                  combatStatus.current ?? undefined,
+                )
+              }
+              onMove={(delta) =>
+                run(
+                  useEconomy,
+                  { kind: 'movement', feet: -delta },
+                  combatStatus.current ?? undefined,
+                )
+              }
+            />
+          </section>
+        )}
+
+        <p role="note" className="text-xs text-text-muted">
+          Action preview. Use the HUD and Spellbook for saved changes.
+        </p>
 
         <div className="@min-[900px]:hidden">
           <HpButtons onApply={applyHp} />
