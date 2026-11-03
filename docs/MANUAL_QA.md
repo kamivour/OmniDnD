@@ -164,3 +164,11 @@ Action tabs, HP, and concentration-save tracking are live. Effect countdowns and
 - [ ] For Q21, already-zero HP plus temporary HP can produce competing instant-death interpretations. The current remainder-based default shows a DM-review note in Assisted when outcomes differ. Confirm the table's ruling; this default is not a settled ruling. Manual suppresses the reminder. Undo remains available.
 
 Current concentration and HP are live across character routes. Remaining effect countdowns and Combat log presentation are still previews until their scheduled M5 task.
+
+## Phase 1 — M5: reactions
+
+- [ ] Start combat and leave your turn waiting. Use Cutting Words from React: Bardic Inspiration should drop by one, Reaction become used, and action/bonus/movement/HP/slots remain unchanged. Hits, triggers, and the amount subtracted are resolved at the table.
+- [ ] Try an opportunity attack before your next turn. Cancel the second-reaction warning by keyboard and phone tap; saved values and focus must stay unchanged. Do anyway should log one override. Refresh and Undo each reaction separately; undoing the second reaction must not erase the first.
+- [ ] Use a Readied action response. Only the reaction should be spent, with no spell slot or feature charge inferred. End Turn must keep the reaction spent; Start Turn should restore it. Dead characters' Readied Use must disable, while manual economy corrections and Undo remain available.
+- [ ] At one Bardic Inspiration use left, use Cutting Words from its row and pinned details. The pool should stop at zero, Use disable, and focus remain on a usable preview/detail element. Its explanation should stay reachable. If the character has a reaction spell, verify an off-turn cast spends one available slot and the same reaction pool.
+- [ ] In Manual mode, repeated reactions should apply without warnings or override flags, but empty feature/slot pools must still block spending. Restore Assisted afterward if desired. Check phone and desktop layouts, refresh, and Undo.

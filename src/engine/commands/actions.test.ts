@@ -7,6 +7,7 @@ import { combatMovement, endTurn, startCombat, startTurn, useEconomy } from './c
 import { setExhaustion, toggleCondition } from './effects';
 import { runCommand } from './runner';
 import { freshEconomy } from './shared';
+import { castSpell } from './spells';
 import { freshState, Session, withLive } from './test-utils';
 
 function inTurn(state = freshState) {
@@ -213,6 +214,100 @@ describe('takeCombatAction', () => {
     });
   });
 
+  it('records a readied response off-turn with only a reaction spend, retaining effects and exact Undo', () => {
+    const preparing = new Session();
+    preparing.run(castSpell, { spellId: 'spell.invisibility', slotLevel: 2, onSelf: true });
+    const session = inTurn(preparing.state);
+    session.run(useEconomy, { kind: 'action' });
+    session.run(useEconomy, { kind: 'bonus' });
+    session.run(useEconomy, { kind: 'object' });
+    session.run(useEconomy, { kind: 'movement', feet: 7 });
+    session.run(endTurn, null);
+    const before = structuredClone(session.state);
+    const events = session.events.length;
+
+    expect(session.run(takeCombatAction, { action: 'readied-response' })).toBe(
+      'Reaction: Readied action',
+    );
+    expect(session.events).toHaveLength(events + 1);
+    expect(session.events.at(-1)?.command).toBe('takeCombatAction');
+    expect(session.state).toEqual({
+      ...before,
+      live: {
+        ...before.live,
+        combat: {
+          ...before.live.combat!,
+          economy: { ...before.live.combat!.economy, reactionUsed: true },
+        },
+      },
+    });
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('shares the readied response reaction pool, leaving cancellation unchanged and logging override', () => {
+    const session = inTurn();
+    session.run(endTurn, null);
+    session.run(takeCombatAction, { action: 'readied-response' });
+    const before = structuredClone(session.state);
+    const events = structuredClone(session.events);
+    expect(
+      session.preview(takeCombatAction, {
+        action: 'weapon-attack',
+        instanceId: 'dagger-1',
+        reaction: true,
+      }),
+    ).toEqual({ result: 'warn', reasons: ['Reaction already used'] });
+    expect(session.try(takeCombatAction, { action: 'readied-response' })).toEqual({
+      result: 'warn',
+      reasons: ['Reaction already used'],
+    });
+    expect(session.state).toEqual(before);
+    expect(session.events).toEqual(events);
+    session.run(takeCombatAction, { action: 'readied-response' }, true);
+    expect(session.events.at(-1)?.override).toBe(true);
+    expect(session.live.combat?.economy.reactionUsed).toBe(true);
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('blocks a readied response outside combat or when dead, preserving manual economy corrections', () => {
+    const dead = withLive(inTurn().state, {
+      hp: 0,
+      deathSaves: { success: 0, fail: 3 },
+      conditions: [],
+    });
+    for (const [state, reason] of [
+      [freshState, 'Not in combat'],
+      [dead, 'You are dead'],
+    ] as const) {
+      const before = structuredClone(state);
+      for (const automation of ['assisted', 'manual'] as const) {
+        expect(
+          runCommand(takeCombatAction, state, { action: 'readied-response' }, registry, {
+            eventId: 'blocked-readied-response',
+            realTime: '2026-11-03T03:00:00.000Z',
+            force: true,
+            automation,
+          }),
+        ).toEqual({ result: 'blocked', reasons: [reason] });
+        expect(state).toEqual(before);
+      }
+    }
+    const session = new Session(dead);
+    expect(session.run(useEconomy, { kind: 'reaction' })).toBe('Reaction used');
+    expect(session.live.combat?.economy.reactionUsed).toBe(true);
+    const spent = structuredClone(session.state);
+    expect(session.run(useEconomy, { kind: 'reaction', release: true })).toBe(
+      'Reaction available again',
+    );
+    expect(session.live.combat?.economy.reactionUsed).toBe(false);
+    session.undo();
+    expect(session.state).toEqual(spent);
+    session.undo();
+    expect(session.state).toEqual(dead);
+  });
+
   it('derives melee/ranged eligibility and allows an explicit non-melee reaction override', () => {
     const session = inTurn(withWeapon('item.shortbow', 'bow-1'));
     expect(session.sheet.attacks.find(({ instanceId }) => instanceId === 'bow-1')?.type).toBe(
@@ -239,6 +334,9 @@ describe('takeCombatAction', () => {
     { action: 'unknown' },
     { action: 'attack', instanceId: 'rapier-1' },
     { action: 'dash', reaction: true },
+    { action: 'readied-response', reaction: true },
+    { action: 'readied-response', instanceId: 'rapier-1' },
+    { action: 'readied-response', label: 'Attack' },
     { action: 'weapon-attack' },
     { action: 'weapon-attack', instanceId: '' },
     { action: 'weapon-attack', instanceId: 3 },

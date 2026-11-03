@@ -118,6 +118,7 @@ export const STANDARD_ACTIONS: readonly {
 
 const TakeCombatActionPayloadSchema = z.union([
   z.strictObject({ action: StandardActionIdSchema }),
+  z.strictObject({ action: z.literal('readied-response') }),
   z.strictObject({
     action: z.literal('weapon-attack'),
     instanceId: z.string().min(1),
@@ -134,7 +135,9 @@ export const takeCombatAction: Command<TakeCombatActionPayload> = {
     if (!parsed.success) return [block('Combat action details are invalid')];
     const choice = parsed.data;
     const checks = [...deadCheck(ctx), ...notInCombat(ctx)];
-    const reaction = choice.action === 'weapon-attack' && choice.reaction === true;
+    const reaction =
+      choice.action === 'readied-response' ||
+      (choice.action === 'weapon-attack' && choice.reaction === true);
     if (choice.action === 'weapon-attack') {
       const weapon = ctx.sheet.attacks.find((attack) => attack.instanceId === choice.instanceId);
       if (!weapon) checks.push(block('That weapon is not equipped or available'));
@@ -146,8 +149,12 @@ export const takeCombatAction: Command<TakeCombatActionPayload> = {
   },
   apply: ({ live }, payload, ctx) => {
     const choice = TakeCombatActionPayloadSchema.parse(payload);
-    const reaction = choice.action === 'weapon-attack' && choice.reaction === true;
+    const reaction =
+      choice.action === 'readied-response' ||
+      (choice.action === 'weapon-attack' && choice.reaction === true);
     spendEconomy(live, reaction ? 'reaction' : 'action');
+    // The response is resolved at the table; no attack, cast or held-spell outcome is inferred.
+    if (choice.action === 'readied-response') return 'Reaction: Readied action';
     if (choice.action === 'dash' && live.combat)
       live.combat.economy.dashCount = (live.combat.economy.dashCount ?? 0) + 1;
     const attacks =

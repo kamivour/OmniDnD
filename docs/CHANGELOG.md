@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 20:32 — Reactions verified and boundary fixes
+
+- Verified off-turn Cutting Words, opportunity attacks, Readied responses, and reaction spells. They share one reaction pool; a second use warns, Cancel changes nothing, and Do anyway records an override. Start Turn restores the reaction; End Turn keeps it spent.
+- Readied responses now use the validated action command, so dead characters cannot spend them. Manual economy corrections remain available. Trigger and response outcomes stay decisions at the table.
+- Using the final feature charge now leaves focus on a usable row preview or pinned detail container. Empty resource pools remain blocked, including Manual mode. Refresh and Undo preserve exact counts and histories.
+- Validation: 764 unit tests and 42 focused browser checks pass without retries, including 16 reaction checks (4 expected width skips); typecheck, lint, and build pass. Phone/desktop layouts checked using the optional real-HTTP forwarder.
+- Manual reaction checks are in `docs/MANUAL_QA.md`. Next: verify the bonus-action-spell flow, then live effect countdowns/log and ending combat.
+
 ## 2026-11-03 15:55 — Live HP, concentration checks, and death saves
 
 - Combat and HUD now share saved damage, healing, temporary HP, and critical-at-zero controls. Warning Cancel keeps the editor, amount, and Apply focus; success closes it correctly. Desktop popover dismissal and focus after revival were reproduced and fixed.

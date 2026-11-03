@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M5 — Combat (live).
-**Next up:** Verify off-turn reactions and the second-reaction warning in the live UI.
+**Next up:** Verify the live bonus-action-spell rule and its warning/override flow.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -101,7 +101,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Economy bar; Start/End Turn resets
 - [x] Action tabs; standard actions; weapon attacks
 - [x] HP panel; concentration save prompt; death saves at 0 HP
-- [ ] Reactions usable off-turn; second reaction warns
+- [x] Reactions usable off-turn; second reaction warns
 - [ ] Bonus-action-spell rule
 - [ ] Effects with round countdown; log + Undo
 - [ ] End combat converts rounds to game time
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M5 reactions verified: off-turn Cutting Words, melee opportunity attacks, Readied responses and reaction spells share one reaction pool, with second-use warnings, explicit override, Manual behavior and durable Undo. Reproduced/fixed actual Readied responses bypassing dead checks and final feature-use focus loss (D81); manual economy corrections remain available. 764 unit tests and 42 focused browser checks pass without retries, including 16 reaction checks (4 expected width skips); typecheck, lint and build pass. 375/1440 layouts checked; manual reaction QA added. Next: bonus-action-spell rule.
 
 - 2026-11-03 — M5 HP/saves: shared live HUD/Combat damage, heal, temp and critical-at-zero inputs; durable per-damage concentration requests with explicit logged Pass/Fail and exact Undo (D79). Manual creates no new reminders and preserves old checks for explicit review. Death saves support natural d20 plus manual external modifiers, stable/dead states and natural1/20 outcomes; absorbed damage at0 still adds failures (D80), with Q21 flagged for the ambiguous massive-damage threshold. Real browser failures reproduced and fixed desktop HUD warning dismissal and revival focus. 758 unit tests and 266 full browser checks pass without retries (32 expected skips); typecheck, lint and build pass. 375/1440 HP/save layouts checked; manual QA added. Next: off-turn reactions/second-use warning.
 

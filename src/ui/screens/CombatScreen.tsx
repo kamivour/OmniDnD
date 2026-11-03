@@ -5,6 +5,7 @@ import {
   combatMovement,
   endTurn,
   endConcentration,
+  healthDetails,
   STANDARD_ACTIONS,
   startCombat,
   startTurn,
@@ -80,6 +81,7 @@ export function CombatScreen() {
     ? model.spells.entries
     : combatSpellsForEconomy(model.spells.entries, liveCombat);
   const movement = combatMovement({ live: state.live, sheet });
+  const health = healthDetails({ live: state.live, sheet });
   const economy = {
     action: !liveCombat?.economy.actionUsed,
     bonus: !liveCombat?.economy.bonusUsed,
@@ -188,8 +190,24 @@ export function CombatScreen() {
       actionLabel="Use"
       disabled={!!unavailableReason}
       onAction={(event) => {
-        event.currentTarget.focus();
-        run(useFeature, { featureId: feature.id }, combatStatus.current ?? undefined);
+        const opener = event.currentTarget;
+        const preview = opener.closest('li')?.querySelector<HTMLButtonElement>('button');
+        opener.focus();
+        run(
+          useFeature,
+          { featureId: feature.id },
+          preview ?? combatStatus.current ?? undefined,
+          () => {
+            requestAnimationFrame(() => {
+              if (!opener.matches(':disabled')) return;
+              const target =
+                preview?.isConnected && preview.getClientRects().length && !preview.disabled
+                  ? preview
+                  : combatStatus.current;
+              if (target?.isConnected && target.getClientRects().length) target.focus();
+            });
+          },
+        );
       }}
       spent={spentFor(feature.cost)}
       unavailable={!!unavailableReason}
@@ -530,16 +548,20 @@ export function CombatScreen() {
                 iconId="rule.Ready"
                 name="Readied action"
                 badges={<CostBadge cost="R" />}
-                meta="Resolve the chosen trigger and response at the table."
+                meta={
+                  health.status === 'dead'
+                    ? 'You are dead. This reaction is unavailable.'
+                    : 'Resolve the chosen trigger and response at the table.'
+                }
                 actionLabel="Use"
-                disabled={!liveCombat}
+                disabled={!liveCombat || health.status === 'dead'}
                 spent={spentFor('R')}
                 unavailable={!liveCombat}
                 onAction={(event) => {
                   event.currentTarget.focus();
                   run(
-                    useEconomy,
-                    { kind: 'reaction', label: 'Readied action' },
+                    takeCombatAction,
+                    { action: 'readied-response' },
                     combatStatus.current ?? undefined,
                   );
                 }}
@@ -745,13 +767,21 @@ function LiveFeatureDetail({
         className={actionButton}
         disabled={!!entry.unavailableReason}
         onClick={(event) => {
-          event.currentTarget.focus();
-          run(
-            useFeature,
-            { featureId },
-            returnFocusTo ?? container.current ?? undefined,
-            onApplied,
-          );
+          const opener = event.currentTarget;
+          opener.focus();
+          run(useFeature, { featureId }, returnFocusTo ?? container.current ?? undefined, () => {
+            onApplied?.();
+            if (onApplied) return;
+            requestAnimationFrame(() => {
+              if (
+                opener.matches(':disabled') &&
+                container.current?.isConnected &&
+                container.current.getClientRects().length
+              ) {
+                container.current.focus();
+              }
+            });
+          });
         }}
       >
         Use {entry.feature.name}
