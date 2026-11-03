@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M6 — Rest + Dashboard (live).
-**Next up:** Verify rest clock advancement, then live Dashboard resources/effects/log.
+**Next up:** Live Dashboard resources, effects, conditions, quick access, and recent log.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -109,7 +109,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ### M6 — Rest + Dashboard (live)
 - [x] Short Rest dialog: Hit Dice spending, Song of Rest, preview diff
 - [x] Long Rest dialog: 24 h + 0 HP checks, Hit Dice half cap, preview diff
-- [ ] Rests advance game clock
+- [x] Rests advance game clock
 - [ ] Dashboard: resources, effects, conditions, quick access, recent log
 
 ### M7 — Character Sheet + Exploration
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M6 rest clock gate verified against unchanged runtime code: Short Rest advances exactly 3600 seconds, Long Rest 28800, with midnight crossing, deadline expiry, pre-command log timestamps, durable reload and exact Undo. Draft/preview/Cancel and blocked attempts leave the clock untouched. Reused matching 813-unit/97-focused-browser proof from the completed rest tasks; typecheck, lint and build remain current. Manual game-time checks added. Next: live Dashboard.
 
 - 2026-11-03 — M6 Long Rest: shared recovery diff includes HP/resources, half-cap Hit Dice, temporary HP, exhaustion, death saves, last-rest time and expiry. Warned projections remain read-only while actual Apply uses normal Assisted/Manual/Block checks; eligible prepared casters can review through the existing manager after success (D87). Reproduced/fixed focus escaping a warned rest-to-manager transition with a late-resolved return target (D88). 813 unit tests and 97 focused browser checks pass without retries (9 expected width skips); typecheck, lint and build pass. 375/768/1440 layouts and warning/Tab/reload/Undo checked; manual QA added. Next: rest clock verification, then live Dashboard.
 

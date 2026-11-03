@@ -4,6 +4,13 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 22:38 — Rest game-clock verification
+
+- Confirmed Short Rest adds one hour and Long Rest eight hours only when applied. Drafting, previewing, canceling, and blocked attempts leave saved time unchanged.
+- Confirmed midnight crossing, effect/concentration expiry, saved rest times, refresh, and exact Undo. Log timestamps correctly show the game time before each command.
+- Reused the current passing rest tests and browser checks; no runtime changes were needed. Manual game-time checks are in `docs/MANUAL_QA.md`.
+- Next: make Dashboard resources, effects, conditions, quick access, and recent log live.
+
 ## 2026-11-03 22:36 — Long Rest with recovery preview
 
 - Long Rest now opens from the desktop HUD, phone More menu, and tablet toolbar. Its full preview shows recovery, the half-total Hit Dice cap, temporary HP, exhaustion, death saves, game time, and effect expiry before anything changes.

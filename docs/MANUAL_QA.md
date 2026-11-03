@@ -219,3 +219,8 @@ M5 implementation is complete; the sections above are the manual follow-up. The 
 - [ ] At zero HP, in combat, or dead, Apply should disable with an explanation. Manual should suppress the interval warning and override marker while retaining those Blocks. Restore Assisted afterward if desired.
 - [ ] On a prepared caster, keep Review prepared spells after resting checked. Success should open Manage spells on the first eligible prepared class without changing any selection. Check first-rest and warned Do anyway flows keep focus inside Manage, including Tab/Shift+Tab wrapping. Close without edits, refresh, and Undo the rest: the exact previous resources, clock, effects, and pending checks should return. Uncheck review to close normally; Bard and Paladin 1 should not offer it.
 - [ ] At 375 px, tablet, and desktop width, check long labels, scroll to Apply/Cancel, and verify nested warning controls do not lose the underlying rest. Refresh and Undo after recovery and after expiry should restore the entire prior state.
+
+## Phase 1 — M6: rest game time
+
+- [ ] Read the Game clock row, draft a Short Rest, then Cancel. Reopen: saved time should be unchanged. Apply a Short Rest and confirm exactly one hour is added; a Long Rest should add eight. Waiting in real time or leaving a preview open must add nothing.
+- [ ] With a late-night imported state, check Long Rest crosses to the next day correctly. Effects due within the rest should expire; later and untimed effects should remain. Refresh, Undo, and reopen the preview to confirm the exact previous clock, effects, concentration requests, and resources return.
