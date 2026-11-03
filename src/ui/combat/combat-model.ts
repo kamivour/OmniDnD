@@ -1,5 +1,5 @@
 import type { CharacterState, Sheet, WeaponAttack } from '../../engine/calc/sheet';
-import { featureUseDetails } from '../../engine/commands';
+import { bonusActionSpellChecks, featureUseDetails } from '../../engine/commands';
 import type { Registry } from '../../engine/registry';
 import type { FeatureView } from '../fixtures/the-fool';
 import { signed } from '../format';
@@ -36,10 +36,14 @@ function damageText(dice: string | undefined, bonus: number): string {
 /** Default tab visibility only; the engine still checks every attempted cast and exception. */
 export function combatSpellsForEconomy(
   entries: readonly SpellbookEntry[],
-  combat: CharacterState['live']['combat'],
+  live: CharacterState['live'],
+  registry: Registry,
 ): SpellbookEntry[] {
+  const combat = live.combat;
   if (!combat) return [...entries];
   return entries.filter(({ spell }) => {
+    const def = registry.get('spell', spell.id);
+    if (bonusActionSpellChecks({ live }, def).some(({ level }) => level === 'warn')) return false;
     if (spell.cost === 'R') return !combat.economy.reactionUsed;
     if (spell.cost === 'BA') return combat.turnActive && !combat.economy.bonusUsed;
     return combat.turnActive && !combat.economy.actionUsed;

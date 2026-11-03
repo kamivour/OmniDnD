@@ -79,7 +79,7 @@ export function CombatScreen() {
   const model = combatModel(state, sheet, registry);
   const visibleSpells = showAllSpells
     ? model.spells.entries
-    : combatSpellsForEconomy(model.spells.entries, liveCombat);
+    : combatSpellsForEconomy(model.spells.entries, state.live, registry);
   const movement = combatMovement({ live: state.live, sheet });
   const health = healthDetails({ live: state.live, sheet });
   const economy = {

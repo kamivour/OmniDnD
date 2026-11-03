@@ -2,6 +2,15 @@ import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { seedFile } from '../../data/seed';
 import { computeSheet, type CharacterState } from '../../engine/calc/sheet';
+import {
+  castSpell,
+  endTurn,
+  startCombat,
+  startTurn,
+  useEconomy,
+  useFeature,
+} from '../../engine/commands';
+import { Session } from '../../engine/commands/test-utils';
 import { buildRegistry, type Registry } from '../../engine/registry';
 import type { FeatureDef } from '../../engine/schema';
 import { combatModel, combatSpellsForEconomy } from './combat-model';
@@ -21,6 +30,35 @@ function equip(character: CharacterState, itemId: string, instanceId = itemId) {
 
 function extraFeatures(...features: FeatureDef[]): Registry {
   return buildRegistry([[...registry.entries.values(), ...features]], [], []);
+}
+
+function spellSession(): Session {
+  const character = state();
+  character.build.spells = [
+    {
+      classId: 'class.bard',
+      known: [
+        'spell.vicious-mockery',
+        'spell.healing-word',
+        'spell.shillelagh',
+        'spell.shield',
+        'spell.mending',
+        'spell.find-familiar',
+        'spell.dissonant-whispers',
+      ],
+    },
+  ];
+  character.live.slotsUsed = character.live.slotsUsed.map(() => 0);
+  const session = new Session(character);
+  session.run(startCombat, null);
+  session.run(startTurn, null);
+  return session;
+}
+
+function visibleSpellIds(session: Session): string[] {
+  return combatSpellsForEconomy(model(session.state).spells.entries, session.live, registry).map(
+    ({ spell }) => spell.id,
+  );
 }
 
 describe('combatModel', () => {
@@ -199,7 +237,7 @@ describe('combatModel', () => {
       },
     ];
     const entries = model(character).spells.entries;
-    expect(combatSpellsForEconomy(entries, undefined)).toEqual(entries);
+    expect(combatSpellsForEconomy(entries, character.live, registry)).toEqual(entries);
     character.live.combat = {
       round: 1,
       turnActive: true,
@@ -214,27 +252,108 @@ describe('combatModel', () => {
       },
     };
     const combat = character.live.combat;
-    expect(combatSpellsForEconomy(entries, combat)).toHaveLength(5);
+    expect(combatSpellsForEconomy(entries, character.live, registry)).toHaveLength(5);
     // Minute/hour choices stay under Action; their casting warnings remain engine-owned.
     expect(
-      combatSpellsForEconomy(entries, combat).filter(({ spell }) => / (min|h)$/.test(spell.cost)),
+      combatSpellsForEconomy(entries, character.live, registry).filter(({ spell }) =>
+        / (min|h)$/.test(spell.cost),
+      ),
     ).toHaveLength(2);
     combat.turnActive = false;
-    expect(combatSpellsForEconomy(entries, combat).map(({ spell }) => spell.id)).toEqual([
-      'spell.shield',
-    ]);
+    expect(
+      combatSpellsForEconomy(entries, character.live, registry).map(({ spell }) => spell.id),
+    ).toEqual(['spell.shield']);
     combat.turnActive = true;
     combat.economy.actionUsed = true;
-    expect(combatSpellsForEconomy(entries, combat).map(({ spell }) => spell.id)).toEqual([
+    expect(
+      combatSpellsForEconomy(entries, character.live, registry).map(({ spell }) => spell.id),
+    ).toEqual(['spell.healing-word', 'spell.shield']);
+    combat.economy.reactionUsed = true;
+    expect(
+      combatSpellsForEconomy(entries, character.live, registry).map(({ spell }) => spell.id),
+    ).toEqual(['spell.healing-word']);
+    combat.economy.bonusUsed = true;
+    expect(combatSpellsForEconomy(entries, character.live, registry)).toEqual([]);
+    expect(entries).toHaveLength(5);
+  });
+
+  it.each([{ spellId: 'spell.healing-word', slotLevel: 1 }, { spellId: 'spell.shillelagh' }])(
+    'shows only available 1-action cantrips after casting $spellId',
+    (cast) => {
+      const session = spellSession();
+      session.run(castSpell, cast);
+      expect(visibleSpellIds(session)).toEqual(['spell.vicious-mockery']);
+      expect(model(session.state).spells.entries).toHaveLength(7);
+    },
+  );
+
+  it.each(['spell.dissonant-whispers', 'spell.shield'])(
+    'excludes bonus-action spells after an earlier %s cast on this turn',
+    (spellId) => {
+      const session = spellSession();
+      session.run(castSpell, { spellId, slotLevel: 1 });
+      const visible = visibleSpellIds(session);
+      expect(visible).not.toContain('spell.healing-word');
+      expect(visible).not.toContain('spell.shillelagh');
+      expect(visible).toContain(
+        spellId === 'spell.shield' ? 'spell.dissonant-whispers' : 'spell.shield',
+      );
+    },
+  );
+
+  it('permits bonus-action spells after a 1-action cantrip', () => {
+    const session = spellSession();
+    session.run(castSpell, { spellId: 'spell.vicious-mockery' });
+    expect(visibleSpellIds(session)).toEqual([
+      'spell.shillelagh',
       'spell.healing-word',
       'spell.shield',
     ]);
-    combat.economy.reactionUsed = true;
-    expect(combatSpellsForEconomy(entries, combat).map(({ spell }) => spell.id)).toEqual([
-      'spell.healing-word',
+  });
+
+  it('does not infer a spell restriction from a nonspell bonus action', () => {
+    const session = spellSession();
+    session.run(useFeature, { featureId: 'feature.bard.bardic-inspiration' });
+    expect(visibleSpellIds(session)).toContain('spell.dissonant-whispers');
+    expect(visibleSpellIds(session)).toContain('spell.shield');
+    expect(visibleSpellIds(session)).not.toContain('spell.healing-word');
+    session.run(useEconomy, { kind: 'bonus', release: true });
+    expect(visibleSpellIds(session)).toContain('spell.healing-word');
+  });
+
+  it('ends the spell restriction off-turn while keeping spent reactions until the next turn', () => {
+    const session = spellSession();
+    session.run(castSpell, { spellId: 'spell.healing-word', slotLevel: 1 });
+    expect(visibleSpellIds(session)).not.toContain('spell.shield');
+    session.run(endTurn, null);
+    expect(visibleSpellIds(session)).toEqual(['spell.shield']);
+    session.run(castSpell, { spellId: 'spell.shield', slotLevel: 1 });
+    expect(visibleSpellIds(session)).toEqual([]);
+    session.run(startTurn, null);
+    expect(visibleSpellIds(session)).toHaveLength(7);
+  });
+
+  it('filters a view without changing selected or unsupported class spell entries', () => {
+    const session = spellSession();
+    session.state = structuredClone(session.state);
+    session.state.build.spells.push({
+      classId: 'class.wizard',
+      known: ['spell.vicious-mockery', 'spell.healing-word'],
+    });
+    session.run(castSpell, { spellId: 'spell.healing-word', slotLevel: 1 });
+    const characterBefore = structuredClone(session.state);
+    const refsBefore = structuredClone([...registry.entries]);
+    const full = model(session.state).spells;
+    const entriesBefore = structuredClone(full.entries);
+    const visible = combatSpellsForEconomy(full.entries, session.live, registry);
+    expect(visible.map(({ spell, classId }) => [spell.id, classId])).toEqual([
+      ['spell.vicious-mockery', 'class.bard'],
+      ['spell.vicious-mockery', 'class.wizard'],
     ]);
-    combat.economy.bonusUsed = true;
-    expect(combatSpellsForEconomy(entries, combat)).toEqual([]);
-    expect(entries).toHaveLength(5);
+    expect(full.entries).toHaveLength(9);
+    expect(full.unsupportedClassIds).toEqual(['class.wizard']);
+    expect(full.entries).toEqual(entriesBefore);
+    expect(session.state).toEqual(characterBefore);
+    expect([...registry.entries]).toEqual(refsBefore);
   });
 });

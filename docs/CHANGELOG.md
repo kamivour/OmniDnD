@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 20:48 — Bonus-action spell flow verified
+
+- Verified the 2014 restriction in both casting orders: a bonus-action spell shares its turn only with one-action cantrips. Bonus-action cantrips count too; ordinary bonus-action features do not. Own-turn reaction spells obey the restriction, while a still-available reaction after End Turn can be used normally.
+- Default Combat Spells now uses the same engine check as casting, so incompatible spells are filtered from its normal view. Show all spells and the explicit action tabs keep warning/override choices reachable without changing saved selections.
+- Warning Cancel preserves slot, healing choices, and focus. Do anyway spends once and logs an override. Turn changes, refresh, and Undo preserve the correct spell flags; Manual suppresses warnings while empty pools remain blocked.
+- Validation: 772 unit tests, 12 bonus-spell browser checks, and 14 shared action regressions pass; typecheck, lint, and build pass. Phone/desktop warning and retained-choice layouts checked using the optional real-HTTP forwarder.
+- Manual checks are in `docs/MANUAL_QA.md`. Next: live effect countdowns and the Combat log with Undo.
+
 ## 2026-11-03 20:32 — Reactions verified and boundary fixes
 
 - Verified off-turn Cutting Words, opportunity attacks, Readied responses, and reaction spells. They share one reaction pool; a second use warns, Cancel changes nothing, and Do anyway records an override. Start Turn restores the reaction; End Turn keeps it spent.

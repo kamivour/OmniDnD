@@ -109,7 +109,10 @@ function healChecks(spell: SpellDef, details: SpellCastDetails, roll: number): C
  * PHB 2014: after a bonus-action spell, the only other spell you may cast that turn is a cantrip
  * with a casting time of 1 action. Tracked only during your own turn.
  */
-function bonusActionSpellChecks({ live }: CommandContext, spell: SpellDef): Check[] {
+export function bonusActionSpellChecks(
+  { live }: Pick<CommandContext, 'live'>,
+  spell: SpellDef,
+): Check[] {
   const combat = live.combat;
   if (!combat?.turnActive) return [];
   const isBonus = spell.casting.cost === 'bonus';

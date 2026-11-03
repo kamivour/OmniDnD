@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M5 — Combat (live).
-**Next up:** Verify the live bonus-action-spell rule and its warning/override flow.
+**Next up:** Live effect countdowns and Combat log with Undo.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -102,7 +102,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Action tabs; standard actions; weapon attacks
 - [x] HP panel; concentration save prompt; death saves at 0 HP
 - [x] Reactions usable off-turn; second reaction warns
-- [ ] Bonus-action-spell rule
+- [x] Bonus-action-spell rule
 - [ ] Effects with round countdown; log + Undo
 - [ ] End combat converts rounds to game time
 
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M5 bonus-action-spell rule verified in both orders, including BA cantrips, own/off-turn reactions, nonspell bonus features, Manual/Blocks, flag reset and exact durable Undo. Default Spells visibility now reuses the engine's existing 2014 rule check; Show all and explicit action tabs retain exceptions without changing selections (D82). Five visibility regressions reproduced before the fix. 772 unit tests, 12 focused bonus-spell browser checks and 14 shared action regressions pass; typecheck, lint and build pass. 375/1440 warning/retained-choice layouts checked; manual QA added. Next: effect countdowns and Combat log/Undo.
 
 - 2026-11-03 — M5 reactions verified: off-turn Cutting Words, melee opportunity attacks, Readied responses and reaction spells share one reaction pool, with second-use warnings, explicit override, Manual behavior and durable Undo. Reproduced/fixed actual Readied responses bypassing dead checks and final feature-use focus loss (D81); manual economy corrections remain available. 764 unit tests and 42 focused browser checks pass without retries, including 16 reaction checks (4 expected width skips); typecheck, lint and build pass. 375/1440 layouts checked; manual reaction QA added. Next: bonus-action-spell rule.
 
