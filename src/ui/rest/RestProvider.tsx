@@ -1,30 +1,43 @@
-import { useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Sheet } from '../components/Sheet';
+import { SpellManage } from '../spells/SpellManage';
 import { RestContext } from './rest-context';
 import { ShortRestForm } from './ShortRestForm';
+import { LongRestForm } from './LongRestForm';
 
 /** HUD, tablet toolbar, and mobile More share one rest draft and return-focus owner. */
 export function RestProvider({ children }: { children: ReactNode }) {
-  const [shortRestOpen, setShortRestOpen] = useState(false);
-  const opener = useRef<HTMLElement | null>(null);
+  const [kind, setKind] = useState<'short' | 'long' | 'manage' | null>(null);
+  const [opener, setOpener] = useState<HTMLElement | null>(null);
+  const [preparedClass, setPreparedClass] = useState<string | undefined>(undefined);
+  const manageContainer = useRef<HTMLDivElement>(null);
+  const open = (next: 'short' | 'long', control?: HTMLElement) => {
+    setOpener(control ?? (document.activeElement as HTMLElement | null));
+    setKind(next);
+  };
+  useEffect(() => {
+    if (kind === 'manage') manageContainer.current?.focus();
+  }, [kind]);
   return (
     <RestContext
       value={{
-        openShortRest: (control) => {
-          opener.current = control ?? (document.activeElement as HTMLElement | null);
-          setShortRestOpen(true);
-        },
+        openShortRest: (control) => open('short', control),
+        openLongRest: (control) => open('long', control),
       }}
     >
       {children}
       <Sheet
-        open={shortRestOpen}
-        onOpenChange={setShortRestOpen}
-        title="Short Rest"
-        description="One hour of game time. Review rolls and changes before applying."
+        open={kind !== null}
+        onOpenChange={(next) => !next && setKind(null)}
+        title={kind === 'manage' ? 'Manage spells' : kind === 'long' ? 'Long Rest' : 'Short Rest'}
+        description={
+          kind === 'manage'
+            ? 'Review prepared spells after resting. Changes are separate logged commands.'
+            : `${kind === 'long' ? 'Eight hours' : 'One hour'} of game time. Review changes before applying.`
+        }
         onCloseAutoFocus={(event) => {
           event.preventDefault();
-          const target = opener.current;
+          const target = opener;
           if (
             target?.isConnected &&
             target.getClientRects().length &&
@@ -34,7 +47,24 @@ export function RestProvider({ children }: { children: ReactNode }) {
           } else document.getElementById('character-workspace')?.focus();
         }}
       >
-        {shortRestOpen && <ShortRestForm onClose={() => setShortRestOpen(false)} />}
+        {kind === 'short' && <ShortRestForm onClose={() => setKind(null)} />}
+        {kind === 'long' && (
+          <LongRestForm
+            onClose={() => setKind(null)}
+            returnFocusTo={() => manageContainer.current ?? opener}
+            onApplied={(classId) => {
+              if (classId) {
+                setPreparedClass(classId);
+                setKind('manage');
+              } else setKind(null);
+            }}
+          />
+        )}
+        {kind === 'manage' && (
+          <div ref={manageContainer} tabIndex={-1}>
+            <SpellManage initialClassId={preparedClass} onClose={() => setKind(null)} />
+          </div>
+        )}
       </Sheet>
     </RestContext>
   );

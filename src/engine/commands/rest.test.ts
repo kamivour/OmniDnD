@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import { registry } from '../../data/registry';
 import { startCombat } from './combat';
 import { setExhaustion } from './effects';
 import { useFeature } from './features';
 import { applyDamage, setTempHp } from './hp';
 import { adjustHitDice, completeLongRest, completeShortRest } from './rest';
+import { runCommand } from './runner';
 import { castSpell } from './spells';
 import { advanceTime } from './time';
 import { freshState, seedState, Session, withLive } from './test-utils';
@@ -226,8 +228,104 @@ describe('completeLongRest', () => {
       reasons: ['Less than 24 h since last long rest'],
     });
     // Rest starts 24 h after the last one started (16 h after it ended): fine.
-    session.run(advanceTime, { seconds: 16 * 3600 });
+    session.run(advanceTime, { seconds: 16 * 3600 - 1 });
+    expect(session.preview(completeLongRest, null)).toEqual({
+      result: 'warn',
+      reasons: ['Less than 24 h since last long rest'],
+    });
+    session.run(advanceTime, { seconds: 1 });
     expect(session.preview(completeLongRest, null)).toEqual({ result: 'ok', reasons: [] });
+  });
+
+  it('recovers one Hit Die at level 1 and never grants more dice than were spent', () => {
+    const state = structuredClone(freshState);
+    state.build.classes[0]!.level = 1;
+    state.build.hpEntries = state.build.hpEntries.slice(0, 1);
+    state.live.hitDiceSpent = { d8: 1 };
+    const session = new Session(state);
+    expect(session.run(completeLongRest, null)).toContain('1 Hit Die back');
+    expect(session.live.hitDiceSpent).toEqual({});
+    expect(session.sheet.hitDice).toEqual([{ die: 'd8', max: 1 }]);
+    expect(session.run(completeLongRest, null, true)).not.toContain('Hit Die back');
+    expect(session.live.hitDiceSpent).toEqual({});
+  });
+
+  it.each([
+    [{ d8: 2, d6: 3 }, { d6: 3 }, '2 Hit Dice back'],
+    [{ d8: 1, d6: 3 }, { d6: 2 }, '2 Hit Dice back'],
+    [{ d6: 1 }, {}, '1 Hit Die back'],
+  ] as const)(
+    'recovers the shared floor-half budget from spent mixed pools, largest first (%j)',
+    (spent, remaining, note) => {
+      const state = structuredClone(freshState);
+      state.build.classes = [
+        { classId: 'class.bard', level: 2 },
+        { classId: 'class.wizard', level: 3 },
+      ];
+      state.build.hpEntries = Array.from({ length: 5 }, (_, index) => ({
+        level: index + 1,
+        classId: index < 2 ? 'class.bard' : 'class.wizard',
+        value: index === 0 ? 8 : index < 2 ? 5 : 4,
+        method: index === 0 ? 'max' : 'average',
+      }));
+      state.live.hitDiceSpent = { ...spent };
+      const session = new Session(state);
+      expect(session.sheet.hitDice).toEqual([
+        { die: 'd8', max: 2 },
+        { die: 'd6', max: 3 },
+      ]);
+      expect(session.run(completeLongRest, null)).toContain(note);
+      expect(session.live.hitDiceSpent).toEqual(remaining);
+    },
+  );
+
+  it('Manual suppresses the 24-hour warning without marking an override', () => {
+    const session = new Session(seedState);
+    session.run(completeLongRest, null);
+    const before = structuredClone(session.state);
+    const result = runCommand(completeLongRest, session.state, null, registry, {
+      eventId: 'manual-long-rest',
+      realTime: '2026-11-03T10:00:00.000Z',
+      automation: 'manual',
+    });
+    expect(result.result).toBe('ok');
+    if (result.result !== 'ok') return;
+    expect(result.reasons).toEqual([]);
+    expect(result.event.override).toBeUndefined();
+    expect(result.next.live.clock.seconds).toBe(before.live.clock.seconds + 8 * 3600);
+    expect(session.state).toEqual(before);
+  });
+
+  it('health and combat blocks survive force and Manual without changing state or history', () => {
+    const fighting = new Session();
+    fighting.run(startCombat, null);
+    const cases = [
+      [withLive(freshState, { hp: 0, conditions: ['unconscious'] }), "Can't long rest at 0 HP"],
+      [
+        withLive(freshState, { hp: 0, deathSaves: { success: 3, fail: 0 } }),
+        "Can't long rest at 0 HP",
+      ],
+      [withLive(freshState, { hp: 0, deathSaves: { success: 0, fail: 3 } }), 'You are dead'],
+      [withLive(freshState, { exhaustion: 6 }), 'You are dead'],
+      [fighting.state, 'End combat before resting'],
+    ] as const;
+    for (const [state, reason] of cases) {
+      const session = new Session(state);
+      const before = structuredClone({ state: session.state, events: session.events });
+      for (const automation of ['assisted', 'manual'] as const) {
+        for (const force of [false, true]) {
+          expect(
+            runCommand(completeLongRest, session.state, null, registry, {
+              eventId: 'blocked-long-rest',
+              realTime: '2026-11-03T10:00:00.000Z',
+              automation,
+              force,
+            }),
+          ).toEqual({ result: 'blocked', reasons: [reason] });
+          expect({ state: session.state, events: session.events }).toEqual(before);
+        }
+      }
+    }
   });
 
   it('removes one exhaustion level and restores the full max HP', () => {

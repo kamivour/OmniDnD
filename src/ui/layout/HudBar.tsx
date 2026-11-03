@@ -8,7 +8,6 @@ import { Icon } from '../components/Icon';
 import { PipRow } from '../components/PipRow';
 import { StatChip } from '../components/StatChip';
 import { useCommand } from '../commands/command-context';
-import { useFixtureAction } from '../fixtures/useFixtureAction';
 import { useCharacter } from '../hooks/useCharacter';
 import { signed } from '../format';
 import { useRest } from '../rest/rest-context';
@@ -18,8 +17,7 @@ import { HudAdjustments, type HudSelection } from './HudAdjustments';
 export function HudBar() {
   const { state, sheet } = useCharacter();
   const { run } = useCommand();
-  const fixtureAction = useFixtureAction();
-  const { openShortRest } = useRest();
+  const { openShortRest, openLongRest } = useRest();
   const [selection, setSelection] = useState<HudSelection | null>(null);
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const { build, live } = state;
@@ -195,7 +193,8 @@ export function HudBar() {
             </button>
             <button
               type="button"
-              onClick={() => fixtureAction('Long Rest')}
+              aria-label="Long Rest"
+              onClick={(event) => openLongRest(event.currentTarget)}
               className="inline-flex min-h-11 items-center gap-1.5 rounded-btn border border-border bg-surface px-3 text-xs"
             >
               <Moon size={14} aria-hidden />

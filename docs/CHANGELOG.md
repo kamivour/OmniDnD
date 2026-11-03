@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 22:36 — Long Rest with recovery preview
+
+- Long Rest now opens from the desktop HUD, phone More menu, and tablet toolbar. Its full preview shows recovery, the half-total Hit Dice cap, temporary HP, exhaustion, death saves, game time, and effect expiry before anything changes.
+- The 24-hour warning keeps the preview visible. Cancel preserves it and focus; Do anyway applies one logged override. Manual suppresses the warning while zero HP, death, and combat remain blocked. Refresh and Undo restore the entire previous state.
+- Eligible prepared casters can review spells after success in the existing manager, starting on their first prepared class. Opening review changes no selection. Fixed keyboard focus escaping that manager after confirming a warned rest.
+- Validation: 813 unit tests and 97 focused browser checks pass without retries (9 expected width skips); typecheck, lint, and build pass. Phone/tablet/desktop recovery, nested warnings, prepared review, and Short Rest/shared feedback regressions checked using the real-HTTP forwarder.
+- Long Rest manual checks are in `docs/MANUAL_QA.md`. Next: verify rest clock advancement, then make Dashboard live.
+
 ## 2026-11-03 22:20 — Short Rest with rolls and preview
 
 - Open Short Rest from the desktop HUD, phone More menu, or tablet toolbar. Add Hit Dice one at a time and enter the results; CON and projected HP are computed automatically. Cancel or Escape discards the draft without spending anything.

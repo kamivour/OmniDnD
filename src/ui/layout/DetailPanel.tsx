@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
-import { PanelRight, Tent, Undo2, X } from 'lucide-react';
+import { Moon, PanelRight, Tent, Undo2, X } from 'lucide-react';
 import { Sheet } from '../components/Sheet';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { DetailContext, useDetail } from './detail-context';
@@ -45,7 +45,7 @@ export function DetailProvider({ children }: { children: ReactNode }) {
 export function DetailToggle() {
   const { open, setOpen } = useDetail();
   const { undo } = useCommand();
-  const { openShortRest } = useRest();
+  const { openShortRest, openLongRest } = useRest();
   const { events } = useCharacter();
   const canUndo = events.some((event) => event.command !== 'undo' && !event.undoneBy);
   return (
@@ -57,6 +57,13 @@ export function DetailToggle() {
         className="hidden min-h-11 items-center gap-1 text-xs text-text-muted sm:flex lg:hidden"
       >
         <Tent size={16} aria-hidden /> Short Rest
+      </button>
+      <button
+        type="button"
+        onClick={(event) => openLongRest(event.currentTarget)}
+        className="hidden min-h-11 items-center gap-1 text-xs text-text-muted sm:flex lg:hidden"
+      >
+        <Moon size={16} aria-hidden /> Long Rest
       </button>
       <button
         type="button"

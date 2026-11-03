@@ -4,7 +4,7 @@ import { characterStore } from '../../state/character-store';
 import { flushPersistence, storageStatusStore } from '../../state/persistence';
 import { Sheet } from '../components/Sheet';
 import { useToast } from '../components/toast-context';
-import { CommandContext } from './command-context';
+import { CommandContext, type CommandFocusTarget } from './command-context';
 
 /** Shared command feedback: no UI component writes character values directly. */
 export function CommandProvider({
@@ -18,7 +18,7 @@ export function CommandProvider({
   const [notes, setNotes] = useState<string[]>([]);
   const [warning, setWarning] = useState<{ reasons: string[]; confirm: () => void } | null>(null);
   const warningOpener = useRef<HTMLElement | null>(null);
-  const warningFallback = useRef<HTMLElement | null>(null);
+  const warningFallback = useRef<CommandFocusTarget | null>(null);
   const feedbackSequence = useRef(0);
   const mounted = useRef(true);
   useEffect(() => {
@@ -62,7 +62,7 @@ export function CommandProvider({
   const execute = <P,>(
     command: Command<P>,
     payload: P,
-    returnFocusTo?: HTMLElement,
+    returnFocusTo?: CommandFocusTarget,
     onApplied?: () => void,
     force = false,
   ): RunResult => {
@@ -129,15 +129,19 @@ export function CommandProvider({
         title="Check this action"
         onCloseAutoFocus={(event) => {
           event.preventDefault();
+          const fallback =
+            typeof warningFallback.current === 'function'
+              ? warningFallback.current()
+              : warningFallback.current;
           const target =
             warningOpener.current?.isConnected &&
             warningOpener.current.getClientRects().length &&
             !warningOpener.current.matches(':disabled')
               ? warningOpener.current
-              : warningFallback.current?.isConnected &&
-                  warningFallback.current.getClientRects().length &&
-                  !warningFallback.current.matches(':disabled')
-                ? warningFallback.current
+              : fallback?.isConnected &&
+                  fallback.getClientRects().length &&
+                  !fallback.matches(':disabled')
+                ? fallback
                 : document.getElementById('character-workspace');
           target?.focus();
         }}

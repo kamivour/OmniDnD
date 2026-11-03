@@ -204,6 +204,8 @@ Combat displays this history newest first without changing stored order. `gameSe
 
 Short Rest rolls stay in an unsaved UI draft until Apply. Preview runs the same pure command with discarded synthetic event metadata; it never appends an event or writes storage. Apply records one `completeShortRest` event for dice, optional Song of Rest, recovery, expiry, and time. Its optional `songOfRestSource` distinguishes self from another bard without changing saved character schemas or rewriting old events.
 
+Long Rest preview preserves the unforced check's warnings while using a discarded forced projection only when necessary to show the diff. Actual Apply runs unforced through the shared command feedback flow; only an explicit Assisted override marks its saved event. Prepared-spell review is view state and never changes a selection merely by opening; subsequent edits use their existing separate commands.
+
 ## 6. Persistence
 
 - Dexie database `omnidnd`. Tables: `builds`, `live`, `events`, `campaigns`, `settings`, `userPacks`, `backups`.

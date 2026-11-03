@@ -7,6 +7,7 @@ import { SectionLabel } from '../components/SectionLabel';
 import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
 import { previewShortRest, restChanges } from './rest-model';
+import { RestPreview } from './RestPreview';
 
 const field = 'min-h-11 w-full rounded-btn border border-border bg-surface px-3 text-text';
 
@@ -210,32 +211,7 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
         )}
       </section>
 
-      <section
-        aria-label="Rest preview"
-        className="flex flex-col gap-2 rounded-card border border-border bg-surface p-3"
-      >
-        <SectionLabel>Rest preview · +1 h</SectionLabel>
-        {preview.result === 'ok' ? (
-          <dl className="flex flex-col gap-3">
-            {changes.map((change, index) => (
-              <div key={index} className="min-w-0 text-sm">
-                <dt className="wrap-anywhere text-text-muted">{change.label}</dt>
-                <dd
-                  className={`wrap-anywhere ${change.before === change.after ? 'text-text-muted' : 'text-text'}`}
-                >
-                  {change.before} <span aria-label="becomes">→</span> {change.after}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        ) : (
-          <ul role="alert" className="list-disc space-y-1 pl-4 text-sm text-warn">
-            {preview.reasons.map((reason) => (
-              <li key={reason}>{reason}</li>
-            ))}
-          </ul>
-        )}
-      </section>
+      <RestPreview duration="1 h" result={preview} changes={changes} />
       <div className="grid grid-cols-2 gap-2">
         <button
           type="button"

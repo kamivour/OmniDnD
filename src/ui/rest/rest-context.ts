@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react';
 
 export const RestContext = createContext<{
   openShortRest: (opener?: HTMLElement) => void;
+  openLongRest: (opener?: HTMLElement) => void;
 } | null>(null);
 
 export function useRest() {

@@ -50,7 +50,13 @@ function matchesSearch(id: string, query: string): boolean {
 }
 
 /** Between-session spell choices. Every saved change uses the shared engine commands. */
-export function SpellManage({ onClose }: { onClose: () => void }) {
+export function SpellManage({
+  onClose,
+  initialClassId,
+}: {
+  onClose: () => void;
+  initialClassId?: string;
+}) {
   const { state, sheet, events } = useCharacter();
   const { run, undo } = useCommand();
   const container = useRef<HTMLDivElement>(null);
@@ -73,7 +79,9 @@ export function SpellManage({ onClose }: { onClose: () => void }) {
         .map(({ classId }) => classId),
     ]),
   ];
-  const [chosenClass, setChosenClass] = useState(classIds[0] ?? '');
+  const [chosenClass, setChosenClass] = useState(
+    initialClassId && classIds.includes(initialClassId) ? initialClassId : (classIds[0] ?? ''),
+  );
   const classId = classIds.includes(chosenClass) ? chosenClass : (classIds[0] ?? '');
   const details = classId
     ? spellSelectionDetails({ ...state, sheet, registry }, classId)

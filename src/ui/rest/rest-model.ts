@@ -1,6 +1,13 @@
 import { computeSheet, type CharacterState } from '../../engine/calc/sheet';
 import { formatClock } from '../../engine/clock';
-import { completeShortRest, runCommand, type ShortRestPayload } from '../../engine/commands';
+import {
+  completeLongRest,
+  completeShortRest,
+  runCommand,
+  spellSelectionDetails,
+  type Automation,
+  type ShortRestPayload,
+} from '../../engine/commands';
 import type { Registry } from '../../engine/registry';
 
 export interface RestChange {
@@ -21,7 +28,39 @@ export function previewShortRest(
   });
 }
 
-/** Presentation of engine results, including resources that a short rest leaves unchanged. */
+/** Preserve warnings while deriving a projected result; neither run writes state or history. */
+export function previewLongRest(
+  state: CharacterState,
+  registry: Registry,
+  automation: Automation = 'assisted',
+) {
+  const options = {
+    eventId: 'preview.long-rest',
+    realTime: '1970-01-01T00:00:00.000Z',
+    automation,
+  };
+  const checked = runCommand(completeLongRest, state, null, registry, options);
+  if (checked.result !== 'warn') return { ...checked, warnings: [] as string[] };
+  const projected = runCommand(completeLongRest, state, null, registry, {
+    ...options,
+    force: true,
+  });
+  return { ...projected, warnings: checked.reasons };
+}
+
+/** Only supported classes that can currently prepare leveled spells need a rest prompt. */
+export function preparedRestClassIds(state: CharacterState, registry: Registry): string[] {
+  const context = { ...state, registry, sheet: computeSheet(state, registry) };
+  return state.build.classes.flatMap(({ classId }) => {
+    const details = spellSelectionDetails(context, classId);
+    return (details.mode === 'prepared' || details.mode === 'spellbook') &&
+      details.maxSpellLevel > 0
+      ? [classId]
+      : [];
+  });
+}
+
+/** Presentation of engine results, including resources that a rest leaves unchanged. */
 export function restChanges(
   before: CharacterState,
   after: CharacterState,
@@ -41,6 +80,42 @@ export function restChanges(
       after: formatClock(after.live.clock.seconds),
     },
   ];
+  if (before.live.tempHp !== after.live.tempHp)
+    rows.push({
+      label: 'Temporary HP',
+      before: String(before.live.tempHp),
+      after: String(after.live.tempHp),
+    });
+  if (before.live.exhaustion !== after.live.exhaustion)
+    rows.push({
+      label: 'Exhaustion',
+      before: String(before.live.exhaustion),
+      after: String(after.live.exhaustion),
+    });
+  if (
+    before.live.deathSaves.success !== after.live.deathSaves.success ||
+    before.live.deathSaves.fail !== after.live.deathSaves.fail
+  ) {
+    const saves = ({ success, fail }: CharacterState['live']['deathSaves']) =>
+      `${success} ${success === 1 ? 'success' : 'successes'} / ${fail} ${fail === 1 ? 'failure' : 'failures'}`;
+    rows.push({
+      label: 'Death saves',
+      before: saves(before.live.deathSaves),
+      after: saves(after.live.deathSaves),
+    });
+  }
+  if (before.live.lastLongRestEnd !== after.live.lastLongRestEnd)
+    rows.push({
+      label: 'Last long rest',
+      before:
+        before.live.lastLongRestEnd === undefined
+          ? 'Never'
+          : formatClock(before.live.lastLongRestEnd),
+      after:
+        after.live.lastLongRestEnd === undefined
+          ? 'Never'
+          : formatClock(after.live.lastLongRestEnd),
+    });
   for (const pool of previous.hitDice) {
     rows.push({
       label: `${pool.die} Hit Dice`,

@@ -3,7 +3,6 @@ import { Link, NavLink, useLocation } from 'react-router';
 import { ChevronLeft, Ellipsis, Moon, Tent } from 'lucide-react';
 import { cx } from '../cx';
 import { Sheet } from '../components/Sheet';
-import { useFixtureAction } from '../fixtures/useFixtureAction';
 import { useCharacterBase } from '../hooks/useCharacterBase';
 import { useRest } from '../rest/rest-context';
 import { BOTTOM_NAV, NAV, navPath } from './nav';
@@ -15,10 +14,9 @@ const tab =
 export function BottomNav() {
   const [more, setMore] = useState(false);
   const { pathname } = useLocation();
-  const fixtureAction = useFixtureAction();
-  const { openShortRest } = useRest();
+  const { openShortRest, openLongRest } = useRest();
   const moreButton = useRef<HTMLButtonElement>(null);
-  const openingRest = useRef(false);
+  const openingRest = useRef<'short' | 'long' | null>(null);
   const base = useCharacterBase();
   // BOTTOM_NAV order, not sidebar order (SPEC §3: Home · Combat · Spells · Inventory).
   const direct = BOTTOM_NAV.flatMap((to) => NAV.filter((n) => n.to === to));
@@ -57,15 +55,16 @@ export function BottomNav() {
         onCloseAutoFocus={(event) => {
           if (!openingRest.current) return;
           event.preventDefault();
-          openingRest.current = false;
-          openShortRest(moreButton.current ?? undefined);
+          const open = openingRest.current === 'short' ? openShortRest : openLongRest;
+          openingRest.current = null;
+          open(moreButton.current ?? undefined);
         }}
       >
         <div className="mb-3 grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={() => {
-              openingRest.current = true;
+              openingRest.current = 'short';
               setMore(false);
             }}
             className="flex min-h-12 items-center justify-center gap-2 rounded-btn border border-border bg-surface text-text"
@@ -74,7 +73,10 @@ export function BottomNav() {
           </button>
           <button
             type="button"
-            onClick={() => fixtureAction('Long Rest')}
+            onClick={() => {
+              openingRest.current = 'long';
+              setMore(false);
+            }}
             className="flex min-h-12 items-center justify-center gap-2 rounded-btn border border-border bg-surface text-text"
           >
             <Moon size={18} aria-hidden /> Long Rest
