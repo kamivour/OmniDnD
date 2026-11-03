@@ -127,7 +127,7 @@ M4 implementation is complete; the checklist above is the manual follow-up. Stan
 - [ ] Navigate to Spells and back, then refresh. The same round/status should remain. Undo last command should remove the started fight and retain all previous character values after another refresh.
 - [ ] Start combat by keyboard at desktop and 375 px widths. Focus should move to the updated combat status; no controls should overflow the viewport.
 
-Combat startup and turn economy are live. The action preview remains separate while the remaining M5 controls are wired to saved state.
+Combat startup, turn economy, actions, HP, effects, and history are live. End Combat is the remaining M5 task.
 
 ## Phase 1 — M5: turns and economy
 
@@ -149,7 +149,7 @@ Combat startup and turn economy are live. The action preview remains separate wh
 - [ ] Cast ordinary level-2 Invisibility on yourself, then attack or cast a cantrip. Your personal Invisibility and its linked concentration should end together. Invisibility cast on an ally should survive your attack. For an upcast self effect, the self effect should end while concentration remains with a note for possible other targets; end concentration manually if none remain. Undo should restore the exact previous state.
 - [ ] Open a blank character: no spells, weapons, or Bard features should be inherited from The Fool. Items should state that its actions are coming in Phase 2. At 375 px, tablet, and desktop widths, check previews, pinned details, warning cancellation, disabled-resource reasons, keyboard focus, and horizontal scrolling.
 
-Action tabs, HP, and concentration-save tracking are live. Effect countdowns and the Combat log remain scheduled M5 work; their current preview is labeled. Target results, contests, additional attacks from features, and readied-spell holding remain decisions at the table.
+Action tabs, HP, concentration-save tracking, effect countdowns, and the Combat log are live. Target results, contests, additional attacks from features, and readied-spell holding remain decisions at the table.
 
 ## Phase 1 — M5: HP, concentration saves, and death saves
 
@@ -181,3 +181,12 @@ Current concentration and HP are live across character routes. Remaining effect 
 - [ ] If the character has a bonus-action cantrip, verify it causes the same restriction. A cantrip taking longer than one action does not qualify as the permitted other spell. A nonspell bonus feature such as Bardic Inspiration should not prevent an ordinary action spell.
 - [ ] With a reaction spell known and the reaction available, try it during the same own turn as a bonus-action spell: it should warn. Cancel, End Turn, then try the reaction off-turn: the bonus-action-spell warning should be gone. End Turn must not restore an already-spent reaction.
 - [ ] Start the next turn and confirm spell flags reset. Undo End/Start Turn and casts after refresh; the exact prior restriction and resources should return. In Manual, exceptional casts should apply without warnings/override flags, while depleted slots still block. Restore Assisted afterward if desired.
+
+## Phase 1 — M5: effects and saved log
+
+- [ ] Cast Faerie Fire on others during your first turn. Concentration should show 10 rounds left while Effects on you stays empty. End Turn keeps the timer; the next Start Turn shows 9. The timer must not change while you wait in real time. Refresh and Undo the turn change.
+- [ ] Cast Invisibility on yourself. It should appear in both the separate Concentration block and Effects on you. End its self effect: the linked concentration should end, focus should remain usable, and one Undo should restore both. End an unrelated effect instead: concentration should stay intact.
+- [ ] Let a short timed effect or concentration expire at a later Start Turn. Check the event explains what ended. Undo must restore the exact clock, round, economy, concentration, pending checks, and effects after refresh. Untimed effects should remain.
+- [ ] If testing imported timers, check partial rounds round upward, a missing concentration timer says No timer, an untimed effect says Until removed, and an already-expired entry stays visible until a command handles it. A self effect ending before its parent concentration must not crash or end unknown other targets.
+- [ ] Scroll from top to bottom at 375 px and desktop width. The log summary and Undo must stay reachable below the HUD; long effect names must wrap and End targets must remain easy to tap. View full log should open all retained commands newest first, beyond the five desktop recent entries, without horizontal scrolling.
+- [ ] Create a warning override, then Undo it. Full history should show Override and Undone, plus a separate Undo event. Game timestamps include seconds and show when commands started. Repeated Undo must skip old undo events and disable when exhausted. Closing the log with Escape should return focus to View full log; exhausting Undo should keep usable focus.

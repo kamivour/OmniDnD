@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 21:03 — Live effects and saved Combat history
+
+- Concentration and effects on you now show their saved timers: rounds in combat and exact game time outside it. Timers follow the game clock, with no real-time countdown. End controls use logged commands and Undo restores the previous state.
+- The sticky log keeps the latest command and Undo available while scrolling. View full log shows all retained character commands newest first, including game timestamps, warning overrides, and undone entries. Desktop also shows five recent events.
+- Fixed a crash when an imported self effect expired before its surviving concentration. Only the expired link is removed; concentration, other possible targets, and pending saves remain intact. End effect targets are at least 44 px wide and tall.
+- Validation: 783 unit tests and 60 focused browser checks pass without retries (4 expected width skips); typecheck, lint, and build pass. Phone/desktop countdowns, history, keyboard focus, long names, and sticky access checked with the real-HTTP forwarder.
+- Manual checks are in `docs/MANUAL_QA.md`. Next: End Combat and final M5 validation.
+
 ## 2026-11-03 20:48 — Bonus-action spell flow verified
 
 - Verified the 2014 restriction in both casting orders: a bonus-action spell shares its turn only with one-action cantrips. Bonus-action cantrips count too; ordinary bonus-action features do not. Own-turn reaction spells obey the restriction, while a still-available reaction after End Turn can be used normally.

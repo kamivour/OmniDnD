@@ -199,6 +199,13 @@ export function passTime(live: Live, seconds: number, { registry, sheet }: Comma
     live,
     (effect) => effect.endsAt !== undefined && effect.endsAt <= end,
   );
+  const concentration = live.concentration;
+  if (
+    concentration?.effectId !== undefined &&
+    !live.effects.some((effect) => effect.id === concentration.effectId)
+  ) {
+    delete concentration.effectId;
+  }
   notes.push(...expired.map((name) => `${name} ended`));
   const dawn = (time: number) => Math.floor((time - DAWN_SECONDS) / SECONDS_PER_DAY);
   if (dawn(end) > dawn(start)) {

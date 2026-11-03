@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { LiveStateSchema } from '../schema';
 import { addEffect, removeEffect, setExhaustion, toggleCondition } from './effects';
+import { applyDamage } from './hp';
 import { castSpell } from './spells';
 import { advanceTime } from './time';
 import { freshState, Session, withLive } from './test-utils';
@@ -102,6 +104,82 @@ describe('addEffect and removeEffect', () => {
       'Effect removed: Invisibility; concentration on Invisibility ended',
     );
     expect(session.live.concentration).toBeUndefined();
+  });
+
+  it.each([60, undefined])(
+    'detaches an earlier imported effect expiry while retaining concentration duration %s and saves',
+    (duration) => {
+      const now = freshState.live.clock.seconds;
+      const concentration = {
+        spellId: 'spell.invisibility' as const,
+        slotLevel: 3,
+        ...(duration === undefined ? {} : { endsAt: now + duration }),
+        pendingSaves: [{ id: 'earlier-damage', dc: 10 }],
+      };
+      const live = LiveStateSchema.parse({
+        ...freshState.live,
+        concentration: { ...concentration, effectId: 'spell.invisibility' },
+        effects: [
+          {
+            id: 'spell.invisibility',
+            name: 'Invisibility',
+            sourceId: 'spell.invisibility',
+            endsAt: now + 6,
+            concentration: true,
+            conditions: ['invisible'],
+            modifiers: [],
+          },
+          {
+            id: 'effect.other-dependent',
+            name: 'Additional dependent effect',
+            concentration: true,
+            conditions: [],
+            modifiers: [],
+          },
+        ],
+      });
+      const session = new Session(withLive(freshState, live));
+      session.run(advanceTime, { seconds: 5 });
+      expect(session.live.concentration?.effectId).toBe('spell.invisibility');
+      const before = session.state;
+
+      expect(session.run(advanceTime, { seconds: 1 })).toBe(
+        'Time +1 s (Day 1, 08:00); Invisibility ended',
+      );
+      expect(session.live.concentration).toEqual(concentration);
+      expect(session.live.effects).toEqual([live.effects[1]]);
+      session.undo();
+      expect(session.state).toEqual(before);
+    },
+  );
+
+  it('expires an ordinary self cast and its pending saves together with exact Undo', () => {
+    const session = new Session();
+    session.run(castSpell, { spellId: 'spell.invisibility', slotLevel: 2, onSelf: true });
+    session.run(applyDamage, { amount: 1 });
+    expect(session.live.concentration?.pendingSaves).toHaveLength(1);
+    const before = session.state;
+
+    expect(session.run(advanceTime, { seconds: 3600 })).toBe(
+      'Time +1 h (Day 1, 09:00); Invisibility ended',
+    );
+    expect(session.live.concentration).toBeUndefined();
+    expect(session.live.effects).toEqual([]);
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('keeps the concentration link when only an unrelated timed effect expires', () => {
+    const session = new Session();
+    session.run(castSpell, { spellId: 'spell.invisibility', slotLevel: 2, onSelf: true });
+    session.run(addEffect, { name: 'Other effect', durationSeconds: 6 });
+    const before = session.state;
+
+    session.run(advanceTime, { seconds: 6 });
+    expect(session.live.concentration).toEqual(before.live.concentration);
+    expect(session.live.effects).toEqual([before.live.effects[0]]);
+    session.undo();
+    expect(session.state).toEqual(before);
   });
 
   it('blocks an empty name and a missing effect', () => {

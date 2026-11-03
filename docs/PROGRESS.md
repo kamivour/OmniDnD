@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M5 — Combat (live).
-**Next up:** Live effect countdowns and Combat log with Undo.
+**Next up:** End Combat and remaining round-time conversion.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -103,7 +103,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] HP panel; concentration save prompt; death saves at 0 HP
 - [x] Reactions usable off-turn; second reaction warns
 - [x] Bonus-action-spell rule
-- [ ] Effects with round countdown; log + Undo
+- [x] Effects with round countdown; log + Undo
 - [ ] End combat converts rounds to game time
 
 ### M6 — Rest + Dashboard (live)
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M5 effects/log: live concentration and personal effects derive round countdowns from saved deadlines, with logged End controls and exact Undo. Sticky history opens all saved events with game timestamps and Override/Undone markers; desktop shows five recent entries (D83). Reproduced/fixed imported shorter self-effect expiry leaving an invalid concentration link and End targets below 44 px. 783 unit tests and 60 focused browser checks pass without retries (4 expected width skips); typecheck, lint and build pass. 375/1440 layouts, sticky access, focus and long names checked; manual QA added. Next: End Combat and final M5 checks.
 
 - 2026-11-03 — M5 bonus-action-spell rule verified in both orders, including BA cantrips, own/off-turn reactions, nonspell bonus features, Manual/Blocks, flag reset and exact durable Undo. Default Spells visibility now reuses the engine's existing 2014 rule check; Show all and explicit action tabs retain exceptions without changing selections (D82). Five visibility regressions reproduced before the fix. 772 unit tests, 12 focused bonus-spell browser checks and 14 shared action regressions pass; typecheck, lint and build pass. 375/1440 warning/retained-choice layouts checked; manual QA added. Next: effect countdowns and Combat log/Undo.
 

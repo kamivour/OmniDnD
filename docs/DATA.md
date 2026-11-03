@@ -200,6 +200,8 @@ interface LogEvent {
 - **Undo** applies the last non-undone event's inverse patches and appends an `undo` event. Linear undo only.
 - Keep the last 500 events per character.
 
+Combat displays this history newest first without changing stored order. `gameSeconds` is the clock before the command, including for commands that advance time; the log shows seconds and labels that meaning. Historical round numbers are not stored or inferred from the current combat. Override and undone markers remain visible, and Undo skips undo records and previously undone commands.
+
 ## 6. Persistence
 
 - Dexie database `omnidnd`. Tables: `builds`, `live`, `events`, `campaigns`, `settings`, `userPacks`, `backups`.

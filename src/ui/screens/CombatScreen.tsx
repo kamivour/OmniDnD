@@ -4,7 +4,6 @@ import { registry } from '../../data/registry';
 import {
   combatMovement,
   endTurn,
-  endConcentration,
   healthDetails,
   STANDARD_ACTIONS,
   startCombat,
@@ -23,23 +22,22 @@ import {
 import { useCommand } from '../commands/command-context';
 import { ActionRow } from '../components/ActionRow';
 import { AttackCard, FeatureCard, RuleCard } from '../components/cards';
-import { ConcentrationChip, EffectChip } from '../components/chips';
 import { CostBadge } from '../components/CostBadge';
 import { EconomyBar } from '../components/EconomyBar';
 import { HpButtons, HpPanel } from '../components/HpControl';
-import { LastLogLine, LogList } from '../components/LogList';
 import { PipRow } from '../components/PipRow';
 import { Preview } from '../components/Preview';
 import { SectionLabel } from '../components/SectionLabel';
 import { Sheet } from '../components/Sheet';
 import { SpellRow } from '../components/SpellRow';
 import { cx } from '../cx';
-import { fool, type Cost } from '../fixtures/the-fool';
-import { useFixtureAction } from '../fixtures/useFixtureAction';
+import type { Cost } from '../fixtures/the-fool';
 import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
 import { useDetail } from '../layout/detail-context';
 import { LiveSpellDetail } from '../spells/LiveSpellDetail';
+import { LiveEffects } from '../effects/LiveEffects';
+import { CharacterLogBar, RecentCharacterLog } from '../log/CharacterLog';
 import { SpellCastControls } from '../spells/SpellCastControls';
 import type { SpellbookEntry } from '../spells/spellbook-model';
 
@@ -61,7 +59,6 @@ const TABS = [
  * first. lg: right column with HP panel, pinned detail, concentration, effects, and log.
  */
 export function CombatScreen() {
-  const act = useFixtureAction();
   const { state, sheet, events } = useCharacter();
   const { run } = useCommand();
   const combatStatus = useRef<HTMLDivElement>(null);
@@ -227,40 +224,10 @@ export function CombatScreen() {
     />
   );
 
-  const effects = (
-    <>
-      <section className="flex flex-col gap-2">
-        <SectionLabel>Concentration</SectionLabel>
-        {state.live.concentration ? (
-          <ConcentrationChip
-            name={registry.get('spell', state.live.concentration.spellId).name}
-            onEnd={() =>
-              run(endConcentration, null, combatStatus.current ?? undefined, () => {
-                restoreStatusFocus.current = true;
-              })
-            }
-            className="self-start"
-          />
-        ) : (
-          <p className="text-sm text-text-muted">None</p>
-        )}
-      </section>
-      <section className="flex flex-col gap-2">
-        <SectionLabel>Effects on you</SectionLabel>
-        <div className="flex flex-wrap gap-2">
-          {fool.effects.length === 0 ? (
-            <span className="text-sm text-text-muted">None</span>
-          ) : (
-            fool.effects.map((e) => <EffectChip key={e.id} name={e.name} remaining={e.remaining} />)
-          )}
-        </div>
-      </section>
-    </>
-  );
-
   return (
     <div className="mx-auto grid max-w-screen-2xl gap-4 px-4 py-4 lg:px-6 @min-[900px]:grid-cols-[minmax(0,1fr)_20rem] @min-[1100px]:gap-6 @min-[1100px]:grid-cols-[minmax(0,1fr)_24rem]">
       <h1 className="sr-only">Combat</h1>
+      <CharacterLogBar />
 
       <div className="flex min-w-0 flex-col gap-4">
         <section className="flex flex-wrap items-center gap-3 rounded-card border border-border bg-surface p-3">
@@ -347,7 +314,6 @@ export function CombatScreen() {
         )}
 
         <div className="@min-[900px]:hidden">
-          <StatusPreviewNote />
           <HpButtons />
         </div>
 
@@ -588,8 +554,7 @@ export function CombatScreen() {
         </Tabs.Root>
 
         <div className="flex flex-col gap-3 @min-[900px]:hidden">
-          {effects}
-          <LastLogLine entries={fool.log} onUndo={() => act('Undo')} />
+          <LiveEffects />
         </div>
       </div>
 
@@ -597,22 +562,9 @@ export function CombatScreen() {
         aria-label="Status and log"
         className="hidden min-w-0 flex-col gap-5 @min-[900px]:flex"
       >
-        <StatusPreviewNote />
         <HpPanel />
-        {effects}
-        <section className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <SectionLabel>Log</SectionLabel>
-            <button
-              type="button"
-              onClick={() => act('Undo')}
-              className="min-h-11 rounded-btn px-2 text-sm text-accent"
-            >
-              Undo last
-            </button>
-          </div>
-          <LogList entries={fool.log} />
-        </section>
+        <LiveEffects />
+        <RecentCharacterLog />
       </aside>
       <Sheet
         open={casting !== null}
@@ -644,14 +596,6 @@ function SpentNote({ what }: { what: string }) {
   return (
     <p className="text-xs text-text-muted">
       {what} used this turn. Dimmed buttons still work; you will be asked to confirm.
-    </p>
-  );
-}
-
-function StatusPreviewNote() {
-  return (
-    <p role="note" className="mb-3 text-xs text-text-muted">
-      Effects and log shown here are previews. Use the HUD for saved changes.
     </p>
   );
 }

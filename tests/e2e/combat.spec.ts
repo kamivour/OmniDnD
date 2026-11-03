@@ -84,10 +84,16 @@ test.describe('desktop', () => {
     );
   });
 
-  test('status column shows concentration, effects on you, and the full log', async ({ page }) => {
+  test('status column shows saved concentration, effects on you, and recent commands', async ({
+    page,
+  }) => {
     const aside = page.getByRole('complementary', { name: 'Status and log' });
     await expect(aside.getByRole('heading', { name: 'Concentration' })).toBeVisible();
     await expect(aside.getByRole('heading', { name: 'Effects on you' })).toBeVisible();
-    await expect(aside.getByText('Took 4 damage (HP 19 → 15)')).toBeVisible();
+    await expect(aside.getByText('No commands yet.')).toBeVisible();
+    await page.getByRole('button', { name: 'Start combat', exact: true }).click();
+    await expect(aside.getByRole('list', { name: 'Recent command history' })).toContainText(
+      'Combat started',
+    );
   });
 });
