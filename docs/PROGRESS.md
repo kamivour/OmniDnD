@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M5 — Combat (live).
-**Next up:** End Combat and remaining round-time conversion.
+**Current milestone:** M6 — Rest + Dashboard (live).
+**Next up:** Short Rest dialog with Hit Dice, Song of Rest, and preview diff.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -25,8 +25,8 @@ Status: `todo` · `doing` · `done` · `blocked`
 | M2 | Rules engine core (headless) | 1 | done | Scenario passes as Vitest test |
 | M3 | Shell, HUD, persistence | 1 | done | Nav works on all breakpoints, data survives reload |
 | M4 | Spellbook (live) | 1 | done | Cast/adjust slots synced with HUD |
-| M5 | Combat (live) | 1 | doing | Scenario steps 1–8 work in UI |
-| M6 | Rest + Dashboard (live) | 1 | todo | Scenario steps 9–14 work in UI |
+| M5 | Combat (live) | 1 | done | Scenario steps 1–8 work in UI |
+| M6 | Rest + Dashboard (live) | 1 | doing | Scenario steps 9–14 work in UI |
 | M7 | Character Sheet + Exploration + level-up | 1 | todo | All computed values match TEST_CHARACTER §4 |
 | M8 | Phase 1 hardening | 1 | todo | Definition of done (SPEC §8) met |
 | M9 | Inventory + Features screen | 2 | todo | |
@@ -104,7 +104,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Reactions usable off-turn; second reaction warns
 - [x] Bonus-action-spell rule
 - [x] Effects with round countdown; log + Undo
-- [ ] End combat converts rounds to game time
+- [x] End combat converts rounds to game time
 
 ### M6 — Rest + Dashboard (live)
 - [ ] Short Rest dialog: Hit Dice spending, Song of Rest, preview diff
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M5 complete: End Combat runs the existing engine command from the header, settles only the final six seconds, expires due timers, preserves surviving state, and restores usable status focus (D84). Available before the first turn, off-turn, and at zero HP/dead. 788 unit tests and 318 full browser checks pass without retries (32 expected width skips), including 12 new End Combat checks; typecheck, lint and build pass. 375/1440 layouts and exact reload/Undo checked; final M5 manual QA added. Next: M6 Short Rest dialog with Hit Dice, Song of Rest and preview diff.
 
 - 2026-11-03 — M5 effects/log: live concentration and personal effects derive round countdowns from saved deadlines, with logged End controls and exact Undo. Sticky history opens all saved events with game timestamps and Override/Undone markers; desktop shows five recent entries (D83). Reproduced/fixed imported shorter self-effect expiry leaving an invalid concentration link and End targets below 44 px. 783 unit tests and 60 focused browser checks pass without retries (4 expected width skips); typecheck, lint and build pass. 375/1440 layouts, sticky access, focus and long names checked; manual QA added. Next: End Combat and final M5 checks.
 

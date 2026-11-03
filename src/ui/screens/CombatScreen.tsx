@@ -3,6 +3,7 @@ import { Tabs } from 'radix-ui';
 import { registry } from '../../data/registry';
 import {
   combatMovement,
+  endCombat,
   endTurn,
   healthDetails,
   STANDARD_ACTIONS,
@@ -283,6 +284,20 @@ export function CombatScreen() {
               className="min-h-11 rounded-btn bg-accent px-4 font-semibold text-bg"
             >
               Start combat
+            </button>
+          )}
+          {liveCombat && (
+            <button
+              type="button"
+              onClick={() =>
+                run(endCombat, null, combatStatus.current ?? undefined, () => {
+                  restoreStatusFocus.current = true;
+                })
+              }
+              title="Advance the final round by 6 seconds and leave combat"
+              className="min-h-11 min-w-11 rounded-btn border border-border px-3 text-sm text-text-muted hover:text-text"
+            >
+              End combat
             </button>
           )}
         </section>

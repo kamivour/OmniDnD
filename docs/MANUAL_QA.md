@@ -127,7 +127,7 @@ M4 implementation is complete; the checklist above is the manual follow-up. Stan
 - [ ] Navigate to Spells and back, then refresh. The same round/status should remain. Undo last command should remove the started fight and retain all previous character values after another refresh.
 - [ ] Start combat by keyboard at desktop and 375 px widths. Focus should move to the updated combat status; no controls should overflow the viewport.
 
-Combat startup, turn economy, actions, HP, effects, and history are live. End Combat is the remaining M5 task.
+Combat startup, turn economy, actions, HP, effects, history, and End Combat are live.
 
 ## Phase 1 — M5: turns and economy
 
@@ -190,3 +190,13 @@ Current concentration and HP are live across character routes. Remaining effect 
 - [ ] If testing imported timers, check partial rounds round upward, a missing concentration timer says No timer, an untimed effect says Until removed, and an already-expired entry stays visible until a command handles it. A self effect ending before its parent concentration must not crash or end unknown other targets.
 - [ ] Scroll from top to bottom at 375 px and desktop width. The log summary and Undo must stay reachable below the HUD; long effect names must wrap and End targets must remain easy to tap. View full log should open all retained commands newest first, beyond the five desktop recent entries, without horizontal scrolling.
 - [ ] Create a warning override, then Undo it. Full history should show Override and Undone, plus a separate Undo event. Game timestamps include seconds and show when commands started. Repeated Undo must skip old undo events and disable when exhausted. Closing the log with Escape should return focus to View full log; exhausting Undo should keep usable focus.
+
+## Phase 1 — M5: End Combat and final milestone check
+
+- [ ] Start combat and end it before your first turn. The fight should end, the game clock should advance six seconds, and Start combat should return. Repeat with two actual turns: the fight must advance twelve seconds in total, including the six seconds already paid at the second Start Turn.
+- [ ] End combat during your turn and while waiting. Turn controls and economy should disappear, focus should move to No active combat, and HP, slots, feature uses, conditions, and surviving concentration requests should remain unchanged. Ending combat at zero HP or dead must stay available and must not heal or revive you.
+- [ ] Check an effect due during the final six seconds expires and is named in the log. Surviving timers should switch from round counts to exact time; an effect with seven seconds left should now show one second left. Untimed effects should stay. Expired concentration must remove its dependent effects and pending checks.
+- [ ] Refresh after ending, then Undo from the log. The exact previous round, active/waiting turn, spent economy, clock, concentration, saves, and effects should return. Refresh again and confirm they remain. End Combat and the restored controls should fit at 375 px and desktop width and work with keyboard Enter.
+- [ ] Run [TEST_CHARACTER.md §6](TEST_CHARACTER.md#6-acceptance-scenario) steps 1–8 with a fresh copy of The Fool, checking HUD, Combat, and Spellbook after each step and refreshing after steps 3 and 8. An ally's Invisibility should survive your own casts; self Invisibility should end when you attack or cast. Check warning Cancel, override, and the final Undo sequence.
+
+M5 implementation is complete; the sections above are the manual follow-up. The already-zero massive-damage/temporary-HP interpretation remains a DM review under Q21. Live rests and Dashboard are M6, with the full cross-screen acceptance and native offline checks still scheduled for later Phase 1 milestones.

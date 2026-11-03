@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 22:04 — Combat milestone complete
+
+- End combat now works from the Combat header, during your turn, while waiting, or before the first turn. It settles the final six seconds through the existing engine command, clears turn state, and returns focus to the updated status.
+- Due effects and concentration expire with a log entry. Surviving effects, pending concentration checks, HP, and resources stay intact; timers switch to exact game time outside combat. Refresh and Undo restore the entire previous fight. Ending combat remains available at zero HP or dead without healing the character.
+- M5 Combat is complete: startup, turns, economy, actions, casting, reactions, HP/saves, effects, saved history, and ending combat are live. Target results and DM rulings remain manual.
+- Validation: 788 unit tests and 318 full browser checks pass without retries (32 expected width skips), including 12 End Combat checks. Typecheck, lint, and build pass; 375/1440 layouts and keyboard focus checked with the real-HTTP forwarder.
+- Final M5 manual checks are in `docs/MANUAL_QA.md`. The existing massive-damage/temporary-HP question remains for DM review under Q21. Next: M6 Short Rest dialog, Hit Dice, Song of Rest, and preview diff.
+
 ## 2026-11-03 21:03 — Live effects and saved Combat history
 
 - Concentration and effects on you now show their saved timers: rounds in combat and exact game time outside it. Timers follow the game clock, with no real-time countdown. End controls use logged commands and Undo restores the previous state.

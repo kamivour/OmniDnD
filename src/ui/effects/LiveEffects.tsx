@@ -92,7 +92,7 @@ export function LiveEffects() {
         )}
         {live.combat && (live.concentration || live.effects.length > 0) && (
           <p className="text-xs text-text-muted">
-            Timers follow game time. Each later Start Turn advances 6 seconds.
+            Timers follow game time. Later Start Turn and End combat each advance 6 seconds.
           </p>
         )}
       </section>

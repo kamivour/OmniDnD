@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { endCombat, endTurn, startCombat, startTurn, useEconomy } from './combat';
-import { toggleCondition } from './effects';
+import { addEffect, toggleCondition } from './effects';
 import { useFeature } from './features';
+import { applyDamage } from './hp';
 import { castSpell } from './spells';
 import { advanceTime } from './time';
-import { freshState, Session } from './test-utils';
+import { freshState, Session, withLive } from './test-utils';
 
 const CUTTING_WORDS = 'feature.bard.cutting-words';
 const start = freshState.live.clock.seconds;
@@ -82,6 +83,106 @@ describe('combat rounds', () => {
     session.run(endTurn, null);
     expect(session.run(startTurn, null)).toBe('Round 11: your turn; Faerie Fire ended');
     expect(session.live.concentration).toBeUndefined();
+  });
+});
+
+describe('ending combat', () => {
+  it.each([true, false])(
+    'settles only the final round with turnActive=%s and preserves surviving state through Undo',
+    (active) => {
+      const session = inCombat();
+      session.run(startTurn, null);
+      session.run(castSpell, { spellId: 'spell.invisibility', slotLevel: 2, onSelf: true });
+      session.run(applyDamage, { amount: 1 });
+      session.run(addEffect, { name: 'Due ward', durationSeconds: 6 });
+      session.run(addEffect, { name: 'Surviving ward', durationSeconds: 7 });
+      session.run(addEffect, { name: 'Untimed ward' });
+      session.run(useEconomy, { kind: 'movement', feet: 15 });
+      session.run(useEconomy, { kind: 'reaction' });
+      if (!active) session.run(endTurn, null);
+      const before = session.state;
+
+      expect(session.run(endCombat, null)).toBe('Combat ended after 1 round (6 s); Due ward ended');
+      const expected = {
+        ...before.live,
+        clock: { seconds: before.live.clock.seconds + 6 },
+        effects: before.live.effects.filter((effect) => effect.name !== 'Due ward'),
+      };
+      delete expected.combat;
+      expect(session.live).toEqual(expected);
+      expect(session.live.concentration?.pendingSaves).toHaveLength(1);
+      expect(session.live.effects.find((effect) => effect.name === 'Surviving ward')?.endsAt).toBe(
+        session.live.clock.seconds + 1,
+      );
+      session.undo();
+      expect(session.state).toEqual(before);
+    },
+  );
+
+  it('expires due concentration, every dependent effect and saves while retaining independent effects', () => {
+    const now = freshState.live.clock.seconds;
+    const session = new Session(
+      withLive(freshState, {
+        concentration: {
+          spellId: 'spell.invisibility',
+          endsAt: now + 6,
+          effectId: 'self-effect',
+          pendingSaves: [{ id: 'damage-before-combat', dc: 10 }],
+        },
+        effects: [
+          {
+            id: 'self-effect',
+            name: 'Invisibility',
+            concentration: true,
+            conditions: ['invisible'],
+            modifiers: [],
+          },
+          {
+            id: 'dependent',
+            name: 'Dependent effect',
+            concentration: true,
+            conditions: [],
+            modifiers: [],
+          },
+          {
+            id: 'independent',
+            name: 'Independent effect',
+            endsAt: now + 7,
+            concentration: false,
+            conditions: [],
+            modifiers: [],
+          },
+        ],
+      }),
+    );
+    session.run(startCombat, null);
+    const before = session.state;
+    expect(session.run(endCombat, null)).toBe(
+      'Combat ended after 1 round (6 s); Invisibility ended',
+    );
+    expect(session.live.concentration).toBeUndefined();
+    expect(session.live.effects).toEqual([before.live.effects[2]]);
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it.each([0, 3])('allows bookkeeping at zero HP with %s failed death saves', (fail) => {
+    const session = new Session(
+      withLive(freshState, {
+        hp: 0,
+        deathSaves: { success: 0, fail },
+        conditions: ['unconscious'],
+      }),
+    );
+    session.run(startCombat, null);
+    const before = session.state;
+    session.run(endCombat, null);
+    expect(session.live.hp).toBe(0);
+    expect(session.live.deathSaves).toEqual({ success: 0, fail });
+    expect(session.live.conditions).toEqual(['unconscious']);
+    expect(session.live.combat).toBeUndefined();
+    session.undo();
+    expect(session.state).toEqual(before);
   });
 });
 
