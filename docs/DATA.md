@@ -202,6 +202,8 @@ interface LogEvent {
 
 Combat displays this history newest first without changing stored order. `gameSeconds` is the clock before the command, including for commands that advance time; the log shows seconds and labels that meaning. Historical round numbers are not stored or inferred from the current combat. Override and undone markers remain visible, and Undo skips undo records and previously undone commands.
 
+Short Rest rolls stay in an unsaved UI draft until Apply. Preview runs the same pure command with discarded synthetic event metadata; it never appends an event or writes storage. Apply records one `completeShortRest` event for dice, optional Song of Rest, recovery, expiry, and time. Its optional `songOfRestSource` distinguishes self from another bard without changing saved character schemas or rewriting old events.
+
 ## 6. Persistence
 
 - Dexie database `omnidnd`. Tables: `builds`, `live`, `events`, `campaigns`, `settings`, `userPacks`, `backups`.

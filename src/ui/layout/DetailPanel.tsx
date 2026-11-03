@@ -1,11 +1,12 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
-import { PanelRight, Undo2, X } from 'lucide-react';
+import { PanelRight, Tent, Undo2, X } from 'lucide-react';
 import { Sheet } from '../components/Sheet';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { DetailContext, useDetail } from './detail-context';
 import { useCommand } from '../commands/command-context';
 import { useCharacter } from '../hooks/useCharacter';
 import { StorageStatus } from '../storage/StorageStatus';
+import { useRest } from '../rest/rest-context';
 
 /** One selection follows the character across screens. Closing keeps the selection. */
 export function DetailProvider({ children }: { children: ReactNode }) {
@@ -44,11 +45,19 @@ export function DetailProvider({ children }: { children: ReactNode }) {
 export function DetailToggle() {
   const { open, setOpen } = useDetail();
   const { undo } = useCommand();
+  const { openShortRest } = useRest();
   const { events } = useCharacter();
   const canUndo = events.some((event) => event.command !== 'undo' && !event.undoneBy);
   return (
     <div className="flex flex-wrap items-center justify-end gap-3 border-b border-border px-4">
       <StorageStatus />
+      <button
+        type="button"
+        onClick={(event) => openShortRest(event.currentTarget)}
+        className="hidden min-h-11 items-center gap-1 text-xs text-text-muted sm:flex lg:hidden"
+      >
+        <Tent size={16} aria-hidden /> Short Rest
+      </button>
       <button
         type="button"
         aria-label="Undo last command"

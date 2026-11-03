@@ -4,6 +4,7 @@ import { characterStore } from '../../state/character-store';
 import { CommandNotes, CommandProvider } from '../commands/CommandProvider';
 import { PlaceholderScreen } from '../screens/PlaceholderScreen';
 import { ConcentrationSaveBanner } from '../health/ConcentrationSaveBanner';
+import { RestProvider } from '../rest/RestProvider';
 import { BottomNav } from './BottomNav';
 import { HudBar } from './HudBar';
 import { SideNav } from './SideNav';
@@ -31,26 +32,28 @@ export function AppFrame() {
   return (
     <DetailProvider key={characterId}>
       <CommandProvider characterId={character.build.id}>
-        <div className="flex min-h-dvh">
-          <SideNav />
-          <div className="flex min-w-0 flex-1 flex-col">
-            <HudBar />
-            <ConcentrationSaveBanner />
-            <DetailToggle />
-            <div className="flex min-w-0 flex-1">
-              <main
-                id="character-workspace"
-                tabIndex={-1}
-                className="@container min-w-0 flex-1 pb-20 sm:pb-0"
-              >
-                <CommandNotes />
-                <Outlet />
-              </main>
-              <DetailPanel />
+        <RestProvider>
+          <div className="flex min-h-dvh">
+            <SideNav />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <HudBar />
+              <ConcentrationSaveBanner />
+              <DetailToggle />
+              <div className="flex min-w-0 flex-1">
+                <main
+                  id="character-workspace"
+                  tabIndex={-1}
+                  className="@container min-w-0 flex-1 pb-20 sm:pb-0"
+                >
+                  <CommandNotes />
+                  <Outlet />
+                </main>
+                <DetailPanel />
+              </div>
             </div>
           </div>
-        </div>
-        <BottomNav />
+          <BottomNav />
+        </RestProvider>
       </CommandProvider>
     </DetailProvider>
   );

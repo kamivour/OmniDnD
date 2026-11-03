@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
 import { ChevronLeft, Ellipsis, Moon, Tent } from 'lucide-react';
 import { cx } from '../cx';
 import { Sheet } from '../components/Sheet';
 import { useFixtureAction } from '../fixtures/useFixtureAction';
 import { useCharacterBase } from '../hooks/useCharacterBase';
+import { useRest } from '../rest/rest-context';
 import { BOTTOM_NAV, NAV, navPath } from './nav';
 
 const tab =
@@ -15,6 +16,9 @@ export function BottomNav() {
   const [more, setMore] = useState(false);
   const { pathname } = useLocation();
   const fixtureAction = useFixtureAction();
+  const { openShortRest } = useRest();
+  const moreButton = useRef<HTMLButtonElement>(null);
+  const openingRest = useRef(false);
   const base = useCharacterBase();
   // BOTTOM_NAV order, not sidebar order (SPEC §3: Home · Combat · Spells · Inventory).
   const direct = BOTTOM_NAV.flatMap((to) => NAV.filter((n) => n.to === to));
@@ -38,6 +42,7 @@ export function BottomNav() {
         </NavLink>
       ))}
       <button
+        ref={moreButton}
         type="button"
         onClick={() => setMore(true)}
         className={cx(tab, moreActive ? 'text-accent' : 'text-text-muted')}
@@ -45,11 +50,24 @@ export function BottomNav() {
         <Ellipsis size={20} aria-hidden />
         More
       </button>
-      <Sheet open={more} onOpenChange={setMore} title="More">
+      <Sheet
+        open={more}
+        onOpenChange={setMore}
+        title="More"
+        onCloseAutoFocus={(event) => {
+          if (!openingRest.current) return;
+          event.preventDefault();
+          openingRest.current = false;
+          openShortRest(moreButton.current ?? undefined);
+        }}
+      >
         <div className="mb-3 grid grid-cols-2 gap-2">
           <button
             type="button"
-            onClick={() => fixtureAction('Short Rest')}
+            onClick={() => {
+              openingRest.current = true;
+              setMore(false);
+            }}
             className="flex min-h-12 items-center justify-center gap-2 rounded-btn border border-border bg-surface text-text"
           >
             <Tent size={18} aria-hidden /> Short Rest

@@ -31,8 +31,10 @@ function hitDiceLeft({ sheet, live }: CommandContext, die: HitDieName): number {
 export interface ShortRestPayload {
   /** Each Hit Die spent, with the die roll the player entered. CON is added by the engine. */
   hitDice?: { die: HitDieName; roll: number }[];
-  /** Extra healing from Song of Rest (yours or a party bard's), if you spent Hit Dice. */
+  /** Extra healing from Song of Rest, if you regain HP from spent Hit Dice. */
   songOfRest?: number;
+  /** Defaults to your own feature when available, otherwise another bard's unknown die. */
+  songOfRestSource?: 'self' | 'other';
 }
 
 /**
@@ -41,7 +43,7 @@ export interface ShortRestPayload {
  */
 export const completeShortRest: Command<ShortRestPayload> = {
   name: 'completeShortRest',
-  check: (ctx, { hitDice = [], songOfRest }) => {
+  check: (ctx, { hitDice = [], songOfRest, songOfRestSource }) => {
     const checks = restChecks(ctx);
     const counts = new Map<HitDieName, number>();
     for (const { die, roll } of hitDice) {
@@ -57,16 +59,29 @@ export const completeShortRest: Command<ShortRestPayload> = {
       }
     }
     if (songOfRest !== undefined) {
-      if (hitDice.length === 0) {
+      const hitDieHealing = hitDice.reduce(
+        (total, { roll }) => total + Math.max(0, roll + ctx.sheet.abilities.CON.mod),
+        0,
+      );
+      if (hitDieHealing <= 0 || ctx.live.hp >= ctx.sheet.maxHp.value) {
         checks.push(block('Song of Rest only adds to healing from spent Hit Dice'));
       }
       // Your own Song of Rest die, or up to d12 from another bard.
       const own = ctx.sheet.features.find(({ def }) => def.id === SONG_OF_REST)?.die;
-      checks.push(...rangeCheck('Song of Rest roll', songOfRest, 1, own ? faces(own) : 12));
+      const source = songOfRestSource ?? (own ? 'self' : 'other');
+      if (source === 'self' && !own) checks.push(block('You do not have Song of Rest'));
+      checks.push(
+        ...rangeCheck(
+          'Song of Rest roll',
+          songOfRest,
+          1,
+          source === 'self' && own ? faces(own) : 12,
+        ),
+      );
     }
     return checks;
   },
-  apply: ({ live }, { hitDice = [], songOfRest }, ctx) => {
+  apply: ({ live }, { hitDice = [], songOfRest, songOfRestSource }, ctx) => {
     const notes: (string | undefined)[] = passTime(live, SHORT_REST_SECONDS, ctx);
     const con = ctx.sheet.abilities.CON.mod;
     let healing = 0;
@@ -77,7 +92,12 @@ export const completeShortRest: Command<ShortRestPayload> = {
     healing += songOfRest ?? 0;
     if (hitDice.length > 0) {
       const { before, after } = restoreHp(live, healing, ctx.sheet.maxHp.value);
-      const song = songOfRest === undefined ? '' : ` + ${featureName(ctx, SONG_OF_REST)}`;
+      const own = ctx.sheet.features.find(({ def }) => def.id === SONG_OF_REST)?.die;
+      const source = songOfRestSource ?? (own ? 'self' : 'other');
+      const song =
+        songOfRest === undefined
+          ? ''
+          : ` + ${featureName(ctx, SONG_OF_REST)}${source === 'other' ? ' (other bard)' : ''}`;
       notes.push(
         `${hitDice.length} Hit ${hitDice.length === 1 ? 'Die' : 'Dice'}${song}: HP ${before} → ${after}`,
       );

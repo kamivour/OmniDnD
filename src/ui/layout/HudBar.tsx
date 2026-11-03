@@ -11,6 +11,7 @@ import { useCommand } from '../commands/command-context';
 import { useFixtureAction } from '../fixtures/useFixtureAction';
 import { useCharacter } from '../hooks/useCharacter';
 import { signed } from '../format';
+import { useRest } from '../rest/rest-context';
 import { HudAdjustments, type HudSelection } from './HudAdjustments';
 
 /** Two HUD rows read the same engine state on every character route. */
@@ -18,6 +19,7 @@ export function HudBar() {
   const { state, sheet } = useCharacter();
   const { run } = useCommand();
   const fixtureAction = useFixtureAction();
+  const { openShortRest } = useRest();
   const [selection, setSelection] = useState<HudSelection | null>(null);
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const { build, live } = state;
@@ -184,7 +186,8 @@ export function HudBar() {
           <div className="hidden shrink-0 gap-2 lg:flex">
             <button
               type="button"
-              onClick={() => fixtureAction('Short Rest')}
+              aria-label="Short Rest"
+              onClick={(event) => openShortRest(event.currentTarget)}
               className="inline-flex min-h-11 items-center gap-1.5 rounded-btn border border-border bg-surface px-3 text-xs"
             >
               <Tent size={14} aria-hidden />

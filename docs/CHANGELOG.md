@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-03 22:20 — Short Rest with rolls and preview
+
+- Open Short Rest from the desktop HUD, phone More menu, or tablet toolbar. Add Hit Dice one at a time and enter the results; CON and projected HP are computed automatically. Cancel or Escape discards the draft without spending anything.
+- Review HP, Hit Dice, slots, features, game time, and effect expiry before Apply. One saved command advances an hour, spends selected dice, and restores eligible short-rest resources. Ordinary slots and level-3 Bardic Inspiration stay unchanged; refresh and Undo restore the exact previous state.
+- Song of Rest is optional and applied once. Your own die and another bard's roll have separate limits, and Song requires actual healing from Hit Dice. Fixed incorrect ally limits, zero-healing eligibility, and focus after removing a roll while a different pool is depleted.
+- Validation: 796 unit tests and 53 focused browser checks pass without retries (7 expected width skips); typecheck, lint, and build pass. Phone/tablet/desktop previews, action buttons, focus, and scrolling checked using the real-HTTP forwarder.
+- Short Rest manual checks are in `docs/MANUAL_QA.md`. Next: Long Rest with eligibility checks and preview.
+
 ## 2026-11-03 22:04 — Combat milestone complete
 
 - End combat now works from the Combat header, during your turn, while waiting, or before the first turn. It settles the final six seconds through the existing engine command, clears turn state, and returns focus to the updated status.

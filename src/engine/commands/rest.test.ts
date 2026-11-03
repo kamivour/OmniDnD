@@ -42,7 +42,7 @@ describe('completeShortRest', () => {
   });
 
   it('blocks dice you do not have, bad rolls, and Song of Rest alone', () => {
-    const session = new Session(withLive(freshState, { hitDiceSpent: { d8: 2 } }));
+    const session = new Session(withLive(freshState, { hp: 13, hitDiceSpent: { d8: 2 } }));
     const twoDice = [
       { die: 'd8' as const, roll: 3 },
       { die: 'd8' as const, roll: 4 },
@@ -64,6 +64,127 @@ describe('completeShortRest', () => {
     expect(
       session.preview(completeShortRest, { hitDice: [{ die: 'd10', roll: 3 }] }).reasons,
     ).toEqual(['No d10 Hit Dice left']);
+  });
+
+  it("accepts another bard's larger Song of Rest and undoes the whole rest exactly", () => {
+    const session = new Session(withLive(seedState, { hp: 1 }));
+    session.run(castSpell, { spellId: 'spell.invisibility', slotLevel: 2, onSelf: true });
+    const before = session.state;
+    for (const roll of [0, 13]) {
+      expect(
+        session.preview(completeShortRest, {
+          hitDice: [{ die: 'd8', roll: 1 }],
+          songOfRest: roll,
+          songOfRestSource: 'other',
+        }),
+      ).toEqual({
+        result: 'blocked',
+        reasons: ['Song of Rest roll must be a whole number from 1 to 12'],
+      });
+    }
+    expect(
+      session.run(completeShortRest, {
+        hitDice: [{ die: 'd8', roll: 1 }],
+        songOfRest: 12,
+        songOfRestSource: 'other',
+      }),
+    ).toBe(
+      'Short rest (1 h); Invisibility ended; 1 Hit Die + Song of Rest (other bard): HP 1 → 15',
+    );
+    expect(session.live.hp).toBe(15);
+    expect(session.live.hitDiceSpent).toEqual({ d8: 1 });
+    expect(session.live.concentration).toBeUndefined();
+    expect(session.live.effects).toEqual([]);
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('keeps the owned Song of Rest die cap for an explicit self source', () => {
+    const session = new Session(withLive(freshState, { hp: 1 }));
+    expect(
+      session.preview(completeShortRest, {
+        hitDice: [{ die: 'd8', roll: 1 }],
+        songOfRest: 7,
+        songOfRestSource: 'self',
+      }),
+    ).toEqual({
+      result: 'blocked',
+      reasons: ['Song of Rest roll must be a whole number from 1 to 6'],
+    });
+    expect(
+      session.run(completeShortRest, {
+        hitDice: [{ die: 'd8', roll: 1 }],
+        songOfRest: 6,
+        songOfRestSource: 'self',
+      }),
+    ).toBe('Short rest (1 h); 1 Hit Die + Song of Rest: HP 1 → 9');
+  });
+
+  it('defaults to another bard without the feature and blocks an explicit self source', () => {
+    const state = structuredClone(freshState);
+    state.build.classes[0]!.level = 1;
+    state.build.hpEntries = state.build.hpEntries.slice(0, 1);
+    state.live.hp = 1;
+    const session = new Session(state);
+    expect(
+      session.preview(completeShortRest, {
+        hitDice: [{ die: 'd8', roll: 1 }],
+        songOfRest: 1,
+        songOfRestSource: 'self',
+      }),
+    ).toEqual({ result: 'blocked', reasons: ['You do not have Song of Rest'] });
+    expect(
+      session.run(completeShortRest, {
+        hitDice: [{ die: 'd8', roll: 1 }],
+        songOfRest: 12,
+      }),
+    ).toBe('Short rest (1 h); 1 Hit Die + Song of Rest (other bard): HP 1 → 9');
+  });
+
+  it('blocks Song of Rest when negative CON makes all Hit Die healing zero', () => {
+    const state = structuredClone(freshState);
+    state.build.abilityScores.base.CON = 5;
+    state.live.hp = 1;
+    const session = new Session(state);
+    expect(session.sheet.abilities.CON.mod).toBe(-2);
+    const before = session.state;
+    expect(
+      session.preview(completeShortRest, {
+        hitDice: [{ die: 'd8', roll: 1 }],
+        songOfRest: 2,
+      }),
+    ).toEqual({
+      result: 'blocked',
+      reasons: ['Song of Rest only adds to healing from spent Hit Dice'],
+    });
+    expect(session.state).toEqual(before);
+    const noSong = new Session(state);
+    expect(noSong.run(completeShortRest, { hitDice: [{ die: 'd8', roll: 1 }] })).toBe(
+      'Short rest (1 h); 1 Hit Die: HP 1 → 1',
+    );
+    expect(noSong.live.hitDiceSpent).toEqual({ d8: 1 });
+    expect(
+      session.run(completeShortRest, {
+        hitDice: [
+          { die: 'd8', roll: 1 },
+          { die: 'd8', roll: 3 },
+        ],
+        songOfRest: 2,
+      }),
+    ).toBe('Short rest (1 h); 2 Hit Dice + Song of Rest: HP 1 → 4');
+  });
+
+  it('blocks Song of Rest when Hit Dice cannot restore HP at maximum HP', () => {
+    const session = new Session();
+    expect(
+      session.preview(completeShortRest, {
+        hitDice: [{ die: 'd8', roll: 1 }],
+        songOfRest: 2,
+      }),
+    ).toEqual({
+      result: 'blocked',
+      reasons: ['Song of Rest only adds to healing from spent Hit Dice'],
+    });
   });
 
   it('not in combat', () => {

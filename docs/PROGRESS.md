@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M6 — Rest + Dashboard (live).
-**Next up:** Short Rest dialog with Hit Dice, Song of Rest, and preview diff.
+**Next up:** Long Rest dialog with 24-hour/zero-HP checks and preview diff.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -107,7 +107,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] End combat converts rounds to game time
 
 ### M6 — Rest + Dashboard (live)
-- [ ] Short Rest dialog: Hit Dice spending, Song of Rest, preview diff
+- [x] Short Rest dialog: Hit Dice spending, Song of Rest, preview diff
 - [ ] Long Rest dialog: 24 h + 0 HP checks, Hit Dice half cap, preview diff
 - [ ] Rests advance game clock
 - [ ] Dashboard: resources, effects, conditions, quick access, recent log
@@ -141,6 +141,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-03 — M6 Short Rest: shared phone/tablet/desktop dialog drafts one die at a time, shows engine-computed projected HP and complete recovery/expiry preview, and applies one durable undoable command (D85). Fixed own/other Song of Rest limits and zero-healing eligibility (D86), plus reproduced mixed-pool removal focus loss. 796 unit tests and 53 focused browser checks pass without retries (7 expected width skips); typecheck, lint and build pass. 375/768/1440 top/diff/action layouts checked; manual QA added. Next: Long Rest checks and preview.
 
 - 2026-11-03 — M5 complete: End Combat runs the existing engine command from the header, settles only the final six seconds, expires due timers, preserves surviving state, and restores usable status focus (D84). Available before the first turn, off-turn, and at zero HP/dead. 788 unit tests and 318 full browser checks pass without retries (32 expected width skips), including 12 new End Combat checks; typecheck, lint and build pass. 375/1440 layouts and exact reload/Undo checked; final M5 manual QA added. Next: M6 Short Rest dialog with Hit Dice, Song of Rest and preview diff.
 
