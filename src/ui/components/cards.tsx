@@ -183,7 +183,7 @@ export function ResourceCard({
       <div>
         <h3 className="font-semibold text-text">{title}</h3>
         <p className="text-xs text-text-muted">
-          {max - used} of {max} left
+          {Math.max(0, max - used)} of {max} left
         </p>
       </div>
       {lines.map((line) => (

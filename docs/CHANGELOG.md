@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-04 03:39 — Live Dashboard and favorite actions
+
+- Dashboard now shows saved resource pools, concentration, personal effects, condition sources, computed abilities/saves/passives, and the five newest real log entries with Undo. Resource descriptions stay current when pinned.
+- Manage Quick Access chooses favorite spells, features, and items through saved undoable commands. Spellbook stars stay in sync. Actions preserve casting classes and item instances; unavailable favorites keep explanations without invented stats or actions.
+- Imported overspent pools stay intact until explicit correction. Fixed negative visible remaining counts, condition-editor close focus, and level-20 Hit Dice pips overflowing or overlapping adjustment buttons.
+- Validation: 858 unit tests and 136 focused browser checks pass without retries (10 expected width skips); typecheck, lint, and build pass. Styled phone/tablet/desktop layouts and shared Combat/Spellbook/HUD behavior checked with the real-HTTP forwarder.
+- Manual Dashboard checks are in `docs/MANUAL_QA.md`. M6 still needs its linked acceptance gate: scenario steps 9 and 12 require a standalone time control. That is next.
+
 ## 2026-11-03 22:38 — Rest game-clock verification
 
 - Confirmed Short Rest adds one hour and Long Rest eight hours only when applied. Drafting, previewing, canceling, and blocked attempts leave saved time unchanged.

@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import type { CharacterState } from '../calc/sheet';
-import { setSpellFavorite, type SetSpellFavoritePayload } from './favorites';
+import {
+  setQuickAccessFavorite,
+  setSpellFavorite,
+  type SetQuickAccessFavoritePayload,
+  type SetSpellFavoritePayload,
+} from './favorites';
 import { runCommand } from './runner';
 import { freshState, Session } from './test-utils';
 
@@ -158,5 +163,193 @@ describe('setSpellFavorite', () => {
       });
       expect(initial).toEqual(before);
     }
+  });
+});
+
+describe('setQuickAccessFavorite', () => {
+  it.each([
+    [SPELL, 'Cure Wounds'],
+    ['feature.barbarian.rage', 'Rage'],
+    ['item.lute', 'Lute'],
+  ])(
+    'favorites an unavailable reference %s without changing play state, with exact Undo',
+    (refId, name) => {
+      const initial = withFavorites([ITEM, FEATURE, OTHER_SPELL]);
+      const before = structuredClone(initial);
+      const session = new Session(initial);
+      const payload = { refId, favorite: true };
+      expect(session.run(setQuickAccessFavorite, payload)).toBe(`Favorite ${name}`);
+      expect(session.state).toEqual({
+        ...before,
+        build: { ...before.build, favorites: [...before.build.favorites, refId] },
+      });
+      expect(initial).toEqual(before);
+      expect(payload).toEqual({ refId, favorite: true });
+      expect(session.events.at(-1)).toMatchObject({
+        command: 'setQuickAccessFavorite',
+        text: `Favorite ${name}`,
+        characterId: initial.build.id,
+      });
+      expect(
+        session.events
+          .at(-1)
+          ?.patches.every((patch) => patch.path[0] === 'build' && patch.path[1] === 'favorites'),
+      ).toBe(true);
+      session.undo();
+      expect(session.state).toEqual(before);
+    },
+  );
+
+  it.each([SPELL, FEATURE, ITEM])(
+    'normalizes only chosen %s duplicates at the first existing position and restores them on Undo',
+    (refId) => {
+      const initial = withFavorites([OTHER_SPELL, refId, 'race.half-elf', refId, OTHER_SPELL]);
+      const before = structuredClone(initial);
+      const session = new Session(initial);
+      session.run(setQuickAccessFavorite, { refId, favorite: true });
+      expect(session.state.build.favorites).toEqual([
+        OTHER_SPELL,
+        refId,
+        'race.half-elf',
+        OTHER_SPELL,
+      ]);
+      session.undo();
+      expect(session.state).toEqual(before);
+      expect(session.run(setQuickAccessFavorite, { refId, favorite: false })).toBe(
+        `Remove favorite ${registry.entries.get(refId)!.name}`,
+      );
+      expect(session.state).toEqual({
+        ...before,
+        build: { ...before.build, favorites: [OTHER_SPELL, 'race.half-elf', OTHER_SPELL] },
+      });
+      session.undo();
+      expect(session.state).toEqual(before);
+    },
+  );
+
+  it.each(['spell.missing', 'feature.missing', 'item.missing'])(
+    'allows explicit cleanup of unknown %s but blocks adding it in every automation mode',
+    (refId) => {
+      const initial = withFavorites([ITEM, refId, FEATURE, refId, ITEM]);
+      const before = structuredClone(initial);
+      const session = new Session(initial);
+      expect(session.run(setQuickAccessFavorite, { refId, favorite: false })).toBe(
+        `Remove favorite ${refId}`,
+      );
+      expect(session.state).toEqual({
+        ...before,
+        build: { ...before.build, favorites: [ITEM, FEATURE, ITEM] },
+      });
+      session.undo();
+      expect(session.state).toEqual(before);
+      for (const automation of ['assisted', 'manual'] as const) {
+        for (const force of [false, true]) {
+          const result = runCommand(
+            setQuickAccessFavorite,
+            initial,
+            { refId, favorite: true },
+            registry,
+            {
+              eventId: 'unknown-quick-favorite',
+              realTime: '2026-11-03T03:00:00.000Z',
+              automation,
+              force,
+            },
+          );
+          expect(result.result).toBe('blocked');
+          expect(initial).toEqual(before);
+        }
+      }
+    },
+  );
+
+  it('logs repeated add/remove requests without changing unrelated state', () => {
+    const initial = withFavorites([ITEM]);
+    const session = new Session(initial);
+    session.run(setQuickAccessFavorite, { refId: SPELL, favorite: true });
+    const once = structuredClone(session.state);
+    session.run(setQuickAccessFavorite, { refId: SPELL, favorite: true });
+    expect(session.state).toEqual(once);
+    expect(session.events.at(-1)?.patches).toEqual([]);
+    session.undo();
+    expect(session.state).toEqual(once);
+    session.undo();
+    expect(session.state).toEqual(initial);
+    session.run(setQuickAccessFavorite, { refId: SPELL, favorite: false });
+    expect(session.state).toEqual(initial);
+    expect(session.events.at(-1)?.patches).toEqual([]);
+    expect(session.events.at(-1)?.text).toBe('Remove favorite Cure Wounds');
+  });
+
+  it.each([
+    null,
+    [],
+    {},
+    { refId: SPELL },
+    { favorite: true },
+    { refId: 1, favorite: true },
+    { refId: 'cure-wounds', favorite: true },
+    { refId: 'spell.CureWounds', favorite: false },
+    { refId: 'spell.', favorite: false },
+    { refId: 'feature.bard..cutting-words', favorite: false },
+    { refId: 'item.rapier ', favorite: false },
+    { refId: 'condition.poisoned', favorite: true },
+    { refId: 'race.half-elf', favorite: false },
+    { refId: 'class.bard', favorite: false },
+    { refId: SPELL, favorite: 'true' },
+    { refId: SPELL, favorite: 1 },
+    { refId: SPELL, favorite: null },
+    { refId: SPELL, favorite: true, extra: false },
+    { refId: SPELL, favorite: false, live: {} },
+  ])('blocks malformed payloads even when forced/Manual without mutation (%j)', (payload) => {
+    const initial = withFavorites([ITEM, FEATURE, OTHER_SPELL]);
+    const before = structuredClone(initial);
+    const payloadBefore = structuredClone(payload);
+    for (const automation of ['assisted', 'manual'] as const) {
+      for (const force of [false, true]) {
+        const result = runCommand(
+          setQuickAccessFavorite,
+          initial,
+          payload as SetQuickAccessFavoritePayload,
+          registry,
+          {
+            eventId: 'invalid-quick-favorite',
+            realTime: '2026-11-03T03:00:00.000Z',
+            automation,
+            force,
+          },
+        );
+        expect(result.result).toBe('blocked');
+        expect(initial).toEqual(before);
+        expect(payload).toEqual(payloadBefore);
+      }
+    }
+  });
+
+  it.each([
+    [SPELL, FEATURE],
+    [FEATURE, ITEM],
+    [ITEM, SPELL],
+  ])('blocks adding %s when its registry entry has the wrong kind', (refId, otherId) => {
+    const wrongKindRegistry = {
+      ...registry,
+      entries: new Map(registry.entries).set(refId, registry.entries.get(otherId)!),
+    };
+    const initial = withFavorites([OTHER_SPELL]);
+    const before = structuredClone(initial);
+    const result = runCommand(
+      setQuickAccessFavorite,
+      initial,
+      { refId, favorite: true },
+      wrongKindRegistry,
+      {
+        eventId: 'wrong-quick-reference-kind',
+        realTime: '2026-11-03T03:00:00.000Z',
+        automation: 'manual',
+        force: true,
+      },
+    );
+    expect(result.result).toBe('blocked');
+    expect(initial).toEqual(before);
   });
 });

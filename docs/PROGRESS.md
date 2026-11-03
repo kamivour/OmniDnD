@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M6 — Rest + Dashboard (live).
-**Next up:** Live Dashboard resources, effects, conditions, quick access, and recent log.
+**Next up:** M6 exit gate: shared manual clock control and linked acceptance steps 9–14.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -110,7 +110,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Short Rest dialog: Hit Dice spending, Song of Rest, preview diff
 - [x] Long Rest dialog: 24 h + 0 HP checks, Hit Dice half cap, preview diff
 - [x] Rests advance game clock
-- [ ] Dashboard: resources, effects, conditions, quick access, recent log
+- [x] Dashboard: resources, effects, conditions, quick access, recent log
+- [ ] Gate: scenario steps 9–14 through real controls, including standalone time advancement
 
 ### M7 — Character Sheet + Exploration
 - [ ] Sheet sections (SPEC §5) with breakdown tooltips
@@ -141,6 +142,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-04 — M6 Dashboard: saved resources, live pinned descriptions, source-aware conditions, computed ability/save/passive summaries, last-five history and shared Undo replace fixtures. Quick Access favorites now support explicit spell/feature/item choices and class/instance-specific live actions (D89); overspent imports require explicit correction and large pip pools wrap (D90). Reproduced/fixed condition-editor close focus and level-20 overflow/overlap. 858 unit tests and 136 focused browser checks pass without retries (10 expected width skips); typecheck, lint and build pass. Styled 375/768/1440 layouts checked through the real-HTTP forwarder; manual QA added. M6 exit audit found missing standalone time controls for scenario steps 9/12, so M6 remains doing. Next: shared manual clock control and linked steps 9–14.
 
 - 2026-11-03 — M6 rest clock gate verified against unchanged runtime code: Short Rest advances exactly 3600 seconds, Long Rest 28800, with midnight crossing, deadline expiry, pre-command log timestamps, durable reload and exact Undo. Draft/preview/Cancel and blocked attempts leave the clock untouched. Reused matching 813-unit/97-focused-browser proof from the completed rest tasks; typecheck, lint and build remain current. Manual game-time checks added. Next: live Dashboard.
 

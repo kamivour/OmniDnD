@@ -12,6 +12,8 @@ interface PipStepperProps {
   /** Enable direct pip adjustments; receives the aggregate number of used pips. */
   onSetUsed?: (used: number) => void;
   className?: string;
+  /** Invalid retained imports need an explicit correction before ordinary adjustments. */
+  disabled?: boolean;
 }
 
 /**
@@ -27,6 +29,7 @@ export function PipStepper({
   onRestore,
   onSetUsed,
   className,
+  disabled = false,
 }: PipStepperProps) {
   const left = Math.max(0, max - used);
   const fill = tone === 'magic' ? 'border-magic bg-magic' : 'border-accent bg-accent';
@@ -37,7 +40,7 @@ export function PipStepper({
       aria-label={onSetUsed ? label : undefined}
       className={cx('inline-flex shrink-0 items-center', onSetUsed ? 'gap-1' : 'gap-2', className)}
     >
-      <StepButton label={`Use one: ${label}`} onClick={onUse} disabled={used >= max}>
+      <StepButton label={`Use one: ${label}`} onClick={onUse} disabled={disabled || used >= max}>
         −
       </StepButton>
       {onSetUsed ? (
@@ -51,6 +54,7 @@ export function PipStepper({
                   type="button"
                   aria-label={`Set ${label} to ${remaining} remaining`}
                   aria-pressed={i < left}
+                  disabled={disabled}
                   onClick={() => onSetUsed(max - remaining)}
                   className="hover-lift grid size-11 shrink-0 place-items-center rounded-btn border border-transparent"
                 >
@@ -74,14 +78,18 @@ export function PipStepper({
           </span>
         </span>
       ) : (
-        <span className="flex w-28 items-center justify-center gap-2">
-          <PipRow label={label} max={max} used={used} tone={tone} showLabel={false} />
+        <span className="flex w-28 flex-wrap items-center justify-center gap-2">
+          <PipRow label={label} max={max} used={used} tone={tone} showLabel={false} wrap />
           <span aria-hidden className="text-xs text-text-muted">
-            {max - used}/{max}
+            {left}/{max}
           </span>
         </span>
       )}
-      <StepButton label={`Restore one: ${label}`} onClick={onRestore} disabled={used <= 0}>
+      <StepButton
+        label={`Restore one: ${label}`}
+        onClick={onRestore}
+        disabled={disabled || used <= 0}
+      >
         +
       </StepButton>
     </span>

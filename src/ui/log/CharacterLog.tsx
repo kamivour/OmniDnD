@@ -8,7 +8,13 @@ import { useCharacter } from '../hooks/useCharacter';
 import { canUndoCommand, characterLogEntries } from './log-model';
 
 /** Sticky summary and the complete saved history share the ordinary linear Undo. */
-export function CharacterLogBar() {
+export function CharacterLogBar({
+  label = 'Combat log',
+  undoLabel = 'Undo last combat command',
+}: {
+  label?: string;
+  undoLabel?: string;
+}) {
   const { events } = useCharacter();
   const { undo } = useCommand();
   const [open, setOpen] = useState(false);
@@ -16,7 +22,7 @@ export function CharacterLogBar() {
   const entries = characterLogEntries(events);
   return (
     <section
-      aria-label="Combat log"
+      aria-label={label}
       className="sticky top-22 z-10 flex min-w-0 items-center gap-2 rounded-card border border-border bg-surface px-3 shadow-pop @min-[900px]:col-span-2"
     >
       <button
@@ -33,7 +39,7 @@ export function CharacterLogBar() {
       </button>
       <button
         type="button"
-        aria-label="Undo last combat command"
+        aria-label={undoLabel}
         disabled={!canUndoCommand(events)}
         onClick={(event) => {
           const control = event.currentTarget;
@@ -51,7 +57,7 @@ export function CharacterLogBar() {
       <Sheet
         open={open}
         onOpenChange={setOpen}
-        title="Combat log"
+        title={label}
         description="Newest first. Game times show when each command started. Undo always reverts the latest command that has not been undone."
         onCloseAutoFocus={(event) => {
           event.preventDefault();

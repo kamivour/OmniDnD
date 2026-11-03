@@ -206,6 +206,8 @@ Short Rest rolls stay in an unsaved UI draft until Apply. Preview runs the same 
 
 Long Rest preview preserves the unforced check's warnings while using a discarded forced projection only when necessary to show the diff. Actual Apply runs unforced through the shared command feedback flow; only an explicit Assisted override marks its saved event. Prepared-spell review is view state and never changes a selection merely by opening; subsequent edits use their existing separate commands.
 
+Dashboard Quick Access uses the existing reference-ID favorites array. Its manager supports spells, features, and items; chosen-reference duplicates are normalized without rewriting unrelated entries. Retained unavailable references can be explicitly removed. One favorited spell can render several class-specific actions, and an item reference can render several owned instance-specific actions. Pool display clamps remaining counts at zero, but raw overspending stays saved until an explicit correction command is applied.
+
 ## 6. Persistence
 
 - Dexie database `omnidnd`. Tables: `builds`, `live`, `events`, `campaigns`, `settings`, `userPacks`, `backups`.
