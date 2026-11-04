@@ -1,6 +1,6 @@
 import { formatClock, formatDuration } from '../clock';
 import type { Command } from './runner';
-import { minCheck, passTime, warn, withNotes } from './shared';
+import { minCheck, passTime, timeRangeChecks, warn, withNotes } from './shared';
 
 export interface AdvanceTimePayload {
   seconds: number;
@@ -11,6 +11,7 @@ export const advanceTime: Command<AdvanceTimePayload> = {
   name: 'advanceTime',
   check: ({ live }, { seconds }) => {
     const checks = minCheck('Seconds', seconds, 1);
+    if (checks.length === 0) checks.push(...timeRangeChecks(live.clock.seconds, seconds));
     if (live.combat) checks.push(warn('In combat: Start Turn advances the clock'));
     return checks;
   },

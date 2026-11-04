@@ -13,6 +13,7 @@ import {
   resetDeathSaves,
   restoreFeatures,
   restoreHp,
+  timeRangeChecks,
   warn,
   withNotes,
 } from './shared';
@@ -79,6 +80,7 @@ export const completeShortRest: Command<ShortRestPayload> = {
         ),
       );
     }
+    checks.push(...timeRangeChecks(ctx.live.clock.seconds, SHORT_REST_SECONDS));
     return checks;
   },
   apply: ({ live }, { hitDice = [], songOfRest, songOfRestSource }, ctx) => {
@@ -129,6 +131,7 @@ export const completeLongRest: Command<null> = {
     ) {
       checks.push(warn('Less than 24 h since last long rest'));
     }
+    checks.push(...timeRangeChecks(live.clock.seconds, LONG_REST_SECONDS));
     return checks;
   },
   apply: ({ live }, _payload, ctx) => {

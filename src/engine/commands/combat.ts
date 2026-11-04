@@ -9,6 +9,7 @@ import {
   notInCombat,
   passTime,
   spendEconomy,
+  timeRangeChecks,
   warn,
   withNotes,
   type EconomySlot,
@@ -32,6 +33,9 @@ export const startTurn: Command<null> = {
   check: (ctx) => {
     const checks = notInCombat(ctx);
     if (ctx.live.combat?.turnActive) checks.push(warn('Your turn is already active'));
+    if (ctx.live.combat && ctx.live.combat.round > 0) {
+      checks.push(...timeRangeChecks(ctx.live.clock.seconds, SECONDS_PER_ROUND));
+    }
     return checks;
   },
   apply: ({ live }, _payload, ctx) => {
@@ -130,7 +134,10 @@ export const useEconomy: Command<UseEconomyPayload> = {
 
 export const endCombat: Command<null> = {
   name: 'endCombat',
-  check: notInCombat,
+  check: (ctx) => [
+    ...notInCombat(ctx),
+    ...(ctx.live.combat ? timeRangeChecks(ctx.live.clock.seconds, SECONDS_PER_ROUND) : []),
+  ],
   apply: ({ live }, _payload, ctx) => {
     const rounds = Math.max(1, live.combat?.round ?? 0);
     const notes = passTime(live, SECONDS_PER_ROUND, ctx);

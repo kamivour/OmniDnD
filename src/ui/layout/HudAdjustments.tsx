@@ -265,7 +265,7 @@ export function HudAdjustments({
             event.preventDefault();
             anchor?.focus();
           }}
-          className="z-40 max-h-[85dvh] w-96 max-w-[calc(100vw-16px)] overflow-y-auto rounded-card border border-border bg-surface-2 p-4 shadow-pop"
+          className="z-40 max-h-[min(85dvh,var(--radix-popover-content-available-height))] w-96 max-w-[calc(100vw-16px)] overflow-y-auto rounded-card border border-border bg-surface-2 p-4 shadow-pop"
         >
           <div className="mb-3 flex items-center justify-between">
             <h2 className="font-semibold">{title}</h2>

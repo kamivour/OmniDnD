@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-04 10:55 — Manual game clock and M6 complete
+
+- Dashboard now has game-time presets and custom day/hour/minute choices, with a read-only preview. Applied advances save once, expire due effects, and support exact Undo. Combat warnings retain the draft; invalid or oversized durations stay blocked.
+- Linked acceptance steps 9–14 pass through actual controls: end combat, elapsed time, Short Rest, Long Rest, repeat-rest warning, Hit Dice recovery cap, refresh, Undo, and separate slot corrections.
+- Fixed desktop HUD editors extending above the viewport. Traced a separate Chromium full-page screenshot issue that temporarily changes the viewport; editor artifacts now capture the current viewport while retaining all behavior checks.
+- Validation: 885 unit tests pass. All 415 runnable browser cases have passing proof, with 35 expected skips. The full run hit five Windows loopback EACCES failures before app loading; the focused rerun passes seven checks with three expected skips. No automatic retries. Typecheck, lint, formatting, and build pass; phone/desktop layouts checked using the real-HTTP forwarder.
+- Manual follow-up: check the M6 rest, Dashboard, and clock sections in `docs/MANUAL_QA.md`, especially warning Cancel, final resource counts, refresh, and Undo. Native browser networking and offline checks remain scheduled for M8. Next: M7 Character Sheet sections and breakdown tooltips.
+
 ## 2026-11-04 03:39 — Live Dashboard and favorite actions
 
 - Dashboard now shows saved resource pools, concentration, personal effects, condition sources, computed abilities/saves/passives, and the five newest real log entries with Undo. Resource descriptions stay current when pinned.

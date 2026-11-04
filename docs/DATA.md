@@ -208,6 +208,8 @@ Long Rest preview preserves the unforced check's warnings while using a discarde
 
 Dashboard Quick Access uses the existing reference-ID favorites array. Its manager supports spells, features, and items; chosen-reference duplicates are normalized without rewriting unrelated entries. Retained unavailable references can be explicitly removed. One favorited spell can render several class-specific actions, and an item reference can render several owned instance-specific actions. Pool display clamps remaining counts at zero, but raw overspending stays saved until an explicit correction command is applied.
 
+Game-clock controls convert explicit day/hour/minute choices to seconds and dispatch `advanceTime`. Their discarded previews never save an event or update timers. All elapsed-time and persisted-deadline arithmetic must stay within the schema's exact integer range; invalid sums Block before mutation. This adds no state fields or migration and leaves existing saved clocks and undo histories intact.
+
 ## 6. Persistence
 
 - Dexie database `omnidnd`. Tables: `builds`, `live`, `events`, `campaigns`, `settings`, `userPacks`, `backups`.

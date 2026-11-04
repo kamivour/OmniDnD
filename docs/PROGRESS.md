@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M6 — Rest + Dashboard (live).
-**Next up:** M6 exit gate: shared manual clock control and linked acceptance steps 9–14.
+**Current milestone:** M7 — Character Sheet + Exploration + level-up.
+**Next up:** Live Character Sheet sections with breakdown tooltips.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -26,8 +26,8 @@ Status: `todo` · `doing` · `done` · `blocked`
 | M3 | Shell, HUD, persistence | 1 | done | Nav works on all breakpoints, data survives reload |
 | M4 | Spellbook (live) | 1 | done | Cast/adjust slots synced with HUD |
 | M5 | Combat (live) | 1 | done | Scenario steps 1–8 work in UI |
-| M6 | Rest + Dashboard (live) | 1 | doing | Scenario steps 9–14 work in UI |
-| M7 | Character Sheet + Exploration + level-up | 1 | todo | All computed values match TEST_CHARACTER §4 |
+| M6 | Rest + Dashboard (live) | 1 | done | Scenario steps 9–14 work in UI |
+| M7 | Character Sheet + Exploration + level-up | 1 | doing | All computed values match TEST_CHARACTER §4 |
 | M8 | Phase 1 hardening | 1 | todo | Definition of done (SPEC §8) met |
 | M9 | Inventory + Features screen | 2 | todo | |
 | M10 | Effects editor + Conditions | 2 | todo | |
@@ -111,7 +111,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Long Rest dialog: 24 h + 0 HP checks, Hit Dice half cap, preview diff
 - [x] Rests advance game clock
 - [x] Dashboard: resources, effects, conditions, quick access, recent log
-- [ ] Gate: scenario steps 9–14 through real controls, including standalone time advancement
+- [x] Gate: scenario steps 9–14 through real controls, including standalone time advancement
 
 ### M7 — Character Sheet + Exploration
 - [ ] Sheet sections (SPEC §5) with breakdown tooltips
@@ -142,6 +142,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-04 — M6 complete: shared Dashboard clock presets/custom duration and command-only preview close linked acceptance steps 9–14, including expiry, both rests, the Hit Dice half cap, refresh, exact Undo and per-click slot corrections (D91). Shared guards block unsafe clock/deadline arithmetic without rewriting saves (D92). Fixed above-anchor HUD editor height (D93); traced screenshot-induced responsive remounts and corrected viewport artifact capture (D94). 885 unit tests pass; all 415 runnable browser cases have passing proof with 35 expected skips. The full run had five Windows loopback EACCES failures before app loading; focused rerun passes seven checks with three expected skips, without automatic retries. Typecheck, lint, formatting and build pass; 375/1440 layouts checked with the real-HTTP forwarder. M6 manual QA is in MANUAL_QA.md. Next: M7 live Sheet sections and computed breakdowns.
 
 - 2026-11-04 — M6 Dashboard: saved resources, live pinned descriptions, source-aware conditions, computed ability/save/passive summaries, last-five history and shared Undo replace fixtures. Quick Access favorites now support explicit spell/feature/item choices and class/instance-specific live actions (D89); overspent imports require explicit correction and large pip pools wrap (D90). Reproduced/fixed condition-editor close focus and level-20 overflow/overlap. 858 unit tests and 136 focused browser checks pass without retries (10 expected width skips); typecheck, lint and build pass. Styled 375/768/1440 layouts checked through the real-HTTP forwarder; manual QA added. M6 exit audit found missing standalone time controls for scenario steps 9/12, so M6 remains doing. Next: shared manual clock control and linked steps 9–14.
 

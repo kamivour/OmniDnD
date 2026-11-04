@@ -16,7 +16,9 @@ async function enterHitPoints(
   await dialog.getByRole('tab', { name: mode, exact: true }).click();
   for (const digit of String(amount))
     await dialog.getByRole('button', { name: digit, exact: true }).click();
-  if (screenshotPath) await page.screenshot({ path: screenshotPath, fullPage: true });
+  // Full-page Chromium captures briefly change the viewport and remount this responsive editor.
+  // A viewport capture records the editor this test inspects.
+  if (screenshotPath) await page.screenshot({ path: screenshotPath, fullPage: false });
   await dialog.getByRole('button', { name: 'Apply', exact: true }).click();
 }
 
@@ -111,7 +113,8 @@ test('conditions use commands and remain undoable', async ({ page }, info) => {
   const dialog = page.getByRole('dialog', { name: 'Conditions and effects', exact: true });
   await dialog.getByRole('checkbox', { name: /^poisoned$/i }).check();
   await expect(dialog.getByRole('checkbox', { name: /^poisoned$/i })).toBeChecked();
-  await page.screenshot({ path: info.outputPath('status-adjustment.png'), fullPage: true });
+  // Keep the responsive editor in its current viewport during the capture.
+  await page.screenshot({ path: info.outputPath('status-adjustment.png'), fullPage: false });
   await dialog.getByRole('button', { name: 'Close', exact: true }).click();
   await expect(
     hud(page).getByRole('button', { name: 'Adjust conditions and effects' }),

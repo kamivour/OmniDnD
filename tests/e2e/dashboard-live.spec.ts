@@ -401,7 +401,10 @@ test('concentration stays separate from personal effects while conditions and 20
   const status = page.getByRole('dialog', { name: 'Conditions and effects', exact: true });
   await status.getByRole('checkbox', { name: /^poisoned$/i }).check();
   await status.getByRole('combobox', { name: 'Exhaustion', exact: true }).selectOption('2');
-  await status.getByRole('button', { name: 'Close', exact: true }).click();
+  const closeStatus = status.getByRole('button', { name: 'Close', exact: true });
+  await closeStatus.scrollIntoViewIfNeeded();
+  await expect(closeStatus).toBeInViewport({ ratio: 1 });
+  await closeStatus.click();
   await expect(edit).toBeFocused();
   await saved(page);
   await expect(conditions(page)).toContainText(/poisoned/i);

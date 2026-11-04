@@ -182,6 +182,13 @@ export function restoreFeatures(live: Live, sheet: Sheet, recharges: readonly Re
   return names;
 }
 
+/** Keep elapsed time and persisted deadlines inside the schema's exact integer range. */
+export function timeRangeChecks(start: number, seconds: number): Check[] {
+  return Number.isSafeInteger(seconds) && seconds >= 0 && Number.isSafeInteger(start + seconds)
+    ? []
+    : [block('Time advance exceeds the supported game clock range')];
+}
+
 /**
  * Moves the clock forward and ends what ran out: concentration, then timed effects (D46).
  * Passing 06:00 restores "at dawn" features. Returns log fragments.

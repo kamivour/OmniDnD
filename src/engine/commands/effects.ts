@@ -14,6 +14,7 @@ import {
   rangeCheck,
   removeCondition,
   removeEffects,
+  timeRangeChecks,
   uniqueEffectId,
   withNotes,
 } from './shared';
@@ -110,7 +111,11 @@ export const addEffect: Command<AddEffectPayload> = {
     const checks: Check[] = [];
     if (payload.name.trim() === '') checks.push(block('Name the effect'));
     if (payload.durationSeconds !== undefined) {
-      checks.push(...minCheck('Duration in seconds', payload.durationSeconds, 1));
+      const durationChecks = minCheck('Duration in seconds', payload.durationSeconds, 1);
+      checks.push(...durationChecks);
+      if (durationChecks.length === 0) {
+        checks.push(...timeRangeChecks(ctx.live.clock.seconds, payload.durationSeconds));
+      }
     }
     if (payload.concentration && !ctx.live.concentration) {
       checks.push(block('Not concentrating: cast the concentration spell first'));

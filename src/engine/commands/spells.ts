@@ -13,6 +13,7 @@ import {
   rangeCheck,
   restoreHp,
   spendEconomy,
+  timeRangeChecks,
   uniqueEffectId,
   warn,
   withNotes,
@@ -168,6 +169,12 @@ export const castSpell: Command<CastSpellPayload> = {
       const current = ctx.registry.get('spell', ctx.live.concentration.spellId);
       checks.push(info(`Ends concentration on ${current.name}`));
     }
+    const extra = ctx.live.combat ? 0 : castingSeconds(spell, payload.ritual ?? false);
+    const storesDeadline =
+      spell.duration.concentration ||
+      (spell.effect !== undefined && (spell.effect.target === 'self' || payload.onSelf));
+    const duration = storesDeadline ? (spell.duration.seconds ?? 0) : 0;
+    checks.push(...timeRangeChecks(ctx.live.clock.seconds, extra + duration));
     return checks;
   },
   apply: ({ live }, payload, ctx) => {
