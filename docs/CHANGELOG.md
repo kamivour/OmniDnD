@@ -4,6 +4,14 @@ What changed, newest first, in plain language. One entry per finished task, writ
 
 Entries before 2026-11-02 02:30 were written up later from the PROGRESS.md session log; their time was not recorded. Before the first commit (2026-11-02 02:59) there is no git history for them.
 
+## 2026-11-04 11:22 — Live Character Sheet and computed breakdowns
+
+- Sheet now shows the saved character's identity, abilities/saves, all eighteen skills, passives, proficiencies/languages, senses/defensive records, combat values, weapon attacks and class casting stats. XP follows the campaign; milestone characters hide it, and missing XP stays Not tracked.
+- Hover, keyboard focus or phone tap explains each computed family. Formulas, sources, locked HP rolls, CON, rounding and floors come from the engine. Long level-20 HP breakdowns now fit the available space and scroll by keyboard; numeric values and full calculation text remain accessible.
+- Ordinary Inspiration has its own saved, logged toggle and exact Undo. Older saves retain their original shape until an explicit change. Bardic Inspiration remains separate. Defensive records use owned 2014 traits; unmodeled defenses say Not recorded.
+- Validation: 922 unit tests pass. All 431 runnable browser cases have passing proof, with 35 expected skips. The full run had four Windows loopback EACCES failures and two old Sheet-placeholder expectations; the corrected contract and affected cases pass ten focused checks. No automatic retries. Typecheck, lint, formatting and build pass; phone/desktop layouts, touch/keyboard, refresh and Undo checked with the real-HTTP forwarder.
+- Manual follow-up: the M7 Sheet section in `docs/MANUAL_QA.md` covers values, explanations, Inspiration, defensive traits, other characters and long breakdowns. Next: Sheet Edit mode and noted overrides; the rest of M7 remains in progress.
+
 ## 2026-11-04 10:55 — Manual game clock and M6 complete
 
 - Dashboard now has game-time presets and custom day/hour/minute choices, with a read-only preview. Applied advances save once, expire due effects, and support exact Undo. Combat warnings retain the draft; invalid or oversized durations stay blocked.

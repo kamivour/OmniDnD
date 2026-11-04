@@ -127,6 +127,15 @@ export const SpellDefSchema = z
     { message: 'Casting in minutes or hours needs an amount', path: ['casting', 'amount'] },
   );
 
+/** Source-backed display metadata only; target outcomes and damage reductions stay manual. */
+export const FeatureDefensesSchema = z.strictObject({
+  resistances: z.array(DamageTypeSchema).optional(),
+  immunities: z.array(DamageTypeSchema).optional(),
+  vulnerabilities: z.array(DamageTypeSchema).optional(),
+  saveAdvantages: z.array(z.union([ConditionSchema, DamageTypeSchema])).optional(),
+  magicalSleepImmunity: z.boolean().optional(),
+});
+
 export const FeatureDefSchema = z
   .strictObject({
     kind: z.literal('feature'),
@@ -146,6 +155,7 @@ export const FeatureDefSchema = z
     usesFrom: refId('feature').optional(),
     die: DieByLevelSchema.optional(),
     modifiers: z.array(ModifierSchema).optional(),
+    defenses: FeatureDefensesSchema.optional(),
     /** Complex logic in `src/engine/hooks/<hook>.ts`. */
     hook: z.string().optional(),
   })
@@ -334,7 +344,7 @@ const NOT_MECHANICS = [
  * against its own schema, so a misspelled field fails there.
  */
 export const MechanicsOverlaySchema = z
-  .looseObject({ id: AnyRefIdSchema })
+  .looseObject({ id: AnyRefIdSchema, defenses: FeatureDefensesSchema.optional() })
   .refine((overlay) => NOT_MECHANICS.every((key) => !(key in overlay)), {
     message: `Mechanics overlays may not set ${NOT_MECHANICS.join(', ')} (text goes in data/content/)`,
   });

@@ -105,6 +105,11 @@ describe('levelUp', () => {
         { label: 'Level 2', value: -1 },
         { label: 'Level 3', value: -1 },
       ],
+      notes: [
+        'Level 1 (Bard): locked maximum 8 + current CON (-2) = 6; no per-level minimum.',
+        'Level 2 (Bard): locked roll 1 + current CON (-2) = -1; no per-level minimum.',
+        'Level 3 (Bard): locked roll 1 + current CON (-2) = -1; no per-level minimum.',
+      ],
     });
     expect(
       computeSheet({ ...weak, campaign: { ...weak.campaign, hpLevelFloor: 'one' } }, registry).maxHp
@@ -137,6 +142,11 @@ describe('levelUp', () => {
         { label: 'Level 1', value: 6 },
         { label: 'Level 2', value: 1 },
         { label: 'Level 3', value: -1 },
+      ],
+      notes: [
+        'Level 1 (Bard): locked maximum 8 + current CON (-2) = 6; no per-level minimum.',
+        'Level 2 (Bard): locked roll 1 + current CON (-2) = -1; minimum 1 per level → 1.',
+        'Level 3 (Bard): locked roll 1 + current CON (-2) = -1; no per-level minimum.',
       ],
     });
     expect(

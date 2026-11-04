@@ -9,9 +9,9 @@ import {
   setExhaustion,
 } from '../../engine/commands';
 import { CONDITIONS } from '../../engine/rules2014';
-import type { Stat } from '../../engine/calc/stat';
 import { HpAdjustmentBody, type HpKind } from '../components/HpControl';
 import { DeathSaveTracker } from '../health/DeathSaveTracker';
+import { StatBreakdown } from '../components/StatBreakdown';
 import { PipStepper } from '../components/PipStepper';
 import { Sheet } from '../components/Sheet';
 import { useCommand } from '../commands/command-context';
@@ -280,25 +280,5 @@ export function HudAdjustments({
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
-  );
-}
-
-function StatBreakdown({ stat }: { stat: Stat }) {
-  return (
-    <dl>
-      <div className="mb-2 flex justify-between font-semibold">
-        <dt>Total</dt>
-        <dd>{stat.value}</dd>
-      </div>
-      {stat.parts.map((part, index) => (
-        <div
-          key={`${part.label}-${index}`}
-          className="flex min-h-8 items-center justify-between gap-3 text-text-muted"
-        >
-          <dt>{part.label}</dt>
-          <dd>{part.value}</dd>
-        </div>
-      ))}
-    </dl>
   );
 }

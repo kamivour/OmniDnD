@@ -8,6 +8,8 @@ export interface Part {
 export interface Stat {
   value: number;
   parts: Part[];
+  /** Formulas, floors and source details that are not additive parts of the result. */
+  notes?: string[];
 }
 
 export function sumParts(parts: Part[]): Stat {

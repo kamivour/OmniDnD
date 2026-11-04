@@ -134,6 +134,11 @@ describe('computeSheet: The Fool (TEST_CHARACTER §4)', () => {
         { label: 'Level 2', value: 5 },
         { label: 'Level 3', value: 5 },
       ],
+      notes: [
+        'Level 1 (Bard): locked maximum 8 + current CON (+1) = 9; no per-level minimum.',
+        'Level 2 (Bard): locked roll 4 + current CON (+1) = 5; no per-level minimum.',
+        'Level 3 (Bard): locked roll 4 + current CON (+1) = 5; no per-level minimum.',
+      ],
     });
     expect(sheet.hitDice).toEqual([{ die: 'd8', max: 3 }]);
   });

@@ -142,6 +142,7 @@ interface CharacterBuild {
 interface LiveState {
   characterId: string;
   hp: number; tempHp: number; deathSaves: { success: number; fail: number };
+  inspiration?: boolean;                          // ordinary Inspiration, distinct from class uses
   hitDiceSpent: Record<string, number>;            // { d8: 1 }
   slotsUsed: number[];                             // index = spell level
   pactSlotsUsed?: number;
@@ -173,6 +174,10 @@ interface LiveState {
 **Pending concentration saves (M5):** Assisted damage records one `{ id, dc }` request per damage instance inside the current concentration object. The ID is the originating command's caller-supplied event ID; the DC uses damage after applicable reductions and before temporary HP. Explicit Pass removes one request, while Fail ends concentration and its linked effects. Replacing, ending, or expiring concentration removes its requests with it; Undo restores the exact object. Manual damage creates no Info-driven requests, but previously saved requests remain available for explicit review. The optional field preserves older version 1 files without rewriting them. The runner supplies event ID and automation only to command application; calculations and checks keep their existing context.
 
 **Store "used", not "remaining".** Maximums are computed from the build, so a level-up or override never desyncs live values.
+
+**Ordinary Inspiration (M7):** optional `live.inspiration` reads as false when absent. Only explicit `setInspiration` writes it; unrelated commands, parsing and loading keep legacy records unchanged. Undo of the first toggle removes the field again. Bardic Inspiration remains a separate feature-use pool. No advantage roll or DM outcome is chosen automatically.
+
+**Sheet explanations (M7):** additive `Stat.parts` explain contributions; optional engine-owned `Stat.notes` explain multiplication, rounding, caps and locked HP entries. Scalar explanations come from `sheetBreakdowns` and are never persisted. Maximum-HP parts include its final minimum-one adjustment so they add up to the displayed total. Optional feature `defenses` metadata records typed resistances/immunities/vulnerabilities, saving-throw advantages and magical-sleep protection. Only owned features contribute; missing metadata means not recorded, not proven absent. It does not automatically reduce damage or decide saving throws.
 
 **Dash (M5):** optional `combat.economy.dashCount` counts extra allowances from the current turn. The engine derives movement capacity from current speed and this count. Older version 1 files omit it and read as zero; ordinary turns keep their existing shape. End Turn removes it, and Undo restores it through the existing patches. No database migration rewrites saved characters.
 

@@ -27,7 +27,7 @@ export interface NavItem {
 /** Character screens in sidebar order (DESIGN.md Frame A). The divider sits before Inventory. */
 export const NAV: NavItem[] = [
   { to: '', label: 'Home', short: 'Home', icon: House },
-  { to: 'sheet', label: 'Sheet', short: 'Sheet', icon: ScrollText, milestone: 'M7' },
+  { to: 'sheet', label: 'Sheet', short: 'Sheet', icon: ScrollText },
   { to: 'spells', label: 'Spells', short: 'Spells', icon: Sparkles },
   { to: 'combat', label: 'Combat', short: 'Combat', icon: Swords },
   { to: 'explore', label: 'Explore', short: 'Explore', icon: Compass, milestone: 'M7' },

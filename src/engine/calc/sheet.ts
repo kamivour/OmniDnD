@@ -156,6 +156,8 @@ export function computeSheet({ campaign, build, live }: CharacterState, registry
     campaign.hpLevelFloor,
     build.hpEntries.map((entry) => entry.floor),
   );
+  const hpTotal = hpParts.reduce((sum, part) => sum + part.value, 0);
+  if (fullHp !== hpTotal) hpParts.push({ label: 'Minimum max HP 1', value: fullHp - hpTotal });
   const halvedHp = live.exhaustion >= 4 ? Math.max(1, Math.floor(fullHp / 2)) : fullHp;
   const maxHpStat: Stat = {
     value: halvedHp,
@@ -163,6 +165,23 @@ export function computeSheet({ campaign, build, live }: CharacterState, registry
       halvedHp === fullHp
         ? hpParts
         : [...hpParts, { label: 'Exhaustion (halved)', value: halvedHp - fullHp }],
+    notes: [
+      ...build.hpEntries.map((entry) => {
+        const floor = entry.floor ?? campaign.hpLevelFloor;
+        const beforeFloor = entry.value + mods.CON;
+        const entryLabel =
+          entry.method === 'rolled' ? 'roll' : entry.method === 'average' ? 'average' : 'maximum';
+        const floorNote =
+          floor === 'one'
+            ? `minimum 1 per level → ${Math.max(1, beforeFloor)}`
+            : 'no per-level minimum';
+        return `Level ${entry.level} (${registry.get('class', entry.classId).name}): locked ${entryLabel} ${entry.value} + current CON (${mods.CON >= 0 ? '+' : ''}${mods.CON}) = ${beforeFloor}; ${floorNote}.`;
+      }),
+      ...(fullHp !== hpTotal ? [`Minimum maximum HP: max(1, ${hpTotal}) = ${fullHp}.`] : []),
+      ...(live.exhaustion >= 4
+        ? [`Exhaustion ${live.exhaustion}: max(1, floor(${fullHp} / 2)) = ${halvedHp}.`]
+        : []),
+    ],
   };
 
   const classDefs = build.classes.map((entry) => ({

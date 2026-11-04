@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M7 — Character Sheet + Exploration + level-up.
-**Next up:** Live Character Sheet sections with breakdown tooltips.
+**Next up:** Character Sheet Edit mode and noted overrides with the ✎ marker.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -114,7 +114,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Gate: scenario steps 9–14 through real controls, including standalone time advancement
 
 ### M7 — Character Sheet + Exploration
-- [ ] Sheet sections (SPEC §5) with breakdown tooltips
+- [x] Sheet sections (SPEC §5) with breakdown tooltips
 - [ ] Edit mode + overrides with ✎ marker
 - [ ] Ability scores: enter base per campaign method (rolled = typed, standard array = assign, point buy = 27-point check); bonuses listed separately
 - [ ] Level up (minimal): milestone button / XP threshold prompt; enter roll or take average; +1 Hit Die; XP hidden in milestone mode
@@ -142,6 +142,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ## Session log
 
 Newest first. One line per work session: date — what changed — what's next.
+
+- 2026-11-04 — M7 Sheet sections: live identity, ordinary Inspiration, abilities/saves, eighteen skills and markers, passives, proficiencies/languages, source-backed defensive records, combat references/death saves, attacks and class casting stats replace the placeholder. Shared breakdowns explain scalar formulas and locked HP entries; parts include minimum-max-HP adjustment without changing values. Optional Inspiration preserves legacy absence and exact Undo (D95–D96). Reproduced/fixed level-20 tooltip overflow and accessible formula descriptions (D97). 922 unit tests pass; all 431 runnable browser cases have passing proof with 35 expected skips. Full run: 425 pass, four Windows loopback EACCES failures and two stale Sheet-placeholder assertions; corrected smoke contract and targeted rerun passes ten checks without automatic retries. Typecheck, lint, formatting and build pass; 375/1440 layouts, keyboard/touch inspection, twenty-level scrolling, reload and Undo checked with the real-HTTP forwarder. Sheet manual QA added. Next: Edit mode and noted overrides.
 
 - 2026-11-04 — M6 complete: shared Dashboard clock presets/custom duration and command-only preview close linked acceptance steps 9–14, including expiry, both rests, the Hit Dice half cap, refresh, exact Undo and per-click slot corrections (D91). Shared guards block unsafe clock/deadline arithmetic without rewriting saves (D92). Fixed above-anchor HUD editor height (D93); traced screenshot-induced responsive remounts and corrected viewport artifact capture (D94). 885 unit tests pass; all 415 runnable browser cases have passing proof with 35 expected skips. The full run had five Windows loopback EACCES failures before app loading; focused rerun passes seven checks with three expected skips, without automatic retries. Typecheck, lint, formatting and build pass; 375/1440 layouts checked with the real-HTTP forwarder. M6 manual QA is in MANUAL_QA.md. Next: M7 live Sheet sections and computed breakdowns.
 

@@ -6,6 +6,7 @@ export * from './effects';
 export * from './features';
 export * from './favorites';
 export * from './hp';
+export * from './inspiration';
 export * from './level';
 export * from './rest';
 export * from './spells';

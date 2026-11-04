@@ -6,6 +6,7 @@ import {
   offset,
   safePolygon,
   shift,
+  size,
   useDismiss,
   useFloating,
   useFocus,
@@ -56,7 +57,20 @@ export function Preview({ title, content, sheetFooter, onPin, children }: Previe
     open: popover && open,
     onOpenChange: setOpen,
     placement: 'bottom-start',
-    middleware: [offset(6), flip({ fallbackPlacements: ['top-start'] }), shift({ padding: 8 })],
+    middleware: [
+      offset(6),
+      flip({ fallbackPlacements: ['top-start'] }),
+      shift({ padding: 8 }),
+      size({
+        padding: 8,
+        apply({ availableHeight, elements }) {
+          Object.assign(elements.floating.style, {
+            maxHeight: `${Math.max(0, availableHeight)}px`,
+            overflowY: 'auto',
+          });
+        },
+      }),
+    ],
     whileElementsMounted: autoUpdate,
   });
   const hover = useHover(context, {

@@ -30,6 +30,15 @@
   },
   { "id": "feature.bard.spellcasting", "activation": "passive" },
   { "id": "feature.darkvision", "activation": "passive" },
-  { "id": "feature.fey-ancestry", "activation": "passive" },
+  {
+    "id": "feature.fey-ancestry",
+    "activation": "passive",
+    "defenses": { "saveAdvantages": ["charmed"], "magicalSleepImmunity": true }
+  },
+  {
+    "id": "feature.dwarven-resilience",
+    "defenses": { "resistances": ["poison"], "saveAdvantages": ["poison"] }
+  },
+  { "id": "feature.hellish-resistance", "defenses": { "resistances": ["fire"] } },
   { "id": "feature.skill-versatility", "activation": "passive" }
 ]

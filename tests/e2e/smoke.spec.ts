@@ -24,11 +24,7 @@ const HUB_ROUTES = [
 
 const CHARACTER_ROUTES: { path: string; heading: string; notice?: string }[] = [
   { path: '/characters/the-fool', heading: 'Home' },
-  {
-    path: '/characters/the-fool/sheet',
-    heading: 'Sheet',
-    notice: 'Coming in milestone M7.',
-  },
+  { path: '/characters/the-fool/sheet', heading: 'Character sheet' },
   { path: '/characters/the-fool/combat', heading: 'Combat' },
   { path: '/characters/the-fool/spells', heading: 'Spells' },
   {

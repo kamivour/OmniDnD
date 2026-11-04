@@ -230,6 +230,8 @@ export const LiveStateSchema = z
     schemaVersion: z.literal(SCHEMA_VERSION),
     hp: NonNegativeInt,
     tempHp: NonNegativeInt,
+    /** Ordinary Inspiration, separate from Bardic Inspiration. Absent in older saves: false. */
+    inspiration: z.boolean().optional(),
     deathSaves: z.strictObject({ success: z.int().min(0).max(3), fail: z.int().min(0).max(3) }),
     hitDiceSpent: z.partialRecord(HitDieSchema, NonNegativeInt),
     /** Index = spell level, so index 0 (cantrips) stays 0. Stores used, not remaining (D6). */

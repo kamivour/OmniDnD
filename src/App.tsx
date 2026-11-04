@@ -6,6 +6,7 @@ import { NAV } from './ui/layout/nav';
 import { CampaignSetupScreen } from './ui/screens/CampaignSetupScreen';
 import { CampaignsScreen } from './ui/screens/CampaignsScreen';
 import { CombatScreen } from './ui/screens/CombatScreen';
+import { CharacterSheetScreen } from './ui/screens/CharacterSheetScreen';
 import { DashboardScreen } from './ui/screens/DashboardScreen';
 import { NewCharacterScreen } from './ui/screens/NewCharacterScreen';
 import { PlaceholderScreen } from './ui/screens/PlaceholderScreen';
@@ -16,7 +17,7 @@ import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { MotionPreference } from './ui/components/MotionPreference';
 import { StorageGate } from './ui/storage/StorageGate';
 
-const BUILT = new Set(['', 'combat', 'spells', 'reference', 'settings']);
+const BUILT = new Set(['', 'sheet', 'combat', 'spells', 'reference', 'settings']);
 
 /** Hub routes (no character open) and character routes under `/characters/:characterId`. */
 export function App() {
@@ -38,6 +39,7 @@ export function App() {
             </Route>
             <Route path="characters/:characterId" element={<AppFrame />}>
               <Route index element={<DashboardScreen />} />
+              <Route path="sheet" element={<CharacterSheetScreen />} />
               <Route path="combat" element={<CombatScreen />} />
               <Route path="spells" element={<SpellbookScreen />} />
               <Route path="reference" element={<ReferenceScreen />} />
