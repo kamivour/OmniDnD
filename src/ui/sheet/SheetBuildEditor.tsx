@@ -1,12 +1,25 @@
 import { useId, useRef, useState } from 'react';
 import { registry } from '../../data/registry';
 import { ABILITIES, type Ability } from '../../engine/calc/abilities';
-import { editBuild, type EditBuildChanges } from '../../engine/commands/edit-build';
+import {
+  AbilityBasesSchema,
+  abilityBaseIssues,
+  pointBuyCost,
+  type AbilityMethod,
+} from '../../engine/calc/ability-methods';
+import { computeSheet } from '../../engine/calc/sheet';
+import {
+  editBuild,
+  previewBuildEdit,
+  type EditBuildChanges,
+} from '../../engine/commands/edit-build';
 import { SKILLS } from '../../engine/rules2014';
 import type { CharacterBuild, RaceDef, RefEntry } from '../../engine/schema';
 import { useCommand } from '../commands/command-context';
 import { Field, inputClass } from '../components/fields';
 import { SectionLabel } from '../components/SectionLabel';
+import { AbilityBaseInput } from '../components/AbilityBaseInput';
+import { OverrideMarker } from '../components/StatChip';
 import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
 
@@ -14,6 +27,12 @@ const card = 'flex min-w-0 flex-col gap-4 rounded-card border border-border bg-s
 const button = 'min-h-11 rounded-btn border border-border px-4 text-sm disabled:opacity-40';
 const labelFor = (value: string) =>
   value.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+const abilityMethodLabel = (method: AbilityMethod) =>
+  ({
+    rolled: 'Rolled scores',
+    'standard-array': 'Standard array',
+    'point-buy': 'Point buy',
+  })[method];
 
 interface Choice {
   id: string;
@@ -130,11 +149,18 @@ function initialRacialChoices(build: CharacterBuild, race: RaceDef | undefined):
 
 /** Staged build choices. Saving sends changed fields through one logged engine command. */
 export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
-  const { state } = useCharacter();
+  const { state, sheet } = useCharacter();
   const { campaign } = state;
   const { run } = useCommand();
   const prefix = useId();
   const [baseline] = useState(() => structuredClone(state.build));
+  const [originalAbilityMethod] = useState(campaign.abilityMethod);
+  const [bases, setBases] = useState(
+    () =>
+      Object.fromEntries(
+        ABILITIES.map((ability) => [ability, String(baseline.abilityScores.base[ability])]),
+      ) as Record<Ability, string>,
+  );
   const originalRace = registry.entries.get(baseline.subraceId ?? baseline.raceId);
   const [originalChoices] = useState(() =>
     initialRacialChoices(baseline, originalRace?.kind === 'race' ? originalRace : undefined),
@@ -237,21 +263,77 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
     changes.proficiencies = nextProficiencies;
   const nextXp = xp.trim() ? Number(xp) : null;
   if (campaign.leveling === 'xp' && nextXp !== (baseline.xp ?? null)) changes.xp = nextXp;
+  const enteredBases = Object.fromEntries(
+    ABILITIES.map((ability) => [
+      ability,
+      bases[ability].trim() === '' ? NaN : Number(bases[ability]),
+    ]),
+  ) as Record<Ability, number>;
+  const baseChanged = ABILITIES.some(
+    (ability) => enteredBases[ability] !== baseline.abilityScores.base[ability],
+  );
+  const parsedBases = AbilityBasesSchema.safeParse(enteredBases);
+  const baseIssues = parsedBases.success
+    ? abilityBaseIssues(campaign.abilityMethod, parsedBases.data)
+    : [
+        campaign.abilityMethod === 'standard-array'
+          ? 'Assign each standard-array score once: 15, 14, 13, 12, 10, 8'
+          : `Enter six whole base scores between ${campaign.abilityMethod === 'point-buy' ? '8 and 15' : '3 and 18'}.`,
+      ];
+  const methodChanged = campaign.abilityMethod !== originalAbilityMethod;
+  const baseStateChanged = ABILITIES.some(
+    (ability) => state.build.abilityScores.base[ability] !== baseline.abilityScores.base[ability],
+  );
+  const baseBlocked = baseChanged && (baseIssues.length > 0 || methodChanged || baseStateChanged);
+  if (baseChanged && parsedBases.success) changes.abilityBases = parsedBases.data;
   const hasChanges = Object.keys(changes).length > 0 || bonusChoicesChanged;
+  const pointCost = pointBuyCost(enteredBases);
+  const previewChanges: EditBuildChanges = {};
+  if (changes.raceId !== undefined) previewChanges.raceId = changes.raceId;
+  if (changes.subraceId !== undefined) previewChanges.subraceId = changes.subraceId;
+  if (baseChanged && parsedBases.success && !baseBlocked)
+    previewChanges.abilityBases = parsedBases.data;
+  const previewRequested = baseChanged || reviewRacialBonuses;
+  const preview =
+    previewRequested && !baseBlocked && !baseStateChanged
+      ? previewBuildEdit(
+          { ...state, sheet, registry },
+          {
+            changes: previewChanges,
+            expected: baseline,
+            ...(baseChanged ? { expectedAbilityMethod: originalAbilityMethod } : {}),
+            ...(reviewRacialBonuses ? { racialChoices } : {}),
+          },
+        )
+      : undefined;
+  const previewBuild =
+    !baseStateChanged && !baseBlocked
+      ? previewRequested
+        ? preview?.build
+        : state.build
+      : undefined;
+  const abilityPreview = previewBuild
+    ? computeSheet({ ...state, build: previewBuild }, registry)
+    : undefined;
+  const bonusEntries = previewBuild?.abilityScores.bonuses ?? state.build.abilityScores.bonuses;
+  const previewProblems =
+    preview?.checks.filter((check) => check.level === 'block').map((check) => check.reason) ?? [];
 
   return (
     <form
       aria-label="Edit character build"
+      noValidate
       className="flex min-w-0 flex-col gap-4"
       onChange={() => errors.length > 0 && setErrors([])}
       onSubmit={(event) => {
         event.preventDefault();
-        if (!hasChanges) return;
+        if (!hasChanges || baseBlocked) return;
         const result = run(
           editBuild,
           {
             changes,
             expected: baseline,
+            ...(baseChanged ? { expectedAbilityMethod: originalAbilityMethod } : {}),
             ...(reviewRacialBonuses ? { racialChoices } : {}),
           },
           undefined,
@@ -264,8 +346,8 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
       }}
     >
       <p className="text-sm text-text-muted">
-        Review identity, racial bonus choices and proficiencies, then save them together. Cancel
-        discards this draft.
+        Review identity, base scores, racial bonus choices and proficiencies, then save them
+        together. Cancel discards this draft.
       </p>
       {errors.length > 0 && (
         <div
@@ -384,6 +466,150 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
           recorded proficiencies and languages; review those choices below.
         </p>
       </section>
+      <section aria-label="Ability base scores" className={card}>
+        <SectionLabel>Base ability scores</SectionLabel>
+        <p id={`${prefix}-ability-method`} className="text-sm text-text">
+          {abilityMethodLabel(campaign.abilityMethod)}.{' '}
+          {campaign.abilityMethod === 'rolled'
+            ? 'Type each rolled base score. Bonuses are added separately.'
+            : campaign.abilityMethod === 'standard-array'
+              ? 'Assign 15, 14, 13, 12, 10 and 8, each once. Bonuses are added separately.'
+              : 'Choose base scores from 8 to 15, spending up to 27 points. Bonuses are added separately.'}
+        </p>
+        {campaign.abilityMethod === 'point-buy' && (
+          <p
+            className={`sticky top-[var(--character-header-height)] z-10 bg-surface py-2 text-sm ${pointCost !== undefined && pointCost > 27 ? 'text-warn' : 'text-text'}`}
+            aria-live="polite"
+          >
+            Points used: {pointCost ?? '—'} / 27
+            {pointCost !== undefined &&
+              (pointCost > 27
+                ? ` · ${pointCost - 27} over budget`
+                : ` · ${27 - pointCost} remaining`)}
+          </p>
+        )}
+        {!baseChanged && baseIssues.length > 0 && (
+          <p className="text-sm text-text-muted">
+            Recorded base scores do not match this campaign's current method. They stay recorded
+            unless you edit base scores.
+          </p>
+        )}
+        {methodChanged && (
+          <p role="status" className="text-sm text-warn">
+            The campaign's ability method changed from {abilityMethodLabel(originalAbilityMethod)}{' '}
+            to {abilityMethodLabel(campaign.abilityMethod)}. Your draft is kept; close and reopen
+            Edit mode before saving edited base scores.
+          </p>
+        )}
+        {baseStateChanged && (
+          <p role="status" className="text-sm text-warn">
+            Recorded base scores changed after editing began. Your draft is kept; close and reopen
+            Edit mode before changing base scores.
+          </p>
+        )}
+        {baseChanged && baseIssues.length > 0 && (
+          <ul role="alert" className="list-disc pl-5 text-sm text-warn">
+            {baseIssues.map((issue) => (
+              <li key={issue}>{issue}</li>
+            ))}
+          </ul>
+        )}
+        {previewProblems.length > 0 && (
+          <p className="text-sm text-warn">
+            Complete the ability and racial choices for a score preview. {previewProblems.join(' ')}
+          </p>
+        )}
+        <p className="text-xs text-text-muted">
+          Each bonus keeps its recorded source.{' '}
+          {previewBuild
+            ? 'Scores and modifiers below use the staged choices.'
+            : 'Bonus sources below show recorded entries while the preview is incomplete.'}
+        </p>
+        <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {ABILITIES.map((ability) => {
+            const score = abilityPreview?.abilities[ability].score;
+            const modifier = abilityPreview?.values[`/abilities/${ability}/mod`]?.stat;
+            const bonuses = bonusEntries.filter((bonus) => bonus.ability === ability);
+            return (
+              <div
+                key={ability}
+                className="flex min-w-0 flex-col gap-3 rounded-card border border-border p-3"
+              >
+                <h3 className="text-sm font-semibold text-accent">{ability}</h3>
+                <Field label="Base" htmlFor={`${prefix}-base-${ability}`}>
+                  <AbilityBaseInput
+                    ability={ability}
+                    id={`${prefix}-base-${ability}`}
+                    method={campaign.abilityMethod}
+                    value={bases[ability]}
+                    onChange={(value) => setBases((current) => ({ ...current, [ability]: value }))}
+                    className={inputClass}
+                    describedBy={`${prefix}-ability-method`}
+                    invalid={baseChanged && baseIssues.length > 0}
+                  />
+                </Field>
+                <dl className="grid min-w-0 grid-cols-2 gap-2 text-sm">
+                  <div className="min-w-0">
+                    <dt className="text-xs text-text-muted">Score</dt>
+                    <dd className="wrap-anywhere font-semibold text-text">
+                      <output aria-label={`${ability} score preview`}>
+                        {score?.value ?? '—'}
+                        <OverrideMarker override={score?.override} />
+                      </output>
+                    </dd>
+                  </div>
+                  <div className="min-w-0">
+                    <dt className="text-xs text-text-muted">Modifier</dt>
+                    <dd className="wrap-anywhere font-semibold text-text">
+                      <output aria-label={`${ability} modifier preview`}>
+                        {abilityPreview ? signed(abilityPreview.abilities[ability].mod) : '—'}
+                        <OverrideMarker override={modifier?.override} />
+                      </output>
+                    </dd>
+                  </div>
+                </dl>
+                {score?.override && (
+                  <p className="text-xs text-text-muted">
+                    Calculated score {score.override.calculated} before override:{' '}
+                    {score.override.note}.
+                  </p>
+                )}
+                {modifier?.override && (
+                  <p className="text-xs text-text-muted">
+                    Calculated modifier {signed(modifier.override.calculated)} before override:{' '}
+                    {modifier.override.note}.
+                  </p>
+                )}
+                <div className="min-w-0">
+                  <p className="mb-1 text-xs text-text-muted">Bonus sources</p>
+                  <ul
+                    aria-label={`${ability} bonus sources`}
+                    className="flex min-w-0 flex-col gap-1 text-xs text-text-muted"
+                  >
+                    {bonuses.length ? (
+                      bonuses.map((bonus, index) => (
+                        <li
+                          key={`${bonus.source}-${index}`}
+                          className="flex min-w-0 justify-between gap-2"
+                        >
+                          <span className="min-w-0 wrap-anywhere">
+                            {registry.entries.get(bonus.source)?.name ?? bonus.source}
+                          </span>
+                          <span className="min-w-0 wrap-anywhere text-right">
+                            {signed(bonus.value)}
+                          </span>
+                        </li>
+                      ))
+                    ) : (
+                      <li>No recorded bonuses</li>
+                    )}
+                  </ul>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
       <section aria-label="Racial ability bonuses" className={card}>
         <SectionLabel>Racial ability bonuses</SectionLabel>
         <p className="text-sm text-text">
@@ -395,8 +621,7 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
             : 'None recorded'}
         </p>
         <p className="text-xs text-text-muted">
-          Bonus amounts come from the selected 2014 race. Base scores and unrelated saved bonuses
-          stay as recorded.
+          Bonus amounts come from the selected 2014 race. Unrelated saved bonuses stay as recorded.
         </p>
         {race?.abilityChoices && (
           <>
@@ -519,7 +744,7 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
         </button>
         <button
           type="submit"
-          disabled={!hasChanges}
+          disabled={!hasChanges || baseBlocked}
           className={`${button} bg-accent font-semibold text-bg`}
         >
           Save changes

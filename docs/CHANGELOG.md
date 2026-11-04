@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-04 23:22 — Ability entry by campaign method
+
+- Edit rolled bases, assign the standard array or check a point-buy purchase against 27 points. The budget stays visible while editing.
+- Preview scores and modifiers with bonus sources listed separately. Saved edits keep current resources, locked HP entries and noted overrides.
+- Check Save/Cancel and your campaign's method, including retained older scores. Minimal level-up is next. Checks pass.
+
 ## 2026-11-04 22:58 — Sheet Edit mode and noted overrides
 
 - Edit identity, race, subclass, proficiencies and languages; save choices together or cancel the draft.

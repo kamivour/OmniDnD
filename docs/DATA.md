@@ -181,6 +181,8 @@ interface LiveState {
 
 **Sheet explanations (M7):** additive `Stat.parts` sum to the displayed total, including HP's minimum-one adjustment; optional `Stat.notes` explain formulas, rounding, caps and locked entries. Scalar explanations from `sheetBreakdowns` are never persisted.
 
+**Base-score edits (M7):** explicit edits validate all six bases using the campaign's current method; other edits preserve recorded bases even after a method change (D69). Bonuses, overrides, locked HP entries and current resources stay recorded while dependent numbers recalculate.
+
 **Noted overrides (M7):** `build.overrides` recognizes canonical paths such as `/abilities/CHA/mod`, numeric values and owned feature dice; unrecognized or unsafe entries remain untouched. Calculation-stage overrides feed dependent values, while transient `Stat.override` metadata supplies the ✎ marker and original calculated value.
 
 **Remaining corrections (D101):** a remaining-resource path stores the provenance below in its existing `value` field and changes the corresponding spent counter through a command. Later changes to that counter clear the active annotation; Reset can restore its previous spending, and Undo restores both counter and note.

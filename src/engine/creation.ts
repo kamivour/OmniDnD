@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { ABILITIES } from './calc/abilities';
+import { AbilityBasesSchema, abilityBaseIssues } from './calc/ability-methods';
+export { STANDARD_ARRAY, POINT_BUY_COSTS } from './calc/ability-methods';
 import { averageHpRoll, type HitDie } from './calc/hp';
 import { xpForLevel } from './calc/advancement';
 export { xpForLevel } from './calc/advancement';
@@ -20,19 +21,6 @@ import {
   type RefKind,
 } from './schema';
 
-/** PHB 2014 score methods, before racial increases. */
-export const STANDARD_ARRAY = [15, 14, 13, 12, 10, 8] as const;
-export const POINT_BUY_COSTS: Readonly<Record<number, number>> = {
-  8: 0,
-  9: 1,
-  10: 2,
-  11: 3,
-  12: 4,
-  13: 5,
-  14: 7,
-  15: 9,
-};
-
 const LevelSchema = z.int().min(1).max(20);
 
 export const CreateCharacterInputSchema = z
@@ -45,38 +33,19 @@ export const CreateCharacterInputSchema = z
     backgroundId: refId('background'),
     alignment: z.string().trim().optional(),
     level: LevelSchema,
-    abilityBases: z.record(AbilitySchema, z.int().min(3).max(18)),
+    abilityBases: AbilityBasesSchema,
     /** Pick the abilities only; the race supplies their bonus amounts. */
     racialChoices: z.array(AbilitySchema).optional(),
     /** Entries are for levels 2 through N. Level 1 always uses the die maximum. */
     hpRolls: z.array(z.int().positive()).optional(),
   })
   .superRefine(({ campaign, abilityBases }, ctx) => {
-    const scores = ABILITIES.map((ability) => abilityBases[ability]);
-    if (
-      campaign.abilityMethod === 'standard-array' &&
-      [...scores].sort((a, b) => b - a).some((score, index) => score !== STANDARD_ARRAY[index])
-    ) {
+    for (const message of abilityBaseIssues(campaign.abilityMethod, abilityBases)) {
       ctx.addIssue({
         code: 'custom',
         path: ['abilityBases'],
-        message: 'Assign each standard-array score once: 15, 14, 13, 12, 10, 8',
+        message,
       });
-    }
-    if (campaign.abilityMethod === 'point-buy') {
-      if (scores.some((score) => score < 8 || score > 15)) {
-        ctx.addIssue({
-          code: 'custom',
-          path: ['abilityBases'],
-          message: 'Point-buy base scores must be between 8 and 15',
-        });
-      } else if (scores.reduce((sum, score) => sum + POINT_BUY_COSTS[score]!, 0) > 27) {
-        ctx.addIssue({
-          code: 'custom',
-          path: ['abilityBases'],
-          message: 'Point-buy base scores cost more than 27 points',
-        });
-      }
     }
   });
 

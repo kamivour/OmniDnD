@@ -58,8 +58,9 @@ Exploration will reuse Dashboard's GameClockControl under D91.
 - [ ] On phone, tablet and desktop, judge whether the compact status/log row leaves enough room for play. Find one Undo across character screens, spell management and full history; judge whether its latest-change wording makes the result clear.
 - [ ] Edit your own character and a prepared caster. Judge Save/Cancel wording, retained grants and source choices, especially when changing race, background, subclass or Expertise.
 - [ ] Apply a noted override and inspect ✎ and its breakdown across screens. Judge whether calculated versus overridden values, Reset and normal spending after a remaining correction are understandable, including large resource totals.
+- [ ] Review rolled, standard-array and point-buy entry on your own character. Base scores, separate bonus sources, point cost and ✎ previews should make the result clear before saving.
 
-Ability entry, level-up and Exploration remain unfinished M7 work. Review each when its task is complete.
+Level-up and Exploration remain unfinished M7 work. Review each when its task is complete.
 
 ## Deferred rules review — M5
 

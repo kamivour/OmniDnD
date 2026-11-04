@@ -83,7 +83,7 @@ Create blank (inside a campaign), import JSON, duplicate, delete (confirm). Full
 **Manual vs automatic:** the user enters every *choice* (race, class, skills, Expertise, languages, tools, spells, items, ability scores or rolls, HP rolls). The app computes every *derived number* (modifiers, saves, skills, passives, initiative, DC, attacks, AC, max HP, slots, uses). Never ask the user to type a number the app can compute.
 
 ### Dashboard
-Resources, concentration, effects on you, conditions, Quick Access (favorited spells/features/items), ability/save/passive summary, last 5 log entries with Undo.
+Resources, concentration, effects on you, conditions, Quick Access (favorited spells/features/items), ability/save/passive summary and the last 5 log entries. Full history and Undo stay in the shared header.
 
 - **Resource groups (D37):** Spell slots (one row per level) · Features & traits (class/race resources, e.g. Bardic Inspiration) · Hit Dice. Each group has its own heading.
 - **Row:** label · `[−] pips left/max [+]`. Pips sit between the buttons so a tap on a pip never spends or restores.
@@ -92,7 +92,7 @@ Resources, concentration, effects on you, conditions, Quick Access (favorited sp
 
 ### Character Sheet
 - **Identity:** name, race/subrace, class/subclass/level, background, alignment, inspiration toggle. XP field and "next level at" only when the campaign uses XP leveling; otherwise hidden.
-- **Abilities:** score, modifier, save (proficiency marked). Score = base (entered per campaign method) + bonuses (racial, ASI, feat, item), each bonus listed in the breakdown.
+- **Abilities:** score, modifier, save (proficiency marked). Edit bases as typed rolls, standard-array assignments or a point-buy purchase costing at most 27 points; bonuses (racial, ASI, feat, item) stay separate, with their sources shown.
 - **Max HP:** computed from per-level HP entries (see §6). Shows each level's entry in the breakdown.
 - **Level up (Phase 1: minimal):** XP mode → prompt when XP reaches the threshold. Milestone mode → "Level up" button whenever the DM says so. Either way: enter the new level's HP roll (or take average, per campaign), gain 1 Hit Die. Full feature/spell choices workflow is Phase 3.
 - **Skills:** modifier with markers for proficient / expertise / Jack of All Trades. Passive Perception, Investigation, Insight.

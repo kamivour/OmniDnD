@@ -1,9 +1,11 @@
 import { z } from 'zod';
 import { computeSheet } from '../calc/sheet';
+import { AbilityBasesSchema, abilityBaseIssues } from '../calc/ability-methods';
 import type { Registry } from '../registry';
 import {
   AbilitySchema,
   CharacterBuildSchema,
+  CampaignSchema,
   refId,
   type CharacterBuild,
   type RaceDef,
@@ -29,6 +31,7 @@ const EditBuildChangesSchema = z.strictObject({
     .optional(),
   proficiencies: CharacterBuildSchema.shape.proficiencies.optional(),
   xp: z.int().nonnegative().nullable().optional(),
+  abilityBases: AbilityBasesSchema.optional(),
 });
 
 const EditBuildPayloadSchema = z.strictObject({
@@ -36,6 +39,7 @@ const EditBuildPayloadSchema = z.strictObject({
   /** A form baseline, never a replacement record. Only affected fields are compared. */
   expected: CharacterBuildSchema,
   racialChoices: z.array(AbilitySchema).optional(),
+  expectedAbilityMethod: CampaignSchema.shape.abilityMethod.optional(),
 });
 
 export type EditBuildChanges = z.infer<typeof EditBuildChangesSchema>;
@@ -107,10 +111,11 @@ function safeCalculatedNumbers(value: unknown): boolean {
   return true;
 }
 
-function prepare(ctx: CommandContext, input: EditBuildPayload) {
+/** Validates a staged edit and derives its proposed build without changing saved state. */
+export function previewBuildEdit(ctx: CommandContext, input: EditBuildPayload) {
   const parsed = EditBuildPayloadSchema.safeParse(input);
   if (!parsed.success) return { checks: [block('Character edit details are invalid')] };
-  const { changes, expected, racialChoices } = parsed.data;
+  const { changes, expected, racialChoices, expectedAbilityMethod } = parsed.data;
   const { build } = ctx;
   const checks: Check[] = [];
   if (expected.id !== build.id || expected.campaignId !== build.campaignId)
@@ -129,6 +134,15 @@ function prepare(ctx: CommandContext, input: EditBuildPayload) {
   for (const field of fields) {
     if (changes[field] !== undefined && !same(build[field], expected[field]))
       checks.push(block(`Character ${field} changed since editing began. Reopen Edit mode.`));
+  }
+  if (changes.abilityBases !== undefined) {
+    if (expectedAbilityMethod !== ctx.campaign.abilityMethod)
+      checks.push(
+        block('The campaign ability method changed or was not reviewed. Reopen Edit mode.'),
+      );
+    if (!same(build.abilityScores.base, expected.abilityScores.base))
+      checks.push(block('Base ability scores changed since editing began. Reopen Edit mode.'));
+    checks.push(...abilityBaseIssues(ctx.campaign.abilityMethod, changes.abilityBases).map(block));
   }
   const raceChanged =
     (changes.raceId !== undefined && changes.raceId !== build.raceId) ||
@@ -155,6 +169,7 @@ function prepare(ctx: CommandContext, input: EditBuildPayload) {
   if (changes.raceId !== undefined) next.raceId = changes.raceId;
   if (changes.backgroundId !== undefined) next.backgroundId = changes.backgroundId;
   if (changes.proficiencies !== undefined) next.proficiencies = changes.proficiencies;
+  if (changes.abilityBases !== undefined) next.abilityScores.base = changes.abilityBases;
   if (changes.xp !== undefined && ctx.campaign.leveling !== 'xp')
     checks.push(block('XP can only be edited in a campaign that uses XP leveling'));
 
@@ -314,9 +329,9 @@ function prepare(ctx: CommandContext, input: EditBuildPayload) {
 /** Saves only selected build fields; all play state and unrelated build choices are preserved. */
 export const editBuild: Command<EditBuildPayload> = {
   name: 'editBuild',
-  check: (ctx, payload) => prepare(ctx, payload).checks,
+  check: (ctx, payload) => previewBuildEdit(ctx, payload).checks,
   apply: (draft, payload, ctx) => {
-    const prepared = prepare(ctx, payload);
+    const prepared = previewBuildEdit(ctx, payload);
     if (!prepared.build) throw new Error('Invalid character edit reached apply');
     const next = prepared.build;
     const changed = Object.keys(next).filter(
@@ -335,7 +350,8 @@ export const editBuild: Command<EditBuildPayload> = {
           subraceId: 'subrace',
           backgroundId: 'background',
           classes: 'subclass',
-          abilityScores: 'racial bonuses',
+          abilityScores:
+            payload.changes.abilityBases === undefined ? 'racial bonuses' : 'ability scores',
         })[key] ?? key,
     );
     if (payload.changes.subraceId === null && ctx.build.subraceId) labels.push('subrace');

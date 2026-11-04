@@ -10,6 +10,7 @@ import { SCHEMA_VERSION, type Campaign, type ExportFile } from '../../engine/sch
 import { useCampaign } from '../hooks/useCampaign';
 import { useManagement } from '../commands/useManagement';
 import { Field, inputClass } from '../components/fields';
+import { AbilityBaseInput } from '../components/AbilityBaseInput';
 import { SectionLabel } from '../components/SectionLabel';
 import { ALIGNMENTS } from '../fixtures/new-character';
 import { signed } from '../format';
@@ -320,7 +321,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
                       {a}
                     </th>
                     <td className={cell}>
-                      <BaseInput
+                      <AbilityBaseInput
                         ability={a}
                         method={campaign.abilityMethod}
                         value={bases[a]}
@@ -453,47 +454,6 @@ function abilityHint(c: Campaign): string {
   if (c.abilityMethod === 'standard-array')
     return `Assign ${STANDARD_ARRAY.join(', ')} as Base, each once. Race bonuses are computed.`;
   return 'Point buy: Base 8–15, spending up to 27 points. Race bonuses are computed separately.';
-}
-
-function BaseInput({
-  ability,
-  method,
-  value,
-  onChange,
-}: {
-  ability: Ability;
-  method: Campaign['abilityMethod'];
-  value: string;
-  onChange: (value: string) => void;
-}) {
-  if (method === 'standard-array')
-    return (
-      <select
-        aria-label={`${ability} base`}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        required
-        className={small}
-      >
-        <option value="">—</option>
-        {STANDARD_ARRAY.map((n) => (
-          <option key={n}>{n}</option>
-        ))}
-      </select>
-    );
-  const [min, max] = method === 'point-buy' ? [8, 15] : [3, 18];
-  return (
-    <input
-      type="number"
-      min={min}
-      max={max}
-      aria-label={`${ability} base`}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      required
-      className={small}
-    />
-  );
 }
 
 function Select({
