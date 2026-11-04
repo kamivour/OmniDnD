@@ -94,7 +94,7 @@ Resources, concentration, effects on you, conditions, Quick Access (favorited sp
 - **Identity:** name, race/subrace, class/subclass/level, background, alignment, inspiration toggle. XP field and "next level at" only when the campaign uses XP leveling; otherwise hidden.
 - **Abilities:** score, modifier, save (proficiency marked). Edit bases as typed rolls, standard-array assignments or a point-buy purchase costing at most 27 points; bonuses (racial, ASI, feat, item) stay separate, with their sources shown.
 - **Max HP:** computed from per-level HP entries (see §6). Shows each level's entry in the breakdown.
-- **Level up (Phase 1: minimal):** XP mode → prompt when XP reaches the threshold. Milestone mode → "Level up" button whenever the DM says so. Either way: enter the new level's HP roll (or take average, per campaign), gain 1 Hit Die. Full feature/spell choices workflow is Phase 3.
+- **Level up (Phase 1: minimal):** XP mode prompts at the next recorded level's threshold; milestone mode offers "Level up" whenever the DM says so. Review one new HP roll or the computed average, gain one class level and Hit Die, then apply once; full feature/spell choices stay in Phase 3.
 - **Skills:** modifier with markers for proficient / expertise / Jack of All Trades. Passive Perception, Investigation, Insight.
 - **Proficiencies:** armor, weapons, tools, languages. Senses, resistances, immunities, vulnerabilities.
 - **Combat stats:** HP, temp HP, Hit Dice, AC, initiative, speed, attacks, death saves.

@@ -1,5 +1,5 @@
 import type { Registry } from '../registry';
-import { xpForLevel } from './advancement';
+import { recordedLevel, xpForLevel } from './advancement';
 import { CARRY_PER_STR } from '../rules2014';
 import type { HitDieName } from '../schema';
 import { ABILITIES, abilityModifier, type Ability } from './abilities';
@@ -32,6 +32,7 @@ export function sheetBreakdowns(
     def: registry.get('class', entry.classId),
   }));
   const race = registry.get('race', build.subraceId ?? build.raceId);
+  const actualLevel = recordedLevel(build);
   // Follow computeSheet's accepted override metadata, including its unsafe-legacy fallback.
   const explain = (path: string, base: Stat): Stat => {
     const accepted = sheet.values[path]?.stat.override;
@@ -44,7 +45,7 @@ export function sheetBreakdowns(
   };
   return {
     level: explain('/level', {
-      value: classes.reduce((sum, entry) => sum + entry.level, 0),
+      value: actualLevel,
       parts: classes.map(({ def, level }) => ({ label: def.name, value: level })),
     }),
     proficiency: explain('/proficiency', {
@@ -54,13 +55,13 @@ export function sheetBreakdowns(
         `Character level ${sheet.level}: ceil(${sheet.level} / 4) + 1 = ${signed(proficiencyBonus(sheet.level))}.`,
       ],
     }),
-    ...(campaign.leveling === 'xp' && sheet.level < 20
+    ...(campaign.leveling === 'xp' && actualLevel < 20
       ? {
           nextLevelXp: explain('/nextLevelXp', {
-            value: xpForLevel(sheet.level + 1),
+            value: xpForLevel(actualLevel + 1),
             parts: [],
             notes: [
-              `2014 character advancement: level ${sheet.level + 1} requires ${xpForLevel(sheet.level + 1)} XP.`,
+              `2014 character advancement: level ${actualLevel + 1} requires ${xpForLevel(actualLevel + 1)} XP.`,
             ],
           }),
         }

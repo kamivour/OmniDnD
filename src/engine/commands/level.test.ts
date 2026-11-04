@@ -1,14 +1,311 @@
 import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { computeSheet, type CharacterState } from '../calc/sheet';
-import { CharacterBuildSchema } from '../schema';
-import { levelUp } from './level';
+import { CharacterBuildSchema, type ActiveEffect } from '../schema';
+import { levelUp, type LevelUpPayload } from './level';
+import { runCommand, undo } from './runner';
 import { freshState, seedState, Session, withLive } from './test-utils';
 
 const averageCampaign = {
   ...freshState,
   campaign: { ...freshState.campaign, hpMethod: 'average' as const },
 };
+
+const metadata = { eventId: 'reviewed-level-up', realTime: '2026-11-05T00:00:00.000Z' };
+function atLevel(level: number): CharacterState {
+  const state = structuredClone(seedState);
+  state.build.classes = [{ classId: 'class.bard', level }];
+  state.build.hpEntries = Array.from({ length: level }, (_, index) => ({
+    level: index + 1,
+    classId: 'class.bard',
+    value: index === 0 ? 8 : 5,
+    method: index === 0 ? 'max' : 'average',
+    floor: 'none',
+  }));
+  return state;
+}
+
+describe('levelUp validation and reviewed commands', () => {
+  it('adds a real nineteenth-to-twentieth level and then blocks the actual cap despite an effective level override', () => {
+    const state = atLevel(19);
+    state.build.overrides.push({ path: '/level', value: 20, note: 'Effective level' });
+    const session = new Session(state);
+    session.run(levelUp, { classId: 'class.bard', roll: 5, expected: structuredClone(state) });
+    expect(session.state.build.classes[0]?.level).toBe(20);
+    expect(session.state.build.hpEntries).toHaveLength(20);
+    session.state = {
+      ...session.state,
+      build: {
+        ...session.state.build,
+        overrides: [{ path: '/level', value: 1, note: 'Effective level' }],
+      },
+    };
+    expect(session.try(levelUp, { classId: 'class.bard', roll: 5 }, true)).toMatchObject({
+      result: 'blocked',
+      reasons: ['Already level 20'],
+    });
+  });
+
+  it('rejects an ambiguous duplicate class rather than changing one row while previewing several', () => {
+    const state = atLevel(3);
+    state.build.classes = [
+      { classId: 'class.bard', level: 2 },
+      { classId: 'class.bard', level: 1 },
+    ];
+    const before = structuredClone(state);
+    expect(
+      runCommand(levelUp, state, { classId: 'class.bard', roll: 5 }, registry, metadata),
+    ).toMatchObject({
+      result: 'blocked',
+      reasons: [expect.stringContaining('multiple saved records')],
+    });
+    expect(state).toEqual(before);
+  });
+
+  it.each([
+    null,
+    undefined,
+    {},
+    { classId: 'class.bard', extra: true },
+    { classId: 'class.bard', roll: '5' },
+    { classId: 'class.bard', roll: null },
+    { classId: 'class.bard', roll: NaN },
+    { classId: 'class.bard', roll: Infinity },
+    { classId: 'class.bard', expected: {} },
+  ])('blocks malformed payload %j without throwing even when forced in Manual mode', (payload) => {
+    const before = structuredClone(seedState);
+    expect(
+      runCommand(levelUp, seedState, payload as LevelUpPayload, registry, {
+        ...metadata,
+        force: true,
+        automation: 'manual',
+      }).result,
+    ).toBe('blocked');
+    expect(seedState).toEqual(before);
+  });
+
+  it.each([0, 9, 1.5])('blocks out-of-die or fractional roll %s', (roll) => {
+    expect(
+      runCommand(levelUp, seedState, { classId: 'class.bard', roll }, registry, metadata),
+    ).toMatchObject({
+      result: 'blocked',
+      reasons: ['Hit Die roll must be a whole number from 1 to 8'],
+    });
+  });
+
+  it('rechecks a reviewed snapshot and cannot apply the same level twice', () => {
+    const state = structuredClone(seedState);
+    const payload = { classId: 'class.bard', roll: 5, expected: structuredClone(state) };
+    const first = runCommand(levelUp, state, payload, registry, metadata);
+    expect(first.result).toBe('ok');
+    if (first.result !== 'ok') throw new Error('First level failed');
+    const second = runCommand(levelUp, first.next, payload, registry, {
+      ...metadata,
+      eventId: 'second-level',
+      force: true,
+      automation: 'manual',
+    });
+    expect(second).toMatchObject({
+      result: 'blocked',
+      reasons: [expect.stringContaining('changed after this level-up was reviewed')],
+    });
+    const undone = undo(first.next, [first.event], { ...metadata, eventId: 'undo-reviewed-level' });
+    expect(undone.result).toBe('ok');
+    if (undone.result !== 'ok') throw new Error('Undo failed');
+    expect(undone.next).toEqual(state);
+  });
+
+  it.each([
+    'class',
+    'entry',
+    'method',
+    'floor',
+    'leveling',
+    'xp',
+    'CON',
+    'override',
+    'HP',
+    'exhaustion',
+    'counter',
+    'clock',
+  ] as const)('blocks stale reviewed %s context without overwriting current values', (change) => {
+    const state = structuredClone(seedState);
+    const expected = structuredClone(state);
+    if (change === 'class') {
+      state.build.classes[0]!.level += 1;
+      state.build.hpEntries.push({ level: 4, classId: 'class.bard', value: 5, method: 'rolled' });
+    }
+    if (change === 'entry') state.build.hpEntries[1]!.value += 1;
+    if (change === 'method') state.campaign.hpMethod = 'average';
+    if (change === 'floor') state.campaign.hpLevelFloor = 'one';
+    if (change === 'leveling') state.campaign.leveling = 'xp';
+    if (change === 'xp') state.build.xp = 2700;
+    if (change === 'CON') state.build.abilityScores.base.CON += 1;
+    if (change === 'override')
+      state.build.overrides.push({ path: '/maxHp', value: 30, note: 'New ruling' });
+    if (change === 'HP') state.live.hp = 10;
+    if (change === 'exhaustion') state.live.exhaustion = 4;
+    if (change === 'counter') state.live.hitDiceSpent = { d8: 2 };
+    if (change === 'clock') state.live.clock.seconds += 1;
+    const before = structuredClone(state);
+    expect(
+      runCommand(levelUp, state, { classId: 'class.bard', roll: 5, expected }, registry, {
+        ...metadata,
+        force: true,
+        automation: 'manual',
+      }),
+    ).toMatchObject({
+      result: 'blocked',
+      reasons: [expect.stringContaining('changed after this level-up was reviewed')],
+    });
+    expect(state).toEqual(before);
+  });
+
+  it('advances only the selected owned class and Hit Die pool while preserving every spent count', () => {
+    const state = atLevel(4);
+    state.build.classes = [
+      { classId: 'class.bard', level: 2 },
+      { classId: 'class.wizard', level: 1 },
+      { classId: 'class.fighter', level: 1 },
+    ];
+    state.build.hpEntries[2]!.classId = 'class.wizard';
+    state.build.hpEntries[2]!.value = 4;
+    state.build.hpEntries[3]!.classId = 'class.fighter';
+    state.build.hpEntries[3]!.value = 6;
+    state.live.hitDiceSpent = { d8: 1, d6: 1, d10: 1 };
+    const before = structuredClone(state);
+    const session = new Session(state);
+    session.run(levelUp, { classId: 'class.wizard', roll: 4, expected: structuredClone(state) });
+    expect(session.state.build.classes).toEqual([
+      { classId: 'class.bard', level: 2 },
+      { classId: 'class.wizard', level: 2 },
+      { classId: 'class.fighter', level: 1 },
+    ]);
+    expect(session.sheet.hitDice).toEqual([
+      { die: 'd8', max: 2 },
+      { die: 'd6', max: 2 },
+      { die: 'd10', max: 1 },
+    ]);
+    expect(session.live.hitDiceSpent).toEqual(before.live.hitDiceSpent);
+    expect(session.state.build.hpEntries.slice(0, 4)).toEqual(before.build.hpEntries);
+    expect(session.state.build.hpEntries[4]).toMatchObject({
+      level: 5,
+      classId: 'class.wizard',
+      value: 4,
+      method: 'rolled',
+      floor: 'none',
+    });
+  });
+
+  it.each([1, 3])('does not revive a character at 0 HP with %s failed death saves', (fail) => {
+    const state = withLive(seedState, {
+      hp: 0,
+      conditions: ['unconscious'],
+      deathSaves: { success: 0, fail },
+    });
+    const session = new Session(state);
+    session.run(levelUp, { classId: 'class.bard', roll: 5, expected: structuredClone(state) });
+    expect(session.live).toEqual(state.live);
+    expect(session.sheet.maxHp.value).toBe(25);
+  });
+
+  it('does not rest, advance time or reset combat, concentration, effects, XP or spent resources', () => {
+    const state = structuredClone(seedState);
+    state.build.xp = 2700;
+    state.live.tempHp = 7;
+    state.live.hitDiceSpent = { d8: 2 };
+    state.live.concentration = {
+      spellId: 'spell.faerie-fire',
+      slotLevel: 1,
+      endsAt: state.live.clock.seconds + 60,
+      pendingSaves: [{ id: 'pending-check', dc: 10 }],
+    };
+    const effect: ActiveEffect = {
+      id: 'ward',
+      name: 'Timed Ward',
+      concentration: false,
+      conditions: [],
+      modifiers: [],
+      endsAt: state.live.clock.seconds + 30,
+    };
+    state.live.effects = [effect];
+    state.live.combat = {
+      round: 7,
+      turnActive: false,
+      economy: {
+        actionUsed: true,
+        bonusUsed: true,
+        reactionUsed: true,
+        movementUsed: 15,
+        objectInteractionUsed: true,
+        dashCount: 1,
+        bonusActionSpellCast: true,
+        otherSpellCast: false,
+      },
+    };
+    const before = structuredClone(state);
+    const session = new Session(state);
+    session.run(levelUp, { classId: 'class.bard', roll: 5, expected: structuredClone(state) });
+    expect(session.live).toEqual({ ...before.live, hp: 17 });
+    expect(session.state.build.xp).toBe(2700);
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('preserves explicit fixed HP and Hit Dice maxima while adding the recorded class level and HP entry', () => {
+    const state = structuredClone(seedState);
+    state.build.overrides = [
+      { path: '/maxHp', value: 30, note: 'Fixed HP' },
+      { path: '/hitDice/d8/max', value: 7, note: 'Fixed pool' },
+      { path: '/future/value', value: { keep: true }, note: 'Retained' },
+    ];
+    state.live.hitDiceSpent = { d8: 2 };
+    const session = new Session(state);
+    session.run(levelUp, { classId: 'class.bard', roll: 5, expected: structuredClone(state) });
+    expect(session.sheet.maxHp.value).toBe(30);
+    expect(session.sheet.hitDice).toEqual([{ die: 'd8', max: 7 }]);
+    expect(session.live).toEqual(state.live);
+    expect(session.state.build.overrides).toEqual(state.build.overrides);
+    expect(session.state.build.hpEntries).toHaveLength(4);
+  });
+
+  it('blocks a level whose additional CON contribution would overflow calculated HP', () => {
+    const state = structuredClone(seedState);
+    const modifier = Math.floor((Number.MAX_SAFE_INTEGER - 16) / 3);
+    state.build.abilityScores.bonuses.push({
+      source: 'Large retained boon',
+      ability: 'CON',
+      value: modifier * 2 + 10 - 13,
+    });
+    expect(computeSheet(state, registry).maxHp.value).toBe(Number.MAX_SAFE_INTEGER);
+    expect(
+      runCommand(levelUp, state, { classId: 'class.bard', roll: 5 }, registry, metadata),
+    ).toMatchObject({
+      result: 'blocked',
+      reasons: ['This level produces an unsafe calculated value'],
+    });
+  });
+
+  it('preserves established HP-method warnings and their explicit force or Manual exceptions', () => {
+    const payload = { classId: 'class.bard', expected: structuredClone(seedState) };
+    expect(runCommand(levelUp, seedState, payload, registry, metadata)).toMatchObject({
+      result: 'warn',
+      reasons: ['Campaign uses rolled HP: taking the average'],
+    });
+    const forced = runCommand(levelUp, seedState, payload, registry, { ...metadata, force: true });
+    expect(forced.result).toBe('ok');
+    if (forced.result !== 'ok') throw new Error('Forced average failed');
+    expect(forced.event.override).toBe(true);
+    expect(forced.next.build.hpEntries[3]?.value).toBe(5);
+    const manual = runCommand(levelUp, seedState, payload, registry, {
+      ...metadata,
+      automation: 'manual',
+    });
+    expect(manual.result).toBe('ok');
+    if (manual.result !== 'ok') throw new Error('Manual average failed');
+    expect(manual.event.override).toBeUndefined();
+  });
+});
 
 describe('levelUp', () => {
   it('level 4 rolled 5: max HP 25, Hit Dice 4d8, old entries unchanged (TEST_CHARACTER §4)', () => {

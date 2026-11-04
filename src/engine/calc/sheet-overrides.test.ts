@@ -104,20 +104,26 @@ describe('Sheet override dependencies', () => {
     expect(state.build.hpEntries).toEqual(freshState.build.hpEntries);
   });
 
-  it('separates effective character level from owned class levels, HP entries and class tables', () => {
-    const state = withOverrides(entry('/level', 5));
-    state.campaign.leveling = 'xp';
-    const sheet = computeSheet(state, registry);
-    expect(sheet.level).toBe(5);
-    expect(sheet.proficiency).toBe(3);
-    expect(sheet.nextLevelXp).toBe(14000);
-    expect(sheet.slots.max).toEqual(computeSheet(freshState, registry).slots.max);
-    expect(
-      sheet.features.find(({ def }) => def.id === 'feature.bard.bardic-inspiration')?.die,
-    ).toBe('d6');
-    expect(state.build.classes[0]?.level).toBe(3);
-    expect(state.build.hpEntries).toHaveLength(3);
-  });
+  it.each([
+    { effective: 5, proficiency: 3 },
+    { effective: 20, proficiency: 6 },
+  ])(
+    'separates effective level $effective from recorded advancement, HP entries and class tables',
+    ({ effective, proficiency }) => {
+      const state = withOverrides(entry('/level', effective));
+      state.campaign.leveling = 'xp';
+      const sheet = computeSheet(state, registry);
+      expect(sheet.level).toBe(effective);
+      expect(sheet.proficiency).toBe(proficiency);
+      expect(sheet.nextLevelXp).toBe(2700);
+      expect(sheet.slots.max).toEqual(computeSheet(freshState, registry).slots.max);
+      expect(
+        sheet.features.find(({ def }) => def.id === 'feature.bard.bardic-inspiration')?.die,
+      ).toBe('d6');
+      expect(state.build.classes[0]?.level).toBe(3);
+      expect(state.build.hpEntries).toHaveLength(3);
+    },
+  );
 
   it('explains overridden scalars with the calculated answer and a separate adjustment', () => {
     const state = withOverrides(

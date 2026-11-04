@@ -12,6 +12,7 @@ import { DeathSaveTracker } from '../health/DeathSaveTracker';
 import { useCharacter } from '../hooks/useCharacter';
 import { SheetBuildEditor } from '../sheet/SheetBuildEditor';
 import { SheetOverrideEditor } from '../sheet/SheetOverrideEditor';
+import { LevelUpControl } from '../level/LevelUpControl';
 
 const titleCase = (value: string) =>
   value.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
@@ -148,7 +149,7 @@ export function CharacterSheetScreen() {
                     />
                   </dd>
                 ) : (
-                  <dd className="mt-1 text-text-muted">Maximum character level</dd>
+                  <dd className="mt-1 text-text-muted">Maximum recorded level</dd>
                 )}
               </div>
             )}
@@ -162,6 +163,7 @@ export function CharacterSheetScreen() {
             />
           </div>
         </Section>
+        <LevelUpControl />
         <Section label="Abilities">
           <ul className="grid min-w-0 grid-cols-2 gap-2 @min-[640px]:grid-cols-3">
             {ABILITIES.map((ability) => (

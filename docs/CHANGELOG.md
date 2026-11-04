@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-05 03:53 — Minimal level-up and advancement previews
+
+- Advance a recorded class using a roll or its average; review HP, Hit Dice, spell limits and changed resources before applying.
+- Milestone campaigns hide XP. XP campaigns show readiness against the next recorded level, including a noted threshold override.
+- Check the preview, campaign-method warning and Undo on your own character. Existing spending and game time stay recorded. Exploration is next. Checks pass.
+
 ## 2026-11-04 23:22 — Ability entry by campaign method
 
 - Edit rolled bases, assign the standard array or check a point-buy purchase against 27 points. The budget stays visible while editing.

@@ -1,5 +1,5 @@
 import type { Registry } from '../registry';
-import { xpForLevel } from './advancement';
+import { recordedLevel, xpForLevel } from './advancement';
 import {
   CARRY_PER_STR,
   HEAVY_ARMOR_SPEED_PENALTY,
@@ -130,11 +130,12 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
   };
   const scalar = (path: string, label: string, base: number, domain: NumberDomain = {}) =>
     value(path, label, { value: base, parts: [] }, domain).value;
+  const actualLevel = recordedLevel(build);
   const level = value(
     '/level',
     'Character level',
     {
-      value: build.classes.reduce((sum, entry) => sum + entry.level, 0),
+      value: actualLevel,
       parts: build.classes.map((entry) => ({
         label: registry.get('class', entry.classId).name,
         value: entry.level,
@@ -474,8 +475,12 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       abilities.STR.score.value * CARRY_PER_STR,
       { min: 0 },
     ),
-    ...(campaign.leveling === 'xp' && level < 20
-      ? { nextLevelXp: scalar('/nextLevelXp', 'Next level XP', xpForLevel(level + 1), { min: 0 }) }
+    ...(campaign.leveling === 'xp' && actualLevel < 20
+      ? {
+          nextLevelXp: scalar('/nextLevelXp', 'Next level XP', xpForLevel(actualLevel + 1), {
+            min: 0,
+          }),
+        }
       : {}),
   };
   if (
