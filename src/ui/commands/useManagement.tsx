@@ -56,8 +56,8 @@ export function useManagement() {
         characterStore.getState().managementEvents.at(-1)?.id === result.event.id;
       void flushPersistence().then(
         () => {
+          if (mounted.current && currentSequence === sequence.current) setPending(false);
           if (!valid()) return;
-          setPending(false);
           toast({
             text: result.event.text,
             ...(result.event.command !== 'undo' ? { onUndo: () => undo(result.event.id) } : {}),
@@ -65,8 +65,8 @@ export function useManagement() {
           onSaved?.();
         },
         () => {
+          if (mounted.current && currentSequence === sequence.current) setPending(false);
           if (!valid()) return;
-          setPending(false);
           toast({ text: 'Changes remain in memory. Check the save status before leaving.' });
         },
       );
@@ -105,7 +105,8 @@ export function useManagement() {
         event.preventDefault();
         (opener.current?.isConnected
           ? opener.current
-          : document.getElementById('hub-workspace')
+          : (document.getElementById('character-workspace') ??
+            document.getElementById('hub-workspace'))
         )?.focus();
       }}
     >

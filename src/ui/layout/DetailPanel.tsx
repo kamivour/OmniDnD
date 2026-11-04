@@ -1,12 +1,8 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Moon, PanelRight, Tent, Undo2, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Sheet } from '../components/Sheet';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { DetailContext, useDetail } from './detail-context';
-import { useCommand } from '../commands/command-context';
-import { useCharacter } from '../hooks/useCharacter';
-import { StorageStatus } from '../storage/StorageStatus';
-import { useRest } from '../rest/rest-context';
 
 /** One selection follows the character across screens. Closing keeps the selection. */
 export function DetailProvider({ children }: { children: ReactNode }) {
@@ -42,54 +38,6 @@ export function DetailProvider({ children }: { children: ReactNode }) {
   return <DetailContext value={value}>{children}</DetailContext>;
 }
 
-export function DetailToggle() {
-  const { open, setOpen } = useDetail();
-  const { undo } = useCommand();
-  const { openShortRest, openLongRest } = useRest();
-  const { events } = useCharacter();
-  const canUndo = events.some((event) => event.command !== 'undo' && !event.undoneBy);
-  return (
-    <div className="flex flex-wrap items-center justify-end gap-3 border-b border-border px-4">
-      <StorageStatus />
-      <button
-        type="button"
-        onClick={(event) => openShortRest(event.currentTarget)}
-        className="hidden min-h-11 items-center gap-1 text-xs text-text-muted sm:flex lg:hidden"
-      >
-        <Tent size={16} aria-hidden /> Short Rest
-      </button>
-      <button
-        type="button"
-        onClick={(event) => openLongRest(event.currentTarget)}
-        className="hidden min-h-11 items-center gap-1 text-xs text-text-muted sm:flex lg:hidden"
-      >
-        <Moon size={16} aria-hidden /> Long Rest
-      </button>
-      <button
-        type="button"
-        aria-label="Undo last command"
-        disabled={!canUndo}
-        onClick={undo}
-        className="flex min-h-11 items-center gap-1 text-xs text-accent disabled:opacity-40"
-      >
-        <Undo2 size={18} aria-hidden />
-        Undo
-      </button>
-      <button
-        id="detail-toggle"
-        type="button"
-        aria-expanded={open}
-        aria-controls="character-details"
-        onClick={() => setOpen(!open)}
-        className="flex min-h-11 items-center gap-2 text-xs text-text-muted hover:text-text"
-      >
-        <PanelRight size={18} aria-hidden />
-        {open ? 'Hide details' : 'Open details'}
-      </button>
-    </div>
-  );
-}
-
 export function DetailPanel() {
   const { content, open, setOpen, restoreFocus } = useDetail();
   const desktop = useMediaQuery('(min-width: 1024px)');
@@ -120,7 +68,7 @@ export function DetailPanel() {
       aria-label="Pinned detail"
       className="w-90 shrink-0 border-l border-border bg-surface p-4"
     >
-      <div className="sticky top-28 max-h-[calc(100dvh-8rem)] overflow-y-auto">
+      <div className="sticky top-[calc(var(--character-header-height,132px)+16px)] max-h-[calc(100dvh-var(--character-header-height,132px)-32px)] overflow-y-auto">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="font-display text-base">Details</h2>
           <button

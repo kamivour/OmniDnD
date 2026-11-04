@@ -34,16 +34,18 @@ export function SettingsScreen() {
     >
       <header className="flex flex-wrap items-center gap-2">
         <h1 className="font-display text-xl">Settings</h1>
-        <button
-          type="button"
-          disabled={!last || pending}
-          onClick={() => undo()}
-          title={last?.text}
-          className={`${button} ml-auto`}
-        >
-          <Undo2 size={16} aria-hidden />
-          Undo management
-        </button>
+        {!characterId && (
+          <button
+            type="button"
+            disabled={!last || pending}
+            onClick={() => undo()}
+            title={last?.text}
+            className={`${button} ml-auto`}
+          >
+            <Undo2 size={16} aria-hidden />
+            Undo management
+          </button>
+        )}
       </header>
       <p className="text-sm text-text-muted">
         Preferences apply to every character on this device and save automatically.

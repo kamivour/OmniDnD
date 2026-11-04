@@ -6,6 +6,7 @@ import { useCommand } from '../commands/command-context';
 import { Field, inputClass } from '../components/fields';
 import { Sheet } from '../components/Sheet';
 import { useCharacter } from '../hooks/useCharacter';
+import { useCharacterHistory } from '../log/useCharacterHistory';
 import { SPELL_TYPE_ORDER, SPELL_TYPES, type SpellType } from '../spellTypes';
 
 type SelectionList = 'known' | 'prepared';
@@ -58,7 +59,8 @@ export function SpellManage({
   initialClassId?: string;
 }) {
   const { state, sheet, events } = useCharacter();
-  const { run, undo } = useCommand();
+  const { run } = useCommand();
+  const { target, undo, pending, confirmation } = useCharacterHistory();
   const container = useRef<HTMLDivElement>(null);
   const searchInput = useRef<HTMLInputElement>(null);
   const replacementOpener = useRef<HTMLElement | null>(null);
@@ -95,7 +97,6 @@ export function SpellManage({
       state.build.spells.flatMap(({ known, prepared }) => [...known, ...(prepared ?? [])]),
     ),
   ]);
-  const canUndo = events.some((event) => event.command !== 'undo' && !event.undoneBy);
 
   useEffect(() => {
     if (restoreFocus.current) {
@@ -444,12 +445,23 @@ export function SpellManage({
       )}
       <div className="grid shrink-0 grid-cols-2 gap-2 border-t border-border pt-3">
         <button
+          data-character-dialog-undo=""
           type="button"
-          disabled={!canUndo}
+          disabled={!target || pending}
+          title={
+            target
+              ? `${target.scope === 'workspace' ? 'Workspace' : 'Character'}: ${target.event.text}`
+              : 'No change to undo'
+          }
           className={secondaryButton}
-          onClick={() => {
+          onClick={(event) => {
+            const control = event.currentTarget;
+            control.focus();
             setError(null);
             undo();
+            requestAnimationFrame(() => {
+              if (control.matches(':disabled')) container.current?.focus();
+            });
           }}
         >
           Undo last command
@@ -477,6 +489,7 @@ export function SpellManage({
       >
         {tagSpellId && <SpellTagEditor spellId={tagSpellId} onClose={() => setTagSpellId(null)} />}
       </Sheet>
+      {confirmation}
     </div>
   );
 }

@@ -214,9 +214,9 @@ async function openClock(page: Page) {
 }
 
 async function undo(page: Page) {
-  await main(page)
-    .getByRole('region', { name: 'Dashboard log', exact: true })
-    .getByRole('button', { name: 'Undo last dashboard command', exact: true })
+  await page
+    .getByRole('region', { name: 'Character log', exact: true })
+    .getByRole('button', { name: 'Undo last command', exact: true })
     .click();
   await saved(page);
 }
@@ -256,9 +256,9 @@ test('M6 acceptance steps 9–14 remain linked through clock controls, both rest
     gameSeconds: ended.live.clock.seconds,
   });
   expect(expired.events.at(-1)?.text).toContain('Invisibility ended');
-  await expect(
-    main(page).getByRole('region', { name: 'Dashboard log', exact: true }),
-  ).toContainText('Invisibility ended');
+  await expect(page.getByRole('region', { name: 'Character log', exact: true })).toContainText(
+    'Invisibility ended',
+  );
   await expectShared(page, expired);
   await openRest(page, 'Short');
   await addDie(page, 1, 2);
@@ -414,9 +414,9 @@ test('M6 acceptance steps 9–14 remain linked through clock controls, both rest
     'adjustSlot',
   ]);
   expect(corrected.events.at(-1)?.text).toBe('L1 slots: 2/4 left');
-  await expect(
-    main(page).getByRole('region', { name: 'Dashboard log', exact: true }),
-  ).toContainText('L1 slots: 2/4 left');
+  await expect(page.getByRole('region', { name: 'Character log', exact: true })).toContainText(
+    'L1 slots: 2/4 left',
+  );
   await expectShared(page, corrected);
   await undo(page);
   expect((await readSaved(page, id)).live).toEqual(oneUsed.live);

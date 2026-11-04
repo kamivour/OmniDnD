@@ -1,15 +1,35 @@
 import { useStore } from 'zustand';
+import { Check, Clock3 } from 'lucide-react';
 import { retryPersistence, storageStatusStore } from '../../state/persistence';
 
-export function StorageStatus() {
+export function StorageStatus({ compact = false }: { compact?: boolean }) {
   const { pending, error, conflict } = useStore(storageStatusStore);
   return (
     <div
       role="status"
       aria-label="Local save status"
-      className={`flex min-h-11 min-w-0 flex-1 flex-wrap items-center gap-2 text-xs text-text-muted ${conflict ? 'basis-full py-2' : ''}`}
+      title={
+        conflict
+          ? 'Save conflict'
+          : error
+            ? 'Save failed'
+            : pending > 0
+              ? 'Saving…'
+              : 'Saved locally'
+      }
+      className={`flex min-h-11 min-w-0 flex-wrap items-center gap-2 text-xs text-text-muted ${compact ? 'shrink-0' : 'flex-1'} ${conflict || (compact && error) ? 'basis-full py-2' : ''}`}
     >
-      <span className={error ? 'text-warn' : undefined}>
+      {compact &&
+        !error &&
+        !conflict &&
+        (pending > 0 ? (
+          <Clock3 size={14} aria-hidden className="sm:hidden" />
+        ) : (
+          <Check size={14} aria-hidden className="text-heal sm:hidden" />
+        ))}
+      <span
+        className={error || conflict ? 'text-warn' : compact ? 'sr-only sm:not-sr-only' : undefined}
+      >
         {conflict
           ? 'Save conflict'
           : error

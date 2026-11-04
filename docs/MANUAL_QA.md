@@ -55,7 +55,7 @@ Exploration will reuse Dashboard's GameClockControl under D91.
 - [ ] Compare ordinary Inspiration with Bardic Inspiration. Decide whether the labels and resulting history make their different purposes obvious.
 - [ ] Read senses and defenses. Judge whether conditional protections, such as Fey Ancestry, avoid implying blanket immunity and whether Not recorded is honest about missing details.
 - [ ] Review advancement information in XP and milestone campaigns. It should match how the campaign discusses leveling without asking the player to supply derived numbers.
-- [ ] After the shared status/log row is finished, judge whether one Undo is easy to locate and understand across character screens before reviewing Sheet Edit mode.
+- [ ] On phone, tablet and desktop, judge whether the compact status/log row leaves enough room for play. Find one Undo across character screens, spell management and full history; judge whether its latest-change wording makes the result clear.
 
 Edit mode, overrides, ability entry, level-up and Exploration remain unfinished M7 work. Review them when their tasks are complete.
 

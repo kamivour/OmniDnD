@@ -32,13 +32,8 @@ export function CommandProvider({
   const canPublish = (sequence: number, eventId: string) =>
     mounted.current && feedbackSequence.current === sequence && events().at(-1)?.id === eventId;
 
-  const runUndo = async (expectedEventId?: string) => {
+  const runUndo = async () => {
     const sequence = ++feedbackSequence.current;
-    const target = events().findLast((event) => event.command !== 'undo' && !event.undoneBy);
-    if (expectedEventId && target?.id !== expectedEventId) {
-      toast({ text: 'A newer command is available. Use Undo in the toolbar.' });
-      return;
-    }
     const result = characterStore.getState().undo(characterId);
     if (result.result === 'ok') {
       setNotes([]);
@@ -81,9 +76,6 @@ export function CommandProvider({
           if (canPublish(sequence, result.event.id))
             toast({
               text: result.event.text,
-              onUndo: () => {
-                void runUndo(result.event.id);
-              },
             });
         },
         () => {
@@ -92,9 +84,6 @@ export function CommandProvider({
               text: storageStatusStore.getState().conflict
                 ? 'Save conflict. Changes remain in this window.'
                 : 'Changes are in memory. Retry saving before leaving.',
-              onUndo: () => {
-                void runUndo(result.event.id);
-              },
             });
         },
       );

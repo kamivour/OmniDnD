@@ -95,8 +95,8 @@ async function openClock(page: Page) {
 
 async function undo(page: Page) {
   await page
-    .getByRole('region', { name: 'Dashboard log', exact: true })
-    .getByRole('button', { name: 'Undo last dashboard command', exact: true })
+    .getByRole('region', { name: 'Character log', exact: true })
+    .getByRole('button', { name: 'Undo last command', exact: true })
     .click();
   await saved(page);
 }

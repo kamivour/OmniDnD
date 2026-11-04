@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-04 22:09 — Compact character header and one Undo
+
+- Every character screen, including Spells, shares a compact status row with the latest change. Tap it for full history.
+- One Undo follows character and workspace changes, including inside spell management and long history.
+- Check phone spacing and whether the latest-change wording makes Undo clear. Sheet Edit mode is next. Checks pass.
+
 ## 2026-11-04 16:58 — Shorter docs and companion roadmap
 
 - Project notes and QA lists are shorter, with a clear style for future updates.

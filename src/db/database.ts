@@ -27,6 +27,7 @@ import {
   type LogEvent,
 } from '../engine/schema';
 import type { CharacterRecord, CharacterStoreState } from '../state/character-store';
+import { ActivityOrderSchema, type ActivityReference } from '../state/activity-order';
 
 export interface StoredRecord<T> {
   id: string;
@@ -41,7 +42,13 @@ export interface StoredEvent extends StoredRecord<LogEvent> {
 
 export type Workspace = Pick<
   CharacterStoreState,
-  'campaigns' | 'characters' | 'automation' | 'reducedMotion' | 'managementEvents' | 'bookmarks'
+  | 'campaigns'
+  | 'characters'
+  | 'automation'
+  | 'reducedMotion'
+  | 'managementEvents'
+  | 'bookmarks'
+  | 'activityOrder'
 >;
 
 export interface WorkspaceRows {
@@ -56,6 +63,8 @@ export interface WorkspaceRows {
   managementEvents?: ManagementEvent[];
   /** Missing before Reference bookmarks were introduced. */
   bookmarks?: Bookmark[];
+  /** Local cross-history references; omitted in older workspaces and all character exports. */
+  activityOrder?: ActivityReference[];
 }
 
 class OmniDatabase extends Dexie {
@@ -226,6 +235,9 @@ export function serializeWorkspace(workspace: Workspace): WorkspaceRows {
       .max(EVENT_LIMIT)
       .parse(workspace.managementEvents),
     bookmarks: parseBookmarks(workspace.bookmarks),
+    ...(workspace.activityOrder === undefined
+      ? {}
+      : { activityOrder: ActivityOrderSchema.parse(workspace.activityOrder) }),
   };
 }
 
@@ -295,6 +307,9 @@ export function deserializeWorkspace(rows: WorkspaceRows): Workspace {
       .max(EVENT_LIMIT)
       .parse(rows.managementEvents ?? []),
     bookmarks: parseBookmarks(rows.bookmarks === undefined ? [] : rows.bookmarks),
+    ...(rows.activityOrder === undefined
+      ? {}
+      : { activityOrder: ActivityOrderSchema.parse(rows.activityOrder) }),
   };
   let check: ManagementData = {
     campaigns: workspace.campaigns,

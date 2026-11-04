@@ -13,6 +13,7 @@ import {
 import { characterStore, createCharacterStore } from './character-store';
 import { ManagementEventSchema } from '../engine/commands/management';
 import { BookmarkSchema, PreferencesSchema } from '../engine/schema';
+import { ActivityOrderSchema } from './activity-order';
 
 interface StorageStatus {
   ready: boolean;
@@ -78,6 +79,9 @@ async function replaceRows(rows: WorkspaceRows) {
     database.settings.put(storedRecord('initialized', true)),
     database.settings.put(storedRecord('managementEvents', rows.managementEvents ?? [])),
     database.settings.put(storedRecord('bookmarks', rows.bookmarks ?? [])),
+    ...(rows.activityOrder === undefined
+      ? [database.settings.delete('activityOrder')]
+      : [database.settings.put(storedRecord('activityOrder', rows.activityOrder))]),
   ]);
 }
 
@@ -117,6 +121,7 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
       const reducedMotion = savedSettings.find(({ id }) => id === 'reducedMotion');
       const management = savedSettings.find(({ id }) => id === 'managementEvents');
       const bookmarks = savedSettings.find(({ id }) => id === 'bookmarks');
+      const activityOrder = savedSettings.find(({ id }) => id === 'activityOrder');
       const mode = automation ? AutomationSchema.parse(automation.data) : 'assisted';
       const motion = reducedMotion
         ? PreferencesSchema.shape.reducedMotion.parse(reducedMotion.data)
@@ -132,6 +137,9 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
           reducedMotion: motion,
           managementEvents: management ? z.array(ManagementEventSchema).parse(management.data) : [],
           bookmarks: bookmarks ? z.array(BookmarkSchema).parse(bookmarks.data) : [],
+          ...(activityOrder
+            ? { activityOrder: ActivityOrderSchema.parse(activityOrder.data) }
+            : {}),
         });
         return { workspace, revision: await readRevision() };
       }
@@ -196,7 +204,8 @@ export function initializePersistence(): Promise<void> {
             next.automation !== previous.automation ||
             next.reducedMotion !== previous.reducedMotion ||
             next.managementEvents !== previous.managementEvents ||
-            next.bookmarks !== previous.bookmarks
+            next.bookmarks !== previous.bookmarks ||
+            next.activityOrder !== previous.activityOrder
           ) {
             enqueueSave({
               characters: next.characters,
@@ -205,6 +214,7 @@ export function initializePersistence(): Promise<void> {
               reducedMotion: next.reducedMotion,
               managementEvents: next.managementEvents,
               bookmarks: next.bookmarks,
+              ...(next.activityOrder === undefined ? {} : { activityOrder: next.activityOrder }),
             });
           }
         });
@@ -240,8 +250,23 @@ export async function flushPersistence(): Promise<void> {
 /** Recover a failed startup, or save the latest in-memory workspace after a write failure. */
 export async function retryPersistence(): Promise<void> {
   if (!storageStatusStore.getState().ready) return initializePersistence();
-  const { campaigns, characters, automation, reducedMotion, managementEvents, bookmarks } =
-    characterStore.getState();
-  enqueueSave({ campaigns, characters, automation, reducedMotion, managementEvents, bookmarks });
+  const {
+    campaigns,
+    characters,
+    automation,
+    reducedMotion,
+    managementEvents,
+    bookmarks,
+    activityOrder,
+  } = characterStore.getState();
+  enqueueSave({
+    campaigns,
+    characters,
+    automation,
+    reducedMotion,
+    managementEvents,
+    bookmarks,
+    ...(activityOrder === undefined ? {} : { activityOrder }),
+  });
   await flushPersistence();
 }

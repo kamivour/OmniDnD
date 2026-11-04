@@ -21,10 +21,10 @@ const concentration = (page: Page) =>
   main(page).getByRole('region', { name: 'Concentration', exact: true });
 const effects = (page: Page) =>
   main(page).getByRole('region', { name: 'Effects on you', exact: true });
-const log = (page: Page) => main(page).getByRole('region', { name: 'Combat log', exact: true });
-const history = (page: Page) => page.getByRole('dialog', { name: 'Combat log', exact: true });
+const log = (page: Page) => page.getByRole('region', { name: 'Character log', exact: true });
+const history = (page: Page) => page.getByRole('dialog', { name: 'Character log', exact: true });
 const combatUndo = (page: Page) =>
-  log(page).getByRole('button', { name: 'Undo last combat command', exact: true });
+  log(page).getByRole('button', { name: 'Undo last command', exact: true });
 const viewLog = (page: Page) =>
   log(page).getByRole('button', { name: 'View full log', exact: true });
 const turnButton = (page: Page, name: string) =>
@@ -140,7 +140,7 @@ async function undo(page: Page) {
 }
 
 async function expectHistory(list: Locator, events: readonly LogEvent[]) {
-  const rows = list.getByRole('listitem');
+  const rows = list.locator('[data-source="character"]');
   await expect(rows).toHaveCount(events.length);
   for (const [index, event] of [...events].reverse().entries()) {
     const row = rows.nth(index);
@@ -160,7 +160,12 @@ test('a cast on others has a saved round countdown without becoming an effect on
   const initial = await readSaved(page, file.build.id);
   await expect(concentration(page)).toContainText('None');
   await expect(effects(page)).toContainText('Borrowed Ward');
-  await expect(log(page)).toContainText('No commands yet.');
+  expect(initial.events).toEqual([]);
+  await viewLog(page).click();
+  await expect(history(page).locator('[data-source="character"]')).toHaveCount(0);
+  await expect(history(page).locator('[data-source="workspace"]')).toHaveCount(1);
+  await page.keyboard.press('Escape');
+  await expect(viewLog(page)).toBeFocused();
   const row = main(page)
     .getByRole('listitem')
     .filter({ has: page.getByRole('button', { name: /^Faerie Fire\b/ }) });
@@ -398,7 +403,8 @@ test('imported timers distinguish game time, no timer, and expired entries witho
   await expect(effectRow(page, longName)).toContainText('Until removed');
   await expect(effectRow(page, 'Seven Second Ward')).toContainText('7 s left');
   await expect(effectRow(page, 'Expired Imported Ward')).toContainText('Expired');
-  await expect(log(page)).toContainText('No commands yet.');
+  await expect(viewLog(page)).toContainText('Workspace · Add character: effects-imported-timers');
+  await expect(combatUndo(page)).toBeEnabled();
   const longLabel = effectRow(page, longName).getByText(longName, { exact: true });
   expect(
     await longLabel.evaluate(
@@ -517,26 +523,25 @@ test('the full saved log includes older commands, warning overrides, and durable
 test('an empty log and exhausted Undo retain usable keyboard focus and complete history', async ({
   page,
 }) => {
-  const file = combatFile('effects-empty-log');
-  file.live.combat!.turnActive = false;
-  await importCharacter(page, file);
-  const initial = await readSaved(page, file.build.id);
+  await page.goto('/characters/the-fool/combat');
+  await saved(page);
+  const initial = await readSaved(page, 'the-fool');
   await expect(log(page)).toContainText('No commands yet.');
   await expect(combatUndo(page)).toBeDisabled();
   await viewLog(page).click();
   await expect(history(page)).toContainText('No commands yet.');
   await page.keyboard.press('Escape');
   await expect(viewLog(page)).toBeFocused();
-  await turnButton(page, 'Start Turn').click();
+  await turnButton(page, 'Start combat').click();
   await saved(page);
   await expect(combatUndo(page)).toBeEnabled();
   await combatUndo(page).focus();
   await page.keyboard.press('Enter');
   await saved(page);
-  const undone = await readSaved(page, file.build.id);
+  const undone = await readSaved(page, 'the-fool');
   expect(undone.build).toEqual(initial.build);
   expect(undone.live).toEqual(initial.live);
-  expect(undone.events.map((event) => event.command)).toEqual(['startTurn', 'undo']);
+  expect(undone.events.map((event) => event.command)).toEqual(['startCombat', 'undo']);
   expect(undone.events[0]?.undoneBy).toBe(undone.events[1]?.id);
   await expect(combatUndo(page)).toBeDisabled();
   await expect(viewLog(page)).toBeFocused();
@@ -549,7 +554,7 @@ test('an empty log and exhausted Undo retain usable keyboard focus and complete 
   await expect(viewLog(page)).toBeFocused();
   await page.reload();
   await saved(page);
-  expect(await readSaved(page, file.build.id)).toEqual(undone);
+  expect(await readSaved(page, 'the-fool')).toEqual(undone);
   await expect(combatUndo(page)).toBeDisabled();
   await noOverflow(page);
 });

@@ -92,7 +92,10 @@ test('commands, undo history, and seed records survive reload without reseeding'
     .click();
   await page.keyboard.press('Escape');
   await expect(hud(page).getByRole('img', { name: 'L1: 1 of 4 left', exact: true })).toBeVisible();
-  await page.getByRole('status').getByRole('button', { name: 'Undo', exact: true }).click();
+  await page
+    .getByRole('region', { name: 'Character log', exact: true })
+    .getByRole('button', { name: 'Undo last command', exact: true })
+    .click();
   await expectSaved(page);
   await page.reload();
   await expectSaved(page);
@@ -237,7 +240,10 @@ test('queued writes publish only the latest feedback and Undo reverses that comm
     );
     expect(messages.some((message) => message.includes('L1 slots: 2/4 left'))).toBe(true);
     expect(messages.some((message) => message.includes('L1 slots: 1/4 left'))).toBe(false);
-    await feedback.getByRole('button', { name: 'Undo', exact: true }).click();
+    await page
+      .getByRole('region', { name: 'Character log', exact: true })
+      .getByRole('button', { name: 'Undo last command', exact: true })
+      .click();
     await expect(feedback).toContainText('Undo:');
     await expectSaved(page);
   } finally {

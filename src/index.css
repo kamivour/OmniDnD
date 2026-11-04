@@ -67,6 +67,11 @@
   }
 }
 
+/* Modal history/spell editors own the one Undo while the background toolbar is blocked. */
+body:has([data-character-dialog-undo]) [data-character-toolbar-undo] {
+  display: none;
+}
+
 /* Bottom sheet slide-up (DESIGN.md §5). Mobile only; the 640 px+ dialog just appears. */
 @keyframes omni-sheet-in {
   from {

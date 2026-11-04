@@ -10,7 +10,6 @@ import { StatChip } from '../components/StatChip';
 import { signed } from '../format';
 import { DeathSaveTracker } from '../health/DeathSaveTracker';
 import { useCharacter } from '../hooks/useCharacter';
-import { CharacterLogBar } from '../log/CharacterLog';
 
 const titleCase = (value: string) =>
   value.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
@@ -62,7 +61,6 @@ export function CharacterSheetScreen() {
     <div className="mx-auto max-w-screen-2xl px-4 py-4 lg:px-6">
       <div className="flex min-w-0 flex-col gap-4">
         <h1 className="font-display text-xl text-text">Character sheet</h1>
-        <CharacterLogBar label="Sheet log" undoLabel="Undo last sheet command" />
         <Section label="Identity">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">

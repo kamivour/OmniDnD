@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useLocation } from 'react-router';
 import { ToastContext, type ToastInput } from './toast-context';
 
 const TOAST_MS = 5000;
@@ -9,6 +10,7 @@ interface ActiveToast extends ToastInput {
 
 /** One toast at a time, bottom of the screen, above the mobile nav. */
 export function ToastProvider({ children }: { children: ReactNode }) {
+  const characterRoute = useLocation().pathname.startsWith('/characters/');
   const [toast, setToast] = useState<ActiveToast | null>(null);
 
   const show = useCallback((input: ToastInput) => setToast({ ...input, key: Date.now() }), []);
@@ -34,7 +36,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             className="pointer-events-auto flex min-h-11 max-w-sm items-center gap-3 rounded-card border border-border bg-surface-2 py-1 pr-1 pl-3 shadow-pop"
           >
             <span className="flex-1 text-text">{toast.text}</span>
-            {toast.onUndo && (
+            {toast.onUndo && !characterRoute && (
               <button
                 type="button"
                 onClick={() => {

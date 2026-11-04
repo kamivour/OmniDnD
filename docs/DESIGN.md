@@ -80,7 +80,7 @@ Only these animations exist. Anything else needs a DECISIONS.md entry.
 - **Preview vs Pin.** Hover (desktop) / tap (mobile) / focus (keyboard) → preview. Click → pin full detail in the right panel (desktop) or full-height sheet (mobile).
 - **Popovers never cover the row's own action button.** Use Floating UI flip/shift. Max width 320 px.
 - **Breakdown tooltips** on every computed number.
-- **Toasts** after each command: short text + Undo (5 s).
+- **Toasts** after commands show short feedback for 5 s; character Undo stays in the shared status row. Hub management feedback may offer Undo.
 - **States** (never color alone; always add icon or text):
   - available — normal
   - used / depleted — 40 % opacity, empty pips
@@ -137,7 +137,7 @@ CAMPAIGNS                                   [+ New campaign]
 │ Journal  │ [◇ V.Mockery] [◇ Healing W] [◇ Cutting W] │                    │
 │ Reference│ STR +0  DEX +2  CON +1  INT +1  WIS +1  CHA +5                 │
 │ Settings │ Passive Perc 13 · Inv 13 · Ins 13         │                    │
-│ Campaigns│ LOG  Cast Faerie Fire (L1)       [Undo]   │                    │
+│ Campaigns│ RECENT LOG  Cast Faerie Fire (L1)        │                    │
 └──────────┴───────────────────────────────────────────┴────────────────────┘
 ```
 
@@ -198,7 +198,7 @@ Mobile: same list full width; tap row → bottom sheet with the preview + big Ca
 ├─────────────────────────────────┤
 │ Concentration: Faerie Fire 7 rd │
 │ Effects on you: None            │
-│ Log: Cast Vicious Mockery [Undo]│
+│ Full log + Undo in shared header│
 ├─────────────────────────────────┤
 │ Home  Combat  Spells  Inv  More │
 └─────────────────────────────────┘

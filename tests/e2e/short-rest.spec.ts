@@ -135,8 +135,8 @@ async function undoAfterReload(page: Page, id: string, before: SavedCharacter) {
   await page.reload();
   await saved(page);
   await page
-    .getByRole('region', { name: 'Combat log', exact: true })
-    .getByRole('button', { name: 'Undo last combat command', exact: true })
+    .getByRole('region', { name: 'Character log', exact: true })
+    .getByRole('button', { name: 'Undo last command', exact: true })
     .click();
   await saved(page);
   const undone = await readSaved(page, id);

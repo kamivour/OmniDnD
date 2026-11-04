@@ -37,7 +37,12 @@ const reducedMotion = (page: Page) =>
   page.getByRole('checkbox', { name: 'Always reduce motion', exact: true });
 const automation = (page: Page, name: 'Assisted' | 'Manual') =>
   page.getByRole('radio', { name: new RegExp(`^${name}`) });
-const undo = (page: Page) => page.getByRole('button', { name: 'Undo management', exact: true });
+const undo = (page: Page) =>
+  new URL(page.url()).pathname.startsWith('/characters/')
+    ? page
+        .getByRole('region', { name: 'Character log', exact: true })
+        .getByRole('button', { name: 'Undo last command', exact: true })
+    : page.getByRole('button', { name: 'Undo management', exact: true });
 
 async function expectSaved(page: Page) {
   await expect(page.getByRole('status', { name: 'Local save status', exact: true })).toContainText(

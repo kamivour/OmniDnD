@@ -40,13 +40,13 @@ test('HUD shows the saved Fool state and computed values', async ({ page, isMobi
   });
 });
 
-test('damage changes HUD hit points and toast Undo restores them', async ({ page }, info) => {
+test('damage changes HUD hit points and shared Undo restores them', async ({ page }, info) => {
   await enterHitPoints(page, 'Damage', 5, info.outputPath('hp-adjustment.png'));
   await expect(hp(page)).toHaveText(/6\s*\/\s*19/);
   await expect(page.getByRole('dialog', { name: 'Hit points', exact: true })).toBeHidden();
   await page
-    .getByRole('status', { name: 'Command feedback' })
-    .getByRole('button', { name: 'Undo', exact: true })
+    .getByRole('region', { name: 'Character log', exact: true })
+    .getByRole('button', { name: 'Undo last command', exact: true })
     .click();
   await expect(hp(page)).toHaveText(/11\s*\/\s*19/);
   await expect(page.getByRole('status', { name: 'Command feedback' })).toContainText('Undo:');
@@ -94,8 +94,8 @@ test('replacing temp HP warns; Cancel preserves it and override remains undoable
   await expect(hp(page)).toBeFocused();
   await expect(hp(page)).toContainText('+5');
   await page
-    .getByRole('status', { name: 'Command feedback' })
-    .getByRole('button', { name: 'Undo', exact: true })
+    .getByRole('region', { name: 'Character log', exact: true })
+    .getByRole('button', { name: 'Undo last command', exact: true })
     .click();
   await expect(hp(page)).toContainText('+10');
 });
@@ -120,8 +120,8 @@ test('conditions use commands and remain undoable', async ({ page }, info) => {
     hud(page).getByRole('button', { name: 'Adjust conditions and effects' }),
   ).not.toContainText('Status');
   await page
-    .getByRole('status', { name: 'Command feedback' })
-    .getByRole('button', { name: 'Undo', exact: true })
+    .getByRole('region', { name: 'Character log', exact: true })
+    .getByRole('button', { name: 'Undo last command', exact: true })
     .click();
   await expect(
     hud(page).getByRole('button', { name: 'Adjust conditions and effects' }),

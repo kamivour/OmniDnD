@@ -14,7 +14,7 @@ const effects = (page: Page) =>
   page.getByRole('main').getByRole('region', { name: 'Effects on you', exact: true });
 const concentration = (page: Page) =>
   page.getByRole('main').getByRole('region', { name: 'Concentration', exact: true });
-const log = (page: Page) => page.getByRole('region', { name: 'Combat log', exact: true });
+const log = (page: Page) => page.getByRole('region', { name: 'Character log', exact: true });
 
 async function saved(page: Page) {
   await expect(page.getByRole('status', { name: 'Local save status', exact: true })).toContainText(
@@ -158,7 +158,7 @@ async function reloadUndo(page: Page, id: string, before: LiveState) {
   await page.reload();
   await saved(page);
   await expect(status(page)).toContainText('No active combat');
-  await log(page).getByRole('button', { name: 'Undo last combat command', exact: true }).click();
+  await log(page).getByRole('button', { name: 'Undo last command', exact: true }).click();
   await saved(page);
   expect((await readSaved(page, id)).live).toEqual(before);
   await page.reload();

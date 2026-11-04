@@ -52,16 +52,18 @@ export function ReferenceScreen() {
       <header className="flex flex-wrap items-center gap-2">
         <h1 className="font-display text-xl">Reference</h1>
         <div className="ml-auto flex flex-wrap gap-2">
-          <button
-            type="button"
-            disabled={!last || pending}
-            onClick={() => undo()}
-            title={last?.text}
-            className={button}
-          >
-            <Undo2 size={16} aria-hidden />
-            Undo management
-          </button>
+          {!characterId && (
+            <button
+              type="button"
+              disabled={!last || pending}
+              onClick={() => undo()}
+              title={last?.text}
+              className={button}
+            >
+              <Undo2 size={16} aria-hidden />
+              Undo management
+            </button>
+          )}
           <Link to={`${base}/reference/credits`} className={button}>
             Credits
           </Link>

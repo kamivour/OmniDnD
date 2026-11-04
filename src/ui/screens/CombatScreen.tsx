@@ -39,7 +39,7 @@ import { useCharacter } from '../hooks/useCharacter';
 import { useDetail } from '../layout/detail-context';
 import { LiveSpellDetail } from '../spells/LiveSpellDetail';
 import { LiveEffects } from '../effects/LiveEffects';
-import { CharacterLogBar, RecentCharacterLog } from '../log/CharacterLog';
+import { RecentCharacterLog } from '../log/CharacterLog';
 import { SpellCastControls } from '../spells/SpellCastControls';
 import type { SpellbookEntry } from '../spells/spellbook-model';
 
@@ -229,7 +229,6 @@ export function CombatScreen() {
   return (
     <div className="mx-auto grid max-w-screen-2xl gap-4 px-4 py-4 lg:px-6 @min-[900px]:grid-cols-[minmax(0,1fr)_20rem] @min-[1100px]:gap-6 @min-[1100px]:grid-cols-[minmax(0,1fr)_24rem]">
       <h1 className="sr-only">Combat</h1>
-      <CharacterLogBar />
 
       <div className="flex min-w-0 flex-col gap-4">
         <section className="flex flex-wrap items-center gap-3 rounded-card border border-border bg-surface p-3">

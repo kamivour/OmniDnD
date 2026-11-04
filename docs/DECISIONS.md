@@ -104,6 +104,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D96 | 2026-11-04 | The Sheet explains calculations and locked HP entries. Defenses use recorded 2014 sources; missing data says Not recorded, and Fey Ancestry never implies blanket charmed immunity. | Initially annotate Fey Ancestry, Dwarven Resilience and Hellish Resistance |
 | D97 | 2026-11-04 | Breakdown height, keyboard access and descriptions: [Preview](../src/ui/components/Preview.tsx), [StatChip](../src/ui/components/StatChip.tsx) and [Sheet browser tests](../tests/e2e/character-sheet.spec.ts). | — |
 | D98 | 2026-11-04 | Support future campaigns, friends and multiple characters, including all 2014 classes and prepared casters. Build one milestone at a time, with The Fool as an acceptance character. | User confirmed the broader scope; answers Q10 |
+| D99 | 2026-11-04 | Every character screen shares one compact status/history row and one Undo, covering character and workspace changes. Modal editors keep one Undo while the background control is hidden. | More content on phones, with one clear place for history and Undo |
 
 ## Open questions
 

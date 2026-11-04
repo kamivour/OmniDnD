@@ -52,6 +52,48 @@ describe('persisted workspace validation', () => {
     ]);
   });
 
+  it('round-trips optional local activity order without changing saved game events', () => {
+    const store = createCharacterStore();
+    store.getState().dispatch(FOOL, heal, { amount: 1 }, metadata('game'));
+    store
+      .getState()
+      .dispatchManagement(
+        updatePreferences,
+        { automation: 'manual', reducedMotion: false },
+        metadata('workspace'),
+      );
+    const saved = serializeWorkspace(store.getState());
+    const before = structuredClone(saved);
+    const loaded = deserializeWorkspace(saved);
+    expect(loaded.activityOrder).toEqual(store.getState().activityOrder);
+    expect(saved.events.map(({ data }) => data)).toEqual(store.getState().characters[FOOL]?.events);
+    expect(loaded.characters[FOOL]?.events).toEqual(store.getState().characters[FOOL]?.events);
+    expect(loaded.managementEvents).toEqual(store.getState().managementEvents);
+    expect(serializeWorkspace(loaded)).toEqual(before);
+    expect(saved).toEqual(before);
+  });
+
+  it('loads a missing local activity setting without adding one during round-trip', () => {
+    const saved = rows();
+    delete saved.activityOrder;
+    const before = structuredClone(saved);
+    const loaded = deserializeWorkspace(saved);
+    expect(loaded).not.toHaveProperty('activityOrder');
+    expect(serializeWorkspace(loaded)).toEqual(before);
+  });
+
+  it.each([
+    [{ scope: 'character', eventId: 'missing-character-id', fingerprint: 'x' }],
+    [{ scope: 'workspace', eventId: 'missing-fingerprint' }],
+    [{ scope: 'unknown', eventId: 'bad-scope', fingerprint: 'x' }],
+  ])('rejects malformed local activity metadata without altering source rows (%j)', (invalid) => {
+    const saved = rows();
+    Object.assign(saved, { activityOrder: invalid });
+    const before = structuredClone(saved);
+    expect(() => deserializeWorkspace(saved)).toThrow();
+    expect(saved).toEqual(before);
+  });
+
   it('allows the same event id on different characters', () => {
     const other: ExportFile = structuredClone(seedFile);
     other.build.id = 'other-bard';

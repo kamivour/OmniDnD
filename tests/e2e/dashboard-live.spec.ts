@@ -29,9 +29,9 @@ const effects = (page: Page) =>
   main(page).getByRole('region', { name: 'Effects on you', exact: true });
 const recent = (page: Page) =>
   main(page).getByRole('region', { name: 'Recent commands', exact: true });
-const log = (page: Page) => main(page).getByRole('region', { name: 'Dashboard log', exact: true });
+const log = (page: Page) => page.getByRole('region', { name: 'Character log', exact: true });
 const dashboardUndo = (page: Page) =>
-  log(page).getByRole('button', { name: 'Undo last dashboard command', exact: true });
+  log(page).getByRole('button', { name: 'Undo last command', exact: true });
 const panel = (page: Page) =>
   page.getByRole('complementary', { name: 'Pinned detail', exact: true });
 const step = (page: Page, direction: 'Use' | 'Restore', name: string) =>
@@ -606,8 +606,13 @@ test('Dashboard recent history includes HP and rests, keeps five entries and res
   await expect(recent(page)).not.toContainText(changed.events[0]!.text);
   const view = log(page).getByRole('button', { name: 'View full log', exact: true });
   await view.click();
-  const history = page.getByRole('dialog', { name: 'Dashboard log', exact: true });
-  await expect(history.getByRole('listitem')).toHaveCount(7);
+  const history = page.getByRole('dialog', { name: 'Character log', exact: true });
+  const characterHistory = history.locator('[data-source="character"]');
+  await expect(characterHistory).toHaveCount(7);
+  for (const [index, event] of [...changed.events].reverse().entries()) {
+    await expect(characterHistory.nth(index)).toContainText(event.text);
+  }
+  await expect(history.locator('[data-source="workspace"]')).toHaveCount(1);
   await expect(history).toContainText('Day 1, 08:00');
   await expect(history).toContainText(changed.events[0]!.text);
   await page.keyboard.press('Escape');

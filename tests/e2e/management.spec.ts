@@ -120,7 +120,13 @@ test('hub uses saved HP and duplicate keeps choices and current values with its 
   );
   await character(page, 'The Second Fool').getByRole('link').click();
   await expect(hp(page)).toHaveText(/6\s*\/\s*19/);
-  await expect(page.getByRole('button', { name: 'Undo last command', exact: true })).toBeDisabled();
+  const log = page.getByRole('region', { name: 'Character log', exact: true });
+  await expect(log.getByRole('button', { name: 'Undo last command', exact: true })).toBeEnabled();
+  await log.getByRole('button', { name: 'View full log', exact: true }).click();
+  const history = page.getByRole('dialog', { name: 'Character log', exact: true });
+  await expect(history.locator('[data-source="character"]')).toHaveCount(0);
+  await expect(history.locator('[data-source="workspace"]')).toContainText('The Second Fool');
+  await page.keyboard.press('Escape');
 });
 
 test('delete requires confirmation and management Undo restores the character and game history after reload', async ({

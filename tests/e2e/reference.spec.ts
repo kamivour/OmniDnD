@@ -11,8 +11,12 @@ interface DatabaseSnapshot {
 
 const bookmark = (page: Page, title: string) =>
   page.getByRole('article', { name: title, exact: true });
-const feedback = (page: Page) =>
-  page.getByRole('status', { name: 'Command feedback', exact: true });
+const undo = (page: Page) =>
+  new URL(page.url()).pathname.startsWith('/characters/')
+    ? page
+        .getByRole('region', { name: 'Character log', exact: true })
+        .getByRole('button', { name: 'Undo last command', exact: true })
+    : page.getByRole('button', { name: 'Undo management', exact: true });
 const hp = (page: Page) =>
   page
     .getByRole('banner', { name: 'Character HUD', exact: true })
@@ -259,7 +263,7 @@ test('bookmarks are shared, saved, logged separately and undoable after reload',
   await expect(edited).toHaveCount(0);
   await expectSaved(page);
   await expect(add).toBeFocused();
-  await feedback(page).getByRole('button', { name: 'Undo', exact: true }).click();
+  await undo(page).click();
   await expect(edited).toBeVisible();
   await expectSaved(page);
   await edited.getByRole('button', { name: 'Remove bookmark', exact: true }).click();
@@ -268,8 +272,7 @@ test('bookmarks are shared, saved, logged separately and undoable after reload',
   await page.reload();
   await expectSaved(page);
   await expect(edited).toHaveCount(0);
-  const undo = page.getByRole('button', { name: 'Undo management', exact: true });
-  await undo.click();
+  await undo(page).click();
   await expect(edited).toBeVisible();
   await expectSaved(page);
   await page.reload();
@@ -280,17 +283,17 @@ test('bookmarks are shared, saved, logged separately and undoable after reload',
   await page.goto('/reference');
   await expectSaved(page);
   await expect(edited).toBeVisible();
-  await undo.click();
+  await undo(page).click();
   await expect(original).toBeVisible();
   await expect(edited).toHaveCount(0);
   await expectSaved(page);
-  await undo.click();
+  await undo(page).click();
   await expect(original).toHaveCount(0);
   await expect(page.getByText('No bookmarks yet.', { exact: true })).toBeVisible();
   await expectSaved(page);
   await page.reload();
   await expectSaved(page);
-  await expect(undo).toBeDisabled();
+  await expect(undo(page)).toBeDisabled();
   expect(characterData(await readDatabase(page))).toEqual(before);
 });
 

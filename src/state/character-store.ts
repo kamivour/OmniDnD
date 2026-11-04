@@ -30,6 +30,7 @@ import {
   type LiveState,
   type LogEvent,
 } from '../engine/schema';
+import { recordActivity, type ActivityReference } from './activity-order';
 
 export interface CharacterRecord {
   build: CharacterBuild;
@@ -44,6 +45,8 @@ export interface CharacterStoreState {
   automation: Automation;
   reducedMotion: boolean;
   managementEvents: ManagementEvent[];
+  /** Optional local ordering only; never part of character files or engine events. */
+  activityOrder?: ActivityReference[];
   dispatchManagement: <Payload>(
     command: ManagementCommand<Payload>,
     payload: Payload,
@@ -100,11 +103,18 @@ export function createCharacterStore(files: ExportFile[] = [seedFile]) {
         ...eventMetadata(options),
         force: options?.force,
       });
-      if (result.result === 'ok')
-        set({
+      if (result.result === 'ok') {
+        const next = {
+          ...current,
           ...result.next,
           managementEvents: appendManagementEvent(current.managementEvents, result.event),
+        };
+        set({
+          ...result.next,
+          managementEvents: next.managementEvents,
+          activityOrder: recordActivity(next, { scope: 'workspace', eventId: result.event.id }),
         });
+      }
       return result;
     },
     undoManagement: (options) => {
@@ -116,7 +126,14 @@ export function createCharacterStore(files: ExportFile[] = [seedFile]) {
         eventMetadata(options),
         options?.force,
       );
-      if (result.result === 'ok') set({ ...result.next, managementEvents: result.events });
+      if (result.result === 'ok') {
+        const next = { ...current, ...result.next, managementEvents: result.events };
+        set({
+          ...result.next,
+          managementEvents: result.events,
+          activityOrder: recordActivity(next, { scope: 'workspace', eventId: result.event.id }),
+        });
+      }
       return result;
     },
     dispatch: (characterId, command, payload, options) => {
@@ -130,15 +147,20 @@ export function createCharacterStore(files: ExportFile[] = [seedFile]) {
       });
       if (result.result === 'ok') {
         const events = current.characters[characterId]?.events ?? [];
-        set({
-          characters: {
-            ...current.characters,
-            [characterId]: {
-              build: result.next.build,
-              live: result.next.live,
-              events: appendEvent(events, result.event),
-            },
+        const characters = {
+          ...current.characters,
+          [characterId]: {
+            build: result.next.build,
+            live: result.next.live,
+            events: appendEvent(events, result.event),
           },
+        };
+        set({
+          characters,
+          activityOrder: recordActivity(
+            { ...current, characters },
+            { scope: 'character', characterId, eventId: result.event.id },
+          ),
         });
       }
       return result;
@@ -150,15 +172,20 @@ export function createCharacterStore(files: ExportFile[] = [seedFile]) {
       const events = current.characters[characterId]?.events ?? [];
       const result = undoCommand(state, events, eventMetadata(options));
       if (result.result === 'ok') {
-        set({
-          characters: {
-            ...current.characters,
-            [characterId]: {
-              build: result.next.build,
-              live: result.next.live,
-              events: result.events,
-            },
+        const characters = {
+          ...current.characters,
+          [characterId]: {
+            build: result.next.build,
+            live: result.next.live,
+            events: result.events,
           },
+        };
+        set({
+          characters,
+          activityOrder: recordActivity(
+            { ...current, characters },
+            { scope: 'character', characterId, eventId: result.event.id },
+          ),
         });
       }
       return result;

@@ -68,6 +68,8 @@ Always visible, including Combat.
 
 Tap/click any value → its adjust popover (HP: Damage / Heal / Temp with number pad on mobile). Mobile HUD fits in 2 rows max.
 
+A shared status row beneath the HUD shows saving status, the latest change and one Undo on every character screen. Tap the entry for full history; it stays visible while scrolling, and character toasts do not duplicate Undo.
+
 ## 5. Screens
 
 ### Campaigns (landing)
@@ -125,7 +127,7 @@ The Combat screen tracks **this character's** turn: what they can still do, what
 - **HP panel:** big current HP, quick `−1 −5 −10`, number pad, Damage / Heal / Temp. Damage while concentrating → CON save prompt showing the DC, with Pass / Fail buttons.
 - **At 0 HP:** death-save tracker appears (success/fail pips, nat 1 / nat 20 buttons).
 - **Concentration** block (spell, remaining rounds, End) and **Effects on you** list with remaining rounds (D41).
-- **Log + Undo** always visible (last entry + Undo button; full log in sheet).
+- **Log + Undo** always visible in the shared header row (last entry + one Undo; full history in a sheet).
 - **End Combat:** clear turn state; remaining round durations convert to game time (1 round = 6 s).
 - Validates action requirements and spends resources (see §6). Attack hits and damage dealt to others stay manual.
 

@@ -19,7 +19,7 @@ const main = (page: Page) => page.getByRole('main');
 const section = (page: Page, name: string) => main(page).getByRole('region', { name, exact: true });
 const number = (page: Page, label: string) =>
   main(page).getByRole('button', { name: `Show ${label} breakdown`, exact: true });
-const sheetLog = (page: Page) => section(page, 'Sheet log');
+const sheetLog = (page: Page) => page.getByRole('region', { name: 'Character log', exact: true });
 const inspiration = (page: Page) =>
   section(page, 'Identity').getByRole('checkbox', { name: 'Inspiration', exact: true });
 
@@ -299,7 +299,7 @@ test('Sheet navigation shows every Fool ability, save, skill, combat value and s
   await expect(defenses).not.toContainText(/immune to (?:being )?charmed/i);
   await expect(defenses.getByText('Not recorded', { exact: true })).toHaveCount(3);
   await expect(
-    sheetLog(page).getByRole('button', { name: 'Undo last sheet command', exact: true }),
+    sheetLog(page).getByRole('button', { name: 'Undo last command', exact: true }),
   ).toBeDisabled();
   await noOverflow(page);
   await identity.scrollIntoViewIfNeeded();
@@ -431,9 +431,7 @@ test('ordinary Inspiration logs once, survives reload and Undo restores the lega
   await saved(page);
   await expect(inspiration(page)).toBeChecked();
   expect(await readSaved(page, 'the-fool')).toEqual(changed);
-  await sheetLog(page)
-    .getByRole('button', { name: 'Undo last sheet command', exact: true })
-    .click();
+  await sheetLog(page).getByRole('button', { name: 'Undo last command', exact: true }).click();
   await saved(page);
   const undone = await readSaved(page, 'the-fool');
   expect(undone.build).toEqual(initial.build);
