@@ -11,6 +11,8 @@
 
 Full rule text we cannot store → short own-words summary + link to the external page.
 
+The data model supports many campaigns and characters, including future friends' characters. The Fool is the first acceptance fixture, not a restriction on supported characters.
+
 ## 2. Reference sources
 
 | Source | Use | License |
@@ -38,7 +40,7 @@ Also credit game-icons.net (CC BY 3.0) and Lucide (ISC).
 ## 3. IDs and tags
 
 - Stable kebab IDs with kind prefix: `spell.faerie-fire`, `feature.bard.cutting-words`, `item.rapier`, `condition.prone`.
-- SRD entries reuse the D&D 5e API index after the prefix (`item.crossbow-hand`, `item.rations-1-day`, `subclass.lore` → `subclass.bard.lore`), so the import needs no rename table. Features and subclasses add the class (`feature.bard.*`, `subclass.bard.*`). Exception: class features that the data splits per level become one entry (`bardic-inspiration-d6`, `-d8`, ... → `feature.bard.bardic-inspiration`; rules in D50). Non-SRD entries follow the same kebab style (D49).
+- SRD entries reuse API indexes, with class prefixes for features/subclasses and one combined entry for features split by level (D50). Non-SRD entries follow the same kebab style (D49).
 - `ruleset: '5e-2014'` on every entry. Loader rejects anything else.
 - `source: 'PHB' | 'XGE' | 'TCE' | 'HB'`. Separate `srd: boolean` (true → SRD text may be shown).
 - Campaign Setup filters by `source`.
@@ -99,7 +101,7 @@ interface FeatureDef extends RefBase {
 
 Class, subclass, race, background, item and condition entries are in `src/engine/schema/refs.ts`. Points the sketch does not show: a subrace is a full race entry with `subraceOf: 'race.<parent>'`; ammunition items carry `bundle` (arrows come 20 per purchase); weapon `damage` is dice, a flat number (blowgun 1), or absent (net), and `damageType` is present exactly when `damage` is.
 
-`Formula`, `RechargeByLevel`, `DieByLevel` are small declarative forms (e.g., `{ abilityMod: 'CHA', min: 1 }`, `{ 1: 'long', 5: 'short' }`, `{ 1: 'd6', 5: 'd8', 10: 'd10', 15: 'd12' }`). Anything more complex → a code hook. No custom expression language.
+`Formula`, `RechargeByLevel`, `DieByLevel` are small declarative forms (e.g., `{ abilityMod: 'CHA', min: 1 }`, `{ 1: 'long', 5: 'short' }`, `{ 1: 'd6', 5: 'd8', 10: 'd10', 15: 'd12' }`). More complex logic uses a code hook, not a custom expression language.
 
 ```ts
 interface Campaign {
@@ -169,21 +171,32 @@ interface LiveState {
 
 **Campaign ↔ character (D38):** one campaign has many characters. `CharacterBuild.campaignId` is the only link; the hub lists characters by grouping on it.
 
-**Concentration vs effects (D41):** `concentration` is the caster's own state. `effects` holds only effects whose target is this character. Faerie Fire cast on enemies sets `concentration` and adds nothing to `effects`.
+**Concentration vs effects (D41):** `concentration` is the caster's own state; `effects` holds only effects targeting this character. Faerie Fire cast on enemies sets `concentration` and adds nothing to `effects`.
 
-**Pending concentration saves (M5):** Assisted damage records one `{ id, dc }` request per damage instance inside the current concentration object. The ID is the originating command's caller-supplied event ID; the DC uses damage after applicable reductions and before temporary HP. Explicit Pass removes one request, while Fail ends concentration and its linked effects. Replacing, ending, or expiring concentration removes its requests with it; Undo restores the exact object. Manual damage creates no Info-driven requests, but previously saved requests remain available for explicit review. The optional field preserves older version 1 files without rewriting them. The runner supplies event ID and automation only to command application; calculations and checks keep their existing context.
+**Pending concentration saves (M5):** Assisted damage records one `{ id, dc }` request per damage instance, using damage after reductions and before temporary HP. Pass removes one request; Fail ends concentration and linked effects, replacement/end/expiry clears old requests, Manual creates none, and Undo restores the exact state without legacy rewrites.
 
 **Store "used", not "remaining".** Maximums are computed from the build, so a level-up or override never desyncs live values.
 
-**Ordinary Inspiration (M7):** optional `live.inspiration` reads as false when absent. Only explicit `setInspiration` writes it; unrelated commands, parsing and loading keep legacy records unchanged. Undo of the first toggle removes the field again. Bardic Inspiration remains a separate feature-use pool. No advantage roll or DM outcome is chosen automatically.
+**Ordinary Inspiration (M7):** absent `live.inspiration` reads as false; only `setInspiration` writes it, and Undo restores absence exactly. Bardic Inspiration is a separate feature-use pool; neither chooses advantage or DM outcomes automatically.
 
-**Sheet explanations (M7):** additive `Stat.parts` explain contributions; optional engine-owned `Stat.notes` explain multiplication, rounding, caps and locked HP entries. Scalar explanations come from `sheetBreakdowns` and are never persisted. Maximum-HP parts include its final minimum-one adjustment so they add up to the displayed total. Optional feature `defenses` metadata records typed resistances/immunities/vulnerabilities, saving-throw advantages and magical-sleep protection. Only owned features contribute; missing metadata means not recorded, not proven absent. It does not automatically reduce damage or decide saving throws.
+**Sheet explanations (M7):** additive `Stat.parts` sum to the displayed total, including HP's minimum-one adjustment; optional `Stat.notes` explain formulas, rounding, caps and locked entries. Scalar explanations from `sheetBreakdowns` are never persisted.
 
-**Dash (M5):** optional `combat.economy.dashCount` counts extra allowances from the current turn. The engine derives movement capacity from current speed and this count. Older version 1 files omit it and read as zero; ordinary turns keep their existing shape. End Turn removes it, and Undo restores it through the existing patches. No database migration rewrites saved characters.
+**Defenses (M7):** optional feature metadata records resistances, immunities, vulnerabilities, saving-throw advantages and magical-sleep protection from owned features. Missing metadata means not recorded; it never automatically reduces damage or decides saves.
+
+**Dash (M5):** optional `combat.economy.dashCount` adds allowances based on current speed and reads as zero when absent. End Turn removes it and Undo restores it, without rewriting older saves.
 
 **Max HP is never stored.** It is computed from `hpEntries` + current CON modifier + modifiers (e.g., exhaustion 4 halves it).
 
-**HP floors (D69):** new entries save the current campaign floor. Older entries without `floor` use the campaign fallback. Before changing that fallback, the campaign command records the previous floor on those entries so their HP stays unchanged. Raw rolls and methods remain intact; CON changes still apply to every level. This optional field preserves existing version 1 files.
+**HP floors (D69):** new entries save the campaign floor; legacy entries use its fallback until a campaign-method change locks their previous floor. Raw rolls and methods stay intact, and current CON still applies to every level.
+
+### Planned companion data (M12; not part of the current schemas)
+
+- **Reference data:** import SRD 5.1 creature statblocks, such as Mastiff, into `data/srd/`. Non-SRD companions use user entry or short own-words content in `data/content/`; copied text stays in `data/private/`.
+- **Derived values:** templates cover Eldritch Cannon, Steel Defender, Ranger companions and Find Familiar, using owner class level, proficiency and ability modifiers only where the selected 2014 rule requires them. Familiar forms otherwise use their fixed SRD statblocks; Ranger variant selection remains Q23.
+- **Creation and control:** source rules determine feature/spell uses, spell-slot costs, duration, maximum count and game-clock expiry, plus the owner's command cost shown in the economy bar. The user chooses actions and enters rolls or DM outcomes; the engine computes derived numbers and spends resources.
+- **Live state:** each companion has its own HP, damage, healing, conditions and uses, and is destroyed or dismissed at 0 HP. Creation, commands and all changes are logged and undoable.
+- **Ownership and persistence:** companion definitions/choices and live state belong to the owning character's save and export. The concrete schema, migration and command shapes will be designed in M12; the schemas above do not yet contain companion fields.
+- **Edition and dependency:** Artificer companions use the 2014-compatible `TCE` Artificer, never 2024 rules or Eberron: Forge of the Artificer (2025). M12 plans companion support; Cannon and Steel Defender automation depends on Artificer class support in M14.
 
 ## 5. Commands and event log
 
@@ -205,15 +218,15 @@ interface LogEvent {
 - **Undo** applies the last non-undone event's inverse patches and appends an `undo` event. Linear undo only.
 - Keep the last 500 events per character.
 
-Combat displays this history newest first without changing stored order. `gameSeconds` is the clock before the command, including for commands that advance time; the log shows seconds and labels that meaning. Historical round numbers are not stored or inferred from the current combat. Override and undone markers remain visible, and Undo skips undo records and previously undone commands.
+Combat displays history newest first, with override/undone markers and the clock before each command; historical rounds are not inferred. Undo skips undo records and previously undone commands.
 
-Short Rest rolls stay in an unsaved UI draft until Apply. Preview runs the same pure command with discarded synthetic event metadata; it never appends an event or writes storage. Apply records one `completeShortRest` event for dice, optional Song of Rest, recovery, expiry, and time. Its optional `songOfRestSource` distinguishes self from another bard without changing saved character schemas or rewriting old events.
+Short Rest previews use unsaved drafts and discarded command results; Apply records dice, optional Song of Rest, recovery, expiry and time in one `completeShortRest` event. Optional `songOfRestSource` distinguishes self from another bard without rewriting old records.
 
-Long Rest preview preserves the unforced check's warnings while using a discarded forced projection only when necessary to show the diff. Actual Apply runs unforced through the shared command feedback flow; only an explicit Assisted override marks its saved event. Prepared-spell review is view state and never changes a selection merely by opening; subsequent edits use their existing separate commands.
+Long Rest previews preserve warnings without saving; Apply uses normal command feedback and records an override only after an explicit choice. Opening prepared-spell review changes nothing; edits use separate commands.
 
-Dashboard Quick Access uses the existing reference-ID favorites array. Its manager supports spells, features, and items; chosen-reference duplicates are normalized without rewriting unrelated entries. Retained unavailable references can be explicitly removed. One favorited spell can render several class-specific actions, and an item reference can render several owned instance-specific actions. Pool display clamps remaining counts at zero, but raw overspending stays saved until an explicit correction command is applied.
+Dashboard Quick Access uses reference-ID favorites for spells, features and items, resolving actions for each applicable class or owned item instance. The manager can remove unavailable references without rewriting unrelated entries; displayed pools stop at zero while raw overspending stays saved until explicitly corrected.
 
-Game-clock controls convert explicit day/hour/minute choices to seconds and dispatch `advanceTime`. Their discarded previews never save an event or update timers. All elapsed-time and persisted-deadline arithmetic must stay within the schema's exact integer range; invalid sums Block before mutation. This adds no state fields or migration and leaves existing saved clocks and undo histories intact.
+Dashboard's shared Game Clock converts chosen durations to seconds and dispatches `advanceTime`; Exploration will reuse it and the same saved clock (D91). Previews never save, and unsafe elapsed-time or deadline arithmetic Blocks before mutation.
 
 ## 6. Persistence
 
@@ -223,12 +236,12 @@ Game-clock controls convert explicit day/hour/minute choices to seconds and disp
 - **Export:** `{ app: 'omnidnd', schemaVersion, exportedAt, build, live, events, campaign }` (`ExportFileSchema`; the seed `data/characters/the-fool.json` uses the same shape, D49). **Import:** zod-validate → migrate → preview → save.
 - **Auto backups:** before import, before reset, after each long rest. Keep the last 10.
 - **Stored rows (M3):** `{ id, schemaVersion, data }`; event rows also have `characterId` and a stable `order`, with compound primary key `[characterId + id]`. This keeps identical imported event IDs on different characters separate.
-- **Atomic saves:** a serialized queue writes the workspace's builds, live states, logs, and campaigns together. The UI shows pending or failed saves; success feedback waits for the queue. Saved records and remaining undo history validate before startup hydration. Invalid records are preserved and show a load error.
-- **Window conflicts:** a `workspaceRevision` setting is checked and advanced inside each save transaction. A stale window cannot replace another window's saved changes. Its local changes remain unsaved with an explicit conflict message; retry never forces an overwrite.
-- **Management history:** creation, duplication, deletion, and import use pure engine commands with a separate 500-event workspace log in the `managementEvents` setting. The log saves atomically with character data. Undo warns before replacing character changes made since a management action. Character exports retain the documented single-character export shape.
-- **Import collisions:** matching character IDs add a new copy; conflicting campaign rules add a new campaign. Remapped copies keep current values and choices but start fresh character-action histories, because old inverse patches may reference the old identity. The import preview explains this before saving.
-- **Reference bookmarks (D70):** a shared `bookmarks` setting stores `{ id, title, url }[]`, with unique IDs and HTTP(S) URLs only. Add/edit/remove use management commands and the same durable Undo. The setting saves atomically with the workspace and management history. Missing legacy bookmarks default to an empty list; malformed saved bookmarks show a load error. Bookmarks are device-wide and are not part of single-character exports.
-- **Device preferences (D71):** `automation` (`assisted` by default) and `reducedMotion` (`false` by default) save in versioned settings rows with the workspace and management log. Preference changes use a strict engine command and can be undone after reload. Missing legacy motion data defaults to false; invalid saved preferences fail loading without erasing data. Reduced motion is enabled when either the OS requests it or the saved switch is on. Single-character exports do not include device preferences.
+- **Atomic saves:** builds, live states, logs and campaigns save together; success feedback waits for completion. Startup validates records and remaining Undo history, preserving invalid data with a load error.
+- **Window conflicts:** each save checks `workspaceRevision`; stale windows retain unsaved changes with an explicit conflict message. Retry never forces an overwrite.
+- **Management history:** creation, duplication, deletion and import use a separate 500-event `managementEvents` log saved with character data. Undo warns before replacing subsequent character changes; exports retain the single-character shape.
+- **Import collisions:** matching character IDs add a copy; conflicting campaign rules add a campaign. Copies retain values and choices but start fresh action histories, as explained in the import preview.
+- **Reference bookmarks (D70):** device-wide `bookmarks` stores unique `{ id, title, url }` entries with HTTP(S) URLs, managed through commands and durable Undo. Missing legacy data reads as empty, malformed data causes a load error, and character exports omit bookmarks.
+- **Device preferences (D71):** commands save and undo `automation` (default `assisted`) and `reducedMotion` (default `false`); invalid data fails loading without erasure. OS or saved motion preference enables reduced motion, and character exports omit device preferences.
 
 ## 7. Summary style (house style)
 
@@ -246,7 +259,7 @@ Rules:
 - Header: `L<n> <School> · <Time> · <Range> · <Save/Attack> · <Duration>`. Cantrip = `Cantrip <School>`.
 - Second line: components; material only if costly or consumed.
 - Effect ≤ 40 words. Then optional `Fail:` / `Success:` / `Hit:` / `Upcast:` / `Scaling:` lines.
-- Exact numbers and dice. Use "target" and "you". No "you can choose to", no lore.
+- Use exact numbers and dice, address "target" and "you", and omit "you can choose to" or lore.
 - Casting badges: `A` action, `BA` bonus action, `R` reaction, else `1 min` / `10 min` / `1 h`.
 - Features use the same shape: `Activation · Uses · Recharge`, then effect.
 

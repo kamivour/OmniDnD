@@ -1,255 +1,66 @@
 # OmniDnD — Manual QA
 
-Check these items in a normal browser after each completed milestone. Unchecked items need a human check; automated results are recorded in CHANGELOG.md.
+Use these short reviews for human judgment about appearance, comfort and 2014 rules explanations. Automated checks cover arithmetic, persistence and command behavior.
 
-## Phase 1 — M3: shell layouts
+Try your own campaigns and characters, including characters friends might use later. The Fool remains the acceptance fixture in TEST_CHARACTER.md. Leave a review unchecked until a person has assessed it.
 
-- [ ] At 375 px, open Home, Combat, Spells, and Inventory from the bottom navigation. Open More, choose Sheet, then return to All campaigns.
-- [ ] Open Companions from the sidebar or More. Inventory, Features, Companions, and Journal should each say "Coming in Phase 2". Credits should open from its route without a Not found page.
-- [ ] At desktop width, collapse and expand the sidebar. Click a spell or resource to open Details. Close and reopen Details, then switch screens and confirm the selected detail remains available.
-- [ ] At 640–1023 px, open a spell on both touch and mouse input. Details should open as a drawer on the right. Check the slot picker and Cast button, then close with Escape, the close button, or the backdrop.
-- [ ] Use Tab and Enter to open a detail. Close it and confirm focus returns to the opener. After changing screens, closing an old detail should focus the Details button.
-- [ ] Resize through 375, 768, 1024, and 1440 px with Details open. Confirm readable content, no horizontal scrolling, and reachable navigation.
-- [ ] Load and refresh the app in a normal browser. Confirm the dark theme, fonts, and icons load consistently. This machine intermittently denies Chromium test sockets, so the optional HTTP-forwarding test run does not prove native browser networking.
+## Phase 1 — M3: shell, HUD and local workspace
 
-## Phase 1 — M3: live HUD
+- [ ] On phone, tablet and desktop, judge whether navigation makes the current campaign and character clear and keeps common destinations easy to find.
+- [ ] Scan the HUD during play. HP, temporary HP, concentration and effects should be easy to distinguish, including with long names.
+- [ ] Open details with mouse, touch and keyboard. Judge reading space, placement, dismissal and return focus without having to hunt for the next control.
+- [ ] Review creation and campaign settings. Rolled scores, standard array, point buy and retained choices should be understandable without explaining the form aloud.
+- [ ] Review import, copy and deletion wording on a disposable character. Decide whether the preview and confirmation make the affected character and campaign clear.
+- [ ] Read saving, conflict and error messages. Judge whether they explain the next step calmly and distinguish character actions from workspace management.
+- [ ] Review Reference and Credits. Edition labels, destinations, attribution and external links should be clear to someone seeking 2014 rules.
+- [ ] In a normal browser, judge contrast, fonts, icons, spacing and reduced motion across screen sizes. Note any uncomfortable or distracting interaction.
 
-- [ ] On first use in a new browser profile, check the HUD shows HP 11/19, L1 slots 0/4, L2 slots 2/2, and Bardic Inspiration 3/5. AC is 13, initiative +3, and speed 30 ft.
-- [ ] Open HP, apply 5 damage, then use the toast's Undo. HP should return to 11, with an Undo confirmation.
-- [ ] Restore a level 1 slot from the HUD, switch between Home, Spells, and Combat, and confirm the HUD keeps the new count. Adjust Bardic Inspiration and undo it too.
-- [ ] Give yourself 10 temp HP, then try replacing it with 5. Cancel should keep 10 and return to Apply in the open editor with 5 still entered. Do anyway should set 5, close the editor, and restore the HP button. Undo should restore 10.
-- [ ] Open AC, initiative, and speed. Check their calculation breakdowns. Overrides are scheduled for Character Sheet edit mode in M7.
-- [ ] Add Poisoned from the HUD status control, close it, and undo the change. Check conditions stay separate from concentration and effects on you.
+## Phase 1 — M4: Spellbook
 
-## Phase 1 — M3: local saving
+- [ ] Scan spell groups, slots and active concentration. Judge whether availability and spell types are understandable without relying on color alone.
+- [ ] Read several summaries for different characters and casting classes. Decide whether saves, attacks, components and source links give enough context for table use.
+- [ ] Read a hover preview, pinned detail and phone sheet. Judge whether long descriptions and many slot options remain comfortable to inspect and select.
+- [ ] Walk through casting and upcasting. The chosen slot, healing roll, ritual choice and Apply to me option should make the player's choices clear.
+- [ ] Review a warning and its exception path. Decide whether Cancel and Do anyway explain the consequence while leaving hits, saves and other creatures' outcomes to the table.
+- [ ] Use filters and favorites as you would during a session. Judge discoverability, empty results and whether another character feels free of fixture-specific shortcuts.
+- [ ] Review known/prepared spell management and replacement wording. Class limits, retained conflicts and the effect of a choice should be understandable before saving.
 
-- [ ] Change HP and slots from the HUD. Wait for "Saved locally", refresh, then close and reopen the app in the same browser. Confirm the HUD keeps those values.
-- [ ] After a refresh, use "Undo last command" in the toolbar. Refresh again and confirm the undo remains saved.
-- [ ] Check the save indicator and Undo button remain readable and reachable at 375 px, including when Details is open.
-- [ ] In a throwaway browser profile, open two windows before changing anything. Save a change in the first window, then edit the stale second window. The second should show "Save conflict"; it must not overwrite the first window's saved change. Reloading the stale window warns about its unsaved change.
+## Phase 1 — M5: Combat
 
-## Phase 1 — M3: campaigns and character management
+- [ ] Start combat and move between acting and waiting. Judge whether the app clearly tracks your character's turn while the DM keeps the initiative order.
+- [ ] Use action tabs and movement controls during a short encounter. Judge whether actions, bonus actions, reactions and resources can be scanned quickly on a phone.
+- [ ] Read the bonus-action-spell warning and Show all explanation. Confirm the wording communicates the 2014 restriction and leaves exceptions explicit.
+- [ ] Review reactions and Readied responses. The app should help record a declared choice without implying that a trigger, hit or target outcome was decided automatically.
+- [ ] Review damage, concentration and death-save prompts. Natural rolls, external modifiers and explicit Pass/Fail choices should feel clear under pressure.
+- [ ] Compare concentration with effects on you. Decide whether self versus ally targets, remaining game time and source relationships are understandable.
+- [ ] Read combat history and end an encounter. Judge whether entries explain what happened and whether history, Undo and the next useful control remain easy to reach.
 
-- [ ] Open a character, adjust its HP from the HUD, return to All campaigns, and confirm the card shows the same HP after a refresh.
-- [ ] Make a named copy. Change the copy's HP and confirm the original stays unchanged. The copy should keep choices and current resources while starting its own game-action history.
-- [ ] Delete the copy: first Cancel, then confirm deletion. Refresh, use Undo management, and confirm the character and its saved history return. Cancel and close buttons should restore keyboard focus.
-- [ ] Export a character, then import that JSON. Review the preview before adding it. An existing character ID should create a separate copy; existing characters must remain intact. Conflicting campaign rules should create a separate imported campaign.
-- [ ] Create a blank Half-Elf Bard with Charlatan background in #273. For level 1, use bases STR 11, DEX 14, CON 12, INT 12, WIS 12, CHA 18; choose DEX and CON for the two racial bonuses. The form should compute CON 13, CHA 20, and max HP 9. Create it and confirm the HUD shows 9/9 after refresh. Optional build choices remain unselected.
-- [ ] Check import/copy/delete controls and creation fields at 375 px and desktop width. Invalid creation choices should show useful errors, which clear when you correct the inputs.
+## Phase 1 — M6: Rest and Dashboard
 
-## Phase 1 — M3: campaign settings
+- [ ] Scan Dashboard on several characters. Resource groups, empty states and separate class or item instances should be understandable without remembering fixture details.
+- [ ] Choose quick-access favorites. Judge whether owned, unavailable and reference-only entries explain what can be used and why.
+- [ ] Read conditions and effect sources. Decide whether the presentation makes clear which source is responsible and what ending it means.
+- [ ] Review Short Rest while deciding whether to spend another Hit Die. The healing preview and your bard's or another bard's Song of Rest choices should support that decision.
+- [ ] Review Long Rest recovery and interval warnings. Hit Dice recovery and the prepared-spell review should be understandable; food, sleep and interruptions remain table judgments.
+- [ ] Advance game time with presets and a custom duration. Judge whether elapsed time, day changes and expired effects are clear without suggesting real-world time passes automatically.
+- [ ] On phone, tablet and desktop, read complete rest previews and nested warnings. Judge scrolling, action placement and focus when moving into spell preparation.
 
-- [ ] Create a campaign. Confirm defaults are XP, average HP, allow negative level HP, standard array, and PHB. Refresh and confirm the campaign remains.
-- [ ] Open #273 settings. Change HP to Average and abilities to Point buy. Confirm retained-entry notes appear for The Fool. Save, refresh, and confirm The Fool's HP, ability scores, and resources stay unchanged. Undo management should restore the settings after another refresh.
-- [ ] Create a level 2 character in a standard-array campaign. Repeated scores should fail validation. Assign 15, 14, 13, 12, 10, and 8 once each; confirm HP is computed without asking for a roll.
-- [ ] Change a campaign to point buy and average HP. Confirm new characters use numeric bases from 8 to 15 with a 27-point budget. Change to rolled methods and confirm roll fields appear. Saved existing characters must retain their choices.
-- [ ] For a character with low HP rolls and negative CON, change the campaign's low-roll floor. Its existing max HP must stay unchanged; new characters and later levels use the new floor. Confirm Undo management restores the earlier settings.
-- [ ] Check Save, Cancel, sources, and retained-entry notes at 375 px and desktop width. Sources stay read-only until M11.
+Exploration will reuse Dashboard's GameClockControl under D91.
 
-## Phase 1 — M3: Reference and Credits
+## Phase 1 — M7: Character Sheet, in progress
 
-- [ ] Open Reference from the hub and from a character. Check the eight link cards. Open the Basic Rules, SRD PDF, and 5e.tools cards; confirm each goes to its 2014 destination in a new tab.
-- [ ] Add a named HTTP or HTTPS bookmark. Refresh and open Reference from another character; the same bookmark should appear. Edit its title and URL, remove it, then use the toast's Undo.
-- [ ] Remove a bookmark, refresh, and use Undo management. Confirm the bookmark returns. The character's HP and game-action Undo should remain unchanged.
-- [ ] Enter a `javascript:` or `file:` URL. Save should show a useful error and keep existing bookmarks unchanged. Correct the URL and save. Cancel, Escape, and the close button should return focus to the editor's opener; removing a bookmark should focus Add bookmark.
-- [ ] Open Credits from both the hub and a character. Check the SRD attribution, icon authors/source links, and local Lucide/Inter/Cinzel license notices. Back to Reference should preserve the current character context.
-- [ ] At 375 px and desktop width, check long bookmark titles and URLs wrap without horizontal scrolling. Use Tab/Enter to open and save the bookmark editor.
+- [ ] Read the Sheet for your own character. Judge whether identity, class choices, proficiencies and languages are grouped for quick reference, including tools not carried.
+- [ ] Inspect calculated numbers by mouse, touch and keyboard. Judge whether source parts, locked HP entries and long high-level explanations remain readable and reachable.
+- [ ] Review proficiency, Expertise and Jack of All Trades labels. Their explanations should make the 2014 distinction between checks and saving throws clear.
+- [ ] Compare ordinary Inspiration with Bardic Inspiration. Decide whether the labels and resulting history make their different purposes obvious.
+- [ ] Read senses and defenses. Judge whether conditional protections, such as Fey Ancestry, avoid implying blanket immunity and whether Not recorded is honest about missing details.
+- [ ] Review advancement information in XP and milestone campaigns. It should match how the campaign discusses leveling without asking the player to supply derived numbers.
+- [ ] After the shared status/log row is finished, judge whether one Undo is easy to locate and understand across character screens before reviewing Sheet Edit mode.
 
-## Phase 1 — M3: Settings and final milestone check
+Edit mode, overrides, ability entry, level-up and Exploration remain unfinished M7 work. Review them when their tasks are complete.
 
-- [ ] Open Settings from the hub and from a character. Change Assisted to Manual, wait for Saved locally, refresh, and confirm Manual stays selected. Undo management should restore Assisted after another refresh.
-- [ ] Give a character 10 temp HP, then replace it with 5. Assisted should ask first; Cancel should retain 10. Manual should replace it without a rule warning. Game-action Undo should restore the earlier temp HP independently of preference Undo.
-- [ ] Turn Always reduce motion on. Open and close a preview or dialog; motion should stop. Refresh and confirm the preference remains. Turn the switch off and enable reduced motion in the OS; the app should still reduce motion.
-- [ ] Use Tab, arrow keys, and Space to change preference controls. Focus should stay on the control after saving. Check Settings at 375 px and desktop width.
-- [ ] From hub Settings, select a character and export JSON. From character Settings, export the active character. Import the file, inspect the preview, close it without saving, then import and add it. Existing IDs should create a copy. Refresh and undo the import with Undo management.
-- [ ] Import malformed JSON and confirm an error appears without changing saved characters. Exported files contain one character and its campaign/history; device preferences and bookmarks stay local.
-- [ ] Recheck navigation, HUD adjustments, campaign/character management, Reference, and Settings in one normal browser session. Refresh between changes and confirm saved values agree across screens. Dashboard, Spellbook, and Combat bodies still use approved static frames until M4–M6.
+## Deferred rules review — M5
 
-M3 is complete. The hub, blank character creation, campaign settings, Reference, Settings, HUD, and local saving are live. Automated checks cover failed-write rollback, Retry, and rejecting damaged records without erasing them. Installability and offline operation remain M8 work.
+Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.
 
-## Phase 1 — M4: spell groups and slots
-
-- [ ] Open The Fool's Spellbook. Confirm DC 15, attack +7, cantrips 2/2, known spells 6/6, and saved slots matching the HUD. A fresh seed has level 1 slots 0/4 and level 2 slots 2/2.
-- [ ] Use − and + on both slot rows. Confirm the HUD changes immediately. Refresh, then Undo last command; both the row and HUD should restore the previous value after another refresh.
-- [ ] Tap a pip to set the remaining count. Tapping a filled pip clears that pip and later pips; tapping an empty pip fills through it. Use Tab and Space on a pip too, then undo the adjustment.
-- [ ] Open a newly created blank Bard. Confirm no spells from The Fool appear, limits match that character, and the level 1 slot row is available even with no selected spells.
-- [ ] At 375 px and desktop width, confirm slot controls fit without horizontal scrolling and every control remains reachable. Concentration's Active badge should match saved state and disappear when concentration ends from the HUD.
-
-Spell groups and standard slot adjustments are live. Casting, favorites, and Manage are the next M4 tasks. Pact Magic Spellbook support remains Phase 3; pact slot adjustments already exist in the HUD.
-
-## Phase 1 — M4: spell previews
-
-- [ ] At desktop width, hover a spell to read its registry summary, then use keyboard focus and Enter to pin its details. At 375 px, tap the name and close with the close button or Escape; focus should return to that spell.
-- [ ] Pin a level 1 spell while level 1 slots are empty. It should select level 2 if available. Restore a level 1 slot from the HUD, choose level 2 manually, then spend the final level 2 slot. Selection should fall back to the available level 1 slot. Deplete that too; the leveled Cast control should become disabled. Cantrip Cast controls remain available without slots.
-- [ ] Keep a pinned detail selected, navigate to another screen, then reopen Details. Slot availability and casting stats should still reflect the current character, including changes made from the HUD.
-- [ ] If your character knows an attack spell, check the row and preview show the engine's spell attack bonus. Saving throw spells should show the character's save DC. The full-reference link should open in a new tab.
-- [ ] Check the same pinned detail at tablet width and after resizing to 375 px. Confirm no clipped controls or horizontal scrolling, and verify selected-slot counts against the HUD.
-- [ ] For a high-level character, confirm all available slot levels wrap into reachable options rather than shrinking into tiny targets.
-
-Preview controls now track live availability. Applying casts through the engine is the next M4 task.
-
-## Phase 1 — M4: casting
-
-- [ ] With The Fool's fresh seed slots, press a row's Cast button. The flow should choose level 2 because level 1 is depleted, show upcast information and derived dice, and spend exactly one level 2 slot after confirmation. Refresh and undo; slots should restore in both HUD and Spellbook.
-- [ ] Cast a cantrip. It should use no slot. Cast from a phone preview and from pinned desktop details as well as the row action.
-- [ ] Cast Healing Word with Apply to me off: HP should stay unchanged. Then turn it on, enter a rolled dice total within the displayed range, and check the computed healing preview before confirming. Invalid totals should keep the flow open without spending a slot. Undo should restore both HP and the slot.
-- [ ] In pinned details, cast self healing once and confirm the rolled total clears before the next cast. Spell dice and modifier should reflect the chosen slot and casting class.
-- [ ] Cast Invisibility with Apply to me off, then with it on. Concentration should track the spell in either case; the personal effect should appear only when applied to you. Replacing concentration and Undo should update effects and resource counts together.
-- [ ] For a known eligible ritual such as Comprehend Languages, deplete normal slots and choose Cast as ritual. Confirm no slot is spent and the game clock advances by the normal casting time plus ten minutes. The ritual option should be absent for an ineligible class or during combat.
-- [ ] Trigger a rule warning, such as an already-used action. Cancel should keep choices, counts, and focus on the open flow's confirmation button. Do anyway should cast once, close the flow, and restore the original row/preview opener. If a pinned confirmation becomes disabled after the last slot, focus should move to a usable workspace control.
-- [ ] Check phone and desktop flows for readable upcast text, reachable choices, visible errors, and no horizontal scrolling. Hits, saves, and other creatures' results remain decisions at the table.
-
-## Phase 1 — M4: filters and favorites
-
-- [ ] Combine name search, level, school, casting time, concentration/ritual, and type filters. Search should ignore surrounding spaces and letter case; multiple type selections match either tag. Clear should reset every filter without changing spells, resources, or the log.
-- [ ] Star a spell by click and by keyboard Space. Refresh, then Undo last command; the star should restore its previous state without changing HP or slots.
-- [ ] Enable Favorites, remove the last visible favorite, and confirm focus returns to the Favorites filter so you can turn it off. Check 44 px star targets and readable rows at 375 px and desktop width.
-- [ ] If the character knows spells with longer casting times, check the minute/hour filter options. An empty tag override should display and filter as Utility.
-- [ ] With standard slots depleted, Castable now should retain cantrips and eligible known/prepared rituals outside combat. Other leveled spells should hide until slots are restored.
-
-## Phase 1 — M4: Manage spells and final milestone check
-
-- [ ] Open Manage for The Fool. Confirm 2/2 cantrips and 6/6 known spells. Search available spells by name, school, or source; the selected list must stay visible while searching.
-- [ ] Try adding a seventh known spell. Cancel should retain all choices and resources; Do anyway should add one spell and log an override. Refresh, then use Undo last command. Confirm the previous selection returns without changing HP, slots, concentration, or other favorites.
-- [ ] Replace a known spell. Pick the replacement explicitly; the count should remain 6/6 and one Undo should restore the old spell. Cancel replacement should make no saved change. Removing and replacing cantrips should use their separate count.
-- [ ] On a prepared caster, check learned cantrips and prepared spells have separate counts. For a Wizard, add a spell to the book before preparing it. Removing a prepared spell from the book should warn and retain the separate prepared choice until you change it.
-- [ ] If testing imported choices, confirm off-list, disabled-source, and over-level spells remain visible and removable. An unsupported class association should offer cleanup without inventing new spell choices or limits. Manage must not silently trim existing selections.
-- [ ] Edit a spell's tags, choose several types, then change Main type. Check the row label, tint, and type filters after closing Manage. Clear every tag: the spell should display as Utility. Reset tags should restore the registry defaults. Refresh and Undo each kind of change.
-- [ ] Use keyboard controls through Manage, a rule warning, replacement, and the nested tag editor. Cancel should preserve the current flow. Closing tags should return to its Edit tags button; Done should return to Manage. Confirm the footer stays reachable at 375 px and desktop width without horizontal scrolling.
-- [ ] In one normal browser session, adjust slots, cast from a row and preview, replace concentration, star/filter spells, and change selections/tags. Refresh between changes and verify HUD and Spellbook agree. Undo should restore each saved command exactly.
-
-M4 implementation is complete; the checklist above is the manual follow-up. Standard-slot Spellbook casting and management are live; Pact Magic Spellbook controls remain Phase 3. Native browser networking and offline operation need separate checks because automated browser runs on this Windows host use the real-HTTP forwarder. Offline/PWA work remains M8.
-
-## Phase 1 — M5: combat start
-
-- [ ] Open Combat with no saved fight. Check No active combat and the computed initiative reference (+3 for The Fool). There should be no turn-order list or initiative-roll input.
-- [ ] Start combat. Check Round 1 and Before your first turn. HP, slots, resources, concentration, and the game clock should stay unchanged. Starting combat does not start your turn.
-- [ ] Navigate to Spells and back, then refresh. The same round/status should remain. Undo last command should remove the started fight and retain all previous character values after another refresh.
-- [ ] Start combat by keyboard at desktop and 375 px widths. Focus should move to the updated combat status; no controls should overflow the viewport.
-
-Combat startup, turn economy, actions, HP, effects, history, and End Combat are live.
-
-## Phase 1 — M5: turns and economy
-
-- [ ] Start combat, then Start Turn. Check Round 1, Your turn, all three economy controls available, and full computed movement. The first turn must not advance the clock.
-- [ ] Tap Action, Bonus, and React to spend each; tap again to restore it. Confirm HP, spell slots, and feature uses stay unchanged. Use −5 to spend movement and +5 to give it back; refresh and verify the saved values.
-- [ ] Spend the reaction and some movement, then End Turn. They should stay spent while waiting. Start Turn again: check Round 2, six seconds added to the game clock, and all economy/movement restored. Undo should restore the exact previous waiting state and clock after refresh.
-- [ ] While waiting, spend React. It should work without an off-turn warning. Try Action or movement: Cancel should preserve values and return focus to the same control, including a native phone tap. Do anyway should apply one logged override.
-- [ ] Spend all movement, then try another −5. Cancel should retain zero remaining; Do anyway should keep the displayed remainder at zero rather than negative. Undo should restore the previous used amount. A condition that reduces speed should immediately change the displayed maximum.
-- [ ] At 375 px and desktop width, use keyboard Enter/Space through Start Turn, End Turn, and economy toggles. Focus should remain on the changing turn button; warnings should preserve usable focus. Check there is no horizontal scrolling.
-
-## Phase 1 — M5: action tabs, spells, and weapons
-
-- [ ] Before starting combat, preview a weapon and a standard action. Their actual action buttons should be disabled with Start combat guidance. Previewing must not spend anything.
-- [ ] With The Fool, start combat and your turn. Rapier should show +4 and 1d8+2 piercing; Dagger should show +4 and 1d4+2 piercing. Attack once: one action and one log entry, with HP, slots, and feature uses unchanged. A second attack should warn; Cancel preserves everything and Do anyway records an override. Refresh and Undo both actions.
-- [ ] Preview Dash, then choose Take Dash. Movement should increase from 30 to 60 for this turn. End Turn removes the extra allowance; Undo End Turn should restore it exactly. The next turn starts with normal movement. Neither Dash nor its preview changes the HUD's speed.
-- [ ] On Spells, spend Action and check action spells disappear from the default view while eligible bonus/reaction spells remain. Show all spells should restore the full list without a saved command. Casting from that view should retain normal warnings and Cancel behavior.
-- [ ] Cast Healing Word from Bonus, a phone preview, and pinned details. The saved seed should choose level 2 because level 1 is empty. Apply to me, enter a total of 2 for its two dice, and check HP 11 becomes 18. Spellbook and HUD slots should agree; refresh and Undo should restore the whole cast.
-- [ ] Use Bardic Inspiration from Bonus. Cutting Words in React and in pinned details should read the same reduced shared pool. This feature spends a bonus action, but must not claim that a bonus-action spell was cast. At zero uses, Use should disable while the explanation remains readable.
-- [ ] Cast ordinary level-2 Invisibility on yourself, then attack or cast a cantrip. Your personal Invisibility and its linked concentration should end together. Invisibility cast on an ally should survive your attack. For an upcast self effect, the self effect should end while concentration remains with a note for possible other targets; end concentration manually if none remain. Undo should restore the exact previous state.
-- [ ] Open a blank character: no spells, weapons, or Bard features should be inherited from The Fool. Items should state that its actions are coming in Phase 2. At 375 px, tablet, and desktop widths, check previews, pinned details, warning cancellation, disabled-resource reasons, keyboard focus, and horizontal scrolling.
-
-Action tabs, HP, concentration-save tracking, effect countdowns, and the Combat log are live. Target results, contests, additional attacks from features, and readied-spell holding remain decisions at the table.
-
-## Phase 1 — M5: HP, concentration saves, and death saves
-
-- [ ] Check The Fool starts at HP 11/19 in both HUD and Combat. Apply 5 damage from Combat, heal, give temporary HP, and clear them. Refresh between changes; counts and Undo should agree everywhere. Use a copy for the 0-HP cases below.
-- [ ] From both HUD and Combat, give 10 temporary HP and try replacing them with 5. Cancel must retain the open editor, entered 5, old 10 temporary HP, and Apply focus. Do anyway applies once, closes the editor, and restores its opener. Undo should restore 10 after refresh. Recheck the desktop HUD popover as well as phone sheets.
-- [ ] While concentrating, take two separate damage instances. The banner should show the current spell, the oldest DC, and two pending checks. Navigate to another screen and refresh: both checks should remain. Pass removes only one; Fail ends concentration and its linked personal effects. Undo restores the exact checks and effects. The app must never choose Pass or Fail for you.
-- [ ] At HP 19 with 30 temporary HP, take 22 damage while concentrating. HP should stay 19, temporary HP become 8, and the save DC should be 11. Dropping to 0 instead should end concentration without leaving a save request. Replacing or manually ending the concentrated spell must remove old requests.
-- [ ] At 0 HP, enter natural d20 9 with Other bonus or penalty 1. It should record one success and clear both inputs. Natural 1 gives two failures; natural 20 restores 1 HP and resets the tracker regardless of a pending external modifier. Undo should restore the previous counters and unconscious state. At stable or dead states, illegal death-save actions should disable.
-- [ ] Reach three successes at 0 HP, give 8 temporary HP, then record 3 damage with Critical hit at 0 HP checked. Temporary HP should become 5, stability end, and two failures be recorded despite unchanged HP. A third failure should show Dead and disable ordinary healing; Undo must restore the prior state.
-- [ ] Open the HUD HP editor while dying and choose Natural 20. The editor should remain usable at HP 1, with keyboard focus inside it after the tracker disappears. Test this on phone and desktop, including typed rolls and shortcut buttons.
-- [ ] Create a pending save in Assisted, switch to Manual, and return. The saved check should remain behind Review concentration saves. Resolve it explicitly, then take more damage in Manual: no new automatic reminder should appear. Switching modes must not erase saved checks or HP history.
-- [ ] For Q21, already-zero HP plus temporary HP can produce competing instant-death interpretations. The current remainder-based default shows a DM-review note in Assisted when outcomes differ. Confirm the table's ruling; this default is not a settled ruling. Manual suppresses the reminder. Undo remains available.
-
-Current concentration and HP are live across character routes. Remaining effect countdowns and Combat log presentation are still previews until their scheduled M5 task.
-
-## Phase 1 — M5: reactions
-
-- [ ] Start combat and leave your turn waiting. Use Cutting Words from React: Bardic Inspiration should drop by one, Reaction become used, and action/bonus/movement/HP/slots remain unchanged. Hits, triggers, and the amount subtracted are resolved at the table.
-- [ ] Try an opportunity attack before your next turn. Cancel the second-reaction warning by keyboard and phone tap; saved values and focus must stay unchanged. Do anyway should log one override. Refresh and Undo each reaction separately; undoing the second reaction must not erase the first.
-- [ ] Use a Readied action response. Only the reaction should be spent, with no spell slot or feature charge inferred. End Turn must keep the reaction spent; Start Turn should restore it. Dead characters' Readied Use must disable, while manual economy corrections and Undo remain available.
-- [ ] At one Bardic Inspiration use left, use Cutting Words from its row and pinned details. The pool should stop at zero, Use disable, and focus remain on a usable preview/detail element. Its explanation should stay reachable. If the character has a reaction spell, verify an off-turn cast spends one available slot and the same reaction pool.
-- [ ] In Manual mode, repeated reactions should apply without warnings or override flags, but empty feature/slot pools must still block spending. Restore Assisted afterward if desired. Check phone and desktop layouts, refresh, and Undo.
-
-## Phase 1 — M5: bonus-action spells
-
-- [ ] With available slots, start your turn and cast Healing Word. Try Dissonant Whispers: the bonus-action-spell warning should appear. Cancel must preserve state, selected slot, input choices, and confirmation focus. Do anyway should spend exactly once and log an override. Refresh and Undo should restore the full previous state.
-- [ ] After a bonus-action spell, default Spells should retain one-action cantrips and hide incompatible leveled/reaction spells. Show all should reveal them without a saved command; explicit attempts should still warn. Vicious Mockery is legal if the action remains available.
-- [ ] On a fresh turn, cast Dissonant Whispers first, then try Healing Word. The same restriction should warn in this order too. Repeat with Vicious Mockery first: Healing Word should be allowed. Check a phone preview and pinned desktop healing flow retain choices through Cancel.
-- [ ] If the character has a bonus-action cantrip, verify it causes the same restriction. A cantrip taking longer than one action does not qualify as the permitted other spell. A nonspell bonus feature such as Bardic Inspiration should not prevent an ordinary action spell.
-- [ ] With a reaction spell known and the reaction available, try it during the same own turn as a bonus-action spell: it should warn. Cancel, End Turn, then try the reaction off-turn: the bonus-action-spell warning should be gone. End Turn must not restore an already-spent reaction.
-- [ ] Start the next turn and confirm spell flags reset. Undo End/Start Turn and casts after refresh; the exact prior restriction and resources should return. In Manual, exceptional casts should apply without warnings/override flags, while depleted slots still block. Restore Assisted afterward if desired.
-
-## Phase 1 — M5: effects and saved log
-
-- [ ] Cast Faerie Fire on others during your first turn. Concentration should show 10 rounds left while Effects on you stays empty. End Turn keeps the timer; the next Start Turn shows 9. The timer must not change while you wait in real time. Refresh and Undo the turn change.
-- [ ] Cast Invisibility on yourself. It should appear in both the separate Concentration block and Effects on you. End its self effect: the linked concentration should end, focus should remain usable, and one Undo should restore both. End an unrelated effect instead: concentration should stay intact.
-- [ ] Let a short timed effect or concentration expire at a later Start Turn. Check the event explains what ended. Undo must restore the exact clock, round, economy, concentration, pending checks, and effects after refresh. Untimed effects should remain.
-- [ ] If testing imported timers, check partial rounds round upward, a missing concentration timer says No timer, an untimed effect says Until removed, and an already-expired entry stays visible until a command handles it. A self effect ending before its parent concentration must not crash or end unknown other targets.
-- [ ] Scroll from top to bottom at 375 px and desktop width. The log summary and Undo must stay reachable below the HUD; long effect names must wrap and End targets must remain easy to tap. View full log should open all retained commands newest first, beyond the five desktop recent entries, without horizontal scrolling.
-- [ ] Create a warning override, then Undo it. Full history should show Override and Undone, plus a separate Undo event. Game timestamps include seconds and show when commands started. Repeated Undo must skip old undo events and disable when exhausted. Closing the log with Escape should return focus to View full log; exhausting Undo should keep usable focus.
-
-## Phase 1 — M5: End Combat and final milestone check
-
-- [ ] Start combat and end it before your first turn. The fight should end, the game clock should advance six seconds, and Start combat should return. Repeat with two actual turns: the fight must advance twelve seconds in total, including the six seconds already paid at the second Start Turn.
-- [ ] End combat during your turn and while waiting. Turn controls and economy should disappear, focus should move to No active combat, and HP, slots, feature uses, conditions, and surviving concentration requests should remain unchanged. Ending combat at zero HP or dead must stay available and must not heal or revive you.
-- [ ] Check an effect due during the final six seconds expires and is named in the log. Surviving timers should switch from round counts to exact time; an effect with seven seconds left should now show one second left. Untimed effects should stay. Expired concentration must remove its dependent effects and pending checks.
-- [ ] Refresh after ending, then Undo from the log. The exact previous round, active/waiting turn, spent economy, clock, concentration, saves, and effects should return. Refresh again and confirm they remain. End Combat and the restored controls should fit at 375 px and desktop width and work with keyboard Enter.
-- [ ] Run [TEST_CHARACTER.md §6](TEST_CHARACTER.md#6-acceptance-scenario) steps 1–8 with a fresh copy of The Fool, checking HUD, Combat, and Spellbook after each step and refreshing after steps 3 and 8. An ally's Invisibility should survive your own casts; self Invisibility should end when you attack or cast. Check warning Cancel, override, and the final Undo sequence.
-
-M5 implementation is complete; the sections above are the manual follow-up. The already-zero massive-damage/temporary-HP interpretation remains a DM review under Q21. Live rests and Dashboard are M6, with the full cross-screen acceptance and native offline checks still scheduled for later Phase 1 milestones.
-
-## Phase 1 — M6: Short Rest
-
-- [ ] Open Short Rest from the desktop HUD, phone More menu, and tablet toolbar. Add a Hit Die, enter its natural result, and check CON is added automatically. Projected HP and remaining dice should update after each result so you can decide whether to spend another die. Drafting must not change the HUD or saved log.
-- [ ] Add and remove several rolls, including different die sizes on a multiclass character. You cannot add more dice than remain. Remove a row while the selected pool is depleted: focus should return to the Hit Die selector. Cancel and Escape should discard the draft, reopen cleanly, and restore the original Short Rest control or phone More button.
-- [ ] With The Fool at HP 13/19, add one d8 roll of 2 and Song of Rest roll 2. Preview should show HP 18/19, one spent Hit Die, one hour added, and unchanged ordinary slots and level-3 Bardic Inspiration. Apply should produce one saved command. Refresh and Undo should restore the exact pre-rest state, including timers and resources.
-- [ ] Check the full preview before applying: concentration, pending checks, and personal effects due within the hour should end; later and untimed effects should remain. At Bard 5, Bardic Inspiration should recover on a short rest. If importing Pact Magic, its separate slots should recover without restoring ordinary slots.
-- [ ] Your Song of Rest should use your derived die (d6 for The Fool). An out-of-range roll should block Apply. Choose Another bard for a larger die; enter that bard's rolled result, up to d12. Add Song only once, and only when Hit Dice actually regain HP. With negative CON and a roll healing zero, or at full HP, Song should be unavailable while a rest without Song remains possible.
-- [ ] With no Hit Dice left, rest without dice and confirm only time, expiry, and eligible recovery occur. In combat or dead, preview should explain the block and Apply should disable. At 375 px, tablet, and desktop width, scroll through the entire preview, reach Apply/Cancel, check keyboard focus and no horizontal scrolling.
-
-## Phase 1 — M6: Long Rest
-
-- [ ] Open Long Rest from the desktop HUD, phone More menu, and tablet toolbar. Read the entire recovery preview before applying. HP, slots, short/long-rest features, Hit Dice, time, temporary HP, exhaustion, death saves, and expired effects should show their computed changes. Cancel/Escape must make no saved change and restore the opener.
-- [ ] Apply with partially used resources. HP should reach the current maximum, ordinary and Pact slots and eligible features should recover, temporary HP should clear, and exhaustion should decrease by one. At exhaustion 4, the preview should show the new higher HP maximum after dropping to 3. The clock should advance eight hours and record the new rest end. Food, drink, sleep, and interruptions remain table decisions.
-- [ ] Spend all three of The Fool's Hit Dice, then long rest: only one die should return. At level 1, the minimum recovery is one. With different die sizes, check the preview's existing largest-spent-die-first policy and total half cap. The app should never restore more dice than were spent.
-- [ ] Try another long rest immediately. The full diff should remain visible with a warning. Apply should open confirmation; Cancel or Escape must retain the rest preview and Apply focus. Do anyway should apply once and log an override. A rest starting sixteen hours after the previous rest ended should satisfy the normal twenty-four-hour interval once its own eight hours finish.
-- [ ] At zero HP, in combat, or dead, Apply should disable with an explanation. Manual should suppress the interval warning and override marker while retaining those Blocks. Restore Assisted afterward if desired.
-- [ ] On a prepared caster, keep Review prepared spells after resting checked. Success should open Manage spells on the first eligible prepared class without changing any selection. Check first-rest and warned Do anyway flows keep focus inside Manage, including Tab/Shift+Tab wrapping. Close without edits, refresh, and Undo the rest: the exact previous resources, clock, effects, and pending checks should return. Uncheck review to close normally; Bard and Paladin 1 should not offer it.
-- [ ] At 375 px, tablet, and desktop width, check long labels, scroll to Apply/Cancel, and verify nested warning controls do not lose the underlying rest. Refresh and Undo after recovery and after expiry should restore the entire prior state.
-
-## Phase 1 — M6: rest game time
-
-- [ ] Read the Game clock row, draft a Short Rest, then Cancel. Reopen: saved time should be unchanged. Apply a Short Rest and confirm exactly one hour is added; a Long Rest should add eight. Waiting in real time or leaving a preview open must add nothing.
-- [ ] With a late-night imported state, check Long Rest crosses to the next day correctly. Effects due within the rest should expire; later and untimed effects should remain. Refresh, Undo, and reopen the preview to confirm the exact previous clock, effects, concentration requests, and resources return.
-
-## Phase 1 — M6: live Dashboard
-
-- [ ] Load the saved seed: Level 1 slots 0/4, Level 2 slots 2/2, Bardic Inspiration 3/5, d8 Hit Dice 3/3, and empty favorites/concentration/effects. Use and restore resources through the separate buttons; tapping pips must do nothing. Check HUD, Spellbook, Combat, refresh, and Undo agree without changing unrelated pools.
-- [ ] Hover/tap a resource label, then pin it on desktop. Adjust it from another visible control or complete a rest: the pinned count must update. Using/restoring the final available charge should leave focus on the resource label. With an imported overspent pool, check zero remaining, disabled ordinary controls, explicit correction to the displayed limit, and exact Undo of the original raw amount.
-- [ ] Manage quick access: choose a spell, feature, and owned item. Check Spellbook stars and Dashboard agree, then refresh and Undo changes. With no favorites there should be no fixed Fool shortcuts. Search and closing the manager must not spend resources.
-- [ ] Cast a favorite spell from its phone preview and desktop pinned detail. Use a favorite feature and, during combat, a favorite equipped weapon. The same engine commands, slot choices, warnings, shared pools, depletion rules, and Undo should apply. Multiple classes for one spell and multiple copies of an item must stay distinguishable. Unselected/unowned favorites should remain reference-only with an explanation.
-- [ ] Edit conditions and exhaustion from Dashboard. Close the editor and confirm focus returns to Edit conditions. A condition granted by an effect should remain visible after removing only a manual duplicate, with its source named. Ending the source effect should remove only that source; incapacitation should end concentration through the existing command behavior.
-- [ ] Check computed ability scores, modifiers, saves/proficiency, and passive values on a non-Fool or multiclass character. Empty pools should stay empty rather than inherit seed resources. Dashboard should show the five newest real log entries, including HP/rest commands and Override/Undone markers; full history and Undo should remain available after refresh.
-- [ ] At 375 px, tablet, and desktop width, check long labels, pinned cards, the favorite manager, and keyboard focus. On a level-20 character, all Hit Dice pips must wrap without overlapping the 44 px adjustment buttons or causing horizontal scrolling.
-
-## Phase 1 — M6: manual clock and final milestone check
-
-- [ ] Open Advance time on Dashboard. Try each preset and a custom duration such as 1 day, 2 hours, 3 minutes. Review the projected game time, then apply: one clock command should save and close the dialog. Cancel/Escape, editing fields, and real-world waiting must leave saved time unchanged. Refresh and Undo should restore the exact clock, effects, and pending concentration checks.
-- [ ] Negative or fractional custom fields and an all-zero duration should disable the custom action with an explanation. Valid presets should still work independently. In combat, Cancel a manual-time warning and confirm fields/focus remain; Do anyway should advance once with an override. Manual should suppress the warning while invalid values remain blocked.
-- [ ] Continue [TEST_CHARACTER.md §6](TEST_CHARACTER.md#6-acceptance-scenario) from step 9 after completing steps 1–8. End combat, advance one hour, and confirm ally Invisibility expires. Short Rest with one d8 roll 2 and Song 2 should heal HP 13 to 18; Long Rest should restore HP 19, slots 4/2, Inspiration 5, and all three Hit Dice. Cancel the immediate repeat-rest warning.
-- [ ] Take 15 damage, Short Rest spending all three d8 with rolls of 1 and no Song, then advance 23 hours. Confirm the clock is exactly twenty-four hours after the prior Long Rest end. Long Rest should restore only one Hit Die. Refresh and Undo that rest: HP, slots, dice, clock, conditions, effects, and pending checks should match the previous state exactly.
-- [ ] Use Dashboard's Level 1 minus twice to set two slots spent. Each click should create its own log entry; Undo each correction in reverse order to return to full slots, without changing other values. Check HUD, Dashboard, Spellbook, and Combat after each scenario step; inspect the shared HUD on other routes as well.
-- [ ] At 375 px and desktop width, check time presets, custom fields, nested warnings, complete rest previews, final resource counts, and keyboard return focus. Native networking, PWA installation/offline behavior, and the full cross-screen Phase 1 scenario still have their later M7/M8 checks.
-- [ ] On desktop, open HUD HP and Dashboard conditions with their anchors near the top and middle of the viewport. All editor content should scroll within the available space. Close and Apply must stay reachable; changing a condition/exhaustion or capturing the screen should not prevent completing the editor.
-
-## Phase 1 — M7: live Character Sheet sections
-
-- [ ] Open Sheet from desktop navigation and phone More. The Fool should show Half-Elf, Bard 3/Lore, Charlatan, the saved alignment and no XP in the milestone campaign. Scores should be 11/15/13/12/12/20, saves 0/+4/+1/+1/+1/+7, and all eighteen skills should match TEST_CHARACTER §4. Expertise, proficiency and Jack of All Trades should have readable labels; passives should all be 13.
-- [ ] Hover or focus a number on desktop; tap it on a phone. Inspect ability bonuses, modifier rounding, proficient/unproficient saves, Expertise, Jack of All Trades, passives, armor, initiative, speed, maximum HP, Hit Dice, carrying capacity, weapon damage, and spell DC/attack. HP should explain each locked roll plus current CON and any minimum or exhaustion adjustment. On a level-20 character, Tab into the open calculation and press End: the final locked entry should be reachable inside the viewport. Closing with Escape or Close should leave saved state untouched and return usable focus.
-- [ ] Toggle ordinary Inspiration by touch and keyboard Space. Check one log entry per change, refresh, then Undo. The previous toggle and all unrelated values should return. Bardic Inspiration must remain 3/5 in the seed. A first toggle on an older imported character should work without a migration prompt or resource reset.
-- [ ] Check saved proficiencies and languages even for tools not carried. The Fool has Darkvision 60 ft and capacity 165 lb. Fey Ancestry should show saves against charmed and protection from magical sleep; it must not claim immunity to being charmed. Dwarf poison resistance and Tiefling fire resistance should appear only on characters owning those traits. Unstructured defenses should say Not recorded; inspect racial and active-condition reference text for other cases.
-- [ ] Check combat values against HUD: seed HP 11/19, temp 0, Hit Dice 3d8, AC 13, initiative +3, speed 30 ft, rapier +4/1d8+2 and dagger +4/1d4+2 with 20/60 ft range. A saved CON score of 14 should produce maximum HP 22. Exhaustion/effect changes should agree with the named breakdown sources. At zero HP, the shared death-save tracker should remain usable and undoable.
-- [ ] Import or create another character. Verify its identity, proficiencies, attacks, senses and casting values replace all Fool values. XP campaigns should show the saved XP and next threshold; missing XP should say Not tracked and level 20 should have no next threshold. At 375 px and desktop width, check long labels, all sections, 44 px numeric targets, keyboard inspection, and no horizontal scrolling. Build editing, overrides, ability entry, level-up and Exploration remain later M7 checks.
+- [ ] At project end, review D80 (Q22) and Q21 with the DM, including damage at zero HP and instant-death thresholds. Record rulings before changing behavior.

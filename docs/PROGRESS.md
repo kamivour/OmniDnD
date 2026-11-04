@@ -1,9 +1,11 @@
 # OmniDnD — Progress
 
 **Current milestone:** M7 — Character Sheet + Exploration + level-up.
-**Next up:** Character Sheet Edit mode and noted overrides with the ✎ marker.
+**Next up:** Unify the character status/log row with one Undo, then continue Sheet Edit mode.
 
 Status: `todo` · `doing` · `done` · `blocked`
+
+Build for multiple campaigns and characters, including friends' future characters. The Fool remains the acceptance fixture.
 
 ## Goals
 
@@ -115,10 +117,11 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 ### M7 — Character Sheet + Exploration
 - [x] Sheet sections (SPEC §5) with breakdown tooltips
+- [ ] Unify character status/log row with one Undo (gate before Sheet Edit mode)
 - [ ] Edit mode + overrides with ✎ marker
 - [ ] Ability scores: enter base per campaign method (rolled = typed, standard array = assign, point buy = 27-point check); bonuses listed separately
 - [ ] Level up (minimal): milestone button / XP threshold prompt; enter roll or take average; +1 Hit Die; XP hidden in milestone mode
-- [ ] Exploration: game clock controls, utility spells/rituals, skills + passives, active effects
+- [ ] Exploration: reuse Dashboard GameClockControl (D91); utility spells/rituals, skills + passives, active effects
 
 ### M8 — Phase 1 hardening
 - [ ] Playwright acceptance scenario at mobile + desktop sizes
@@ -141,77 +144,51 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 ## Session log
 
-Newest first. One line per work session: date — what changed — what's next.
+Newest first. One line per task, about 25 words at most.
 
-- 2026-11-04 — M7 Sheet sections: live identity, ordinary Inspiration, abilities/saves, eighteen skills and markers, passives, proficiencies/languages, source-backed defensive records, combat references/death saves, attacks and class casting stats replace the placeholder. Shared breakdowns explain scalar formulas and locked HP entries; parts include minimum-max-HP adjustment without changing values. Optional Inspiration preserves legacy absence and exact Undo (D95–D96). Reproduced/fixed level-20 tooltip overflow and accessible formula descriptions (D97). 922 unit tests pass; all 431 runnable browser cases have passing proof with 35 expected skips. Full run: 425 pass, four Windows loopback EACCES failures and two stale Sheet-placeholder assertions; corrected smoke contract and targeted rerun passes ten checks without automatic retries. Typecheck, lint, formatting and build pass; 375/1440 layouts, keyboard/touch inspection, twenty-level scrolling, reload and Undo checked with the real-HTTP forwarder. Sheet manual QA added. Next: Edit mode and noted overrides.
+- 2026-11-04 — Shortened docs, deferred D80 review and planned M12 companions. Next: shared character status/log row with one Undo.
 
-- 2026-11-04 — M6 complete: shared Dashboard clock presets/custom duration and command-only preview close linked acceptance steps 9–14, including expiry, both rests, the Hit Dice half cap, refresh, exact Undo and per-click slot corrections (D91). Shared guards block unsafe clock/deadline arithmetic without rewriting saves (D92). Fixed above-anchor HUD editor height (D93); traced screenshot-induced responsive remounts and corrected viewport artifact capture (D94). 885 unit tests pass; all 415 runnable browser cases have passing proof with 35 expected skips. The full run had five Windows loopback EACCES failures before app loading; focused rerun passes seven checks with three expected skips, without automatic retries. Typecheck, lint, formatting and build pass; 375/1440 layouts checked with the real-HTTP forwarder. M6 manual QA is in MANUAL_QA.md. Next: M7 live Sheet sections and computed breakdowns.
-
-- 2026-11-04 — M6 Dashboard: saved resources, live pinned descriptions, source-aware conditions, computed ability/save/passive summaries, last-five history and shared Undo replace fixtures. Quick Access favorites now support explicit spell/feature/item choices and class/instance-specific live actions (D89); overspent imports require explicit correction and large pip pools wrap (D90). Reproduced/fixed condition-editor close focus and level-20 overflow/overlap. 858 unit tests and 136 focused browser checks pass without retries (10 expected width skips); typecheck, lint and build pass. Styled 375/768/1440 layouts checked through the real-HTTP forwarder; manual QA added. M6 exit audit found missing standalone time controls for scenario steps 9/12, so M6 remains doing. Next: shared manual clock control and linked steps 9–14.
-
-- 2026-11-03 — M6 rest clock gate verified against unchanged runtime code: Short Rest advances exactly 3600 seconds, Long Rest 28800, with midnight crossing, deadline expiry, pre-command log timestamps, durable reload and exact Undo. Draft/preview/Cancel and blocked attempts leave the clock untouched. Reused matching 813-unit/97-focused-browser proof from the completed rest tasks; typecheck, lint and build remain current. Manual game-time checks added. Next: live Dashboard.
-
-- 2026-11-03 — M6 Long Rest: shared recovery diff includes HP/resources, half-cap Hit Dice, temporary HP, exhaustion, death saves, last-rest time and expiry. Warned projections remain read-only while actual Apply uses normal Assisted/Manual/Block checks; eligible prepared casters can review through the existing manager after success (D87). Reproduced/fixed focus escaping a warned rest-to-manager transition with a late-resolved return target (D88). 813 unit tests and 97 focused browser checks pass without retries (9 expected width skips); typecheck, lint and build pass. 375/768/1440 layouts and warning/Tab/reload/Undo checked; manual QA added. Next: rest clock verification, then live Dashboard.
-
-- 2026-11-03 — M6 Short Rest: shared phone/tablet/desktop dialog drafts one die at a time, shows engine-computed projected HP and complete recovery/expiry preview, and applies one durable undoable command (D85). Fixed own/other Song of Rest limits and zero-healing eligibility (D86), plus reproduced mixed-pool removal focus loss. 796 unit tests and 53 focused browser checks pass without retries (7 expected width skips); typecheck, lint and build pass. 375/768/1440 top/diff/action layouts checked; manual QA added. Next: Long Rest checks and preview.
-
-- 2026-11-03 — M5 complete: End Combat runs the existing engine command from the header, settles only the final six seconds, expires due timers, preserves surviving state, and restores usable status focus (D84). Available before the first turn, off-turn, and at zero HP/dead. 788 unit tests and 318 full browser checks pass without retries (32 expected width skips), including 12 new End Combat checks; typecheck, lint and build pass. 375/1440 layouts and exact reload/Undo checked; final M5 manual QA added. Next: M6 Short Rest dialog with Hit Dice, Song of Rest and preview diff.
-
-- 2026-11-03 — M5 effects/log: live concentration and personal effects derive round countdowns from saved deadlines, with logged End controls and exact Undo. Sticky history opens all saved events with game timestamps and Override/Undone markers; desktop shows five recent entries (D83). Reproduced/fixed imported shorter self-effect expiry leaving an invalid concentration link and End targets below 44 px. 783 unit tests and 60 focused browser checks pass without retries (4 expected width skips); typecheck, lint and build pass. 375/1440 layouts, sticky access, focus and long names checked; manual QA added. Next: End Combat and final M5 checks.
-
-- 2026-11-03 — M5 bonus-action-spell rule verified in both orders, including BA cantrips, own/off-turn reactions, nonspell bonus features, Manual/Blocks, flag reset and exact durable Undo. Default Spells visibility now reuses the engine's existing 2014 rule check; Show all and explicit action tabs retain exceptions without changing selections (D82). Five visibility regressions reproduced before the fix. 772 unit tests, 12 focused bonus-spell browser checks and 14 shared action regressions pass; typecheck, lint and build pass. 375/1440 warning/retained-choice layouts checked; manual QA added. Next: effect countdowns and Combat log/Undo.
-
-- 2026-11-03 — M5 reactions verified: off-turn Cutting Words, melee opportunity attacks, Readied responses and reaction spells share one reaction pool, with second-use warnings, explicit override, Manual behavior and durable Undo. Reproduced/fixed actual Readied responses bypassing dead checks and final feature-use focus loss (D81); manual economy corrections remain available. 764 unit tests and 42 focused browser checks pass without retries, including 16 reaction checks (4 expected width skips); typecheck, lint and build pass. 375/1440 layouts checked; manual reaction QA added. Next: bonus-action-spell rule.
-
-- 2026-11-03 — M5 HP/saves: shared live HUD/Combat damage, heal, temp and critical-at-zero inputs; durable per-damage concentration requests with explicit logged Pass/Fail and exact Undo (D79). Manual creates no new reminders and preserves old checks for explicit review. Death saves support natural d20 plus manual external modifiers, stable/dead states and natural1/20 outcomes; absorbed damage at0 still adds failures (D80), with Q21 flagged for the ambiguous massive-damage threshold. Real browser failures reproduced and fixed desktop HUD warning dismissal and revival focus. 758 unit tests and 266 full browser checks pass without retries (32 expected skips); typecheck, lint and build pass. 375/1440 HP/save layouts checked; manual QA added. Next: off-turn reactions/second-use warning.
-
-- 2026-11-03 — M5 actions: live equipped weapons, named standard actions, class-specific spells/shared casting, and owned feature pools replace action fixtures. Strict named commands validate weapon availability; Dash expires at End Turn with exact Undo, and spell-created self Invisibility ends on actual attacks/casts without deleting unknown ally targets (D77–D78). Default Spells view follows economy with a view-only Show all override. Zero-quantity gear and dead/missing-pool feature uses cannot grant actions; flat damage cannot be negative. 689 unit tests and 248 full browser checks pass without retries (32 expected skips); typecheck, lint and build pass. 375/768/1440 layouts checked; action manual QA added. Next: HP/concentration-save/death-save panel.
-
-- 2026-11-03 — M5 turn controls/economy: Start/End Turn, manual action/bonus/reaction toggles, and movement use the existing engine commands. The first turn keeps the clock; later turns advance 6 seconds and reset economy. End Turn retains spent resources until the next turn. Derived speed and saved flags drive the screen; warnings preserve Cancel/override/focus behavior on touch and keyboard. 620 unit tests and 30 focused Combat browser checks pass without retries (4 expected width skips); typecheck, lint and build pass. 375/1440 layouts checked; manual turn QA added. Next: action tabs, standard actions, weapon attacks.
-
-- 2026-11-03 — M5 combat start: saved combat state and round/turn display replace the fixture header; initiative is derived and remains a reference. Starting combat is one logged command, preserves resources/clock, focuses the updated status, and supports reload/Undo. Other Combat controls remain an explicit preview. 620 unit tests and 18 focused Combat browser checks pass (4 expected width skips); typecheck, lint and build pass. 375/1440 layouts checked; startup manual QA added. Next: economy bar and Start/End Turn.
-
-- 2026-11-03 — M4 complete: Manage adds/removes known and prepared spells, derives separate class limits, replaces atomically, retains imported conflicts for explicit cleanup, and edits ordered character tag overrides (D76). Selection/tag changes preserve play state and support reload/Undo. 620 unit tests and 216 full browser checks pass without retries; typecheck, lint and build pass. Manage/tag layouts checked at 375/1440; final M4 manual QA added. Next: M5 Start combat and saved round counter.
-
-- 2026-11-03 — M4 filters/favorites: school and actual minute/hour costs join search, level, type, concentration, ritual, castable resources and saved favorites. Stars use strict logged commands with reload/Undo and retain unrelated references; removing a filtered row restores focus (D75). 559 unit tests and 204 full browser checks pass without retries; typecheck, lint and build pass. 375/1440 layouts and manual QA checked. Next: Manage selections/limits/replacement/tag overrides.
-
-- 2026-11-03 — M4 live casting: shared row/mobile/pinned flow with one logged engine command, exact class modifiers, computed dice/healing preview, opt-in self results, eligible rituals and clock advancement (D74). Unknown/unprepared spell warnings retain override/Manual behavior; unavailable healing modifiers block. Warning Cancel preserves choices/focus, success closes correctly, and depleted pinned controls get a usable focus fallback. 537 unit tests and 196 full browser checks pass without retries; typecheck, lint and build pass. Phone/desktop casting QA added. Next: filters/search/favorites.
-
-- 2026-11-02 — M4 previews: live class-specific spell attack metadata, current slot selection/fallback, no-slot disabled Cast, source-neutral references, and mobile focus restoration (D73). Slot levels wrap into 56×48 px minimum targets; a level 20 regression reproduced 31 px targets before the fix. 501 unit tests and 176 full browser checks pass without retries; typecheck, lint and build pass. Preview layouts checked at 375/768/1440 px; manual QA added. Next: live casting and rituals.
-
-- 2026-11-02 — M4 spell groups/slots: selected registry spells, engine-derived DC/attack/limits, actual concentration, empty-book slot rows, and logged −/+ or pip adjustments shared with the HUD and durable Undo (D72). Unsupported imported casting associations keep metadata without invented stats; Pact Magic Spellbook support remains Phase 3. 500 unit tests and 168 full browser checks pass without retries; the final phone screenshot check also passes. Typecheck, lint and build pass; 375/1440 layouts checked. Manual slot QA added. Next: live previews/pinned details, then casting.
-
-- 2026-11-02 — M3 complete: Settings now saves automation/reduced motion through logged commands with durable Undo, respects OS motion preferences, and reuses hub character JSON transfer controls (D71). Preference controls retain keyboard focus while saving. 488 unit tests and 158 full browser checks pass without retries; typecheck, lint and build pass. Phone/desktop Settings and import previews checked. M3 manual QA consolidated in MANUAL_QA.md. Reset scope recorded as Q20 for M8. Next: M4 live Spellbook groups/slot controls.
-
-- 2026-11-02 — M3 Reference: eight external cards with 2014 destinations/edition notes, shared HTTP(S) bookmarks with durable management Undo, and Credits with SRD attribution, icon sources/authors, and local icon/font license notices (D70). 454 unit tests pass; 148 browser checks pass after focused reruns for a fixed removal-focus race and two transport errors. Typecheck, lint and build pass; 375/1440 layouts checked. Manual Reference QA added. Next: Settings.
-
-- 2026-11-02 — M3 live Campaign Setup: create/save through management commands, retained-entry notes, and new-character inputs following saved methods. Per-entry HP floors preserve legacy low rolls and negative-CON HP when rules change (D69). Management Undo also survives character Undo removing an older level. 379 unit tests and 140 browser checks pass; one host transport error in a skipped case cleared on rerun. Typecheck, lint and build pass; phone/desktop visually checked. Manual campaign QA added. Next: Reference links/bookmarks and Credits.
-
-- 2026-11-02 — M3 live hub and blank creation: saved campaign/character cards, copy/delete confirmation, durable management Undo, validated JSON preview/import/export, collision-safe copies, and source-filtered creation with derived racial bonuses/HP/XP (D67–D68). 343 unit tests and 132 full browser checks pass; the final corrected-form checks also pass at both widths. Typecheck, lint and build pass. Manual management QA added. Next: live Campaign Setup save/create.
-
-- 2026-11-02 — M3 persistence: atomic IndexedDB workspace saves, startup validation/hydration, serialized queue, save status/Retry, durable toolbar Undo, seed-once marker, and stale-window revision guard (D66). Invalid data and undo histories are preserved with a load error. 253 unit tests and 118 browser checks pass; typecheck, lint and build pass. Manual persistence QA added. Next: live Campaigns hub and character management.
-
-- 2026-11-02 — M3 live HUD: validated seed loader and Zustand command store; derived stats, HP/slot/resource adjustments, basic conditions/effects, warnings, command notes, toast Undo and focus restoration (D65). 234 unit tests and 108 browser checks pass; typecheck, lint and build pass. Manual HUD QA added. Next: Dexie persistence; other screen bodies remain static until M4–M6.
-
-- 2026-11-02 — M3 routes: added Companions to sidebar/More, Credits aliases, and explicit future-phase notices. All navigation screens are routed. 224 unit tests and 47 focused browser checks pass; typecheck, lint and build pass. Next: live HUD and shared command store.
-
-- 2026-11-02 — M3 layouts: shared collapsible Details panel, desktop sidebar collapse, tablet right drawer (touch/mouse), mobile sheets/nav, focus restoration and container-sized workspaces. 224 unit tests; 69 browser checks pass with optional real-HTTP forwarding after Windows socket failures (D63–D64). Manual checks in MANUAL_QA.md. Next: routes and phase placeholders.
-
-- 2026-11-02 — Change tracking: `docs/CHANGELOG.md` (timestamped, plain language, backfilled from this log) and the first git commit (M0–M2). AGENTS workflow now adds a changelog entry and one commit per task (D62). Next: M3 layouts.
-- 2026-11-02 — M2 done: `src/engine/commands/acceptance.test.ts` runs TEST_CHARACTER §6 steps 1–16 in order on one session (combat, concentration swap, Cutting Words, reaction override, bonus-action spell rule, expiry, both rests, Hit Dice cap, undo, manual slot fix, seed checks). §6 steps 1–3 reworded for D41 (concentration only, no effect on you) and D42 (no initiative). Rest previews and "Choose Pass" are UI steps (M5, M6). 224 tests. Next: M3 layouts.
-- 2026-11-02 — M2 §4 values: all engine rows of TEST_CHARACTER §4 are covered by `sheet.test.ts` (plus the Song of Rest d6) and `level.test.ts` (level up to 4, rolled 5: max HP 25, Hit Dice 4d8). "XP field hidden" is a UI check (M3 level-up task). 208 tests. Next: acceptance scenario.
-- 2026-11-02 — M2 Commands in `src/engine/commands/`: `castSpell` (slots, rituals, concentration, self effects, healing, casting time on the clock), `endConcentration`, `adjustSlot`, `useFeature` (Cutting Words spends Bardic Inspiration and the reaction), `adjustFeatureUses`, `applyDamage` / `heal` / `setTempHp` / `rollDeathSave` (concentration DC, massive damage, stability), conditions, exhaustion and effects, combat (rounds on the clock, economy, bonus-action spell rule), `advanceTime` (effect expiry, dawn), `completeShortRest` (Hit Dice + Song of Rest), `completeLongRest` (24 h warn, half Hit Dice), `adjustHitDice`, `levelUp` (D54–D61). Item commands and `overrideValue` wait for their phases (D61). 207 tests. Next: §4 tests, acceptance scenario.
-- 2026-11-02 — M2 Command runner: `runCommand` in `src/engine/commands/runner.ts` runs checks (Block / Warn / Info), applies the command with Immer `produceWithPatches`, re-validates the result, and returns the log event; "Do anyway" (`force`) marks it `override`. `undo` reverts the last event that is not undone, marks it, and logs an undo event; the log keeps 500 events (D53). 128 tests. Next: Commands.
-- 2026-11-02 — M2 Calculations: `computeSheet` in `src/engine/calc/sheet.ts` derives abilities, saves, skills (expertise, JoAT), passives, initiative, AC, speed, max HP, Hit Dice, spellcasting, slots (incl. multiclass and Pact Magic), features with uses and dice, weapon attacks, and carrying capacity; each number carries its parts for breakdowns. Exhaustion and speed-zero conditions apply (D52). The Fool's §4 values and the level-up to 4 pass. 117 tests. Next: Command runner.
-- 2026-11-02 — M2 The Fool content: Charlatan, False Identity, Dissonant Whispers, deck of marked cards in `data/content/`; own-words summaries for The Fool's SRD spells and features in `data/content/summaries.json`; activation, uses, dice, JoAT modifier, spell tags and effects in `data/mechanics/`. Engine `buildRegistry` merges the layers and re-validates (D51). Every seed id resolves. 82 tests. Next: Calculations.
-
-- 2026-11-02 — M2 SRD import: `npm run import:srd` maps 5e-database (pinned commit) into `data/srd/` (319 spells, 328 features, 12 classes, 12 subclasses, 13 races, 1 background, 197 items, 15 conditions) via pure mappers in `scripts/srd/map.ts` (D50). Missing for The Fool: `background.charlatan`, `spell.dissonant-whispers`, `item.deck-of-marked-cards`. 69 tests. Next: The Fool content.
-- 2026-11-02 — M2 seed `data/characters/the-fool.json` (export file shape, D49) with campaign #273, §2 build and §3 live state; `ExportFileSchema` cross-checks; derived features (D48). 40 tests. Next: SRD import.
-- 2026-11-02 — M2 types + zod schemas in `src/engine/schema/` (D47), game clock in seconds (D46). 21 schema tests. Next: seed fixture.
-- 2026-11-02 — M1 signed off by the user (D45). M2 started. Next: types + zod schemas.
-- 2026-11-01 — Blank landing page was a stale dev-server module after mid-edit HMR (no code bug); server restarted. New campaign setting for low HP rolls (D44, default allow negative): `levelHp` / `maxHp` take the floor, New character uses it. Unit 11 pass, e2e 58 pass (8 flaky on retry). Next: user sign-off (M1 gate).
-- 2026-11-01 — M1 review round 1: app now opens on a Campaigns hub with campaign settings and new-character frames; Dashboard resources split into groups with `PipStepper` and description cards; concentration shown apart from effects on you; spell type tags, tinted rows, Type filter, Active badge; Combat drops turn order. D37–D43, Q19. e2e 56 pass (6 flaky on retry). Next: user sign-off (M1 gate).
-- 2026-11-01 — M1 frames built on fixture data: Combat (mobile stack, lg 2 columns, xl 3 columns), Spellbook (filters, slot rows, hover/pin, cast sheet with slot picker), Dashboard. Core components, game-icons, motion tokens with reduced motion. Buttons show a toast only. e2e covers all three frames at 375 / 1440 px. Next: user sign-off (M1 gate).
-- 2026-11-01 — M0 done: Vite 8 + React 19 + TS 6 strict + Tailwind 4 tokens, Vitest 5, Playwright (375 / 1440 px), ESLint 10 with engine-purity rule, Prettier, self-hosted fonts, folder layout, git init (no commits). Next: M1 Frame C.
-- 2026-11-01 — Docs updated with real Fool data (max HP 19, milestone, rolled HP/abilities), public-repo rules, campaign character rules, locked per-level HP. Next: M0.
-- 2026-11-01 — Planning docs created (AGENTS, SPEC, DESIGN, DATA, DECISIONS, PROGRESS, TEST_CHARACTER). Next: M0.
+- 2026-11-04 — M7 Sheet: identity, Inspiration, calculated stats, defenses and accessible breakdowns are live. Next: Edit mode and noted overrides.
+- 2026-11-04 — M6 complete: manual clock, expiry, rest recovery and Undo work together; oversized HUD editors now scroll. Next: M7 Sheet sections.
+- 2026-11-04 — M6 Dashboard: live resources, favorites, conditions and history replace fixtures; layout and focus fixes landed. Next: manual clock and gate.
+- 2026-11-03 — M6 rest clock: rest durations, midnight crossing, expiry and exact Undo verified. Next: live Dashboard.
+- 2026-11-03 — M6 Long Rest: full recovery preview, interval warnings and optional prepared-spell review are live; focus is fixed. Next: rest clock verification.
+- 2026-11-03 — M6 Short Rest: Hit Dice drafts, Song of Rest and recovery previews are live; mixed-die focus is fixed. Next: Long Rest.
+- 2026-11-03 — M5 complete: End Combat settles time, expires due effects and preserves surviving state with Undo. Next: M6 Short Rest.
+- 2026-11-03 — M5 effects/log: saved countdowns, source endings and complete history with Undo are live; focus and touch targets improved. Next: End Combat.
+- 2026-11-03 — M5 bonus-action spells: 2014 restrictions work in both orders; default filtering follows available choices. Next: effect countdowns and history.
+- 2026-11-03 — M5 reactions: off-turn actions share one reaction pool with warnings and Undo; final-use focus is fixed. Next: bonus-action-spell rule.
+- 2026-11-03 — M5 HP/saves: damage, healing, concentration checks and death saves are live; Q21 remains open. Next: reactions.
+- 2026-11-03 — M5 actions: equipped weapons, standard actions, class spells and owned features are live; self Invisibility ends appropriately. Next: HP and saves.
+- 2026-11-03 — M5 turn controls: Start/End Turn, economy corrections and movement use saved state and game time. Next: action tabs and attacks.
+- 2026-11-03 — M5 combat start: saved combat status and rounds replace fixtures; initiative remains a reference, with refresh and Undo. Next: turn controls.
+- 2026-11-03 — M4 complete: spell management supports class limits, preparation, replacement, retained conflicts and tags without changing play state. Next: M5 combat start.
+- 2026-11-03 — M4 filters/favorites: search and filters use live metadata; saved stars retain useful focus through removal. Next: spell management.
+- 2026-11-03 — M4 casting: shared flows handle slots, rituals, healing and class modifiers with clear warnings and retained choices. Next: filters and favorites.
+- 2026-11-02 — M4 previews: class-specific metadata and slot availability stay live; phone focus and high-level touch targets improved. Next: casting and rituals.
+- 2026-11-02 — M4 groups/slots: selected spells, casting stats and slot controls share saved state and Undo. Unsupported associations remain explicit. Next: previews.
+- 2026-11-02 — M3 complete: Settings saves automation and motion preferences, respects system motion and shares character transfer controls. Reset scope remains Q20. Next: Spellbook.
+- 2026-11-02 — M3 Reference: 2014 links, shared bookmarks and Credits are live; removal focus is fixed. Next: Settings.
+- 2026-11-02 — M3 Campaign Setup: saved rules guide creation while existing HP entries remain preserved; management Undo handles older levels. Next: Reference.
+- 2026-11-02 — M3 hub: saved campaigns, character creation, copies, deletion and JSON transfer are live with previews and management Undo. Next: Campaign Setup.
+- 2026-11-02 — M3 persistence: local saves, validation, Retry, durable Undo and stale-window protection preserve characters and history. Next: live hub and management.
+- 2026-11-02 — M3 HUD: saved characters drive stats, adjustments, conditions, effects, warnings and Undo; other screen bodies remain previews. Next: persistence.
+- 2026-11-02 — M3 routes: all destinations now resolve, including Companions, Credits and future-phase notices. Next: live HUD and shared state.
+- 2026-11-02 — M3 layouts: collapsible details, sidebar, tablet drawer and phone navigation share readable workspaces and return focus. Next: routes and placeholders.
+- 2026-11-02 — Change tracking: timestamped plain-language changelog and per-task commits join the workflow; initial project history committed. Next: M3 layouts.
+- 2026-11-02 — M2 complete: the full Fool acceptance sequence passes in one session; rest previews and save choices await UI. Next: M3 layouts.
+- 2026-11-02 — M2 expected values: Fool calculations, Song of Rest and minimal level-up match the fixture; XP visibility awaits UI. Next: acceptance scenario.
+- 2026-11-02 — M2 commands: spells, combat, HP, effects, time, rests, corrections and minimal level-up are undoable. Next: expected values and acceptance.
+- 2026-11-02 — M2 command runner: checks, explicit overrides, validated changes, saved history and linear Undo are ready. Next: commands.
+- 2026-11-02 — M2 calculations: character stats, resources, attacks and spellcasting include explanation parts; exhaustion and movement conditions apply. Next: command runner.
+- 2026-11-02 — M2 Fool content: required references, original summaries and mechanics now merge into a validated registry; all fixture references resolve. Next: calculations.
+- 2026-11-02 — M2 SRD import: pinned 2014 data maps into local references; missing Fool entries identified. Next: original summaries and mechanics.
+- 2026-11-02 — M2 seed: campaign #273, Fool build and current state validate together; features derive from references. Next: SRD import.
+- 2026-11-02 — M2 schemas: campaign, character and reference shapes validate; the game clock uses seconds. Next: seed fixture.
+- 2026-11-02 — M1 signed off by the user; M2 started. Next: types and schemas.
+- 2026-11-01 — Campaign HP floor added for low rolls; a stale development page was resolved by restarting the server. Next: M1 sign-off.
+- 2026-11-01 — M1 review: campaign hub, setup and creation frames added; resources and spell states clarified; turn order removed. Next: user sign-off.
+- 2026-11-01 — M1 frames: responsive Combat, Spellbook and Dashboard use fixtures, shared components and reduced motion; actions remain previews. Next: user sign-off.
+- 2026-11-01 — M0 complete: app foundation, styling tokens, local fonts and project checks are ready. Next: mobile Combat frame.
+- 2026-11-01 — Docs aligned with Fool data, campaign rules, public content limits and locked HP entries. Next: project setup.
+- 2026-11-01 — Planning documents created for scope, design, data, decisions, progress and acceptance. Next: project setup.

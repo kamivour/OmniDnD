@@ -1,6 +1,6 @@
 # OmniDnD — Agent Guide
 
-Personal D&D 5e **2014** character companion. Responsive web app / PWA. No backend.
+D&D 5e **2014** character companion for future campaigns and friends' characters. Responsive web app / PWA; no backend. The Fool is the acceptance fixture, not the limit of supported characters.
 
 ## Read first (in this order)
 
@@ -32,6 +32,14 @@ Personal D&D 5e **2014** character companion. Responsive web app / PWA. No backe
 6. Made a non-obvious choice? Add it to DECISIONS.md "Decided".
 7. Hit an unknown? Add it to "Open questions" with a safe, reversible default, then continue. Ask the user only when no safe default exists.
 8. Commit the task on `main`: one commit per finished task, made after tests, typecheck and lint pass, with a Conventional Commits message (`feat(engine): …`, `docs: …`). Never push unless the user asks.
+
+## Docs style
+
+- **CHANGELOG:** 2–4 short bullets per entry in plain language: what the user can now see or do, and what they should check. No test counts or tooling details (loopback errors, Radix, screenshots, focus handling). End with “Checks pass.” or say what failed.
+- **PROGRESS session log:** one line per task, about 25 words at most.
+- **DECISIONS:** only product or rules choices the user might disagree with, in 1–2 sentences each. Implementation and test-setup notes belong in code comments or tests.
+- **DATA.md:** keep the schemas; keep each prose note to 1–2 sentences.
+- **MANUAL_QA.md:** at most 10 items per milestone, only things a person must judge: look, feel, or rules.
 
 ## Commands
 

@@ -4,6 +4,8 @@
 
 One place to track a D&D 5e (2014) character during play. Fast in combat, complete between sessions.
 
+Support different campaigns and characters, including future friends' characters. The Fool is the first acceptance fixture, not the product's scope limit; local saves and character-file exchange do not require accounts or cloud sync.
+
 **Principles (in priority order)**
 
 1. **Accurate** — functional accuracy beats usability, which beats polish, which beats more automation.
@@ -128,7 +130,7 @@ The Combat screen tracks **this character's** turn: what they can still do, what
 - Validates action requirements and spends resources (see §6). Attack hits and damage dealt to others stay manual.
 
 ### Exploration (basic in Phase 1)
-- Game clock: `Day N, HH:MM`. Advance buttons `+1 min · +10 min · +1 h · +8 h · custom`. Never use real-world time.
+- Reuse Dashboard's shared Game Clock control and saved clock (D91): `Day N, HH:MM`, with `+1 min · +10 min · +1 h · +8 h · custom`. No second clock or real-world timer.
 - Utility spells and rituals; same slot pool as Combat.
 - Skill list with modifiers + passives.
 - Active effects with remaining time; they persist into Combat until expired or ended.
@@ -161,7 +163,15 @@ Items grouped by container. Equip toggle, quantity `− / +`, Use/Consume (potio
 - Phase 2: full editor: source, duration, modifiers (e.g., +1 AC, resistance), expiry trigger, manual override. Injuries and custom effects are DM-defined (no built-in mechanics).
 
 ### Companions (Phase 2)
-Name, type (pet / mount / familiar / summon / sidekick), icon, AC, HP, speed, attacks, abilities, conditions, uses, notes, initiative. Tasha sidekicks only if enabled in Campaign Setup.
+Planned for M12; no companion screen, commands or schema fields are implemented by this plan. Show name, type (pet / mount / familiar / summon / sidekick), icon, AC, HP, speed, attacks, abilities, conditions, uses, notes and initiative; Tasha sidekicks require the campaign option.
+
+- **Statblocks:** import SRD 5.1 creatures such as Mastiff into `data/srd/`. Non-SRD companions use user entry or own-words content; never copy book text into public content packs.
+- **Owner-derived values:** cover Eldritch Cannon, Steel Defender, Ranger companions and Find Familiar, computing values from owner class level, proficiency and ability modifiers where the selected 2014 rule requires them. Familiar forms otherwise retain fixed SRD stats; Ranger PHB/Tasha variant choice is Q23, and users never type numbers the engine can derive.
+- **Creation and recreation:** apply the source's feature/spell uses, spell-slot costs, duration and maximum count through engine commands. Expiry uses the shared saved game clock.
+- **Commanding:** spend the owner's required action, bonus action or other economy cost and show that cost in the economy bar. The player enters choices, rolls and DM outcomes; the app does not decide hits, saves or target behavior.
+- **Independent live state:** track each companion's HP, damage, healing, conditions and uses; it is destroyed or dismissed at 0 HP. Creation, commands and all changes are logged and undoable.
+- **Persistence:** include owned companions and their live state in character saves and exports. Concrete data shapes and compatibility work remain M12 design work, described as planned in DATA.md.
+- **Artificer dependency:** use the 2014-compatible `TCE` Artificer, never 2024 rules or Eberron: Forge of the Artificer (2025). Cannon and Steel Defender automation depends on Artificer class support in M14; M12 does not bring that class implementation forward.
 
 ### Journal (Phase 2)
 Backstory, personality traits, ideals, bonds, flaws, relationships, quests (open/done), NPCs, locations, session notes (dated). Markdown text.
