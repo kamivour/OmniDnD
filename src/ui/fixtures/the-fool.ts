@@ -8,6 +8,8 @@ import type { SpellType } from '../spellTypes';
 export type Cost = 'A' | 'BA' | 'R' | `${number} min` | `${number} h`;
 
 export interface SpellView {
+  dcOverride?: { note: string };
+  attackOverride?: { note: string };
   id: string;
   name: string;
   level: number;
@@ -29,6 +31,8 @@ export interface SpellView {
 }
 
 export interface AttackView {
+  toHitOverride?: { note: string };
+  damageOverride?: { note: string };
   id: string;
   name: string;
   toHit: number;
@@ -38,6 +42,8 @@ export interface AttackView {
 }
 
 export interface FeatureView {
+  override?: { note: string };
+  dieOverride?: { note: string };
   id: string;
   name: string;
   cost: Cost | 'Passive' | 'Rest';

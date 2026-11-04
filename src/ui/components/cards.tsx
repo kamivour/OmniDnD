@@ -7,6 +7,7 @@ import { cx } from '../cx';
 import { CostBadge, ConcBadge } from './CostBadge';
 import { Icon } from './Icon';
 import { PipRow } from './PipRow';
+import { OverrideMarker } from './StatChip';
 
 /** Preview / detail card frame: icon, title, source, then house-style lines. */
 function Card({
@@ -72,12 +73,14 @@ export function SpellCard({
       {spell.save && (
         <span className="mt-0.5 block">
           {spell.save} save {dc === undefined ? '(DC unavailable)' : `DC ${dc}`}
+          <OverrideMarker override={spell.dcOverride} />
         </span>
       )}
       {spell.attack && (
         <span className="mt-0.5 block">
           {spell.attack === 'melee' ? 'Melee' : 'Ranged'} spell attack{' '}
           {attack === undefined ? 'unavailable' : signed(attack)}
+          <OverrideMarker override={spell.attackOverride} />
         </span>
       )}
       <span className="mt-0.5 flex items-center gap-1.5">
@@ -117,6 +120,8 @@ export function AttackCard({
   attack,
 }: {
   attack: Pick<AttackView, 'id' | 'name' | 'toHit' | 'notes'> & {
+    toHitOverride?: { note: string };
+    damageOverride?: { note: string };
     damage?: string;
     damageType?: string;
   };
@@ -125,7 +130,13 @@ export function AttackCard({
     <Card
       iconId={attack.id}
       title={attack.name}
-      header={`Weapon attack · ${signed(attack.toHit)} to hit`}
+      header={
+        <span>
+          Weapon attack · {signed(attack.toHit)} to hit
+          <OverrideMarker override={attack.toHitOverride} />
+          <OverrideMarker override={attack.damageOverride} />
+        </span>
+      }
       lines={[
         attack.damage === undefined
           ? 'No direct damage.'
@@ -156,12 +167,24 @@ export function FeatureCard({
               {[`${remainingUses ?? uses.max - uses.used} / ${uses.max}`, uses.die, uses.recharge]
                 .filter(Boolean)
                 .join(' · ')}
+              <OverrideMarker override={feature.override} />
+              <OverrideMarker override={feature.dieOverride} />
             </span>
           )}
         </span>
       }
       lines={feature.lines}
-      footer={uses && <PipRow label="Uses" max={uses.max} used={uses.used} tone="accent" />}
+      footer={
+        uses && (
+          <PipRow
+            label="Uses"
+            max={uses.max}
+            used={uses.used}
+            tone="accent"
+            override={feature.override}
+          />
+        )
+      }
     />
   );
 }
@@ -172,18 +195,21 @@ export function ResourceCard({
   max,
   used,
   lines,
+  override,
 }: {
   title: string;
   max: number;
   used: number;
   lines: readonly string[];
+  override?: { note: string };
 }) {
   return (
     <div className="flex flex-col gap-2">
       <div>
         <h3 className="font-semibold text-text">{title}</h3>
-        <p className="text-xs text-text-muted">
+        <p className="wrap-anywhere text-xs text-text-muted">
           {Math.max(0, max - used)} of {max} left
+          <OverrideMarker override={override} />
         </p>
       </div>
       {lines.map((line) => (

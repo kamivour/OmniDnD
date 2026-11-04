@@ -67,6 +67,7 @@ export function spellbookModel(
 
   for (const selection of state.build.spells) {
     const casting = byClass.get(selection.classId);
+    const derived = sheet.spellcasting.find((entry) => entry.classId === selection.classId);
     if (!casting && (selection.known.length > 0 || (selection.prepared?.length ?? 0) > 0))
       unsupportedClassIds.add(selection.classId);
     for (const id of [...selection.known, ...(selection.prepared ?? [])]) {
@@ -95,6 +96,8 @@ export function spellbookModel(
         url: def.url ?? BASIC_RULES_2014,
         type: tags[0]!,
         tags,
+        ...(derived?.saveDc.override ? { dcOverride: derived.saveDc.override } : {}),
+        ...(derived?.attack.override ? { attackOverride: derived.attack.override } : {}),
       };
       entries.push({
         spell,

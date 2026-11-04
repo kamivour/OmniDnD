@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M7 — Character Sheet + Exploration + level-up.
-**Next up:** Sheet Edit mode and noted overrides with the ✎ marker.
+**Next up:** Ability entry by campaign method, with bonuses listed separately.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -118,7 +118,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 ### M7 — Character Sheet + Exploration
 - [x] Sheet sections (SPEC §5) with breakdown tooltips
 - [x] Unify character status/log row with one Undo (gate before Sheet Edit mode)
-- [ ] Edit mode + overrides with ✎ marker
+- [x] Edit mode + overrides with ✎ marker
 - [ ] Ability scores: enter base per campaign method (rolled = typed, standard array = assign, point buy = 27-point check); bonuses listed separately
 - [ ] Level up (minimal): milestone button / XP threshold prompt; enter roll or take average; +1 Hit Die; XP hidden in milestone mode
 - [ ] Exploration: reuse Dashboard GameClockControl (D91); utility spells/rituals, skills + passives, active effects
@@ -146,6 +146,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-04 — M7 Sheet Edit: staged choices and noted overrides save, reset and undo across screens; resource corrections keep normal spending. Next: ability entry.
 - 2026-11-04 — Shared character status/history row leaves more phone space; one Undo follows character and workspace changes. Next: Sheet Edit mode and overrides.
 - 2026-11-04 — Shortened docs, deferred D80 review and planned M12 companions. Next: shared character status/log row with one Undo.
 

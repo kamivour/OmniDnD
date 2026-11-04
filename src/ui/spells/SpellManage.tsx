@@ -7,6 +7,8 @@ import { Field, inputClass } from '../components/fields';
 import { Sheet } from '../components/Sheet';
 import { useCharacter } from '../hooks/useCharacter';
 import { useCharacterHistory } from '../log/useCharacterHistory';
+import { overridePath } from '../../engine/calc/value-overrides';
+import { OverrideMarker } from '../components/StatChip';
 import { SPELL_TYPE_ORDER, SPELL_TYPES, type SpellType } from '../spellTypes';
 
 type SelectionList = 'known' | 'prepared';
@@ -288,7 +290,14 @@ export function SpellManage({
             </select>
           </Field>
           <div aria-label="Spell selection counts" className="flex flex-wrap gap-x-4 gap-y-1">
-            <Count label="cantrips" count={details.cantrips.count} limit={details.cantrips.limit} />
+            <Count
+              label="cantrips"
+              count={details.cantrips.count}
+              limit={details.cantrips.limit}
+              override={
+                sheet.values[overridePath('spellcasting', classId, 'cantripsKnown')]?.stat.override
+              }
+            />
             {(details.mode === 'known' ||
               details.mode === 'spellbook' ||
               details.known.count > 0) && (
@@ -296,6 +305,9 @@ export function SpellManage({
                 label={details.mode === 'spellbook' ? 'in spellbook' : 'known'}
                 count={details.known.count}
                 limit={details.known.limit}
+                override={
+                  sheet.values[overridePath('spellcasting', classId, 'spellsKnown')]?.stat.override
+                }
               />
             )}
             {(details.mode === 'prepared' ||
@@ -305,6 +317,10 @@ export function SpellManage({
                 label="prepared"
                 count={details.prepared.count}
                 limit={details.prepared.limit}
+                override={
+                  sheet.values[overridePath('spellcasting', classId, 'preparedLimit')]?.stat
+                    .override
+                }
               />
             )}
           </div>
@@ -494,12 +510,23 @@ export function SpellManage({
   );
 }
 
-function Count({ label, count, limit }: { label: string; count: number; limit?: number }) {
+function Count({
+  label,
+  count,
+  limit,
+  override,
+}: {
+  label: string;
+  count: number;
+  limit?: number;
+  override?: { note: string };
+}) {
   return (
     <p className="text-xs text-text-muted">
       <span className="font-semibold text-text">
         {count}
         {limit === undefined ? '' : ` / ${limit}`}
+        <OverrideMarker override={override} />
       </span>{' '}
       {label}
     </p>

@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import type { Stat } from '../../engine/calc/stat';
 import { cx } from '../cx';
 import { Preview } from './Preview';
@@ -9,10 +10,18 @@ interface StatChipProps {
   className?: string;
   stat?: Stat;
   breakdownLabel?: string;
+  override?: Stat['override'];
 }
 
 /** Display-only unless a computed value supplies its engine-owned breakdown. */
-export function StatChip({ label, value, className, stat, breakdownLabel = label }: StatChipProps) {
+export function StatChip({
+  label,
+  value,
+  className,
+  stat,
+  breakdownLabel = label,
+  override,
+}: StatChipProps) {
   const valueId = useId();
   if (stat) {
     return (
@@ -30,8 +39,9 @@ export function StatChip({ label, value, className, stat, breakdownLabel = label
             )}
           >
             <span className="text-xs text-text-muted">{label}</span>
-            <span id={valueId} className="shrink-0 font-semibold text-text">
+            <span id={valueId} className="min-w-0 text-right font-semibold break-all text-text">
               {value}
+              <OverrideMarker override={stat.override ?? override} />
             </span>
           </button>
         )}
@@ -41,8 +51,23 @@ export function StatChip({ label, value, className, stat, breakdownLabel = label
   return (
     <span className={cx('inline-flex items-baseline gap-1 whitespace-nowrap', className)}>
       <span className="text-xs text-text-muted">{label}</span>
-      <span className="font-semibold text-text">{value}</span>
+      <span className="font-semibold text-text">
+        {value}
+        <OverrideMarker override={override} />
+      </span>
     </span>
   );
 }
-import { useId } from 'react';
+
+export function OverrideMarker({ override }: { override?: { note: string } }) {
+  return override ? (
+    <span
+      role="img"
+      aria-label={`Overridden: ${override.note}`}
+      title={override.note}
+      className="ml-1 text-accent"
+    >
+      ✎
+    </span>
+  ) : null;
+}

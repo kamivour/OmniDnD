@@ -2,6 +2,7 @@ import type { Registry } from '../registry';
 import type { SpellDef } from '../schema';
 import type { CharacterState, Sheet } from './sheet';
 import { spellSlots } from './slots';
+import { overridePath } from './value-overrides';
 
 export type SpellSelectionContext = CharacterState & { sheet: Sheet; registry: Registry };
 export type SpellSelectionMode = 'known' | 'prepared' | 'spellbook' | 'unsupported';
@@ -107,6 +108,7 @@ export function spellSelectionDetails(
     .filter((entry) => entry.classId === classId)
     .reduce((sum, entry) => sum + entry.level, 0);
   const casting = def?.spellcasting;
+  const effective = ctx.sheet.spellcasting.find((entry) => entry.classId === classId);
   const mode: SpellSelectionMode =
     !casting || classLevel === 0
       ? 'unsupported'
@@ -122,7 +124,8 @@ export function spellSelectionDetails(
       ? spellSlots([{ progression: casting.progression, level: classLevel }])
       : undefined;
   const maxSpellLevel = ownSlots?.pact?.level ?? ownSlots?.max.findLastIndex((max) => max > 0) ?? 0;
-  const maximum = mode === 'unsupported' ? 0 : Math.max(0, maxSpellLevel);
+  const maximum =
+    mode === 'unsupported' ? 0 : (effective?.maxSpellLevel ?? Math.max(0, maxSpellLevel));
   const records = ctx.build.spells.filter((entry) => entry.classId === classId);
   const selection = {
     known: unique(records.flatMap((entry) => entry.known)),
@@ -134,18 +137,24 @@ export function spellSelectionDetails(
   const cantripLimit =
     mode === 'unsupported'
       ? undefined
-      : (casting?.cantripsKnown?.[classLevel - 1] ??
+      : (effective?.cantripsKnown ??
+        casting?.cantripsKnown?.[classLevel - 1] ??
         (classId === 'class.paladin' || classId === 'class.ranger' ? 0 : undefined));
-  const knownLimit = mode === 'known' ? casting?.spellsKnown?.[classLevel - 1] : undefined;
+  const knownLimit =
+    mode === 'known'
+      ? (effective?.spellsKnown ?? casting?.spellsKnown?.[classLevel - 1])
+      : undefined;
   const preparedLimit =
     mode === 'prepared' || mode === 'spellbook'
-      ? maximum === 0
-        ? 0
-        : Math.max(
-            1,
-            (classId === 'class.paladin' ? Math.floor(classLevel / 2) : classLevel) +
-              ctx.sheet.abilities[casting!.ability].mod,
-          )
+      ? (ctx.sheet.values[overridePath('spellcasting', classId, 'preparedLimit')]?.stat.override
+          ?.value ??
+        (maximum === 0
+          ? 0
+          : Math.max(
+              1,
+              (classId === 'class.paladin' ? Math.floor(classLevel / 2) : classLevel) +
+                ctx.sheet.abilities[casting!.ability].mod,
+            )))
       : undefined;
   const eligible = [...ctx.registry.entries.values()]
     .filter(

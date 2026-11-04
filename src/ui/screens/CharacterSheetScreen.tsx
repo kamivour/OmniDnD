@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { registry } from '../../data/registry';
 import { ABILITIES } from '../../engine/calc/abilities';
 import { sheetBreakdowns } from '../../engine/calc/sheet-breakdowns';
@@ -6,10 +6,12 @@ import { setInspiration } from '../../engine/commands';
 import { SKILLS, SKILL_ABILITY } from '../../engine/rules2014';
 import { useCommand } from '../commands/command-context';
 import { SectionLabel } from '../components/SectionLabel';
-import { StatChip } from '../components/StatChip';
+import { OverrideMarker, StatChip } from '../components/StatChip';
 import { signed } from '../format';
 import { DeathSaveTracker } from '../health/DeathSaveTracker';
 import { useCharacter } from '../hooks/useCharacter';
+import { SheetBuildEditor } from '../sheet/SheetBuildEditor';
+import { SheetOverrideEditor } from '../sheet/SheetOverrideEditor';
 
 const titleCase = (value: string) =>
   value.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
@@ -37,8 +39,10 @@ function Section({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-/** Saved choices and engine-derived values; build editing arrives in the next M7 tasks. */
+/** Saved choices and engine-derived values, with explicit logged edits and noted overrides. */
 export function CharacterSheetScreen() {
+  const [editing, setEditing] = useState(false);
+  const editButton = useRef<HTMLButtonElement>(null);
   const { state, sheet } = useCharacter();
   const { run } = useCommand();
   const { build, live, campaign } = state;
@@ -57,10 +61,43 @@ export function CharacterSheetScreen() {
   const itemName = (id: string) => registry.get('item', id).name;
   const attackDamage = (dice: string | undefined, bonus: number) =>
     dice ? `${dice}${bonus ? signed(bonus) : ''}` : String(bonus);
+  const closeEdit = () => {
+    setEditing(false);
+    requestAnimationFrame(() => editButton.current?.focus());
+  };
+  if (editing)
+    return (
+      <div className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-4 lg:px-6">
+        <h1 className="font-display text-xl text-text">Edit character</h1>
+        <p className="text-sm text-text-muted">
+          Save build choices together below. Apply a computed override separately with a note.
+        </p>
+        <details className="min-w-0 rounded-card border border-border bg-surface p-3">
+          <summary className="flex min-h-11 cursor-pointer items-center font-semibold text-accent">
+            Computed overrides
+          </summary>
+          <div className="pt-3">
+            <SheetOverrideEditor />
+          </div>
+        </details>
+        <SheetBuildEditor onDone={closeEdit} />
+      </div>
+    );
   return (
     <div className="mx-auto max-w-screen-2xl px-4 py-4 lg:px-6">
       <div className="flex min-w-0 flex-col gap-4">
-        <h1 className="font-display text-xl text-text">Character sheet</h1>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h1 className="font-display text-xl text-text">Character sheet</h1>
+          <button
+            ref={editButton}
+            type="button"
+            aria-label="Edit character"
+            onClick={() => setEditing(true)}
+            className="min-h-11 rounded-btn border border-border px-3 text-sm text-accent"
+          >
+            Edit
+          </button>
+        </div>
         <Section label="Identity">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">
@@ -312,6 +349,7 @@ export function CharacterSheetScreen() {
               <span>HP</span>
               <strong>
                 {live.hp}/{sheet.maxHp.value}
+                <OverrideMarker override={sheet.maxHp.override} />
               </strong>
             </p>
             <StatChip label="Maximum HP" value={sheet.maxHp.value} stat={sheet.maxHp} />

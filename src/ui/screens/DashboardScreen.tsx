@@ -5,6 +5,7 @@ import { DashboardQuickAccess } from '../dashboard/DashboardQuickAccess';
 import { DashboardResourceRow } from '../dashboard/DashboardResources';
 import { dashboardResources } from '../dashboard/dashboard-model';
 import { SectionLabel } from '../components/SectionLabel';
+import { OverrideMarker } from '../components/StatChip';
 import { LiveEffects } from '../effects/LiveEffects';
 import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
@@ -19,9 +20,21 @@ export function DashboardScreen() {
   const [editingConditions, setEditingConditions] = useState(false);
   const groups = dashboardResources(state, sheet, registry);
   const passives = [
-    { label: 'Perception', value: sheet.passives.perception.value },
-    { label: 'Investigation', value: sheet.passives.investigation.value },
-    { label: 'Insight', value: sheet.passives.insight.value },
+    {
+      label: 'Perception',
+      value: sheet.passives.perception.value,
+      override: sheet.passives.perception.override,
+    },
+    {
+      label: 'Investigation',
+      value: sheet.passives.investigation.value,
+      override: sheet.passives.investigation.override,
+    },
+    {
+      label: 'Insight',
+      value: sheet.passives.insight.value,
+      override: sheet.passives.insight.override,
+    },
   ];
   return (
     <div className="mx-auto max-w-screen-2xl px-4 py-4 lg:px-6">
@@ -105,14 +118,19 @@ export function DashboardScreen() {
                 className="flex min-w-0 flex-col items-center rounded-card border border-border bg-surface py-2"
               >
                 <span className="text-xs text-text-muted">{ability}</span>
-                <span className="text-lg font-semibold text-text">
+                <span className="w-full text-center text-lg font-semibold break-all text-text">
                   {signed(sheet.abilities[ability].mod)}
+                  <OverrideMarker
+                    override={sheet.values[`/abilities/${ability}/mod`]?.stat.override}
+                  />
                 </span>
-                <span className="text-xs text-text-muted">
+                <span className="w-full text-center text-xs break-all text-text-muted">
                   Score {sheet.abilities[ability].score.value}
+                  <OverrideMarker override={sheet.abilities[ability].score.override} />
                 </span>
-                <span className="text-xs text-text-muted">
+                <span className="w-full text-center text-xs break-all text-text-muted">
                   Save {signed(sheet.saves[ability].value)}
+                  <OverrideMarker override={sheet.saves[ability].override} />
                   {sheet.saves[ability].proficient ? ' · proficient' : ''}
                 </span>
               </li>
@@ -124,6 +142,7 @@ export function DashboardScreen() {
               <span key={passive.label}>
                 {index > 0 && ' · '}
                 {passive.label} <span className="font-semibold text-text">{passive.value}</span>
+                <OverrideMarker override={passive.override} />
               </span>
             ))}
           </p>

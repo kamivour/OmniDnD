@@ -24,6 +24,7 @@ import { useCommand } from '../commands/command-context';
 import { LiveFeatureDetail, LiveWeaponDetail } from '../combat/LiveCombatDetails';
 import { ActionRow } from '../components/ActionRow';
 import { AttackCard, FeatureCard, RuleCard } from '../components/cards';
+import { OverrideMarker } from '../components/StatChip';
 import { CostBadge } from '../components/CostBadge';
 import { EconomyBar } from '../components/EconomyBar';
 import { HpButtons, HpPanel } from '../components/HpControl';
@@ -145,11 +146,19 @@ export function CombatScreen() {
       iconId={attack.id}
       name={reaction ? `Opportunity Attack (${attack.name})` : attack.name}
       badges={<CostBadge cost={reaction ? 'R' : 'A'} />}
-      meta={[
-        `${signed(attack.toHit)} to hit`,
-        attack.damage === undefined ? 'No direct damage' : `${attack.damage} ${attack.damageType}`,
-        attack.notes,
-      ].join(' · ')}
+      meta={
+        <span>
+          {[
+            `${signed(attack.toHit)} to hit`,
+            attack.damage === undefined
+              ? 'No direct damage'
+              : `${attack.damage} ${attack.damageType}`,
+            attack.notes,
+          ].join(' · ')}
+          <OverrideMarker override={attack.toHitOverride} />
+          <OverrideMarker override={attack.damageOverride} />
+        </span>
+      }
       actionLabel="Attack"
       disabled={!liveCombat}
       onAction={(event) => {
@@ -185,7 +194,13 @@ export function CombatScreen() {
       iconId={feature.id}
       name={feature.name}
       badges={<CostBadge cost={feature.cost} />}
-      meta={meta}
+      meta={
+        <span>
+          {meta}
+          <OverrideMarker override={feature.override} />
+          <OverrideMarker override={feature.dieOverride} />
+        </span>
+      }
       actionLabel="Use"
       disabled={!!unavailableReason}
       onAction={(event) => {
@@ -257,6 +272,7 @@ export function CombatScreen() {
             )}
             <p className="text-xs text-text-muted">
               Initiative {signed(sheet.initiative.value)} · reference
+              <OverrideMarker override={sheet.initiative.override} />
             </p>
           </div>
           {liveCombat ? (

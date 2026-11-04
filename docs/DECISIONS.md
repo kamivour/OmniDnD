@@ -105,6 +105,10 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D97 | 2026-11-04 | Breakdown height, keyboard access and descriptions: [Preview](../src/ui/components/Preview.tsx), [StatChip](../src/ui/components/StatChip.tsx) and [Sheet browser tests](../tests/e2e/character-sheet.spec.ts). | — |
 | D98 | 2026-11-04 | Support future campaigns, friends and multiple characters, including all 2014 classes and prepared casters. Build one milestone at a time, with The Fool as an acceptance character. | User confirmed the broader scope; answers Q10 |
 | D99 | 2026-11-04 | Every character screen shares one compact status/history row and one Undo, covering character and workspace changes. Modal editors keep one Undo while the background control is hidden. | More content on phones, with one clear place for history and Undo |
+| D100 | 2026-11-04 | Noted overrides take precedence at their calculation stage, and dependent values use the result. An effective character-level override changes character-level calculations while recorded class levels, class grants and locked HP entries stay unchanged. | Explicit DM exceptions without rewriting advancement history |
+| D101 | 2026-11-04 | Correct remaining changes recorded spending and keeps normal use and rest recovery; ✎ clears when that counter next changes. Reset restores previous spending while the correction is active. | A resource correction must not freeze future spending |
+| D102 | 2026-11-04 | Race/subrace edits replace identifiable racial bonuses, preserving ambiguous bonuses and other grants for review. Proficiencies remain explicit choices when race or background changes. | Existing saves lack complete grant provenance |
+| D103 | 2026-11-04 | Unrecognized or unsafe saved overrides remain in the character file without affecting calculations. Replacing or resetting a supported value is explicit. | Preserve older and custom data without trusting unknown calculations |
 
 ## Open questions
 

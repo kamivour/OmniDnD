@@ -181,6 +181,20 @@ interface LiveState {
 
 **Sheet explanations (M7):** additive `Stat.parts` sum to the displayed total, including HP's minimum-one adjustment; optional `Stat.notes` explain formulas, rounding, caps and locked entries. Scalar explanations from `sheetBreakdowns` are never persisted.
 
+**Noted overrides (M7):** `build.overrides` recognizes canonical paths such as `/abilities/CHA/mod`, numeric values and owned feature dice; unrecognized or unsafe entries remain untouched. Calculation-stage overrides feed dependent values, while transient `Stat.override` metadata supplies the ✎ marker and original calculated value.
+
+**Remaining corrections (D101):** a remaining-resource path stores the provenance below in its existing `value` field and changes the corresponding spent counter through a command. Later changes to that counter clear the active annotation; Reset can restore its previous spending, and Undo restores both counter and note.
+
+```ts
+interface RemainingCorrection {
+  kind: 'remaining-correction';
+  remaining: number;
+  spentBefore: number;
+  spent: number;
+  max: number;                 // remaining + spent = max
+}
+```
+
 **Defenses (M7):** optional feature metadata records resistances, immunities, vulnerabilities, saving-throw advantages and magical-sleep protection from owned features. Missing metadata means not recorded; it never automatically reduces damage or decides saves.
 
 **Dash (M5):** optional `combat.economy.dashCount` adds allowances based on current speed and reads as zero when absent. End Turn removes it and Undo restores it, without rewriting older saves.

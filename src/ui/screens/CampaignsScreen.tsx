@@ -11,6 +11,7 @@ import { HpBar } from '../components/HpBar';
 import { Icon } from '../components/Icon';
 import { Sheet } from '../components/Sheet';
 import { SectionLabel } from '../components/SectionLabel';
+import { OverrideMarker } from '../components/StatChip';
 import { inputClass } from '../components/fields';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { useManagement } from '../commands/useManagement';
@@ -234,6 +235,7 @@ function CampaignCard({
                       <span className="mt-1.5 flex items-center gap-2 text-xs">
                         <span className="text-text-muted">HP</span>
                         {record.live.hp}/{sheet.maxHp.value}
+                        <OverrideMarker override={sheet.maxHp.override} />
                         <HpBar current={record.live.hp} max={sheet.maxHp.value} className="w-16" />
                       </span>
                     </span>

@@ -99,7 +99,7 @@ Resources, concentration, effects on you, conditions, Quick Access (favorited sp
 - **Proficiencies:** armor, weapons, tools, languages. Senses, resistances, immunities, vulnerabilities.
 - **Combat stats:** HP, temp HP, Hit Dice, AC, initiative, speed, attacks, death saves.
 - **Breakdown on every computed number:** hover/tap shows its parts, e.g. `Initiative +3 = DEX +2, Jack of All Trades +1`.
-- **Overrides:** any computed value can be overridden with a note (e.g., "DM approved"). Overridden values show a ✎ marker.
+- **Overrides:** any current computed value can be selected for a noted override (e.g., "DM approved"); ✎ marks the result, and breakdowns retain the calculated value. Remaining resources use noted spending corrections, so later use and rest recovery continue normally (D100–D101).
 - View mode by default; Edit mode toggle for build changes.
 
 ### Spellbook

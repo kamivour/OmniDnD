@@ -61,7 +61,7 @@ export const levelUp: Command<LevelUpPayload> = {
     const notes: string[] = [];
     // A negative-CON level can lower max HP (D44); current HP follows but stays at least 1.
     if (live.hp > 0) {
-      const hp = Math.min(after, Math.max(1, live.hp + after - before));
+      const hp = Math.min(after, Math.max(1, live.hp + (after - before)));
       if (hp !== live.hp) notes.push(`HP ${live.hp} → ${hp}`);
       live.hp = hp;
     }

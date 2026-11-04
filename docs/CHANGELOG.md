@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-04 22:58 — Sheet Edit mode and noted overrides
+
+- Edit identity, race, subclass, proficiencies and languages; save choices together or cancel the draft.
+- Select a computed value, add a note and inspect its ✎ breakdown. Overrides carry through other screens and character export.
+- Correct remaining resources without freezing future spending. Check retained grants, Reset and Undo. Ability entry is next. Checks pass.
+
 ## 2026-11-04 22:09 — Compact character header and one Undo
 
 - Every character screen, including Spells, shares a compact status row with the latest change. Tap it for full history.

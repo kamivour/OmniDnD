@@ -9,10 +9,13 @@ import {
   setExhaustion,
 } from '../../engine/commands';
 import { CONDITIONS } from '../../engine/rules2014';
+import { overridePath } from '../../engine/calc/value-overrides';
 import { HpAdjustmentBody, type HpKind } from '../components/HpControl';
 import { DeathSaveTracker } from '../health/DeathSaveTracker';
 import { StatBreakdown } from '../components/StatBreakdown';
 import { PipStepper } from '../components/PipStepper';
+import { OverrideMarker } from '../components/StatChip';
+import { resourceOverride } from '../components/resource-override';
 import { Sheet } from '../components/Sheet';
 import { useCommand } from '../commands/command-context';
 import { useCharacter } from '../hooks/useCharacter';
@@ -45,11 +48,17 @@ export function HudAdjustments({
   const [kind, setKind] = useState<HpKind>('damage');
   const hpBody = useRef<HTMLDivElement>(null);
   const title = selection ? TITLES[selection] : '';
-  const { live } = state;
+  const { build, live } = state;
   const body = (
     <>
       {selection === 'hp' && (
         <div ref={hpBody} tabIndex={-1}>
+          {sheet.maxHp.override && (
+            <p className="mb-3 text-sm break-all text-text-muted">
+              Maximum HP {sheet.maxHp.value}
+              <OverrideMarker override={sheet.maxHp.override} />
+            </p>
+          )}
           <Tabs.Root value={kind} onValueChange={(value) => setKind(value as HpKind)}>
             <Tabs.List
               aria-label="HP adjustment"
@@ -83,28 +92,53 @@ export function HudAdjustments({
         <div className="flex flex-col gap-3">
           {sheet.slots.max.map(
             (max, level) =>
-              max > 0 && (
+              (max > 0 || (level > 0 && (live.slotsUsed[level] ?? 0) > 0)) && (
                 <div key={level} className="flex flex-wrap items-center justify-between gap-2">
                   <span>Level {level}</span>
                   <PipStepper
                     label={`Level ${level} spell slots`}
                     max={max}
                     used={live.slotsUsed[level] ?? 0}
+                    override={resourceOverride(
+                      build,
+                      sheet,
+                      overridePath('slots', 'max', level),
+                      overridePath('slots', 'remaining', level),
+                      live.slotsUsed[level] ?? 0,
+                      max,
+                    )}
                     onUse={() => run(adjustSlot, { level, used: (live.slotsUsed[level] ?? 0) + 1 })}
                     onRestore={() =>
                       run(adjustSlot, { level, used: (live.slotsUsed[level] ?? 0) - 1 })
                     }
                   />
+                  {(live.slotsUsed[level] ?? 0) > max && (
+                    <p className="basis-full text-xs text-warn">
+                      Recorded spending exceeds this maximum. Correct remaining in Sheet Edit mode,
+                      or undo the maximum change.
+                    </p>
+                  )}
                 </div>
               ),
           )}
           {sheet.slots.pact && (
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span>Pact L{sheet.slots.pact.level}</span>
+              <span>
+                Pact L{sheet.slots.pact.level}
+                <OverrideMarker override={sheet.values['/slots/pact/level']?.stat.override} />
+              </span>
               <PipStepper
                 label="Pact Magic slots"
                 max={sheet.slots.pact.count}
                 used={live.pactSlotsUsed ?? 0}
+                override={resourceOverride(
+                  build,
+                  sheet,
+                  '/slots/pact/count',
+                  '/slots/pact/remaining',
+                  live.pactSlotsUsed ?? 0,
+                  sheet.slots.pact.count,
+                )}
                 onUse={() =>
                   run(adjustSlot, { level: 'pact', used: (live.pactSlotsUsed ?? 0) + 1 })
                 }
@@ -112,11 +146,18 @@ export function HudAdjustments({
                   run(adjustSlot, { level: 'pact', used: (live.pactSlotsUsed ?? 0) - 1 })
                 }
               />
+              {(live.pactSlotsUsed ?? 0) > sheet.slots.pact.count && (
+                <p className="basis-full text-xs text-warn">
+                  Recorded spending exceeds this maximum. Correct remaining in Sheet Edit mode, or
+                  undo the maximum change.
+                </p>
+              )}
             </div>
           )}
-          {!sheet.slots.max.some((max) => max > 0) && !sheet.slots.pact && (
-            <p className="text-text-muted">No spell slots.</p>
-          )}
+          {!sheet.slots.max.some(
+            (max, level) => max > 0 || (level > 0 && (live.slotsUsed[level] ?? 0) > 0),
+          ) &&
+            !sheet.slots.pact && <p className="text-text-muted">No spell slots.</p>}
         </div>
       )}
       {selection === 'features' && (
@@ -128,12 +169,21 @@ export function HudAdjustments({
                 <h3 className="mb-2 font-semibold">
                   {feature.def.name}
                   {feature.die && ` (${feature.die})`}
+                  <OverrideMarker override={feature.dieOverride} />
                 </h3>
                 <PipStepper
                   label={feature.def.name}
                   max={feature.uses!.max}
                   used={live.featureUsesSpent[feature.def.id] ?? 0}
                   tone="accent"
+                  override={resourceOverride(
+                    build,
+                    sheet,
+                    overridePath('features', feature.def.id, 'uses', 'max'),
+                    overridePath('features', feature.def.id, 'uses', 'remaining'),
+                    live.featureUsesSpent[feature.def.id] ?? 0,
+                    feature.uses!.max,
+                  )}
                   onUse={() =>
                     run(adjustFeatureUses, {
                       featureId: feature.def.id,
@@ -147,6 +197,12 @@ export function HudAdjustments({
                     })
                   }
                 />
+                {(live.featureUsesSpent[feature.def.id] ?? 0) > feature.uses!.max && (
+                  <p className="mt-2 text-xs text-warn">
+                    Recorded spending exceeds this maximum. Correct remaining in Sheet Edit mode, or
+                    undo the maximum change.
+                  </p>
+                )}
                 <p className="mt-2 text-xs text-text-muted">
                   Restores:{' '}
                   {
@@ -175,7 +231,7 @@ export function HudAdjustments({
             }
           />
           <p className="mt-3 text-xs text-text-muted">
-            Value overrides arrive with Character Sheet edit mode in M7.
+            Edit noted overrides from Character Sheet Edit mode.
           </p>
         </>
       )}

@@ -7,6 +7,7 @@ import { DeathSaveTracker } from '../health/DeathSaveTracker';
 import { useCharacter } from '../hooks/useCharacter';
 import { HpBar } from './HpBar';
 import { Sheet } from './Sheet';
+import { OverrideMarker } from './StatChip';
 
 export type HpKind = 'damage' | 'heal' | 'temp';
 
@@ -30,7 +31,8 @@ export function HpButtons({ showSummary = true }: { showSummary?: boolean }) {
     <div ref={container} tabIndex={-1} className="flex min-w-0 flex-col gap-3">
       {showSummary && (
         <p className="text-sm text-text-muted">
-          HP {health.hp} / {health.maxHp} · Temp {health.tempHp}
+          HP {health.hp} / {health.maxHp}
+          <OverrideMarker override={sheet.maxHp.override} /> · Temp {health.tempHp}
         </p>
       )}
       <div className="grid grid-cols-3 gap-2">
@@ -179,7 +181,8 @@ export function HpAdjustmentBody({
   return (
     <div ref={container} tabIndex={-1} className="flex min-w-0 flex-col gap-3">
       <p className="text-sm text-text-muted">
-        HP {health.hp}/{health.maxHp} · Temp {health.tempHp}
+        HP {health.hp}/{health.maxHp}
+        <OverrideMarker override={sheet.maxHp.override} /> · Temp {health.tempHp}
       </p>
       {kind === 'damage' && (
         <p className="text-xs text-text-muted">

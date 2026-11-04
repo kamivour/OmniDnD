@@ -1,6 +1,8 @@
 import type { CharacterState, Sheet, WeaponAttack } from '../../engine/calc/sheet';
 import { bonusActionSpellChecks, featureUseDetails } from '../../engine/commands';
 import type { Registry } from '../../engine/registry';
+import { overridePath } from '../../engine/calc/value-overrides';
+import { resourceOverride } from '../components/resource-override';
 import type { FeatureView } from '../fixtures/the-fool';
 import { signed } from '../format';
 import { spellbookModel, type SpellbookEntry } from '../spells/spellbook-model';
@@ -15,6 +17,8 @@ export interface CombatWeapon {
     damage?: string;
     damageType?: string;
     notes: string;
+    toHitOverride?: { note: string };
+    damageOverride?: { note: string };
   };
 }
 
@@ -59,6 +63,14 @@ export function combatModel(state: CharacterState, sheet: Sheet, registry: Regis
       id: attack.itemId,
       name: attack.name,
       toHit: attack.toHit.value,
+      ...(attack.toHit.override ? { toHitOverride: attack.toHit.override } : {}),
+      ...(sheet.values[overridePath('attacks', attack.instanceId, 'damage', 'bonus')]?.stat.override
+        ? {
+            damageOverride:
+              sheet.values[overridePath('attacks', attack.instanceId, 'damage', 'bonus')]!.stat
+                .override,
+          }
+        : {}),
       ...(attack.damage
         ? {
             damage: damageText(attack.damage.dice, attack.damage.bonus),
@@ -80,6 +92,17 @@ export function combatModel(state: CharacterState, sheet: Sheet, registry: Regis
     if (!(def.activation in COSTS)) return [];
     const cost = COSTS[def.activation as keyof typeof COSTS];
     const details = featureUseDetails({ live: state.live, sheet }, def.id);
+    const resourceNote =
+      details.uses &&
+      resourceOverride(
+        state.build,
+        sheet,
+        overridePath('features', details.poolId, 'uses', 'max'),
+        overridePath('features', details.poolId, 'uses', 'remaining'),
+        details.uses.spent,
+        details.uses.max,
+      );
+    const dieNote = details.feature?.dieOverride ?? details.pool?.dieOverride;
     const lines = def.summary
       ? [def.summary.effect]
       : (def.fullText?.split(/\n\s*\n/).filter(Boolean) ?? []);
@@ -92,6 +115,8 @@ export function combatModel(state: CharacterState, sheet: Sheet, registry: Regis
         feature: {
           id: def.id,
           name: def.name,
+          ...(resourceNote ? { override: resourceNote } : {}),
+          ...(dieNote ? { dieOverride: dieNote } : {}),
           cost,
           ...(details.uses
             ? {

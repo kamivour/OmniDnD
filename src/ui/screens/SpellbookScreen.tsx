@@ -3,9 +3,12 @@ import { Search } from 'lucide-react';
 import { registry } from '../../data/registry';
 import { adjustSlot, setSpellFavorite, spellCastDetails } from '../../engine/commands';
 import { SchoolSchema } from '../../engine/schema';
+import { overridePath } from '../../engine/calc/value-overrides';
 import { useCommand } from '../commands/command-context';
 import { Sheet } from '../components/Sheet';
 import { PipStepper } from '../components/PipStepper';
+import { OverrideMarker } from '../components/StatChip';
+import { resourceOverride } from '../components/resource-override';
 import { SectionLabel } from '../components/SectionLabel';
 import { SpellRow } from '../components/SpellRow';
 import { cx } from '../cx';
@@ -130,17 +133,47 @@ export function SpellbookScreen() {
           <h1 className="font-display text-lg text-text">Spells</h1>
           <div className="flex flex-col gap-1 text-xs text-text-muted">
             {model.classes.map((casting) => (
-              <p key={casting.classId}>
+              <p key={casting.classId} className="min-w-0 wrap-anywhere">
                 {model.classes.length > 1 && `${casting.name} · `}
-                Save DC <span className="font-semibold text-text">{casting.dc}</span> · Attack{' '}
-                <span className="font-semibold text-text">{signed(casting.attack)}</span> · Cantrips{' '}
-                {casting.cantrips}
+                Save DC{' '}
+                <span className="font-semibold text-text">
+                  {casting.dc}
+                  <OverrideMarker
+                    override={
+                      sheet.values[overridePath('spellcasting', casting.classId, 'saveDc')]?.stat
+                        .override
+                    }
+                  />
+                </span>{' '}
+                · Attack{' '}
+                <span className="font-semibold text-text">
+                  {signed(casting.attack)}
+                  <OverrideMarker
+                    override={
+                      sheet.values[overridePath('spellcasting', casting.classId, 'attack')]?.stat
+                        .override
+                    }
+                  />
+                </span>{' '}
+                · Cantrips {casting.cantrips}
                 {casting.cantripLimit === undefined ? '' : ` / ${casting.cantripLimit}`}
+                <OverrideMarker
+                  override={
+                    sheet.values[overridePath('spellcasting', casting.classId, 'cantripsKnown')]
+                      ?.stat.override
+                  }
+                />
                 {casting.mode !== 'prepared' && (
                   <>
                     {' '}
                     · {casting.mode === 'spellbook' ? 'Book' : 'Known'} {casting.known}
                     {casting.knownLimit === undefined ? '' : ` / ${casting.knownLimit}`}
+                    <OverrideMarker
+                      override={
+                        sheet.values[overridePath('spellcasting', casting.classId, 'spellsKnown')]
+                          ?.stat.override
+                      }
+                    />
                   </>
                 )}
                 {(casting.mode === 'prepared' || casting.mode === 'spellbook') && (
@@ -148,6 +181,12 @@ export function SpellbookScreen() {
                     {' '}
                     · Prepared {casting.prepared}
                     {casting.preparedLimit === undefined ? '' : ` / ${casting.preparedLimit}`}
+                    <OverrideMarker
+                      override={
+                        sheet.values[overridePath('spellcasting', casting.classId, 'preparedLimit')]
+                          ?.stat.override
+                      }
+                    />
                   </>
                 )}
               </p>
@@ -295,7 +334,8 @@ export function SpellbookScreen() {
 
         {slots.length > 0 && (
           <p className="text-xs text-text-muted">
-            Tap a pip to set remaining slots. − uses one; + restores one.
+            − uses one slot; + restores one. Small pools also let you tap a pip to set remaining
+            slots.
           </p>
         )}
 
@@ -316,6 +356,14 @@ export function SpellbookScreen() {
                     label={`Level ${level} spell slots`}
                     max={slot.max}
                     used={slot.used}
+                    override={resourceOverride(
+                      state.build,
+                      sheet,
+                      overridePath('slots', 'max', level),
+                      overridePath('slots', 'remaining', level),
+                      slot.used,
+                      slot.max,
+                    )}
                     onUse={() => run(adjustSlot, { level, used: slot.used + 1 })}
                     onRestore={() => run(adjustSlot, { level, used: slot.used - 1 })}
                     onSetUsed={(used) => run(adjustSlot, { level, used })}

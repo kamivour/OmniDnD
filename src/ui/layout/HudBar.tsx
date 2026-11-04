@@ -2,11 +2,13 @@ import { useState, type MouseEvent } from 'react';
 import { Moon, Tent } from 'lucide-react';
 import { registry } from '../../data/registry';
 import { endConcentration } from '../../engine/commands';
+import { overridePath } from '../../engine/calc/value-overrides';
 import { ConcentrationChip } from '../components/chips';
 import { HpBar } from '../components/HpBar';
 import { Icon } from '../components/Icon';
 import { PipRow } from '../components/PipRow';
-import { StatChip } from '../components/StatChip';
+import { OverrideMarker, StatChip } from '../components/StatChip';
+import { compactInteger, resourceOverride } from '../components/resource-override';
 import { useCommand } from '../commands/command-context';
 import { useCharacter } from '../hooks/useCharacter';
 import { signed } from '../format';
@@ -35,6 +37,8 @@ export function HudBar() {
     max > 0 ? [{ max, level, used: live.slotsUsed[level] ?? 0 }] : [],
   );
   const resource = sheet.features.find((feature) => feature.uses);
+  const shownSlots = slots.slice(0, sheet.slots.pact && resource ? 1 : 2);
+  const largeHp = [live.hp, live.tempHp, sheet.maxHp.value].some((value) => value >= 1_000_000);
   const concentration = live.concentration && registry.get('spell', live.concentration.spellId);
   const statuses = [
     ...live.conditions,
@@ -63,57 +67,94 @@ export function HudBar() {
           <button
             type="button"
             aria-label="Adjust hit points"
+            aria-description={`HP ${live.hp} of ${sheet.maxHp.value}; temporary HP ${live.tempHp}`}
+            title={`HP ${live.hp}/${sheet.maxHp.value}; temporary HP ${live.tempHp}`}
             onClick={open('hp')}
             className={`${control} ml-auto flex shrink-0 items-center gap-2`}
           >
             <span className="text-xs text-text-muted">HP</span>
             <span className="font-semibold">
-              {live.hp}
-              <span className="text-text-muted">/{sheet.maxHp.value}</span>
+              {compactInteger(live.hp)}
+              <span className="text-text-muted">/{compactInteger(sheet.maxHp.value)}</span>
+              <OverrideMarker override={sheet.maxHp.override} />
             </span>
-            {live.tempHp > 0 && <span className="text-xs text-temp">+{live.tempHp}</span>}
-            <HpBar current={live.hp} max={sheet.maxHp.value} className="w-10 sm:w-20" />
+            {live.tempHp > 0 && (
+              <span className="text-xs text-temp">+{compactInteger(live.tempHp)}</span>
+            )}
+            <HpBar
+              current={live.hp}
+              max={sheet.maxHp.value}
+              className={largeHp ? 'hidden w-10 sm:block sm:w-20' : 'w-10 sm:w-20'}
+            />
           </button>
           <button
             type="button"
             title="Armor class"
+            aria-description={`Armor class ${sheet.ac.value}`}
             onClick={open('ac')}
             className={`${control} shrink-0`}
           >
-            <StatChip label="AC" value={sheet.ac.value} />
+            <StatChip
+              label="AC"
+              value={compactInteger(sheet.ac.value)}
+              override={sheet.ac.override}
+            />
           </button>
           <span className="hidden shrink-0 gap-2 sm:flex">
             <button
               type="button"
               title="Initiative"
+              aria-description={`Initiative ${signed(sheet.initiative.value)}`}
               onClick={open('initiative')}
               className={control}
             >
-              <StatChip label="Init" value={signed(sheet.initiative.value)} />
+              <StatChip
+                label="Init"
+                value={`${sheet.initiative.value >= 0 ? '+' : ''}${compactInteger(sheet.initiative.value)}`}
+                override={sheet.initiative.override}
+              />
             </button>
-            <button type="button" title="Speed" onClick={open('speed')} className={control}>
-              <StatChip label="Spd" value={sheet.speed.value} />
+            <button
+              type="button"
+              title="Speed"
+              aria-description={`Speed ${sheet.speed.value} feet`}
+              onClick={open('speed')}
+              className={control}
+            >
+              <StatChip
+                label="Spd"
+                value={compactInteger(sheet.speed.value)}
+                override={sheet.speed.override}
+              />
             </button>
           </span>
         </div>
-        <div className="flex h-11 min-w-0 items-center gap-2">
+        <div className="flex h-11 min-w-0 items-center gap-1 sm:gap-2">
           {slots.length > 0 && (
             <button
               type="button"
               aria-label="Adjust spell slots"
               onClick={open('slots')}
-              className={`${control} flex shrink-0 items-center gap-2`}
+              className={`${control} flex min-w-0 shrink-0 items-center gap-1`}
             >
-              {slots.slice(0, 2).map((slot) => (
-                <PipRow
-                  key={slot.level}
-                  label={`L${slot.level}`}
-                  max={slot.max}
-                  used={slot.used}
-                  size="sm"
-                />
+              {shownSlots.map((slot) => (
+                <span key={slot.level} className="inline-flex max-w-18 min-w-0 items-center">
+                  <PipRow label={`L${slot.level}`} max={slot.max} used={slot.used} size="sm" wrap />
+                  <OverrideMarker
+                    override={resourceOverride(
+                      build,
+                      sheet,
+                      overridePath('slots', 'max', slot.level),
+                      overridePath('slots', 'remaining', slot.level),
+                      slot.used,
+                      slot.max,
+                    )}
+                  />
+                </span>
               ))}
-              {slots.length > 2 && <span className="text-xs text-magic">+{slots.length - 2}</span>}
+              {slots.length > shownSlots.length && (
+                <span className="text-xs text-magic">+{slots.length - shownSlots.length}</span>
+              )}
             </button>
           )}
           {sheet.slots.pact && (
@@ -121,13 +162,24 @@ export function HudBar() {
               type="button"
               aria-label="Adjust Pact Magic slots"
               onClick={open('slots')}
-              className={control}
+              className={`${control} inline-flex max-w-18 min-w-0 items-center`}
             >
               <PipRow
                 label="Pact"
                 max={sheet.slots.pact.count}
                 used={live.pactSlotsUsed ?? 0}
                 size="sm"
+                wrap
+              />
+              <OverrideMarker
+                override={resourceOverride(
+                  build,
+                  sheet,
+                  '/slots/pact/count',
+                  '/slots/pact/remaining',
+                  live.pactSlotsUsed ?? 0,
+                  sheet.slots.pact.count,
+                )}
               />
             </button>
           )}
@@ -136,7 +188,7 @@ export function HudBar() {
               type="button"
               aria-label="Adjust class resources"
               onClick={open('features')}
-              className={`${control} shrink-0`}
+              className={`${control} inline-flex max-w-20 min-w-0 shrink-0 items-center`}
             >
               <PipRow
                 label={
@@ -148,7 +200,19 @@ export function HudBar() {
                 used={live.featureUsesSpent[resource.def.id] ?? 0}
                 tone="accent"
                 size="sm"
+                wrap
               />
+              <OverrideMarker
+                override={resourceOverride(
+                  build,
+                  sheet,
+                  overridePath('features', resource.def.id, 'uses', 'max'),
+                  overridePath('features', resource.def.id, 'uses', 'remaining'),
+                  live.featureUsesSpent[resource.def.id] ?? 0,
+                  resource.uses.max,
+                )}
+              />
+              <OverrideMarker override={resource.dieOverride} />
             </button>
           )}
           {concentration && (

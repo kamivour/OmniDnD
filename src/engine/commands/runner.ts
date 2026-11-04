@@ -1,5 +1,6 @@
 import { applyPatches, enablePatches, produceWithPatches, type Draft } from 'immer';
 import { computeSheet, type CharacterState, type Sheet } from '../calc/sheet';
+import { retainCounterCorrections } from '../calc/value-overrides';
 import type { Registry } from '../registry';
 import {
   CharacterBuildSchema,
@@ -87,6 +88,8 @@ export function runCommand<Payload>(
     { build: state.build, live: state.live },
     (draft) => {
       text = command.apply(draft, payload, { ...ctx, eventId, automation });
+      const retained = retainCounterCorrections(draft.build, draft.live, state.live);
+      if (retained.length !== draft.build.overrides.length) draft.build.overrides = retained;
     },
   );
   assertValid(command.name, next);

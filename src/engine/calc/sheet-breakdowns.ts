@@ -1,10 +1,12 @@
 import type { Registry } from '../registry';
-import { xpForLevel } from '../creation';
+import { xpForLevel } from './advancement';
 import { CARRY_PER_STR } from '../rules2014';
 import type { HitDieName } from '../schema';
-import { ABILITIES, type Ability } from './abilities';
+import { ABILITIES, abilityModifier, type Ability } from './abilities';
+import { proficiencyBonus } from './proficiency';
 import type { CharacterState, Sheet } from './sheet';
 import type { Stat } from './stat';
+import { counterCorrection, overridePath, overrideStat } from './value-overrides';
 
 export interface SheetBreakdowns {
   level: Stat;
@@ -30,76 +32,110 @@ export function sheetBreakdowns(
     def: registry.get('class', entry.classId),
   }));
   const race = registry.get('race', build.subraceId ?? build.raceId);
+  // Follow computeSheet's accepted override metadata, including its unsafe-legacy fallback.
+  const explain = (path: string, base: Stat): Stat => {
+    const accepted = sheet.values[path]?.stat.override;
+    return accepted
+      ? overrideStat({ overrides: [{ path, value: accepted.value, note: accepted.note }] }, path, {
+          ...base,
+          ...(base.notes ? { notes: base.notes.map((note) => `Before override: ${note}`) } : {}),
+        })
+      : base;
+  };
   return {
-    level: {
-      value: sheet.level,
+    level: explain('/level', {
+      value: classes.reduce((sum, entry) => sum + entry.level, 0),
       parts: classes.map(({ def, level }) => ({ label: def.name, value: level })),
-    },
-    proficiency: {
-      value: sheet.proficiency,
+    }),
+    proficiency: explain('/proficiency', {
+      value: proficiencyBonus(sheet.level),
       parts: [],
       notes: [
-        `Character level ${sheet.level}: ceil(${sheet.level} / 4) + 1 = ${signed(sheet.proficiency)}.`,
+        `Character level ${sheet.level}: ceil(${sheet.level} / 4) + 1 = ${signed(proficiencyBonus(sheet.level))}.`,
       ],
-    },
+    }),
     ...(campaign.leveling === 'xp' && sheet.level < 20
       ? {
-          nextLevelXp: {
+          nextLevelXp: explain('/nextLevelXp', {
             value: xpForLevel(sheet.level + 1),
             parts: [],
             notes: [
               `2014 character advancement: level ${sheet.level + 1} requires ${xpForLevel(sheet.level + 1)} XP.`,
             ],
-          },
+          }),
         }
       : {}),
     modifiers: Object.fromEntries(
       ABILITIES.map((ability): [Ability, Stat] => {
-        const { score, mod } = sheet.abilities[ability];
+        const { score } = sheet.abilities[ability];
+        const mod = abilityModifier(score.value);
         return [
           ability,
-          {
+          explain(overridePath('abilities', ability, 'mod'), {
             value: mod,
             parts: [],
             notes: [
               `Score ${score.value}: ${score.parts.map(({ label, value }) => `${label} ${signed(value)}`).join(', ')}.`,
               `floor((${score.value} - 10) / 2) = ${signed(mod)}.`,
             ],
-          },
+          }),
         ];
       }),
     ) as Record<Ability, Stat>,
     ...(sheet.darkvision === undefined
       ? {}
       : {
-          darkvision: {
-            value: sheet.darkvision,
-            parts: [{ label: race.name, value: sheet.darkvision }],
-          },
+          darkvision: explain('/darkvision', {
+            value: race.darkvision ?? 0,
+            parts: [{ label: race.name, value: race.darkvision ?? 0 }],
+          }),
         }),
-    carryingCapacity: {
-      value: sheet.carryingCapacity,
+    carryingCapacity: explain('/carryingCapacity', {
+      value: sheet.abilities.STR.score.value * CARRY_PER_STR,
       parts: [],
       notes: [
-        `STR ${sheet.abilities.STR.score.value} × ${CARRY_PER_STR} lb = ${sheet.carryingCapacity} lb.`,
+        `STR ${sheet.abilities.STR.score.value} × ${CARRY_PER_STR} lb = ${sheet.abilities.STR.score.value * CARRY_PER_STR} lb.`,
       ],
-    },
+    }),
     hitDice: sheet.hitDice.map(({ die, max }) => {
       const maxParts = classes
         .filter(({ def }) => def.hitDie === die)
         .map(({ def, level }) => ({ label: def.name, value: level }));
       const spent = live.hitDiceSpent[die] ?? 0;
+      const maximum = explain(overridePath('hitDice', die, 'max'), {
+        value: maxParts.reduce((sum, part) => sum + part.value, 0),
+        parts: maxParts,
+      });
       const remaining = Math.max(0, max - spent);
-      const parts = [...maxParts, { label: 'Spent Hit Dice', value: -spent }];
+      const parts = [...maximum.parts, { label: 'Spent Hit Dice', value: -spent }];
       if (max - spent < 0)
         parts.push({ label: 'Minimum remaining 0', value: remaining - (max - spent) });
-      return { die, max: { value: max, parts: maxParts }, remaining: { value: remaining, parts } };
+      const correction = counterCorrection(
+        build,
+        overridePath('hitDice', die, 'remaining'),
+        spent,
+        max,
+      );
+      const current: Stat = { value: remaining, parts };
+      if (correction) {
+        current.override = {
+          path: correction.path,
+          note: correction.note,
+          calculated: Math.max(0, max - correction.value.spentBefore),
+          value: remaining,
+        };
+        current.notes = [
+          `Correction: ${correction.note}. Spent ${correction.value.spentBefore} → ${spent}; later spending or recovery clears this marker.`,
+        ];
+      }
+      return { die, max: maximum, remaining: current };
     }),
     attacks: sheet.attacks.map((attack) => {
       if (!attack.damage) return { instanceId: attack.instanceId };
       const weapon = registry.get('item', attack.itemId).weapon!;
       const mod = sheet.abilities[attack.ability].mod;
       const flat = typeof weapon.damage === 'number' ? weapon.damage : undefined;
+      const calculated = flat === undefined ? mod : Math.max(0, flat + mod);
       const parts = [
         ...(flat === undefined ? [] : [{ label: attack.name, value: flat }]),
         { label: attack.ability, value: mod },
@@ -109,7 +145,7 @@ export function sheetBreakdowns(
           ? [
               `Damage dice: ${attack.damage.dice}. Add ${attack.ability} ${signed(mod)} to the rolled total.`,
             ]
-          : [`Flat damage: max(0, ${flat} + (${mod})) = ${attack.damage.bonus}.`];
+          : [`Flat damage: max(0, ${flat} + (${mod})) = ${calculated}.`];
       notes.push(
         weapon.properties.includes('finesse')
           ? `Finesse uses the higher of STR and DEX; ${attack.ability} selected.`
@@ -125,7 +161,11 @@ export function sheetBreakdowns(
       }
       return {
         instanceId: attack.instanceId,
-        damageBonus: { value: attack.damage.bonus, parts, notes },
+        damageBonus: explain(overridePath('attacks', attack.instanceId, 'damage', 'bonus'), {
+          value: calculated,
+          parts,
+          notes,
+        }),
       };
     }),
   };

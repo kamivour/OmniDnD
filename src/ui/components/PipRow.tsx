@@ -1,4 +1,6 @@
 import { cx } from '../cx';
+import { compactInteger } from './resource-override';
+import { OverrideMarker } from './StatChip';
 
 interface PipRowProps {
   label: string;
@@ -11,6 +13,7 @@ interface PipRowProps {
   className?: string;
   /** Bounded resource rows can wrap large pools without shrinking their pips. */
   wrap?: boolean;
+  override?: { note: string };
 }
 
 /** Remaining uses as filled pips, spent uses as empty rings. Live state stores "used" (D6). */
@@ -23,29 +26,49 @@ export function PipRow({
   size = 'md',
   className,
   wrap = false,
+  override,
 }: PipRowProps) {
   const left = Math.max(0, max - used);
   const dot = size === 'sm' ? 'size-2' : 'size-2.5';
   const fill = tone === 'magic' ? 'border-magic bg-magic' : 'border-accent bg-accent';
   return (
-    <span
-      role="img"
-      aria-label={`${label}: ${left} of ${max} left`}
-      className={cx('inline-flex items-center gap-1.5', wrap && 'min-w-0 max-w-full', className)}
-    >
-      {showLabel && <span className="text-xs text-text-muted">{label}</span>}
-      <span className={cx('inline-flex gap-1', wrap && 'max-w-full flex-wrap justify-center')}>
-        {Array.from({ length: max }, (_, i) => (
-          <span
-            key={i}
-            className={cx(
-              'rounded-full border transition-colors duration-(--omni-motion-pip)',
-              dot,
-              i < left ? fill : 'border-text-muted bg-transparent',
-            )}
-          />
-        ))}
+    <>
+      <span
+        role="img"
+        aria-label={`${label}: ${left} of ${max} left`}
+        className={cx('inline-flex items-center gap-1.5', wrap && 'min-w-0 max-w-full', className)}
+      >
+        {showLabel && (
+          <span className={cx('text-xs text-text-muted', size === 'sm' && 'max-w-8 truncate')}>
+            {label}
+          </span>
+        )}
+        <span
+          className={cx('inline-flex min-w-0 gap-1', wrap && 'max-w-full flex-wrap justify-center')}
+        >
+          {max > 12 ? (
+            <span
+              aria-hidden
+              title={`${left}/${max}`}
+              className="min-w-0 text-center text-xs break-all tabular-nums text-text-muted"
+            >
+              {size === 'sm' ? compactInteger(left) : `${left}/${max}`}
+            </span>
+          ) : (
+            Array.from({ length: max }, (_, i) => (
+              <span
+                key={i}
+                className={cx(
+                  'rounded-full border transition-colors duration-(--omni-motion-pip)',
+                  dot,
+                  i < left ? fill : 'border-text-muted bg-transparent',
+                )}
+              />
+            ))
+          )}
+        </span>
       </span>
-    </span>
+      <OverrideMarker override={override} />
+    </>
   );
 }

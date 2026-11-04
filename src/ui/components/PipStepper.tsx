@@ -1,5 +1,6 @@
 import { cx } from '../cx';
 import { PipRow } from './PipRow';
+import { OverrideMarker } from './StatChip';
 
 interface PipStepperProps {
   /** Accessible name of the resource, e.g. "Level 1 spell slots". */
@@ -14,6 +15,7 @@ interface PipStepperProps {
   className?: string;
   /** Invalid retained imports need an explicit correction before ordinary adjustments. */
   disabled?: boolean;
+  override?: { note: string };
 }
 
 /**
@@ -30,8 +32,10 @@ export function PipStepper({
   onSetUsed,
   className,
   disabled = false,
+  override,
 }: PipStepperProps) {
   const left = Math.max(0, max - used);
+  const directPips = onSetUsed !== undefined && max <= 4;
   const fill = tone === 'magic' ? 'border-magic bg-magic' : 'border-accent bg-accent';
 
   return (
@@ -43,7 +47,7 @@ export function PipStepper({
       <StepButton label={`Use one: ${label}`} onClick={onUse} disabled={disabled || used >= max}>
         −
       </StepButton>
-      {onSetUsed ? (
+      {directPips ? (
         <span className="flex items-center gap-1">
           <span className="inline-flex gap-1">
             {Array.from({ length: max }, (_, i) => {
@@ -55,7 +59,7 @@ export function PipStepper({
                   aria-label={`Set ${label} to ${remaining} remaining`}
                   aria-pressed={i < left}
                   disabled={disabled}
-                  onClick={() => onSetUsed(max - remaining)}
+                  onClick={() => onSetUsed?.(max - remaining)}
                   className="hover-lift grid size-11 shrink-0 place-items-center rounded-btn border border-transparent"
                 >
                   <span
@@ -76,13 +80,17 @@ export function PipStepper({
           >
             {left}/{max}
           </span>
+          <OverrideMarker override={override} />
         </span>
       ) : (
         <span className="flex w-28 flex-wrap items-center justify-center gap-2">
           <PipRow label={label} max={max} used={used} tone={tone} showLabel={false} wrap />
-          <span aria-hidden className="text-xs text-text-muted">
-            {left}/{max}
-          </span>
+          {max <= 12 && (
+            <span aria-hidden className="max-w-full text-xs break-all text-text-muted">
+              {left}/{max}
+            </span>
+          )}
+          <OverrideMarker override={override} />
         </span>
       )}
       <StepButton

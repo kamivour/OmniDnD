@@ -56,8 +56,10 @@ Exploration will reuse Dashboard's GameClockControl under D91.
 - [ ] Read senses and defenses. Judge whether conditional protections, such as Fey Ancestry, avoid implying blanket immunity and whether Not recorded is honest about missing details.
 - [ ] Review advancement information in XP and milestone campaigns. It should match how the campaign discusses leveling without asking the player to supply derived numbers.
 - [ ] On phone, tablet and desktop, judge whether the compact status/log row leaves enough room for play. Find one Undo across character screens, spell management and full history; judge whether its latest-change wording makes the result clear.
+- [ ] Edit your own character and a prepared caster. Judge Save/Cancel wording, retained grants and source choices, especially when changing race, background, subclass or Expertise.
+- [ ] Apply a noted override and inspect ✎ and its breakdown across screens. Judge whether calculated versus overridden values, Reset and normal spending after a remaining correction are understandable, including large resource totals.
 
-Edit mode, overrides, ability entry, level-up and Exploration remain unfinished M7 work. Review them when their tasks are complete.
+Ability entry, level-up and Exploration remain unfinished M7 work. Review each when its task is complete.
 
 ## Deferred rules review — M5
 

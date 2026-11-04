@@ -8,6 +8,7 @@ import { CastFooter } from './CastFooter';
 import { SpellCard } from './cards';
 import { ConcBadge, CostBadge } from './CostBadge';
 import type { PreviewFooter } from './Preview';
+import { OverrideMarker } from './StatChip';
 
 interface SpellRowProps {
   spell: SpellView;
@@ -56,6 +57,8 @@ export function SpellRow({
     <>
       {castingClass && `${castingClass} · `}
       <span className={type.text}>{type.label}</span> · {details}
+      {spell.save && <OverrideMarker override={spell.dcOverride} />}
+      {spell.attack && <OverrideMarker override={spell.attackOverride} />}
     </>
   );
 

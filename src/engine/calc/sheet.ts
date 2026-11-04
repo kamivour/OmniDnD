@@ -1,4 +1,5 @@
 import type { Registry } from '../registry';
+import { xpForLevel } from './advancement';
 import {
   CARRY_PER_STR,
   HEAVY_ARMOR_SPEED_PENALTY,
@@ -17,6 +18,13 @@ import { levelHp, maxHp } from './hp';
 import { proficiencyBonus } from './proficiency';
 import { spellSlots, type SpellSlots } from './slots';
 import { sumParts, type Part, type Stat } from './stat';
+import { isPreparedCaster2014 } from './spell-selections';
+import {
+  overridePath,
+  overrideStat,
+  resolveDieOverride,
+  type NumberDomain,
+} from './value-overrides';
 
 export interface CharacterState {
   campaign: Campaign;
@@ -31,6 +39,8 @@ export interface SpellcastingStats {
   attack: Stat;
   cantripsKnown?: number;
   spellsKnown?: number;
+  preparedLimit?: number;
+  maxSpellLevel?: number;
 }
 
 export interface WeaponAttack {
@@ -50,6 +60,8 @@ export interface WeaponAttack {
 
 /** Everything the engine derives from build + live state. Display only: never stored (DATA.md §4). */
 export interface Sheet {
+  /** Canonical calculated values and their domains, shared by editors and breakdowns. */
+  values: Record<string, { label: string; stat: Stat; domain: NumberDomain }>;
   level: number;
   proficiency: number;
   abilities: Record<Ability, { score: Stat; mod: number }>;
@@ -69,22 +81,91 @@ export interface Sheet {
   /** Applied conditions, from `live.conditions` and active effects. */
   conditions: Condition[];
   carryingCapacity: number;
+  nextLevelXp?: number;
 }
 
-export function computeSheet({ campaign, build, live }: CharacterState, registry: Registry): Sheet {
-  const level = build.classes.reduce((sum, entry) => sum + entry.level, 0);
-  const proficiency = proficiencyBonus(level);
+export function computeSheet(state: CharacterState, registry: Registry): Sheet {
+  const sheet = computeValues(state, registry);
+  if (safeValues(sheet) || state.build.overrides.length === 0) return sheet;
+  // Older exports allow opaque overrides. Preserve their records, but do not let a
+  // newly recognized, otherwise well-formed value overflow dependent calculations.
+  let accepted: CharacterBuild['overrides'] = [];
+  let safe = computeValues({ ...state, build: { ...state.build, overrides: accepted } }, registry);
+  if (!safeValues(safe)) return sheet;
+  for (const entry of state.build.overrides) {
+    const candidate = computeValues(
+      {
+        ...state,
+        build: { ...state.build, overrides: [...accepted, entry] },
+      },
+      registry,
+    );
+    if (safeValues(candidate)) {
+      accepted = [...accepted, entry];
+      safe = candidate;
+    }
+  }
+  return safe;
+}
+
+function safeValues(sheet: Sheet): boolean {
+  return (
+    Number.isSafeInteger(
+      sumParts(sheet.hitDice.map((pool) => ({ label: pool.die, value: pool.max }))).value,
+    ) &&
+    Object.values(sheet.values).every(
+      ({ stat }) =>
+        Number.isSafeInteger(stat.value) &&
+        stat.parts.every((part) => Number.isSafeInteger(part.value)),
+    )
+  );
+}
+
+function computeValues({ campaign, build, live }: CharacterState, registry: Registry): Sheet {
+  const values: Sheet['values'] = {};
+  const value = (path: string, label: string, base: Stat, domain: NumberDomain = {}): Stat => {
+    const stat = overrideStat(build, path, base, domain);
+    values[path] = { label, stat, domain };
+    return stat;
+  };
+  const scalar = (path: string, label: string, base: number, domain: NumberDomain = {}) =>
+    value(path, label, { value: base, parts: [] }, domain).value;
+  const level = value(
+    '/level',
+    'Character level',
+    {
+      value: build.classes.reduce((sum, entry) => sum + entry.level, 0),
+      parts: build.classes.map((entry) => ({
+        label: registry.get('class', entry.classId).name,
+        value: entry.level,
+      })),
+    },
+    { min: 1, max: 20 },
+  ).value;
+  const proficiency = scalar('/proficiency', 'Proficiency bonus', proficiencyBonus(level), {
+    min: 0,
+  });
   const proficiencyPart: Part = { label: 'Proficiency', value: proficiency };
 
   const abilities = Object.fromEntries(
     ABILITIES.map((ability) => {
-      const score = sumParts([
-        { label: 'Base', value: build.abilityScores.base[ability] },
-        ...build.abilityScores.bonuses
-          .filter((bonus) => bonus.ability === ability)
-          .map((bonus) => ({ label: sourceLabel(bonus.source, registry), value: bonus.value })),
-      ]);
-      return [ability, { score, mod: abilityModifier(score.value) }];
+      const score = value(
+        overridePath('abilities', ability, 'score'),
+        `${ability} score`,
+        sumParts([
+          { label: 'Base', value: build.abilityScores.base[ability] },
+          ...build.abilityScores.bonuses
+            .filter((bonus) => bonus.ability === ability)
+            .map((bonus) => ({ label: sourceLabel(bonus.source, registry), value: bonus.value })),
+        ]),
+        { min: 0 },
+      );
+      const mod = scalar(
+        overridePath('abilities', ability, 'mod'),
+        `${ability} modifier`,
+        abilityModifier(score.value),
+      );
+      return [ability, { score, mod }];
     }),
   ) as Sheet['abilities'];
   const mods = Object.fromEntries(
@@ -93,7 +174,23 @@ export function computeSheet({ campaign, build, live }: CharacterState, registry
   const ctx = { mods, proficiency };
   const modPart = (ability: Ability): Part => ({ label: ability, value: mods[ability] });
 
-  const features = characterFeatures(build, registry, ctx);
+  const features = characterFeatures(build, registry, ctx, level).map((feature) => {
+    const path = overridePath('features', feature.def.id);
+    const result = { ...feature };
+    if (feature.uses)
+      result.uses = {
+        ...feature.uses,
+        max: scalar(`${path}/uses/max`, `${feature.def.name} uses maximum`, feature.uses.max, {
+          min: 0,
+        }),
+      };
+    if (feature.die) {
+      const die = resolveDieOverride(build, `${path}/die`, feature.die);
+      result.die = die.value;
+      if (die.override) result.dieOverride = die.override;
+    }
+    return result;
+  });
   const sources: { label: string; modifiers: readonly Modifier[] }[] = [
     ...features.map(({ def }) => ({ label: def.name, modifiers: def.modifiers ?? [] })),
     ...live.effects.map((effect) => ({ label: effect.name, modifiers: effect.modifiers })),
@@ -109,7 +206,17 @@ export function computeSheet({ campaign, build, live }: CharacterState, registry
     ABILITIES.map((ability) => {
       const proficient = build.proficiencies.saves.includes(ability);
       const parts = [modPart(ability), ...(proficient ? [proficiencyPart] : [])];
-      return [ability, { ...sumParts([...parts, ...modifierParts('saves')]), proficient }];
+      return [
+        ability,
+        {
+          ...value(
+            overridePath('saves', ability),
+            `${ability} save`,
+            sumParts([...parts, ...modifierParts('saves')]),
+          ),
+          proficient,
+        },
+      ];
     }),
   ) as Sheet['saves'];
 
@@ -128,12 +235,26 @@ export function computeSheet({ campaign, build, live }: CharacterState, registry
         ...(kind === 'proficient' ? [proficiencyPart] : []),
         ...modifierParts('checks', ...(kind === 'none' ? (['unproficient-checks'] as const) : [])),
       ];
-      return [skill, { ...sumParts(parts), proficiency: kind }];
+      return [
+        skill,
+        {
+          ...value(
+            overridePath('skills', skill),
+            `${skill.replaceAll('-', ' ')} skill`,
+            sumParts(parts),
+          ),
+          proficiency: kind,
+        },
+      ];
     }),
   ) as Sheet['skills'];
 
   const passive = (skill: Skill): Stat =>
-    sumParts([{ label: 'Base', value: 10 }, ...skills[skill].parts]);
+    value(
+      overridePath('passives', skill),
+      `Passive ${skill}`,
+      sumParts([{ label: 'Base', value: 10 }, ...skills[skill].parts]),
+    );
 
   const equipped = build.items.flatMap((item) => {
     const state = live.items[item.instanceId];
@@ -189,7 +310,62 @@ export function computeSheet({ campaign, build, live }: CharacterState, registry
     def: registry.get('class', entry.classId),
   }));
 
-  return {
+  const hitDice = classDefs
+    .reduce<Sheet['hitDice']>((pool, { entry, def }) => {
+      const row = pool.find((dice) => dice.die === def.hitDie);
+      if (row) row.max += entry.level;
+      else pool.push({ die: def.hitDie, max: entry.level });
+      return pool;
+    }, [])
+    .map((pool) => ({
+      ...pool,
+      max: scalar(
+        overridePath('hitDice', pool.die, 'max'),
+        `${pool.die} Hit Dice maximum`,
+        pool.max,
+        { min: 0 },
+      ),
+    }));
+  const slots = spellSlots(
+    classDefs.flatMap(({ entry, def }) =>
+      def.spellcasting ? [{ progression: def.spellcasting.progression, level: entry.level }] : [],
+    ),
+  );
+  slots.max = slots.max.map((max, slotLevel) =>
+    slotLevel === 0
+      ? max
+      : scalar(
+          overridePath('slots', 'max', slotLevel),
+          `Level ${slotLevel} spell slots maximum`,
+          max,
+          { min: 0 },
+        ),
+  );
+  if (slots.pact)
+    slots.pact = {
+      count: scalar('/slots/pact/count', 'Pact slots maximum', slots.pact.count, { min: 0 }),
+      level: scalar('/slots/pact/level', 'Pact slot level', slots.pact.level, { min: 1, max: 5 }),
+    };
+  const attacks = equipped.flatMap(({ instanceId, def }) => {
+    if (!def.weapon) return [];
+    const attack = weaponAttack(instanceId, def, build, mods, proficiencyPart);
+    attack.toHit = value(
+      overridePath('attacks', instanceId, 'toHit'),
+      `${def.name} attack`,
+      attack.toHit,
+    );
+    if (attack.damage)
+      attack.damage.bonus = scalar(
+        overridePath('attacks', instanceId, 'damage', 'bonus'),
+        `${def.name} damage bonus`,
+        attack.damage.bonus,
+        typeof def.weapon.damage === 'number' ? { min: 0 } : {},
+      );
+    return [attack];
+  });
+
+  const result: Sheet = {
+    values,
     level,
     proficiency,
     abilities,
@@ -201,28 +377,31 @@ export function computeSheet({ campaign, build, live }: CharacterState, registry
       insight: passive('insight'),
     },
     // Initiative is a DEX check without proficiency (D51).
-    initiative: sumParts([
-      modPart('DEX'),
-      ...modifierParts('initiative', 'checks', 'unproficient-checks'),
-    ]),
-    ac: armorClass(equipped, mods.DEX, modifierParts('ac')),
-    speed: speed(
-      race.name,
-      race.speed,
-      equipped,
-      abilities.STR.score.value,
-      live.exhaustion,
-      conditions,
-      modifierParts('speed'),
+    initiative: value(
+      '/initiative',
+      'Initiative',
+      sumParts([modPart('DEX'), ...modifierParts('initiative', 'checks', 'unproficient-checks')]),
     ),
-    ...(race.darkvision ? { darkvision: race.darkvision } : {}),
-    maxHp: maxHpStat,
-    hitDice: classDefs.reduce<Sheet['hitDice']>((pool, { entry, def }) => {
-      const row = pool.find((dice) => dice.die === def.hitDie);
-      if (row) row.max += entry.level;
-      else pool.push({ die: def.hitDie, max: entry.level });
-      return pool;
-    }, []),
+    ac: value('/ac', 'Armor class', armorClass(equipped, mods.DEX, modifierParts('ac')), {
+      min: 0,
+    }),
+    speed: value(
+      '/speed',
+      'Speed',
+      speed(
+        race.name,
+        race.speed,
+        equipped,
+        abilities.STR.score.value,
+        live.exhaustion,
+        conditions,
+        modifierParts('speed'),
+      ),
+      { min: 0 },
+    ),
+    darkvision: scalar('/darkvision', 'Darkvision', race.darkvision ?? 0, { min: 0 }),
+    maxHp: value('/maxHp', 'Maximum HP', maxHpStat, { min: 1 }),
+    hitDice,
     spellcasting: classDefs.flatMap(({ entry, def }) => {
       if (!def.spellcasting) return [];
       const { ability, cantripsKnown, spellsKnown } = def.spellcasting;
@@ -230,27 +409,82 @@ export function computeSheet({ campaign, build, live }: CharacterState, registry
       const stats: SpellcastingStats = {
         classId: entry.classId,
         ability,
-        saveDc: sumParts([{ label: 'Base', value: 8 }, proficiencyPart, modPart(ability)]),
-        attack: sumParts([proficiencyPart, modPart(ability)]),
+        saveDc: value(
+          overridePath('spellcasting', entry.classId, 'saveDc'),
+          `${def.name} spell save DC`,
+          sumParts([{ label: 'Base', value: 8 }, proficiencyPart, modPart(ability)]),
+        ),
+        attack: value(
+          overridePath('spellcasting', entry.classId, 'attack'),
+          `${def.name} spell attack`,
+          sumParts([proficiencyPart, modPart(ability)]),
+        ),
       };
       const cantrips = known(cantripsKnown);
       const spells = known(spellsKnown);
-      if (cantrips !== undefined) stats.cantripsKnown = cantrips;
-      if (spells !== undefined) stats.spellsKnown = spells;
+      if (cantrips !== undefined)
+        stats.cantripsKnown = scalar(
+          overridePath('spellcasting', entry.classId, 'cantripsKnown'),
+          `${def.name} cantrips known limit`,
+          cantrips,
+          { min: 0 },
+        );
+      if (spells !== undefined)
+        stats.spellsKnown = scalar(
+          overridePath('spellcasting', entry.classId, 'spellsKnown'),
+          `${def.name} spells known limit`,
+          spells,
+          { min: 0 },
+        );
+      const ownSlots = spellSlots([
+        { progression: def.spellcasting.progression, level: entry.level },
+      ]);
+      const maximum = Math.max(
+        0,
+        ownSlots.pact?.level ?? ownSlots.max.findLastIndex((max) => max > 0),
+      );
+      stats.maxSpellLevel = scalar(
+        overridePath('spellcasting', entry.classId, 'maxSpellLevel'),
+        `${def.name} maximum spell level`,
+        maximum,
+        { min: 0, max: 9 },
+      );
+      if (isPreparedCaster2014(entry.classId))
+        stats.preparedLimit = scalar(
+          overridePath('spellcasting', entry.classId, 'preparedLimit'),
+          `${def.name} prepared spells limit`,
+          stats.maxSpellLevel === 0
+            ? 0
+            : Math.max(
+                1,
+                (entry.classId === 'class.paladin' ? Math.floor(entry.level / 2) : entry.level) +
+                  mods[ability],
+              ),
+          { min: 0 },
+        );
       return [stats];
     }),
-    slots: spellSlots(
-      classDefs.flatMap(({ entry, def }) =>
-        def.spellcasting ? [{ progression: def.spellcasting.progression, level: entry.level }] : [],
-      ),
-    ),
+    slots,
     features,
-    attacks: equipped.flatMap(({ instanceId, def }) =>
-      def.weapon ? [weaponAttack(instanceId, def, build, mods, proficiencyPart)] : [],
-    ),
+    attacks,
     conditions,
-    carryingCapacity: abilities.STR.score.value * CARRY_PER_STR,
+    carryingCapacity: scalar(
+      '/carryingCapacity',
+      'Carrying capacity',
+      abilities.STR.score.value * CARRY_PER_STR,
+      { min: 0 },
+    ),
+    ...(campaign.leveling === 'xp' && level < 20
+      ? { nextLevelXp: scalar('/nextLevelXp', 'Next level XP', xpForLevel(level + 1), { min: 0 }) }
+      : {}),
   };
+  if (
+    race.darkvision === undefined &&
+    result.darkvision === 0 &&
+    !values['/darkvision']?.stat.override
+  )
+    delete result.darkvision;
+  return result;
 }
 
 /** Label for an ability bonus source: the entry name when the source is a reference id. */
@@ -294,11 +528,7 @@ function speed(
       value: -HEAVY_ARMOR_SPEED_PENALTY,
     });
   }
-  const current = () =>
-    Math.max(
-      0,
-      parts.reduce((sum, part) => sum + part.value, 0),
-    );
+  const current = () => Math.max(0, sumParts(parts).value);
   const stopped = conditions.find((condition) => SPEED_ZERO_CONDITIONS.includes(condition));
   if (stopped || exhaustion >= 5) {
     parts.push({ label: stopped ?? 'Exhaustion', value: -current() });

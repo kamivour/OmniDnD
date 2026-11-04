@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { ABILITIES } from './calc/abilities';
 import { averageHpRoll, type HitDie } from './calc/hp';
+import { xpForLevel } from './calc/advancement';
+export { xpForLevel } from './calc/advancement';
 import { computeSheet } from './calc/sheet';
 import type { Registry } from './registry';
 import { SECONDS_PER_HOUR } from './rules2014';
@@ -31,19 +33,7 @@ export const POINT_BUY_COSTS: Readonly<Record<number, number>> = {
   15: 9,
 };
 
-/**
- * 2014 Basic Rules, Character Advancement (also SRD 5.1).
- * https://www.dndbeyond.com/sources/dnd/basic-rules-2014/step-by-step-characters#Beyond1stLevel
- */
-const XP_THRESHOLDS = [
-  0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000, 165000,
-  195000, 225000, 265000, 305000, 355000,
-] as const;
 const LevelSchema = z.int().min(1).max(20);
-
-export function xpForLevel(level: number): number {
-  return XP_THRESHOLDS[LevelSchema.parse(level) - 1]!;
-}
 
 export const CreateCharacterInputSchema = z
   .strictObject({

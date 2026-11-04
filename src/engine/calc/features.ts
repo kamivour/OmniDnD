@@ -9,6 +9,7 @@ export interface CharacterFeature {
   level: number;
   uses?: { max: number; recharge: Recharge };
   die?: Die;
+  dieOverride?: { path: string; note: string; calculated: Die; value: Die };
 }
 
 /** Value of a by-level table (`{ 1: 'd6', 5: 'd8' }`) at a level: the row with the highest key at or below it. */
@@ -43,8 +44,9 @@ export function characterFeatures(
   build: CharacterBuild,
   registry: Registry,
   ctx: FormulaContext,
+  characterLevel?: number,
 ): CharacterFeature[] {
-  const totalLevel = build.classes.reduce((sum, entry) => sum + entry.level, 0);
+  const totalLevel = characterLevel ?? build.classes.reduce((sum, entry) => sum + entry.level, 0);
   const granted: { featureId: string; level: number }[] = [];
   const atCharacterLevel = (featureId: string) => granted.push({ featureId, level: totalLevel });
 

@@ -4,6 +4,9 @@ import { completeShortRest, type ShortRestPayload } from '../../engine/commands'
 import type { HitDieName } from '../../engine/schema';
 import { useCommand } from '../commands/command-context';
 import { SectionLabel } from '../components/SectionLabel';
+import { OverrideMarker } from '../components/StatChip';
+import { resourceOverride } from '../components/resource-override';
+import { overridePath } from '../../engine/calc/value-overrides';
 import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
 import { previewShortRest, restChanges } from './rest-model';
@@ -17,7 +20,8 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
   const { run } = useCommand();
   const [rows, setRows] = useState<{ id: number; die: HitDieName; roll: string }[]>([]);
   const [selectedDie, setSelectedDie] = useState<HitDieName | ''>(sheet.hitDice[0]?.die ?? '');
-  const ownSong = sheet.features.find(({ def }) => def.id === 'feature.bard.song-of-rest')?.die;
+  const songFeature = sheet.features.find(({ def }) => def.id === 'feature.bard.song-of-rest');
+  const ownSong = songFeature?.die;
   const [songEnabled, setSongEnabled] = useState(false);
   const [songSource, setSongSource] = useState<'self' | 'other'>(ownSong ? 'self' : 'other');
   const [songRoll, setSongRoll] = useState('');
@@ -64,11 +68,22 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
         <SectionLabel>Hit Dice</SectionLabel>
         <p className="text-sm text-text-muted">
           Enter each die result. CON {signed(sheet.abilities.CON.mod)} is added automatically.
+          <OverrideMarker override={sheet.values['/abilities/CON/mod']?.stat.override} />
           Review healing before deciding to spend another die.
         </p>
         {pools.map((pool) => (
           <p key={pool.die} className="text-sm text-text">
             {pool.die}: {pool.remaining} / {pool.max} left
+            <OverrideMarker
+              override={resourceOverride(
+                state.build,
+                sheet,
+                overridePath('hitDice', pool.die, 'max'),
+                overridePath('hitDice', pool.die, 'remaining'),
+                state.live.hitDiceSpent[pool.die] ?? 0,
+                pool.max,
+              )}
+            />
           </p>
         ))}
         {pools.length === 0 && <p className="text-sm text-text-muted">No Hit Dice pool.</p>}
@@ -163,6 +178,12 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
       </section>
 
       <section className="flex flex-col gap-2" aria-label="Song of Rest">
+        {ownSong && songFeature?.dieOverride && (
+          <p className="text-sm text-text-muted">
+            Your Song of Rest die: {ownSong}
+            <OverrideMarker override={songFeature.dieOverride} />
+          </p>
+        )}
         <label className="flex min-h-11 items-center gap-2 text-sm text-text">
           <input
             type="checkbox"
