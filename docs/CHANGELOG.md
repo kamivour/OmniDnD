@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-05 10:18 — Full Phase 1 acceptance check
+
+- Verified The Fool's full session from fresh resources through combat, reactions, rests and manual corrections.
+- Shared values, required reloads and exact Undo stay consistent across Home, Spells, Combat, Explore and Sheet.
+- Review the M7 manual checklist on your own character. Installation and offline use are next. Checks pass.
+
 ## 2026-11-05 10:07 — Exploration and M7 complete
 
 - Explore brings utility spells, rituals, skills, passives and active effects together for the current character.

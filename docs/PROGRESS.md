@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M8 — Phase 1 hardening.
-**Next up:** Run the full acceptance scenario through real controls at phone and desktop widths.
+**Next up:** PWA installation and offline use after the first load.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -124,7 +124,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Exploration: reuse Dashboard GameClockControl (D91); utility spells/rituals, skills + passives, active effects
 
 ### M8 — Phase 1 hardening
-- [ ] Playwright acceptance scenario at mobile + desktop sizes
+- [x] Playwright acceptance scenario at mobile + desktop sizes
 - [ ] PWA: installable, offline after first load
 - [ ] Keyboard pass; contrast check; reduced motion check
 - [ ] No dead buttons
@@ -146,6 +146,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-05 — M8 acceptance: fresh Fool runs through combat, reactions, rests, reloads and Undo with all five screens synchronized. Next: PWA and offline use.
 - 2026-11-05 — M7 complete: Exploration reuses clock, casting, effects and Sheet checks; rituals, expiry and Undo share saved state. Next: M8 hardening.
 - 2026-11-05 — M7 level-up: review class, HP, Hit Dice and resource changes; milestone and XP prompts respect recorded advancement, warnings and Undo. Next: Exploration.
 - 2026-11-04 — M7 ability entry: rolled, array and point-buy edits separate bases from bonuses; previews and Undo preserve current resources. Next: minimal level-up.
