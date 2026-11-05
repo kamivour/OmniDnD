@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-05 16:30 — Control review and clear saving states
+
+- Settings visibly pauses preference controls during a save instead of silently ignoring changes.
+- Reviewed Phase 1 controls and verified every standard combat action, including logged Undo and manual outcomes.
+- Check the saving message and return focus on your device. Automatic backups are next. Checks pass.
+
 ## 2026-11-05 10:51 — Keyboard controls and readable states
 
 - HP keypad buttons respect Enter and Space without applying changes early.

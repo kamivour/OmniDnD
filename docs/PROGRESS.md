@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M8 — Phase 1 hardening.
-**Next up:** Review visible Phase 1 controls for dead ends, then add automatic backups.
+**Next up:** Automatic backups before import/reset and after long rest; then the agreed live-state Reset.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -127,7 +127,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Playwright acceptance scenario at mobile + desktop sizes
 - [x] PWA: installable, offline after first load
 - [x] Keyboard pass; contrast check; reduced motion check
-- [ ] No dead buttons
+- [x] No dead buttons
 - [ ] Auto backups (before import/reset, after long rest)
 - [ ] Settings reset behavior (Q20), with backup and confirmation
 - [ ] SPEC §8 checklist all true
@@ -146,6 +146,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-05 — M8 controls: preferences visibly pause while saving; Phase 1 entry points and standard actions support commands and Undo. Next: automatic backups.
 - 2026-11-05 — M8 accessibility: keypad activation, desktop Escape, focus rings and readable state labels pass keyboard and contrast checks. Next: dead-button review.
 - 2026-11-05 — M8 PWA: installation, offline routes, commands and Undo work locally; updates preserve open drafts. Next: keyboard and contrast.
 - 2026-11-05 — M8 acceptance: fresh Fool runs through combat, reactions, rests, reloads and Undo with all five screens synchronized. Next: PWA and offline use.

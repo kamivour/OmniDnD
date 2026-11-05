@@ -96,8 +96,14 @@ test('shared inputs and spell search retain keyboard rings and Damage stays read
   await readable(damage);
   // Tabs use roving arrow navigation rather than an ordinary input's Tab sequence.
   await page.keyboard.press('ArrowRight');
+  await expect(dialog.getByRole('tab', { name: 'Heal', exact: true })).toBeFocused();
+  await expect(dialog.getByRole('tab', { name: 'Heal', exact: true })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
   await page.keyboard.press('ArrowLeft');
   await expect(damage).toBeFocused();
+  await expect(damage).toHaveAttribute('aria-selected', 'true');
   await ring(damage);
   await page.screenshot({
     path: test.info().outputPath('damage-keyboard-focus.png'),

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { useStore } from 'zustand';
 import { Download, Undo2, Upload } from 'lucide-react';
 import { updatePreferences } from '../../engine/commands/preferences';
+import type { Preferences } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
 import { useManagement } from '../commands/useManagement';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
@@ -20,10 +21,25 @@ export function SettingsScreen() {
   const { pending, run, undo, confirmation } = management;
   const { openImport, exportCharacter, importControls } = useCharacterTransfer(management);
   const [selectedId, setSelectedId] = useState('');
+  const preferenceFocus = useRef<HTMLInputElement | null>(null);
   const exportId =
     characterId ??
     (Object.hasOwn(characters, selectedId) ? selectedId : Object.keys(characters)[0]);
   const last = managementEvents.findLast((event) => event.command !== 'undo' && !event.undoneBy);
+
+  const savePreferences = (preferences: Preferences) => {
+    const focused = document.activeElement;
+    const result = run(updatePreferences, preferences);
+    if (result.result === 'ok' && focused instanceof HTMLInputElement)
+      preferenceFocus.current = focused;
+  };
+  useEffect(() => {
+    if (pending) return;
+    const focused = preferenceFocus.current;
+    preferenceFocus.current = null;
+    // Native disabling can blur the input; preserve a later deliberate focus move.
+    if (document.activeElement === document.body && focused?.isConnected) focused.focus();
+  }, [pending]);
 
   return (
     <section
@@ -50,11 +66,22 @@ export function SettingsScreen() {
       <p className="text-sm text-text-muted">
         Preferences apply to every character on this device and save automatically.
       </p>
+      {pending && (
+        <p
+          id="settings-saving"
+          role="status"
+          aria-label="Preference save status"
+          className="text-sm text-text-muted"
+        >
+          Saving changes. Preferences will be available when the save finishes.
+        </p>
+      )}
       <fieldset
-        aria-disabled={pending}
+        disabled={pending}
         aria-busy={pending}
         aria-label="Preferences"
-        className="flex flex-col gap-6"
+        aria-describedby={pending ? 'settings-saving' : undefined}
+        className="flex flex-col gap-6 disabled:opacity-60"
       >
         <ChoiceGroup
           legend="Automation"
@@ -72,9 +99,7 @@ export function SettingsScreen() {
               hint: 'Track game actions without rule warnings. Invalid input stays blocked.',
             },
           ]}
-          onChange={(value) => {
-            if (!pending) run(updatePreferences, { automation: value, reducedMotion });
-          }}
+          onChange={(value) => savePreferences({ automation: value, reducedMotion })}
         />
         <section aria-labelledby="settings-motion" className="flex flex-col gap-3">
           <h2 id="settings-motion" className="text-base font-semibold">
@@ -84,10 +109,9 @@ export function SettingsScreen() {
             <input
               type="checkbox"
               checked={reducedMotion}
-              onChange={(event) => {
-                if (!pending)
-                  run(updatePreferences, { automation, reducedMotion: event.target.checked });
-              }}
+              onChange={(event) =>
+                savePreferences({ automation, reducedMotion: event.target.checked })
+              }
               className="size-4 accent-(--omni-accent)"
             />
             Always reduce motion

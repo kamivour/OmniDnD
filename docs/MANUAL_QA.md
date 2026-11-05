@@ -67,6 +67,7 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Run a short keyboard session. Judge whether focus stays obvious while correcting HP, choosing a spell, closing nested details and using Undo.
 - [ ] Compare available, used, depleted and disabled controls in Combat. Judge whether text and state markers remain clear without relying on color alone.
 - [ ] Try reduced motion on your actual devices. Judge comfort while opening previews and sheets and changing resources.
+- [ ] When Settings shows Saving, judge whether the temporary pause and return focus make the next usable control clear.
 
 ## Deferred rules review — M5
 
