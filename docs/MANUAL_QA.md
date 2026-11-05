@@ -60,7 +60,7 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Apply a noted override and inspect ✎ and its breakdown across screens. Judge whether calculated versus overridden values, Reset and normal spending after a remaining correction are understandable, including large resource totals.
 - [ ] Review rolled, standard-array and point-buy entry on your own character. Base scores, separate bonus sources, point cost and ✎ previews should make the result clear before saving.
 
-## Phase 1 — M8: hardening, in progress
+## Phase 1 — M8: hardening
 
 - [ ] Install from your phone and desktop browser, then reopen the installed app offline. Judge its icon, fonts, navigation and save feedback on the actual device.
 - [ ] Judge whether activating updates only after all app windows close fits your session habits, especially while editing a character.
@@ -69,6 +69,7 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Try reduced motion on your actual devices. Judge comfort while opening previews and sheets and changing resources.
 - [ ] When Settings shows Saving, judge whether the temporary pause and return focus make the next usable control clear.
 - [ ] Review Reset on your own character. Judge whether its preview, confirmation, retained belongings/time and backup/Undo wording make the scope clear before applying.
+- [ ] Play a full session with The Fool and try a friend's character. Judge combat pace, clear rule warnings and manual DM outcomes across screens.
 
 ## Deferred rules review — M5
 

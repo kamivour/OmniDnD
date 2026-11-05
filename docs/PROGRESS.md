@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M8 — Phase 1 hardening.
-**Next up:** Review SPEC §8 and finish the Phase 1 verification gate.
+**Current milestone:** M8 — done. Phase 1 complete.
+**Next up:** M9 — Inventory and Features. Detail its checklist before starting Phase 2 work.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -30,7 +30,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M5 | Combat (live) | 1 | done | Scenario steps 1–8 work in UI |
 | M6 | Rest + Dashboard (live) | 1 | done | Scenario steps 9–14 work in UI |
 | M7 | Character Sheet + Exploration + level-up | 1 | done | All computed values match TEST_CHARACTER §4 |
-| M8 | Phase 1 hardening | 1 | doing | Definition of done (SPEC §8) met |
+| M8 | Phase 1 hardening | 1 | done | Definition of done (SPEC §8) met |
 | M9 | Inventory + Features screen | 2 | todo | |
 | M10 | Effects editor + Conditions | 2 | todo | |
 | M11 | Campaign Setup: sources + optional rules | 2 | todo | |
@@ -130,7 +130,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] No dead buttons
 - [x] Auto backups (before import/reset, after long rest)
 - [x] Settings reset behavior (D107), with backup and confirmation
-- [ ] SPEC §8 checklist all true
+- [x] SPEC §8 checklist all true; device feel and full-session judgments remain in MANUAL_QA.md
 
 ## Backlog (not scheduled)
 
@@ -146,6 +146,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-05 — M8 complete: Phase 1 covers combat, offline play, backups, Reset and Undo. Manual device/session checks documented. Next: M9 Inventory and Features.
 - 2026-11-05 — M8 Reset: preview and confirm resource recovery, with prior-workspace backup, exact Undo and retained belongings/time. Next: Phase 1 gate.
 - 2026-11-05 — M8 backups: retain ten whole-workspace recovery points before imports/reset and after long rests; failed saves preserve Retry snapshots. Next: Settings Reset.
 - 2026-11-05 — M8 controls: preferences visibly pause while saving; Phase 1 entry points and standard actions support commands and Undo. Next: automatic backups.

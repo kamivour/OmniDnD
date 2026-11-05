@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-05 17:08 — Phase 1 complete
+
+- Phase 1 now covers combat, spells, rests, character editing, Exploration, automatic backups and confirmed Reset across phone and desktop.
+- Offline navigation, saved changes and Undo pass review; updates preserve open drafts.
+- Check installation, keyboard flow, motion, Reset scope and full-session pace using MANUAL_QA. Inventory and Features are next. Checks pass.
+
 ## 2026-11-05 16:56 — Review and reset current resources
 
 - Settings previews HP/resource recovery and removal of combat, conditions and effects before you confirm Reset.
