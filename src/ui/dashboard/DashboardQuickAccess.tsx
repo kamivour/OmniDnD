@@ -97,7 +97,7 @@ export function LiveQuickDetail({
       {entry.kind === 'unavailable' ? (
         <p className="text-sm text-text-muted">{entry.reason}</p>
       ) : entry.kind === 'item' ? (
-        <p className="text-sm text-text-muted">Item actions are coming in Phase 2.</p>
+        <p className="text-sm text-text-muted">Manage quantity and equipped gear in Inventory.</p>
       ) : (
         <p className="text-sm text-text-muted">
           This feature is a reference here. Resolve its passive or special timing at the table.

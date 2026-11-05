@@ -42,6 +42,32 @@ const effect = (fields: Partial<ActiveEffect>): ActiveEffect => ({
 });
 
 describe('computeSheet: The Fool (TEST_CHARACTER §4)', () => {
+  it.each(['race.dwarf', 'race.hill-dwarf'])(
+    'keeps %s speed in heavy armor below its STR requirement',
+    (raceId) => {
+      const equipped = wearing('item.chain-mail');
+      const dwarf: CharacterState = {
+        ...equipped,
+        build: {
+          ...equipped.build,
+          raceId: 'race.dwarf',
+          ...(raceId === 'race.dwarf' ? {} : { subraceId: raceId }),
+        },
+      };
+      expect(computeSheet(equipped, registry).speed.value).toBe(20);
+      const result = computeSheet(dwarf, registry);
+      expect(result.speed.value).toBe(25);
+      expect(result.speed.parts).not.toContainEqual(expect.objectContaining({ value: -10 }));
+      expect(
+        computeSheet({ ...dwarf, live: { ...dwarf.live, exhaustion: 2 } }, registry).speed.value,
+      ).toBe(12);
+      expect(
+        computeSheet({ ...dwarf, live: { ...dwarf.live, conditions: ['restrained'] } }, registry)
+          .speed.value,
+      ).toBe(0);
+    },
+  );
+
   it('computes ability scores, modifiers, and proficiency', () => {
     expect(sheet.level).toBe(3);
     expect(sheet.proficiency).toBe(2);

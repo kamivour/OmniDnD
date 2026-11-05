@@ -11,7 +11,15 @@ import {
   type Skill,
   type WeaponProperty,
 } from '../rules2014';
-import type { Campaign, CharacterBuild, HitDieName, ItemDef, LiveState, Modifier } from '../schema';
+import type {
+  Campaign,
+  CharacterBuild,
+  HitDieName,
+  ItemDef,
+  LiveState,
+  Modifier,
+  RaceDef,
+} from '../schema';
 import { ABILITIES, abilityModifier, type Ability } from './abilities';
 import { characterFeatures, resolveFormula, type CharacterFeature } from './features';
 import { levelHp, maxHp } from './hp';
@@ -390,8 +398,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       '/speed',
       'Speed',
       speed(
-        race.name,
-        race.speed,
+        race,
         equipped,
         abilities.STR.score.value,
         live.exhaustion,
@@ -517,17 +524,19 @@ function armorClass(equipped: Equipped, dexMod: number, extra: Part[]): Stat {
 }
 
 function speed(
-  raceName: string,
-  base: number,
+  race: RaceDef,
   equipped: Equipped,
   strScore: number,
   exhaustion: number,
   conditions: Condition[],
   extra: Part[],
 ): Stat {
-  const parts: Part[] = [{ label: raceName, value: base }, ...extra];
+  const parts: Part[] = [{ label: race.name, value: race.speed }, ...extra];
   const heavy = equipped.find(({ def }) => def.armor?.category === 'heavy')?.def;
-  if (heavy?.armor?.strMin && strScore < heavy.armor.strMin) {
+  // 2014 Dwarf Speed ignores heavy armor's STR penalty, including inherited subraces.
+  // https://www.dndbeyond.com/sources/dnd/basic-rules-2014/races#DwarfTraits
+  const dwarf = race.id === 'race.dwarf' || race.subraceOf === 'race.dwarf';
+  if (!dwarf && heavy?.armor?.strMin && strScore < heavy.armor.strMin) {
     parts.push({
       label: `${heavy.name} (STR ${heavy.armor.strMin})`,
       value: -HEAVY_ARMOR_SPEED_PENALTY,

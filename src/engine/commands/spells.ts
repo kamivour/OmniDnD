@@ -1,4 +1,5 @@
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from '../rules2014';
+import { wornArmor } from '../calc/equipment';
 import type { SpellDef } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
 import { previewSpellHealing, spellCastDetails, type SpellCastDetails } from './spell-options';
@@ -144,6 +145,13 @@ export const castSpell: Command<CastSpellPayload> = {
       slotLevel: castLevel(ctx, spell, payload),
     });
     const checks = [...deadCheck(ctx), ...slotChecks(ctx, spell, payload)];
+    const armor = wornArmor(ctx, ctx.registry).filter((entry) => !entry.proficient);
+    if (armor.length > 0)
+      checks.push(
+        warn(
+          `Cannot cast spells while wearing armor without proficiency: ${armor.map(({ def }) => def.name).join(', ')}`,
+        ),
+      );
     if (details.classId !== undefined && !details.selected)
       checks.push(warn(`${spell.name} is not selected for this casting class`));
     else if (!knowsSpell(ctx, spell.id)) checks.push(warn(`You don't know ${spell.name}`));

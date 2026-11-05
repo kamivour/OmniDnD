@@ -9,6 +9,7 @@ import { CombatScreen } from './ui/screens/CombatScreen';
 import { CharacterSheetScreen } from './ui/screens/CharacterSheetScreen';
 import { DashboardScreen } from './ui/screens/DashboardScreen';
 import { ExplorationScreen } from './ui/screens/ExplorationScreen';
+import { InventoryScreen } from './ui/screens/InventoryScreen';
 import { NewCharacterScreen } from './ui/screens/NewCharacterScreen';
 import { PlaceholderScreen } from './ui/screens/PlaceholderScreen';
 import { SpellbookScreen } from './ui/screens/SpellbookScreen';
@@ -18,7 +19,16 @@ import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { MotionPreference } from './ui/components/MotionPreference';
 import { StorageGate } from './ui/storage/StorageGate';
 
-const BUILT = new Set(['', 'sheet', 'combat', 'spells', 'explore', 'reference', 'settings']);
+const BUILT = new Set([
+  '',
+  'sheet',
+  'combat',
+  'spells',
+  'explore',
+  'inventory',
+  'reference',
+  'settings',
+]);
 
 /** Hub routes (no character open) and character routes under `/characters/:characterId`. */
 export function App() {
@@ -44,6 +54,7 @@ export function App() {
               <Route path="combat" element={<CombatScreen />} />
               <Route path="spells" element={<SpellbookScreen />} />
               <Route path="explore" element={<ExplorationScreen />} />
+              <Route path="inventory" element={<InventoryScreen />} />
               <Route path="reference" element={<ReferenceScreen />} />
               <Route path="settings" element={<SettingsScreen />} />
               {NAV.filter((n) => !BUILT.has(n.to)).map((n) => (

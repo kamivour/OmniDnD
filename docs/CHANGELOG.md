@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-05 22:16 — Live item quantities and equipment
+
+- Inventory shows each owned item, its notes and container. Adjust quantities and equipped gear without losing empty item records.
+- Armor and weapons update shared AC, speed and attacks; armor proficiency and casting warnings keep DM exceptions explicit.
+- Check duplicate items, outfit changes and Undo on phone and desktop. Adding catalogue items and editing notes are next. Checks pass.
+
 ## 2026-11-05 17:16 — Inventory and Features plan
 
 - M9 starts with owned item quantities, equipment and container groups, keeping AC and attacks shared across screens.

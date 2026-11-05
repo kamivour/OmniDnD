@@ -71,6 +71,11 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Review Reset on your own character. Judge whether its preview, confirmation, retained belongings/time and backup/Undo wording make the scope clear before applying.
 - [ ] Play a full session with The Fool and try a friend's character. Judge combat pace, clear rule warnings and manual DM outcomes across screens.
 
+## Phase 2 — M9: Inventory and Features, in progress
+
+- [ ] Browse a character with duplicate items and nested containers on phone and desktop. Judge whether notes, locations and empty quantities distinguish each copy clearly.
+- [ ] Record your actual outfit and review armor replacements, proficiency warnings and time/action reminders. Judge whether the changed AC, attacks and shared Undo make the result clear.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

@@ -171,6 +171,10 @@ interface LiveState {
 
 **Campaign ↔ character (D38):** one campaign has many characters. `CharacterBuild.campaignId` is the only link; the hub lists characters by grouping on it.
 
+**Inventory (M9):** quantity counts individual items; `bundle` describes purchase size and its listed weight/cost. Zero quantity preserves the instance and other recorded fields, while equipped benefits use only positive quantities (D109–D110).
+
+**Containers (M9):** `container` points to another item instance; display groups follow immediate containers and show nested paths. Accepted legacy circular or non-container links stay visible for review without rewriting saved records.
+
 **Concentration vs effects (D41):** `concentration` is the caster's own state; `effects` holds only effects targeting this character. Faerie Fire cast on enemies sets `concentration` and adds nothing to `effects`.
 
 **Pending concentration saves (M5):** Assisted damage records one `{ id, dc }` request per damage instance, using damage after reductions and before temporary HP. Pass removes one request; Fail ends concentration and linked effects, replacement/end/expiry clears old requests, Manual creates none, and Undo restores the exact state without legacy rewrites.

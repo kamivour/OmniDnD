@@ -35,6 +35,53 @@ function ritualCaster(classId: string, prepared?: string[]): CharacterState {
 }
 
 describe('castSpell', () => {
+  it('warns for actually worn unproficient armor and preserves explicit DM exceptions', () => {
+    const state = structuredClone(freshState);
+    state.build.items.push({ instanceId: 'untrained-chain', itemId: 'item.chain-mail' });
+    state.live.items['untrained-chain'] = { qty: 1, equipped: true, attuned: false };
+    const session = new Session(state);
+    const payload = { spellId: VICIOUS_MOCKERY };
+    expect(session.preview(castSpell, payload)).toMatchObject({
+      result: 'warn',
+      reasons: [
+        expect.stringContaining(
+          'Cannot cast spells while wearing armor without proficiency: Chain Mail',
+        ),
+      ],
+    });
+    expect(session.events).toEqual([]);
+    expect(session.state).toEqual(state);
+    session.run(castSpell, payload, true);
+    expect(session.events.at(-1)?.override).toBe(true);
+    session.undo();
+    expect(session.state).toEqual(state);
+    const proficient: CharacterState = {
+      ...state,
+      build: {
+        ...state.build,
+        proficiencies: { ...state.build.proficiencies, armor: ['light', 'heavy'] },
+      },
+    };
+    expect(new Session(proficient).preview(castSpell, payload).result).toBe('ok');
+    expect(
+      new Session(
+        withLive(state, {
+          items: {
+            ...state.live.items,
+            'untrained-chain': { qty: 0, equipped: true, attuned: false },
+          },
+        }),
+      ).preview(castSpell, payload).result,
+    ).toBe('ok');
+    const manual = runCommand(castSpell, state, payload, registry, {
+      eventId: 'manual-armor',
+      realTime: '2026-11-05T00:00:00.000Z',
+      automation: 'manual',
+    });
+    expect(manual.result).toBe('ok');
+    if (manual.result === 'ok') expect(manual.event.override).toBeUndefined();
+  });
+
   it('spends the slot and starts concentration without an effect on you (D41)', () => {
     const session = new Session();
     expect(session.run(castSpell, { spellId: FAERIE_FIRE, slotLevel: 1 })).toBe(

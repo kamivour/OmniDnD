@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M9 — Inventory and Features.
-**Next up:** Live Inventory with instance quantities, equipment and container groups; shared AC, attacks, history and Undo stay synchronized.
+**Next up:** Catalogue items: add/remove instances, choose containers and edit notes, preserving imported records and rejecting new container cycles.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -134,7 +134,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 ### M9 — Inventory + Features
 - [x] Define scope, task order and acceptance from existing item and feature data
-- [ ] Live Inventory: instance quantities, equipment toggles and container groups; AC/attacks update through logged commands
+- [x] Live Inventory: instance quantities, equipment toggles and container groups; AC/attacks update through logged commands
 - [ ] Catalogue items: add/remove instances, choose containers, edit notes; preserve legacy records and reject new container cycles
 - [ ] Currency adjustments and computed carried weight/capacity, including coins, purchase bundles and unknown weights
 - [ ] Attunement limit, item charge counters and explicit recharge prompts tied to rests/game time
@@ -157,6 +157,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-05 — M9 Inventory: independent quantities, equipment and container groups sync AC/attacks, warnings and exact Undo across reloads. Next: catalogue items and notes.
 - 2026-11-05 — M9 started: planned inventory, portable custom items, charges, consumables and Features as separate tasks. Next: quantities, equipment and container groups.
 - 2026-11-05 — M8 complete: Phase 1 covers combat, offline play, backups, Reset and Undo. Manual device/session checks documented. Next: M9 Inventory and Features.
 - 2026-11-05 — M8 Reset: preview and confirm resource recovery, with prior-workspace backup, exact Undo and retained belongings/time. Next: Phase 1 gate.

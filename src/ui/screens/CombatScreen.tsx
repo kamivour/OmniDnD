@@ -578,7 +578,10 @@ export function CombatScreen() {
           </Tabs.Content>
 
           <Tabs.Content value="items" className="flex flex-col gap-3">
-            <p className="text-sm text-text-muted">Item actions are coming in Phase 2.</p>
+            <p className="text-sm text-text-muted">
+              Manage quantity and equipped gear in Inventory. Consumable use stays manual at the
+              table.
+            </p>
           </Tabs.Content>
         </Tabs.Root>
 
