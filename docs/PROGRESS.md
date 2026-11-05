@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M9 — Inventory and Features.
-**Next up:** Currency adjustments and computed carried weight/capacity, including coins, purchase bundles and unknown weights.
+**Next up:** Attunement limit, item charge counters and explicit recharge prompts tied to rests/game time.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -137,7 +137,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Live Inventory: instance quantities, equipment toggles and container groups; AC/attacks update through logged commands
 - [x] Catalogue items: add/remove instances, choose containers, edit notes; preserve legacy records and reject new container cycles
 - [x] Reject incomplete item imports while preserving existing records and valid legacy item IDs
-- [ ] Currency adjustments and computed carried weight/capacity, including coins, purchase bundles and unknown weights
+- [x] Currency adjustments and computed carried weight/capacity, including coins, purchase bundles and unknown weights
 - [ ] Attunement limit, item charge counters and explicit recharge prompts tied to rests/game time
 - [ ] Consumables and potions: entered rolls/outcomes, 2014 combat action costs, shared Combat Items controls
 - [ ] Portable custom items, saved with the character and retained by import/export
@@ -158,6 +158,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M9 currency and weight: adjust actual coins with previews and Undo; show bundles, unknown weights and computed capacity. Next: attunement and charges.
 - 2026-11-06 — M9 imports: reject incomplete item state without changing saved data; valid legacy records retain edits and Undo. Next: currency and weight.
 - 2026-11-06 — M9 catalogue: add separate items, edit counts/notes/locations and confirm removal with retained contents and exact Undo. Next: import validation, currency and weight.
 - 2026-11-05 — M9 Inventory: independent quantities, equipment and container groups sync AC/attacks, warnings and exact Undo across reloads. Next: catalogue items and notes.

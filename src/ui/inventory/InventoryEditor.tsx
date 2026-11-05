@@ -16,6 +16,7 @@ import { Field, inputClass } from '../components/fields';
 import { Sheet } from '../components/Sheet';
 import { useCharacter } from '../hooks/useCharacter';
 import { catalogueItems, containerOptions } from './inventory-editor-model';
+import { parseWholeCount } from './whole-count';
 
 export type InventoryEditorRequest =
   { kind: 'add'; instanceId: string } | { kind: 'edit'; instanceId: string };
@@ -78,7 +79,7 @@ export function InventoryEditor({
       !currentItem ||
       !currentLive ||
       !equalData(baseline, { item: currentItem, live: currentLive }));
-  const quantityValue = quantity.trim() === '' ? NaN : Number(quantity);
+  const quantityValue = parseWholeCount(quantity) ?? NaN;
   const quantityValid = Number.isSafeInteger(quantityValue) && quantityValue >= 0;
   const options = containerOptions(
     state,

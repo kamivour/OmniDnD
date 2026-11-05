@@ -117,6 +117,8 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D109 | 2026-11-05 | Recording new body armor or a shield replaces other equipped items in that same slot; weapons and other gear remain independent. Armor time and action costs stay explicit reminders until Q26 is answered. | One chosen outfit, with manual time and hand use |
 | D110 | 2026-11-05 | Quantity zero keeps the item instance, notes, charges and equipment/attunement flags, while granting no equipment benefits. Imported conflicting outfits and container links remain visible for explicit review. | Depletion must not erase character records |
 | D111 | 2026-11-06 | Removing an item record moves its direct contents to Carried and preserves their own contents and notes. Confirmation lists the affected records before removal. | Removing a container must not silently delete its contents |
+| D112 | 2026-11-06 | Currency adjustments change the selected denomination without automatic exchange or item purchases. A preview shows the resulting coin count, value and weight. | Record the coins actually received or spent |
+| D113 | 2026-11-06 | Carried weight counts each positive item record and its contents once, plus coins; missing weights make the result incomplete. Capacity uses the shared Sheet calculation, while movement limits remain manual until M11 optional rules. | Unknown weights must not imply a complete load |
 
 ## Open questions
 

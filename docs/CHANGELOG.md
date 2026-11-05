@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 03:17 — Currency adjustments and carried weight
+
+- Add or spend actual coins with a preview, saved history and Undo. Other denominations stay separate.
+- Inventory computes value, coin weight and carried weight, including purchase bundles, and identifies missing weights beside shared carrying capacity.
+- Check coin previews and load warnings against your table's rules. Attunement and charges are next. Checks pass.
+
 ## 2026-11-06 03:00 — Reject incomplete item files safely
 
 - Character files must include recorded resources for every owned item. Invalid imports and failed loads leave saved data intact.

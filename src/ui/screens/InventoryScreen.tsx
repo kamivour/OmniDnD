@@ -13,6 +13,8 @@ import {
 } from '../inventory/InventoryItemDetails';
 import { inventoryGroups } from '../inventory/inventory-model';
 import { InventoryEditor, type InventoryEditorRequest } from '../inventory/InventoryEditor';
+import { InventoryCurrency } from '../inventory/InventoryCurrency';
+import { InventoryWeight } from '../inventory/InventoryWeight';
 import { useDetail } from '../layout/detail-context';
 
 /** Instance identity and live counts are shared with equipment calculations and character exports. */
@@ -60,17 +62,10 @@ export function InventoryScreen() {
           </ul>
         </section>
       )}
-      <section aria-label="Currency" className="rounded-card border border-border bg-surface p-3">
-        <h2 className="mb-3 text-sm font-semibold">Currency</h2>
-        <dl className="grid grid-cols-5 gap-2 text-center text-sm">
-          {(['cp', 'sp', 'ep', 'gp', 'pp'] as const).map((unit) => (
-            <div key={unit} className="min-w-0">
-              <dt className="text-xs text-text-muted">{unit}</dt>
-              <dd className="tabular-nums wrap-anywhere">{state.live.currency[unit]}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+      <div className="grid min-w-0 gap-3 @min-[680px]:grid-cols-2">
+        <InventoryCurrency />
+        <InventoryWeight />
+      </div>
       {groups.length === 0 ? (
         <h2 className="text-base font-semibold">No items recorded</h2>
       ) : (
