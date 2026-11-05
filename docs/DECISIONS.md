@@ -145,6 +145,8 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q22 | Should damage at 0 HP clear stability and add death-save failures when temporary HP absorb all of it, as D80 currently does? | review at project end | Keep current behavior unchanged until the user reviews it | User |
 | Q23 | Should Ranger companions use the PHB 2014 version or the TCE alternative? | M12 | Use PHB 2014 unless the campaign explicitly selects the TCE option | User / DM |
 | Q24 | Should Settings Reset also refill item charges or clear ordinary Inspiration? | M9 | Preserve both; Reset refills tracked class resources and leaves possessions and DM-awarded Inspiration intact | User |
+| Q25 | Which features should offer sustained on/off toggles or temporary grants? | M9 | Toggle only explicitly defined mechanics; do not invent effects from feature prose. Full temporary-effect editing remains M10 | User / DM |
+| Q26 | Should recording equipped gear automatically spend actions or advance time? | M9 | Record the actual outfit with explicit 2014 time/action reminders; the player uses the shared economy and game clock controls | User / DM |
 
 ## How to add an entry
 

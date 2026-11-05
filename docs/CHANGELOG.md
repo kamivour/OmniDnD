@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-05 17:16 — Inventory and Features plan
+
+- M9 starts with owned item quantities, equipment and container groups, keeping AC and attacks shared across screens.
+- Currency, charges, consumables, portable custom items and Features follow as separate tasks. Review this order in PROGRESS. Checks pass.
+
 ## 2026-11-05 17:08 — Phase 1 complete
 
 - Phase 1 now covers combat, spells, rests, character editing, Exploration, automatic backups and confirmed Reset across phone and desktop.
