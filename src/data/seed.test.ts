@@ -71,6 +71,93 @@ describe('The Fool seed', () => {
 });
 
 describe('ExportFileSchema cross-checks', () => {
+  function renameFirstInstance(instanceId: string) {
+    const file = structuredClone(fool);
+    const item = file.build.items[0]!;
+    const liveItem = file.live.items[item.instanceId]!;
+    delete file.live.items[item.instanceId];
+    item.instanceId = instanceId;
+    return { file, item, liveItem };
+  }
+
+  it.each(['constructor', 'toString', '__proto__'])(
+    'rejects missing own live state for legacy instance %s after a JSON round trip',
+    (instanceId) => {
+      const { file } = renameFirstInstance(instanceId);
+      const raw: unknown = JSON.parse(JSON.stringify(file));
+      const result = ExportFileSchema.safeParse(raw);
+      expect(result.success).toBe(false);
+      if (result.success) return;
+      expect(result.error.issues).toContainEqual(
+        expect.objectContaining({
+          message: `Item ${instanceId} has no live state`,
+          path: ['live', 'items'],
+        }),
+      );
+    },
+  );
+
+  it('rejects an owned __proto__ row that the live-record parser cannot retain', () => {
+    const { file, liveItem } = renameFirstInstance('__proto__');
+    file.live.items = { ...file.live.items, ...Object.fromEntries([['__proto__', liveItem]]) };
+    expect(Object.hasOwn(file.live.items, '__proto__')).toBe(true);
+    const result = ExportFileSchema.safeParse(JSON.parse(JSON.stringify(file)));
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error.issues).toContainEqual(
+      expect.objectContaining({
+        message: 'Item __proto__ has no live state',
+      }),
+    );
+  });
+
+  it.each(['legacy-rapier', 'constructor', 'toString'])(
+    'keeps valid owned %s records and their raw metadata unchanged',
+    (instanceId) => {
+      const { file, item } = renameFirstInstance(instanceId);
+      item.notes = '  Original notes\nincluding whitespace  ';
+      file.live.items = {
+        ...file.live.items,
+        [instanceId]: {
+          qty: 0,
+          equipped: true,
+          attuned: true,
+          charges: 3,
+        },
+      };
+      const raw: unknown = JSON.parse(JSON.stringify(file));
+      const parsed = ExportFileSchema.parse(raw);
+      expect(Object.hasOwn(parsed.live.items, instanceId)).toBe(true);
+      expect(parsed).toEqual(raw);
+      expect(file.live.items[instanceId]).toEqual({
+        qty: 0,
+        equipped: true,
+        attuned: true,
+        charges: 3,
+      });
+    },
+  );
+
+  it.each(['constructor', 'toString'])(
+    'still rejects an extra own live row named %s without a matching owned instance',
+    (instanceId) => {
+      const file = structuredClone(fool);
+      file.live.items = {
+        ...file.live.items,
+        [instanceId]: { qty: 1, equipped: false, attuned: false },
+      };
+      const result = ExportFileSchema.safeParse(JSON.parse(JSON.stringify(file)));
+      expect(result.success).toBe(false);
+      if (result.success) return;
+      expect(result.error.issues).toContainEqual(
+        expect.objectContaining({
+          message: `Live state has unknown item ${instanceId}`,
+          path: ['live', 'items', instanceId],
+        }),
+      );
+    },
+  );
+
   it('rejects a build from another campaign', () => {
     const file = structuredClone(seed);
     file.build.campaignId = 'campaign-999';

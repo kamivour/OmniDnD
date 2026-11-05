@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 03:00 — Reject incomplete item files safely
+
+- Character files must include recorded resources for every owned item. Invalid imports and failed loads leave saved data intact.
+- Valid legacy item records still support editing, reload and Undo. Check error wording when importing edited files. Currency and carried weight are next. Checks pass.
+
 ## 2026-11-06 02:53 — Add and organize catalogue items
 
 - Search the catalogue and record separate item copies with quantities, notes and containers. Purchase bundles suggest an initial count.

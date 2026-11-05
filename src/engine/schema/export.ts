@@ -42,7 +42,7 @@ export const ExportFileSchema = z
     // Every owned item needs a live entry (qty, equipped), and nothing else may have one.
     const instanceIds = new Set(file.build.items.map((item) => item.instanceId));
     for (const id of instanceIds) {
-      if (!(id in file.live.items)) {
+      if (!Object.hasOwn(file.live.items, id)) {
         ctx.addIssue({
           code: 'custom',
           message: `Item ${id} has no live state`,
