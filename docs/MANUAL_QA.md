@@ -60,6 +60,11 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Apply a noted override and inspect ✎ and its breakdown across screens. Judge whether calculated versus overridden values, Reset and normal spending after a remaining correction are understandable, including large resource totals.
 - [ ] Review rolled, standard-array and point-buy entry on your own character. Base scores, separate bonus sources, point cost and ✎ previews should make the result clear before saving.
 
+## Phase 1 — M8: hardening, in progress
+
+- [ ] Install from your phone and desktop browser, then reopen the installed app offline. Judge its icon, fonts, navigation and save feedback on the actual device.
+- [ ] Judge whether activating updates only after all app windows close fits your session habits, especially while editing a character.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

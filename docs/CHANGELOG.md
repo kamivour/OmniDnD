@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-05 10:33 — Installable app and offline play
+
+- Install OmniDnD from your browser and reopen character pages offline after an online visit. Local changes, reload and Undo keep working.
+- Updates wait until all app windows close, preserving an open session and unsaved drafts.
+- Check the installed icon, fonts, navigation and offline feel on your devices. Keyboard and contrast are next. Checks pass.
+
 ## 2026-11-05 10:18 — Full Phase 1 acceptance check
 
 - Verified The Fool's full session from fresh resources through combat, reactions, rests and manual corrections.

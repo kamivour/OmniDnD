@@ -244,7 +244,7 @@ Long Rest previews preserve warnings without saving; Apply uses normal command f
 
 Dashboard Quick Access uses reference-ID favorites for spells, features and items, resolving actions for each applicable class or owned item instance. The manager can remove unavailable references without rewriting unrelated entries; displayed pools stop at zero while raw overspending stays saved until explicitly corrected.
 
-Dashboard's shared Game Clock converts chosen durations to seconds and dispatches `advanceTime`; Exploration will reuse it and the same saved clock (D91). Previews never save, and unsafe elapsed-time or deadline arithmetic Blocks before mutation.
+Dashboard and Exploration share the Game Clock, which converts chosen durations to seconds and dispatches `advanceTime` (D91). Previews never save, and unsafe elapsed-time or deadline arithmetic Blocks before mutation.
 
 ## 6. Persistence
 
@@ -261,6 +261,7 @@ Dashboard's shared Game Clock converts chosen durations to seconds and dispatche
 - **Import collisions:** matching character IDs add a copy; conflicting campaign rules add a campaign. Copies retain values and choices but start fresh action histories, as explained in the import preview.
 - **Reference bookmarks (D70):** device-wide `bookmarks` stores unique `{ id, title, url }` entries with HTTP(S) URLs, managed through commands and durable Undo. Missing legacy data reads as empty, malformed data causes a load error, and character exports omit bookmarks.
 - **Device preferences (D71):** commands save and undo `automation` (default `assisted`) and `reducedMotion` (default `false`); invalid data fails loading without erasure. OS or saved motion preference enables reduced motion, and character exports omit device preferences.
+- **Offline app:** production builds cache app code, reference data, fonts and icons after an online visit; character data and history remain in Dexie. Updates wait for all open app windows to close (D106).
 
 ## 7. Summary style (house style)
 

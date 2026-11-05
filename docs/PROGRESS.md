@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M8 — Phase 1 hardening.
-**Next up:** PWA installation and offline use after the first load.
+**Next up:** Keyboard, contrast and reduced-motion hardening.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -125,7 +125,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 ### M8 — Phase 1 hardening
 - [x] Playwright acceptance scenario at mobile + desktop sizes
-- [ ] PWA: installable, offline after first load
+- [x] PWA: installable, offline after first load
 - [ ] Keyboard pass; contrast check; reduced motion check
 - [ ] No dead buttons
 - [ ] Auto backups (before import/reset, after long rest)
@@ -146,6 +146,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-05 — M8 PWA: installation, offline routes, commands and Undo work locally; updates preserve open drafts. Next: keyboard and contrast.
 - 2026-11-05 — M8 acceptance: fresh Fool runs through combat, reactions, rests, reloads and Undo with all five screens synchronized. Next: PWA and offline use.
 - 2026-11-05 — M7 complete: Exploration reuses clock, casting, effects and Sheet checks; rituals, expiry and Undo share saved state. Next: M8 hardening.
 - 2026-11-05 — M7 level-up: review class, HP, Hit Dice and resource changes; milestone and XP prompts respect recorded advancement, warnings and Undo. Next: Exploration.

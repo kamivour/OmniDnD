@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "generate:icons": "node scripts/generate-app-icons.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -b",
@@ -48,6 +49,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.1",
     "vite": "^8.3.5",
+    "vite-plugin-pwa": "^2.0.0",
     "vitest": "^5.0.5"
   }
 }
