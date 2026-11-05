@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M9 — Inventory and Features.
-**Next up:** Catalogue items: add/remove instances, choose containers and edit notes, preserving imported records and rejecting new container cycles.
+**Next up:** Reject incomplete item imports while preserving existing records; then currency adjustments and carried weight.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -135,7 +135,8 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 ### M9 — Inventory + Features
 - [x] Define scope, task order and acceptance from existing item and feature data
 - [x] Live Inventory: instance quantities, equipment toggles and container groups; AC/attacks update through logged commands
-- [ ] Catalogue items: add/remove instances, choose containers, edit notes; preserve legacy records and reject new container cycles
+- [x] Catalogue items: add/remove instances, choose containers, edit notes; preserve legacy records and reject new container cycles
+- [ ] Reject incomplete item imports while preserving existing records and valid legacy item IDs
 - [ ] Currency adjustments and computed carried weight/capacity, including coins, purchase bundles and unknown weights
 - [ ] Attunement limit, item charge counters and explicit recharge prompts tied to rests/game time
 - [ ] Consumables and potions: entered rolls/outcomes, 2014 combat action costs, shared Combat Items controls
@@ -157,6 +158,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M9 catalogue: add separate items, edit counts/notes/locations and confirm removal with retained contents and exact Undo. Next: import validation, currency and weight.
 - 2026-11-05 — M9 Inventory: independent quantities, equipment and container groups sync AC/attacks, warnings and exact Undo across reloads. Next: catalogue items and notes.
 - 2026-11-05 — M9 started: planned inventory, portable custom items, charges, consumables and Features as separate tasks. Next: quantities, equipment and container groups.
 - 2026-11-05 — M8 complete: Phase 1 covers combat, offline play, backups, Reset and Undo. Manual device/session checks documented. Next: M9 Inventory and Features.

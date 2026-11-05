@@ -1,4 +1,7 @@
+import { useRef, useState } from 'react';
+import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
+import { storageStatusStore } from '../../state/persistence';
 import { armorEquipmentNotes } from '../../engine/calc/equipment';
 import { Icon } from '../components/Icon';
 import { Preview } from '../components/Preview';
@@ -9,18 +12,37 @@ import {
   LiveInventoryItemDetail,
 } from '../inventory/InventoryItemDetails';
 import { inventoryGroups } from '../inventory/inventory-model';
+import { InventoryEditor, type InventoryEditorRequest } from '../inventory/InventoryEditor';
 import { useDetail } from '../layout/detail-context';
 
 /** Instance identity and live counts are shared with equipment calculations and character exports. */
 export function InventoryScreen() {
   const { state, sheet } = useCharacter();
   const { pin } = useDetail();
+  const [editor, setEditor] = useState<InventoryEditorRequest | null>(null);
+  const opener = useRef<HTMLElement | null>(null);
+  const addButton = useRef<HTMLButtonElement>(null);
+  const conflict = useStore(storageStatusStore, (status) => status.conflict);
   const groups = inventoryGroups(state, registry);
   const notes = armorEquipmentNotes(state, registry, sheet);
   return (
     <div className="mx-auto flex min-w-0 max-w-5xl flex-col gap-6 px-4 py-4 lg:px-6">
       <header>
-        <h1 className="font-display text-xl">Inventory</h1>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 className="font-display text-xl">Inventory</h1>
+          <button
+            ref={addButton}
+            type="button"
+            disabled={conflict}
+            onClick={(event) => {
+              opener.current = event.currentTarget;
+              setEditor({ kind: 'add', instanceId: crypto.randomUUID() });
+            }}
+            className="min-h-11 rounded-btn border border-border px-3 text-sm text-accent disabled:opacity-40"
+          >
+            Add item
+          </button>
+        </div>
         <p className="mt-2 text-sm text-text-muted">
           Record your actual equipment. Track armor time and actions with the Game Clock and Combat
           economy controls.
@@ -93,11 +115,35 @@ export function InventoryScreen() {
                   )}
                   {item.locationNote && <p className="text-sm text-warn">{item.locationNote}</p>}
                   <InventoryItemControls instanceId={item.instanceId} />
+                  <button
+                    type="button"
+                    aria-label={`Edit: ${item.def.name}`}
+                    disabled={conflict}
+                    onClick={(event) => {
+                      opener.current = event.currentTarget;
+                      setEditor({ kind: 'edit', instanceId: item.instanceId });
+                    }}
+                    className="min-h-11 rounded-btn border border-border px-3 text-sm text-accent disabled:opacity-40"
+                  >
+                    Edit
+                  </button>
                 </article>
               ))}
             </div>
           </section>
         ))
+      )}
+      {editor && (
+        <InventoryEditor
+          key={`${editor.kind}:${editor.instanceId}`}
+          request={editor}
+          onClose={() => setEditor(null)}
+          returnFocusTo={() =>
+            opener.current?.isConnected && !opener.current.matches(':disabled')
+              ? opener.current
+              : addButton.current
+          }
+        />
       )}
     </div>
   );

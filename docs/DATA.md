@@ -175,6 +175,8 @@ interface LiveState {
 
 **Containers (M9):** `container` points to another item instance; display groups follow immediate containers and show nested paths. Accepted legacy circular or non-container links stay visible for review without rewriting saved records.
 
+**Inventory editing (M9):** catalogue additions create separate instances; edits preserve item identity, equipment, attunement and charges while changing the chosen quantity, notes or location. New locations require present containers without cycles, while unchanged accepted legacy links remain recorded.
+
 **Concentration vs effects (D41):** `concentration` is the caster's own state; `effects` holds only effects targeting this character. Faerie Fire cast on enemies sets `concentration` and adds nothing to `effects`.
 
 **Pending concentration saves (M5):** Assisted damage records one `{ id, dc }` request per damage instance, using damage after reductions and before temporary HP. Pass removes one request; Fail ends concentration and linked effects, replacement/end/expiry clears old requests, Manual creates none, and Undo restores the exact state without legacy rewrites.

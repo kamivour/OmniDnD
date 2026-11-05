@@ -116,6 +116,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D108 | 2026-11-05 | Automatic backups hold the whole workspace, keeping the latest 10 on this device by save order. Import/Reset capture the prior workspace; Long Rest captures recovery, and failed saves retain that original point for Retry. | Recovery covers all campaigns together; restore controls remain Phase 4 |
 | D109 | 2026-11-05 | Recording new body armor or a shield replaces other equipped items in that same slot; weapons and other gear remain independent. Armor time and action costs stay explicit reminders until Q26 is answered. | One chosen outfit, with manual time and hand use |
 | D110 | 2026-11-05 | Quantity zero keeps the item instance, notes, charges and equipment/attunement flags, while granting no equipment benefits. Imported conflicting outfits and container links remain visible for explicit review. | Depletion must not erase character records |
+| D111 | 2026-11-06 | Removing an item record moves its direct contents to Carried and preserves their own contents and notes. Confirmation lists the affected records before removal. | Removing a container must not silently delete its contents |
 
 ## Open questions
 

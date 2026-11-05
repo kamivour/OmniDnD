@@ -75,6 +75,7 @@ Exploration shares Dashboard's GameClockControl under D91.
 
 - [ ] Browse a character with duplicate items and nested containers on phone and desktop. Judge whether notes, locations and empty quantities distinguish each copy clearly.
 - [ ] Record your actual outfit and review armor replacements, proficiency warnings and time/action reminders. Judge whether the changed AC, attacks and shared Undo make the result clear.
+- [ ] Add a catalogue item, edit its notes/location and review removal. Judge the bundle count, source warnings, Cancel and retained-contents wording before confirming.
 
 ## Deferred rules review — M5
 

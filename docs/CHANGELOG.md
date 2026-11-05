@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 02:53 — Add and organize catalogue items
+
+- Search the catalogue and record separate item copies with quantities, notes and containers. Purchase bundles suggest an initial count.
+- Edit or remove a record with shared Undo; removing a container moves direct contents to Carried and keeps nested contents linked.
+- Check Cancel, source warnings and container choices on your devices. Import validation, currency and carried weight are next. Checks pass.
+
 ## 2026-11-05 22:16 — Live item quantities and equipment
 
 - Inventory shows each owned item, its notes and container. Adjust quantities and equipped gear without losing empty item records.

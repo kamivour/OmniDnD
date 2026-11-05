@@ -8,6 +8,7 @@ export * from './favorites';
 export * from './hp';
 export * from './inspiration';
 export * from './items';
+export * from './inventory';
 export * from './edit-build';
 export * from './value-overrides';
 export * from './level';
