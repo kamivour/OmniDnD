@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M7 — Character Sheet + Exploration + level-up.
-**Next up:** Exploration, reusing Dashboard's GameClockControl with utility spells, skills and active effects.
+**Current milestone:** M8 — Phase 1 hardening.
+**Next up:** Run the full acceptance scenario through real controls at phone and desktop widths.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -29,8 +29,8 @@ Build for multiple campaigns and characters, including friends' future character
 | M4 | Spellbook (live) | 1 | done | Cast/adjust slots synced with HUD |
 | M5 | Combat (live) | 1 | done | Scenario steps 1–8 work in UI |
 | M6 | Rest + Dashboard (live) | 1 | done | Scenario steps 9–14 work in UI |
-| M7 | Character Sheet + Exploration + level-up | 1 | doing | All computed values match TEST_CHARACTER §4 |
-| M8 | Phase 1 hardening | 1 | todo | Definition of done (SPEC §8) met |
+| M7 | Character Sheet + Exploration + level-up | 1 | done | All computed values match TEST_CHARACTER §4 |
+| M8 | Phase 1 hardening | 1 | doing | Definition of done (SPEC §8) met |
 | M9 | Inventory + Features screen | 2 | todo | |
 | M10 | Effects editor + Conditions | 2 | todo | |
 | M11 | Campaign Setup: sources + optional rules | 2 | todo | |
@@ -121,7 +121,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Edit mode + overrides with ✎ marker
 - [x] Ability scores: enter base per campaign method (rolled = typed, standard array = assign, point buy = 27-point check); bonuses listed separately
 - [x] Level up (minimal): milestone button / XP threshold prompt; enter roll or take average; +1 Hit Die; XP hidden in milestone mode
-- [ ] Exploration: reuse Dashboard GameClockControl (D91); utility spells/rituals, skills + passives, active effects
+- [x] Exploration: reuse Dashboard GameClockControl (D91); utility spells/rituals, skills + passives, active effects
 
 ### M8 — Phase 1 hardening
 - [ ] Playwright acceptance scenario at mobile + desktop sizes
@@ -146,6 +146,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-05 — M7 complete: Exploration reuses clock, casting, effects and Sheet checks; rituals, expiry and Undo share saved state. Next: M8 hardening.
 - 2026-11-05 — M7 level-up: review class, HP, Hit Dice and resource changes; milestone and XP prompts respect recorded advancement, warnings and Undo. Next: Exploration.
 - 2026-11-04 — M7 ability entry: rolled, array and point-buy edits separate bases from bonuses; previews and Undo preserve current resources. Next: minimal level-up.
 - 2026-11-04 — M7 Sheet Edit: staged choices and noted overrides save, reset and undo across screens; resource corrections keep normal spending. Next: ability entry.

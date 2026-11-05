@@ -3,9 +3,9 @@ import { registry } from '../../data/registry';
 import { ABILITIES } from '../../engine/calc/abilities';
 import { sheetBreakdowns } from '../../engine/calc/sheet-breakdowns';
 import { setInspiration } from '../../engine/commands';
-import { SKILLS, SKILL_ABILITY } from '../../engine/rules2014';
 import { useCommand } from '../commands/command-context';
 import { SectionLabel } from '../components/SectionLabel';
+import { PassiveList, SkillList } from '../components/SkillChecks';
 import { OverrideMarker, StatChip } from '../components/StatChip';
 import { signed } from '../format';
 import { DeathSaveTracker } from '../health/DeathSaveTracker';
@@ -16,8 +16,6 @@ import { LevelUpControl } from '../level/LevelUpControl';
 
 const titleCase = (value: string) =>
   value.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
-const skillName = (value: string) =>
-  value === 'sleight-of-hand' ? 'Sleight of Hand' : titleCase(value);
 const card = 'flex min-w-0 flex-col gap-3 rounded-card border border-border bg-surface p-3';
 
 function ReferenceList({ label, entries }: { label: string; entries: string[] }) {
@@ -199,45 +197,11 @@ export function CharacterSheetScreen() {
         </Section>
         <div className="grid min-w-0 items-start gap-4 @min-[800px]:grid-cols-2">
           <Section label="Skills">
-            <ul className="flex min-w-0 flex-col divide-y divide-border">
-              {SKILLS.map((skill) => {
-                const stat = sheet.skills[skill];
-                const marker =
-                  stat.proficiency === 'expertise'
-                    ? 'Expertise'
-                    : stat.proficiency === 'proficient'
-                      ? 'Proficient'
-                      : stat.parts.some(({ label }) => label === 'Jack of All Trades')
-                        ? 'Jack of All Trades'
-                        : 'Untrained';
-                return (
-                  <li key={skill} className="flex min-w-0 flex-col py-1">
-                    <StatChip
-                      label={skillName(skill)}
-                      value={signed(stat.value)}
-                      stat={stat}
-                      breakdownLabel={skillName(skill)}
-                      className="w-full"
-                    />
-                    <span className="px-2 pb-1 text-xs text-text-muted">
-                      {SKILL_ABILITY[skill]} · {marker}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
+            <SkillList sheet={sheet} />
           </Section>
           <div className="flex min-w-0 flex-col gap-4">
             <Section label="Passives">
-              {(['perception', 'investigation', 'insight'] as const).map((skill) => (
-                <StatChip
-                  key={skill}
-                  label={`Passive ${titleCase(skill)}`}
-                  value={sheet.passives[skill].value}
-                  stat={sheet.passives[skill]}
-                  className="w-full"
-                />
-              ))}
+              <PassiveList sheet={sheet} />
             </Section>
             <Section label="Proficiencies">
               <dl className="flex min-w-0 flex-col gap-3">

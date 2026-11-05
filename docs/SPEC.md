@@ -133,7 +133,7 @@ The Combat screen tracks **this character's** turn: what they can still do, what
 
 ### Exploration (basic in Phase 1)
 - Reuse Dashboard's shared Game Clock control and saved clock (D91): `Day N, HH:MM`, with `+1 min · +10 min · +1 h · +8 h · custom`. No second clock or real-world timer.
-- Utility spells and rituals; same slot pool as Combat.
+- Spells with any effective Utility tag, plus rituals; keep class associations and unavailable choices visible. Casting uses the same controls and slot pool as Combat; a ritual label alone does not grant ritual eligibility.
 - Skill list with modifiers + passives.
 - Active effects with remaining time; they persist into Combat until expired or ended.
 - Light sources and timed consumables as effects (Phase 2).

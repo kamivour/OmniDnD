@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-05 10:07 — Exploration and M7 complete
+
+- Explore brings utility spells, rituals, skills, passives and active effects together for the current character.
+- The Dashboard clock and shared casting controls keep time, slots, preparation and effects consistent across screens.
+- Check phone spacing, ritual availability and skill breakdowns on your own character. M8 hardening is next. Checks pass.
+
 ## 2026-11-05 03:53 — Minimal level-up and advancement previews
 
 - Advance a recorded class using a roll or its average; review HP, Hit Dice, spell limits and changed resources before applying.

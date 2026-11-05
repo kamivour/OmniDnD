@@ -30,7 +30,7 @@ export const NAV: NavItem[] = [
   { to: 'sheet', label: 'Sheet', short: 'Sheet', icon: ScrollText },
   { to: 'spells', label: 'Spells', short: 'Spells', icon: Sparkles },
   { to: 'combat', label: 'Combat', short: 'Combat', icon: Swords },
-  { to: 'explore', label: 'Explore', short: 'Explore', icon: Compass, milestone: 'M7' },
+  { to: 'explore', label: 'Explore', short: 'Explore', icon: Compass },
   { to: 'inventory', label: 'Inventory', short: 'Inv', icon: Backpack, milestone: 'M9', phase: 2 },
   { to: 'features', label: 'Features', short: 'Features', icon: Star, milestone: 'M9', phase: 2 },
   {

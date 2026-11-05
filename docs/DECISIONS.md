@@ -110,6 +110,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D102 | 2026-11-04 | Race/subrace edits replace identifiable racial bonuses, preserving ambiguous bonuses and other grants for review. Proficiencies remain explicit choices when race or background changes. | Existing saves lack complete grant provenance |
 | D103 | 2026-11-04 | Unrecognized or unsafe saved overrides remain in the character file without affecting calculations. Replacing or resetting a supported value is explicit. | Preserve older and custom data without trusting unknown calculations |
 | D104 | 2026-11-05 | Replaces D100 for advancement: recorded class levels determine the level cap and default next-level XP threshold, even when an override changes effective character level. A direct next-level XP override still controls the XP readiness prompt. | A computed-level exception must not hide recorded advancement |
+| D105 | 2026-11-05 | Exploration lists spells with any effective Utility tag or a ritual label, retaining each casting class and unavailable choices. The shared casting controls determine preparation, ritual eligibility and combat restrictions. | A focused view must preserve the character's actual casting rules |
 
 ## Open questions
 
