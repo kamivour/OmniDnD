@@ -33,7 +33,6 @@ import { Preview } from '../components/Preview';
 import { SectionLabel } from '../components/SectionLabel';
 import { Sheet } from '../components/Sheet';
 import { SpellRow } from '../components/SpellRow';
-import { cx } from '../cx';
 import type { Cost } from '../fixtures/the-fool';
 import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
@@ -405,13 +404,12 @@ export function CombatScreen() {
                         ref={ref}
                         type="button"
                         {...props}
-                        className={cx(
-                          'hover-lift min-h-11 rounded-btn border border-border bg-surface px-3 text-sm text-text',
-                          !economy.action && 'opacity-40',
-                        )}
+                        className="hover-lift min-h-11 rounded-btn border border-border bg-surface px-3 py-1 text-sm text-text"
                       >
                         {rule.name}
-                        {!economy.action && <span className="sr-only"> (Action used)</span>}
+                        {!economy.action && (
+                          <span className="block text-xs text-text-muted"> (Action used)</span>
+                        )}
                       </button>
                     )}
                   </Preview>
@@ -626,7 +624,7 @@ export function CombatScreen() {
 function SpentNote({ what }: { what: string }) {
   return (
     <p className="text-xs text-text-muted">
-      {what} used this turn. Dimmed buttons still work; you will be asked to confirm.
+      {what} used this turn. These actions still work; you will be asked to confirm.
     </p>
   );
 }

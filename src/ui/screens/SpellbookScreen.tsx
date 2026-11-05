@@ -226,7 +226,7 @@ export function SpellbookScreen() {
                 value={filters.query}
                 onChange={(e) => set('query', e.target.value)}
                 placeholder="Search"
-                className="min-w-0 flex-1 bg-transparent text-text placeholder:text-text-muted focus:outline-none"
+                className="min-w-0 flex-1 bg-transparent text-text placeholder:text-text-muted"
               />
             </label>
             <label className="sr-only" htmlFor="spell-level">

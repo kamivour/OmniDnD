@@ -22,7 +22,7 @@ interface EconomyBarProps {
   onMove: (delta: number) => void;
 }
 
-/** Action / Bonus / Reaction chips + movement. Spent = 40 % + empty ring + text (never color alone). */
+/** Action / Bonus / Reaction chips + movement. Spent = dim empty ring + readable status text. */
 export function EconomyBar({ economy, movement, onToggle, onMove }: EconomyBarProps) {
   return (
     <div className="flex flex-col gap-2">
@@ -36,20 +36,21 @@ export function EconomyBar({ economy, movement, onToggle, onMove }: EconomyBarPr
               aria-pressed={!available}
               onClick={() => onToggle(key)}
               className={cx(
-                'flex min-h-11 items-center justify-center gap-2 rounded-btn border font-semibold',
-                'transition-opacity duration-(--omni-motion-dim)',
-                available ? 'border-accent text-text' : 'border-border text-text-muted opacity-40',
+                'flex min-h-11 flex-col items-center justify-center gap-1 rounded-btn border py-2 font-semibold',
+                available ? 'border-accent text-text' : 'border-border text-text-muted',
               )}
             >
-              <span
-                aria-hidden
-                className={cx(
-                  'size-2.5 rounded-full border',
-                  available ? 'border-accent bg-accent' : 'border-text-muted',
-                )}
-              />
-              {label}
-              <span className="sr-only">{available ? 'available' : 'used'}</span>
+              <span className="flex items-center gap-2">
+                <span
+                  aria-hidden
+                  className={cx(
+                    'size-2.5 rounded-full border transition-opacity duration-(--omni-motion-dim)',
+                    available ? 'border-accent bg-accent' : 'border-text-muted opacity-40',
+                  )}
+                />
+                {label}
+              </span>
+              <span className="text-xs font-normal">{available ? 'available' : 'used'}</span>
             </button>
           );
         })}

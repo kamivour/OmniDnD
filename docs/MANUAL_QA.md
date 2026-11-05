@@ -64,6 +64,9 @@ Exploration shares Dashboard's GameClockControl under D91.
 
 - [ ] Install from your phone and desktop browser, then reopen the installed app offline. Judge its icon, fonts, navigation and save feedback on the actual device.
 - [ ] Judge whether activating updates only after all app windows close fits your session habits, especially while editing a character.
+- [ ] Run a short keyboard session. Judge whether focus stays obvious while correcting HP, choosing a spell, closing nested details and using Undo.
+- [ ] Compare available, used, depleted and disabled controls in Combat. Judge whether text and state markers remain clear without relying on color alone.
+- [ ] Try reduced motion on your actual devices. Judge comfort while opening previews and sheets and changing resources.
 
 ## Deferred rules review — M5
 

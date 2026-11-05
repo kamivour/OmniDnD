@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { Sheet } from '../components/Sheet';
 import { useMediaQuery } from '../hooks/useMediaQuery';
@@ -41,6 +41,18 @@ export function DetailProvider({ children }: { children: ReactNode }) {
 export function DetailPanel() {
   const { content, open, setOpen, restoreFocus } = useDetail();
   const desktop = useMediaQuery('(min-width: 1024px)');
+  useEffect(() => {
+    if (!desktop || !open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || event.defaultPrevented || event.isComposing) return;
+      event.preventDefault();
+      setOpen(false);
+    };
+    // The opener can retain focus after pinning. Bubble after Radix/Floating UI so
+    // their dialogs and previews consume Escape before dismissing these details.
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [desktop, open, setOpen]);
   const body = content ?? (
     <p className="text-text-muted">Select a spell, resource, or action to see its details.</p>
   );

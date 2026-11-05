@@ -17,7 +17,7 @@ interface ActionRowProps {
   onAction: MouseEventHandler<HTMLButtonElement>;
   /** Disable only actions that cannot be used in the current context. */
   disabled?: boolean;
-  /** The economy slot this costs is spent. Dims the button; it still works (warns later, D10). */
+  /** The economy slot this costs is spent. Shows its status; it still works (warns later, D10). */
   spent?: string;
   /** Keep choices reachable while indicating an unavailable resource. */
   unavailable?: boolean;
@@ -69,7 +69,10 @@ export function ActionRow({
             <Icon
               id={iconId}
               fallback={fallbackIconId}
-              className="text-text-muted transition-colors duration-(--omni-motion-hover) group-hover:text-accent"
+              className={cx(
+                'text-text-muted transition-colors duration-(--omni-motion-hover) group-hover:text-accent',
+                (spent || unavailable) && 'opacity-40',
+              )}
             />
             <span className="min-w-0 flex-1">
               <span className="flex items-center gap-1.5">
@@ -92,14 +95,18 @@ export function ActionRow({
         onClick={onAction}
         disabled={disabled}
         className={cx(
-          'hover-lift min-h-11 shrink-0 rounded-btn border border-border bg-surface-2 px-3 font-semibold text-accent',
-          'transition-opacity duration-(--omni-motion-dim)',
+          'hover-lift flex min-h-11 shrink-0 flex-col items-center justify-center rounded-btn border border-border bg-surface-2 px-3 py-1 font-semibold text-accent',
           'disabled:cursor-not-allowed disabled:opacity-40',
-          (spent || unavailable) && 'opacity-40',
         )}
       >
         {actionLabel}
         {spent && <span className="sr-only"> ({spent} used)</span>}
+        {(spent || unavailable) && (
+          <span aria-hidden className="max-w-20 text-center text-xs font-normal text-text-muted">
+            {spent && <span className="block">{spent} used</span>}
+            {unavailable && <span className="block">Unavailable</span>}
+          </span>
+        )}
       </button>
     </li>
   );

@@ -24,7 +24,7 @@ Defined as CSS variables on `:root`; Tailwind reads them (`bg-surface`, `text-ac
 | `text-muted` | `#8B95A8` | Labels, secondary text, icons at rest |
 | `accent` | `#CFAE72` | Primary buttons, selection, focus ring |
 | `magic` | `#64CDD2` | Spell slots, concentration, spell effects |
-| `danger` | `#D7606C` | Damage, low HP, destructive actions |
+| `danger` | `#DF7580` | Damage, low HP, destructive actions |
 | `heal` | `#7FC08F` | Healing, success |
 | `temp` | `#8FA8E0` | Temp HP |
 | `warn` | `#E0A458` | Warnings, overrides |
@@ -71,7 +71,7 @@ Only these animations exist. Anything else needs a DECISIONS.md entry.
 | Bottom sheet | slide up | 180 ms |
 | Slot pip / resource pip | fill ↔ empty | 150 ms |
 | HP bar | width change | 200 ms |
-| Used action / depleted item | dim to 40 % opacity | 120 ms |
+| Used action / depleted item marker | dim to 40 % opacity | 120 ms |
 
 `prefers-reduced-motion` or the Settings toggle sets all durations to 0.
 
@@ -83,7 +83,7 @@ Only these animations exist. Anything else needs a DECISIONS.md entry.
 - **Toasts** after commands show short feedback for 5 s; character Undo stays in the shared status row. Hub management feedback may offer Undo.
 - **States** (never color alone; always add icon or text):
   - available — normal
-  - used / depleted — 40 % opacity, empty pips
+  - used / depleted — empty or dimmed pips and visible status text; enabled labels and focus rings remain opaque
   - concentrating — `magic` left border + "C" chip
   - active effect — `magic` chip with timer
   - warning / override — `warn` color + ✎ or ⚠ icon

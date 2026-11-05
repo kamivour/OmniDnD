@@ -270,8 +270,11 @@ export function HpNumberPad({
   const onKeyDown = (e: KeyboardEvent) => {
     if (/^\d$/.test(e.key)) press(e.key);
     else if (e.key === 'Backspace') back();
-    else if (e.key === 'Enter' && amount > 0) submit();
-    else return;
+    else if (e.key === 'Enter' && amount > 0) {
+      // A focused keypad button owns Enter through its native click behavior.
+      if (e.target instanceof Element && e.target.closest('button')) return;
+      submit();
+    } else return;
     e.preventDefault();
   };
 

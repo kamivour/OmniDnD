@@ -68,6 +68,59 @@ test.describe('desktop shell', () => {
       'Healing Word',
     );
   });
+
+  test('Escape closes keyboard-pinned details after nested dialogs and previews', async ({
+    page,
+  }, info) => {
+    test.skip(info.project.name !== 'desktop', 'desktop pinned detail only');
+    await page.goto(spellPath);
+    const trigger = healingWord(page);
+    const panel = page.getByRole('complementary', { name: 'Pinned detail' });
+    const detailToggle = page.getByRole('button', { name: 'Open details', exact: true });
+
+    await trigger.press('Enter');
+    await expect(panel).toContainText('Healing Word');
+    await expect(trigger).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(panel).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    await detailToggle.press('Enter');
+    await expect(panel).toContainText('Healing Word');
+    await panel.getByRole('button', { name: 'Close details', exact: true }).focus();
+    await page.keyboard.press('Escape');
+    await expect(panel).toBeHidden();
+    await expect(detailToggle).toBeFocused();
+
+    await detailToggle.press('Enter');
+    const hpTrigger = page.getByRole('button', { name: 'Adjust hit points', exact: true });
+    await hpTrigger.press('Enter');
+    const hpDialog = page.getByRole('dialog', { name: 'Hit points', exact: true });
+    await expect(hpDialog).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(hpDialog).toBeHidden();
+    await expect(hpTrigger).toBeFocused();
+    await expect(panel).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(panel).toBeHidden();
+    await expect(detailToggle).toBeFocused();
+
+    await detailToggle.press('Enter');
+    const previewTrigger = page.getByRole('main').getByRole('button', { name: /^Suggestion/ });
+    await previewTrigger.focus();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Tab');
+    await expect(previewTrigger).toBeFocused();
+    const preview = page.getByRole('tooltip');
+    await expect(preview).toContainText('Suggestion');
+    await page.keyboard.press('Escape');
+    await expect(preview).toBeHidden();
+    await expect(previewTrigger).toBeFocused();
+    await expect(panel).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(panel).toBeHidden();
+    await expect(detailToggle).toBeFocused();
+  });
 });
 
 for (const touch of [false, true]) {

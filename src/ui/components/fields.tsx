@@ -4,7 +4,7 @@ import type { Option } from '../campaignOptions';
 
 /** Shared form styles for setup screens. */
 export const inputClass =
-  'min-h-11 w-full rounded-btn border border-border bg-surface px-3 text-text placeholder:text-text-muted focus:border-accent focus:outline-none';
+  'min-h-11 w-full rounded-btn border border-border bg-surface px-3 text-text placeholder:text-text-muted focus:border-accent';
 
 export function Field({
   label,

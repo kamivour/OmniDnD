@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-05 10:51 — Keyboard controls and readable states
+
+- HP keypad buttons respect Enter and Space without applying changes early.
+- Inputs keep clear focus rings; Escape closes desktop details after nested dialogs and previews finish.
+- Damage text and used controls stay readable, with visible state labels.
+- Check keyboard flow, focus and colors on your devices. Dead-button review is next. Checks pass.
+
 ## 2026-11-05 10:33 — Installable app and offline play
 
 - Install OmniDnD from your browser and reopen character pages offline after an online visit. Local changes, reload and Undo keep working.
