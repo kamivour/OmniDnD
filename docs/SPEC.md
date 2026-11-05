@@ -206,6 +206,8 @@ New campaign defaults (D40, D44): XP leveling, average HP, allow negative level 
 ### Settings
 Theme, reduced motion, automation level (**Assisted:** validate + warn · **Manual:** track only, no warnings), export/import JSON, backups, reset character.
 
+Reset previews and confirms the current character's HP/resource refill and removal of combat, conditions and effects, with a prior-workspace backup and logged Undo (D107). Build choices, inventory, money, game time, history, ordinary Inspiration and item charges stay; the hub links to the selected character's Settings.
+
 ## 6. Rules engine
 
 Separate module (`src/engine/`). Pure functions + commands. UI calls commands; engine returns new state, warnings, and a log event.

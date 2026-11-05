@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-05 16:56 — Review and reset current resources
+
+- Settings previews HP/resource recovery and removal of combat, conditions and effects before you confirm Reset.
+- Build choices, belongings, money, time and history stay. A local backup and shared Undo preserve the previous character.
+- Check Reset's scope on your own character, including Inspiration and item charges staying recorded. Phase 1 review is next. Checks pass.
+
 ## 2026-11-05 16:45 — Automatic local recovery points
 
 - Imports and completed Long Rests now keep automatic workspace backups, covering every campaign and character. The latest 10 stay on this device.

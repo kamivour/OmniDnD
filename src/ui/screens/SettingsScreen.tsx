@@ -8,6 +8,7 @@ import { characterStore } from '../../state/character-store';
 import { useManagement } from '../commands/useManagement';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { ChoiceGroup, Field, inputClass } from '../components/fields';
+import { ResetCharacterControl } from '../settings/ResetCharacterControl';
 import { cx } from '../cx';
 
 const button =
@@ -179,6 +180,27 @@ export function SettingsScreen() {
           Import previews before saving and keeps existing characters and campaign rules.
         </p>
       </section>
+      {characterId ? (
+        <ResetCharacterControl />
+      ) : exportId ? (
+        <section
+          aria-labelledby="settings-reset"
+          className="flex flex-col gap-3 rounded-card border border-border bg-surface p-4"
+        >
+          <h2 id="settings-reset" className="text-base font-semibold">
+            Reset character
+          </h2>
+          <p className="text-sm text-text-muted">
+            Review and reset current resources from the selected character’s Settings.
+          </p>
+          <Link
+            to={`/characters/${encodeURIComponent(exportId)}/settings`}
+            className={`${button} self-start text-danger`}
+          >
+            Review reset for {characters[exportId]?.build.name}
+          </Link>
+        </section>
+      ) : null}
       <Link to="/" className="inline-flex min-h-11 items-center text-sm text-accent">
         All campaigns
       </Link>

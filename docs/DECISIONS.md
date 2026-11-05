@@ -112,7 +112,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D104 | 2026-11-05 | Replaces D100 for advancement: recorded class levels determine the level cap and default next-level XP threshold, even when an override changes effective character level. A direct next-level XP override still controls the XP readiness prompt. | A computed-level exception must not hide recorded advancement |
 | D105 | 2026-11-05 | Exploration lists spells with any effective Utility tag or a ritual label, retaining each casting class and unavailable choices. The shared casting controls determine preparation, ritual eligibility and combat restrictions. | A focused view must preserve the character's actual casting rules |
 | D106 | 2026-11-05 | App updates activate after all open app windows close. An ongoing session and unsaved drafts stay on the current version until then. | Updates should respect play and editing |
-| D107 | 2026-11-05 | Settings Reset will refill HP/resources and clear combat, conditions and effects, preserving build choices, inventory, money, game time and history. It requires a preview, confirmation, backup and Undo. | User chose live state only; answers Q20 |
+| D107 | 2026-11-05 | Settings Reset refills HP/resources and clears combat, conditions and effects, preserving build choices, inventory, money, game time and history. It requires a preview, confirmation, backup and Undo. | User chose live state only; answers Q20 |
 | D108 | 2026-11-05 | Automatic backups hold the whole workspace, keeping the latest 10 on this device by save order. Import/Reset capture the prior workspace; Long Rest captures recovery, and failed saves retain that original point for Retry. | Recovery covers all campaigns together; restore controls remain Phase 4 |
 
 ## Open questions
@@ -144,6 +144,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q21 | At already 0 HP, does instant death compare maximum HP with damage taken before temporary-HP absorption, or only damage remaining afterward? | M5 | Preserve the existing remainder-based threshold. When those interpretations differ, Assisted mode shows a DM-review note and logs it; Manual suppresses the Info reminder. Damage and death-save counters remain undoable. No official worked example for this interaction was found | DM |
 | Q22 | Should damage at 0 HP clear stability and add death-save failures when temporary HP absorb all of it, as D80 currently does? | review at project end | Keep current behavior unchanged until the user reviews it | User |
 | Q23 | Should Ranger companions use the PHB 2014 version or the TCE alternative? | M12 | Use PHB 2014 unless the campaign explicitly selects the TCE option | User / DM |
+| Q24 | Should Settings Reset also refill item charges or clear ordinary Inspiration? | M9 | Preserve both; Reset refills tracked class resources and leaves possessions and DM-awarded Inspiration intact | User |
 
 ## How to add an entry
 

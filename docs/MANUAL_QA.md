@@ -68,6 +68,7 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Compare available, used, depleted and disabled controls in Combat. Judge whether text and state markers remain clear without relying on color alone.
 - [ ] Try reduced motion on your actual devices. Judge comfort while opening previews and sheets and changing resources.
 - [ ] When Settings shows Saving, judge whether the temporary pause and return focus make the next usable control clear.
+- [ ] Review Reset on your own character. Judge whether its preview, confirmation, retained belongings/time and backup/Undo wording make the scope clear before applying.
 
 ## Deferred rules review — M5
 

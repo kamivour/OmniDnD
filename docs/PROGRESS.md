@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M8 — Phase 1 hardening.
-**Next up:** Settings Reset with the agreed live-state scope, preview, confirmation and automatic backup.
+**Next up:** Review SPEC §8 and finish the Phase 1 verification gate.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -129,7 +129,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] Keyboard pass; contrast check; reduced motion check
 - [x] No dead buttons
 - [x] Auto backups (before import/reset, after long rest)
-- [ ] Settings reset behavior (Q20), with backup and confirmation
+- [x] Settings reset behavior (D107), with backup and confirmation
 - [ ] SPEC §8 checklist all true
 
 ## Backlog (not scheduled)
@@ -144,10 +144,10 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 
 ## Session log
 
-- 2026-11-05 — M8 backups: retain ten whole-workspace recovery points before imports/reset and after long rests; failed saves preserve Retry snapshots. Next: Settings Reset.
-
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-05 — M8 Reset: preview and confirm resource recovery, with prior-workspace backup, exact Undo and retained belongings/time. Next: Phase 1 gate.
+- 2026-11-05 — M8 backups: retain ten whole-workspace recovery points before imports/reset and after long rests; failed saves preserve Retry snapshots. Next: Settings Reset.
 - 2026-11-05 — M8 controls: preferences visibly pause while saving; Phase 1 entry points and standard actions support commands and Undo. Next: automatic backups.
 - 2026-11-05 — M8 accessibility: keypad activation, desktop Escape, focus rings and readable state labels pass keyboard and contrast checks. Next: dead-button review.
 - 2026-11-05 — M8 PWA: installation, offline routes, commands and Undo work locally; updates preserve open drafts. Next: keyboard and contrast.
