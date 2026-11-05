@@ -314,6 +314,16 @@ export const addCharacter: ManagementCommand<{ file: ExportFile }> = {
   },
 };
 
+/** Imports share creation validation while retaining their recovery boundary in history. */
+export const importCharacter: ManagementCommand<{ file: ExportFile }> = {
+  ...addCharacter,
+  name: 'importCharacter',
+  apply: (draft, payload, ctx) => {
+    addCharacter.apply(draft, payload, ctx);
+    return `Import character: ${payload.file.build.name}`;
+  },
+};
+
 export const duplicateCharacter: ManagementCommand<{ sourceId: string; id: string; name: string }> =
   {
     name: 'duplicateCharacter',

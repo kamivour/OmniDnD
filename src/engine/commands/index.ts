@@ -11,6 +11,7 @@ export * from './edit-build';
 export * from './value-overrides';
 export * from './level';
 export * from './rest';
+export * from './reset';
 export * from './spells';
 export * from './spell-options';
 export * from './spell-selection';

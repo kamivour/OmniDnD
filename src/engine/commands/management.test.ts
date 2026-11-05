@@ -8,6 +8,7 @@ import {
   createCampaign,
   deleteCharacter,
   duplicateCharacter,
+  importCharacter,
   ManagementEventSchema,
   runManagement,
   undoManagement,
@@ -45,6 +46,19 @@ function playedFile(): ExportFile {
 }
 
 describe('management commands', () => {
+  it('distinguishes file import from creation and restores the entire workspace on Undo', () => {
+    const input = structuredClone(seedFile);
+    const { next, event } = run(importCharacter, empty, { file: input });
+    expect(next).toEqual(workspace());
+    expect(event).toMatchObject({ command: 'importCharacter', text: 'Import character: The Fool' });
+    const undone = undoManagement(next, [event], registry, metadata('undo-import'));
+    expect(undone.result).toBe('ok');
+    if (undone.result === 'ok') expect(undone.next).toEqual(empty);
+    expect(
+      runManagement(importCharacter, next, { file: input }, registry, metadata('again')),
+    ).toMatchObject({ result: 'blocked' });
+  });
+
   it('adds a character and its campaign with a separate, valid workspace event', () => {
     const input = structuredClone(seedFile);
     const { next, event, reasons } = run(addCharacter, empty, { file: input });

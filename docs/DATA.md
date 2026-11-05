@@ -252,7 +252,8 @@ Dashboard and Exploration share the Game Clock, which converts chosen durations 
 - Write after every command. Zustand store mirrors the active character for the UI.
 - `schemaVersion` on every saved record. Migrations in `src/db/migrations/` as pure functions (vN → vN+1), unit-tested.
 - **Export:** `{ app: 'omnidnd', schemaVersion, exportedAt, build, live, events, campaign }` (`ExportFileSchema`; the seed `data/characters/the-fool.json` uses the same shape, D49). **Import:** zod-validate → migrate → preview → save.
-- **Auto backups:** before import, before reset, after each long rest. Keep the last 10.
+- **Auto backups (D108):** save the whole workspace before import/reset and after a completed long rest; keep the latest 10 on this device. Backup and command save together; Retry preserves the original recovery point.
+- **Backup retention:** use local save order, independent of clock changes; unrelated, damaged or newer-format backup records stay untouched. Backups exclude themselves, user packs and unrelated settings; a backup browser and restore controls remain Phase 4.
 - **Stored rows (M3):** `{ id, schemaVersion, data }`; event rows also have `characterId` and a stable `order`, with compound primary key `[characterId + id]`. This keeps identical imported event IDs on different characters separate.
 - **Atomic saves:** builds, live states, logs and campaigns save together; success feedback waits for completion. Startup validates records and remaining Undo history, preserving invalid data with a load error.
 - **Window conflicts:** each save checks `workspaceRevision`; stale windows retain unsaved changes with an explicit conflict message. Retry never forces an overwrite.
@@ -262,6 +263,19 @@ Dashboard and Exploration share the Game Clock, which converts chosen durations 
 - **Reference bookmarks (D70):** device-wide `bookmarks` stores unique `{ id, title, url }` entries with HTTP(S) URLs, managed through commands and durable Undo. Missing legacy data reads as empty, malformed data causes a load error, and character exports omit bookmarks.
 - **Device preferences (D71):** commands save and undo `automation` (default `assisted`) and `reducedMotion` (default `false`); invalid data fails loading without erasure. OS or saved motion preference enables reduced motion, and character exports omit device preferences.
 - **Offline app:** production builds cache app code, reference data, fonts and icons after an online visit; character data and history remain in Dexie. Updates wait for all open app windows to close (D106).
+
+```ts
+// backups table: StoredRecord<WorkspaceBackup>; schemaVersion remains 1.
+type WorkspaceBackup = {
+  kind: 'omnidnd-workspace-backup';
+  payloadVersion: 1;
+  reason: 'before-import' | 'before-reset' | 'after-long-rest';
+  capturedAt: string; // Real UTC time, for display only.
+  order: number; // Monotonic device-local save order.
+  source: ActivityReference;
+  workspace: WorkspaceRows; // Campaigns, characters, histories, preferences and bookmarks.
+};
+```
 
 ## 7. Summary style (house style)
 

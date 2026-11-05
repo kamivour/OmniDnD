@@ -113,6 +113,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D105 | 2026-11-05 | Exploration lists spells with any effective Utility tag or a ritual label, retaining each casting class and unavailable choices. The shared casting controls determine preparation, ritual eligibility and combat restrictions. | A focused view must preserve the character's actual casting rules |
 | D106 | 2026-11-05 | App updates activate after all open app windows close. An ongoing session and unsaved drafts stay on the current version until then. | Updates should respect play and editing |
 | D107 | 2026-11-05 | Settings Reset will refill HP/resources and clear combat, conditions and effects, preserving build choices, inventory, money, game time and history. It requires a preview, confirmation, backup and Undo. | User chose live state only; answers Q20 |
+| D108 | 2026-11-05 | Automatic backups hold the whole workspace, keeping the latest 10 on this device by save order. Import/Reset capture the prior workspace; Long Rest captures recovery, and failed saves retain that original point for Retry. | Recovery covers all campaigns together; restore controls remain Phase 4 |
 
 ## Open questions
 

@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M8 — Phase 1 hardening.
-**Next up:** Automatic backups before import/reset and after long rest; then the agreed live-state Reset.
+**Next up:** Settings Reset with the agreed live-state scope, preview, confirmation and automatic backup.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -128,7 +128,7 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - [x] PWA: installable, offline after first load
 - [x] Keyboard pass; contrast check; reduced motion check
 - [x] No dead buttons
-- [ ] Auto backups (before import/reset, after long rest)
+- [x] Auto backups (before import/reset, after long rest)
 - [ ] Settings reset behavior (Q20), with backup and confirmation
 - [ ] SPEC §8 checklist all true
 
@@ -143,6 +143,8 @@ Phase 2+ milestones get detailed checklists when Phase 1 is done.
 - Session recap generated from the event log
 
 ## Session log
+
+- 2026-11-05 — M8 backups: retain ten whole-workspace recovery points before imports/reset and after long rests; failed saves preserve Retry snapshots. Next: Settings Reset.
 
 Newest first. One line per task, about 25 words at most.
 

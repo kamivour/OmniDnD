@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-05 16:45 — Automatic local recovery points
+
+- Imports and completed Long Rests now keep automatic workspace backups, covering every campaign and character. The latest 10 stay on this device.
+- Failed saves preserve the original recovery point for Retry. Reset's backup support is ready; its Settings control is next.
+- Check the import preview wording. Backup browsing and restore controls come in Phase 4. Checks pass.
+
 ## 2026-11-05 16:30 — Control review and clear saving states
 
 - Settings visibly pauses preference controls during a save instead of silently ignoring changes.

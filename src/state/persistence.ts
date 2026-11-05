@@ -14,6 +14,7 @@ import { characterStore, createCharacterStore } from './character-store';
 import { ManagementEventSchema } from '../engine/commands/management';
 import { BookmarkSchema, PreferencesSchema } from '../engine/schema';
 import { ActivityOrderSchema } from './activity-order';
+import { createBackupIntent, planBackups, type BackupIntent } from '../db/backups';
 
 interface StorageStatus {
   ready: boolean;
@@ -36,6 +37,8 @@ let initialization: Promise<void> | undefined;
 let subscribed = false;
 let writeQueue: Promise<void> = Promise.resolve();
 let workspaceRevision = 0;
+// Intent payloads capture command-time state. Retry must never reconstruct them from later edits.
+const pendingBackups = new Map<string, BackupIntent>();
 
 export class WorkspaceConflictError extends Error {
   constructor() {
@@ -85,14 +88,27 @@ async function replaceRows(rows: WorkspaceRows) {
   ]);
 }
 
-async function saveWorkspace(snapshot: Workspace) {
+async function saveWorkspace(snapshot: Workspace, backups: BackupIntent[]) {
   const rows = serializeWorkspace(snapshot);
   const nextRevision = await database.transaction(
     'rw',
-    [database.builds, database.live, database.events, database.campaigns, database.settings],
+    [
+      database.builds,
+      database.live,
+      database.events,
+      database.campaigns,
+      database.settings,
+      database.backups,
+    ],
     async () => {
       const currentRevision = await readRevision();
       if (currentRevision !== workspaceRevision) throw new WorkspaceConflictError();
+      if (backups.length > 0) {
+        const plan = planBackups(await database.backups.toArray(), backups);
+        // add (rather than put) makes an unexpected id collision fail without replacing recovery data.
+        await database.backups.bulkAdd(plan.add);
+        await database.backups.bulkDelete(plan.remove);
+      }
       await replaceRows(rows);
       const next = currentRevision + 1;
       await database.settings.put(storedRecord('workspaceRevision', next));
@@ -160,12 +176,19 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
 }
 
 function enqueueSave(snapshot: Workspace) {
+  // Older queued snapshots cannot commit recovery points for commands that happened after them.
+  const eligibleBackups = [...pendingBackups.keys()];
   storageStatusStore.setState((status) => ({ pending: status.pending + 1 }));
   const operation = writeQueue
     .catch(() => undefined)
     .then(async () => {
       try {
-        await saveWorkspace(snapshot);
+        const backups = eligibleBackups.flatMap((id) => {
+          const intent = pendingBackups.get(id);
+          return intent ? [intent] : [];
+        });
+        await saveWorkspace(snapshot, backups);
+        backups.forEach(({ id }) => pendingBackups.delete(id));
         storageStatusStore.setState({ error: null, persistent: true, conflict: false });
       } catch (cause) {
         const error = storageError(cause);
@@ -207,6 +230,11 @@ export function initializePersistence(): Promise<void> {
             next.bookmarks !== previous.bookmarks ||
             next.activityOrder !== previous.activityOrder
           ) {
+            const backup = createBackupIntent(previous, next, {
+              id: `backup:${crypto.randomUUID()}`,
+              capturedAt: new Date().toISOString(),
+            });
+            if (backup) pendingBackups.set(backup.id, backup);
             enqueueSave({
               characters: next.characters,
               campaigns: next.campaigns,

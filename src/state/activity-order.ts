@@ -72,6 +72,24 @@ export interface ActivityState {
   activityOrder?: ActivityReference[];
 }
 
+/** Resolve only the exact local event, including its immutable content identity. */
+export function resolveActivity(
+  state: ActivityState,
+  reference: ActivityReference,
+): CharacterActivity | undefined {
+  const events =
+    reference.scope === 'character'
+      ? state.characters[reference.characterId]?.events
+      : state.managementEvents;
+  const event = events?.findLast(
+    (entry) => entry.id === reference.eventId && eventFingerprint(entry) === reference.fingerprint,
+  );
+  if (!event) return undefined;
+  return reference.scope === 'character'
+    ? { scope: 'character', event: event as LogEvent }
+    : { scope: 'workspace', event: event as ManagementEvent };
+}
+
 /** Merge only the active character and shared history, preserving each source's saved order. */
 export function characterActivity(state: ActivityState, characterId: string): CharacterActivity[] {
   const ranks = new Map((state.activityOrder ?? []).map((ref, rank) => [referenceKey(ref), rank]));

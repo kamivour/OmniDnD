@@ -3,7 +3,7 @@ import { ZodError } from 'zod';
 import { characterExport, prepareCharacterImport } from '../../data/character-files';
 import { registry } from '../../data/registry';
 import { computeSheet } from '../../engine/calc/sheet';
-import { addCharacter } from '../../engine/commands/management';
+import { importCharacter } from '../../engine/commands/management';
 import type { ExportFile } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
 import { Sheet } from '../components/Sheet';
@@ -122,12 +122,15 @@ export function useCharacterTransfer({
               ))}
             </ul>
             <p className="mb-4 text-sm text-text-muted">
-              Existing characters and campaign rules remain saved.
+              Existing characters and campaign rules remain saved. A local backup is saved before
+              adding this import.
             </p>
             <button
               type="button"
               disabled={pending}
-              onClick={() => run(addCharacter, { file: importing.file }, () => setImporting(null))}
+              onClick={() =>
+                run(importCharacter, { file: importing.file }, () => setImporting(null))
+              }
               className={`${button} w-full`}
             >
               Add character

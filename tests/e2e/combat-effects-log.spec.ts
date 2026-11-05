@@ -403,7 +403,9 @@ test('imported timers distinguish game time, no timer, and expired entries witho
   await expect(effectRow(page, longName)).toContainText('Until removed');
   await expect(effectRow(page, 'Seven Second Ward')).toContainText('7 s left');
   await expect(effectRow(page, 'Expired Imported Ward')).toContainText('Expired');
-  await expect(viewLog(page)).toContainText('Workspace · Add character: effects-imported-timers');
+  await expect(viewLog(page)).toContainText(
+    'Workspace · Import character: effects-imported-timers',
+  );
   await expect(combatUndo(page)).toBeEnabled();
   const longLabel = effectRow(page, longName).getByText(longName, { exact: true });
   expect(
