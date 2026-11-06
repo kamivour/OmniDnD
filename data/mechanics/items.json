@@ -120,79 +120,92 @@
   {
     "id": "item.potion-of-animal-friendship",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-clairvoyance",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-climbing",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-diminution",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-flying",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-gaseous-form",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-giant-strength-cloud",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-giant-strength-fire",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-giant-strength-frost",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-giant-strength-hill",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-giant-strength-stone",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-giant-strength-storm",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-growth",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
@@ -202,7 +215,8 @@
       "healing": {
         "dice": "2d4",
         "bonus": 2
-      }
+      },
+      "potion": true
     }
   },
   {
@@ -212,7 +226,8 @@
       "healing": {
         "dice": "4d4",
         "bonus": 4
-      }
+      },
+      "potion": true
     }
   },
   {
@@ -222,7 +237,8 @@
       "healing": {
         "dice": "8d4",
         "bonus": 8
-      }
+      },
+      "potion": true
     }
   },
   {
@@ -232,103 +248,120 @@
       "healing": {
         "dice": "10d4",
         "bonus": 20
-      }
+      },
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-heroism",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-invisibility",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-mind-reading",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-poison",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-resistance-acid",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-resistance-cold",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-resistance-fire",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-resistance-force",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-resistance-lightning",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-resistance-necrotic",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-resistance-poison",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-resistance-psychic",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-resistance-radiant",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-resistance-thunder",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-speed",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {
     "id": "item.potion-of-water-breathing",
     "use": {
-      "activation": "action"
+      "activation": "action",
+      "potion": true
     }
   },
   {

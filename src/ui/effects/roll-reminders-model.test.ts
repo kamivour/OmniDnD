@@ -37,4 +37,16 @@ describe('roll reminder groups', () => {
     expect(saveTag(rollReminders(['paralyzed'], 3), 'WIS')).toBe('Disadvantage');
     expect(saveTag(rollReminders([], 0), 'WIS')).toBeUndefined();
   });
+
+  it('labels the abilities and roll kind for heavy encumbrance', () => {
+    const groups = reminderGroups(rollReminders([], 0, true));
+    expect(groups.map(({ lines }) => lines[0]?.text)).toEqual([
+      'STR, DEX and CON attacks: disadvantage',
+      'STR, DEX and CON checks: disadvantage',
+      'STR, DEX and CON saves: disadvantage',
+    ]);
+    const reminders = rollReminders([], 0, true);
+    expect(saveTag(reminders, 'CON')).toBe('Disadvantage');
+    expect(saveTag(reminders, 'WIS')).toBeUndefined();
+  });
 });

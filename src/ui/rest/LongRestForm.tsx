@@ -2,6 +2,8 @@ import { useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { completeLongRest } from '../../engine/commands';
+import { restDurations } from '../../engine/calc/rests';
+import { formatDuration } from '../../engine/clock';
 import { characterStore } from '../../state/character-store';
 import { useCommand, type CommandFocusTarget } from '../commands/command-context';
 import { useCharacter } from '../hooks/useCharacter';
@@ -21,6 +23,7 @@ export function LongRestForm({
   const { run } = useCommand();
   const automation = useStore(characterStore, (store) => store.automation);
   const preparedClasses = preparedRestClassIds(state, registry);
+  const durations = restDurations(state.campaign);
   const [reviewPrepared, setReviewPrepared] = useState(true);
   const container = useRef<HTMLDivElement>(null);
   const preview = previewLongRest(state, registry, automation);
@@ -28,14 +31,25 @@ export function LongRestForm({
   return (
     <div ref={container} tabIndex={-1} className="flex min-w-0 flex-col gap-4">
       <p className="text-sm text-text-muted">
-        Review recovery before applying a completed eight-hour rest. Sleep, interruptions, food and
-        drink are resolved at the table.
+        Review recovery before applying a completed {formatDuration(durations.long)} rest. Sleep,
+        interruptions, food and drink are resolved at the table.
       </p>
       <p className="text-sm text-text-muted">
         Recover up to half your total Hit Dice, rounded down (minimum one), largest spent dice
         first.
       </p>
-      <RestPreview duration="8 h" result={preview} changes={changes} warnings={preview.warnings} />
+      {durations.variant === 'epic' && (
+        <p className="text-sm text-text-muted">
+          Epic rests change duration only. Spell slots recover normally; extra spell-recovery limits
+          are a separate DM choice. The 24-hour rest reminder still applies.
+        </p>
+      )}
+      <RestPreview
+        duration={formatDuration(durations.long)}
+        result={preview}
+        changes={changes}
+        warnings={preview.warnings}
+      />
       {preparedClasses.length > 0 && (
         <label className="flex min-h-11 items-center gap-2 text-sm text-text">
           <input

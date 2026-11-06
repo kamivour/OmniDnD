@@ -1,5 +1,6 @@
 import { characterRegistry, type Registry } from '../registry';
 import { recordedLevel, xpForLevel } from './advancement';
+import { encumbrance, type Encumbrance } from './encumbrance';
 import {
   CARRY_PER_STR,
   HEAVY_ARMOR_SPEED_PENALTY,
@@ -89,6 +90,7 @@ export interface Sheet {
   /** Applied conditions, from `live.conditions` and active effects. */
   conditions: Condition[];
   carryingCapacity: number;
+  encumbrance: Encumbrance;
   nextLevelXp?: number;
 }
 
@@ -382,6 +384,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     return [attack];
   });
 
+  const load = encumbrance({ campaign, build, live }, registry, abilities.STR.score.value);
   const result: Sheet = {
     values,
     level,
@@ -413,6 +416,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         live.exhaustion,
         conditions,
         modifierParts('speed'),
+        load,
       ),
       { min: 0 },
     ),
@@ -485,6 +489,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     features,
     attacks,
     conditions,
+    encumbrance: load,
     carryingCapacity: scalar(
       '/carryingCapacity',
       'Carrying capacity',
@@ -539,18 +544,26 @@ function speed(
   exhaustion: number,
   conditions: Condition[],
   extra: Part[],
+  load: Encumbrance,
 ): Stat {
   const parts: Part[] = [{ label: race.name, value: race.speed }, ...extra];
   const heavy = equipped.find(({ def }) => def.armor?.category === 'heavy')?.def;
   // 2014 Dwarf Speed ignores heavy armor's STR penalty, including inherited subraces.
   // https://www.dndbeyond.com/sources/dnd/basic-rules-2014/races#DwarfTraits
   const dwarf = race.id === 'race.dwarf' || race.subraceOf === 'race.dwarf';
-  if (!dwarf && heavy?.armor?.strMin && strScore < heavy.armor.strMin) {
+  if (load.mode !== 'variant' && !dwarf && heavy?.armor?.strMin && strScore < heavy.armor.strMin) {
     parts.push({
       label: `${heavy.name} (STR ${heavy.armor.strMin})`,
       value: -HEAVY_ARMOR_SPEED_PENALTY,
     });
   }
+  if (load.speedPenalty > 0)
+    parts.push({
+      label: load.level === 'heavy' ? 'Heavily encumbered' : 'Encumbered',
+      value: -load.speedPenalty,
+    });
+  const beforeFloor = sumParts(parts).value;
+  if (beforeFloor < 0) parts.push({ label: 'Minimum speed', value: -beforeFloor });
   const current = () => Math.max(0, sumParts(parts).value);
   const stopped = conditions.find((condition) => SPEED_ZERO_CONDITIONS.includes(condition));
   if (stopped || exhaustion >= 5) {

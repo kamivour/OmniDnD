@@ -52,4 +52,14 @@ describe('condition roll reminders (2014)', () => {
     const frightened = rollReminders(['frightened'], 0);
     expect(frightened.every(({ when }) => when === 'the source of fear is in sight')).toBe(true);
   });
+
+  it('scopes heavy encumbrance to physical checks, attacks and saves without cancelling every attack', () => {
+    const reminders = rollReminders(['invisible'], 0, true);
+    const load = reminders.filter(({ source }) => source === 'heavily encumbered');
+    expect(load.map(({ roll }) => roll)).toEqual(['checks', 'attacks', 'saves']);
+    expect(load.every(({ abilities }) => abilities?.join() === 'STR,DEX,CON')).toBe(true);
+    expect(saveRollState(reminders, 'CON').disadvantage).toBe(true);
+    expect(saveRollState(reminders, 'WIS').disadvantage).toBe(false);
+    expect(cancels(reminders, 'attacks')).toBe(false);
+  });
 });

@@ -2,6 +2,7 @@ import { z } from 'zod';
 import type { Draft } from 'immer';
 import { armorReplacements } from '../calc/equipment';
 import { attunedItems } from '../calc/attunement';
+import { itemUseCost } from '../calc/item-use';
 import { ATTUNEMENT_LIMIT } from '../rules2014';
 import type { ItemDef } from '../schema';
 import type { CharacterData, Command, CommandContext } from './runner';
@@ -335,13 +336,8 @@ function usableItem(ctx: CommandContext, instanceId: string) {
   return owned?.def.use ? { ...owned, use: owned.def.use } : undefined;
 }
 
-/** Whether this use spends your action: in combat, for action items you use yourself. */
-function spendsAction(ctx: CommandContext, use: ItemDef['use'], byAlly?: true) {
-  return ctx.live.combat !== undefined && use?.activation === 'action' && byAlly !== true;
-}
-
 /**
- * Use up one item (2014: drinking or giving a potion is an action). Healing on yourself takes the
+ * Use up one item (2014: action, except self-drinking under the explicit house rule). Healing takes the
  * entered roll plus the item's bonus; every other effect, target and roll stays at the table.
  */
 export const consumeItem: Command<ConsumeItemPayload> = {
@@ -366,8 +362,10 @@ export const consumeItem: Command<ConsumeItemPayload> = {
         return [...checks, block(`A ${healing.dice} roll is ${min}–${max}`)];
       if (ctx.live.hp >= ctx.sheet.maxHp.value) checks.push(info('Your HP is already full'));
     } else if (roll !== undefined) return [block(`${item.def.name} has no roll to enter here`)];
-    if (spendsAction(ctx, item.use, byAlly)) checks.push(...economyChecks(ctx, 'action'));
-    else if (!byAlly && item.use.activation !== 'none') {
+    const cost = itemUseCost(ctx.campaign, item.use, target, byAlly);
+    if (ctx.live.combat && (cost === 'action' || cost === 'bonus'))
+      checks.push(...economyChecks(ctx, cost));
+    else if (!byAlly && cost !== 'none') {
       const cause = incapacitatedBy(ctx.sheet.conditions);
       if (cause) checks.push(warn(`Incapacitated (${cause}): no actions`));
     }
@@ -383,7 +381,8 @@ export const consumeItem: Command<ConsumeItemPayload> = {
     const left = item.live.qty - 1;
     changeItems(draft, ctx, [{ instanceId, values: { qty: left } }]);
     const notes: string[] = [];
-    if (spendsAction(ctx, item.use, byAlly)) spendEconomy(draft.live, 'action');
+    const cost = itemUseCost(ctx.campaign, item.use, target, byAlly);
+    if (cost === 'action' || cost === 'bonus') spendEconomy(draft.live, cost);
     if (item.use.attack) notes.push(...endSelfInvisibility(draft.live, 'attack'));
     const { healing } = item.use;
     if (healing && target === 'self') {

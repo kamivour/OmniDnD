@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { ItemUseSchema } from '../schema';
-import { startCombat, startTurn } from './combat';
+import { startCombat, startTurn, useEconomy } from './combat';
 import { applyDamage } from './hp';
 import { addInventoryItem } from './inventory';
 import { consumeItem } from './items';
@@ -24,11 +24,104 @@ describe('item use data', () => {
     expect(registry.get('item', 'item.potion-of-healing-supreme').use).toEqual({
       activation: 'action',
       healing: { dice: '10d4', bonus: 20 },
+      potion: true,
     });
   });
 });
 
 describe('consumeItem', () => {
+  it('uses only the bonus action for self-drinking under the house rule and undoes after JSON reload', () => {
+    const session = withItem('item.potion-of-healing-common');
+    session.state.campaign.optionalRules.potionBonusAction = true;
+    session.run(applyDamage, { amount: 10 });
+    session.run(startCombat, null);
+    session.run(startTurn, null);
+    session.run(useEconomy, { kind: 'action', label: 'An earlier action' });
+    const before = structuredClone(session.state);
+    const result = session.try(consumeItem, { instanceId: 'used', target: 'self', roll: 5 });
+    expect(result.result).toBe('ok');
+    expect(session.live.combat!.economy).toEqual({
+      ...before.live.combat!.economy,
+      bonusUsed: true,
+    });
+    expect(session.live.hp).toBe(16);
+    expect(session.live.items.used!.qty).toBe(1);
+    expect(session.live.clock).toEqual(before.live.clock);
+    session.state = JSON.parse(JSON.stringify(session.state));
+    session.events = JSON.parse(JSON.stringify(session.events));
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('warns on an already-spent bonus action, with Cancel leaving the state intact', () => {
+    const session = withItem('item.potion-of-healing-common');
+    session.state.campaign.optionalRules.potionBonusAction = true;
+    session.run(startCombat, null);
+    session.run(startTurn, null);
+    session.run(useEconomy, { kind: 'bonus', label: 'An earlier bonus action' });
+    const before = structuredClone(session.state);
+    const events = structuredClone(session.events);
+    const payload = { instanceId: 'used', target: 'self' as const, roll: 4 };
+    expect(session.preview(consumeItem, payload)).toEqual({
+      result: 'warn',
+      reasons: ['Bonus action already used'],
+    });
+    expect(session.state).toEqual(before);
+    expect(session.events).toEqual(events);
+    session.run(consumeItem, payload, true);
+    expect(session.events.at(-1)?.override).toBe(true);
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('keeps giving potions and throwing acid on the action, and ally-given potions spend neither pool', () => {
+    for (const itemId of ['item.potion-of-healing-common', 'item.acid-vial']) {
+      const session = withItem(itemId);
+      session.state.campaign.optionalRules.potionBonusAction = true;
+      session.run(startCombat, null);
+      session.run(startTurn, null);
+      session.run(consumeItem, { instanceId: 'used', target: 'other' });
+      expect(session.live.combat!.economy.actionUsed).toBe(true);
+      expect(session.live.combat!.economy.bonusUsed).toBe(false);
+    }
+    const session = withItem('item.potion-of-healing-common');
+    session.state.campaign.optionalRules.potionBonusAction = true;
+    session.run(startCombat, null);
+    session.run(startTurn, null);
+    const economy = structuredClone(session.live.combat!.economy);
+    session.run(consumeItem, { instanceId: 'used', target: 'self', byAlly: true, roll: 2 });
+    expect(session.live.combat!.economy).toEqual(economy);
+  });
+
+  it('requires explicit potion metadata instead of inferring a potion from healing', () => {
+    expect(ItemUseSchema.safeParse({ activation: 'special', potion: true }).success).toBe(false);
+    expect(
+      ItemUseSchema.safeParse({ activation: 'action', attack: true, potion: true }).success,
+    ).toBe(false);
+    const session = withItem('item.potion-of-healing-common');
+    session.state = structuredClone(session.state);
+    session.state.campaign.optionalRules.potionBonusAction = true;
+    session.state.build.customItems = [
+      {
+        kind: 'item',
+        id: 'item.custom.healing-food',
+        name: 'Healing food',
+        ruleset: '5e-2014',
+        source: 'HB',
+        srd: false,
+        category: 'consumable',
+        use: { activation: 'action', healing: { dice: '2d4', bonus: 2 } },
+      },
+    ];
+    session.state.build.items.find((item) => item.instanceId === 'used')!.itemId =
+      'item.custom.healing-food';
+    session.run(startCombat, null);
+    session.run(startTurn, null);
+    session.run(consumeItem, { instanceId: 'used', target: 'self', roll: 2 });
+    expect(session.live.combat!.economy.actionUsed).toBe(true);
+    expect(session.live.combat!.economy.bonusUsed).toBe(false);
+  });
+
   it('heals by the entered roll plus bonus, spends one and undoes exactly', () => {
     const session = withItem('item.potion-of-healing-common');
     session.run(applyDamage, { amount: 10 });

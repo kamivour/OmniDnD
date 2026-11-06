@@ -4,9 +4,14 @@ import { SpellManage } from '../spells/SpellManage';
 import { RestContext } from './rest-context';
 import { ShortRestForm } from './ShortRestForm';
 import { LongRestForm } from './LongRestForm';
+import { useCharacter } from '../hooks/useCharacter';
+import { restDurations } from '../../engine/calc/rests';
+import { formatDuration } from '../../engine/clock';
 
 /** HUD, tablet toolbar, and mobile More share one rest draft and return-focus owner. */
 export function RestProvider({ children }: { children: ReactNode }) {
+  const { state } = useCharacter();
+  const durations = restDurations(state.campaign);
   const [kind, setKind] = useState<'short' | 'long' | 'manage' | null>(null);
   const [opener, setOpener] = useState<HTMLElement | null>(null);
   const [preparedClass, setPreparedClass] = useState<string | undefined>(undefined);
@@ -33,7 +38,13 @@ export function RestProvider({ children }: { children: ReactNode }) {
         description={
           kind === 'manage'
             ? 'Review prepared spells after resting. Changes are separate logged commands.'
-            : `${kind === 'long' ? 'Eight hours' : 'One hour'} of game time. Review changes before applying.`
+            : `${
+                durations.variant === 'standard'
+                  ? kind === 'long'
+                    ? 'Eight hours'
+                    : 'One hour'
+                  : formatDuration(kind === 'long' ? durations.long : durations.short)
+              } of game time. Review changes before applying.`
         }
         onCloseAutoFocus={(event) => {
           event.preventDefault();

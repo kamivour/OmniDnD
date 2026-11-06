@@ -285,13 +285,20 @@ export const ItemChargesSchema = z
  * `special` takes the time the item states (a scroll uses the spell's casting time); `none`
  * is spent as part of something else, like ammunition. Effects beyond healing stay manual.
  */
-export const ItemUseSchema = z.strictObject({
-  activation: z.enum(['action', 'special', 'none']),
-  /** Thrown or splashed as an attack (Acid, Holy Water); attacking ends your own Invisibility. */
-  attack: z.literal(true).optional(),
-  /** Hit points regained by the drinker: the entered dice roll plus the bonus. */
-  healing: z.strictObject({ dice: DiceSchema, bonus: z.int().positive().optional() }).optional(),
-});
+export const ItemUseSchema = z
+  .strictObject({
+    activation: z.enum(['action', 'special', 'none']),
+    /** A drinkable potion; the campaign's self-drinking house rule applies only to these. */
+    potion: z.literal(true).optional(),
+    /** Thrown or splashed as an attack (Acid, Holy Water); attacking ends your own Invisibility. */
+    attack: z.literal(true).optional(),
+    /** Hit points regained by the drinker: the entered dice roll plus the bonus. */
+    healing: z.strictObject({ dice: DiceSchema, bonus: z.int().positive().optional() }).optional(),
+  })
+  .refine((use) => !use.potion || (use.activation === 'action' && !use.attack), {
+    message: 'A drinkable potion uses an action by default and is not a thrown attack',
+    path: ['potion'],
+  });
 
 export const ItemDefSchema = z
   .strictObject({

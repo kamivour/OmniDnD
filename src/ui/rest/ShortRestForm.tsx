@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 import { registry } from '../../data/registry';
 import { completeShortRest, type ShortRestPayload } from '../../engine/commands';
+import { restDurations } from '../../engine/calc/rests';
+import { formatDuration } from '../../engine/clock';
 import type { HitDieName } from '../../engine/schema';
 import { useCommand } from '../commands/command-context';
 import { SectionLabel } from '../components/SectionLabel';
@@ -232,7 +234,11 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
         )}
       </section>
 
-      <RestPreview duration="1 h" result={preview} changes={changes} />
+      <RestPreview
+        duration={formatDuration(restDurations(state.campaign).short)}
+        result={preview}
+        changes={changes}
+      />
       <div className="grid grid-cols-2 gap-2">
         <button
           type="button"

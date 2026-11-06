@@ -1,5 +1,6 @@
 import { formatDuration } from '../clock';
-import { LONG_REST_INTERVAL_SECONDS, LONG_REST_SECONDS, SHORT_REST_SECONDS } from '../rules2014';
+import { restDurations } from '../calc/rests';
+import { LONG_REST_INTERVAL_SECONDS } from '../rules2014';
 import type { HitDieName } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
 import {
@@ -41,7 +42,7 @@ export interface ShortRestPayload {
 }
 
 /**
- * One hour. Hit Dice are spent inside the rest (D54): each heals its roll + CON, at least 0.
+ * Campaign-length short rest. Hit Dice are spent inside it (D54): each heals roll + CON, at least 0.
  * Short-rest features and Pact Magic slots come back.
  */
 export const completeShortRest: Command<ShortRestPayload> = {
@@ -82,11 +83,12 @@ export const completeShortRest: Command<ShortRestPayload> = {
         ),
       );
     }
-    checks.push(...timeRangeChecks(ctx.live.clock.seconds, SHORT_REST_SECONDS));
+    checks.push(...timeRangeChecks(ctx.live.clock.seconds, restDurations(ctx.campaign).short));
     return checks;
   },
   apply: ({ live }, { hitDice = [], songOfRest, songOfRestSource }, ctx) => {
-    const notes: (string | undefined)[] = passTime(live, SHORT_REST_SECONDS, ctx);
+    const duration = restDurations(ctx.campaign).short;
+    const notes: (string | undefined)[] = passTime(live, duration, ctx);
     notes.push(...endTriggeredEffects(live, (on) => on.event === 'short-rest'));
     const con = ctx.sheet.abilities.CON.mod;
     let healing = 0;
@@ -114,12 +116,12 @@ export const completeShortRest: Command<ShortRestPayload> = {
     }
     if (restored.length > 0) notes.push(`restored ${restored.join(', ')}`);
     notes.push(...rechargeItems(live, ctx, ctx.live.items, ['short']));
-    return withNotes(`Short rest (${formatDuration(SHORT_REST_SECONDS)})`, notes);
+    return withNotes(`Short rest (${formatDuration(duration)})`, notes);
   },
 };
 
 /**
- * Eight hours. Needs at least 1 HP at the start. Only one long rest per 24 hours: the warning
+ * Campaign-length long rest. Needs at least 1 HP at the start. One per 24 hours: the warning
  * compares this rest's end with the last one's (start to start, so a nightly rest is fine).
  */
 export const completeLongRest: Command<null> = {
@@ -127,19 +129,18 @@ export const completeLongRest: Command<null> = {
   check: (ctx) => {
     const checks = restChecks(ctx);
     const { live } = ctx;
+    const duration = restDurations(ctx.campaign).long;
     if (live.hp === 0 && checks.length === 0) checks.push(block("Can't long rest at 0 HP"));
     const last = live.lastLongRestEnd;
-    if (
-      last !== undefined &&
-      live.clock.seconds + LONG_REST_SECONDS - last < LONG_REST_INTERVAL_SECONDS
-    ) {
+    if (last !== undefined && live.clock.seconds + duration - last < LONG_REST_INTERVAL_SECONDS) {
       checks.push(warn('Less than 24 h since last long rest'));
     }
-    checks.push(...timeRangeChecks(live.clock.seconds, LONG_REST_SECONDS));
+    checks.push(...timeRangeChecks(live.clock.seconds, duration));
     return checks;
   },
   apply: ({ live }, _payload, ctx) => {
-    const notes: (string | undefined)[] = passTime(live, LONG_REST_SECONDS, ctx);
+    const duration = restDurations(ctx.campaign).long;
+    const notes: (string | undefined)[] = passTime(live, duration, ctx);
     notes.push(
       ...endTriggeredEffects(live, (on) => on.event === 'short-rest' || on.event === 'long-rest'),
     );
@@ -191,7 +192,7 @@ export const completeLongRest: Command<null> = {
     if (recovered > 0) notes.push(`${recovered} Hit ${recovered === 1 ? 'Die' : 'Dice'} back`);
 
     live.lastLongRestEnd = live.clock.seconds;
-    return withNotes(`Long rest (${formatDuration(LONG_REST_SECONDS)})`, notes);
+    return withNotes(`Long rest (${formatDuration(duration)})`, notes);
   },
 };
 

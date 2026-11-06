@@ -21,7 +21,11 @@ export function DashboardScreen() {
   const [statusAnchor, setStatusAnchor] = useState<HTMLElement | null>(null);
   const [editingConditions, setEditingConditions] = useState(false);
   const groups = dashboardResources(state, sheet, registry);
-  const reminders = rollReminders(sheet.conditions, state.live.exhaustion);
+  const reminders = rollReminders(
+    sheet.conditions,
+    state.live.exhaustion,
+    sheet.encumbrance.level === 'heavy',
+  );
   const passives = [
     {
       label: 'Perception',

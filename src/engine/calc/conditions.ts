@@ -8,7 +8,7 @@ export type RollMode = 'advantage' | 'disadvantage' | 'auto-fail' | 'critical';
 export interface RollReminder {
   roll: RollKind;
   mode: RollMode;
-  /** Only these saves; absent means every roll of the kind. */
+  /** Only rolls using these abilities; absent means every roll of the kind. */
   abilities?: readonly Ability[];
   /** A situation the player judges, such as "the check needs sight". */
   when?: string;
@@ -80,6 +80,7 @@ export const EXHAUSTION_LEVELS: readonly string[] = [
 export function rollReminders(
   conditions: readonly Condition[],
   exhaustion: number,
+  heavilyEncumbered = false,
 ): RollReminder[] {
   const reminders: RollReminder[] = conditions.flatMap((condition) =>
     CONDITION_ROLLS[condition].map((rule) => ({ ...rule, source: condition })),
@@ -92,6 +93,15 @@ export function rollReminders(
       { roll: 'attacks', mode: 'disadvantage', source: `exhaustion ${exhaustion}` },
       { roll: 'saves', mode: 'disadvantage', source: `exhaustion ${exhaustion}` },
     );
+  }
+  if (heavilyEncumbered) {
+    for (const roll of ['checks', 'attacks', 'saves'] as const)
+      reminders.push({
+        roll,
+        mode: 'disadvantage',
+        abilities: ['STR', 'DEX', 'CON'],
+        source: 'heavily encumbered',
+      });
   }
   return reminders;
 }

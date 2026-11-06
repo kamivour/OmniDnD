@@ -1,6 +1,7 @@
 import { useId, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
+import { itemUseCost } from '../../engine/calc/item-use';
 import { consumeItem } from '../../engine/commands';
 import { storageStatusStore } from '../../state/persistence';
 import { inputClass } from '../components/fields';
@@ -42,7 +43,11 @@ export function ItemUseControls({ instanceId }: { instanceId: string }) {
       aria-label={`Use: ${name}`}
       className="flex min-w-0 flex-col gap-2 text-sm"
     >
-      <p className="text-xs text-text-muted">{itemUseText(use)}</p>
+      <p className="text-xs text-text-muted">
+        {byAlly
+          ? 'Ally uses an action; none of yours.'
+          : itemUseText(use, itemUseCost(state.campaign, use))}
+      </p>
       {healing && (
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <label htmlFor={`${prefix}-roll`} className="text-xs text-text-muted">

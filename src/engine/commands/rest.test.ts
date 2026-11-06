@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { startCombat } from './combat';
-import { setExhaustion } from './effects';
+import { addEffect, setExhaustion } from './effects';
 import { useFeature } from './features';
 import { applyDamage, setTempHp } from './hp';
 import { adjustHitDice, completeLongRest, completeShortRest } from './rest';
@@ -12,6 +12,132 @@ import { freshState, seedState, Session, withLive } from './test-utils';
 
 const BARDIC_INSPIRATION = 'feature.bard.bardic-inspiration';
 const start = freshState.live.clock.seconds;
+
+describe('campaign rest variants', () => {
+  it.each([
+    ['gritty', 8 * 3600, '8 h'],
+    ['epic', 5 * 60, '5 min'],
+    ['standard', 3600, '1 h'],
+    ['unknown-legacy-value', 3600, '1 h'],
+  ] as const)(
+    '%s short rest uses its duration for recovery, expiry and Undo',
+    (variant, seconds, label) => {
+      const state = structuredClone(seedState);
+      state.campaign.optionalRules = { rests: variant };
+      const session = new Session(state);
+      session.run(addEffect, { name: 'Expires during rest', durationSeconds: seconds });
+      session.run(addEffect, { name: 'Survives rest', durationSeconds: seconds + 1 });
+      const before = structuredClone(session.state);
+      expect(session.run(completeShortRest, { hitDice: [{ die: 'd8', roll: 2 }] })).toContain(
+        `Short rest (${label})`,
+      );
+      expect(session.live.clock.seconds).toBe(start + seconds);
+      expect(session.live.hp).toBe(14);
+      expect(session.live.hitDiceSpent.d8).toBe((before.live.hitDiceSpent.d8 ?? 0) + 1);
+      expect(session.live.slotsUsed).toEqual(before.live.slotsUsed);
+      expect(session.live.featureUsesSpent).toEqual(before.live.featureUsesSpent);
+      expect(session.live.effects.map(({ name }) => name)).toEqual(['Survives rest']);
+      session.undo();
+      expect(session.state).toEqual(before);
+    },
+  );
+
+  it.each([
+    ['gritty', 7 * 86400, '7 days'],
+    ['epic', 3600, '1 h'],
+    ['standard', 8 * 3600, '8 h'],
+    ['unknown-legacy-value', 8 * 3600, '8 h'],
+  ] as const)(
+    '%s long rest keeps normal recovery and undoes the full time span',
+    (variant, seconds, label) => {
+      const state = structuredClone(seedState);
+      state.campaign.optionalRules = { rests: variant };
+      state.live.tempHp = 3;
+      state.live.exhaustion = 2;
+      state.live.hitDiceSpent = { d8: 3 };
+      const session = new Session(state);
+      session.run(addEffect, { name: 'Expires during rest', durationSeconds: seconds });
+      session.run(addEffect, { name: 'Survives rest', durationSeconds: seconds + 1 });
+      const before = structuredClone(session.state);
+      expect(session.run(completeLongRest, null)).toContain(`Long rest (${label})`);
+      expect(session.live.clock.seconds).toBe(start + seconds);
+      expect(session.live.lastLongRestEnd).toBe(start + seconds);
+      expect(session.live.hp).toBe(19);
+      expect(session.live.tempHp).toBe(0);
+      expect(session.live.exhaustion).toBe(1);
+      expect(session.live.hitDiceSpent).toEqual({ d8: 2 });
+      expect(session.live.slotsUsed.every((used) => used === 0)).toBe(true);
+      expect(session.live.featureUsesSpent[BARDIC_INSPIRATION] ?? 0).toBe(0);
+      expect(session.live.effects.map(({ name }) => name)).toEqual(['Survives rest']);
+      session.undo();
+      expect(session.state).toEqual(before);
+    },
+  );
+
+  it('keeps the 24-hour warning with epic rests and uses their actual duration at the boundary', () => {
+    const state = structuredClone(seedState);
+    state.campaign.optionalRules = { rests: 'epic' };
+    state.live.lastLongRestEnd = start;
+    state.live.clock.seconds = start + 23 * 3600;
+    const session = new Session(state);
+    expect(session.preview(completeLongRest, null).result).toBe('ok');
+    session.state = {
+      ...session.state,
+      live: { ...session.live, clock: { seconds: session.live.clock.seconds - 1 } },
+    };
+    expect(session.preview(completeLongRest, null)).toEqual({
+      result: 'warn',
+      reasons: ['Less than 24 h since last long rest'],
+    });
+  });
+
+  it('passes dawn during a gritty week without rolling item recovery or losing exact Undo', () => {
+    const state = structuredClone(seedState);
+    state.campaign.optionalRules = { rests: 'gritty' };
+    state.build.items.push(
+      { instanceId: 'eyes', itemId: 'item.eyes-of-charming' },
+      { instanceId: 'wand', itemId: 'item.wand-of-magic-missiles' },
+    );
+    state.live.items.eyes = { qty: 1, equipped: true, attuned: true, charges: 1 };
+    state.live.items.wand = { qty: 1, equipped: false, attuned: false, charges: 1 };
+    const session = new Session(state);
+    session.run(addEffect, { name: 'One-day ward', durationSeconds: 86400 });
+    const before = structuredClone(session.state);
+    const text = session.run(completeLongRest, null);
+    expect(text).toContain('Long rest (7 days)');
+    expect(text).toContain('One-day ward ended');
+    expect(text).toContain('recharged Eyes of Charming');
+    expect(text).toContain('roll to recharge Wand of Magic Missiles');
+    expect(session.live.items.eyes).toMatchObject({ charges: 3 });
+    // Large time advances preserve one unresolved player roll rather than inventing rolls.
+    expect(session.live.items.wand).toMatchObject({ charges: 1, rechargePending: true });
+    expect(session.live.effects).toEqual([]);
+    expect(session.live.clock.seconds).toBe(start + 7 * 86400);
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('blocks a gritty rest that would overflow game time, including forced Manual commands', () => {
+    for (const long of [false, true]) {
+      const state = structuredClone(seedState);
+      state.campaign.optionalRules = { rests: 'gritty' };
+      state.live.clock.seconds = Number.MAX_SAFE_INTEGER - 3600;
+      const options = {
+        eventId: 'overflow-rest',
+        realTime: '2026-11-06T00:00:00.000Z',
+        automation: 'manual' as const,
+        force: true,
+      };
+      const result = long
+        ? runCommand(completeLongRest, state, null, registry, options)
+        : runCommand(completeShortRest, state, {}, registry, options);
+      expect(result).toEqual({
+        result: 'blocked',
+        reasons: ['Time advance exceeds the supported game clock range'],
+      });
+    }
+  });
+});
 
 describe('completeShortRest', () => {
   it('spends Hit Dice (roll + CON) and adds Song of Rest', () => {

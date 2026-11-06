@@ -14,6 +14,7 @@ export function InventoryWeight() {
   const capacity = sheetBreakdowns(state, sheet, registry).carryingCapacity;
   const notes = new Map(state.build.items.map((item) => [item.instanceId, item.notes]));
   const coins = currencyTotals(state.live.currency).coins.toString();
+  const load = sheet.encumbrance;
   return (
     <section
       aria-label="Carried weight"
@@ -70,12 +71,33 @@ export function InventoryWeight() {
           </details>
         </div>
       )}
-      {weight.overCapacity === true && (
+      {load.mode === 'variant' && (
+        <div role="note" className="flex flex-col gap-2 text-sm">
+          <p className={load.level === 'none' ? 'text-text-muted' : 'text-warn'}>
+            {load.level === 'heavy'
+              ? 'Heavily encumbered'
+              : load.level === 'encumbered'
+                ? 'Encumbered'
+                : load.level === 'unknown'
+                  ? 'Encumbrance uncertain'
+                  : 'Not encumbered'}
+            {load.speedPenalty > 0 ? ` · speed reduced by ${load.speedPenalty} ft` : ''}
+          </p>
+          <p className="text-xs text-text-muted">
+            Above {load.encumberedAbove} lb: −10 ft. Above {load.heavyAbove} lb: −20 ft and
+            disadvantage on STR, DEX and CON checks, attacks and saves.
+          </p>
+          {load.incomplete && (
+            <p className="text-xs text-warn">Missing weights may increase the penalty.</p>
+          )}
+        </div>
+      )}
+      {load.mode !== 'off' && weight.overCapacity === true && (
         <p role="note" className="text-sm text-warn">
           Known weight exceeds carrying capacity. Review the load with your DM.
         </p>
       )}
-      {weight.overCapacity === false && (
+      {load.mode !== 'off' && weight.overCapacity === false && (
         <p className="text-xs text-text-muted">Recorded weight is within carrying capacity.</p>
       )}
       <details className="text-sm">
@@ -96,7 +118,12 @@ export function InventoryWeight() {
         </ul>
       </details>
       <p className="text-xs text-text-muted">
-        ≈ marks a rounded display. Resolve movement limits at the table.
+        ≈ marks a rounded display.{' '}
+        {load.mode === 'off'
+          ? 'Weight tracking only; load warnings are off.'
+          : load.mode === 'variant'
+            ? 'Variant speed reductions use the recorded load.'
+            : 'Resolve movement limits at the table.'}
       </p>
     </section>
   );

@@ -1,4 +1,5 @@
 import type { CharacterState } from '../../engine/calc/sheet';
+import type { ItemUseCost } from '../../engine/calc/item-use';
 import { characterRegistry, type Registry } from '../../engine/registry';
 import type { ItemCharges, ItemDef, ItemUse } from '../../engine/schema';
 
@@ -169,12 +170,16 @@ export function regainText({ recharge, regain }: ItemCharges): string {
 }
 
 /** "Action to use or give · regains 2d4 + 2 HP": the 2014 cost of using one item. */
-export function itemUseText({ activation, attack, healing }: ItemUse): string {
+export function itemUseText(
+  { activation, attack, healing }: ItemUse,
+  useCost: ItemUseCost = activation,
+): string {
   const cost = {
     action: attack ? 'Action to throw; resolve the attack at the table' : 'Action to use or give',
+    bonus: 'Bonus action to drink · action to give',
     special: 'Takes the time its own rule states',
     none: 'No action of its own',
-  }[activation];
+  }[useCost];
   return healing
     ? `${cost} · regains ${healing.dice}${healing.bonus ? ` + ${healing.bonus}` : ''} HP`
     : cost;

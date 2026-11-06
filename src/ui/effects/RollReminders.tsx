@@ -8,7 +8,9 @@ const capital = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 /** What your conditions and exhaustion do to rolls. Reminders only: the player rolls. */
 export function RollReminders() {
   const { state, sheet } = useCharacter();
-  const groups = reminderGroups(rollReminders(sheet.conditions, state.live.exhaustion));
+  const groups = reminderGroups(
+    rollReminders(sheet.conditions, state.live.exhaustion, sheet.encumbrance.level === 'heavy'),
+  );
   if (groups.length === 0) return null;
   return (
     <section aria-label="Roll reminders" className="flex min-w-0 flex-col gap-2">

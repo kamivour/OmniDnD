@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 16:49 — Campaign rules now apply in play
+
+- Gritty and epic rests change how long short and long rests take on the clock.
+- With variant encumbrance, carried weight lowers your speed and, when heavily loaded, adds disadvantage reminders for STR, DEX and CON rolls. Encumbrance Off hides load warnings.
+- With the potion house rule, drinking a potion yourself in combat costs a bonus action; giving one to someone is still an action. Custom items can be marked as potions.
+- Checks pass.
+
 ## 2026-11-06 13:12 — Pick books and optional rules per campaign
 
 - Campaign settings now have checkboxes for each book (the Player's Handbook is always on) and for optional rules like feats, multiclassing and potions as a bonus action.

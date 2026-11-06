@@ -222,6 +222,9 @@ describe('item use text and usable items', () => {
     );
     expect(itemUseText({ activation: 'action', attack: true })).toMatch(/^Action to throw/);
     expect(itemUseText({ activation: 'none' })).toBe('No action of its own');
+    expect(itemUseText({ activation: 'action', potion: true }, 'bonus')).toBe(
+      'Bonus action to drink · action to give',
+    );
   });
 
   it('lists held consumables only', () => {

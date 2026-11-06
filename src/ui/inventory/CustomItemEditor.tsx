@@ -364,6 +364,17 @@ export function CustomItemEditor({
               </div>
             </fieldset>
             {fields.category === 'consumable' && (
+              <label className="flex min-h-11 items-center gap-3 text-sm">
+                <input
+                  type="checkbox"
+                  checked={fields.potion}
+                  onChange={(event) => set('potion', event.target.checked)}
+                  className="size-4 accent-(--omni-accent)"
+                />
+                Potion (drink)
+              </label>
+            )}
+            {fields.category === 'consumable' && (
               <div className="flex min-w-0 gap-3">
                 <Field
                   label="Healing dice"

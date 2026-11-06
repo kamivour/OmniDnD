@@ -1,5 +1,6 @@
 import { characterRegistry, type Registry } from '../registry';
 import type { ItemDef } from '../schema';
+import { optionalRules } from './campaign-rules';
 import { computeSheet, type CharacterState, type Sheet } from './sheet';
 
 type EquipmentState = Pick<CharacterState, 'build' | 'live'>;
@@ -78,7 +79,11 @@ export function armorEquipmentNotes(
   for (const { def } of armor) {
     const required = def.armor.strMin;
     const strength = sheet.abilities.STR.score.value;
-    if (required !== undefined && strength < required)
+    if (
+      optionalRules(state.campaign).encumbrance !== 'variant' &&
+      required !== undefined &&
+      strength < required
+    )
       notes.push(
         `${def.name}: STR ${required} requirement; current STR ${strength}. Review the armor speed restriction.`,
       );

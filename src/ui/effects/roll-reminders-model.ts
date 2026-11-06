@@ -31,8 +31,13 @@ export interface ReminderGroup {
   cancelled: boolean;
 }
 
-function lineText({ mode, abilities, when }: RollReminder): string {
-  const scope = abilities ? `${abilities.join(' and ')} saves: ` : '';
+function lineText({ roll, mode, abilities, when }: RollReminder): string {
+  const names = abilities
+    ? abilities.length > 2
+      ? `${abilities.slice(0, -1).join(', ')} and ${abilities.at(-1)}`
+      : abilities.join(' and ')
+    : '';
+  const scope = abilities ? `${names} ${roll}: ` : '';
   return `${scope}${MODE_TEXT[mode]}${when ? ` when ${when}` : ''}`;
 }
 

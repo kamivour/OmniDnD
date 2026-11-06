@@ -27,7 +27,9 @@ export type CustomItemFields = {
   regain: 'all' | 'dice';
   regainDice: string;
   regainBonus: string;
-  /** Consumables only. Blank: no healing roll. */
+  /** Consumables only: the player explicitly identifies a drinkable potion. */
+  potion: boolean;
+  /** Blank: no healing roll. */
   healingDice: string;
   healingBonus: string;
 };
@@ -49,6 +51,7 @@ export function emptyCustomItemFields(): CustomItemFields {
     regain: 'dice',
     regainDice: '',
     regainBonus: '',
+    potion: false,
     healingDice: '',
     healingBonus: '',
   };
@@ -72,6 +75,7 @@ export function customItemFields(def: ItemDef): CustomItemFields {
     regain: regain === 'all' ? 'all' : 'dice',
     regainDice: typeof regain === 'object' ? regain.dice : '',
     regainBonus: typeof regain === 'object' && regain.bonus ? String(regain.bonus) : '',
+    potion: def.use?.potion ?? false,
     healingDice: healing?.dice ?? '',
     healingBonus: healing?.bonus ? String(healing.bonus) : '',
   };
@@ -166,6 +170,7 @@ export function buildCustomItem(
       errors.push('A healing bonus needs healing dice and must be 1 or more.');
     use = {
       activation: 'action',
+      ...(fields.potion ? { potion: true } : {}),
       ...(dice ? { healing: { dice, ...(bonus ? { bonus } : {}) } } : {}),
     };
   }

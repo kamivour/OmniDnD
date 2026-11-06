@@ -74,6 +74,14 @@ describe('buildCustomItem', () => {
     ).item!;
     expect(tonic.use).toEqual({ activation: 'action', healing: { dice: '2d4', bonus: 2 } });
     expect(buildCustomItem(customItemFields(tonic), id, registry).item).toEqual(tonic);
+    const potion = buildCustomItem(
+      { ...customItemFields(tonic), potion: true },
+      id,
+      registry,
+    ).item!;
+    expect(potion.use?.potion).toBe(true);
+    expect(customItemFields(potion).potion).toBe(true);
+    expect(buildCustomItem(customItemFields(potion), id, registry).item).toEqual(potion);
   });
 
   it('lists what to fix', () => {
