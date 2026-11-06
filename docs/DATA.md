@@ -265,7 +265,7 @@ Dashboard and Exploration share the Game Clock, which converts chosen durations 
 
 ## 6. Persistence
 
-- Dexie database `omnidnd`. Tables: `builds`, `live`, `events`, `campaigns`, `settings`, `userPacks`, `backups`.
+- Dexie database `omnidnd`. Tables: `builds`, `live`, `events`, `campaigns`, `settings`, `userPacks`, `backups`, `sync`.
 - Write after every command. Zustand store mirrors the active character for the UI.
 - `schemaVersion` on every saved record. Migrations in `src/db/migrations/` as pure functions (vN → vN+1), unit-tested.
 - **Export:** `{ app: 'omnidnd', schemaVersion, exportedAt, build, live, events, campaign }` (`ExportFileSchema`; the seed `data/characters/the-fool.json` uses the same shape, D49). **Import:** zod-validate → migrate → preview → save.
@@ -280,6 +280,7 @@ Dashboard and Exploration share the Game Clock, which converts chosen durations 
 - **Import collisions:** matching character IDs add a copy; conflicting campaign rules add a campaign. Copies retain values and choices but start fresh action histories, as explained in the import preview.
 - **Reference bookmarks (D70):** device-wide `bookmarks` stores unique `{ id, title, url }` entries with HTTP(S) URLs, managed through commands and durable Undo. Missing legacy data reads as empty, malformed data causes a load error, and character exports omit bookmarks.
 - **Device preferences (D71):** commands save and undo `automation` (default `assisted`) and `reducedMotion` (default `false`); invalid data fails loading without erasure. OS or saved motion preference enables reduced motion, and character exports omit device preferences.
+- **Sync metadata (MA, D121):** `sync` holds one `{ kind: 'campaign' | 'character', entityId, changedAt, deleted, fingerprint }` row per entity, id `kind:entityId`. Saves stamp only entities whose content fingerprint changed; removed entities keep a deletion marker. Loading back-fills rows for older saves.
 - **Offline app:** production builds cache app code, reference data, fonts and icons after an online visit; character data and history remain in Dexie. Updates wait for all open app windows to close (D106).
 
 ```ts

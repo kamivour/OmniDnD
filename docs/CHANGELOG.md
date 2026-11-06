@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 11:53 — Groundwork for accounts
+
+- The app now notes when each campaign and character last changed, and remembers deletions, so a future account can sync them between devices.
+- Nothing changes for you: no sign-in, no new screens. Existing saves are upgraded on the next load.
+- Next: the account database rules. Checks pass.
+
 ## 2026-11-06 11:36 — Class feature uses; M9 done
 
 - Fighters, Barbarians, Monks, Clerics, Druids, Paladins, Rogues, Sorcerers, Warlocks and Wizards now count their limited features (Second Wind, Action Surge, Rage, Ki, Channel Divinity and more) from class level.

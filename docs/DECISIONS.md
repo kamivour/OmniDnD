@@ -126,6 +126,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D119 | 2026-11-06 | Custom items are saved on the character, so they travel with export/import and ignore campaign source filters. Custom weapons and armor copy a chosen catalogue item's stats and proficiency. | Portable homebrew without a rules editor |
 | D117 | 2026-11-06 | At dawn or a rest, items that regain all charges refill automatically; dice regains wait for the player to enter the roll (the app adds the bonus and caps at the maximum). Zero-quantity records are skipped, and each entry keeps one counter. | Player rolls stay manual and visible |
 | D120 | 2026-11-06 | Common limited-use class features for every SRD class track uses by class level (Rage, Second Wind, Action Surge, Ki, Channel Divinity, Wild Shape, sorcery points). Variable-cost spending (Lay on Hands points, Metamagic, multi-point Ki) stays a manual pip adjustment. | General characters need their resources; costs other than 1 stay player-entered |
+| D121 | 2026-11-06 | Account sync will cover campaigns and characters, including their Undo history. Device preferences, bookmarks, backups and hub Undo history stay on each device. | Players share characters across devices; display settings and recovery points are per device |
 
 ## Open questions
 

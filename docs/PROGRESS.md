@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** MA — Accounts and cloud sync (local parts first; hosting waits, Q1/Q28).
-**Next up:** MA sync-ready local storage: change times and deletion markers, with migration.
+**Next up:** MA account database schema with row-level security.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -147,7 +147,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Gate: general characters, cross-screen values, offline reload and exact Undo at phone/desktop widths; manual QA documented
 
 ### MA — Accounts + cloud sync (after M9; going online waits for hosting, Q1/Q28)
-- [ ] Sync-ready local storage: per-record change times and deletion markers, with migration and no behavior change for guests
+- [x] Sync-ready local storage: per-record change times and deletion markers, with migration and no behavior change for guests
 - [ ] Database schema and row-level security policies in the repo, so each account can only read and write its own rows
 - [ ] Optional sign-in screen, hidden until a sync provider is configured; guest mode stays the default
 - [ ] Two-way sync through the persistence layer with revision conflict checks; conflicts ask the user, never silently overwrite
@@ -167,6 +167,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — Sync-ready storage: each campaign and character gets a change stamp and deletion marker; older saves back-fill on load. No visible change. Next: database schema.
 - 2026-11-06 — M9 complete: a non-Fool fighter checks AC, feature uses, Home, offline reload and exact Undo. All SRD classes now track common limited uses. Next: MA.
 - 2026-11-06 — Features screen: origin groups, activation, uses with pips, Use, favorites. No toggles yet; no feature defines one (Q25). Next: M9 Gate.
 - 2026-11-06 — Custom items: create, edit and delete per-character items; weapons/armor copy a base item's stats and proficiency; travel with export. Next: Features screen.

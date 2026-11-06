@@ -15,6 +15,7 @@ import { ManagementEventSchema } from '../engine/commands/management';
 import { BookmarkSchema, PreferencesSchema } from '../engine/schema';
 import { ActivityOrderSchema } from './activity-order';
 import { createBackupIntent, planBackups, type BackupIntent } from '../db/backups';
+import { planSyncRecords, SyncRecordSchema } from '../db/sync-metadata';
 
 interface StorageStatus {
   ready: boolean;
@@ -64,6 +65,14 @@ function storageError(error: unknown): Error {
   return error instanceof Error ? error : new Error(String(error));
 }
 
+async function updateSyncRecords(rows: WorkspaceRows) {
+  const saved = (await database.sync.toArray()).map((row) =>
+    parseStoredRecord(row, SyncRecordSchema, 'sync record'),
+  );
+  const changes = planSyncRecords(saved, rows, new Date().toISOString());
+  if (changes.length > 0) await database.sync.bulkPut(changes);
+}
+
 /** Replace the workspace atomically. Unrelated settings, packs, and backups stay untouched. */
 async function replaceRows(rows: WorkspaceRows) {
   await Promise.all([
@@ -86,6 +95,7 @@ async function replaceRows(rows: WorkspaceRows) {
       ? [database.settings.delete('activityOrder')]
       : [database.settings.put(storedRecord('activityOrder', rows.activityOrder))]),
   ]);
+  await updateSyncRecords(rows);
 }
 
 async function saveWorkspace(snapshot: Workspace, backups: BackupIntent[]) {
@@ -99,6 +109,7 @@ async function saveWorkspace(snapshot: Workspace, backups: BackupIntent[]) {
       database.campaigns,
       database.settings,
       database.backups,
+      database.sync,
     ],
     async () => {
       const currentRevision = await readRevision();
@@ -122,7 +133,14 @@ async function saveWorkspace(snapshot: Workspace, backups: BackupIntent[]) {
 async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: number }> {
   return database.transaction(
     'rw',
-    [database.builds, database.live, database.events, database.campaigns, database.settings],
+    [
+      database.builds,
+      database.live,
+      database.events,
+      database.campaigns,
+      database.settings,
+      database.sync,
+    ],
     async () => {
       const [builds, live, events, campaigns, settings] = await Promise.all([
         database.builds.toArray(),
@@ -157,6 +175,8 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
             ? { activityOrder: ActivityOrderSchema.parse(activityOrder.data) }
             : {}),
         });
+        // Back-fills metadata for workspaces saved before MA; a no-op once rows exist.
+        await updateSyncRecords(serializeWorkspace(workspace));
         return { workspace, revision: await readRevision() };
       }
       if (builds.length || live.length || events.length || campaigns.length || bookmarks) {

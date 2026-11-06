@@ -75,6 +75,8 @@ class OmniDatabase extends Dexie {
   settings!: Table<StoredRecord<unknown>, string>;
   userPacks!: Table<StoredRecord<unknown>, string>;
   backups!: Table<StoredRecord<unknown>, string>;
+  /** Sync metadata (MA): one row per campaign or character, kept after deletion as a marker. */
+  sync!: Table<StoredRecord<unknown>, string>;
 
   constructor() {
     super('omnidnd');
@@ -87,6 +89,8 @@ class OmniDatabase extends Dexie {
       userPacks: 'id',
       backups: 'id',
     });
+    // Rows are back-filled on the next load, so no upgrade function is needed.
+    this.version(2).stores({ sync: 'id' });
   }
 }
 

@@ -348,3 +348,64 @@ test('failed writes roll back atomically and Retry saves retained changes', asyn
   expect(after.builds).toEqual(before.builds);
   expect(after.campaigns).toEqual(before.campaigns);
 });
+
+interface SyncRow {
+  id: string;
+  data: {
+    kind: string;
+    entityId: string;
+    changedAt: string;
+    deleted: boolean;
+    fingerprint: string;
+  };
+}
+
+async function syncRows(page: Page, clear = false): Promise<SyncRow[]> {
+  return page.evaluate(async (clearRows) => {
+    const requestValue = <T>(request: IDBRequest<T>) =>
+      new Promise<T>((resolve, reject) => {
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    const db = await requestValue(indexedDB.open('omnidnd'));
+    try {
+      const store = db.transaction('sync', 'readwrite').objectStore('sync');
+      if (clearRows) await requestValue(store.clear());
+      return (await requestValue(store.getAll())) as SyncRow[];
+    } finally {
+      db.close();
+    }
+  }, clear);
+}
+
+test('sync metadata back-fills older saves and stamps only changed characters', async ({
+  page,
+}) => {
+  await page.goto('/characters/the-fool');
+  await expectSaved(page);
+  // An older workspace has no sync rows; loading adds one per campaign and character.
+  expect(await syncRows(page, true)).toEqual([]);
+  await page.reload();
+  await expectSaved(page);
+  const first = await syncRows(page);
+  const character = (rows: SyncRow[]) => rows.find(({ id }) => id === 'character:the-fool');
+  const campaigns = (rows: SyncRow[]) => rows.filter(({ data }) => data.kind === 'campaign');
+  expect(character(first)?.data).toMatchObject({ entityId: 'the-fool', deleted: false });
+  expect(campaigns(first)).toHaveLength(1);
+
+  await page.reload();
+  await expectSaved(page);
+  expect(await syncRows(page)).toEqual(first);
+
+  await hp(page).click();
+  const dialog = page.getByRole('dialog', { name: 'Hit points', exact: true });
+  await dialog.getByRole('button', { name: '1', exact: true }).click();
+  await dialog.getByRole('button', { name: 'Apply', exact: true }).click();
+  await expectSaved(page);
+  const after = await syncRows(page);
+  expect(character(after)?.data.fingerprint).not.toBe(character(first)?.data.fingerprint);
+  expect(String(character(after)?.data.changedAt) >= String(character(first)?.data.changedAt)).toBe(
+    true,
+  );
+  expect(campaigns(after)).toEqual(campaigns(first));
+});
