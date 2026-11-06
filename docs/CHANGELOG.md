@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 18:56 — Campaign setup milestone done
+
+- Campaign books and optional rules are finished and verified on phone and desktop: rest variants, variant encumbrance and the potion house rule apply in play.
+- Exact Undo restores prior state, and saved campaign rules survive a reload.
+- Five hands-on checks for campaign setup and rule variants are in the manual QA list.
+- Checks pass.
+
 ## 2026-11-06 16:49 — Campaign rules now apply in play
 
 - Gritty and epic rests change how long short and long rests take on the clock.

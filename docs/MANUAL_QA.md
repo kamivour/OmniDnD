@@ -99,6 +99,14 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Turn on prone and invisible together. Judge whether the situational lines and the cancel-out note read clearly.
 - [ ] Set exhaustion 1 to 6. Check the level list and the speed and HP limits match how your DM runs exhaustion.
 
+## Phase 2 — M11: Campaign Setup sources and optional rules
+
+- [ ] Open Campaign Setup for your campaign and toggle books and optional rules. Judge whether the list of kept choices from a removed book is clear before saving.
+- [ ] Switch to gritty realism or epic heroism and open Short and Long Rest previews. Judge whether the changed rest length makes sense without checking a reference.
+- [ ] Enable variant encumbrance and load items near the thresholds. Judge whether the Inventory weight status, Sheet speed and Dashboard reminders make the penalty obvious.
+- [ ] Enable potions as a bonus action and drink one in combat. Judge whether the economy cost and the "give" distinction match your table's expectation.
+- [ ] Turn encumbrance Off and confirm the Inventory still shows weight facts without capacity warnings or speed penalties.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.
