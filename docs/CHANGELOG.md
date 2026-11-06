@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 13:12 — Pick books and optional rules per campaign
+
+- Campaign settings now have checkboxes for each book (the Player's Handbook is always on) and for optional rules like feats, multiclassing and potions as a bonus action.
+- You can also pick encumbrance (off, standard, variant) and rest length (standard, gritty, epic). These take effect in play in the next update.
+- Turning a book on never turns on its rules; turning one off keeps what characters already have and lists it.
+- Checks pass.
+
 ## 2026-11-06 13:07 — Campaign books and optional rules (behind the scenes)
 
 - Campaigns can now store which books they use and which optional rules are on. Nothing changes on screen yet; the settings toggles come next.

@@ -99,13 +99,11 @@ test('new campaign saves the 2014 defaults and standard-array creation validates
   await expect(page.getByRole('radio', { name: /^Allow negative/ })).toBeChecked();
   await expect(page.getByRole('radio', { name: /^Standard array/ })).toBeChecked();
   await expect(page.getByText('D&D 5e (2014)', { exact: true })).toBeVisible();
-  const sources = page.getByRole('region', { name: 'Sources', exact: true });
-  await expect(sources.getByRole('listitem')).toHaveText(['PHB']);
-  await expect(sources.locator('input, select, button')).toHaveCount(0);
-  await expect(page.getByRole('checkbox')).toHaveCount(0);
-  await expect(
-    page.getByText(/Adding books and optional rules comes in milestone M11/),
-  ).toBeVisible();
+  const sources = page.getByRole('group', { name: 'Sources', exact: true });
+  await expect(sources.getByRole('checkbox', { checked: true })).toHaveCount(1);
+  await expect(sources.getByRole('checkbox', { name: /Player's Handbook/ })).toBeDisabled();
+  const rules = page.getByRole('group', { name: 'Optional rules', exact: true });
+  await expect(rules.getByRole('checkbox', { checked: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Create campaign', exact: true })).toBeDisabled();
   await expect(page).toHaveURL(/\/campaigns\/new$/);
   expect(await readDatabase(page)).toEqual(before);
@@ -202,9 +200,8 @@ test('editing campaign methods preserves existing choices, current HP and histor
   await expect(existing).toContainText(/point.buy/i);
   await expect(existing).toContainText(/XP/);
   await expect(existing).toContainText(/not tracked|untracked/i);
-  const sources = page.getByRole('region', { name: 'Sources', exact: true });
-  await expect(sources.getByRole('listitem')).toHaveText(['PHB', 'XGE', 'TCE']);
-  await expect(sources.locator('input, select, button')).toHaveCount(0);
+  const sources = page.getByRole('group', { name: 'Sources', exact: true });
+  await expect(sources.getByRole('checkbox', { checked: true })).toHaveCount(3);
   expect(await readDatabase(page)).toEqual(before);
   await expectNoOverflow(page);
   await page.screenshot({ path: testInfo.outputPath('campaign-settings.png'), fullPage: true });

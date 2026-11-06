@@ -1,5 +1,11 @@
 import type { HpLevelFloor } from '../engine/calc/hp';
-import type { Campaign } from '../engine/schema';
+import {
+  SOURCE_NAMES,
+  type EncumbranceRule,
+  type OptionalRules,
+  type RestRule,
+} from '../engine/calc/campaign-rules';
+import type { Campaign, Source } from '../engine/schema';
 
 /** Campaign Setup choices (SPEC §5 Campaign Setup). Labels and one-line hints, own words. */
 
@@ -52,3 +58,53 @@ export function rulesSummary(c: Campaign): string {
     c.sources.join(', '),
   ].join(' · ');
 }
+
+export const SOURCE_OPTIONS: { value: Source; label: string; hint: string }[] = [
+  { value: 'PHB', label: SOURCE_NAMES.PHB, hint: 'Always on.' },
+  { value: 'DMG', label: SOURCE_NAMES.DMG, hint: 'Magic items and variant rules.' },
+  { value: 'XGE', label: SOURCE_NAMES.XGE, hint: 'Extra subclasses, spells and feats.' },
+  { value: 'TCE', label: SOURCE_NAMES.TCE, hint: 'Extra subclasses, spells and feats.' },
+  { value: 'HB', label: SOURCE_NAMES.HB, hint: 'Items and features your table made.' },
+];
+
+type RuleFlag = Exclude<keyof OptionalRules, 'encumbrance' | 'rests'>;
+
+export const RULE_FLAG_OPTIONS: { value: RuleFlag; label: string; hint: string }[] = [
+  { value: 'feats', label: 'Feats', hint: 'A feat can replace an Ability Score Improvement.' },
+  { value: 'multiclassing', label: 'Multiclassing', hint: 'Levels in more than one class.' },
+  {
+    value: 'optionalClassFeatures',
+    label: "Tasha's optional class features",
+    hint: 'Extra or replacement class features from Tasha’s.',
+  },
+  {
+    value: 'customOrigin',
+    label: "Tasha's custom origin",
+    hint: 'Move racial ability bonuses and swap racial proficiencies.',
+  },
+  {
+    value: 'potionBonusAction',
+    label: 'Potions as a bonus action',
+    hint: 'House rule: drinking a potion yourself takes a bonus action.',
+  },
+];
+
+export const ENCUMBRANCE_OPTIONS: Option<EncumbranceRule>[] = [
+  { value: 'off', label: 'Off', hint: 'Weight is shown but never warns.' },
+  {
+    value: 'standard',
+    label: 'Standard',
+    hint: 'Warn above carrying capacity (STR × 15).',
+  },
+  {
+    value: 'variant',
+    label: 'Variant',
+    hint: 'Slower above STR × 5, slower still with roll penalties above STR × 10.',
+  },
+];
+
+export const REST_OPTIONS: Option<RestRule>[] = [
+  { value: 'standard', label: 'Standard', hint: 'Short rest 1 hour, long rest 8 hours.' },
+  { value: 'gritty', label: 'Gritty realism', hint: 'Short rest 8 hours, long rest 7 days.' },
+  { value: 'epic', label: 'Epic heroism', hint: 'Short rest 5 minutes, long rest 1 hour.' },
+];

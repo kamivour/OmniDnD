@@ -2,18 +2,29 @@ import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useStore } from 'zustand';
 import { Lock } from 'lucide-react';
+import { registry } from '../../data/registry';
+import {
+  optionalRules,
+  sourceConflicts,
+  type OptionalRules,
+} from '../../engine/calc/campaign-rules';
 import { createCampaign } from '../../engine/commands/management';
 import { campaignMethodConflicts, updateCampaign } from '../../engine/commands/campaigns';
-import { SCHEMA_VERSION, type Campaign } from '../../engine/schema';
+import { SCHEMA_VERSION, type Campaign, type Source } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
 import { useCampaign } from '../hooks/useCampaign';
 import { useManagement } from '../commands/useManagement';
 import { ChoiceGroup, Field, inputClass } from '../components/fields';
+import { cx } from '../cx';
 import {
   ABILITY_OPTIONS,
+  ENCUMBRANCE_OPTIONS,
   HP_FLOOR_OPTIONS,
   HP_OPTIONS,
   LEVELING_OPTIONS,
+  REST_OPTIONS,
+  RULE_FLAG_OPTIONS,
+  SOURCE_OPTIONS,
 } from '../campaignOptions';
 import { PlaceholderScreen } from './PlaceholderScreen';
 
@@ -49,11 +60,40 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
   const [hpMethod, setHpMethod] = useState(base.hpMethod);
   const [hpLevelFloor, setHpLevelFloor] = useState(base.hpLevelFloor);
   const [abilityMethod, setAbilityMethod] = useState(base.abilityMethod);
-  const changes = { name: name.trim(), leveling, hpMethod, hpLevelFloor, abilityMethod };
+  const [sources, setSources] = useState<Source[]>(base.sources);
+  const [rules, setRules] = useState<OptionalRules>(() => optionalRules(base));
+  const toggleSource = (source: Source, on: boolean) =>
+    setSources(
+      SOURCE_OPTIONS.map(({ value }) => value).filter((value) =>
+        value === source ? on : sources.includes(value),
+      ),
+    );
+  const changes = {
+    name: name.trim(),
+    leveling,
+    hpMethod,
+    hpLevelFloor,
+    abilityMethod,
+    sources,
+    // Store only rules the player changed so an untouched save leaves the campaign as it was.
+    optionalRules: {
+      ...base.optionalRules,
+      ...Object.fromEntries(
+        Object.entries(rules).filter(
+          ([key, value]) => value !== optionalRules(base)[key as keyof OptionalRules],
+        ),
+      ),
+    },
+  };
   const proposal = { ...base, ...changes };
   const characters = Object.values(records).filter((record) => record.build.campaignId === base.id);
   const conflicts = characters.flatMap((record) => {
-    const notes = campaignMethodConflicts(proposal, record.build);
+    const notes = [
+      ...campaignMethodConflicts(proposal, record.build),
+      ...sourceConflicts(proposal, record.build, registry).map(
+        (choice) => `Keeps ${choice} from a book that is off.`,
+      ),
+    ];
     return notes.length > 0 ? [{ name: record.build.name, id: record.build.id, notes }] : [];
   });
 
@@ -130,24 +170,57 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
           onChange={setAbilityMethod}
         />
 
-        <section aria-labelledby="campaign-sources" className="flex flex-col gap-2">
-          <h2 id="campaign-sources" className="text-sm font-semibold">
-            Sources
-          </h2>
-          <ul className="flex flex-wrap gap-2">
-            {base.sources.map((source) => (
-              <li
-                key={source}
-                className="rounded-btn border border-border bg-surface px-3 py-1 text-sm"
-              >
-                {source}
-              </li>
+        <fieldset className="flex flex-col gap-2">
+          <legend className="mb-2 text-sm font-semibold text-text">Sources</legend>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {SOURCE_OPTIONS.map((option) => (
+              <Toggle
+                key={option.value}
+                label={option.label}
+                hint={option.hint}
+                checked={option.value === 'PHB' || sources.includes(option.value)}
+                disabled={option.value === 'PHB'}
+                onChange={(on) => toggleSource(option.value, on)}
+              />
             ))}
-          </ul>
+          </div>
           <p className="text-xs text-text-muted">
-            Adding books and optional rules comes in milestone M11.
+            Turning on a book never turns on its optional rules. Turning one off keeps every choice
+            already made from it.
           </p>
-        </section>
+        </fieldset>
+
+        <fieldset className="flex flex-col gap-2">
+          <legend className="mb-2 text-sm font-semibold text-text">Optional rules</legend>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {RULE_FLAG_OPTIONS.map((option) => (
+              <Toggle
+                key={option.value}
+                label={option.label}
+                hint={option.hint}
+                checked={rules[option.value]}
+                onChange={(on) => setRules({ ...rules, [option.value]: on })}
+              />
+            ))}
+          </div>
+          <p className="text-xs text-text-muted">
+            Feats, multiclassing and Tasha&apos;s options are saved now and used by level up.
+          </p>
+        </fieldset>
+        <ChoiceGroup
+          legend="Encumbrance"
+          name="encumbrance"
+          options={ENCUMBRANCE_OPTIONS}
+          value={rules.encumbrance}
+          onChange={(encumbrance) => setRules({ ...rules, encumbrance })}
+        />
+        <ChoiceGroup
+          legend="Rest length"
+          name="rests"
+          options={REST_OPTIONS}
+          value={rules.rests}
+          onChange={(rests) => setRules({ ...rules, rests })}
+        />
 
         {existing && (
           <section
@@ -201,5 +274,42 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
       </form>
       {confirmation}
     </>
+  );
+}
+
+function Toggle({
+  label,
+  hint,
+  checked,
+  disabled = false,
+  onChange,
+}: {
+  label: string;
+  hint: string;
+  checked: boolean;
+  disabled?: boolean;
+  onChange: (checked: boolean) => void;
+}) {
+  return (
+    <label
+      className={cx(
+        'flex min-w-0 flex-col gap-0.5 rounded-btn border border-border bg-surface p-3',
+        'has-checked:border-accent has-checked:bg-surface-2 has-focus-visible:outline-2 has-focus-visible:outline-accent',
+        disabled ? 'cursor-default' : 'cursor-pointer hover:border-text-muted',
+      )}
+    >
+      <span className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={checked}
+          disabled={disabled}
+          onChange={(event) => onChange(event.target.checked)}
+          className="size-4 shrink-0 accent-(--omni-accent)"
+        />
+        <span className="min-w-0 font-semibold wrap-anywhere text-text">{label}</span>
+        {disabled && <Lock size={14} aria-label="Locked" className="shrink-0 text-text-muted" />}
+      </span>
+      <span className="text-xs text-text-muted">{hint}</span>
+    </label>
   );
 }
