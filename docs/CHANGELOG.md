@@ -4,7 +4,7 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
-## 2026-11-07 00:05 — M13 complete
+## 2026-11-06 23:50 — M13 complete
 
 - Reference now has seven short rules tables: actions, cover, exhaustion, death saves, DCs, advantage and rests. Tap a title to open it.
 - Check that the wording matches how your table plays these rules.
