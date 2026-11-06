@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 12:01 — Sync between devices (behind the scenes)
+
+- Added the logic that moves campaigns and characters between this device and a future account, including deletions.
+- If the same character changed on two devices, the app will ask which version to keep. It never overwrites quietly.
+- Not visible yet; the sign-in screen comes next. Checks pass.
+
 ## 2026-11-06 11:58 — Account database rules
 
 - Added the cloud database setup for future accounts: each person can only see and change their own campaigns and characters.

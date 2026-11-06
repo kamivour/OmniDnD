@@ -127,6 +127,8 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D117 | 2026-11-06 | At dawn or a rest, items that regain all charges refill automatically; dice regains wait for the player to enter the roll (the app adds the bonus and caps at the maximum). Zero-quantity records are skipped, and each entry keeps one counter. | Player rolls stay manual and visible |
 | D120 | 2026-11-06 | Common limited-use class features for every SRD class track uses by class level (Rage, Second Wind, Action Surge, Ki, Channel Divinity, Wild Shape, sorcery points). Variable-cost spending (Lay on Hands points, Metamagic, multi-point Ki) stays a manual pip adjustment. | General characters need their resources; costs other than 1 stay player-entered |
 | D121 | 2026-11-06 | Account sync will cover campaigns and characters, including their Undo history. Device preferences, bookmarks, backups and hub Undo history stay on each device. | Players share characters across devices; display settings and recovery points are per device |
+| D122 | 2026-11-06 | When a campaign or character changed both here and in the cloud since the last sync, the app asks which version to keep (this device or the cloud) and changes nothing until you choose. Untouched starter data on a new device quietly takes the cloud's copy. | Never silently overwrite a player's work |
+| D123 | 2026-11-06 | Downloaded changes replace local records directly, with an automatic backup first; they are not Undo steps. If they make this device's hub Undo history unreplayable, that history is cleared. | Undo covers your own actions; backups cover sync |
 
 ## Open questions
 
