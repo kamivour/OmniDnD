@@ -1,5 +1,5 @@
 import { useId, useRef, useState } from 'react';
-import { registry } from '../../data/registry';
+import { registry, registryFor } from '../../data/registry';
 import { ABILITIES, type Ability } from '../../engine/calc/abilities';
 import {
   AbilityBasesSchema,
@@ -297,7 +297,7 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
   const preview =
     previewRequested && !baseBlocked && !baseStateChanged
       ? previewBuildEdit(
-          { ...state, sheet, registry },
+          { ...state, sheet, registry: registryFor(state.build) },
           {
             changes: previewChanges,
             expected: baseline,

@@ -135,6 +135,7 @@ interface CharacterBuild {
   featureIds: string[];                            // extras only (feats, DM grants, homebrew); granted features are derived (D48)
   choices: Record<string, unknown>;
   items: { instanceId: string; itemId: string; container?: string; notes?: string }[];
+  customItems?: ItemDef[];                         // player-made items (id item.custom.*), saved with the character (D119)
   journal: { personality?: string; ideals?: string; bonds?: string; flaws?: string;
              backstory?: string; appearance?: Record<string, string>; notes?: string };
   overrides: { path: string; value: unknown; note: string }[];
@@ -178,6 +179,8 @@ interface LiveState {
 **Inventory editing (M9):** catalogue additions create separate instances; edits preserve item identity, equipment, attunement and charges while changing the chosen quantity, notes or location. New locations require present containers without cycles, while unchanged accepted legacy links remain recorded.
 
 **Item use (M9):** `data/mechanics/items.json` gives each consumable a `use`: activation (`action`, `special`, `none`), an attack flag, and any healing dice plus bonus (D118).
+
+**Custom items (M9):** custom weapons and armor copy stats from a catalogue item and record it as `baseItemId`, which also counts for weapon proficiency. Import rejects duplicate or non-custom ids.
 
 **Item charges (M9):** `data/srd/magic-items.json` imports SRD magic items with charges from a table checked against the item text; new items start full. A dice regain sets `rechargePending` until the entered roll is applied or skipped (D117).
 

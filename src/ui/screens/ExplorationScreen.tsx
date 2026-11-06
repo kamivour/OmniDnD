@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { registry } from '../../data/registry';
+import { registry, registryFor } from '../../data/registry';
 import { spellCastDetails } from '../../engine/commands';
 import { SectionLabel } from '../components/SectionLabel';
 import { Sheet } from '../components/Sheet';
@@ -20,7 +20,7 @@ export function ExplorationScreen() {
   const { state, sheet } = useCharacter();
   const { pin } = useDetail();
   const model = explorationModel(state, sheet, registry);
-  const context = { ...state, sheet, registry };
+  const context = { ...state, sheet, registry: registryFor(state.build) };
   const [casting, setCasting] = useState<{
     spellId: string;
     classId: string;

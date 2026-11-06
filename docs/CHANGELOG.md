@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 11:20 — Create your own items
+
+- Inventory has a Create item button: name, type, rarity, weight, cost, a short description, charges and healing for consumables.
+- Custom weapons and armor are based on a catalogue item, so they attack and protect like it and keep your proficiency.
+- Custom items are saved with the character and travel with export/import. Edit or delete them under Custom items.
+- Next: Features screen. Checks pass.
+
 ## 2026-11-06 11:03 — Use potions and consumables
 
 - Potions, acid, oil, scrolls and other consumables now have Use controls in Inventory and in the Combat Items tab.

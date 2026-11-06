@@ -1,4 +1,4 @@
-import type { Registry } from '../registry';
+import { characterRegistry, type Registry } from '../registry';
 import type { ItemDef } from '../schema';
 import { computeSheet, type CharacterState, type Sheet } from './sheet';
 
@@ -13,9 +13,10 @@ export interface WornArmor {
 
 function equippedArmor(
   state: EquipmentState,
-  registry: Registry,
+  bundled: Registry,
   includeEmpty: boolean,
 ): WornArmor[] {
+  const registry = characterRegistry(bundled, state.build);
   return state.build.items.flatMap(({ instanceId, itemId }) => {
     const live = Object.hasOwn(state.live.items, instanceId)
       ? state.live.items[instanceId]
@@ -46,7 +47,7 @@ export function armorReplacements(
 ): WornArmor[] {
   const item = state.build.items.find((entry) => entry.instanceId === instanceId);
   if (!item) return [];
-  const def = registry.get('item', item.itemId);
+  const def = characterRegistry(registry, state.build).get('item', item.itemId);
   if (!def.armor) return [];
   const shield = def.armor.category === 'shield';
   return equippedArmor(state, registry, true).filter(

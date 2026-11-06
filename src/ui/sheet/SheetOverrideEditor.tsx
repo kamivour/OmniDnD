@@ -1,5 +1,5 @@
 import { useId, useRef, useState } from 'react';
-import { registry } from '../../data/registry';
+import { registryFor } from '../../data/registry';
 import { overrideTargets, type OverrideTarget } from '../../engine/calc/override-targets';
 import { resetValueOverride, setValueOverride } from '../../engine/commands/value-overrides';
 import { DieSchema } from '../../engine/schema';
@@ -26,7 +26,7 @@ export function SheetOverrideEditor() {
   const [path, setPath] = useState('');
   const [draft, setDraft] = useState<OverrideDraft | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
-  const targets = overrideTargets({ ...state, sheet, registry });
+  const targets = overrideTargets({ ...state, sheet, registry: registryFor(state.build) });
   const current = targets.find((target) => target.path === path);
   const reviewed = draft?.reviewed ?? current;
   const displayed = current ?? reviewed;

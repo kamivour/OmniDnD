@@ -123,6 +123,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D115 | 2026-11-06 | Replaces D11: add optional accounts with cloud sync in milestone MA. Local-first storage and guest mode stay; export/import remains. | Friends will use the app for their own campaigns and characters |
 | D116 | 2026-11-06 | SRD magic items (source DMG) are DM-awarded, so campaign source filters and warnings do not apply to them. | Magic items come from the table, not character options |
 | D118 | 2026-11-06 | Drinking or giving a potion costs your action in combat (Q4, rules as written). When an ally gives you one, you spend nothing. Only self-healing is applied; other item effects stay manual. | 2014 rules; DM outcomes stay manual |
+| D119 | 2026-11-06 | Custom items are saved on the character, so they travel with export/import and ignore campaign source filters. Custom weapons and armor copy a chosen catalogue item's stats and proficiency. | Portable homebrew without a rules editor |
 | D117 | 2026-11-06 | At dawn or a rest, items that regain all charges refill automatically; dice regains wait for the player to enter the roll (the app adds the bonus and caps at the maximum). Zero-quantity records are skipped, and each entry keeps one counter. | Player rolls stay manual and visible |
 
 ## Open questions

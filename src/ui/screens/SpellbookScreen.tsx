@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type Ref } from 'react';
 import { Search } from 'lucide-react';
-import { registry } from '../../data/registry';
+import { registry, registryFor } from '../../data/registry';
 import { adjustSlot, setSpellFavorite, spellCastDetails } from '../../engine/commands';
 import { SchoolSchema } from '../../engine/schema';
 import { overridePath } from '../../engine/calc/value-overrides';
@@ -86,7 +86,7 @@ export function SpellbookScreen() {
   const { run } = useCommand();
   const model = spellbookModel(state, sheet, registry);
   const { slots, levels } = model;
-  const context = { ...state, sheet, registry };
+  const context = { ...state, sheet, registry: registryFor(state.build) };
   const entries = model.entries.map((entry) => ({
     ...entry,
     ritualAvailable:

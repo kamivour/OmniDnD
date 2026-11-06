@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M9 — Inventory and Features.
-**Next up:** Portable custom items, saved with the character and retained by import/export.
+**Next up:** Features screen: origin groups, details, uses, recharge, favorites and toggles.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -142,7 +142,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Attunement limit and explicit bond records, with focused-rest reminders and legacy record review
 - [x] Item charge counters and explicit recharge prompts tied to rests/game time
 - [x] Consumables and potions: entered rolls/outcomes, 2014 combat action costs, shared Combat Items controls
-- [ ] Portable custom items, saved with the character and retained by import/export
+- [x] Portable custom items, saved with the character and retained by import/export
 - [ ] Features screen: origin groups, passive/active/triggered details, uses/shared pools, recharge, favorites and supported explicit toggles
 - [ ] Gate: general characters, cross-screen values, offline reload and exact Undo at phone/desktop widths; manual QA documented
 
@@ -167,6 +167,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — Custom items: create, edit and delete per-character items; weapons/armor copy a base item's stats and proficiency; travel with export. Next: Features screen.
 - 2026-11-06 — Consumables: potions heal by entered roll, spend the action in combat, ally-given potions revive; shared Inventory and Combat Items controls. Next: custom items.
 - 2026-11-06 — M9 charges: SRD magic items, charge counters, dawn/rest recharge prompts with entered rolls, exact Undo. Consumables next.
 - 2026-11-06 — M9 attunement: record bonds with limits, manual rest reminders and exact Undo. Paused for user review; charges next.

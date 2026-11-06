@@ -1,7 +1,7 @@
 import { applyPatches, enablePatches, produceWithPatches, type Draft } from 'immer';
 import { z } from 'zod';
 import { computeSheet } from '../calc/sheet';
-import type { Registry } from '../registry';
+import { characterRegistry, type Registry } from '../registry';
 import {
   AutomationSchema,
   BookmarkSchema,
@@ -194,7 +194,7 @@ export function appendManagementEvent(
 }
 
 /** Validate source state, crosslinks, and every explicit reference before saving or importing. */
-export function validateManagementData(state: ManagementData, registry: Registry): void {
+export function validateManagementData(state: ManagementData, bundled: Registry): void {
   if (Object.hasOwn(state, 'automation')) AutomationSchema.parse(state.automation);
   if (Object.hasOwn(state, 'reducedMotion'))
     PreferencesSchema.shape.reducedMotion.parse(state.reducedMotion);
@@ -226,6 +226,7 @@ export function validateManagementData(state: ManagementData, registry: Registry
       ...record,
     });
     const { build, live } = file;
+    const registry = characterRegistry(bundled, build);
     registry.get('race', build.raceId);
     if (build.subraceId) registry.get('race', build.subraceId);
     for (const entry of build.classes) {

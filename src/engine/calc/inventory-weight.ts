@@ -1,4 +1,4 @@
-import type { Registry } from '../registry';
+import { characterRegistry, type Registry } from '../registry';
 import type { LiveState } from '../schema';
 import type { CharacterState } from './sheet';
 import { currencyTotals } from './currency';
@@ -94,9 +94,10 @@ export function coinWeight(currency: LiveState['currency']): string {
 /** Sum each positive recorded instance once, independently of its container links or equipment flags. */
 export function inventoryWeight(
   state: Pick<CharacterState, 'build' | 'live'>,
-  registry: Registry,
+  bundled: Registry,
   capacityPounds?: number,
 ): InventoryWeight {
+  const registry = characterRegistry(bundled, state.build);
   let itemWeight: Fraction = { numerator: 0n, denominator: 1n };
   const knownItems: KnownWeightItem[] = [];
   const unknown: UnknownWeightItem[] = [];

@@ -1,9 +1,16 @@
 import type { Draft } from 'immer';
 import { z } from 'zod';
-import { CharacterBuildSchema, LiveStateSchema, refId } from '../schema';
+import {
+  CharacterBuildSchema,
+  CUSTOM_ITEM_PREFIX,
+  CustomItemSchema,
+  LiveStateSchema,
+  refId,
+  type ItemDef,
+} from '../schema';
 import { equalData } from './management';
 import type { CharacterData, Check, Command, CommandContext } from './runner';
-import { block, warn } from './shared';
+import { block, changeLiveItems, warn, type ItemChange } from './shared';
 
 const InstanceIdSchema = z.string().min(1);
 const BaselineSchema = z.strictObject({
@@ -111,7 +118,12 @@ export const addInventoryItem: Command<AddInventoryItemPayload> = {
     if (!def || def.kind !== 'item') return [block('That catalogue item is unavailable')];
     const checks = containerChecks(ctx, instanceId, container);
     // DMG magic items are awarded by the DM, not chosen from campaign books (D116).
-    if (def.source !== 'DMG' && !ctx.campaign.sources.includes(def.source))
+    // Custom items belong to the character, not to a book.
+    if (
+      def.source !== 'DMG' &&
+      !def.id.startsWith(CUSTOM_ITEM_PREFIX) &&
+      !ctx.campaign.sources.includes(def.source)
+    )
       checks.push(warn(`${def.name} is outside this campaign's enabled sources`));
     return checks;
   },
@@ -199,5 +211,157 @@ export const removeInventoryItem: Command<RemoveInventoryItemPayload> = {
       draft.live.items = items;
     } else delete draft.live.items[instanceId];
     return `Remove item: ${target.def.name}${moved > 0 ? `; moved ${moved} direct ${moved === 1 ? 'item' : 'items'} to Carried` : ''}`;
+  },
+};
+
+const CreateCustomItemPayloadSchema = z.strictObject({
+  item: z.unknown(),
+  instanceId: InstanceIdSchema,
+  quantity: z.int().nonnegative(),
+  container: InstanceIdSchema.optional(),
+  notes: z.string().optional(),
+});
+const EditCustomItemPayloadSchema = z.strictObject({
+  item: z.unknown(),
+  /** The definition the player reviewed; blocks if it changed meanwhile. */
+  expected: z.unknown().optional(),
+});
+const DeleteCustomItemPayloadSchema = z.strictObject({ itemId: refId('item') });
+
+export type CreateCustomItemPayload = {
+  item: ItemDef;
+  instanceId: string;
+  quantity: number;
+  container?: string;
+  notes?: string;
+};
+export type EditCustomItemPayload = { item: ItemDef; expected?: ItemDef };
+export type DeleteCustomItemPayload = z.infer<typeof DeleteCustomItemPayloadSchema>;
+
+function customItemIndex(ctx: CommandContext, itemId: string) {
+  return (ctx.build.customItems ?? []).findIndex((item) => item.id === itemId);
+}
+
+function customItemCheck(item: unknown): Check[] {
+  const parsed = CustomItemSchema.safeParse(item);
+  if (parsed.success) return [];
+  return [
+    block(`Custom item is invalid: ${parsed.error.issues[0]?.message ?? 'check the fields'}`),
+  ];
+}
+
+/** Define a new item for this character and record the first copy of it. */
+export const createCustomItem: Command<CreateCustomItemPayload> = {
+  name: 'createCustomItem',
+  check: (ctx, input) => {
+    const parsed = CreateCustomItemPayloadSchema.safeParse(input);
+    if (!parsed.success) return [block('New item details are invalid')];
+    const invalid = customItemCheck(parsed.data.item);
+    if (invalid.length > 0) return invalid;
+    const item = parsed.data.item as ItemDef;
+    const { instanceId, container } = parsed.data;
+    if (ctx.registry.entries.has(item.id)) return [block('That custom item id is already used')];
+    if (RESERVED_NEW_IDS.has(instanceId)) return [block('Choose a fresh item instance id')];
+    if (
+      ctx.build.items.some((entry) => entry.instanceId === instanceId) ||
+      Object.hasOwn(ctx.live.items, instanceId)
+    )
+      return [block('That item instance id already exists')];
+    return containerChecks(ctx, instanceId, container);
+  },
+  apply: (draft, { item, instanceId, quantity, container, notes }) => {
+    const def = CustomItemSchema.parse(item);
+    (draft.build.customItems ??= []).push(def);
+    draft.build.items.push({
+      instanceId,
+      itemId: def.id,
+      ...(container === undefined ? {} : { container }),
+      ...(notes === undefined ? {} : { notes }),
+    });
+    draft.live.items[instanceId] = {
+      qty: quantity,
+      equipped: false,
+      attuned: false,
+      ...(def.charges && { charges: def.charges.max }),
+    };
+    return `Create custom item: ${def.name} ×${quantity}`;
+  },
+};
+
+/** Replace a custom item's definition. Every copy follows; charges stay within the new maximum. */
+export const editCustomItem: Command<EditCustomItemPayload> = {
+  name: 'editCustomItem',
+  check: (ctx, input) => {
+    const parsed = EditCustomItemPayloadSchema.safeParse(input);
+    if (!parsed.success) return [block('Item edits are invalid')];
+    const invalid = customItemCheck(parsed.data.item);
+    if (invalid.length > 0) return invalid;
+    const item = parsed.data.item as ItemDef;
+    const index = customItemIndex(ctx, item.id);
+    if (index < 0) return [block('That custom item is unavailable')];
+    const current = ctx.build.customItems![index]!;
+    if (parsed.data.expected !== undefined && !equalData(parsed.data.expected, current))
+      return [block('This item changed after review. Review it again.')];
+    const copies = ctx.build.items.filter((entry) => entry.itemId === item.id);
+    const live = (instanceId: string) =>
+      Object.hasOwn(ctx.live.items, instanceId) ? ctx.live.items[instanceId] : undefined;
+    const checks: Check[] = [];
+    if (
+      current.attunement &&
+      !item.attunement &&
+      copies.some((entry) => live(entry.instanceId)?.attuned)
+    )
+      checks.push(warn(`${current.name} will no longer need attunement; its bond ends`));
+    if (
+      current.category !== item.category &&
+      copies.some((entry) => live(entry.instanceId)?.equipped)
+    )
+      checks.push(warn(`${current.name} is equipped; check it after changing its type`));
+    return checks;
+  },
+  apply: (draft, { item }, ctx) => {
+    const def = CustomItemSchema.parse(item);
+    const index = customItemIndex(ctx, def.id);
+    const before = ctx.build.customItems![index]!;
+    draft.build.customItems![index] = def;
+    const changes: ItemChange[] = [];
+    for (const entry of ctx.build.items) {
+      if (entry.itemId !== def.id || !Object.hasOwn(ctx.live.items, entry.instanceId)) continue;
+      const live = ctx.live.items[entry.instanceId]!;
+      const values: ItemChange['values'] = {};
+      if (!def.charges) {
+        if (live.charges !== undefined) values.charges = undefined;
+        if (live.rechargePending !== undefined) values.rechargePending = undefined;
+      } else if (live.charges === undefined || !before.charges) values.charges = def.charges.max;
+      else if (live.charges > def.charges.max) values.charges = def.charges.max;
+      if (live.attuned && !def.attunement) values.attuned = false;
+      if (Object.keys(values).length > 0) changes.push({ instanceId: entry.instanceId, values });
+    }
+    changeLiveItems(draft.live, ctx.live.items, changes);
+    return `Edit custom item: ${before.name}${before.name === def.name ? '' : ` → ${def.name}`}`;
+  },
+};
+
+/** Remove a custom item definition once nothing on the character uses it. */
+export const deleteCustomItem: Command<DeleteCustomItemPayload> = {
+  name: 'deleteCustomItem',
+  check: (ctx, input) => {
+    const parsed = DeleteCustomItemPayloadSchema.safeParse(input);
+    if (!parsed.success) return [block('Item removal details are invalid')];
+    const { itemId } = parsed.data;
+    if (customItemIndex(ctx, itemId) < 0) return [block('That custom item is unavailable')];
+    if (ctx.build.items.some((entry) => entry.itemId === itemId))
+      return [block('Remove every copy from the inventory first')];
+    const { weapons, tools, expertise } = ctx.build.proficiencies;
+    const used: readonly string[] = [...weapons, ...tools, ...expertise, ...ctx.build.favorites];
+    if (used.includes(itemId)) return [block('Proficiencies or favorites still use this item')];
+    return [];
+  },
+  apply: (draft, { itemId }, ctx) => {
+    const index = customItemIndex(ctx, itemId);
+    const name = ctx.build.customItems![index]!.name;
+    draft.build.customItems!.splice(index, 1);
+    if (draft.build.customItems!.length === 0) delete draft.build.customItems;
+    return `Delete custom item: ${name}`;
   },
 };

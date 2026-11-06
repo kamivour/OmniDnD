@@ -13,6 +13,7 @@ import {
 } from '../inventory/InventoryItemDetails';
 import { inventoryGroups } from '../inventory/inventory-model';
 import { InventoryEditor, type InventoryEditorRequest } from '../inventory/InventoryEditor';
+import { CustomItemEditor, type CustomItemRequest } from '../inventory/CustomItemEditor';
 import { InventoryCurrency } from '../inventory/InventoryCurrency';
 import { InventoryWeight } from '../inventory/InventoryWeight';
 import { InventoryAttunement } from '../inventory/InventoryAttunement';
@@ -24,6 +25,8 @@ export function InventoryScreen() {
   const { state, sheet } = useCharacter();
   const { pin } = useDetail();
   const [editor, setEditor] = useState<InventoryEditorRequest | null>(null);
+  const [custom, setCustom] = useState<CustomItemRequest | null>(null);
+  const customItems = state.build.customItems ?? [];
   const opener = useRef<HTMLElement | null>(null);
   const addButton = useRef<HTMLButtonElement>(null);
   const conflict = useStore(storageStatusStore, (status) => status.conflict);
@@ -34,18 +37,31 @@ export function InventoryScreen() {
       <header>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h1 className="font-display text-xl">Inventory</h1>
-          <button
-            ref={addButton}
-            type="button"
-            disabled={conflict}
-            onClick={(event) => {
-              opener.current = event.currentTarget;
-              setEditor({ kind: 'add', instanceId: crypto.randomUUID() });
-            }}
-            className="min-h-11 rounded-btn border border-border px-3 text-sm text-accent disabled:opacity-40"
-          >
-            Add item
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              ref={addButton}
+              type="button"
+              disabled={conflict}
+              onClick={(event) => {
+                opener.current = event.currentTarget;
+                setEditor({ kind: 'add', instanceId: crypto.randomUUID() });
+              }}
+              className="min-h-11 rounded-btn border border-border px-3 text-sm text-accent disabled:opacity-40"
+            >
+              Add item
+            </button>
+            <button
+              type="button"
+              disabled={conflict}
+              onClick={(event) => {
+                opener.current = event.currentTarget;
+                setCustom({ kind: 'create', instanceId: crypto.randomUUID() });
+              }}
+              className="min-h-11 rounded-btn border border-border px-3 text-sm disabled:opacity-40"
+            >
+              Create item
+            </button>
+          </div>
         </div>
         <p className="mt-2 text-sm text-text-muted">
           Record your actual equipment. Track armor time and actions with the Game Clock and Combat
@@ -134,6 +150,44 @@ export function InventoryScreen() {
             </div>
           </section>
         ))
+      )}
+      {customItems.length > 0 && (
+        <section aria-label="Custom items" className="flex min-w-0 flex-col gap-2">
+          <h2 className="font-display text-base">Custom items</h2>
+          <p className="text-sm text-text-muted">
+            Saved with this character. Add more copies with Add item.
+          </p>
+          <ul className="flex flex-wrap gap-2">
+            {customItems.map((def) => (
+              <li key={def.id}>
+                <button
+                  type="button"
+                  aria-label={`Edit custom item: ${def.name}`}
+                  disabled={conflict}
+                  onClick={(event) => {
+                    opener.current = event.currentTarget;
+                    setCustom({ kind: 'edit', itemId: def.id });
+                  }}
+                  className="min-h-11 max-w-full rounded-btn border border-border px-3 text-sm wrap-anywhere disabled:opacity-40"
+                >
+                  {def.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      {custom && (
+        <CustomItemEditor
+          key={custom.kind === 'create' ? custom.instanceId : custom.itemId}
+          request={custom}
+          onClose={() => setCustom(null)}
+          returnFocusTo={() =>
+            opener.current?.isConnected && !opener.current.matches(':disabled')
+              ? opener.current
+              : addButton.current
+          }
+        />
       )}
       {editor && (
         <InventoryEditor

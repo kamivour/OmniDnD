@@ -1,4 +1,4 @@
-import type { Registry } from '../registry';
+import { characterRegistry, type Registry } from '../registry';
 import { recordedLevel, xpForLevel } from './advancement';
 import { CARRY_PER_STR } from '../rules2014';
 import type { HitDieName } from '../schema';
@@ -25,8 +25,9 @@ const signed = (value: number) => `${value >= 0 ? '+' : ''}${value}`;
 export function sheetBreakdowns(
   { campaign, build, live }: CharacterState,
   sheet: Sheet,
-  registry: Registry,
+  bundled: Registry,
 ): SheetBreakdowns {
+  const registry = characterRegistry(bundled, build);
   const classes = build.classes.map((entry) => ({
     ...entry,
     def: registry.get('class', entry.classId),

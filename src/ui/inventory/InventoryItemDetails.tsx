@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useStore } from 'zustand';
-import { registry } from '../../data/registry';
+import { registry, registryFor } from '../../data/registry';
 import { armorReplacements } from '../../engine/calc/equipment';
 import { adjustItemQuantity, equipItem, type Command } from '../../engine/commands';
 import { storageStatusStore } from '../../state/persistence';
@@ -122,7 +122,7 @@ export function InventoryItemControls({ instanceId }: { instanceId: string }) {
   const replacements = armorReplacements(state, registry, instanceId);
   const checks =
     equipItem.check?.(
-      { ...state, sheet, registry },
+      { ...state, sheet, registry: registryFor(state.build) },
       {
         instanceId,
         equipped: !item.equipped,

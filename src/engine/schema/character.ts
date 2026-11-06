@@ -13,7 +13,7 @@ import {
   SourceSchema,
   SpellTypeSchema,
 } from './common';
-import { ModifierSchema } from './refs';
+import { CustomItemSchema, ModifierSchema } from './refs';
 
 /** Campaign rules plus layers B (build) and C (live state). DATA.md §4. */
 
@@ -112,6 +112,8 @@ export const CharacterBuildSchema = z
         notes: z.string().optional(),
       }),
     ),
+    /** Items the player defined, by `item.custom.` id. Absent in older saves. */
+    customItems: z.array(CustomItemSchema).optional(),
     journal: z.strictObject({
       personality: z.string().optional(),
       ideals: z.string().optional(),
@@ -184,6 +186,18 @@ export const CharacterBuildSchema = z
         });
       }
       instanceIds.add(item.instanceId);
+    });
+
+    const customIds = new Set<string>();
+    build.customItems?.forEach((item, index) => {
+      if (customIds.has(item.id)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Duplicate custom item ${item.id}`,
+          path: ['customItems', index, 'id'],
+        });
+      }
+      customIds.add(item.id);
     });
   });
 

@@ -15,8 +15,9 @@ import srdMagicItems from '../../data/srd/magic-items.json';
 import srdRaces from '../../data/srd/races.json';
 import srdSpells from '../../data/srd/spells.json';
 import srdSubclasses from '../../data/srd/subclasses.json';
-import { buildRegistry } from '../engine/registry';
+import { buildRegistry, characterRegistry } from '../engine/registry';
 import {
+  type CharacterBuild,
   MechanicsOverlayPackSchema,
   RefPackSchema,
   SummaryOverlayPackSchema,
@@ -57,3 +58,8 @@ export const registry = buildRegistry(
   SummaryOverlayPackSchema.parse(summaries),
   Object.values(mechanicsPacks).flatMap((pack) => MechanicsOverlayPackSchema.parse(pack)),
 );
+
+/** Bundled data plus one character's custom items. */
+export function registryFor(build: Pick<CharacterBuild, 'customItems'>) {
+  return characterRegistry(registry, build);
+}

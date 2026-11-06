@@ -1,5 +1,5 @@
 import { useRef, useState, type ReactNode } from 'react';
-import { registry } from '../../data/registry';
+import { registry, registryFor } from '../../data/registry';
 import { ABILITIES } from '../../engine/calc/abilities';
 import { sheetBreakdowns } from '../../engine/calc/sheet-breakdowns';
 import { setInspiration } from '../../engine/commands';
@@ -57,7 +57,7 @@ export function CharacterSheetScreen() {
     def.defenses ? [{ name: def.name, ...def.defenses }] : [],
   );
   const racialTraits = sheet.features.filter(({ def }) => def.origin === 'race');
-  const itemName = (id: string) => registry.get('item', id).name;
+  const itemName = (id: string) => registryFor(build).get('item', id).name;
   const attackDamage = (dice: string | undefined, bonus: number) =>
     dice ? `${dice}${bonus ? signed(bonus) : ''}` : String(bonus);
   const closeEdit = () => {

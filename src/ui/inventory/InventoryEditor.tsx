@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { useStore } from 'zustand';
-import { registry } from '../../data/registry';
+import { registryFor } from '../../data/registry';
 import { equalData } from '../../engine/commands/management';
 import {
   addInventoryItem,
@@ -44,6 +44,7 @@ export function InventoryEditor({
   returnFocusTo: () => HTMLElement | null | undefined;
 }) {
   const { state, sheet } = useCharacter();
+  const registry = registryFor(state.build);
   const { run, warningOpen } = useCommand();
   const conflict = useStore(storageStatusStore, (status) => status.conflict);
   const automation = useStore(characterStore, (store) => store.automation);

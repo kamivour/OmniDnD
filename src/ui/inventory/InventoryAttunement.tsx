@@ -1,6 +1,6 @@
 import { useId, useRef, useState } from 'react';
 import { useStore } from 'zustand';
-import { registry } from '../../data/registry';
+import { registryFor } from '../../data/registry';
 import { attunedItems } from '../../engine/calc/attunement';
 import { setItemAttunement } from '../../engine/commands';
 import { ATTUNEMENT_LIMIT } from '../../engine/rules2014';
@@ -16,6 +16,7 @@ const button = 'min-h-11 rounded-btn border border-border px-3 text-sm disabled:
 /** A recorded bond remains separate from equipment, quantity and elapsed rest time. */
 export function InventoryAttunement() {
   const { state } = useCharacter();
+  const registry = registryFor(state.build);
   const [open, setOpen] = useState(false);
   const opener = useRef<HTMLButtonElement>(null);
   const conflict = useStore(storageStatusStore, (status) => status.conflict);
@@ -76,6 +77,7 @@ function AttunementDialog({
   returnFocusTo: () => HTMLElement | null;
 }) {
   const { state, sheet } = useCharacter();
+  const registry = registryFor(state.build);
   const { run, warningOpen } = useCommand();
   const conflict = useStore(storageStatusStore, (status) => status.conflict);
   const [search, setSearch] = useState('');

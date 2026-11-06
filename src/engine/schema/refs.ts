@@ -258,7 +258,7 @@ export const ItemRaritySchema = z.enum([
 /** Item recharge rolls also use d3 (Wand of Secrets: 1d3). */
 const RegainDiceSchema = z
   .string()
-  .regex(/^[1-9]d*d(3|4|6|8|10|12|20)$/, 'Expected dice like "1d6"');
+  .regex(/^[1-9]\d*d(3|4|6|8|10|12|20)$/, 'Expected dice like "1d6"');
 
 export const ItemChargesSchema = z
   .strictObject({
@@ -338,6 +338,8 @@ export const ItemDefSchema = z
     attunement: z.boolean().optional(),
     charges: ItemChargesSchema.optional(),
     use: ItemUseSchema.optional(),
+    /** Catalogue item this one counts as for weapon proficiency (a custom +1 rapier is a rapier). */
+    baseItemId: refId('item').optional(),
   })
   .refine(srdTextOnly, SRD_TEXT_ONLY)
   .refine((item) => (item.category === 'weapon') === (item.weapon !== undefined), {
@@ -348,6 +350,19 @@ export const ItemDefSchema = z
     message: 'Armor, and only armor, has armor stats',
     path: ['armor'],
   });
+
+/** Id prefix for a character's own items. Bundled packs never use it. */
+export const CUSTOM_ITEM_PREFIX = 'item.custom.';
+
+/** An item the player defines. It lives on the build, so it travels with exports. */
+export const CustomItemSchema = ItemDefSchema.refine(
+  (item) =>
+    item.id.startsWith(CUSTOM_ITEM_PREFIX) &&
+    item.source === 'HB' &&
+    !item.srd &&
+    item.url === undefined,
+  { message: 'Custom items use an item.custom. id, source HB and no book link', path: ['id'] },
+);
 
 export const ConditionDefSchema = z
   .strictObject({ kind: z.literal('condition'), id: refId('condition'), ...refBase })

@@ -1,4 +1,4 @@
-import type { Registry } from '../registry';
+import { characterRegistry, type Registry } from '../registry';
 import { recordedLevel, xpForLevel } from './advancement';
 import {
   CARRY_PER_STR,
@@ -92,7 +92,8 @@ export interface Sheet {
   nextLevelXp?: number;
 }
 
-export function computeSheet(state: CharacterState, registry: Registry): Sheet {
+export function computeSheet(state: CharacterState, bundled: Registry): Sheet {
+  const registry = characterRegistry(bundled, state.build);
   const sheet = computeValues(state, registry);
   if (safeValues(sheet) || state.build.overrides.length === 0) return sheet;
   // Older exports allow opaque overrides. Preserve their records, but do not let a
@@ -569,7 +570,7 @@ function weaponAttack(
       ? 'DEX'
       : 'STR';
   const proficient = build.proficiencies.weapons.some(
-    (entry) => entry === weapon.category || entry === def.id,
+    (entry) => entry === weapon.category || entry === def.id || entry === def.baseItemId,
   );
   const abilityPart = { label: ability, value: mods[ability] };
   const attack: WeaponAttack = {

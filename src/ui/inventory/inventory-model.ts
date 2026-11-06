@@ -1,5 +1,5 @@
 import type { CharacterState } from '../../engine/calc/sheet';
-import type { Registry } from '../../engine/registry';
+import { characterRegistry, type Registry } from '../../engine/registry';
 import type { ItemCharges, ItemDef, ItemUse } from '../../engine/schema';
 
 export interface InventoryItem {
@@ -28,7 +28,7 @@ type ResolvedItem = { owned: OwnedItem; item: InventoryItem };
 
 function resolveItem(owned: OwnedItem, state: InventoryState, registry: Registry): InventoryItem {
   const live = state.live.items[owned.instanceId];
-  const def = registry.get('item', owned.itemId);
+  const def = characterRegistry(registry, state.build).get('item', owned.itemId);
   const charges = def.charges
     ? Math.min(live?.charges ?? def.charges.max, def.charges.max)
     : live?.charges;

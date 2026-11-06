@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import {
+  CUSTOM_ITEM_PREFIX,
   RefEntrySchema,
+  type ItemDef,
   type MechanicsOverlay,
   type RefEntry,
   type RefKind,
@@ -14,6 +16,8 @@ export interface Registry {
   readonly entries: ReadonlyMap<string, RefEntry>;
   /** Throws when the id is missing or is another kind: a broken reference is a data bug. */
   get<K extends RefKind>(kind: K, id: string): EntryOf<K>;
+  /** The bundled registry under a character's custom items. */
+  readonly base?: Registry;
 }
 
 /**
@@ -29,6 +33,8 @@ export function buildRegistry(
   const entries = new Map<string, RefEntry>();
   for (const entry of packs.flat()) {
     if (entries.has(entry.id)) throw new Error(`${entry.id} is in more than one pack`);
+    if (entry.id.startsWith(CUSTOM_ITEM_PREFIX))
+      throw new Error(`${entry.id} uses the custom item prefix`);
     entries.set(entry.id, entry);
   }
 
@@ -50,8 +56,13 @@ export function buildRegistry(
     }
   }
 
+  return lookup(entries);
+}
+
+function lookup(entries: ReadonlyMap<string, RefEntry>, base?: Registry): Registry {
   return {
     entries,
+    ...(base && { base }),
     get<K extends RefKind>(kind: K, id: string) {
       const entry = entries.get(id);
       if (!entry) throw new Error(`Unknown ${kind} ${id}`);
@@ -59,4 +70,28 @@ export function buildRegistry(
       return entry as EntryOf<K>;
     },
   };
+}
+
+const scoped = new WeakMap<Registry, WeakMap<readonly ItemDef[], Registry>>();
+
+/**
+ * The registry one character sees: bundled entries plus the build's custom items, so every
+ * calculation and command resolves them like catalogue items. Cached per custom item list.
+ */
+export function characterRegistry(
+  registry: Registry,
+  build: { customItems?: readonly ItemDef[] | undefined },
+): Registry {
+  const base = registry.base ?? registry;
+  const items = build.customItems;
+  if (!items || items.length === 0) return base;
+  let cache = scoped.get(base);
+  if (!cache) scoped.set(base, (cache = new WeakMap()));
+  const cached = cache.get(items);
+  if (cached) return cached;
+  const entries = new Map(base.entries);
+  for (const item of items) entries.set(item.id, item);
+  const result = lookup(entries, base);
+  cache.set(items, result);
+  return result;
 }

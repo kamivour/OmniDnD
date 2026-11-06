@@ -1,6 +1,6 @@
 import type { CharacterState } from '../../engine/calc/sheet';
 import type { Registry } from '../../engine/registry';
-import type { ItemDef, Source } from '../../engine/schema';
+import { CUSTOM_ITEM_PREFIX, type ItemDef, type Source } from '../../engine/schema';
 import { inventoryGroups } from './inventory-model';
 
 /** Search small catalogue fields; large SRD descriptions remain available in item details. */
@@ -19,7 +19,10 @@ export function catalogueItems(
         entry.kind === 'item' &&
         (category === undefined || entry.category === category) &&
         // DMG magic items are DM-awarded treasure, so campaign source filters never hide them (D116).
-        (sources === undefined || entry.source === 'DMG' || sources.includes(entry.source)) &&
+        (sources === undefined ||
+          entry.source === 'DMG' ||
+          entry.id.startsWith(CUSTOM_ITEM_PREFIX) ||
+          sources.includes(entry.source)) &&
         (!query || `${entry.name} ${entry.summary?.effect ?? ''}`.toLowerCase().includes(query)),
     )
     .sort(

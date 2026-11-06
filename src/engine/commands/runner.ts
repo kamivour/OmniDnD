@@ -1,7 +1,7 @@
 import { applyPatches, enablePatches, produceWithPatches, type Draft } from 'immer';
 import { computeSheet, type CharacterState, type Sheet } from '../calc/sheet';
 import { retainCounterCorrections } from '../calc/value-overrides';
-import type { Registry } from '../registry';
+import { characterRegistry, type Registry } from '../registry';
 import {
   CharacterBuildSchema,
   LiveStateSchema,
@@ -73,7 +73,8 @@ export function runCommand<Payload>(
   registry: Registry,
   { eventId, realTime, force = false, automation = 'assisted' }: RunOptions,
 ): RunResult {
-  const ctx: CommandContext = { ...state, registry, sheet: computeSheet(state, registry) };
+  const scoped = characterRegistry(registry, state.build);
+  const ctx: CommandContext = { ...state, registry: scoped, sheet: computeSheet(state, scoped) };
   const checks = command.check?.(ctx, payload) ?? [];
   const reasons = (level: Check['level']) =>
     checks.filter((check) => check.level === level).map((check) => check.reason);
