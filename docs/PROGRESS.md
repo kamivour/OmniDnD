@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M13 done. M14 (level-up wizard, more classes, multiclass) not started.
-**Next up:** plan M14 tasks. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M14 (level-up wizard, more classes, multiclass) not started.
+**Next up:** M14 task 1, SRD creature import. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -35,13 +35,13 @@ Build for multiple campaigns and characters, including friends' future character
 | MA | Accounts + cloud sync | 2 | done | Optional login keeps each person's campaigns and characters; guest mode and offline use unchanged |
 | M10 | Effects editor + Conditions | 2 | done | Effects on you can be added, edited and end on their own; conditions show their consequences |
 | M11 | Campaign Setup: sources + optional rules | 2 | done | Each campaign picks its books and optional rules; changes never delete character choices |
-| M12 | Journal + Companions | 2 | done | |
-| M13 | Searchable Reference | 2 | done | |
-| M14 | Full level-up wizard + more classes + multiclass | 3 | todo | |
-| M15 | Ally/enemy tracker | 3 | todo | |
-| M16 | Dice roller, themes, more books | 4 | todo | |
+| M12 | Journal + Companions | 2 | done | Journal entries and companions save, show on every screen, survive reload and Undo |
+| M13 | Searchable Reference | 2 | done | Any bundled rule can be found by name; quick tables work offline |
+| M14 | Full level-up wizard + more classes + multiclass | 3 | todo | Every SRD class reaches level 20 through the wizard; multiclassing and feats follow campaign toggles |
+| M15 | Ally/enemy tracker | 3 | todo | A whole fight can be tracked: order, HP and conditions for allies and enemies, all undoable |
+| M16 | Dice roller, themes, more books | 4 | todo | Optional dice roller, Parchment theme, backups, Xanathar's and Tasha's packs; rules review done with the user |
 
-Detail one milestone at a time. Later Phase 2+ screens remain placeholders until their milestone starts.
+All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
 ## Checklists
 
@@ -177,10 +177,43 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Quick tables and rules summaries in our own words
 - [x] Gate: phone and desktop widths, reload, manual QA documented
 
+### M14 — Full level-up wizard + more classes + multiclass
+- [ ] SRD creature import: SRD monster statblocks into `data/srd/`, searchable in Reference (D130); companion templates and the M15 tracker read from it
+- [ ] Engine, multiclass: `levelUp` can add a new class only when the campaign allows multiclassing; checks 2014 ability minimums for the old and new class; grants the smaller multiclass proficiency set
+- [ ] Engine, level choices: subclass at the class's subclass level; ASI (+2 or +1/+1, cap 20) or a feat only when feats are on; class picks such as Fighting Style, Expertise, Favored Enemy, Metamagic, Invocations
+- [ ] Engine, spells on level-up: new cantrips and spells known per class table, Wizard adds two spellbook spells, known casters may swap one spell; prepared counts recompute
+- [ ] Level-up wizard UI: class, HP, new features, subclass, ASI or feat, class picks, spells, review; applies as one undoable command; replaces the minimal level-up
+- [ ] Martial and half-caster classes end to end, levels 1–20: Barbarian, Fighter, Monk, Rogue, Paladin, Ranger; features, resources and slots checked per level
+- [ ] Full casters end to end, levels 1–20: Bard, Cleric, Druid, Sorcerer, Warlock, Wizard; Pact Magic and Mystic Arcanum, Sorcery Points, Wild Shape uses, Channel Divinity
+- [ ] Feats: SRD Grappler plus PHB feats in our own words in `data/content/`; ability, HP, initiative and proficiency effects applied, the rest shown as reminders
+- [ ] Tasha options behind campaign toggles: optional class features and custom origin; turning a toggle off keeps choices and lists conflicts (as M11)
+- [ ] Artificer (TCE, 2014-compatible, own words): class, infusions as choices, Battle Smith and Artillerist (Q32)
+- [ ] Owner-derived companion templates: Ranger's companion (PHB 2014, Q23, HP uses the higher of its normal HP or 4 × ranger level), Steel Defender, Eldritch Cannon, Find Familiar forms
+- [ ] Guided character builder: race, class, background, ability method, skills, equipment and spells for a new character in any campaign; blank create stays available
+- [ ] Gate: build a Fighter 2 / Wizard 3 and a Warlock / Sorcerer through the wizard; one character per SRD class to level 5; phone and desktop widths, Undo, reload, manual QA documented
+
+### M15 — Ally/enemy tracker
+- [ ] Engine, tracker: one encounter per character (Q31) with combatants (you, companions, allies, enemies), initiative order, round and turn; logged and undoable
+- [ ] Engine, combatants: add from an SRD creature or a quick custom entry (name, AC, HP, initiative bonus); groups get numbers ("Goblin 2"); HP is average or a roll the player enters
+- [ ] Engine, turn flow: next turn moves through the order; your turn start resets your action economy; rounds drive existing effect timers; companions act on their own or the owner's initiative
+- [ ] Tracker UI in Combat: initiative list, quick damage and heal, conditions, defeated toggle, statblock preview; compact at 375 px
+- [ ] Hits, saves and damage dealt stay player-entered; the tracker warns (concentration, 0 HP) but never decides
+- [ ] Gate: run a three-round fight with The Fool, a companion and three enemies; phone and desktop widths, Undo, reload, manual QA documented
+
+### M16 — Dice roller, themes, more books
+- [ ] Optional dice roller (off by default, Settings toggle): roll from attack, damage, save and check buttons; roll history; results never applied without the player (Q5)
+- [ ] Parchment theme and theme picker (system, dark, parchment); tokens only
+- [ ] Backups UI: export and import all data, restore preview, reminder when no recent backup
+- [ ] Xanathar's and Tasha's packs in our own words (Q6): subclasses, races, spells, feats; Artificer Alchemist and Armorer
+- [ ] Search and lists respect each campaign's books; content packs appear in Reference
+- [ ] Journal shows formatted Markdown safely (D129)
+- [ ] Portrait upload (Q12): image resized and stored on the device; icon stays the default
+- [ ] Rules review with the user: Q21, Q22, D80 and every default ruling; DECISIONS updated with the answers
+- [ ] Gate: switch themes, back up and restore, add a Tasha subclass, roll and apply damage by hand; phone and desktop widths, offline reload, manual QA documented
+
 ## Backlog (not scheduled)
 
-- Optional dice roller with roll history
-- Parchment theme
+- Going online with accounts: user-led, follow [HOSTING.md](HOSTING.md) (Q1, Q28)
 - Shared campaign view for a party or DM (after accounts)
 - Party view (several characters side by side)
 - Print / PDF character sheet export
@@ -191,6 +224,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-07 — M12 and M13 verified. Planned M14–M16 task lists; tracker scope and Artificer subclasses added as open questions. Next: SRD creature import.
 - 2026-11-07 — M12 review fix: companions can be edited (attacks, uses, abilities, traits, notes); strict number entry; initiative box refreshes on Undo.
 - 2026-11-06 — M13 complete: quick tables added; search and tables pass at 375 and 1440 px; manual QA listed. Next: M14.
 - 2026-11-06 — M13 rules search: Reference page searches conditions, spells, items, features, classes and races by name; conditions show SRD text.

@@ -173,6 +173,8 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q28 | Which hosting and sync provider for accounts? | MA | Supabase (auth + Postgres with row-level security); the app keeps working offline and without an account | User |
 | Q29 | A level 20 Barbarian's Rage is unlimited. How should the app show it? | M10 | Keep 6 uses at level 17+; the player restores pips as needed | User |
 | Q30 | Should Tasha sidekicks be a campaign option, and should Artificer cannon and Steel Defender templates ship with M14? | M12 / M14 | Sidekicks are plain custom companions with type "sidekick"; no campaign option; Artificer templates wait for M14 | User |
+| Q31 | Should the ally/enemy tracker belong to one character or be shared by everyone in a campaign? | M15 | One tracker per character, saved with that character; a shared party view stays in the backlog | User |
+| Q32 | Which Artificer subclasses ship with M14? | M14 | Battle Smith and Artillerist, since they own companions; Alchemist and Armorer come with the M16 Tasha pack | User |
 
 ## How to add an entry
 

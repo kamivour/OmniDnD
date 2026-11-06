@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 00:08 — Plan for the remaining milestones
+
+- Journal, Companions and Reference rechecked; all work as planned.
+- Progress now lists every task left: the full level-up wizard and all SRD classes (M14), the ally/enemy tracker (M15), then the dice roller, Parchment theme, backups and Xanathar's/Tasha's packs (M16).
+- Two new questions in Decisions: should the fight tracker be per character or shared, and which Artificer subclasses come first.
+- Next: bundling the SRD creatures for companions and the tracker. Checks pass.
+
 ## 2026-11-07 00:04 — Edit companions
 
 - Each companion now has an Edit button. You can change its stats, speeds, ability scores, attacks, limited uses, traits and notes.
