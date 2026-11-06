@@ -1,14 +1,16 @@
 import { z } from 'zod';
 import { ABILITIES } from '../calc/abilities';
+import { sourceConflicts } from '../calc/campaign-rules';
 import { POINT_BUY_COSTS, STANDARD_ARRAY } from '../creation';
 import { CampaignSchema, type Campaign, type CharacterBuild } from '../schema';
 import type { ManagementCommand } from './management';
 
-/** Phase 1 campaign settings; source books and optional rules stay unchanged. */
+/** Campaign settings; sources and optional rules are optional so older callers keep them. */
 export type CampaignChanges = Pick<
   Campaign,
   'name' | 'leveling' | 'hpMethod' | 'hpLevelFloor' | 'abilityMethod'
->;
+> &
+  Partial<Pick<Campaign, 'sources' | 'optionalRules'>>;
 
 const CampaignChangesSchema = CampaignSchema.pick({
   name: true,
@@ -16,7 +18,13 @@ const CampaignChangesSchema = CampaignSchema.pick({
   hpMethod: true,
   hpLevelFloor: true,
   abilityMethod: true,
-}).extend({ name: z.string().trim().min(1) });
+}).extend({
+  name: z.string().trim().min(1),
+  sources: CampaignSchema.shape.sources
+    .refine((sources) => sources.includes('PHB'), "The Player's Handbook stays enabled")
+    .optional(),
+  optionalRules: CampaignSchema.shape.optionalRules.optional(),
+});
 
 const UpdateCampaignSchema = z.strictObject({
   campaignId: z.string().min(1),
@@ -34,7 +42,20 @@ export const updateCampaign: ManagementCommand<{
     if (!parsed.success) return [{ level: 'block', reason: 'Campaign settings are invalid' }];
     if (!Object.hasOwn(ctx.campaigns, parsed.data.campaignId))
       return [{ level: 'block', reason: 'Campaign does not exist' }];
-    return [];
+    const { campaignId, changes } = parsed.data;
+    if (!changes.sources) return [];
+    const campaign = { sources: changes.sources };
+    // Choices from a removed book stay on the character; the player decides what to replace.
+    return Object.values(ctx.characters).flatMap(({ build }) => {
+      if (build.campaignId !== campaignId) return [];
+      const before = new Set(sourceConflicts(ctx.campaigns[campaignId]!, build, ctx.registry));
+      const added = sourceConflicts(campaign, build, ctx.registry).filter(
+        (note) => !before.has(note),
+      );
+      return added.length > 0
+        ? [{ level: 'warn' as const, reason: `${build.name} keeps ${added.join(', ')}` }]
+        : [];
+    });
   },
   apply: (draft, payload, ctx) => {
     const { campaignId, changes } = UpdateCampaignSchema.parse(payload);

@@ -112,7 +112,7 @@ interface Campaign {
   hpLevelFloor: 'none' | 'one';                    // D44: 'none' (default) lets roll + CON go below 1
   abilityMethod: 'standard-array' | 'point-buy' | 'rolled';
   sources: ('PHB' | 'XGE' | 'TCE' | 'HB')[];
-  optionalRules: Record<string, boolean>;          // all false unless the user enables them
+  optionalRules: Record<string, boolean | string>; // flags off unless enabled; encumbrance and rests hold an option name
 }
 
 interface CharacterBuild {

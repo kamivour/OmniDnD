@@ -30,8 +30,8 @@ export const CampaignSchema = z.strictObject({
   hpLevelFloor: HpLevelFloorSchema,
   abilityMethod: z.enum(['standard-array', 'point-buy', 'rolled']),
   sources: z.array(SourceSchema).min(1),
-  /** All false unless the user enables them. */
-  optionalRules: z.record(z.string(), z.boolean()),
+  /** Flags are off unless enabled; choice rules (encumbrance, rests) hold their option name. Read through optionalRules(). */
+  optionalRules: z.record(z.string(), z.union([z.boolean(), z.string()])),
 });
 
 const HpEntrySchema = z.strictObject({

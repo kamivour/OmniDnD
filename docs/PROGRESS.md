@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M11 — Campaign Setup: sources + optional rules.
-**Next up:** M11 task list. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M11 Campaign Setup toggles. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -34,7 +34,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M9 | Inventory + Features screen | 2 | done | General inventory and feature controls sync across screens; custom items export; changes survive reload and Undo |
 | MA | Accounts + cloud sync | 2 | done | Optional login keeps each person's campaigns and characters; guest mode and offline use unchanged |
 | M10 | Effects editor + Conditions | 2 | done | Effects on you can be added, edited and end on their own; conditions show their consequences |
-| M11 | Campaign Setup: sources + optional rules | 2 | todo | |
+| M11 | Campaign Setup: sources + optional rules | 2 | doing | Each campaign picks its books and optional rules; changes never delete character choices |
 | M12 | Journal + Companions | 2 | todo | |
 | M13 | Searchable Reference | 2 | todo | |
 | M14 | Full level-up wizard + more classes + multiclass | 3 | todo | |
@@ -159,6 +159,12 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Condition consequences: advantage, disadvantage and auto-fail reminders on checks, saves and attacks; exhaustion levels; condition details in own words
 - [x] Gate: phone and desktop widths, exact Undo, reload; manual QA documented
 
+### M11 — Campaign Setup: sources + optional rules
+- [x] Engine: campaigns save sources and optional rules (defaults off); choices from a removed book are kept and listed as conflicts
+- [ ] Campaign Setup: book and optional-rule toggles with conflict preview; enabling a book never enables its rules
+- [ ] Rules in play: rest variants change rest length; variant encumbrance slows you and adds roll reminders; potion as bonus action
+- [ ] Gate: phone and desktop widths, Undo, reload; feats, multiclassing and Tasha options recorded for M14
+
 ## Backlog (not scheduled)
 
 - Optional dice roller with roll history
@@ -173,6 +179,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M11 engine: campaigns save books and optional rules; removing a book keeps its choices and warns which ones; PHB stays on.
 - 2026-11-06 — M10 complete: effect with condition and AC bonus checked at phone and desktop width, exact Undo, reload; manual QA listed. Next: M11.
 - 2026-11-06 — M10 conditions: roll reminders for conditions and exhaustion, save tags, condition details in own words, exhaustion levels listed.
 - 2026-11-06 — M10 effect editor: add or edit effects with timing, conditions, bonuses and damage defenses; Sheet and damage pad show effect defenses.

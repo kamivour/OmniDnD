@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 13:07 — Campaign books and optional rules (behind the scenes)
+
+- Campaigns can now store which books they use and which optional rules are on. Nothing changes on screen yet; the settings toggles come next.
+- Removing a book later will never delete a character's spells, items or features from it. The app lists them and asks first.
+- Checks pass.
+
 ## 2026-11-06 13:03 — Effects and conditions milestone done
 
 - Effects on you and condition reminders are finished and checked on phone and desktop: Undo puts everything back exactly, and a reload keeps your effects.
