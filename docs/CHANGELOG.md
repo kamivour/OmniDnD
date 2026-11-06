@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 23:05 — Companions screen
+
+- The Companions page now works: add a pet, mount or summon (or start from Mastiff or Riding horse), with its own HP, conditions and uses.
+- In combat, each companion gets Command buttons that spend your Action, Bonus Action or Reaction. Initiative can be entered per companion.
+- Check: the card layout on a phone and whether commanding feels right. SRD creature list and Artificer templates are not in yet (Q30).
+- Checks pass.
+
 ## 2026-11-06 22:40 — Companions engine
 
 - Pets, mounts, familiars, summons and sidekicks can now be saved with a character, each with its own HP, conditions and uses.

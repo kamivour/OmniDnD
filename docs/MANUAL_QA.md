@@ -107,6 +107,13 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Enable potions as a bonus action and drink one in combat. Judge whether the economy cost and the "give" distinction match your table's expectation.
 - [ ] Turn encumbrance Off and confirm the Inventory still shows weight facts without capacity warnings or speed penalties.
 
+## Phase 2 — M12: Companions
+
+- [ ] Add your real pet or mount. Judge whether the card shows what you need at a glance on a phone.
+- [ ] In combat, press Command: Bonus and check the economy bar spends the bonus action as your table expects.
+- [ ] Damage a companion to 0 HP. Judge whether "destroyed" and the Resummon option fit how your DM rules it.
+- [ ] Long rest, then check companion uses recharge when you expect.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

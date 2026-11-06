@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M12 — Journal + Companions.
-**Next up:** M12 Companions UI. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M12 gate. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -169,7 +169,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Journal engine: narrative traits, notes, quests, NPCs, locations and dated session notes
 - [x] Journal UI: character narrative, markdown notes, quests, NPCs, locations and session logs
 - [x] Companions engine: companion definitions, owner-derived stats, independent live state and commanding
-- [ ] Companions UI: companions screen and combat actions with turn economy integration
+- [x] Companions UI: companions screen and combat actions with turn economy integration
 - [ ] Gate: phone and desktop widths, Undo, reload, manual QA documented
 
 ## Backlog (not scheduled)
@@ -186,6 +186,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M12 Companions UI: screen with HP, conditions, uses, initiative and commanding that spends your turn economy; Mastiff and horse templates; sidekick option deferred (Q30).
 - 2026-11-06 — M12 Companions engine: definitions, owner-derived stats, own HP, conditions and uses, commanding, timed expiry, undo and export checks; SRD creature import deferred (D130).
 - 2026-11-06 — Journal review fixes: "&" title, local session date, 44 px quest checkbox, DATA.md schema; Markdown shown unformatted (D129).
 - 2026-11-06 — M12 Journal UI: responsive narrative, markdown notes, quests, NPCs, locations and session logs with live Undo and persistence.

@@ -42,7 +42,6 @@ const CHARACTER_ROUTES: { path: string; heading: string; notice?: string }[] = [
   {
     path: '/characters/the-fool/companions',
     heading: 'Companions',
-    notice: 'Coming in Phase 2.',
   },
   { path: '/characters/the-fool/journal', heading: 'Journal' },
   {
@@ -95,7 +94,6 @@ test('Companions opens from desktop navigation or mobile More', async ({ page, i
   }
   await expect(page).toHaveURL(/\/characters\/the-fool\/companions$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Companions' })).toBeVisible();
-  await expect(page.getByText('Coming in Phase 2.', { exact: true })).toBeVisible();
 });
 
 test('unknown routes show not found', async ({ page }) => {

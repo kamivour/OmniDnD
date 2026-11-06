@@ -165,7 +165,7 @@ Items grouped by container. Equip toggle, quantity `− / +`, Use/Consume (potio
 - Phase 2: full editor: source, duration, modifiers (e.g., +1 AC, resistance), expiry trigger, manual override. Injuries and custom effects are DM-defined (no built-in mechanics).
 
 ### Companions (Phase 2)
-Planned for M12; no companion screen, commands or schema fields are implemented by this plan. Show name, type (pet / mount / familiar / summon / sidekick), icon, AC, HP, speed, attacks, abilities, conditions, uses, notes and initiative; Tasha sidekicks require the campaign option.
+Built in M12: companion screen, commands and schema. Creature import and Artificer templates are not yet in (Q30). Show name, type (pet / mount / familiar / summon / sidekick), icon, AC, HP, speed, attacks, abilities, conditions, uses, notes and initiative; Tasha sidekicks require the campaign option.
 
 - **Statblocks:** import SRD 5.1 creatures such as Mastiff into `data/srd/`. Non-SRD companions use user entry or own-words content; never copy book text into public content packs.
 - **Owner-derived values:** cover Eldritch Cannon, Steel Defender, Ranger companions and Find Familiar, computing values from owner class level, proficiency and ability modifiers where the selected 2014 rule requires them. Familiar forms otherwise retain fixed SRD stats; Ranger PHB/Tasha variant choice is Q23, and users never type numbers the engine can derive.

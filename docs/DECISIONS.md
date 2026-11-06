@@ -172,6 +172,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q27 | Should attunement controls complete focused rests or automatically end bonds after death, prerequisite loss or separation? | M9 | Record verified bonds explicitly; use shared rest/clock controls and review contact, prerequisites, curses and ending conditions at the table | User / DM |
 | Q28 | Which hosting and sync provider for accounts? | MA | Supabase (auth + Postgres with row-level security); the app keeps working offline and without an account | User |
 | Q29 | A level 20 Barbarian's Rage is unlimited. How should the app show it? | M10 | Keep 6 uses at level 17+; the player restores pips as needed | User |
+| Q30 | Should Tasha sidekicks be a campaign option, and should Artificer cannon and Steel Defender templates ship with M14? | M12 / M14 | Sidekicks are plain custom companions with type "sidekick"; no campaign option; Artificer templates wait for M14 | User |
 
 ## How to add an entry
 
