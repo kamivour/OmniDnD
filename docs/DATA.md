@@ -253,7 +253,8 @@ interface CompanionLive {
 - **Ownership:** definitions and live state belong to the owning character's save and export; every definition has a live entry and the reverse.
 - **Derived values:** formulas follow the owner's level (or one class's level), proficiency and ability modifiers (`calc/companions.ts`).
 - **Play:** damage, healing, temp HP, conditions, uses, initiative, dismiss, resummon and commanding are engine commands, all logged and undoable. Timed companions leave play on the shared clock; short, long and dawn uses recharge with rests.
-- **Still to come:** SRD creature statblocks (Mastiff and similar) in `data/srd/` and templates for Steel Defender, Eldritch Cannon, Ranger companions and Find Familiar. Artificer templates depend on M14 and use the 2014-compatible `TCE` class only.
+- **Creatures:** `kind: 'creature'` entries (size, type, AC, HP, speeds, abilities, saves, skills, defenses, senses, CR, traits, actions, reactions, legendary actions) come from the SRD import into `data/srd/creatures.json` and show in Reference search.
+- **Still to come:** templates for Steel Defender, Eldritch Cannon, Ranger companions and Find Familiar. Artificer templates depend on M14 and use the 2014-compatible `TCE` class only.
 
 ## 5. Commands and event log
 

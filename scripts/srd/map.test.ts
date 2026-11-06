@@ -3,6 +3,7 @@ import {
   BackgroundDefSchema,
   ClassDefSchema,
   ConditionDefSchema,
+  CreatureDefSchema,
   FeatureDefSchema,
   ItemDefSchema,
   RaceDefSchema,
@@ -15,6 +16,7 @@ import {
   mapClass,
   mapClassFeatures,
   mapCondition,
+  mapCreature,
   mapItem,
   mapMagicItem,
   mapRace,
@@ -28,6 +30,7 @@ import {
   referencedIds,
   rollFromSlots,
   type RawFeature,
+  type RawMonster,
   type RawItem,
   type RawLevel,
   type RawMagicItem,
@@ -773,5 +776,80 @@ describe('mapMagicItem', () => {
     expect(() => mapMagicItem(magic({ index: 'x', rarity: { name: 'Mythic' } }), [])).toThrow(
       /unknown rarity/,
     );
+  });
+});
+
+describe('mapCreature', () => {
+  const monster = (over: Partial<RawMonster> = {}): RawMonster => ({
+    index: 'test-beast',
+    name: 'Test Beast',
+    size: 'Medium',
+    type: 'beast',
+    alignment: 'unaligned',
+    armor_class: [{ type: 'natural', value: 12 }],
+    hit_points: 11,
+    hit_points_roll: '2d8 + 2',
+    speed: { walk: '30 ft.', fly: '60 ft.', hover: true },
+    strength: 10,
+    dexterity: 14,
+    constitution: 12,
+    intelligence: 2,
+    wisdom: 12,
+    charisma: 6,
+    proficiencies: [
+      { value: 4, proficiency: { index: 'saving-throw-dex', name: 'Saving Throw: DEX' } },
+      { value: 3, proficiency: { index: 'skill-perception', name: 'Skill: Perception' } },
+    ],
+    damage_vulnerabilities: [],
+    damage_resistances: [],
+    damage_immunities: [],
+    condition_immunities: [],
+    senses: { darkvision: '60 ft.', passive_perception: 13 },
+    languages: '',
+    challenge_rating: 0.5,
+    proficiency_bonus: 2,
+    xp: 100,
+    actions: [
+      {
+        name: 'Bite',
+        desc: 'Melee Weapon Attack.',
+        attack_bonus: 4,
+        damage: [{ damage_dice: '1d6 + 2', damage_type: { index: 'piercing', name: 'Piercing' } }],
+        usage: { type: 'recharge on roll', dice: '1d6', min_value: 5 },
+      },
+    ],
+    ...over,
+  });
+
+  it('maps numbers, saves, skills, speeds and action usage', () => {
+    const creature = mapCreature(monster());
+    expect(CreatureDefSchema.parse(creature)).toEqual(creature);
+    expect(creature).toMatchObject({
+      id: 'creature.test-beast',
+      size: 'medium',
+      ac: 12,
+      acNote: 'natural armor',
+      hpFormula: '2d8+2',
+      speed: { walk: 30, fly: 60, hover: true },
+      saves: { DEX: 4 },
+      skills: { perception: 3 },
+      senses: { darkvision: 60, passivePerception: 13 },
+    });
+    expect(creature.actions[0]).toMatchObject({
+      usage: 'Recharge 5–6',
+      damage: [{ dice: '1d6+2', type: 'piercing' }],
+    });
+  });
+
+  it('throws on a speed, sense or proficiency it does not know', () => {
+    expect(() => mapCreature(monster({ speed: { teleport: '30 ft.' } }))).toThrow(/unknown speed/);
+    expect(() => mapCreature(monster({ senses: { x: '5 ft.', passive_perception: 9 } }))).toThrow(
+      /unknown sense/,
+    );
+    expect(() =>
+      mapCreature(
+        monster({ proficiencies: [{ value: 1, proficiency: { index: 'tool-x', name: 'x' } }] }),
+      ),
+    ).toThrow(/unknown proficiency/);
   });
 });

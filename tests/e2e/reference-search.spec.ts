@@ -23,3 +23,19 @@ test('quick tables open and show exhaustion levels', async ({ page }) => {
   await expect(page.getByText('Speed reduced to 0.', { exact: true })).toBeVisible();
   await noOverflow(page);
 });
+
+test('reference search finds a creature and opens its statblock', async ({ page }, info) => {
+  await page.goto('/reference');
+  await page.getByRole('searchbox', { name: 'Search rules', exact: true }).fill('goblin');
+  const hit = page.getByRole('listitem').filter({ hasText: 'Goblin · Creature' }).first();
+  await hit.getByText('Show statblock', { exact: false }).click();
+  await expect(hit.getByText('Small humanoid (goblinoid), neutral evil')).toBeVisible();
+  await expect(hit.getByText('AC 15', { exact: true })).toBeVisible();
+  await expect(hit.getByText('Scimitar.', { exact: false })).toBeVisible();
+  await expect(hit.getByText('Nimble Escape.', { exact: false })).toBeVisible();
+  await noOverflow(page);
+  await page.screenshot({
+    path: info.outputPath(`creature-statblock-${page.viewportSize()!.width}.png`),
+    animations: 'disabled',
+  });
+});

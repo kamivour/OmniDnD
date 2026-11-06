@@ -19,6 +19,7 @@ import {
   mapClass,
   mapClassFeatures,
   mapCondition,
+  mapCreature,
   mapItem,
   mapMagicItem,
   mapRace,
@@ -35,6 +36,7 @@ import {
   type RawItem,
   type RawLevel,
   type RawMagicItem,
+  type RawMonster,
   type RawRace,
   type RawSpell,
   type RawSubclass,
@@ -80,6 +82,7 @@ const [
   rawEquipment,
   rawConditions,
   rawMagicItems,
+  rawMonsters,
 ] = await Promise.all([
   load<RawSpell>('Spells'),
   load<RawClass>('Classes'),
@@ -93,6 +96,7 @@ const [
   load<RawItem>('Equipment'),
   load<RawCondition>('Conditions'),
   load<RawMagicItem>('Magic-Items'),
+  load<RawMonster>('Monsters'),
 ]);
 
 const notes: string[] = [];
@@ -124,6 +128,7 @@ const packs: Record<string, RefEntry[]> = {
   items,
   'magic-items': magicItems,
   conditions: rawConditions.map(mapCondition),
+  creatures: rawMonsters.map(mapCreature),
 };
 
 for (const [name, entries] of Object.entries(packs)) {

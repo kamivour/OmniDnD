@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { registry } from '../../data/registry';
 import { searchRules } from '../../engine/calc/rules-search';
 import { inputClass } from '../components/fields';
+import { CreatureStatblock } from './CreatureStatblock';
+import { crText } from './creature-format';
 
 const KIND_LABEL = {
   condition: 'Condition',
@@ -12,6 +14,7 @@ const KIND_LABEL = {
   subclass: 'Subclass',
   race: 'Race',
   background: 'Background',
+  creature: 'Creature',
 } as const;
 
 /** Name search over bundled 2014 data. Conditions show their rules text; the rest show where they come from. */
@@ -28,7 +31,7 @@ export function RulesSearch() {
       <input
         type="search"
         aria-label="Search rules"
-        placeholder="Conditions, spells, items, features…"
+        placeholder="Conditions, spells, items, creatures…"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         className={inputClass}
@@ -47,6 +50,7 @@ export function RulesSearch() {
                   · {KIND_LABEL[hit.kind]} · {hit.source}
                 </span>
               </p>
+              {hit.kind === 'creature' && <CreatureHit id={hit.id} />}
               {hit.text && (
                 <p className="mt-1 whitespace-pre-line text-sm text-text-muted">{hit.text}</p>
               )}
@@ -55,5 +59,17 @@ export function RulesSearch() {
         </ul>
       )}
     </section>
+  );
+}
+
+function CreatureHit({ id }: { id: string }) {
+  const creature = registry.get('creature', id);
+  return (
+    <details className="mt-1">
+      <summary className="cursor-pointer text-sm text-text-muted">
+        CR {crText(creature.cr)} · AC {creature.ac} · HP {creature.hp}. Show statblock
+      </summary>
+      <CreatureStatblock creature={creature} />
+    </details>
   );
 }

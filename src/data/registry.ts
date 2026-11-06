@@ -9,6 +9,7 @@ import spellMechanics from '../../data/mechanics/spells.json';
 import srdBackgrounds from '../../data/srd/backgrounds.json';
 import srdClasses from '../../data/srd/classes.json';
 import srdConditions from '../../data/srd/conditions.json';
+import srdCreatures from '../../data/srd/creatures.json';
 import srdFeatures from '../../data/srd/features.json';
 import srdItems from '../../data/srd/items.json';
 import srdMagicItems from '../../data/srd/magic-items.json';
@@ -28,6 +29,7 @@ export const srdPacks = {
   backgrounds: srdBackgrounds,
   classes: srdClasses,
   conditions: srdConditions,
+  creatures: srdCreatures,
   features: srdFeatures,
   items: srdItems,
   magicItems: srdMagicItems,

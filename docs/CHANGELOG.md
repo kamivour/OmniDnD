@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 02:37 — SRD creatures in Reference search
+
+- Reference search now finds all 334 SRD creatures (goblin, mage, adult black dragon…). Open "Show statblock" for AC, HP, abilities, traits, actions and legendary actions.
+- Flavor text and pictures are left out. Creatures with several AC options list the extras in the AC note.
+- Next: multiclass rules in the engine. Checks pass.
+
 ## 2026-11-07 02:24 — Artificer subclasses decided
 
 - M14 will add the Artificer with Battle Smith and Artillerist; Alchemist and Armorer come later with the Tasha pack.

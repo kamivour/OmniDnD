@@ -41,6 +41,7 @@ export const REF_KINDS = [
   'subclass',
   'race',
   'background',
+  'creature',
 ] as const;
 export type RefKind = (typeof REF_KINDS)[number];
 

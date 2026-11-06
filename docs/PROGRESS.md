@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M14 (level-up wizard, more classes, multiclass) not started.
-**Next up:** M14 task 1, SRD creature import. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M14 (level-up wizard, more classes, multiclass), task 1 done.
+**Next up:** M14 task 2, multiclass engine. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -178,7 +178,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Gate: phone and desktop widths, reload, manual QA documented
 
 ### M14 — Full level-up wizard + more classes + multiclass
-- [ ] SRD creature import: SRD monster statblocks into `data/srd/`, searchable in Reference (D130); companion templates and the M15 tracker read from it
+- [x] SRD creature import: SRD monster statblocks into `data/srd/`, searchable in Reference (D130); companion templates and the M15 tracker read from it
 - [ ] Engine, multiclass: `levelUp` can add a new class only when the campaign allows multiclassing; checks 2014 ability minimums for the old and new class; grants the smaller multiclass proficiency set
 - [ ] Engine, level choices: subclass at the class's subclass level; ASI (+2 or +1/+1, cap 20) or a feat only when feats are on; class picks such as Fighting Style, Expertise, Favored Enemy, Metamagic, Invocations
 - [ ] Engine, spells on level-up: new cantrips and spells known per class table, Wizard adds two spellbook spells, known casters may swap one spell; prepared counts recompute
@@ -224,6 +224,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-07 — M14: 334 SRD creatures imported into `data/srd/creatures.json`; Reference search shows statblocks. Next: multiclass engine.
 - 2026-11-07 — M12 and M13 verified. Planned M14–M16 task lists; tracker scope and Artificer subclasses added as open questions. Next: SRD creature import.
 - 2026-11-07 — M12 review fix: companions can be edited (attacks, uses, abilities, traits, notes); strict number entry; initiative box refreshes on Undo.
 - 2026-11-06 — M13 complete: quick tables added; search and tables pass at 375 and 1440 px; manual QA listed. Next: M14.

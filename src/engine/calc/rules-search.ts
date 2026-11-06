@@ -19,6 +19,7 @@ const KIND_ORDER: RefKind[] = [
   'subclass',
   'race',
   'background',
+  'creature',
 ];
 
 /**

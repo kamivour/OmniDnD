@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import backgrounds from '../../data/srd/backgrounds.json';
 import classes from '../../data/srd/classes.json';
 import conditions from '../../data/srd/conditions.json';
+import creatures from '../../data/srd/creatures.json';
 import features from '../../data/srd/features.json';
 import items from '../../data/srd/items.json';
 import races from '../../data/srd/races.json';
@@ -14,6 +15,7 @@ const packs = {
   backgrounds,
   classes,
   conditions,
+  creatures,
   features,
   items,
   races,
@@ -120,6 +122,33 @@ describe('SRD packs', () => {
     });
     expect(get('item', 'item.flute').category).toBe('instrument');
     expect(get('item', 'item.disguise-kit').category).toBe('tool');
+  });
+
+  it('has the SRD creatures with their statblock numbers', () => {
+    expect(parsed.creatures).toHaveLength(334);
+    const goblin = get('creature', 'creature.goblin');
+    expect(goblin).toMatchObject({
+      size: 'small',
+      creatureType: 'humanoid (goblinoid)',
+      ac: 15,
+      acNote: 'leather armor, shield',
+      hp: 7,
+      hpFormula: '2d6',
+      speed: { walk: 30 },
+      cr: 0.25,
+      xp: 50,
+      skills: { stealth: 6 },
+      senses: { darkvision: 60, passivePerception: 9 },
+    });
+    expect(goblin.actions[0]).toMatchObject({
+      name: 'Scimitar',
+      attackBonus: 4,
+      damage: [{ dice: '1d6+2', type: 'slashing' }],
+    });
+    const dragon = get('creature', 'creature.adult-black-dragon');
+    expect(dragon.legendaryActions.length).toBeGreaterThan(0);
+    expect(dragon.saves).toMatchObject({ DEX: 7 });
+    expect(get('creature', 'creature.mage').acNote).toBe('15 with mage armor');
   });
 
   it('has every 2014 condition', () => {

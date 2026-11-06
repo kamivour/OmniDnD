@@ -120,6 +120,10 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Open each quick table. Judge whether the own-words wording matches how your table runs the rule.
 - [ ] Use search and tables on a phone. Judge whether they are easy to read one-handed.
 
+## Phase 3 — M14: Creatures
+
+- [ ] Search "goblin", "mage" and "dragon". Judge whether the statblocks are readable and complete enough to run a fight from.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

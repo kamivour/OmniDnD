@@ -379,6 +379,84 @@ export const ConditionDefSchema = z
   .strictObject({ kind: z.literal('condition'), id: refId('condition'), ...refBase })
   .refine(srdTextOnly, SRD_TEXT_ONLY);
 
+const CreatureTextSchema = z.strictObject({
+  name: z.string().min(1),
+  text: z.string().min(1),
+  /** "Recharge 5–6", "3/day" and similar. */
+  usage: z.string().optional(),
+  attackBonus: z.int().optional(),
+  damage: z
+    .array(
+      z.strictObject({
+        dice: z.string().regex(/^\d+(?:d\d+)?(?:[+-]\d+)?$/, 'Expected dice like "2d6+3"'),
+        type: DamageTypeSchema,
+      }),
+    )
+    .optional(),
+});
+
+const SpeedFeetSchema = z.int().min(0);
+const SensesSchema = z.strictObject({
+  darkvision: z.int().positive().optional(),
+  blindsight: z.int().positive().optional(),
+  truesight: z.int().positive().optional(),
+  tremorsense: z.int().positive().optional(),
+  passivePerception: z.int().min(0),
+});
+
+/** A statblock: monsters, animals and NPCs (SRD import, or our own words in data/content/). */
+export const CreatureDefSchema = z
+  .strictObject({
+    kind: z.literal('creature'),
+    id: refId('creature'),
+    ...refBase,
+    size: z.enum(['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan']),
+    /** "beast", "humanoid (goblinoid)", "swarm of Tiny beasts". */
+    creatureType: z.string().min(1),
+    alignment: z.string().min(1),
+    ac: z.int().min(0),
+    /** Armor worn, or the other ways the number changes ("15 with mage armor"). */
+    acNote: z.string().optional(),
+    hp: z.int().min(1),
+    /** Hit dice with the flat bonus, e.g. "2d6+4". */
+    hpFormula: z.string().regex(/^\d+d\d+(?:[+-]\d+)?$/),
+    speed: z.strictObject({
+      walk: SpeedFeetSchema.optional(),
+      fly: SpeedFeetSchema.optional(),
+      swim: SpeedFeetSchema.optional(),
+      climb: SpeedFeetSchema.optional(),
+      burrow: SpeedFeetSchema.optional(),
+      hover: z.boolean().optional(),
+    }),
+    abilities: z.strictObject({
+      STR: z.int().min(1).max(30),
+      DEX: z.int().min(1).max(30),
+      CON: z.int().min(1).max(30),
+      INT: z.int().min(1).max(30),
+      WIS: z.int().min(1).max(30),
+      CHA: z.int().min(1).max(30),
+    }),
+    /** Total modifiers, not proficiency flags. */
+    saves: z.partialRecord(AbilitySchema, z.int()).optional(),
+    skills: z.partialRecord(SkillSchema, z.int()).optional(),
+    /** Plain text, with the qualifier when there is one. */
+    vulnerabilities: z.array(z.string()),
+    resistances: z.array(z.string()),
+    immunities: z.array(z.string()),
+    conditionImmunities: z.array(z.string()),
+    senses: SensesSchema,
+    languages: z.string(),
+    /** 0.125, 0.25 and 0.5 are the fractions. */
+    cr: z.number().min(0),
+    xp: z.int().min(0),
+    proficiencyBonus: z.int().min(2),
+    traits: z.array(CreatureTextSchema),
+    actions: z.array(CreatureTextSchema),
+    reactions: z.array(CreatureTextSchema),
+    legendaryActions: z.array(CreatureTextSchema),
+  })
+  .refine(srdTextOnly, SRD_TEXT_ONLY);
+
 export const RefEntrySchema = z.discriminatedUnion('kind', [
   SpellDefSchema,
   FeatureDefSchema,
@@ -388,6 +466,7 @@ export const RefEntrySchema = z.discriminatedUnion('kind', [
   BackgroundDefSchema,
   ItemDefSchema,
   ConditionDefSchema,
+  CreatureDefSchema,
 ]);
 
 function uniqueIds(entries: { id: string }[], ctx: z.RefinementCtx) {
@@ -454,6 +533,7 @@ export type ItemDef = z.infer<typeof ItemDefSchema>;
 export type ItemCharges = z.infer<typeof ItemChargesSchema>;
 export type ItemRarity = z.infer<typeof ItemRaritySchema>;
 export type ConditionDef = z.infer<typeof ConditionDefSchema>;
+export type CreatureDef = z.infer<typeof CreatureDefSchema>;
 export type RefEntry = z.infer<typeof RefEntrySchema>;
 export type SummaryOverlay = z.infer<typeof SummaryOverlaySchema>;
 export type MechanicsOverlay = z.infer<typeof MechanicsOverlaySchema>;

@@ -11,6 +11,7 @@ import type {
   BackgroundDef,
   ClassDef,
   ConditionDef,
+  CreatureDef,
   FeatureDef,
   ItemCharges,
   ItemDef,
@@ -823,10 +824,191 @@ export function mapCondition(raw: RawCondition): ConditionDef {
 }
 
 // ---------------------------------------------------------------------------
+// Creatures
+
+interface RawCreatureText {
+  name: string;
+  desc: string;
+  attack_bonus?: number;
+  damage?: { damage_type?: ApiRef; damage_dice?: string }[];
+  usage?: {
+    type: string;
+    times?: number;
+    dice?: string;
+    min_value?: number;
+    rest_types?: string[];
+  };
+}
+
+export interface RawMonster {
+  index: string;
+  name: string;
+  size: string;
+  type: string;
+  subtype?: string;
+  alignment: string;
+  armor_class: {
+    type: string;
+    value: number;
+    armor?: ApiRef[];
+    spell?: ApiRef;
+    condition?: ApiRef;
+    desc?: string;
+  }[];
+  hit_points: number;
+  hit_points_roll: string;
+  speed: Record<string, string | boolean>;
+  strength: number;
+  dexterity: number;
+  constitution: number;
+  intelligence: number;
+  wisdom: number;
+  charisma: number;
+  proficiencies: { value: number; proficiency: ApiRef }[];
+  damage_vulnerabilities: string[];
+  damage_resistances: string[];
+  damage_immunities: string[];
+  condition_immunities: ApiRef[];
+  senses: Record<string, string | number>;
+  languages: string;
+  challenge_rating: number;
+  proficiency_bonus: number;
+  xp: number;
+  special_abilities?: RawCreatureText[];
+  actions?: RawCreatureText[];
+  reactions?: RawCreatureText[];
+  legendary_actions?: RawCreatureText[];
+}
+
+const feet = (text: unknown, what: string): number => {
+  const match = /^(\d+) ft\.?/.exec(String(text));
+  if (!match) throw new Error(`${what}: unknown distance "${String(text)}"`);
+  return Number(match[1]);
+};
+
+function creatureUsage(raw: RawCreatureText['usage']): string | undefined {
+  if (!raw) return undefined;
+  switch (raw.type) {
+    case 'per day':
+      return `${raw.times}/day`;
+    case 'recharge on roll':
+      return raw.min_value === 6 ? 'Recharge 6' : `Recharge ${raw.min_value}–6`;
+    case 'recharge after rest':
+      return 'Recharges after a short or long rest';
+    default:
+      throw new Error(`unknown usage type "${raw.type}"`);
+  }
+}
+
+type CreatureText = CreatureDef['actions'][number];
+
+function creatureTexts(list: RawCreatureText[] | undefined): CreatureText[] {
+  return (list ?? []).map((raw) => {
+    const damage = (raw.damage ?? []).flatMap((part) =>
+      part.damage_dice && part.damage_type
+        ? [{ dice: part.damage_dice.replace(/\s+/g, ''), type: part.damage_type.index }]
+        : [],
+    ) as NonNullable<CreatureText['damage']>;
+    const usage = creatureUsage(raw.usage);
+    return {
+      name: raw.name,
+      text: raw.desc,
+      ...(usage && { usage }),
+      ...(raw.attack_bonus !== undefined && { attackBonus: raw.attack_bonus }),
+      ...(damage.length > 0 && { damage }),
+    };
+  });
+}
+
+function creatureAc(raw: RawMonster): { ac: number; acNote?: string } {
+  const [first, ...others] = raw.armor_class;
+  if (!first) throw new Error(`${raw.index}: no armor class`);
+  const label = (entry: RawMonster['armor_class'][number]): string | undefined => {
+    if (entry.armor?.length) return entry.armor.map((item) => item.name.toLowerCase()).join(', ');
+    if (entry.type === 'natural') return 'natural armor';
+    if (entry.spell) return entry.spell.name.toLowerCase();
+    if (entry.condition) return `while ${entry.condition.name.toLowerCase()}`;
+    return entry.desc;
+  };
+  const parts = [
+    label(first),
+    ...others.map((entry) => `${entry.value} with ${label(entry) ?? 'a boost'}`),
+  ].filter((part): part is string => !!part);
+  return { ac: first.value, ...(parts.length > 0 && { acNote: parts.join('; ') }) };
+}
+
+export function mapCreature(raw: RawMonster): CreatureDef {
+  const saves: Partial<Record<Ability, number>> = {};
+  const skills: Record<string, number> = {};
+  for (const { value, proficiency } of raw.proficiencies) {
+    if (proficiency.index.startsWith('saving-throw-')) {
+      saves[toAbility(proficiency.index.slice('saving-throw-'.length))] = value;
+    } else if (proficiency.index.startsWith('skill-')) {
+      skills[proficiency.index.slice('skill-'.length)] = value;
+    } else throw new Error(`${raw.index}: unknown proficiency ${proficiency.index}`);
+  }
+
+  const speed: CreatureDef['speed'] = {};
+  for (const [kind, value] of Object.entries(raw.speed)) {
+    if (kind === 'hover') speed.hover = value === true;
+    else if (['walk', 'fly', 'swim', 'climb', 'burrow'].includes(kind)) {
+      speed[kind as 'walk'] = feet(value, `${raw.index} speed`);
+    } else throw new Error(`${raw.index}: unknown speed ${kind}`);
+  }
+
+  const { passive_perception: passive, ...rawSenses } = raw.senses;
+  const senses: CreatureDef['senses'] = { passivePerception: Number(passive) };
+  for (const [kind, value] of Object.entries(rawSenses)) {
+    if (!['darkvision', 'blindsight', 'truesight', 'tremorsense'].includes(kind))
+      throw new Error(`${raw.index}: unknown sense ${kind}`);
+    senses[kind as 'darkvision'] = feet(value, `${raw.index} ${kind}`);
+  }
+
+  return {
+    kind: 'creature',
+    id: `creature.${raw.index}`,
+    name: raw.name,
+    ...SRD,
+    size: lower(raw.size),
+    creatureType: raw.subtype ? `${raw.type} (${raw.subtype})` : raw.type,
+    alignment: raw.alignment,
+    ...creatureAc(raw),
+    hp: raw.hit_points,
+    hpFormula: raw.hit_points_roll.replace(/\s+/g, ''),
+    speed,
+    abilities: {
+      STR: raw.strength,
+      DEX: raw.dexterity,
+      CON: raw.constitution,
+      INT: raw.intelligence,
+      WIS: raw.wisdom,
+      CHA: raw.charisma,
+    },
+    ...(Object.keys(saves).length > 0 && { saves }),
+    ...(Object.keys(skills).length > 0 && {
+      skills: skills as NonNullable<CreatureDef['skills']>,
+    }),
+    vulnerabilities: raw.damage_vulnerabilities,
+    resistances: raw.damage_resistances,
+    immunities: raw.damage_immunities,
+    conditionImmunities: raw.condition_immunities.map((condition) => condition.index),
+    senses,
+    languages: raw.languages,
+    cr: raw.challenge_rating,
+    xp: raw.xp,
+    proficiencyBonus: raw.proficiency_bonus,
+    traits: creatureTexts(raw.special_abilities),
+    actions: creatureTexts(raw.actions),
+    reactions: creatureTexts(raw.reactions),
+    legendaryActions: creatureTexts(raw.legendary_actions),
+  } as CreatureDef;
+}
+
+// ---------------------------------------------------------------------------
 // Report helpers
 
 const REF_ID =
-  /^(?:spell|feature|item|condition|class|subclass|race|background)(?:\.[a-z0-9]+(?:-[a-z0-9]+)*)+$/;
+  /^(?:spell|feature|item|condition|class|subclass|race|background|creature)(?:\.[a-z0-9]+(?:-[a-z0-9]+)*)+$/;
 
 /** Every reference id in a JSON value, as a value or as a record key (`featureUsesSpent`). */
 export function referencedIds(value: unknown, found = new Set<string>()): Set<string> {
