@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** MA — Accounts and cloud sync (local parts first; hosting waits, Q1/Q28).
-**Next up:** MA Gate: guest use unchanged, sync tests, hosting steps.
+**Current milestone:** M10 — Effects editor + Conditions.
+**Next up:** detail the M10 checklist. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -32,7 +32,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M7 | Character Sheet + Exploration + level-up | 1 | done | All computed values match TEST_CHARACTER §4 |
 | M8 | Phase 1 hardening | 1 | done | Definition of done (SPEC §8) met |
 | M9 | Inventory + Features screen | 2 | done | General inventory and feature controls sync across screens; custom items export; changes survive reload and Undo |
-| MA | Accounts + cloud sync | 2 | doing | Optional login keeps each person's campaigns and characters; guest mode and offline use unchanged |
+| MA | Accounts + cloud sync | 2 | done | Optional login keeps each person's campaigns and characters; guest mode and offline use unchanged |
 | M10 | Effects editor + Conditions | 2 | todo | |
 | M11 | Campaign Setup: sources + optional rules | 2 | todo | |
 | M12 | Journal + Companions | 2 | todo | |
@@ -151,7 +151,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Database schema and row-level security policies in the repo, so each account can only read and write its own rows
 - [x] Optional sign-in screen, hidden until a sync provider is configured; guest mode stays the default
 - [x] Two-way sync through the persistence layer with revision conflict checks; conflicts ask the user, never silently overwrite
-- [ ] Gate: guest-only use unchanged; sync tested against a local or mocked provider; hosting steps documented for the user
+- [x] Gate: guest-only use unchanged; sync tested against a local or mocked provider; hosting steps documented for the user
 
 ## Backlog (not scheduled)
 
@@ -167,6 +167,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — MA complete: guest builds unchanged and free of account code; sync verified with an in-memory cloud; HOSTING.md lists the steps to go online. Next: M10.
 - 2026-11-06 — Sign-in: Settings shows an Account section only in builds with a provider; email sign-in, Sync now, conflict choices. Guest builds omit the code. Next: MA Gate.
 - 2026-11-06 — Two-way sync engine: uploads, downloads and deletions per campaign/character with revision checks; conflicts wait for a choice. Tested with an in-memory cloud. Next: sign-in.
 - 2026-11-06 — Account database schema: one row per campaign or character, server revisions, owner-only access, no hard deletes. Static test checks the rules. Next: sign-in.

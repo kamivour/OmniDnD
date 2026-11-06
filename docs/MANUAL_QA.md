@@ -84,6 +84,13 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Open a friend's non-Bard character (Fighter, Monk, Cleric). Judge whether Rage, Ki, Channel Divinity and similar uses match what they track on paper.
 - [ ] Spend wand charges, pass a dawn and enter the regain roll. Judge the prompt wording, Skip/Set choices and whether charge rules match your table.
 
+## Phase 2 — MA: Accounts (after hosting, see HOSTING.md)
+
+- [ ] Create an account, confirm the email and sign in on a phone and a laptop. Judge whether the Account section explains what stays on the device.
+- [ ] Change a character on one device, press Sync now on both, and check the change, including Undo history, arrives intact.
+- [ ] Change the same character on both devices before syncing. Judge whether the keep-this-device / keep-cloud choice is clear and does what it says.
+- [ ] Have a friend sign in with their own account and confirm neither of you sees the other's campaigns.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

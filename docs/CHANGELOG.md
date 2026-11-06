@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 12:21 — Accounts ready; how to go online
+
+- Accounts are finished on the app side. Your current version stays guest-only and works exactly as before.
+- New guide, docs/HOSTING.md: create the free account database, add two settings, build and publish. GitHub Pages needs a small path change first unless you use a custom domain.
+- Next: effects editor and conditions (M10). Checks pass.
+
 ## 2026-11-06 12:20 — Optional sign-in
 
 - Settings gains an Account section with sign-in, Create account, Sync now and a "which version to keep" choice when needed.
