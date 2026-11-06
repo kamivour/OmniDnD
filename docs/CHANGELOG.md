@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 11:26 — Features screen
+
+- The Features page now lists everything your race, class, subclass, background and build give you, grouped by origin.
+- Each card shows where it came from, its action cost, uses with − / + pips, a Use button and a favorite star for Home.
+- Bonuses the app already applies are marked "Already counted on your sheet." Long rules text folds behind Show full text.
+- Next: the M9 check-through. Checks pass.
+
 ## 2026-11-06 11:20 — Create your own items
 
 - Inventory has a Create item button: name, type, rarity, weight, cost, a short description, charges and healing for consumables.

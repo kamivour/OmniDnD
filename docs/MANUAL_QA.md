@@ -80,6 +80,7 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Review recorded attunement bonds, duplicate copies and depleted items. Judge the limit, DM warnings and focused-rest reminders before marking or ending a bond.
 - [ ] Drink a potion in combat, have an ally give one at 0 HP, and throw acid. Judge the action cost, roll entry and the table-resolved wording.
 - [ ] Create a homebrew weapon and a charged trinket, then edit and export them. Judge the form, the based-on choice and whether the attack matches.
+- [ ] Open Features for your own character. Judge the grouping, long-text folding and whether Use, pips and favorites feel right next to Combat and Home.
 - [ ] Spend wand charges, pass a dawn and enter the regain roll. Judge the prompt wording, Skip/Set choices and whether charge rules match your table.
 
 ## Deferred rules review — M5

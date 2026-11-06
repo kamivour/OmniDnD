@@ -9,6 +9,7 @@ import { CombatScreen } from './ui/screens/CombatScreen';
 import { CharacterSheetScreen } from './ui/screens/CharacterSheetScreen';
 import { DashboardScreen } from './ui/screens/DashboardScreen';
 import { ExplorationScreen } from './ui/screens/ExplorationScreen';
+import { FeaturesScreen } from './ui/screens/FeaturesScreen';
 import { InventoryScreen } from './ui/screens/InventoryScreen';
 import { NewCharacterScreen } from './ui/screens/NewCharacterScreen';
 import { PlaceholderScreen } from './ui/screens/PlaceholderScreen';
@@ -26,6 +27,7 @@ const BUILT = new Set([
   'spells',
   'explore',
   'inventory',
+  'features',
   'reference',
   'settings',
 ]);
@@ -55,6 +57,7 @@ export function App() {
               <Route path="spells" element={<SpellbookScreen />} />
               <Route path="explore" element={<ExplorationScreen />} />
               <Route path="inventory" element={<InventoryScreen />} />
+              <Route path="features" element={<FeaturesScreen />} />
               <Route path="reference" element={<ReferenceScreen />} />
               <Route path="settings" element={<SettingsScreen />} />
               {NAV.filter((n) => !BUILT.has(n.to)).map((n) => (

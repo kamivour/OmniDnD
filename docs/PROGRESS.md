@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M9 — Inventory and Features.
-**Next up:** Features screen: origin groups, details, uses, recharge, favorites and toggles.
+**Next up:** M9 Gate: general characters, cross-screen values, offline reload and exact Undo; manual QA.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -143,7 +143,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Item charge counters and explicit recharge prompts tied to rests/game time
 - [x] Consumables and potions: entered rolls/outcomes, 2014 combat action costs, shared Combat Items controls
 - [x] Portable custom items, saved with the character and retained by import/export
-- [ ] Features screen: origin groups, passive/active/triggered details, uses/shared pools, recharge, favorites and supported explicit toggles
+- [x] Features screen: origin groups, passive/active/triggered details, uses/shared pools, recharge, favorites and supported explicit toggles
 - [ ] Gate: general characters, cross-screen values, offline reload and exact Undo at phone/desktop widths; manual QA documented
 
 ### MA — Accounts + cloud sync (after M9; going online waits for hosting, Q1/Q28)
@@ -167,6 +167,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — Features screen: origin groups, activation, uses with pips, Use, favorites. No toggles yet; no feature defines one (Q25). Next: M9 Gate.
 - 2026-11-06 — Custom items: create, edit and delete per-character items; weapons/armor copy a base item's stats and proficiency; travel with export. Next: Features screen.
 - 2026-11-06 — Consumables: potions heal by entered roll, spend the action in combat, ally-given potions revive; shared Inventory and Combat Items controls. Next: custom items.
 - 2026-11-06 — M9 charges: SRD magic items, charge counters, dawn/rest recharge prompts with entered rolls, exact Undo. Consumables next.
