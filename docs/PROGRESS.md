@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M12 — Journal + Companions.
-**Next up:** M13 (see the milestone table). Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M13 — Searchable Reference.
+**Next up:** M13 tasks below. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -36,7 +36,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M10 | Effects editor + Conditions | 2 | done | Effects on you can be added, edited and end on their own; conditions show their consequences |
 | M11 | Campaign Setup: sources + optional rules | 2 | done | Each campaign picks its books and optional rules; changes never delete character choices |
 | M12 | Journal + Companions | 2 | done | |
-| M13 | Searchable Reference | 2 | todo | |
+| M13 | Searchable Reference | 2 | doing | |
 | M14 | Full level-up wizard + more classes + multiclass | 3 | todo | |
 | M15 | Ally/enemy tracker | 3 | todo | |
 | M16 | Dice roller, themes, more books | 4 | todo | |
