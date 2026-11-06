@@ -231,14 +231,29 @@ interface RemainingCorrection {
 
 **HP floors (D69):** new entries save the campaign floor; legacy entries use its fallback until a campaign-method change locks their previous floor. Raw rolls and methods stay intact, and current CON still applies to every level.
 
-### Planned companion data (M12; not part of the current schemas)
+### Companions (M12)
 
-- **Reference data:** import SRD 5.1 creature statblocks, such as Mastiff, into `data/srd/`. Non-SRD companions use user entry or short own-words content in `data/content/`; copied text stays in `data/private/`.
-- **Derived values:** templates cover Eldritch Cannon, Steel Defender, Ranger companions and Find Familiar, using owner class level, proficiency and ability modifiers only where the selected 2014 rule requires them. Familiar forms otherwise use their fixed SRD statblocks; Ranger variant selection remains Q23.
-- **Creation and control:** source rules determine feature/spell uses, spell-slot costs, duration, maximum count and game-clock expiry, plus the owner's command cost shown in the economy bar. The user chooses actions and enters rolls or DM outcomes; the engine computes derived numbers and spends resources.
-- **Live state:** each companion has its own HP, damage, healing, conditions and uses, and is destroyed or dismissed at 0 HP. Creation, commands and all changes are logged and undoable.
-- **Ownership and persistence:** companion definitions/choices and live state belong to the owning character's save and export. The concrete schema, migration and command shapes will be designed in M12; the schemas above do not yet contain companion fields.
-- **Edition and dependency:** Artificer companions use the 2014-compatible `TCE` Artificer, never 2024 rules or Eberron: Forge of the Artificer (2025). M12 plans companion support; Cannon and Steel Defender automation depends on Artificer class support in M14.
+```ts
+// build.companions?: Companion[]   live.companions?: Record<id, CompanionLive>   (absent in older saves)
+type OwnerNumber = number | { base?; ownerLevel?; classId?; ownerAbilityMod?; ownerProficiency? };
+interface Companion {
+  id; name; type: 'pet'|'mount'|'familiar'|'summon'|'sidekick'; kind?; iconId?;
+  ac: OwnerNumber; maxHp: OwnerNumber; speed: { walk?, fly?, swim?, climb?, burrow? };
+  abilities: Record<Ability, number>;
+  attacks: { name; bonus: OwnerNumber; damage?: { dice?; bonus?: OwnerNumber; type }; range?; note? }[];
+  traits: string[]; uses: { id; name; max; recharge }[];
+  limit?: { key; max }; durationSeconds?; sourceId?; notes?;
+}
+interface CompanionLive {
+  status: 'active'|'dismissed'|'destroyed'; hp; tempHp; conditions[]; usesSpent: Record<useId, n>;
+  endsAt?; initiative?;
+}
+```
+
+- **Ownership:** definitions and live state belong to the owning character's save and export; every definition has a live entry and the reverse.
+- **Derived values:** formulas follow the owner's level (or one class's level), proficiency and ability modifiers (`calc/companions.ts`).
+- **Play:** damage, healing, temp HP, conditions, uses, initiative, dismiss, resummon and commanding are engine commands, all logged and undoable. Timed companions leave play on the shared clock; short, long and dawn uses recharge with rests.
+- **Still to come:** SRD creature statblocks (Mastiff and similar) in `data/srd/` and templates for Steel Defender, Eldritch Cannon, Ranger companions and Find Familiar. Artificer templates depend on M14 and use the 2014-compatible `TCE` class only.
 
 ## 5. Commands and event log
 

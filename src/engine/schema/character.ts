@@ -13,6 +13,7 @@ import {
   SourceSchema,
   SpellTypeSchema,
 } from './common';
+import { CompanionLiveSchema, CompanionSchema } from './companions';
 import { CustomItemSchema, FeatureDefensesSchema, ModifierSchema } from './refs';
 
 /** Campaign rules plus layers B (build) and C (live state). DATA.md §4. */
@@ -163,6 +164,8 @@ export const CharacterBuildSchema = z
     /** Items the player defined, by `item.custom.` id. Absent in older saves. */
     customItems: z.array(CustomItemSchema).optional(),
     journal: JournalSchema,
+    /** Pets, mounts, familiars, summons. Absent in older saves: none. */
+    companions: z.array(CompanionSchema).optional(),
     overrides: z.array(
       z.strictObject({ path: z.string().min(1), value: z.unknown(), note: z.string() }),
     ),
@@ -238,6 +241,18 @@ export const CharacterBuildSchema = z
         });
       }
       customIds.add(item.id);
+    });
+
+    const companionIds = new Set<string>();
+    build.companions?.forEach((companion, index) => {
+      if (companionIds.has(companion.id)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Duplicate companion ${companion.id}`,
+          path: ['companions', index, 'id'],
+        });
+      }
+      companionIds.add(companion.id);
     });
   });
 
@@ -340,6 +355,8 @@ export const LiveStateSchema = z
       pp: NonNegativeInt,
     }),
     clock: z.strictObject({ seconds: GameSeconds }),
+    /** Keyed by build companion id. Absent in older saves. */
+    companions: z.record(z.string(), CompanionLiveSchema).optional(),
     lastLongRestEnd: GameSeconds.optional(),
     combat: z
       .strictObject({

@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 22:40 — Companions engine
+
+- Pets, mounts, familiars, summons and sidekicks can now be saved with a character, each with its own HP, conditions and uses.
+- Their numbers can follow the owner (level, proficiency, ability), and timed summons expire on the game clock.
+- Commanding one spends your action, bonus action or reaction. Nothing is visible yet: the Companions screen comes next.
+- Checks pass.
+
 ## 2026-11-06 19:32 — Journal fixes
 
 - The "Relationships & Allies" card title now shows a plain "&" instead of "&amp;".

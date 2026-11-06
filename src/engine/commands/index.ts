@@ -21,4 +21,6 @@ export * from './spell-selection';
 export * from '../calc/spell-selections';
 export * from './time';
 export * from './journal';
+export * from './companions';
+export * from '../calc/companions';
 export type { EconomySlot } from './shared';

@@ -201,6 +201,42 @@ export function restoreFeatures(live: Live, sheet: Sheet, recharges: readonly Re
   return names;
 }
 
+/** Clears companions' spent uses with one of these recharges. Returns "Name: use" labels. */
+export function restoreCompanionUses(
+  live: Live,
+  build: Pick<CharacterData['build'], 'companions'>,
+  recharges: readonly Recharge[],
+) {
+  const labels: string[] = [];
+  for (const companion of build.companions ?? []) {
+    const state = live.companions?.[companion.id];
+    if (!state) continue;
+    for (const use of companion.uses) {
+      if (!recharges.includes(use.recharge) || (state.usesSpent[use.id] ?? 0) === 0) continue;
+      delete state.usesSpent[use.id];
+      labels.push(`${companion.name}: ${use.name}`);
+    }
+  }
+  return labels;
+}
+
+/** Companions whose timer has run out leave play. Returns their names. */
+export function expireCompanions(
+  live: Live,
+  build: Pick<CharacterData['build'], 'companions'>,
+  now: number,
+) {
+  const names: string[] = [];
+  for (const companion of build.companions ?? []) {
+    const state = live.companions?.[companion.id];
+    if (state?.status !== 'active' || state.endsAt === undefined || state.endsAt > now) continue;
+    state.status = 'dismissed';
+    delete state.endsAt;
+    names.push(companion.name);
+  }
+  return names;
+}
+
 export type ItemChange = {
   instanceId: string;
   /** `undefined` removes the field. */
@@ -312,11 +348,14 @@ export function passTime(live: Live, seconds: number, ctx: CommandContext) {
     delete concentration.effectId;
   }
   notes.push(...expired.map((name) => `${name} ended`));
+  notes.push(...expireCompanions(live, ctx.build, end).map((name) => `${name} expired`));
   const dawn = (time: number) => Math.floor((time - DAWN_SECONDS) / SECONDS_PER_DAY);
   if (dawn(end) > dawn(start)) {
     const restored = restoreFeatures(live, sheet, ['dawn']);
     if (restored.length > 0) notes.push(`dawn restored ${restored.join(', ')}`);
     notes.push(...rechargeItems(live, ctx, ctx.live.items, ['dawn']));
+    const companionUses = restoreCompanionUses(live, ctx.build, ['dawn']);
+    if (companionUses.length > 0) notes.push(`dawn restored ${companionUses.join(', ')}`);
   }
   return notes;
 }

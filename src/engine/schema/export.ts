@@ -59,6 +59,28 @@ export const ExportFileSchema = z
         });
       }
     }
+
+    // Every companion needs a live entry, and nothing else may have one.
+    const companionIds = new Set((file.build.companions ?? []).map((companion) => companion.id));
+    const companionLive = file.live.companions ?? {};
+    for (const id of companionIds) {
+      if (!Object.hasOwn(companionLive, id)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Companion ${id} has no live state`,
+          path: ['live', 'companions'],
+        });
+      }
+    }
+    for (const id of Object.keys(companionLive)) {
+      if (!companionIds.has(id)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Live state has unknown companion ${id}`,
+          path: ['live', 'companions', id],
+        });
+      }
+    }
   });
 
 export type ExportFile = z.infer<typeof ExportFileSchema>;
