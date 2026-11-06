@@ -47,6 +47,54 @@ const HpEntrySchema = z.strictObject({
 
 const SKILL_SET: ReadonlySet<string> = new Set(SKILLS);
 
+export const QuestSchema = z.strictObject({
+  id: z.string().min(1),
+  title: z.string().trim().min(1),
+  status: z.enum(['open', 'done']),
+  notes: z.string().optional(),
+});
+export type Quest = z.infer<typeof QuestSchema>;
+
+export const NpcSchema = z.strictObject({
+  id: z.string().min(1),
+  name: z.string().trim().min(1),
+  location: z.string().optional(),
+  relationship: z.string().optional(),
+  notes: z.string().optional(),
+});
+export type Npc = z.infer<typeof NpcSchema>;
+
+export const LocationEntrySchema = z.strictObject({
+  id: z.string().min(1),
+  name: z.string().trim().min(1),
+  notes: z.string().optional(),
+});
+export type LocationEntry = z.infer<typeof LocationEntrySchema>;
+
+export const SessionNoteSchema = z.strictObject({
+  id: z.string().min(1),
+  date: z.string().trim().min(1),
+  title: z.string().optional(),
+  text: z.string(),
+});
+export type SessionNote = z.infer<typeof SessionNoteSchema>;
+
+export const JournalSchema = z.strictObject({
+  personality: z.string().optional(),
+  ideals: z.string().optional(),
+  bonds: z.string().optional(),
+  flaws: z.string().optional(),
+  relationships: z.string().optional(),
+  backstory: z.string().optional(),
+  appearance: z.record(z.string(), z.string()).optional(),
+  notes: z.string().optional(),
+  quests: z.array(QuestSchema).optional(),
+  npcs: z.array(NpcSchema).optional(),
+  locations: z.array(LocationEntrySchema).optional(),
+  sessionNotes: z.array(SessionNoteSchema).optional(),
+});
+export type Journal = z.infer<typeof JournalSchema>;
+
 export const CharacterBuildSchema = z
   .strictObject({
     id: z.string().min(1),
@@ -114,15 +162,7 @@ export const CharacterBuildSchema = z
     ),
     /** Items the player defined, by `item.custom.` id. Absent in older saves. */
     customItems: z.array(CustomItemSchema).optional(),
-    journal: z.strictObject({
-      personality: z.string().optional(),
-      ideals: z.string().optional(),
-      bonds: z.string().optional(),
-      flaws: z.string().optional(),
-      backstory: z.string().optional(),
-      appearance: z.record(z.string(), z.string()).optional(),
-      notes: z.string().optional(),
-    }),
+    journal: JournalSchema,
     overrides: z.array(
       z.strictObject({ path: z.string().min(1), value: z.unknown(), note: z.string() }),
     ),

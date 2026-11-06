@@ -20,4 +20,5 @@ export * from './spell-options';
 export * from './spell-selection';
 export * from '../calc/spell-selections';
 export * from './time';
+export * from './journal';
 export type { EconomySlot } from './shared';

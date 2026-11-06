@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 19:08 — Journal engine commands and schema
+
+- The character journal now supports narrative traits, freeform notes, open and completed quests, NPCs, locations, and dated session notes.
+- All journal changes are logged through engine commands and can be undone.
+- Checks pass.
+
 ## 2026-11-06 18:56 — Campaign setup milestone done
 
 - Campaign books and optional rules are finished and verified on phone and desktop: rest variants, variant encumbrance and the potion house rule apply in play.
