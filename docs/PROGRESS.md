@@ -172,6 +172,11 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Companions UI: companions screen and combat actions with turn economy integration
 - [x] Gate: phone and desktop widths, Undo, reload, manual QA documented
 
+### M13 — Searchable Reference
+- [x] Rules search: name search over bundled 2014 data; conditions show their SRD text
+- [ ] Quick tables and rules summaries in our own words
+- [ ] Gate: phone and desktop widths, reload, manual QA documented
+
 ## Backlog (not scheduled)
 
 - Optional dice roller with roll history
@@ -186,6 +191,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M13 rules search: Reference page searches conditions, spells, items, features, classes and races by name; conditions show SRD text.
 - 2026-11-06 — M12 gate: Journal and Companions pass at 375 and 1440 px with Undo and reload; manual QA listed. Next: M13.
 - 2026-11-06 — M12 Companions UI: screen with HP, conditions, uses, initiative and commanding that spends your turn economy; Mastiff and horse templates; sidekick option deferred (Q30).
 - 2026-11-06 — M12 Companions engine: definitions, owner-derived stats, own HP, conditions and uses, commanding, timed expiry, undo and export checks; SRD creature import deferred (D130).

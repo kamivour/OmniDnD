@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 23:40 — Rules search
+
+- The Reference page has a search box. Type a name to find conditions, spells, items, features, classes or races.
+- Conditions show their full rules text; other results show the kind and source book.
+- Next: quick tables and short rules summaries.
+- Checks pass.
+
 ## 2026-11-06 23:15 — M12 complete
 
 - Journal and Companions both work on phone and desktop, with Undo and reload keeping changes.

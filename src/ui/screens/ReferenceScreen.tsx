@@ -9,6 +9,7 @@ import { characterStore } from '../../state/character-store';
 import { useManagement } from '../commands/useManagement';
 import { Field, inputClass } from '../components/fields';
 import { Sheet } from '../components/Sheet';
+import { RulesSearch } from '../reference/RulesSearch';
 import { cx } from '../cx';
 
 const button =
@@ -73,6 +74,7 @@ export function ReferenceScreen() {
         OmniDnD uses 2014 rules. External links open in a new tab and need an internet connection.
         Some libraries also contain newer rules; choose 2014 or SRD 5.1 material.
       </p>
+      <RulesSearch />
       <section aria-labelledby="reference-links" className="flex flex-col gap-3">
         <h2 id="reference-links" className="text-base font-semibold">
           Rules and tools
