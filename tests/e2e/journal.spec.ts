@@ -55,7 +55,9 @@ test('journal screen displays narrative, manages quests, npcs, notes, and undo r
   await expect(storySheet).toBeHidden();
   await saved(page);
 
-  await expect(main(page).getByText('Allied with the Harpers')).toBeVisible();
+  await expect(
+    main(page).getByRole('region', { name: 'Relationships & Allies', exact: true }),
+  ).toContainText('Allied with the Harpers');
 
   // --- 2. Quests tab: add quest, complete it, undo --------------------------
   await main(page).getByRole('button', { name: 'Quests', exact: true }).click();

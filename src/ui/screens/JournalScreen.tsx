@@ -24,6 +24,12 @@ import { useCharacter } from '../hooks/useCharacter';
 
 type Tab = 'story' | 'quests' | 'world' | 'notes';
 
+/** Today's date in the player's own time zone, as YYYY-MM-DD. */
+function localDate(now = new Date()): string {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+}
+
 const TABS: { id: Tab; label: string }[] = [
   { id: 'story', label: 'Story & Traits' },
   { id: 'quests', label: 'Quests' },
@@ -52,6 +58,7 @@ export function JournalScreen() {
             <button
               key={t.id}
               type="button"
+              aria-pressed={tab === t.id}
               onClick={() => setTab(t.id)}
               className={cx(
                 'min-h-11 rounded-btn px-3 text-sm font-medium transition-colors',
@@ -142,7 +149,7 @@ function StoryTab({
       </div>
 
       {journal.relationships && (
-        <TraitCard title="Relationships &amp; Allies" text={journal.relationships} />
+        <TraitCard title="Relationships & Allies" text={journal.relationships} />
       )}
 
       <TraitCard title="Backstory" text={journal.backstory} />
@@ -491,12 +498,17 @@ function QuestRow({
           type="button"
           onClick={onToggle}
           aria-label={isDone ? `Reopen quest: ${quest.title}` : `Complete quest: ${quest.title}`}
-          className={cx(
-            'mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-btn border transition-colors',
-            isDone ? 'border-heal bg-heal text-bg' : 'border-border hover:border-accent',
-          )}
+          // 44 px tap area around a 24 px box.
+          className="group -m-2.5 flex size-11 shrink-0 items-center justify-center rounded-btn"
         >
-          {isDone && <Check size={14} aria-hidden />}
+          <span
+            className={cx(
+              'flex size-6 items-center justify-center rounded-btn border transition-colors',
+              isDone ? 'border-heal bg-heal text-bg' : 'border-border group-hover:border-accent',
+            )}
+          >
+            {isDone && <Check size={14} aria-hidden />}
+          </span>
         </button>
         <div className="min-w-0 flex-1">
           <h3
@@ -904,7 +916,7 @@ function SessionNotesTab({ notes }: { notes: SessionNote[] }) {
 
   const openCreate = () => {
     setEditingNote(null);
-    setDate(new Date().toISOString().slice(0, 10));
+    setDate(localDate());
     setTitle('');
     setText('');
     setEditorOpen(true);
@@ -1033,7 +1045,7 @@ function SessionNotesTab({ notes }: { notes: SessionNote[] }) {
               id="note-title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Session 4: Castle Cragmaw Infiltration"
+              placeholder="e.g. Session 4: Into the old mine"
               className={inputClass}
             />
           </Field>

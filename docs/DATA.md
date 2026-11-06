@@ -137,7 +137,12 @@ interface CharacterBuild {
   items: { instanceId: string; itemId: string; container?: string; notes?: string }[];
   customItems?: ItemDef[];                         // player-made items (id item.custom.*), saved with the character (D119)
   journal: { personality?: string; ideals?: string; bonds?: string; flaws?: string;
-             backstory?: string; appearance?: Record<string, string>; notes?: string };
+             relationships?: string; backstory?: string; appearance?: Record<string, string>;
+             notes?: string;                                   // all text is Markdown-friendly, shown as typed
+             quests?: { id: string; title: string; status: 'open' | 'done'; notes?: string }[];
+             npcs?: { id: string; name: string; location?: string; relationship?: string; notes?: string }[];
+             locations?: { id: string; name: string; notes?: string }[];
+             sessionNotes?: { id: string; date: string; title?: string; text: string }[] }; // M12; lists absent in older saves
   overrides: { path: string; value: unknown; note: string }[];
   campaignId: string;
 }

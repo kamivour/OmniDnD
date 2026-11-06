@@ -186,6 +186,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — Journal review fixes: "&" title, local session date, 44 px quest checkbox, DATA.md schema; Markdown shown unformatted (D129).
 - 2026-11-06 — M12 Journal UI: responsive narrative, markdown notes, quests, NPCs, locations and session logs with live Undo and persistence.
 - 2026-11-06 — M12 Journal engine: narrative traits, notes, quests, NPCs, locations and session notes with validation, persistence and exact Undo.
 - 2026-11-06 — M11 complete: books and optional rules verified at phone and desktop width, exact Undo, reload; manual QA listed. Next: M12.

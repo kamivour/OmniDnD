@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 19:32 — Journal fixes
+
+- The "Relationships & Allies" card title now shows a plain "&" instead of "&amp;".
+- New session notes default to today's date in your time zone, not UTC.
+- The quest checkbox is easier to tap on a phone. Journal text keeps any Markdown you type but shows it unformatted for now.
+- Checks pass.
+
 ## 2026-11-06 19:13 — Journal screen
 
 - You can now view and edit your character's personality traits, ideals, bonds, flaws, relationships, backstory, appearance, and freeform notes.
