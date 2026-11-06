@@ -1,7 +1,8 @@
 # OmniDnD — Progress
 
 **Current milestone:** M9 — Inventory and Features.
-**Next up:** Attunement limit, item charge counters and explicit recharge prompts tied to rests/game time.
+**Next up:** Item charge counters and explicit recharge prompts tied to rests/game time, with supported magic-item data.
+**Paused:** User review after attunement; resume only when requested.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -138,7 +139,8 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Catalogue items: add/remove instances, choose containers, edit notes; preserve legacy records and reject new container cycles
 - [x] Reject incomplete item imports while preserving existing records and valid legacy item IDs
 - [x] Currency adjustments and computed carried weight/capacity, including coins, purchase bundles and unknown weights
-- [ ] Attunement limit, item charge counters and explicit recharge prompts tied to rests/game time
+- [x] Attunement limit and explicit bond records, with focused-rest reminders and legacy record review
+- [ ] Item charge counters and explicit recharge prompts tied to rests/game time
 - [ ] Consumables and potions: entered rolls/outcomes, 2014 combat action costs, shared Combat Items controls
 - [ ] Portable custom items, saved with the character and retained by import/export
 - [ ] Features screen: origin groups, passive/active/triggered details, uses/shared pools, recharge, favorites and supported explicit toggles
@@ -158,6 +160,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M9 attunement: record bonds with limits, manual rest reminders and exact Undo. Paused for user review; charges next.
 - 2026-11-06 — M9 currency and weight: adjust actual coins with previews and Undo; show bundles, unknown weights and computed capacity. Next: attunement and charges.
 - 2026-11-06 — M9 imports: reject incomplete item state without changing saved data; valid legacy records retain edits and Undo. Next: currency and weight.
 - 2026-11-06 — M9 catalogue: add separate items, edit counts/notes/locations and confirm removal with retained contents and exact Undo. Next: import validation, currency and weight.

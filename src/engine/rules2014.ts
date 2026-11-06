@@ -66,6 +66,9 @@ export type Condition = (typeof CONDITIONS)[number];
 
 export const MAX_EXHAUSTION = 6;
 
+/** Base 2014 limit; class exceptions are not inferred from feature prose. */
+export const ATTUNEMENT_LIMIT = 3;
+
 /** Conditions that include incapacitated: no actions or reactions, and concentration ends. */
 export const INCAPACITATING_CONDITIONS: readonly Condition[] = [
   'incapacitated',

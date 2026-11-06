@@ -77,6 +77,7 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Record your actual outfit and review armor replacements, proficiency warnings and time/action reminders. Judge whether the changed AC, attacks and shared Undo make the result clear.
 - [ ] Add a catalogue item, edit its notes/location and review removal. Judge the bundle count, source warnings, Cancel and retained-contents wording before confirming.
 - [ ] Adjust coins and review carried weight. Judge denomination previews, unknown-weight wording and capacity warnings against your character's actual load and table rules.
+- [ ] Review recorded attunement bonds, duplicate copies and depleted items. Judge the limit, DM warnings and focused-rest reminders before marking or ending a bond.
 
 ## Deferred rules review — M5
 

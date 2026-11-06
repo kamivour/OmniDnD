@@ -179,6 +179,8 @@ interface LiveState {
 
 **Currency and weight (M9):** saved coin counts stay separate; value uses 2014 exchange rates and coins weigh 50 per pound. Weight counts each positive item instance once, divides purchase-bundle weights by bundle size, and marks missing weights as incomplete; capacity comes from the shared Sheet calculation.
 
+**Attunement (M9):** each owned instance's recorded bond counts toward the three-item limit, including depleted records, until explicitly ended. Recording a bond preserves time, equipment, resources and item properties; contact, focused rests, prerequisites, curses and ending conditions remain explicit table checks (D114, Q27).
+
 **Concentration vs effects (D41):** `concentration` is the caster's own state; `effects` holds only effects targeting this character. Faerie Fire cast on enemies sets `concentration` and adds nothing to `effects`.
 
 **Pending concentration saves (M5):** Assisted damage records one `{ id, dc }` request per damage instance, using damage after reductions and before temporary HP. Pass removes one request; Fail ends concentration and linked effects, replacement/end/expiry clears old requests, Manual creates none, and Undo restores the exact state without legacy rewrites.

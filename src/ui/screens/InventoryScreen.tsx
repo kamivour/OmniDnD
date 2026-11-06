@@ -15,6 +15,7 @@ import { inventoryGroups } from '../inventory/inventory-model';
 import { InventoryEditor, type InventoryEditorRequest } from '../inventory/InventoryEditor';
 import { InventoryCurrency } from '../inventory/InventoryCurrency';
 import { InventoryWeight } from '../inventory/InventoryWeight';
+import { InventoryAttunement } from '../inventory/InventoryAttunement';
 import { useDetail } from '../layout/detail-context';
 
 /** Instance identity and live counts are shared with equipment calculations and character exports. */
@@ -66,6 +67,7 @@ export function InventoryScreen() {
         <InventoryCurrency />
         <InventoryWeight />
       </div>
+      <InventoryAttunement />
       {groups.length === 0 ? (
         <h2 className="text-base font-semibold">No items recorded</h2>
       ) : (

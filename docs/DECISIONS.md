@@ -119,6 +119,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D111 | 2026-11-06 | Removing an item record moves its direct contents to Carried and preserves their own contents and notes. Confirmation lists the affected records before removal. | Removing a container must not silently delete its contents |
 | D112 | 2026-11-06 | Currency adjustments change the selected denomination without automatic exchange or item purchases. A preview shows the resulting coin count, value and weight. | Record the coins actually received or spent |
 | D113 | 2026-11-06 | Carried weight counts each positive item record and its contents once, plus coins; missing weights make the result incomplete. Capacity uses the shared Sheet calculation, while movement limits remain manual until M11 optional rules. | Unknown weights must not imply a complete load |
+| D114 | 2026-11-06 | Attunement records verified bonds separately from rest time and magical benefits; missing item requirements require explicit review in Assisted mode. All retained bonds, including zero-quantity records, count toward the three-item limit until explicitly ended, and duplicate copies cannot gain a new bond. | Preserve recorded state while keeping the 2014 limit visible |
 
 ## Open questions
 
@@ -152,6 +153,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q24 | Should Settings Reset also refill item charges or clear ordinary Inspiration? | M9 | Preserve both; Reset refills tracked class resources and leaves possessions and DM-awarded Inspiration intact | User |
 | Q25 | Which features should offer sustained on/off toggles or temporary grants? | M9 | Toggle only explicitly defined mechanics; do not invent effects from feature prose. Full temporary-effect editing remains M10 | User / DM |
 | Q26 | Should recording equipped gear automatically spend actions or advance time? | M9 | Record the actual outfit with explicit 2014 time/action reminders; the player uses the shared economy and game clock controls | User / DM |
+| Q27 | Should attunement controls complete focused rests or automatically end bonds after death, prerequisite loss or separation? | M9 | Record verified bonds explicitly; use shared rest/clock controls and review contact, prerequisites, curses and ending conditions at the table | User / DM |
 
 ## How to add an entry
 

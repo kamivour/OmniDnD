@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import type { Draft } from 'immer';
 import { armorReplacements } from '../calc/equipment';
+import { attunedItems } from '../calc/attunement';
+import { ATTUNEMENT_LIMIT } from '../rules2014';
 import type { ItemDef } from '../schema';
 import type { CharacterData, Command, CommandContext } from './runner';
 import { block, info, warn } from './shared';
@@ -10,9 +12,14 @@ const AdjustItemQuantityPayloadSchema = InstancePayloadSchema.extend({
   quantity: z.int().nonnegative(),
 });
 const EquipItemPayloadSchema = InstancePayloadSchema.extend({ equipped: z.boolean() });
+const SetItemAttunementPayloadSchema = InstancePayloadSchema.extend({
+  attuned: z.boolean(),
+  expected: z.boolean().optional(),
+});
 
 export type AdjustItemQuantityPayload = z.infer<typeof AdjustItemQuantityPayloadSchema>;
 export type EquipItemPayload = z.infer<typeof EquipItemPayloadSchema>;
+export type SetItemAttunementPayload = z.infer<typeof SetItemAttunementPayloadSchema>;
 
 function ownedItem(ctx: CommandContext, instanceId: string) {
   const item = ctx.build.items.find((entry) => entry.instanceId === instanceId);
@@ -135,5 +142,46 @@ export const equipItem: Command<EquipItemPayload> = {
         ? `; replaced ${replacements.map(({ def }) => def.name).join(', ')}`
         : '';
     return `${equipped ? 'Equip' : 'Unequip'}: ${item.def.name}${replaced}`;
+  },
+};
+
+/** Record the actual 2014 bond; rest time, prerequisites, curses and magical effects stay manual. */
+export const setItemAttunement: Command<SetItemAttunementPayload> = {
+  name: 'setItemAttunement',
+  check: (ctx, input) => {
+    const parsed = SetItemAttunementPayloadSchema.safeParse(input);
+    if (!parsed.success) return [block('Attunement details are invalid')];
+    const { instanceId, attuned, expected } = parsed.data;
+    const target = ownedItem(ctx, instanceId);
+    if (!target) return [block('That item instance is unavailable')];
+    if (expected !== undefined && expected !== target.live.attuned)
+      return [block('The recorded attunement changed after review. Review it again.')];
+    if (attuned === target.live.attuned) return [];
+    const checks = [];
+    if (attuned) {
+      if (target.live.qty === 0) return [block('No quantity left to attune')];
+      const existing = attunedItems(ctx);
+      if (existing.length >= ATTUNEMENT_LIMIT)
+        return [block(`Already attuned to ${ATTUNEMENT_LIMIT} items; end a recorded bond first`)];
+      if (existing.some((item) => item.itemId === target.item.itemId))
+        return [block(`Already attuned to another copy of ${target.def.name}`)];
+      if (target.def.attunement !== true)
+        checks.push(
+          warn(
+            `${target.def.name} has no recorded attunement requirement; confirm the DM's ruling`,
+          ),
+        );
+    }
+    checks.push(
+      info(
+        `${attuned ? 'Attunement' : 'Ending attunement'} recorded. Confirm any required focused short rest, contact, prerequisites, curses and ending conditions at the table; record time separately.`,
+      ),
+    );
+    return checks;
+  },
+  apply: (draft, { instanceId, attuned }, ctx) => {
+    const target = ownedItem(ctx, instanceId)!;
+    changeItems(draft, ctx, [{ instanceId, values: { attuned } }]);
+    return `${attuned ? 'Attune' : 'End attunement'}: ${target.def.name}`;
   },
 };

@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 10:27 — Record and review attunement bonds
+
+- Inventory shows recorded bonds and lets you mark or end them with shared Undo. New bonds respect the three-item limit and duplicate-copy restriction.
+- Depleted and legacy records stay visible for review; missing requirements prompt a DM ruling. Rest timing and magical benefits remain manual.
+- Check warnings, empty-item records and Undo on your devices. Work pauses for your review; charges are next. Checks pass.
+
 ## 2026-11-06 03:17 — Currency adjustments and carried weight
 
 - Add or spend actual coins with a preview, saved history and Undo. Other denominations stay separate.

@@ -1,16 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { armorEquipmentNotes } from '../calc/equipment';
+import { attunedItems } from '../calc/attunement';
 import { computeSheet, type CharacterState } from '../calc/sheet';
+import { buildRegistry } from '../registry';
+import { ATTUNEMENT_LIMIT } from '../rules2014';
 import { ExportFileSchema } from '../schema';
 import { startCombat, startTurn, useEconomy } from './combat';
 import {
   adjustItemQuantity,
   equipItem,
+  setItemAttunement,
   type AdjustItemQuantityPayload,
   type EquipItemPayload,
+  type SetItemAttunementPayload,
 } from './items';
-import { runCommand } from './runner';
+import { runCommand, undo } from './runner';
 import { freshState, Session } from './test-utils';
 
 function withItems(
@@ -32,6 +37,355 @@ function inTurn(state: CharacterState) {
   session.run(useEconomy, { kind: 'movement', feet: 5 });
   return session;
 }
+
+describe('setItemAttunement', () => {
+  it('records up to three distinct bonds without changing equipment, charges, resources, time or economy', () => {
+    const state = withItems(
+      { id: 'bond-1', itemId: 'item.flute' },
+      { id: 'bond-2', itemId: 'item.backpack' },
+      { id: 'bond-3', itemId: 'item.dagger' },
+      { id: 'bond-4', itemId: 'item.candle' },
+    );
+    state.live.items['bond-1']!.charges = 2;
+    const session = inTurn(state);
+    const before = structuredClone(session.state);
+    expect(ATTUNEMENT_LIMIT).toBe(3);
+    for (const instanceId of ['bond-1', 'bond-2', 'bond-3']) {
+      const result = session.try(
+        setItemAttunement,
+        { instanceId, attuned: true, expected: false },
+        true,
+      );
+      expect(result.result).toBe('ok');
+      expect(result.reasons.join()).toMatch(
+        /focused short rest.*contact.*prerequisites.*curses.*time separately/,
+      );
+      expect(session.events.at(-1)?.command).toBe('setItemAttunement');
+    }
+    expect(attunedItems(session.state).map(({ instanceId }) => instanceId)).toEqual([
+      'bond-1',
+      'bond-2',
+      'bond-3',
+    ]);
+    expect(session.state).toEqual({
+      ...before,
+      live: {
+        ...before.live,
+        items: {
+          ...before.live.items,
+          'bond-1': { ...before.live.items['bond-1']!, attuned: true },
+          'bond-2': { ...before.live.items['bond-2']!, attuned: true },
+          'bond-3': { ...before.live.items['bond-3']!, attuned: true },
+        },
+      },
+    });
+    const full = structuredClone(session.state);
+    expect(
+      runCommand(
+        setItemAttunement,
+        session.state,
+        { instanceId: 'bond-4', attuned: true },
+        registry,
+        {
+          eventId: 'fourth-bond',
+          realTime: '2026-11-06T00:00:00.000Z',
+          force: true,
+          automation: 'manual',
+        },
+      ),
+    ).toEqual({
+      result: 'blocked',
+      reasons: ['Already attuned to 3 items; end a recorded bond first'],
+    });
+    expect(session.state).toEqual(full);
+    session.undo();
+    session.undo();
+    session.undo();
+    expect(session.state).toEqual(before);
+    expect(state.live.items['bond-1']!.attuned).toBe(false);
+  });
+
+  it('counts depleted owned flags while ignoring orphan and inherited live entries', () => {
+    const state = withItems({ id: 'depleted-bond', itemId: 'item.backpack', qty: 0 });
+    state.live.items['depleted-bond']!.attuned = true;
+    state.live.items.orphan = { qty: 1, equipped: false, attuned: true };
+    expect(attunedItems(state).map(({ instanceId }) => instanceId)).toEqual(['depleted-bond']);
+    const before = structuredClone(state);
+    expect(attunedItems(state)).toEqual([state.build.items.at(-1)]);
+    expect(state).toEqual(before);
+  });
+
+  it('includes depleted bonds in the three-item limit', () => {
+    const state = withItems({ id: 'next-bond', itemId: 'item.candle' });
+    for (const instanceId of ['rapier-1', 'dagger-1', 'leather-armor-1'])
+      state.live.items[instanceId] = { ...state.live.items[instanceId]!, qty: 0, attuned: true };
+    const session = new Session(state);
+    expect(
+      session.preview(setItemAttunement, { instanceId: 'next-bond', attuned: true }).result,
+    ).toBe('blocked');
+    expect(attunedItems(state)).toHaveLength(3);
+    expect(session.state).toEqual(state);
+  });
+
+  it.each([0, 1])(
+    'blocks another attuned copy of the same definition even when its old quantity is %i',
+    (quantity) => {
+      const state = withItems({ id: 'other-rapier', itemId: 'item.rapier' });
+      state.live.items['rapier-1'] = {
+        ...state.live.items['rapier-1']!,
+        qty: quantity,
+        attuned: true,
+      };
+      const result = runCommand(
+        setItemAttunement,
+        state,
+        { instanceId: 'other-rapier', attuned: true },
+        registry,
+        {
+          eventId: 'duplicate-bond',
+          realTime: '2026-11-06T00:00:00.000Z',
+          force: true,
+          automation: 'manual',
+        },
+      );
+      expect(result).toEqual({
+        result: 'blocked',
+        reasons: ['Already attuned to another copy of Rapier'],
+      });
+      expect(state.live.items['other-rapier']!.attuned).toBe(false);
+    },
+  );
+
+  it('blocks a new bond at quantity zero even with a Manual forced ruling', () => {
+    const state = structuredClone(freshState);
+    state.live.items['rapier-1']!.qty = 0;
+    const result = runCommand(
+      setItemAttunement,
+      state,
+      { instanceId: 'rapier-1', attuned: true },
+      registry,
+      {
+        eventId: 'empty-bond',
+        realTime: '2026-11-06T00:00:00.000Z',
+        force: true,
+        automation: 'manual',
+      },
+    );
+    expect(result).toEqual({ result: 'blocked', reasons: ['No quantity left to attune'] });
+    expect(state.live.items['rapier-1']!.attuned).toBe(false);
+  });
+
+  it.each([undefined, false])(
+    'warns for a new bond when the definition’s attunement field is %s',
+    (attunement) => {
+      const references =
+        attunement === undefined
+          ? registry
+          : buildRegistry(
+              [Array.from(registry.entries.values())],
+              [],
+              [{ id: 'item.rapier', attunement }],
+            );
+      const before = structuredClone(freshState);
+      const result = runCommand(
+        setItemAttunement,
+        freshState,
+        { instanceId: 'rapier-1', attuned: true },
+        references,
+        {
+          eventId: 'unknown-requirement',
+          realTime: '2026-11-06T00:00:00.000Z',
+        },
+      );
+      expect(result).toEqual({
+        result: 'warn',
+        reasons: ["Rapier has no recorded attunement requirement; confirm the DM's ruling"],
+      });
+      expect(freshState).toEqual(before);
+      const manual = runCommand(
+        setItemAttunement,
+        freshState,
+        { instanceId: 'rapier-1', attuned: true },
+        references,
+        {
+          eventId: 'manual-bond',
+          realTime: '2026-11-06T00:00:00.000Z',
+          automation: 'manual',
+        },
+      );
+      expect(manual.result).toBe('ok');
+      if (manual.result === 'ok') {
+        expect(manual.next.live.items['rapier-1']!.attuned).toBe(true);
+        expect(manual.event.override).toBeUndefined();
+        expect(manual.reasons).toEqual([]);
+      }
+    },
+  );
+
+  it('uses declared attunement metadata without inventing any magical effects', () => {
+    const references = buildRegistry(
+      [Array.from(registry.entries.values())],
+      [],
+      [{ id: 'item.rapier', attunement: true }],
+    );
+    const result = runCommand(
+      setItemAttunement,
+      freshState,
+      { instanceId: 'rapier-1', attuned: true, expected: false },
+      references,
+      {
+        eventId: 'known-bond',
+        realTime: '2026-11-06T00:00:00.000Z',
+      },
+    );
+    expect(result.result).toBe('ok');
+    if (result.result !== 'ok') return;
+    expect(result.event.override).toBeUndefined();
+    expect(result.next).toEqual({
+      ...freshState,
+      live: {
+        ...freshState.live,
+        items: {
+          ...freshState.live.items,
+          'rapier-1': { ...freshState.live.items['rapier-1']!, attuned: true },
+        },
+      },
+    });
+    expect(
+      undo(result.next, [result.event], {
+        eventId: 'undo-known-bond',
+        realTime: '2026-11-06T00:00:00.000Z',
+      }),
+    ).toMatchObject({ result: 'ok', next: freshState });
+  });
+
+  it('ends a depleted legacy duplicate bond even while the recorded total exceeds the limit', () => {
+    const state = withItems(
+      { id: 'extra-1', itemId: 'item.rapier' },
+      { id: 'extra-2', itemId: 'item.rapier' },
+    );
+    for (const instanceId of ['rapier-1', 'dagger-1', 'leather-armor-1', 'extra-1', 'extra-2'])
+      state.live.items[instanceId]!.attuned = true;
+    state.live.items['extra-1']!.qty = 0;
+    const session = inTurn(state);
+    const before = structuredClone(session.state);
+    const result = session.try(setItemAttunement, {
+      instanceId: 'extra-1',
+      attuned: false,
+      expected: true,
+    });
+    expect(result.result).toBe('ok');
+    expect(result.reasons.join()).toContain('Ending attunement recorded');
+    expect(attunedItems(session.state)).toHaveLength(4);
+    expect(session.state).toEqual({
+      ...before,
+      live: {
+        ...before.live,
+        items: {
+          ...before.live.items,
+          'extra-1': { ...before.live.items['extra-1']!, attuned: false },
+        },
+      },
+    });
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('protects a stale reviewed boolean and preserves other inventory changes', () => {
+    const state = structuredClone(freshState);
+    state.live.items['dagger-1']!.qty = 2;
+    const session = new Session(state);
+    session.run(
+      setItemAttunement,
+      { instanceId: 'rapier-1', attuned: true, expected: false },
+      true,
+    );
+    expect(session.live.items['dagger-1']!.qty).toBe(2);
+    const before = structuredClone(session.state);
+    expect(
+      runCommand(
+        setItemAttunement,
+        session.state,
+        { instanceId: 'rapier-1', attuned: false, expected: false },
+        registry,
+        {
+          eventId: 'stale-bond',
+          realTime: '2026-11-06T00:00:00.000Z',
+          force: true,
+          automation: 'manual',
+        },
+      ),
+    ).toEqual({
+      result: 'blocked',
+      reasons: ['The recorded attunement changed after review. Review it again.'],
+    });
+    expect(session.state).toEqual(before);
+    session.undo();
+    expect(session.state).toEqual(state);
+  });
+
+  it('round-trips a valid legacy constructor bond and undoes its flag without mutating the source', () => {
+    const instanceId = String('constructor');
+    const state = withItems({ id: instanceId, itemId: 'item.backpack' });
+    state.live.items[instanceId]!.charges = 2;
+    const before = structuredClone(state);
+    const session = new Session(state);
+    session.run(setItemAttunement, { instanceId, attuned: true, expected: false }, true);
+    expect(session.events.at(-1)?.patches.map(({ path }) => path)).toEqual([['live', 'items']]);
+    const file = ExportFileSchema.parse(
+      JSON.parse(
+        JSON.stringify({
+          ...session.state,
+          app: 'omnidnd',
+          schemaVersion: 1,
+          exportedAt: '2026-11-06T00:00:00.000Z',
+          events: session.events,
+        }),
+      ),
+    );
+    session.state = { campaign: file.campaign, build: file.build, live: file.live };
+    session.events = file.events;
+    session.undo();
+    expect(session.state).toEqual(before);
+    expect(state).toEqual(before);
+  });
+
+  it.each(['missing', 'item.rapier', '__proto__', 'constructor'])(
+    'blocks unavailable or inherited attunement instance %s',
+    (instanceId) => {
+      const session = new Session();
+      expect(session.preview(setItemAttunement, { instanceId, attuned: false })).toEqual({
+        result: 'blocked',
+        reasons: ['That item instance is unavailable'],
+      });
+      expect(session.events).toEqual([]);
+    },
+  );
+
+  it.each([
+    null,
+    {},
+    { instanceId: '', attuned: true },
+    { instanceId: 'rapier-1', attuned: 1 },
+    { instanceId: 'rapier-1', attuned: true, expected: 0 },
+    { instanceId: 'rapier-1', attuned: true, equipped: true },
+  ])('blocks malformed attunement payload %j even under force and Manual', (payload) => {
+    expect(
+      runCommand(
+        setItemAttunement,
+        freshState,
+        payload as unknown as SetItemAttunementPayload,
+        registry,
+        {
+          eventId: 'invalid-bond',
+          realTime: '2026-11-06T00:00:00.000Z',
+          force: true,
+          automation: 'manual',
+        },
+      ),
+    ).toEqual({ result: 'blocked', reasons: ['Attunement details are invalid'] });
+  });
+});
 
 describe('adjustItemQuantity', () => {
   it('undoes quantity on a valid owned legacy constructor instance after a JSON reload', () => {
