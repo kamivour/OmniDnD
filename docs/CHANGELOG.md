@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 00:04 — Edit companions
+
+- Each companion now has an Edit button. You can change its stats, speeds, ability scores, attacks, limited uses, traits and notes.
+- Custom companions can have attacks and limited uses from the start, and notes now show on the card.
+- Number boxes reject typos like "4x" and say which field is wrong.
+- Checks pass.
+
 ## 2026-11-06 23:50 — M13 complete
 
 - Reference now has seven short rules tables: actions, cover, exhaustion, death saves, DCs, advantage and rests. Tap a title to open it.

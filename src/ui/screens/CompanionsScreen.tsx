@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Pencil, Plus } from 'lucide-react';
 import { companionStats } from '../../engine/calc/companions';
 import {
-  addCompanion,
   combatMovement,
   adjustCompanionUse,
   commandCompanion,
@@ -16,13 +15,13 @@ import {
   toggleCompanionCondition,
 } from '../../engine/commands';
 import { CONDITIONS, type Condition } from '../../engine/rules2014';
-import { COMPANION_TYPES, type Companion, type CompanionType } from '../../engine/schema';
-import { COMPANION_TEMPLATES } from '../companions/templates';
+import type { Companion } from '../../engine/schema';
+import { CompanionEditor } from '../companions/CompanionEditor';
+import { parseWhole } from '../companions/companion-form';
 import { useCommand } from '../commands/command-context';
 import { EconomyBar } from '../components/EconomyBar';
 import { Field, inputClass } from '../components/fields';
 import { HpBar } from '../components/HpBar';
-import { Sheet } from '../components/Sheet';
 import { useCharacter } from '../hooks/useCharacter';
 import { useEconomy } from '../../engine/commands';
 
@@ -33,8 +32,10 @@ export function CompanionsScreen() {
   const { state, sheet } = useCharacter();
   const { run } = useCommand();
   const [adding, setAdding] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const companions = state.build.companions ?? [];
+  const editing = companions.find((companion) => companion.id === editingId);
   const combat = state.live.combat;
   const movement = combatMovement({ live: state.live, sheet });
   const economy = {
@@ -79,23 +80,41 @@ export function CompanionsScreen() {
       )}
 
       {companions.map((companion) => (
-        <CompanionCard key={companion.id} companion={companion} inCombat={Boolean(combat)} />
+        <CompanionCard
+          key={companion.id}
+          companion={companion}
+          inCombat={Boolean(combat)}
+          onEdit={() => setEditingId(companion.id)}
+        />
       ))}
 
-      <AddSheet open={adding} onOpenChange={setAdding} />
+      <CompanionEditor open={adding} onOpenChange={setAdding} />
+      <CompanionEditor
+        open={editing !== undefined}
+        onOpenChange={(open) => !open && setEditingId(null)}
+        editing={editing}
+      />
     </div>
   );
 }
 
-function CompanionCard({ companion, inCombat }: { companion: Companion; inCombat: boolean }) {
+function CompanionCard({
+  companion,
+  inCombat,
+  onEdit,
+}: {
+  companion: Companion;
+  inCombat: boolean;
+  onEdit: () => void;
+}) {
   const { state, sheet } = useCharacter();
   const { run } = useCommand();
   const [amount, setAmount] = useState('');
   const live = state.live.companions?.[companion.id];
   if (!live) return null;
   const stats = companionStats(companion, { build: state.build, sheet });
-  const value = Number.parseInt(amount, 10);
-  const valid = Number.isInteger(value) && value >= 0;
+  const value = parseWhole(amount) ?? -1;
+  const valid = value >= 0;
   const active = live.status === 'active';
   const speed = Object.entries(companion.speed)
     .filter(([, feet]) => feet)
@@ -165,6 +184,10 @@ function CompanionCard({ companion, inCombat }: { companion: Companion; inCombat
             <li key={trait}>{trait}</li>
           ))}
         </ul>
+      )}
+
+      {companion.notes && (
+        <p className="whitespace-pre-line text-xs text-text-muted">{companion.notes}</p>
       )}
 
       {companion.uses.map((use) => {
@@ -289,13 +312,18 @@ function CompanionCard({ companion, inCombat }: { companion: Companion; inCombat
         <div className="flex flex-wrap items-end gap-2">
           <Field label="Initiative" htmlFor={`init-${companion.id}`} className="w-24">
             <input
+              // Keyed on the saved value so Undo refreshes the box.
+              key={live.initiative ?? 'none'}
               id={`init-${companion.id}`}
               inputMode="numeric"
               defaultValue={live.initiative ?? ''}
               onBlur={(event) => {
                 const text = event.target.value.trim();
-                const initiative = text === '' ? null : Number.parseInt(text, 10);
-                if (initiative !== null && !Number.isInteger(initiative)) return;
+                const initiative = text === '' ? null : parseWhole(text);
+                if (text !== '' && initiative === null) {
+                  event.target.value = String(live.initiative ?? '');
+                  return;
+                }
                 if ((initiative ?? undefined) !== live.initiative)
                   run(setCompanionInitiative, { id: companion.id, initiative });
               }}
@@ -317,6 +345,10 @@ function CompanionCard({ companion, inCombat }: { companion: Companion; inCombat
       )}
 
       <div className="flex flex-wrap gap-2">
+        <button type="button" className={buttonClass} onClick={onEdit}>
+          <Pencil size={16} aria-hidden className="mr-1" />
+          Edit {name}
+        </button>
         {active ? (
           <button
             type="button"
@@ -343,169 +375,5 @@ function CompanionCard({ companion, inCombat }: { companion: Companion; inCombat
         </button>
       </div>
     </section>
-  );
-}
-
-function AddSheet({
-  open,
-  onOpenChange,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) {
-  const { run } = useCommand();
-  const [name, setName] = useState('');
-  const [type, setType] = useState<CompanionType>('pet');
-  const [ac, setAc] = useState('10');
-  const [hp, setHp] = useState('1');
-  const [walk, setWalk] = useState('30');
-  const [template, setTemplate] = useState<Omit<Companion, 'id'> | null>(null);
-
-  const reset = () => {
-    setName('');
-    setType('pet');
-    setAc('10');
-    setHp('1');
-    setWalk('30');
-    setTemplate(null);
-  };
-
-  const pick = (label: string) => {
-    const chosen = COMPANION_TEMPLATES.find((entry) => entry.label === label)?.companion ?? null;
-    setTemplate(chosen);
-    if (!chosen) return;
-    setName(chosen.name);
-    setType(chosen.type);
-    setAc(String(chosen.ac));
-    setHp(String(chosen.maxHp));
-    setWalk(String(chosen.speed.walk ?? 0));
-  };
-
-  const acValue = Number.parseInt(ac, 10);
-  const hpValue = Number.parseInt(hp, 10);
-  const walkValue = Number.parseInt(walk, 10);
-  const valid =
-    name.trim() !== '' &&
-    Number.isInteger(acValue) &&
-    Number.isInteger(hpValue) &&
-    hpValue >= 1 &&
-    Number.isInteger(walkValue) &&
-    walkValue >= 0;
-
-  const submit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!valid) return;
-    const base: Omit<Companion, 'id'> = template ?? {
-      name: '',
-      type,
-      ac: 10,
-      maxHp: 1,
-      speed: {},
-      abilities: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 },
-      attacks: [],
-      traits: [],
-      uses: [],
-    };
-    const companion: Companion = {
-      ...base,
-      id: crypto.randomUUID(),
-      name: name.trim(),
-      type,
-      ac: acValue,
-      maxHp: hpValue,
-      speed: { ...base.speed, walk: walkValue },
-    };
-    run(addCompanion, { companion }, undefined, () => {
-      reset();
-      onOpenChange(false);
-    });
-  };
-
-  return (
-    <Sheet
-      open={open}
-      onOpenChange={(next) => {
-        if (!next) reset();
-        onOpenChange(next);
-      }}
-      title="Add companion"
-      description="Start from a template or enter your own."
-    >
-      <form onSubmit={submit} className="flex flex-col gap-3">
-        <Field label="Template" htmlFor="comp-template">
-          <select
-            id="comp-template"
-            className={inputClass}
-            value={COMPANION_TEMPLATES.find((entry) => entry.companion === template)?.label ?? ''}
-            onChange={(event) => pick(event.target.value)}
-          >
-            <option value="">Custom</option>
-            {COMPANION_TEMPLATES.map((entry) => (
-              <option key={entry.label} value={entry.label}>
-                {entry.label}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Name" htmlFor="comp-name">
-          <input
-            id="comp-name"
-            className={inputClass}
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-        </Field>
-        <Field label="Type" htmlFor="comp-type">
-          <select
-            id="comp-type"
-            className={inputClass}
-            value={type}
-            onChange={(event) => setType(event.target.value as CompanionType)}
-          >
-            {COMPANION_TYPES.map((entry) => (
-              <option key={entry} value={entry}>
-                {entry}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <div className="grid grid-cols-3 gap-2">
-          <Field label="AC" htmlFor="comp-ac">
-            <input
-              id="comp-ac"
-              inputMode="numeric"
-              className={inputClass}
-              value={ac}
-              onChange={(event) => setAc(event.target.value)}
-            />
-          </Field>
-          <Field label="Max HP" htmlFor="comp-hp">
-            <input
-              id="comp-hp"
-              inputMode="numeric"
-              className={inputClass}
-              value={hp}
-              onChange={(event) => setHp(event.target.value)}
-            />
-          </Field>
-          <Field label="Speed (ft.)" htmlFor="comp-walk">
-            <input
-              id="comp-walk"
-              inputMode="numeric"
-              className={inputClass}
-              value={walk}
-              onChange={(event) => setWalk(event.target.value)}
-            />
-          </Field>
-        </div>
-        <button
-          type="submit"
-          disabled={!valid}
-          className="min-h-11 rounded-btn bg-accent px-4 font-semibold text-bg disabled:opacity-40"
-        >
-          Add companion
-        </button>
-      </form>
-    </Sheet>
   );
 }

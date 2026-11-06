@@ -191,6 +191,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-07 — M12 review fix: companions can be edited (attacks, uses, abilities, traits, notes); strict number entry; initiative box refreshes on Undo.
 - 2026-11-06 — M13 complete: quick tables added; search and tables pass at 375 and 1440 px; manual QA listed. Next: M14.
 - 2026-11-06 — M13 rules search: Reference page searches conditions, spells, items, features, classes and races by name; conditions show SRD text.
 - 2026-11-06 — M12 gate: Journal and Companions pass at 375 and 1440 px with Undo and reload; manual QA listed. Next: M13.

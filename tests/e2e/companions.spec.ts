@@ -58,6 +58,26 @@ test('companions: add from template, damage, heal, condition, undo, reload', asy
   await saved(page);
   await expect(card).toContainText('8/13');
 
+  await card.getByRole('button', { name: 'Edit Riding horse', exact: true }).click();
+  const editor = page.getByRole('dialog', { name: 'Edit Riding horse', exact: true });
+  await editor.getByRole('button', { name: 'Add attack', exact: true }).click();
+  await editor.getByLabel('Attack name', { exact: true }).last().fill('Kick');
+  await editor.getByLabel('To hit', { exact: true }).last().fill('4x');
+  await editor.getByLabel('Notes', { exact: true }).fill('Answers to Clover.');
+  await editor.getByRole('button', { name: 'Save companion', exact: true }).click();
+  await expect(editor.getByRole('alert')).toHaveText('Kick: attack bonus must be a whole number.');
+  await page.screenshot({
+    path: info.outputPath(`companion-editor-${isMobile ? 375 : 1440}.png`),
+    animations: 'disabled',
+  });
+  await editor.getByLabel('To hit', { exact: true }).last().fill('4');
+  await editor.getByRole('button', { name: 'Save companion', exact: true }).click();
+  await expect(editor).toBeHidden();
+  await saved(page);
+  await expect(card).toContainText('Kick +4');
+  await expect(card).toContainText('Answers to Clover.');
+  await expect(card).toContainText('8/13');
+
   await card.getByLabel('Add or clear condition', { exact: true }).selectOption('frightened');
   await saved(page);
   await expect(
