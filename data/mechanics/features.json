@@ -1,16 +1,24 @@
 [
+  { "id": "feature.barbarian.intimidating-presence", "activation": "action" },
+  {
+    "id": "feature.barbarian.rage",
+    "activation": "bonus",
+    "uses": {
+      "max": { "byLevel": { "1": 2, "3": 3, "6": 4, "12": 5, "17": 6 } },
+      "recharge": "long"
+    }
+  },
+  { "id": "feature.barbarian.reckless-attack", "activation": "free" },
   { "id": "feature.bard.ability-score-improvement", "activation": "passive" },
   {
     "id": "feature.bard.bardic-inspiration",
     "activation": "bonus",
-    "uses": {
-      "max": { "abilityMod": "CHA", "min": 1 },
-      "recharge": { "1": "long", "5": "short" }
-    },
+    "uses": { "max": { "abilityMod": "CHA", "min": 1 }, "recharge": { "1": "long", "5": "short" } },
     "die": { "1": "d6", "5": "d8", "10": "d10", "15": "d12" }
   },
   { "id": "feature.bard.bonus-proficiencies", "activation": "passive" },
   { "id": "feature.bard.college", "activation": "passive" },
+  { "id": "feature.bard.countercharm", "activation": "action" },
   {
     "id": "feature.bard.cutting-words",
     "activation": "reaction",
@@ -29,16 +37,136 @@
     "die": { "2": "d6", "9": "d8", "13": "d10", "17": "d12" }
   },
   { "id": "feature.bard.spellcasting", "activation": "passive" },
+  {
+    "id": "feature.cleric.channel-divinity",
+    "activation": "special",
+    "uses": { "max": { "byLevel": { "2": 1, "6": 2, "18": 3 } }, "recharge": "short" }
+  },
+  {
+    "id": "feature.cleric.channel-divinity-preserve-life",
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "id": "feature.cleric.channel-divinity-turn-undead",
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
   { "id": "feature.darkvision", "activation": "passive" },
+  {
+    "id": "feature.druid.natural-recovery",
+    "activation": "special",
+    "uses": { "max": 1, "recharge": "long" }
+  },
+  {
+    "id": "feature.druid.wild-shape",
+    "activation": "action",
+    "uses": { "max": 2, "recharge": "short" }
+  },
+  {
+    "id": "feature.dwarven-resilience",
+    "defenses": { "resistances": ["poison"], "saveAdvantages": ["poison"] }
+  },
   {
     "id": "feature.fey-ancestry",
     "activation": "passive",
     "defenses": { "saveAdvantages": ["charmed"], "magicalSleepImmunity": true }
   },
   {
-    "id": "feature.dwarven-resilience",
-    "defenses": { "resistances": ["poison"], "saveAdvantages": ["poison"] }
+    "id": "feature.fighter.action-surge",
+    "activation": "free",
+    "uses": { "max": { "byLevel": { "2": 1, "17": 2 } }, "recharge": "short" }
+  },
+  {
+    "id": "feature.fighter.indomitable",
+    "activation": "free",
+    "trigger": "You fail a saving throw",
+    "uses": { "max": { "byLevel": { "9": 1, "13": 2, "17": 3 } }, "recharge": "long" }
+  },
+  {
+    "id": "feature.fighter.second-wind",
+    "activation": "bonus",
+    "uses": { "max": 1, "recharge": "short" }
   },
   { "id": "feature.hellish-resistance", "defenses": { "resistances": ["fire"] } },
-  { "id": "feature.skill-versatility", "activation": "passive" }
+  {
+    "id": "feature.monk.deflect-missiles",
+    "activation": "reaction",
+    "trigger": "A ranged weapon attack hits you"
+  },
+  { "id": "feature.monk.flurry-of-blows", "activation": "bonus", "usesFrom": "feature.monk.ki" },
+  {
+    "id": "feature.monk.ki",
+    "activation": "special",
+    "uses": { "max": { "perLevel": 1 }, "recharge": "short" }
+  },
+  { "id": "feature.monk.patient-defense", "activation": "bonus", "usesFrom": "feature.monk.ki" },
+  { "id": "feature.monk.slow-fall", "activation": "reaction", "trigger": "You fall" },
+  { "id": "feature.monk.step-of-the-wind", "activation": "bonus", "usesFrom": "feature.monk.ki" },
+  {
+    "id": "feature.monk.stunning-strike",
+    "activation": "free",
+    "trigger": "You hit a creature with a melee weapon attack",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "id": "feature.monk.wholeness-of-body",
+    "activation": "action",
+    "uses": { "max": 1, "recharge": "long" }
+  },
+  {
+    "id": "feature.paladin.channel-divinity",
+    "activation": "special",
+    "uses": { "max": 1, "recharge": "short" }
+  },
+  {
+    "id": "feature.paladin.channel-divinity-sacred-weapon",
+    "activation": "action",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "id": "feature.paladin.channel-divinity-turn-the-unholy",
+    "activation": "action",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "id": "feature.paladin.cleansing-touch",
+    "activation": "action",
+    "uses": { "max": { "abilityMod": "CHA", "min": 1 }, "recharge": "long" }
+  },
+  { "id": "feature.paladin.divine-sense", "activation": "action" },
+  { "id": "feature.paladin.lay-on-hands", "activation": "action" },
+  { "id": "feature.rogue.cunning-action", "activation": "bonus" },
+  {
+    "id": "feature.rogue.stroke-of-luck",
+    "activation": "free",
+    "uses": { "max": 1, "recharge": "short" }
+  },
+  {
+    "id": "feature.rogue.uncanny-dodge",
+    "activation": "reaction",
+    "trigger": "An attacker you can see hits you with an attack"
+  },
+  { "id": "feature.skill-versatility", "activation": "passive" },
+  {
+    "id": "feature.sorcerer.font-of-magic",
+    "activation": "special",
+    "uses": { "max": { "perLevel": 1 }, "recharge": "long" }
+  },
+  {
+    "id": "feature.warlock.dark-ones-own-luck",
+    "activation": "free",
+    "uses": { "max": 1, "recharge": "short" }
+  },
+  {
+    "id": "feature.warlock.hurl-through-hell",
+    "activation": "free",
+    "trigger": "You hit a creature with an attack",
+    "uses": { "max": 1, "recharge": "long" }
+  },
+  {
+    "id": "feature.wizard.arcane-recovery",
+    "activation": "special",
+    "uses": { "max": 1, "recharge": "long" }
+  }
 ]

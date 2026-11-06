@@ -44,9 +44,35 @@ describe('resolveFormula', () => {
   it('applies a minimum to an ability modifier', () => {
     expect(resolveFormula({ abilityMod: 'STR', min: 1 }, ctx)).toBe(1);
   });
+
+  it('reads level tables and per-level counts at the feature level', () => {
+    const rage = { byLevel: { 1: 2, 3: 3, 6: 4 } };
+    expect([1, 2, 3, 5, 6, 20].map((level) => resolveFormula(rage, ctx, level))).toEqual([
+      2, 2, 3, 3, 4, 4,
+    ]);
+    expect(resolveFormula({ byLevel: { 2: 1 } }, ctx, 1)).toBe(0);
+    expect(resolveFormula({ perLevel: 1 }, ctx, 7)).toBe(7);
+    expect(resolveFormula({ perLevel: 1 }, ctx)).toBe(0);
+  });
 });
 
 describe('characterFeatures', () => {
+  it('counts other classes’ limited uses at their class level', () => {
+    const build = {
+      ...fool.build,
+      classes: [
+        { classId: 'class.fighter', subclassId: undefined, level: 17 },
+        { classId: 'class.monk', subclassId: undefined, level: 3 },
+      ],
+    };
+    const all = characterFeatures(build, registry, ctx);
+    const uses = (id: string) => all.find((feature) => feature.def.id === id)?.uses;
+    expect(uses('feature.fighter.second-wind')).toEqual({ max: 1, recharge: 'short' });
+    expect(uses('feature.fighter.action-surge')).toEqual({ max: 2, recharge: 'short' });
+    expect(uses('feature.fighter.indomitable')).toEqual({ max: 3, recharge: 'long' });
+    expect(uses('feature.monk.ki')).toEqual({ max: 3, recharge: 'short' });
+  });
+
   const features = characterFeatures(fool.build, registry, ctx);
   const find = (id: string) => features.find((feature) => feature.def.id === id);
 

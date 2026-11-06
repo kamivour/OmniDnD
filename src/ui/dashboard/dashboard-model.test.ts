@@ -161,11 +161,11 @@ describe('dashboardResources', () => {
     expect(inspiration?.lines).toContain('Uses return after a short or long rest.');
   });
 
-  it('keeps empty headings and derives a blank noncaster’s Hit Dice without fixture resources', () => {
+  it('derives a blank fighter’s Second Wind and Hit Dice without fixture resources', () => {
     const character = blank();
     const groups = resources(character);
     expect(groups[0]?.items).toEqual([]);
-    expect(groups[1]?.items).toEqual([]);
+    expect(groups[1]?.items).toMatchObject([{ label: 'Second Wind', max: 1, used: 0 }]);
     expect(groups[2]?.items).toMatchObject([{ die: 'd10', max: 1, used: 0 }]);
     expect(quickAccess(character)).toEqual([]);
   });

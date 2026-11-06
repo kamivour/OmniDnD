@@ -60,6 +60,10 @@ export const FormulaSchema = z.union([
   z.int(),
   z.strictObject({ abilityMod: AbilitySchema, min: z.int().optional() }),
   z.strictObject({ proficiency: z.enum(['half', 'full', 'double']) }),
+  /** A count that grows with the feature's level (Rage, Action Surge). */
+  z.strictObject({ byLevel: z.record(LevelKeySchema, z.int().min(0)) }),
+  /** The feature's level times this number (Ki points, sorcery points). */
+  z.strictObject({ perLevel: z.int().positive() }),
 ]);
 
 export const RechargeByLevelSchema = z.record(LevelKeySchema, RechargeSchema);

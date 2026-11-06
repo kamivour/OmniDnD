@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M9 — Inventory and Features.
-**Next up:** M9 Gate: general characters, cross-screen values, offline reload and exact Undo; manual QA.
+**Current milestone:** MA — Accounts and cloud sync (local parts first; hosting waits, Q1/Q28).
+**Next up:** MA sync-ready local storage: change times and deletion markers, with migration.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -31,8 +31,8 @@ Build for multiple campaigns and characters, including friends' future character
 | M6 | Rest + Dashboard (live) | 1 | done | Scenario steps 9–14 work in UI |
 | M7 | Character Sheet + Exploration + level-up | 1 | done | All computed values match TEST_CHARACTER §4 |
 | M8 | Phase 1 hardening | 1 | done | Definition of done (SPEC §8) met |
-| M9 | Inventory + Features screen | 2 | doing | General inventory and feature controls sync across screens; custom items export; changes survive reload and Undo |
-| MA | Accounts + cloud sync | 2 | todo | Optional login keeps each person's campaigns and characters; guest mode and offline use unchanged |
+| M9 | Inventory + Features screen | 2 | done | General inventory and feature controls sync across screens; custom items export; changes survive reload and Undo |
+| MA | Accounts + cloud sync | 2 | doing | Optional login keeps each person's campaigns and characters; guest mode and offline use unchanged |
 | M10 | Effects editor + Conditions | 2 | todo | |
 | M11 | Campaign Setup: sources + optional rules | 2 | todo | |
 | M12 | Journal + Companions | 2 | todo | |
@@ -144,7 +144,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Consumables and potions: entered rolls/outcomes, 2014 combat action costs, shared Combat Items controls
 - [x] Portable custom items, saved with the character and retained by import/export
 - [x] Features screen: origin groups, passive/active/triggered details, uses/shared pools, recharge, favorites and supported explicit toggles
-- [ ] Gate: general characters, cross-screen values, offline reload and exact Undo at phone/desktop widths; manual QA documented
+- [x] Gate: general characters, cross-screen values, offline reload and exact Undo at phone/desktop widths; manual QA documented
 
 ### MA — Accounts + cloud sync (after M9; going online waits for hosting, Q1/Q28)
 - [ ] Sync-ready local storage: per-record change times and deletion markers, with migration and no behavior change for guests
@@ -167,6 +167,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M9 complete: a non-Fool fighter checks AC, feature uses, Home, offline reload and exact Undo. All SRD classes now track common limited uses. Next: MA.
 - 2026-11-06 — Features screen: origin groups, activation, uses with pips, Use, favorites. No toggles yet; no feature defines one (Q25). Next: M9 Gate.
 - 2026-11-06 — Custom items: create, edit and delete per-character items; weapons/armor copy a base item's stats and proficiency; travel with export. Next: Features screen.
 - 2026-11-06 — Consumables: potions heal by entered roll, spend the action in combat, ally-given potions revive; shared Inventory and Combat Items controls. Next: custom items.

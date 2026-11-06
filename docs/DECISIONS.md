@@ -125,6 +125,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D118 | 2026-11-06 | Drinking or giving a potion costs your action in combat (Q4, rules as written). When an ally gives you one, you spend nothing. Only self-healing is applied; other item effects stay manual. | 2014 rules; DM outcomes stay manual |
 | D119 | 2026-11-06 | Custom items are saved on the character, so they travel with export/import and ignore campaign source filters. Custom weapons and armor copy a chosen catalogue item's stats and proficiency. | Portable homebrew without a rules editor |
 | D117 | 2026-11-06 | At dawn or a rest, items that regain all charges refill automatically; dice regains wait for the player to enter the roll (the app adds the bonus and caps at the maximum). Zero-quantity records are skipped, and each entry keeps one counter. | Player rolls stay manual and visible |
+| D120 | 2026-11-06 | Common limited-use class features for every SRD class track uses by class level (Rage, Second Wind, Action Surge, Ki, Channel Divinity, Wild Shape, sorcery points). Variable-cost spending (Lay on Hands points, Metamagic, multi-point Ki) stays a manual pip adjustment. | General characters need their resources; costs other than 1 stay player-entered |
 
 ## Open questions
 
@@ -160,6 +161,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q26 | Should recording equipped gear automatically spend actions or advance time? | M9 | Record the actual outfit with explicit 2014 time/action reminders; the player uses the shared economy and game clock controls | User / DM |
 | Q27 | Should attunement controls complete focused rests or automatically end bonds after death, prerequisite loss or separation? | M9 | Record verified bonds explicitly; use shared rest/clock controls and review contact, prerequisites, curses and ending conditions at the table | User / DM |
 | Q28 | Which hosting and sync provider for accounts? | MA | Supabase (auth + Postgres with row-level security); the app keeps working offline and without an account | User |
+| Q29 | A level 20 Barbarian's Rage is unlimited. How should the app show it? | M10 | Keep 6 uses at level 17+; the player restores pips as needed | User |
 
 ## How to add an entry
 

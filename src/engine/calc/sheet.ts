@@ -201,15 +201,23 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     }
     return result;
   });
-  const sources: { label: string; modifiers: readonly Modifier[] }[] = [
-    ...features.map(({ def }) => ({ label: def.name, modifiers: def.modifiers ?? [] })),
-    ...live.effects.map((effect) => ({ label: effect.name, modifiers: effect.modifiers })),
+  const sources: { label: string; modifiers: readonly Modifier[]; level: number }[] = [
+    ...features.map(({ def, level }) => ({
+      label: def.name,
+      modifiers: def.modifiers ?? [],
+      level,
+    })),
+    ...live.effects.map((effect) => ({
+      label: effect.name,
+      modifiers: effect.modifiers,
+      level: 0,
+    })),
   ];
   const modifierParts = (...targets: Modifier['target'][]): Part[] =>
-    sources.flatMap(({ label, modifiers }) =>
+    sources.flatMap(({ label, modifiers, level }) =>
       modifiers
         .filter((modifier) => targets.includes(modifier.target))
-        .map((modifier) => ({ label, value: resolveFormula(modifier.value, ctx) })),
+        .map((modifier) => ({ label, value: resolveFormula(modifier.value, ctx, level) })),
     );
 
   const saves = Object.fromEntries(

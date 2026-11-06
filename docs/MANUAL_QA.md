@@ -71,7 +71,7 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Review Reset on your own character. Judge whether its preview, confirmation, retained belongings/time and backup/Undo wording make the scope clear before applying.
 - [ ] Play a full session with The Fool and try a friend's character. Judge combat pace, clear rule warnings and manual DM outcomes across screens.
 
-## Phase 2 — M9: Inventory and Features, in progress
+## Phase 2 — M9: Inventory and Features
 
 - [ ] Browse a character with duplicate items and nested containers on phone and desktop. Judge whether notes, locations and empty quantities distinguish each copy clearly.
 - [ ] Record your actual outfit and review armor replacements, proficiency warnings and time/action reminders. Judge whether the changed AC, attacks and shared Undo make the result clear.
@@ -81,6 +81,7 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Drink a potion in combat, have an ally give one at 0 HP, and throw acid. Judge the action cost, roll entry and the table-resolved wording.
 - [ ] Create a homebrew weapon and a charged trinket, then edit and export them. Judge the form, the based-on choice and whether the attack matches.
 - [ ] Open Features for your own character. Judge the grouping, long-text folding and whether Use, pips and favorites feel right next to Combat and Home.
+- [ ] Open a friend's non-Bard character (Fighter, Monk, Cleric). Judge whether Rage, Ki, Channel Divinity and similar uses match what they track on paper.
 - [ ] Spend wand charges, pass a dawn and enter the regain roll. Judge the prompt wording, Skip/Set choices and whether charge rules match your table.
 
 ## Deferred rules review — M5

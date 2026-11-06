@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 11:36 — Class feature uses; M9 done
+
+- Fighters, Barbarians, Monks, Clerics, Druids, Paladins, Rogues, Sorcerers, Warlocks and Wizards now count their limited features (Second Wind, Action Surge, Rage, Ki, Channel Divinity and more) from class level.
+- Inventory and feature changes stay in step across Home, Sheet and Features, also offline and after Undo.
+- Watch: a level 20 Barbarian shows 6 Rages, not unlimited (Q29). Lay on Hands points and Metamagic stay manual.
+- Next: groundwork for optional accounts. Checks pass.
+
 ## 2026-11-06 11:26 — Features screen
 
 - The Features page now lists everything your race, class, subclass, background and build give you, grouped by origin.

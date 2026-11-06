@@ -27,8 +27,15 @@ export interface FormulaContext {
   proficiency: number;
 }
 
-export function resolveFormula(formula: Formula, { mods, proficiency }: FormulaContext): number {
+/** `level` is the feature's level (class level for class features); level formulas read 0 without it. */
+export function resolveFormula(
+  formula: Formula,
+  { mods, proficiency }: FormulaContext,
+  level = 0,
+): number {
   if (typeof formula === 'number') return formula;
+  if ('byLevel' in formula) return byLevel(formula.byLevel, level) ?? 0;
+  if ('perLevel' in formula) return formula.perLevel * level;
   if ('abilityMod' in formula) return Math.max(formula.min ?? -Infinity, mods[formula.abilityMod]);
   if (formula.proficiency === 'half') return Math.floor(proficiency / 2);
   if (formula.proficiency === 'double') return proficiency * 2;
@@ -72,7 +79,7 @@ export function characterFeatures(
     if (def.uses) {
       const { max, recharge } = def.uses;
       const atLevel = typeof recharge === 'string' ? recharge : byLevel(recharge, level);
-      feature.uses = { max: resolveFormula(max, ctx), recharge: atLevel ?? 'none' };
+      feature.uses = { max: resolveFormula(max, ctx, level), recharge: atLevel ?? 'none' };
     }
     const die = def.die && byLevel(def.die, level);
     if (die) feature.die = die;

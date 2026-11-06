@@ -101,7 +101,7 @@ interface FeatureDef extends RefBase {
 
 Class, subclass, race, background, item and condition entries are in `src/engine/schema/refs.ts`. Points the sketch does not show: a subrace is a full race entry with `subraceOf: 'race.<parent>'`; ammunition items carry `bundle` (arrows come 20 per purchase); weapon `damage` is dice, a flat number (blowgun 1), or absent (net), and `damageType` is present exactly when `damage` is.
 
-`Formula`, `RechargeByLevel`, `DieByLevel` are small declarative forms (e.g., `{ abilityMod: 'CHA', min: 1 }`, `{ 1: 'long', 5: 'short' }`, `{ 1: 'd6', 5: 'd8', 10: 'd10', 15: 'd12' }`). More complex logic uses a code hook, not a custom expression language.
+`Formula`, `RechargeByLevel`, `DieByLevel` are small declarative forms (e.g., `{ abilityMod: 'CHA', min: 1 }`, `{ byLevel: { 2: 1, 17: 2 } }`, `{ perLevel: 1 }`, `{ 1: 'long', 5: 'short' }`, `{ 1: 'd6', 5: 'd8', 10: 'd10', 15: 'd12' }`). More complex logic uses a code hook, not a custom expression language.
 
 ```ts
 interface Campaign {
