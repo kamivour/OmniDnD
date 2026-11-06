@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 03:26 — Multiclass rules in the engine
+
+- Levelling up a class you do not have now adds it at level 1, only when the campaign allows multiclassing.
+- It checks the 13+ ability minimums for your current classes and the new one, and grants the smaller multiclass proficiency set (including the skill or instrument pick for Bard, Rogue and Ranger).
+- There is no screen for this yet; the level-up wizard comes later in M14. Checks pass.
+
 ## 2026-11-07 02:37 — SRD creatures in Reference search
 
 - Reference search now finds all 334 SRD creatures (goblin, mage, adult black dragon…). Open "Show statblock" for AC, HP, abilities, traits, actions and legendary actions.

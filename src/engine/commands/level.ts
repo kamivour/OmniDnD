@@ -1,13 +1,17 @@
 import { z } from 'zod';
 import { recordedLevel } from '../calc/advancement';
+import { optionalRules } from '../calc/campaign-rules';
 import { averageHpRoll, type HitDie } from '../calc/hp';
+import { MULTICLASS_RULES, meetsMinimum, minimumText } from '../calc/multiclass';
 import { computeSheet } from '../calc/sheet';
 import {
   CampaignSchema,
   CharacterBuildSchema,
   LiveStateSchema,
   refId,
+  SkillSchema,
   type HpEntry,
+  type CharacterBuild,
 } from '../schema';
 import { equalData } from './management';
 import type { Check, Command, CommandContext } from './runner';
@@ -17,6 +21,9 @@ const LevelUpPayloadSchema = z.strictObject({
   classId: refId('class'),
   /** Absent: use the class die's fixed average. Die-specific roll bounds are checked below. */
   roll: z.number().optional(),
+  /** Multiclass only: the skill and instrument a new class lets you pick. */
+  skill: SkillSchema.optional(),
+  tool: refId('item').optional(),
   expected: z
     .strictObject({ campaign: CampaignSchema, build: CharacterBuildSchema, live: LiveStateSchema })
     .optional(),
@@ -34,11 +41,68 @@ function safeCalculatedNumbers(value: unknown): boolean {
   return true;
 }
 
+/** PHB 2014 multiclassing: campaign switch, 13+ in the old and new classes' abilities, then the smaller proficiency set. */
+function multiclassGrants(
+  ctx: CommandContext,
+  classId: string,
+  className: string,
+  skill: string | undefined,
+  tool: string | undefined,
+): { blocked: string } | { checks: Check[]; proficiencies: CharacterBuild['proficiencies'] } {
+  if (!optionalRules(ctx.campaign).multiclassing)
+    return { blocked: 'Multiclassing is off in this campaign' };
+  const rule = MULTICLASS_RULES[classId];
+  if (!rule) return { blocked: `${className} has no multiclass rules in this app yet` };
+  const score = (ability: keyof typeof ctx.sheet.abilities) =>
+    ctx.sheet.abilities[ability].score.value;
+  for (const [id, label] of [
+    ...ctx.build.classes.map((entry) => [entry.classId, 'current'] as const),
+    [classId, 'new'] as const,
+  ]) {
+    const needs = MULTICLASS_RULES[id];
+    if (needs && !meetsMinimum(needs, score)) {
+      const name = ctx.registry.entries.get(id)?.name ?? id;
+      return { blocked: `The ${label} class ${name} needs ${minimumText(needs)}` };
+    }
+  }
+  const have = ctx.build.proficiencies;
+  const checks: Check[] = [];
+  const skills = [...have.skills];
+  if (rule.skill) {
+    if (skill === undefined) return { blocked: `Pick a skill for ${className}` };
+    if (rule.skill !== 'any' && !rule.skill.includes(skill as never))
+      return { blocked: `${className} does not offer that skill` };
+    if (skills.includes(skill as never)) checks.push(warn('You already have that skill'));
+    else skills.push(skill as never);
+  } else if (skill !== undefined) return { blocked: `${className} grants no skill` };
+  const tools = [...have.tools];
+  if (rule.tool === 'instrument') {
+    const item = tool === undefined ? undefined : ctx.registry.entries.get(tool);
+    if (item?.kind !== 'item' || item.category !== 'instrument')
+      return { blocked: 'Pick a musical instrument' };
+    if (!tools.includes(tool!)) tools.push(tool!);
+  } else if (rule.tool) {
+    if (!tools.includes(rule.tool)) tools.push(rule.tool);
+    if (tool !== undefined) return { blocked: `${className} grants a fixed tool` };
+  } else if (tool !== undefined) return { blocked: `${className} grants no tool` };
+  const merge = <T>(list: T[], more: T[]) => [...list, ...more.filter((x) => !list.includes(x))];
+  return {
+    checks,
+    proficiencies: {
+      ...have,
+      skills,
+      tools,
+      armor: merge(have.armor, rule.armor),
+      weapons: merge(have.weapons, rule.weapons),
+    },
+  };
+}
+
 /** Check and Apply derive the same proposed level; neither replaces a saved snapshot. */
 function prepare(ctx: CommandContext, input: LevelUpPayload) {
   const parsed = LevelUpPayloadSchema.safeParse(input);
   if (!parsed.success) return { checks: [block('Level-up details are invalid')] };
-  const { classId, roll, expected } = parsed.data;
+  const { classId, roll, skill, tool, expected } = parsed.data;
   const current = { campaign: ctx.campaign, build: ctx.build, live: ctx.live };
   if (expected !== undefined && !equalData(expected, current))
     return {
@@ -49,9 +113,7 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
       ],
     };
   const entries = ctx.build.classes.filter((entry) => entry.classId === classId);
-  if (entries.length === 0)
-    return { checks: [block('Multiclassing comes later: level up a class you have')] };
-  if (entries.length !== 1)
+  if (entries.length > 1)
     return {
       checks: [block('This class has multiple saved records. Review them before leveling up.')],
     };
@@ -65,6 +127,13 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
     if (invalidRoll.length) return { checks: invalidRoll };
   }
   const checks: Check[] = [];
+  let proficiencies: CharacterBuild['proficiencies'] = ctx.build.proficiencies;
+  if (entries.length === 0) {
+    const added = multiclassGrants(ctx, classId, def.name, skill, tool);
+    if ('blocked' in added) return { checks: [block(added.blocked)] };
+    checks.push(...added.checks);
+    proficiencies = added.proficiencies;
+  }
   if (roll !== undefined && ctx.campaign.hpMethod === 'average')
     checks.push(warn('Campaign uses average HP: using your roll'));
   if (roll === undefined && ctx.campaign.hpMethod === 'rolled')
@@ -78,9 +147,13 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
   };
   const build = {
     ...ctx.build,
-    classes: ctx.build.classes.map((entry) =>
-      entry.classId === classId ? { ...entry, level: entry.level + 1 } : entry,
-    ),
+    proficiencies,
+    classes:
+      entries.length === 0
+        ? [...ctx.build.classes, { classId, level: 1 }]
+        : ctx.build.classes.map((entry) =>
+            entry.classId === classId ? { ...entry, level: entry.level + 1 } : entry,
+          ),
     hpEntries: [...ctx.build.hpEntries, hpEntry],
   };
   if (!CharacterBuildSchema.safeParse(build).success)
@@ -102,7 +175,7 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
       build,
       live,
       name: def.name,
-      classLevel: entries[0]!.level + 1,
+      classLevel: (entries[0]?.level ?? 0) + 1,
       before,
       after,
     };
@@ -122,6 +195,7 @@ export const levelUp: Command<LevelUpPayload> = {
     if (!next.build || !next.live) throw new Error('Invalid level-up reached Apply');
     draft.build.classes = next.build.classes;
     draft.build.hpEntries = next.build.hpEntries;
+    draft.build.proficiencies = next.build.proficiencies;
     draft.live.hp = next.live.hp;
     return withNotes(
       `Level up: ${next.name} ${next.classLevel} (max HP ${next.before} → ${next.after})`,

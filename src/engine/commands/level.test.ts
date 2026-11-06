@@ -481,13 +481,67 @@ describe('levelUp', () => {
     expect(session.state).toEqual(frozen);
   });
 
-  it('blocks other classes, level 20, and bad rolls', () => {
+  it('blocks a new class while multiclassing is off, and bad rolls', () => {
     const session = new Session();
     expect(session.preview(levelUp, { classId: 'class.wizard', roll: 3 }).reasons).toEqual([
-      'Multiclassing comes later: level up a class you have',
+      'Multiclassing is off in this campaign',
     ]);
     expect(session.preview(levelUp, { classId: 'class.bard', roll: 9 }).reasons).toEqual([
       'Hit Die roll must be a whole number from 1 to 8',
     ]);
+  });
+});
+
+describe('levelUp multiclassing', () => {
+  const multiclass = (): CharacterState => {
+    const state = structuredClone(freshState);
+    state.campaign.optionalRules = { ...state.campaign.optionalRules, multiclassing: true };
+    return state;
+  };
+
+  it('adds a new class at level 1 with its proficiencies, and undo restores everything', () => {
+    const state = multiclass();
+    const session = new Session(state);
+    const before = structuredClone(session.state);
+    session.run(levelUp, { classId: 'class.fighter', roll: 5 });
+    expect(session.state.build.classes).toContainEqual({ classId: 'class.fighter', level: 1 });
+    expect(session.state.build.hpEntries.at(-1)).toMatchObject({
+      classId: 'class.fighter',
+      value: 5,
+    });
+    expect(session.state.build.proficiencies.armor).toEqual(
+      expect.arrayContaining(['light', 'medium', 'shield']),
+    );
+    expect(session.state.build.proficiencies.weapons).toEqual(
+      expect.arrayContaining(['simple', 'martial']),
+    );
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('needs the 13+ minimums for the current and the new class', () => {
+    const session = new Session(multiclass());
+    expect(session.preview(levelUp, { classId: 'class.wizard', roll: 3 }).reasons).toEqual([
+      'The new class Wizard needs INT 13',
+    ]);
+    const weak = multiclass();
+    weak.build.abilityScores.base.CHA = 8;
+    weak.build.abilityScores.bonuses = [];
+    expect(
+      new Session(weak).preview(levelUp, { classId: 'class.fighter', roll: 3 }).reasons,
+    ).toEqual(['The current class Bard needs CHA 13']);
+  });
+
+  it('asks for the picks a new class grants and rejects the wrong ones', () => {
+    const session = new Session(multiclass());
+    expect(session.preview(levelUp, { classId: 'class.rogue', roll: 4 }).reasons).toEqual([
+      'Pick a skill for Rogue',
+    ]);
+    expect(
+      session.preview(levelUp, { classId: 'class.rogue', roll: 4, skill: 'arcana' }).reasons,
+    ).toEqual(['Rogue does not offer that skill']);
+    session.run(levelUp, { classId: 'class.rogue', roll: 4, skill: 'athletics' });
+    expect(session.state.build.proficiencies.skills).toContain('athletics');
+    expect(session.state.build.proficiencies.tools).toContain('item.thieves-tools');
   });
 });
