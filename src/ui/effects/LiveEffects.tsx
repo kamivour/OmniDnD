@@ -1,11 +1,13 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { Plus } from 'lucide-react';
 import { registry } from '../../data/registry';
 import { endConcentration, removeEffect } from '../../engine/commands';
 import { useCommand } from '../commands/command-context';
 import { ConcentrationChip } from '../components/chips';
 import { SectionLabel } from '../components/SectionLabel';
 import { useCharacter } from '../hooks/useCharacter';
-import { effectDeadline, remainingEffectTime } from './effects-model';
+import { EffectEditor, type EffectEditorRequest } from './EffectEditor';
+import { effectTimingText, remainingEffectTime } from './effects-model';
 
 /** Concentration is the caster's state; this list contains only effects on this character. */
 export function LiveEffects() {
@@ -13,6 +15,15 @@ export function LiveEffects() {
   const { run } = useCommand();
   const concentrationSection = useRef<HTMLElement>(null);
   const effectsSection = useRef<HTMLElement>(null);
+  const [editor, setEditor] = useState<EffectEditorRequest>();
+  const opener = useRef<HTMLElement | null>(null);
+  const openEditor = (request: EffectEditorRequest, button: HTMLElement) => {
+    opener.current = button;
+    setEditor(request);
+  };
+  // The opener may vanish (an edit that ends the effect); fall back to the section.
+  const editorReturn = () =>
+    opener.current?.isConnected ? opener.current : effectsSection.current;
   const { live } = state;
   const restore = (section: HTMLElement | null) => () => {
     requestAnimationFrame(() => section?.focus());
@@ -51,7 +62,17 @@ export function LiveEffects() {
         aria-label="Effects on you"
         className="flex min-w-0 flex-col gap-2"
       >
-        <SectionLabel>Effects on you</SectionLabel>
+        <div className="flex min-w-0 items-center justify-between gap-2">
+          <SectionLabel>Effects on you</SectionLabel>
+          <button
+            type="button"
+            onClick={(event) => openEditor({ kind: 'add' }, event.currentTarget)}
+            className="-my-2 inline-flex min-h-11 items-center gap-1 rounded-btn px-2 text-sm text-accent"
+          >
+            <Plus size={16} aria-hidden />
+            Add effect
+          </button>
+        </div>
         {live.effects.length === 0 ? (
           <p className="text-sm text-text-muted">None</p>
         ) : (
@@ -64,13 +85,23 @@ export function LiveEffects() {
                 <div className="min-w-0 flex-1 text-sm">
                   <p className="wrap-anywhere text-text">{effect.name}</p>
                   <p className="text-xs text-magic">
-                    {remainingEffectTime(effectDeadline(effect, live), live)}
+                    {effectTimingText(effect, live)}
                     {effect.concentration && ' · Your concentration'}
                   </p>
                   {effect.note && (
                     <p className="wrap-anywhere text-xs text-text-muted">{effect.note}</p>
                   )}
                 </div>
+                <button
+                  type="button"
+                  aria-label={`Edit effect: ${effect.name}`}
+                  onClick={(event) =>
+                    openEditor({ kind: 'edit', effectId: effect.id }, event.currentTarget)
+                  }
+                  className="min-h-11 min-w-11 shrink-0 rounded-btn px-2 text-sm text-accent"
+                >
+                  Edit
+                </button>
                 <button
                   type="button"
                   aria-label={`End effect: ${effect.name}`}
@@ -96,6 +127,14 @@ export function LiveEffects() {
           </p>
         )}
       </section>
+      {editor && (
+        <EffectEditor
+          key={editor.kind === 'edit' ? editor.effectId : 'add'}
+          request={editor}
+          onClose={() => setEditor(undefined)}
+          returnFocusTo={editorReturn}
+        />
+      )}
     </>
   );
 }

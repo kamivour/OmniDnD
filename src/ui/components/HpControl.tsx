@@ -3,6 +3,7 @@ import { Delete, Minus, Plus, Shield } from 'lucide-react';
 import { applyDamage, heal, healthDetails, setTempHp } from '../../engine/commands';
 import { useCommand } from '../commands/command-context';
 import { cx } from '../cx';
+import { damageDefenseLines } from '../effects/effects-model';
 import { DeathSaveTracker } from '../health/DeathSaveTracker';
 import { useCharacter } from '../hooks/useCharacter';
 import { HpBar } from './HpBar';
@@ -178,6 +179,10 @@ export function HpAdjustmentBody({
   const disabled =
     kind === 'damage' ? !health.canTakeDamage : kind === 'heal' ? !health.canHeal : false;
   const [error, setError] = useState<string | null>(null);
+  const defenses =
+    kind === 'damage'
+      ? damageDefenseLines([...sheet.features.map(({ def }) => def), ...state.live.effects])
+      : [];
   return (
     <div ref={container} tabIndex={-1} className="flex min-w-0 flex-col gap-3">
       <p className="text-sm text-text-muted">
@@ -189,6 +194,7 @@ export function HpAdjustmentBody({
           Enter damage after applicable reductions, before temporary HP.
         </p>
       )}
+      {defenses.length > 0 && <p className="text-xs text-text">{defenses.join(' · ')}</p>}
       {kind === 'damage' && health.hp === 0 && (
         <label className="flex min-h-11 items-center gap-2 text-sm text-text">
           <input

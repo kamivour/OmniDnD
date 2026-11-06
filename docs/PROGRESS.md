@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M10 — Effects editor + Conditions.
-**Next up:** M10 effect editor UI. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M10 condition consequences. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -155,7 +155,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 ### M10 — Effects editor + Conditions
 - [x] Engine: effects can end at your next turn's start or end, or at a rest; carry damage defenses; can be edited in place
-- [ ] Effect editor in Combat, Dashboard and Exploration: duration, end trigger, conditions, number modifiers, defenses, note; Sheet shows effect defenses
+- [x] Effect editor in Combat, Dashboard and Exploration: duration, end trigger, conditions, number modifiers, defenses, note; Sheet shows effect defenses
 - [ ] Condition consequences: advantage, disadvantage and auto-fail reminders on checks, saves and attacks; exhaustion levels; condition details in own words
 - [ ] Gate: phone and desktop widths, exact Undo, reload; manual QA documented
 
@@ -173,6 +173,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M10 effect editor: add or edit effects with timing, conditions, bonuses and damage defenses; Sheet and damage pad show effect defenses.
 - 2026-11-06 — M10 engine: effects end at your next turn's start/end or at a rest, carry damage defenses, and can be edited; concentration survives a triggered end.
 - 2026-11-06 — MA complete: guest builds unchanged and free of account code; sync verified with an in-memory cloud; HOSTING.md lists the steps to go online. Next: M10.
 - 2026-11-06 — Sign-in: Settings shows an Account section only in builds with a provider; email sign-in, Sync now, conflict choices. Guest builds omit the code. Next: MA Gate.

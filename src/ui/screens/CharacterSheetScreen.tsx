@@ -53,9 +53,15 @@ export function CharacterSheetScreen() {
     name: registry.get('class', entry.classId).name,
     subclass: entry.subclassId ? registry.get('subclass', entry.subclassId).name : undefined,
   }));
-  const defenses = sheet.features.flatMap(({ def }) =>
-    def.defenses ? [{ name: def.name, ...def.defenses }] : [],
-  );
+  // Effects on you (a potion, an ally's spell) add their defenses while they last.
+  const defenses = [
+    ...sheet.features.flatMap(({ def }) =>
+      def.defenses ? [{ name: def.name, ...def.defenses }] : [],
+    ),
+    ...live.effects.flatMap((effect) =>
+      effect.defenses ? [{ name: effect.name, ...effect.defenses }] : [],
+    ),
+  ];
   const racialTraits = sheet.features.filter(({ def }) => def.origin === 'race');
   const itemName = (id: string) => registryFor(build).get('item', id).name;
   const attackDamage = (dice: string | undefined, bonus: number) =>

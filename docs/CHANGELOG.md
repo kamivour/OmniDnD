@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 12:39 — Add and edit effects on you
+
+- Combat, Dashboard and Exploration now have **Add effect** and **Edit** for effects on you: set how long it lasts, when it ends (your next turn, a rest), conditions, bonuses to AC, saves and more, and damage resistances.
+- The Sheet and the damage pad list resistances from active effects as reminders; you still enter damage after resistance yourself.
+- Check: the editor feels quick enough at the table on your phone. Next: what each condition does to your rolls. Checks pass.
+
 ## 2026-11-06 12:29 — Effects that end on their own
 
 - Behind the scenes, effects on you can now end at the start or end of your next turn, or when you finish a short or long rest. Ending combat clears turn-timed ones.
