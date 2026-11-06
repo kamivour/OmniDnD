@@ -187,7 +187,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [ ] Full casters end to end, levels 1–20: Bard, Cleric, Druid, Sorcerer, Warlock, Wizard; Pact Magic and Mystic Arcanum, Sorcery Points, Wild Shape uses, Channel Divinity
 - [ ] Feats: SRD Grappler plus PHB feats in our own words in `data/content/`; ability, HP, initiative and proficiency effects applied, the rest shown as reminders
 - [ ] Tasha options behind campaign toggles: optional class features and custom origin; turning a toggle off keeps choices and lists conflicts (as M11)
-- [ ] Artificer (TCE, 2014-compatible, own words): class, infusions as choices, Battle Smith and Artillerist (Q32)
+- [ ] Artificer (TCE, 2014-compatible, own words): class, infusions as choices, Battle Smith and Artillerist (D131)
 - [ ] Owner-derived companion templates: Ranger's companion (PHB 2014, Q23, HP uses the higher of its normal HP or 4 × ranger level), Steel Defender, Eldritch Cannon, Find Familiar forms
 - [ ] Guided character builder: race, class, background, ability method, skills, equipment and spells for a new character in any campaign; blank create stays available
 - [ ] Gate: build a Fighter 2 / Wizard 3 and a Warlock / Sorcerer through the wizard; one character per SRD class to level 5; phone and desktop widths, Undo, reload, manual QA documented

@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 02:24 — Artificer subclasses decided
+
+- M14 will add the Artificer with Battle Smith and Artillerist; Alchemist and Armorer come later with the Tasha pack.
+- The fight-tracker question (per character or shared) stays open; you will decide before M15.
+- Next: M14 starts with the SRD creatures. Checks pass.
+
 ## 2026-11-07 00:08 — Plan for the remaining milestones
 
 - Journal, Companions and Reference rechecked; all work as planned.

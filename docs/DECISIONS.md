@@ -134,6 +134,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D127 | 2026-11-06 | Optional rules start off; encumbrance and rest length start at the Player's Handbook rule. Removing a book keeps every choice from it and lists them; the PHB cannot be removed. | Changing settings never deletes character choices (SPEC) |
 | D128 | 2026-11-06 | Potion as a bonus action covers only drinking a potion yourself; giving one stays an action. Variant encumbrance replaces the armor STR speed rule. Rest variants change only rest length. | Smallest house-rule reading; DM can rule wider |
 | D130 | 2026-11-06 | A companion is entered or picked as a template with its numbers (fixed or following the owner); creating it does not spend slots or feature uses, since the owner casts the spell or uses the feature separately. Ranger companions follow PHB 2014 (Q23). SRD creature import comes with the Companions UI. | Keeps one source of truth for resources; avoids charging twice |
+| D131 | 2026-11-07 | M14 ships the Artificer with Battle Smith and Artillerist, the two subclasses that own companions. Alchemist and Armorer come with the M16 Tasha pack. (Was Q32.) | User agreed; keeps M14 smaller |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 
@@ -173,8 +174,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q28 | Which hosting and sync provider for accounts? | MA | Supabase (auth + Postgres with row-level security); the app keeps working offline and without an account | User |
 | Q29 | A level 20 Barbarian's Rage is unlimited. How should the app show it? | M10 | Keep 6 uses at level 17+; the player restores pips as needed | User |
 | Q30 | Should Tasha sidekicks be a campaign option, and should Artificer cannon and Steel Defender templates ship with M14? | M12 / M14 | Sidekicks are plain custom companions with type "sidekick"; no campaign option; Artificer templates wait for M14 | User |
-| Q31 | Should the ally/enemy tracker belong to one character or be shared by everyone in a campaign? | M15 | One tracker per character, saved with that character; a shared party view stays in the backlog | User |
-| Q32 | Which Artificer subclasses ship with M14? | M14 | Battle Smith and Artillerist, since they own companions; Alchemist and Armorer come with the M16 Tasha pack | User |
+| Q31 | Should the ally/enemy tracker belong to one character or be shared by everyone in a campaign? | M15 (user will decide later) | One tracker per character, saved with that character; a shared party view stays in the backlog | User |
 
 ## How to add an entry
 
