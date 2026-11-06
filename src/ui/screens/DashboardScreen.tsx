@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { registry } from '../../data/registry';
 import { ABILITIES } from '../../engine/calc/abilities';
+import { EXHAUSTION_LEVELS, rollReminders } from '../../engine/calc/conditions';
 import { DashboardQuickAccess } from '../dashboard/DashboardQuickAccess';
 import { DashboardResourceRow } from '../dashboard/DashboardResources';
 import { dashboardResources } from '../dashboard/dashboard-model';
 import { SectionLabel } from '../components/SectionLabel';
 import { OverrideMarker } from '../components/StatChip';
 import { LiveEffects } from '../effects/LiveEffects';
+import { saveTag } from '../effects/roll-reminders-model';
 import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
 import { HudAdjustments } from '../layout/HudAdjustments';
@@ -19,6 +21,7 @@ export function DashboardScreen() {
   const [statusAnchor, setStatusAnchor] = useState<HTMLElement | null>(null);
   const [editingConditions, setEditingConditions] = useState(false);
   const groups = dashboardResources(state, sheet, registry);
+  const reminders = rollReminders(sheet.conditions, state.live.exhaustion);
   const passives = [
     {
       label: 'Perception',
@@ -82,9 +85,15 @@ export function DashboardScreen() {
                     const sources = state.live.effects
                       .filter((effect) => effect.conditions.includes(condition))
                       .map(({ name }) => name);
+                    const summary = registry.get('condition', `condition.${condition}`).summary;
                     return (
                       <li key={condition} className="text-sm text-text">
                         <span className="capitalize">{condition}</span>
+                        {summary && (
+                          <span className="block wrap-anywhere text-xs text-text-muted">
+                            {summary.effect}
+                          </span>
+                        )}
                         <span className="block wrap-anywhere text-xs text-text-muted">
                           {[
                             state.live.conditions.includes(condition) && 'Manual',
@@ -99,6 +108,18 @@ export function DashboardScreen() {
                 </ul>
               )}
               <p className="text-sm text-text-muted">Exhaustion (2014): {state.live.exhaustion}</p>
+              {state.live.exhaustion > 0 && (
+                <ol
+                  aria-label="Exhaustion effects"
+                  className="flex flex-col gap-1 text-xs text-text"
+                >
+                  {EXHAUSTION_LEVELS.slice(0, state.live.exhaustion).map((effect, index) => (
+                    <li key={effect}>
+                      Level {index + 1}: {effect}
+                    </li>
+                  ))}
+                </ol>
+              )}
               {state.live.effects.some(({ conditions }) => conditions.length > 0) && (
                 <p className="text-xs text-text-muted">
                   Effect-granted conditions remain until their source ends. Edit changes your manual
@@ -133,6 +154,11 @@ export function DashboardScreen() {
                   <OverrideMarker override={sheet.saves[ability].override} />
                   {sheet.saves[ability].proficient ? ' · proficient' : ''}
                 </span>
+                {saveTag(reminders, ability) && (
+                  <span className="w-full text-center text-xs text-warn">
+                    {saveTag(reminders, ability)}
+                  </span>
+                )}
               </li>
             ))}
           </ul>

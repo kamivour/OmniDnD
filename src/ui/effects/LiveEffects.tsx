@@ -8,6 +8,7 @@ import { SectionLabel } from '../components/SectionLabel';
 import { useCharacter } from '../hooks/useCharacter';
 import { EffectEditor, type EffectEditorRequest } from './EffectEditor';
 import { effectTimingText, remainingEffectTime } from './effects-model';
+import { RollReminders } from './RollReminders';
 
 /** Concentration is the caster's state; this list contains only effects on this character. */
 export function LiveEffects() {
@@ -127,6 +128,7 @@ export function LiveEffects() {
           </p>
         )}
       </section>
+      <RollReminders />
       {editor && (
         <EffectEditor
           key={editor.kind === 'edit' ? editor.effectId : 'add'}

@@ -37,6 +37,8 @@ export default defineConfig(({ command }) => ({
       },
       workbox: {
         globPatterns: ['**/*.{html,js,css,woff2,woff,svg,png,webmanifest}'],
+        // The app bundle carries SRD data and must be precached to work offline.
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
         // Updates wait for all old tabs to close, preserving an ongoing session.

@@ -16,7 +16,9 @@
   },
   {
     "id": "feature.bard.bonus-proficiencies",
-    "summary": { "effect": "Gain proficiency in three skills of your choice." },
+    "summary": {
+      "effect": "Gain proficiency in three skills of your choice."
+    },
     "summaryReviewed": false
   },
   {
@@ -78,7 +80,9 @@
   },
   {
     "id": "feature.skill-versatility",
-    "summary": { "effect": "Gain proficiency in two skills of your choice." },
+    "summary": {
+      "effect": "Gain proficiency in two skills of your choice."
+    },
     "summaryReviewed": false
   },
   {
@@ -143,5 +147,103 @@
     },
     "summaryReviewed": false,
     "url": "https://www.dndbeyond.com/spells/vicious-mockery"
+  },
+  {
+    "id": "condition.blinded",
+    "summary": {
+      "effect": "You cannot see. Checks that rely on sight fail. Your attacks have disadvantage; attacks against you have advantage."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.charmed",
+    "summary": {
+      "effect": "You cannot attack the charmer or aim harmful abilities or magic at them. The charmer has advantage on social checks with you."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.deafened",
+    "summary": {
+      "effect": "You cannot hear. Checks that rely on hearing fail."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.frightened",
+    "summary": {
+      "effect": "While the source of your fear is in sight, your checks and attacks have disadvantage. You cannot willingly move closer to it."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.grappled",
+    "summary": {
+      "effect": "Your speed is 0 and cannot rise. Ends if the grappler is incapacitated or you are moved out of its reach."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.incapacitated",
+    "summary": {
+      "effect": "You cannot take actions or reactions."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.invisible",
+    "summary": {
+      "effect": "You cannot be seen without magic or a special sense; you count as heavily obscured for hiding. Your attacks have advantage; attacks against you have disadvantage."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.paralyzed",
+    "summary": {
+      "effect": "Incapacitated; you cannot move or speak. STR and DEX saves fail. Attacks against you have advantage, and a hit from within 5 ft is a critical hit."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.petrified",
+    "summary": {
+      "effect": "Turned to an inanimate substance: incapacitated, unaware, cannot move or speak. STR and DEX saves fail; attacks against you have advantage. You resist all damage and are immune to poison and disease."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.poisoned",
+    "summary": {
+      "effect": "Your attack rolls and ability checks have disadvantage."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.prone",
+    "summary": {
+      "effect": "You can only crawl unless you stand, which costs half your speed. Your attacks have disadvantage. Attacks against you have advantage within 5 ft, disadvantage from farther away."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.restrained",
+    "summary": {
+      "effect": "Your speed is 0. Your attacks and DEX saves have disadvantage; attacks against you have advantage."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.stunned",
+    "summary": {
+      "effect": "Incapacitated; you cannot move and speak only falteringly. STR and DEX saves fail; attacks against you have advantage."
+    },
+    "summaryReviewed": false
+  },
+  {
+    "id": "condition.unconscious",
+    "summary": {
+      "effect": "Incapacitated and unaware; you drop what you hold and fall prone. STR and DEX saves fail. Attacks against you have advantage, and a hit from within 5 ft is a critical hit."
+    },
+    "summaryReviewed": false
   }
 ]

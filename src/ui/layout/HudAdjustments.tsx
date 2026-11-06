@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { EXHAUSTION_LEVELS } from '../../engine/calc/conditions';
 import { Popover, Tabs } from 'radix-ui';
 import { X } from 'lucide-react';
 import {
@@ -267,6 +268,11 @@ export function HudAdjustments({
               ))}
             </select>
           </label>
+          {live.exhaustion > 0 && (
+            <p className="-mt-3 text-xs text-text-muted">
+              {EXHAUSTION_LEVELS.slice(0, live.exhaustion).join(' · ')}
+            </p>
+          )}
           <section>
             <h3 className="mb-2 font-semibold">Effects on you</h3>
             {live.effects.length === 0 ? (

@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 12:59 — What conditions do to your rolls
+
+- Combat, Dashboard and Exploration show **Roll reminders** when you have a condition or exhaustion: advantage, disadvantage or automatic failure on attacks, checks and saves. The app never rolls or changes numbers for you.
+- Save tiles on Home are tagged Auto-fail, Advantage or Disadvantage, and each condition shows a short note on what it does. Exhaustion lists every level you have.
+- Check: situational lines such as prone (within 5 ft or farther) read clearly. Next: the M10 final check. Checks pass.
+
 ## 2026-11-06 12:39 — Add and edit effects on you
 
 - Combat, Dashboard and Exploration now have **Add effect** and **Edit** for effects on you: set how long it lasts, when it ends (your next turn, a rest), conditions, bonuses to AC, saves and more, and damage resistances.
