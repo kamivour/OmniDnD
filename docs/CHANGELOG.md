@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 11:58 — Account database rules
+
+- Added the cloud database setup for future accounts: each person can only see and change their own campaigns and characters.
+- Nothing is online yet; the app still works without an account.
+- Next: an optional sign-in screen. Checks pass.
+
 ## 2026-11-06 11:53 — Groundwork for accounts
 
 - The app now notes when each campaign and character last changed, and remembers deletions, so a future account can sync them between devices.

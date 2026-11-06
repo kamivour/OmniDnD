@@ -324,7 +324,8 @@ src/
   engine/schema/  zod schemas + inferred types (D47)
   data/         pack loaders, registry (import schemas from engine/schema)
   state/        Zustand store wrapping engine
-  db/           Dexie, migrations/
+  db/           Dexie, migrations/, sync metadata
+  sync/         optional account sync: provider interface, planner, Supabase client
   ui/           components/ (design system), screens/, layout/
   theme/        tokens.css
 data/
@@ -334,6 +335,7 @@ data/
   private/      gitignored
   characters/   seed characters (the-fool.json)
 scripts/        import-srd.ts, srd/map.ts (pure mappers, unit-tested)
+supabase/       migrations/: account database schema and row-level security (MA)
 tests/          e2e/ (Playwright)
 docs/
 ```

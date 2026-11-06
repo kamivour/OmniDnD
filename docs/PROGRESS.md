@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** MA — Accounts and cloud sync (local parts first; hosting waits, Q1/Q28).
-**Next up:** MA account database schema with row-level security.
+**Next up:** MA optional sign-in, hidden until a sync provider is configured.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -148,7 +148,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 ### MA — Accounts + cloud sync (after M9; going online waits for hosting, Q1/Q28)
 - [x] Sync-ready local storage: per-record change times and deletion markers, with migration and no behavior change for guests
-- [ ] Database schema and row-level security policies in the repo, so each account can only read and write its own rows
+- [x] Database schema and row-level security policies in the repo, so each account can only read and write its own rows
 - [ ] Optional sign-in screen, hidden until a sync provider is configured; guest mode stays the default
 - [ ] Two-way sync through the persistence layer with revision conflict checks; conflicts ask the user, never silently overwrite
 - [ ] Gate: guest-only use unchanged; sync tested against a local or mocked provider; hosting steps documented for the user
@@ -167,6 +167,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — Account database schema: one row per campaign or character, server revisions, owner-only access, no hard deletes. Static test checks the rules. Next: sign-in.
 - 2026-11-06 — Sync-ready storage: each campaign and character gets a change stamp and deletion marker; older saves back-fill on load. No visible change. Next: database schema.
 - 2026-11-06 — M9 complete: a non-Fool fighter checks AC, feature uses, Home, offline reload and exact Undo. All SRD classes now track common limited uses. Next: MA.
 - 2026-11-06 — Features screen: origin groups, activation, uses with pips, Use, favorites. No toggles yet; no feature defines one (Q25). Next: M9 Gate.
