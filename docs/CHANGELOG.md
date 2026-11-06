@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 19:13 — Journal screen
+
+- You can now view and edit your character's personality traits, ideals, bonds, flaws, relationships, backstory, appearance, and freeform notes.
+- Track active and completed quests with notes, record NPCs and landmarks in the world, and write dated session logs.
+- All additions and updates support exact Undo and persist across reloads.
+- Checks pass.
+
 ## 2026-11-06 19:08 — Journal engine commands and schema
 
 - The character journal now supports narrative traits, freeform notes, open and completed quests, NPCs, locations, and dated session notes.

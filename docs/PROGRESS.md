@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M12 — Journal + Companions.
-**Next up:** M12 Journal UI screen. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M12 Companions engine. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -167,7 +167,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 ### M12 — Journal + Companions
 - [x] Journal engine: narrative traits, notes, quests, NPCs, locations and dated session notes
-- [ ] Journal UI: character narrative, markdown notes, quests, NPCs, locations and session logs
+- [x] Journal UI: character narrative, markdown notes, quests, NPCs, locations and session logs
 - [ ] Companions engine: companion definitions, owner-derived stats, independent live state and commanding
 - [ ] Companions UI: companions screen and combat actions with turn economy integration
 - [ ] Gate: phone and desktop widths, Undo, reload, manual QA documented
@@ -186,6 +186,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M12 Journal UI: responsive narrative, markdown notes, quests, NPCs, locations and session logs with live Undo and persistence.
 - 2026-11-06 — M12 Journal engine: narrative traits, notes, quests, NPCs, locations and session notes with validation, persistence and exact Undo.
 - 2026-11-06 — M11 complete: books and optional rules verified at phone and desktop width, exact Undo, reload; manual QA listed. Next: M12.
 - 2026-11-06 — M11 rules in play: rest length variants, variant encumbrance speed and reminders, encumbrance Off, self-drunk potions as bonus action.
