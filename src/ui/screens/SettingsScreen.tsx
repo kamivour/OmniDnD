@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { useStore } from 'zustand';
 import { Download, Undo2, Upload } from 'lucide-react';
@@ -8,8 +8,14 @@ import { characterStore } from '../../state/character-store';
 import { useManagement } from '../commands/useManagement';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { ChoiceGroup, Field, inputClass } from '../components/fields';
+import { syncConfig } from '../../sync/config';
 import { ResetCharacterControl } from '../settings/ResetCharacterControl';
 import { cx } from '../cx';
+
+// Replaced at build time: guest builds (no provider configured) drop the account code entirely.
+const AccountSection = import.meta.env.VITE_SUPABASE_URL
+  ? lazy(() => import('../settings/AccountSection'))
+  : null;
 
 const button =
   'inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-border px-3 text-sm hover:bg-surface-2 disabled:opacity-40';
@@ -123,6 +129,11 @@ export function SettingsScreen() {
           </p>
         </section>
       </fieldset>
+      {AccountSection && syncConfig && (
+        <Suspense fallback={null}>
+          <AccountSection config={syncConfig} />
+        </Suspense>
+      )}
       <section
         aria-labelledby="settings-transfer"
         className="flex flex-col gap-3 rounded-card border border-border bg-surface p-4"

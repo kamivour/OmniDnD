@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 12:20 — Optional sign-in
+
+- Settings gains an Account section with sign-in, Create account, Sync now and a "which version to keep" choice when needed.
+- It only appears once the app is set up with an account server; the version you run now looks and works the same.
+- Next: hosting steps and the accounts check. Checks pass.
+
 ## 2026-11-06 12:01 — Sync between devices (behind the scenes)
 
 - Added the logic that moves campaigns and characters between this device and a future account, including deletions.

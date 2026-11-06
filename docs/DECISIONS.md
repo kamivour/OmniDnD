@@ -129,6 +129,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D121 | 2026-11-06 | Account sync will cover campaigns and characters, including their Undo history. Device preferences, bookmarks, backups and hub Undo history stay on each device. | Players share characters across devices; display settings and recovery points are per device |
 | D122 | 2026-11-06 | When a campaign or character changed both here and in the cloud since the last sync, the app asks which version to keep (this device or the cloud) and changes nothing until you choose. Untouched starter data on a new device quietly takes the cloud's copy. | Never silently overwrite a player's work |
 | D123 | 2026-11-06 | Downloaded changes replace local records directly, with an automatic backup first; they are not Undo steps. If they make this device's hub Undo history unreplayable, that history is cleared. | Undo covers your own actions; backups cover sync |
+| D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 
 ## Open questions
 
