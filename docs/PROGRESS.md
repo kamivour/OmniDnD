@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M10 — Effects editor + Conditions.
-**Next up:** detail the M10 checklist. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M10 effect editor UI. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -33,7 +33,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M8 | Phase 1 hardening | 1 | done | Definition of done (SPEC §8) met |
 | M9 | Inventory + Features screen | 2 | done | General inventory and feature controls sync across screens; custom items export; changes survive reload and Undo |
 | MA | Accounts + cloud sync | 2 | done | Optional login keeps each person's campaigns and characters; guest mode and offline use unchanged |
-| M10 | Effects editor + Conditions | 2 | todo | |
+| M10 | Effects editor + Conditions | 2 | doing | Effects on you can be added, edited and end on their own; conditions show their consequences |
 | M11 | Campaign Setup: sources + optional rules | 2 | todo | |
 | M12 | Journal + Companions | 2 | todo | |
 | M13 | Searchable Reference | 2 | todo | |
@@ -153,6 +153,12 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Two-way sync through the persistence layer with revision conflict checks; conflicts ask the user, never silently overwrite
 - [x] Gate: guest-only use unchanged; sync tested against a local or mocked provider; hosting steps documented for the user
 
+### M10 — Effects editor + Conditions
+- [x] Engine: effects can end at your next turn's start or end, or at a rest; carry damage defenses; can be edited in place
+- [ ] Effect editor in Combat, Dashboard and Exploration: duration, end trigger, conditions, number modifiers, defenses, note; Sheet shows effect defenses
+- [ ] Condition consequences: advantage, disadvantage and auto-fail reminders on checks, saves and attacks; exhaustion levels; condition details in own words
+- [ ] Gate: phone and desktop widths, exact Undo, reload; manual QA documented
+
 ## Backlog (not scheduled)
 
 - Optional dice roller with roll history
@@ -167,6 +173,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M10 engine: effects end at your next turn's start/end or at a rest, carry damage defenses, and can be edited; concentration survives a triggered end.
 - 2026-11-06 — MA complete: guest builds unchanged and free of account code; sync verified with an in-memory cloud; HOSTING.md lists the steps to go online. Next: M10.
 - 2026-11-06 — Sign-in: Settings shows an Account section only in builds with a provider; email sign-in, Sync now, conflict choices. Guest builds omit the code. Next: MA Gate.
 - 2026-11-06 — Two-way sync engine: uploads, downloads and deletions per campaign/character with revision checks; conflicts wait for a choice. Tested with an in-memory cloud. Next: sign-in.

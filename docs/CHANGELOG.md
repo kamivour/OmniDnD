@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 12:29 — Effects that end on their own
+
+- Behind the scenes, effects on you can now end at the start or end of your next turn, or when you finish a short or long rest. Ending combat clears turn-timed ones.
+- Effects can also record resistances or immunities, and can be edited without removing them.
+- Next: the editor to use this from Combat, Dashboard and Exploration. Checks pass.
+
 ## 2026-11-06 12:21 — Accounts ready; how to go online
 
 - Accounts are finished on the app side. Your current version stays guest-only and works exactly as before.

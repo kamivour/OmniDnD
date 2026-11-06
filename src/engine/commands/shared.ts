@@ -84,6 +84,25 @@ export function removeEffects(live: Live, matches: (effect: ActiveEffect) => boo
   return names;
 }
 
+/** End effects whose trigger fired (turn or rest); keeps concentration, drops its effect link. */
+export function endTriggeredEffects(
+  live: Live,
+  matches: (endsOn: NonNullable<ActiveEffect['endsOn']>) => boolean,
+): string[] {
+  const ended = removeEffects(
+    live,
+    (effect) => effect.endsOn !== undefined && matches(effect.endsOn),
+  );
+  const concentration = live.concentration;
+  if (
+    concentration?.effectId !== undefined &&
+    !live.effects.some((effect) => effect.id === concentration.effectId)
+  ) {
+    delete concentration.effectId;
+  }
+  return ended.map((name) => `${name} ended`);
+}
+
 /**
  * 2014 Invisibility ends for the target that attacks or casts, not for every invisible creature.
  * https://www.dndbeyond.com/spells/2159-invisibility

@@ -434,6 +434,7 @@ export const MechanicsOverlayPackSchema = z.array(MechanicsOverlaySchema).superR
 export type Summary = z.infer<typeof SummarySchema>;
 export type Formula = z.infer<typeof FormulaSchema>;
 export type Modifier = z.infer<typeof ModifierSchema>;
+export type FeatureDefenses = z.infer<typeof FeatureDefensesSchema>;
 export type EffectTemplate = z.infer<typeof EffectTemplateSchema>;
 export type SpellDef = z.infer<typeof SpellDefSchema>;
 export type FeatureDef = z.infer<typeof FeatureDefSchema>;

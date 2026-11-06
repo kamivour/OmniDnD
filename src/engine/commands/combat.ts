@@ -4,6 +4,7 @@ import type { Command, CommandContext } from './runner';
 import {
   block,
   ECONOMY_LABEL,
+  endTriggeredEffects,
   economyChecks,
   freshEconomy,
   notInCombat,
@@ -43,6 +44,16 @@ export const startTurn: Command<null> = {
     if (!combat) return 'Not in combat';
     combat.round += 1;
     const notes = combat.round > 1 ? passTime(live, SECONDS_PER_ROUND, ctx) : [];
+    const round = combat.round;
+    notes.push(
+      // A forgotten End Turn still closes last round's "until the end of your turn" effects.
+      ...endTriggeredEffects(
+        live,
+        (on) =>
+          (on.event === 'turn-start' && on.round <= round) ||
+          (on.event === 'turn-end' && on.round < round),
+      ),
+    );
     combat.turnActive = true;
     combat.economy = freshEconomy();
     return withNotes(`Round ${combat.round}: your turn`, notes);
@@ -60,13 +71,15 @@ export const endTurn: Command<null> = {
   apply: ({ live }) => {
     const combat = live.combat;
     if (!combat) return 'Not in combat';
+    const round = Math.max(1, combat.round);
+    const ended = endTriggeredEffects(live, (on) => on.event === 'turn-end' && on.round <= round);
     combat.turnActive = false;
     // The bonus-action spell rule is per turn; the reaction stays spent until your next turn.
     combat.economy.bonusActionSpellCast = false;
     combat.economy.otherSpellCast = false;
     // Dash grants movement only for the current turn; spent economy remains until Start Turn.
     delete combat.economy.dashCount;
-    return `End of turn (round ${Math.max(1, combat.round)})`;
+    return withNotes(`End of turn (round ${round})`, ended);
   },
 };
 
@@ -141,6 +154,10 @@ export const endCombat: Command<null> = {
   apply: ({ live }, _payload, ctx) => {
     const rounds = Math.max(1, live.combat?.round ?? 0);
     const notes = passTime(live, SECONDS_PER_ROUND, ctx);
+    // Turn-timed effects cannot outlast the fight they were measured in.
+    notes.push(
+      ...endTriggeredEffects(live, (on) => on.event === 'turn-start' || on.event === 'turn-end'),
+    );
     delete live.combat;
     const unit = rounds === 1 ? 'round' : 'rounds';
     return withNotes(

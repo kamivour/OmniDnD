@@ -13,7 +13,7 @@ import {
   SourceSchema,
   SpellTypeSchema,
 } from './common';
-import { CustomItemSchema, ModifierSchema } from './refs';
+import { CustomItemSchema, FeatureDefensesSchema, ModifierSchema } from './refs';
 
 /** Campaign rules plus layers B (build) and C (live state). DATA.md §4. */
 
@@ -204,6 +204,16 @@ export const CharacterBuildSchema = z
 /** Times are game seconds since Day 1 00:00 (D46). */
 const GameSeconds = NonNegativeInt;
 
+/**
+ * Event that ends an effect besides its timer. Turn events name the combat round whose turn
+ * start or end removes it; rest events end it when that rest finishes (a long rest also ends
+ * short-rest effects).
+ */
+export const EffectEndsOnSchema = z.discriminatedUnion('event', [
+  z.strictObject({ event: z.enum(['turn-start', 'turn-end']), round: z.int().positive() }),
+  z.strictObject({ event: z.enum(['short-rest', 'long-rest']) }),
+]);
+
 export const ActiveEffectSchema = z.strictObject({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -214,6 +224,9 @@ export const ActiveEffectSchema = z.strictObject({
   concentration: z.boolean(),
   conditions: z.array(ConditionSchema),
   modifiers: z.array(ModifierSchema),
+  /** Damage resistances and similar, shown as reminders; damage taken stays player-entered. */
+  defenses: FeatureDefensesSchema.optional(),
+  endsOn: EffectEndsOnSchema.optional(),
   note: z.string().optional(),
 });
 
@@ -339,6 +352,7 @@ export type Campaign = z.infer<typeof CampaignSchema>;
 export type CharacterBuild = z.infer<typeof CharacterBuildSchema>;
 export type HpEntry = z.infer<typeof HpEntrySchema>;
 export type ActiveEffect = z.infer<typeof ActiveEffectSchema>;
+export type EffectEndsOn = z.infer<typeof EffectEndsOnSchema>;
 export type Economy = z.infer<typeof EconomySchema>;
 export type PendingConcentrationSave = z.infer<typeof PendingConcentrationSaveSchema>;
 export type LiveState = z.infer<typeof LiveStateSchema>;

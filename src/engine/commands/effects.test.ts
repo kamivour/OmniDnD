@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { LiveStateSchema } from '../schema';
-import { addEffect, removeEffect, setExhaustion, toggleCondition } from './effects';
+import { endCombat, endTurn, startCombat, startTurn } from './combat';
+import { addEffect, editEffect, removeEffect, setExhaustion, toggleCondition } from './effects';
+import { completeLongRest, completeShortRest } from './rest';
 import { applyDamage } from './hp';
 import { castSpell } from './spells';
 import { advanceTime } from './time';
@@ -196,5 +198,158 @@ describe('addEffect and removeEffect', () => {
     expect(session.run(addEffect, { name: 'Hold Person', conditions: ['paralyzed'] })).toBe(
       'Effect added: Hold Person; concentration on Invisibility ended (paralyzed)',
     );
+  });
+});
+
+describe('effect end triggers', () => {
+  it('blocks turn timing outside combat', () => {
+    expect(
+      new Session().preview(addEffect, { name: 'Dodge', endsOn: 'turn-start' }).reasons,
+    ).toEqual(['Turn timing needs combat: start combat first']);
+  });
+
+  it('"until the start of your next turn" ends on that turn, not the current one', () => {
+    const session = new Session();
+    session.run(startCombat, null);
+    session.run(startTurn, null);
+    expect(session.run(addEffect, { name: 'Dodge', endsOn: 'turn-start' })).toBe(
+      'Effect added: Dodge (until the start of your next turn)',
+    );
+    expect(session.live.effects[0]?.endsOn).toEqual({ event: 'turn-start', round: 2 });
+    session.run(endTurn, null);
+    expect(session.live.effects).toHaveLength(1);
+    expect(session.run(startTurn, null)).toBe('Round 2: your turn; Dodge ended');
+    expect(session.live.effects).toEqual([]);
+  });
+
+  it('"until the end of your next turn" ends at End Turn, or at the next Start Turn if skipped', () => {
+    const session = new Session();
+    session.run(startCombat, null);
+    session.run(addEffect, { name: 'Marked', endsOn: 'turn-end' });
+    session.run(startTurn, null);
+    expect(session.run(endTurn, null)).toBe('End of turn (round 1); Marked ended');
+
+    session.run(startTurn, null);
+    session.run(addEffect, { name: 'Guided', endsOn: 'turn-end' });
+    session.run(endTurn, null);
+    session.run(startTurn, null);
+    expect(session.run(startTurn, null, true)).toContain('Guided ended');
+  });
+
+  it('End Combat ends turn-timed effects but keeps rest-timed ones', () => {
+    const session = new Session();
+    session.run(startCombat, null);
+    session.run(addEffect, { name: 'Dodge', endsOn: 'turn-start' });
+    session.run(addEffect, { name: 'Ward', endsOn: 'long-rest' });
+    expect(session.run(endCombat, null)).toContain('Dodge ended');
+    expect(session.live.effects.map((effect) => effect.name)).toEqual(['Ward']);
+  });
+
+  it('a short rest ends short-rest effects; a long rest ends both', () => {
+    const session = new Session();
+    session.run(addEffect, { name: 'Short', endsOn: 'short-rest' });
+    session.run(addEffect, { name: 'Long', endsOn: 'long-rest' });
+    expect(session.run(completeShortRest, {})).toContain('Short ended');
+    expect(session.live.effects.map((effect) => effect.name)).toEqual(['Long']);
+    session.run(addEffect, { name: 'Short again', endsOn: 'short-rest' });
+    const result = session.run(completeLongRest, null, true);
+    expect(result).toContain('Long ended');
+    expect(result).toContain('Short again ended');
+    expect(session.live.effects).toEqual([]);
+  });
+
+  it('a triggered end drops the concentration link but keeps concentrating', () => {
+    // Concentration with no time limit, so only the trigger ends the effect.
+    const live = LiveStateSchema.parse({
+      ...freshState.live,
+      concentration: {
+        spellId: 'spell.invisibility',
+        slotLevel: 2,
+        effectId: 'spell.invisibility',
+      },
+      effects: [
+        {
+          id: 'spell.invisibility',
+          name: 'Invisibility',
+          concentration: true,
+          conditions: ['invisible'],
+          modifiers: [],
+          endsOn: { event: 'short-rest' },
+        },
+      ],
+    });
+    const session = new Session(withLive(freshState, live));
+    const before = session.state;
+    session.run(completeShortRest, {});
+    expect(session.live.effects).toEqual([]);
+    expect(session.live.concentration?.spellId).toBe('spell.invisibility');
+    expect(session.live.concentration?.effectId).toBeUndefined();
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+});
+
+describe('editEffect', () => {
+  it('changes fields in place and keeps id, source and concentration', () => {
+    const session = new Session();
+    session.run(castSpell, { spellId: 'spell.invisibility', slotLevel: 2, onSelf: true });
+    expect(
+      session.run(editEffect, {
+        effectId: 'spell.invisibility',
+        name: 'Invisibility (from Fool)',
+        durationSeconds: 60,
+        conditions: ['invisible'],
+        modifiers: [{ target: 'ac', value: 1 }],
+        defenses: { resistances: ['fire', 'fire'], immunities: [] },
+        note: '  stay quiet ',
+      }),
+    ).toBe('Effect edited: Invisibility (from Fool) (1 min)');
+    expect(session.live.effects[0]).toMatchObject({
+      id: 'spell.invisibility',
+      sourceId: 'spell.invisibility',
+      concentration: true,
+      endsAt: freshState.live.clock.seconds + 60,
+      modifiers: [{ target: 'ac', value: 1 }],
+      defenses: { resistances: ['fire'] },
+      note: 'stay quiet',
+    });
+    expect(session.live.concentration?.effectId).toBe('spell.invisibility');
+  });
+
+  it('clearing the duration makes it last until removed', () => {
+    const session = new Session();
+    session.run(addEffect, { name: 'Bless', durationSeconds: 60, note: 'from cleric' });
+    session.run(editEffect, { effectId: 'effect.bless', name: 'Bless' });
+    expect(session.live.effects[0]).toEqual({
+      id: 'effect.bless',
+      name: 'Bless',
+      concentration: false,
+      conditions: [],
+      modifiers: [],
+    });
+  });
+
+  it('keeps the original round when the trigger is unchanged', () => {
+    const session = new Session();
+    session.run(startCombat, null);
+    session.run(startTurn, null);
+    session.run(addEffect, { name: 'Marked', endsOn: 'turn-end' });
+    session.run(endTurn, null);
+    session.run(startTurn, null);
+    session.run(editEffect, { effectId: 'effect.marked', name: 'Marked!', endsOn: 'turn-end' });
+    expect(session.live.effects[0]?.endsOn).toEqual({ event: 'turn-end', round: 2 });
+    expect(session.run(endTurn, null)).toBe('End of turn (round 2); Marked! ended');
+  });
+
+  it('warns that an incapacitating condition ends concentration and blocks a missing effect', () => {
+    const session = new Session();
+    session.run(castSpell, { spellId: 'spell.invisibility', slotLevel: 2 });
+    session.run(addEffect, { name: 'Web' });
+    expect(
+      session.preview(editEffect, { effectId: 'effect.web', name: 'Web', conditions: ['stunned'] }),
+    ).toEqual({ result: 'ok', reasons: ['Ends concentration on Invisibility'] });
+    expect(session.preview(editEffect, { effectId: 'effect.nope', name: 'x' }).reasons).toEqual([
+      'No effect effect.nope',
+    ]);
   });
 });

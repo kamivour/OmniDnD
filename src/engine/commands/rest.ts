@@ -9,6 +9,7 @@ import {
   featureName,
   maxHpAfter,
   passTime,
+  endTriggeredEffects,
   rangeCheck,
   resetDeathSaves,
   rechargeItems,
@@ -86,6 +87,7 @@ export const completeShortRest: Command<ShortRestPayload> = {
   },
   apply: ({ live }, { hitDice = [], songOfRest, songOfRestSource }, ctx) => {
     const notes: (string | undefined)[] = passTime(live, SHORT_REST_SECONDS, ctx);
+    notes.push(...endTriggeredEffects(live, (on) => on.event === 'short-rest'));
     const con = ctx.sheet.abilities.CON.mod;
     let healing = 0;
     for (const { die, roll } of hitDice) {
@@ -138,6 +140,9 @@ export const completeLongRest: Command<null> = {
   },
   apply: ({ live }, _payload, ctx) => {
     const notes: (string | undefined)[] = passTime(live, LONG_REST_SECONDS, ctx);
+    notes.push(
+      ...endTriggeredEffects(live, (on) => on.event === 'short-rest' || on.event === 'long-rest'),
+    );
 
     const exhaustion = Math.max(0, live.exhaustion - 1);
     if (exhaustion !== live.exhaustion) {

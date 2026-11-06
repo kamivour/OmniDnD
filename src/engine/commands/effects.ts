@@ -1,6 +1,6 @@
 import { formatDuration } from '../clock';
 import { CONDITIONS, MAX_EXHAUSTION, type Condition } from '../rules2014';
-import type { ActiveEffect, Modifier } from '../schema';
+import type { ActiveEffect, EffectEndsOn, FeatureDefenses, LiveState, Modifier } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
 import {
   addCondition,
@@ -82,16 +82,95 @@ export const setExhaustion: Command<SetExhaustionPayload> = {
   },
 };
 
-export interface AddEffectPayload {
+/** "turn-start"/"turn-end" mean your next turn; rests mean the next one you finish. */
+export type EffectEndTrigger = EffectEndsOn['event'];
+
+interface EffectFields {
   name: string;
-  /** Absent: lasts until removed. */
+  /** From now. Absent: lasts until removed (or until its trigger). */
   durationSeconds?: number;
-  /** Ends with your current concentration. */
-  concentration?: boolean;
+  endsOn?: EffectEndTrigger;
   conditions?: Condition[];
   modifiers?: Modifier[];
+  defenses?: FeatureDefenses;
   note?: string;
+}
+
+export interface AddEffectPayload extends EffectFields {
+  /** Ends with your current concentration. */
+  concentration?: boolean;
   sourceId?: string;
+}
+
+/** Checks shared by adding and editing. */
+function effectFieldChecks(ctx: CommandContext, fields: EffectFields): Check[] {
+  const checks: Check[] = [];
+  if (fields.name.trim() === '') checks.push(block('Name the effect'));
+  if (fields.durationSeconds !== undefined) {
+    const durationChecks = minCheck('Duration in seconds', fields.durationSeconds, 1);
+    checks.push(...durationChecks);
+    if (durationChecks.length === 0) {
+      checks.push(...timeRangeChecks(ctx.live.clock.seconds, fields.durationSeconds));
+    }
+  }
+  if ((fields.endsOn === 'turn-start' || fields.endsOn === 'turn-end') && !ctx.live.combat) {
+    checks.push(block('Turn timing needs combat: start combat first'));
+  }
+  checks.push(...conditionChecks(fields.conditions ?? []));
+  return checks;
+}
+
+/** Your next turn is always the next round: a current turn is already under way. */
+function endsOnFor(live: LiveState, trigger: EffectEndTrigger): EffectEndsOn {
+  if (trigger === 'short-rest' || trigger === 'long-rest') return { event: trigger };
+  return { event: trigger, round: (live.combat?.round ?? 0) + 1 };
+}
+
+function cleanDefenses(defenses: FeatureDefenses | undefined): FeatureDefenses | undefined {
+  if (!defenses) return undefined;
+  const clean: FeatureDefenses = {};
+  if (defenses.resistances?.length) clean.resistances = [...new Set(defenses.resistances)];
+  if (defenses.immunities?.length) clean.immunities = [...new Set(defenses.immunities)];
+  if (defenses.vulnerabilities?.length) {
+    clean.vulnerabilities = [...new Set(defenses.vulnerabilities)];
+  }
+  if (defenses.saveAdvantages?.length) {
+    clean.saveAdvantages = [...new Set(defenses.saveAdvantages)];
+  }
+  if (defenses.magicalSleepImmunity) clean.magicalSleepImmunity = true;
+  return Object.keys(clean).length > 0 ? clean : undefined;
+}
+
+/** Writes the editable fields; an unchanged trigger keeps its original round. */
+function writeFields(live: LiveState, effect: ActiveEffect, fields: EffectFields): void {
+  effect.name = fields.name.trim();
+  effect.conditions = [...new Set(fields.conditions ?? [])];
+  effect.modifiers = fields.modifiers ?? [];
+  if (fields.durationSeconds === undefined) delete effect.endsAt;
+  else effect.endsAt = live.clock.seconds + fields.durationSeconds;
+  if (fields.endsOn === undefined) delete effect.endsOn;
+  else if (effect.endsOn?.event !== fields.endsOn) effect.endsOn = endsOnFor(live, fields.endsOn);
+  const defenses = cleanDefenses(fields.defenses);
+  if (defenses) effect.defenses = defenses;
+  else delete effect.defenses;
+  const note = fields.note?.trim();
+  if (note) effect.note = note;
+  else delete effect.note;
+}
+
+export const EFFECT_TRIGGER_LABEL: Record<EffectEndTrigger, string> = {
+  'turn-start': 'until the start of your next turn',
+  'turn-end': 'until the end of your next turn',
+  'short-rest': 'until a short or long rest',
+  'long-rest': 'until a long rest',
+};
+
+function lengthLabel(fields: EffectFields): string {
+  const parts = [
+    fields.durationSeconds === undefined ? undefined : formatDuration(fields.durationSeconds),
+    fields.endsOn === undefined ? undefined : EFFECT_TRIGGER_LABEL[fields.endsOn],
+  ].filter(Boolean);
+  return parts.length > 0 ? ` (${parts.join(', ')})` : '';
 }
 
 /** "Bless (cleric)" → "bless-cleric". */
@@ -108,20 +187,11 @@ function slug(name: string): string {
 export const addEffect: Command<AddEffectPayload> = {
   name: 'addEffect',
   check: (ctx, payload) => {
-    const checks: Check[] = [];
-    if (payload.name.trim() === '') checks.push(block('Name the effect'));
-    if (payload.durationSeconds !== undefined) {
-      const durationChecks = minCheck('Duration in seconds', payload.durationSeconds, 1);
-      checks.push(...durationChecks);
-      if (durationChecks.length === 0) {
-        checks.push(...timeRangeChecks(ctx.live.clock.seconds, payload.durationSeconds));
-      }
-    }
+    const checks = effectFieldChecks(ctx, payload);
     if (payload.concentration && !ctx.live.concentration) {
       checks.push(block('Not concentrating: cast the concentration spell first'));
     }
-    const conditions = payload.conditions ?? [];
-    checks.push(...conditionChecks(conditions), ...concentrationEndsCheck(ctx, conditions));
+    checks.push(...concentrationEndsCheck(ctx, payload.conditions ?? []));
     return checks;
   },
   apply: ({ live }, payload, { registry }) => {
@@ -130,18 +200,13 @@ export const addEffect: Command<AddEffectPayload> = {
       id: uniqueEffectId(live, `effect.${slug(name)}`),
       name,
       concentration: payload.concentration ?? false,
-      conditions: [...new Set(payload.conditions ?? [])],
-      modifiers: payload.modifiers ?? [],
+      conditions: [],
+      modifiers: [],
     };
     if (payload.sourceId !== undefined) effect.sourceId = payload.sourceId;
-    if (payload.durationSeconds !== undefined) {
-      effect.endsAt = live.clock.seconds + payload.durationSeconds;
-    }
-    if (payload.note !== undefined && payload.note !== '') effect.note = payload.note;
+    writeFields(live, effect, payload);
     live.effects.push(effect);
-    const duration =
-      payload.durationSeconds === undefined ? '' : ` (${formatDuration(payload.durationSeconds)})`;
-    return withNotes(`Effect added: ${name}${duration}`, [
+    return withNotes(`Effect added: ${name}${lengthLabel(payload)}`, [
       breakConcentrationIfIncapacitated(live, registry),
     ]);
   },
@@ -164,5 +229,30 @@ export const removeEffect: Command<RemoveEffectPayload> = {
     }
     removeEffects(live, (effect) => effect.id === effectId);
     return `Effect removed: ${name}`;
+  },
+};
+
+export interface EditEffectPayload extends EffectFields {
+  effectId: string;
+}
+
+/** Change an effect in place. Its id, source and concentration link stay as they are. */
+export const editEffect: Command<EditEffectPayload> = {
+  name: 'editEffect',
+  check: (ctx, payload) => {
+    const effect = ctx.live.effects.find(({ id }) => id === payload.effectId);
+    if (!effect) return [block(`No effect ${payload.effectId}`)];
+    const checks = effectFieldChecks(ctx, payload);
+    const added = (payload.conditions ?? []).filter((c) => !effect.conditions.includes(c));
+    checks.push(...concentrationEndsCheck(ctx, added));
+    return checks;
+  },
+  apply: ({ live }, payload, { registry }) => {
+    const effect = live.effects.find(({ id }) => id === payload.effectId);
+    if (!effect) return `No effect ${payload.effectId}`;
+    writeFields(live, effect, payload);
+    return withNotes(`Effect edited: ${effect.name}${lengthLabel(payload)}`, [
+      breakConcentrationIfIncapacitated(live, registry),
+    ]);
   },
 };
