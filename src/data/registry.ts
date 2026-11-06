@@ -4,6 +4,7 @@ import contentItems from '../../data/content/items.json';
 import contentSpells from '../../data/content/spells.json';
 import summaries from '../../data/content/summaries.json';
 import featureMechanics from '../../data/mechanics/features.json';
+import itemMechanics from '../../data/mechanics/items.json';
 import spellMechanics from '../../data/mechanics/spells.json';
 import srdBackgrounds from '../../data/srd/backgrounds.json';
 import srdClasses from '../../data/srd/classes.json';
@@ -42,7 +43,11 @@ export const contentPacks = {
   spells: contentSpells,
 };
 
-export const mechanicsPacks = { features: featureMechanics, spells: spellMechanics };
+export const mechanicsPacks = {
+  features: featureMechanics,
+  items: itemMechanics,
+  spells: spellMechanics,
+};
 
 /** All bundled reference data. Throws at load if any pack or overlay is invalid. */
 export const registry = buildRegistry(

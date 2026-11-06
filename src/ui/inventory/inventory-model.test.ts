@@ -2,7 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { seedFile } from '../../data/seed';
 import type { CharacterState } from '../../engine/calc/sheet';
-import { inventoryGroups, inventoryItem, regainText } from './inventory-model';
+import {
+  inventoryGroups,
+  inventoryItem,
+  itemUseText,
+  regainText,
+  usableItems,
+} from './inventory-model';
 
 type OwnedItem = CharacterState['build']['items'][number];
 
@@ -206,5 +212,25 @@ describe('regainText', () => {
       'Regains 1d3 on a long rest',
     );
     expect(regainText({ max: 50, recharge: 'none' })).toBe('Does not recharge');
+  });
+});
+
+describe('item use text and usable items', () => {
+  it('describes the 2014 cost and any healing roll', () => {
+    expect(itemUseText({ activation: 'action', healing: { dice: '2d4', bonus: 2 } })).toBe(
+      'Action to use or give · regains 2d4 + 2 HP',
+    );
+    expect(itemUseText({ activation: 'action', attack: true })).toMatch(/^Action to throw/);
+    expect(itemUseText({ activation: 'none' })).toBe('No action of its own');
+  });
+
+  it('lists held consumables only', () => {
+    const character = state([
+      { instanceId: 'potion', itemId: 'item.potion-of-healing-common' },
+      { instanceId: 'empty', itemId: 'item.acid-vial' },
+      { instanceId: 'pack', itemId: 'item.backpack' },
+    ]);
+    character.live.items.empty!.qty = 0;
+    expect(usableItems(character, registry).map((item) => item.instanceId)).toEqual(['potion']);
   });
 });

@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 11:03 — Use potions and consumables
+
+- Potions, acid, oil, scrolls and other consumables now have Use controls in Inventory and in the Combat Items tab.
+- Healing potions ask for your dice roll and heal you; in combat, drinking or giving one spends your action. Tick "An ally gives it to me" when someone else feeds it to you, which also works at 0 HP.
+- Throws and other effects are still resolved at the table. Next: custom items. Checks pass.
+
 ## 2026-11-06 10:54 — Track item charges
 
 - SRD magic items (wands, staffs, rings and more) can be added from the catalogue. Charged items show a counter with Use 1 and Set.

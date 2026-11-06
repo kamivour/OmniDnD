@@ -276,6 +276,19 @@ export const ItemChargesSchema = z
     path: ['regain'],
   });
 
+/**
+ * How one item is used up (data/mechanics/items.json). `action` costs your action in combat;
+ * `special` takes the time the item states (a scroll uses the spell's casting time); `none`
+ * is spent as part of something else, like ammunition. Effects beyond healing stay manual.
+ */
+export const ItemUseSchema = z.strictObject({
+  activation: z.enum(['action', 'special', 'none']),
+  /** Thrown or splashed as an attack (Acid, Holy Water); attacking ends your own Invisibility. */
+  attack: z.literal(true).optional(),
+  /** Hit points regained by the drinker: the entered dice roll plus the bonus. */
+  healing: z.strictObject({ dice: DiceSchema, bonus: z.int().positive().optional() }).optional(),
+});
+
 export const ItemDefSchema = z
   .strictObject({
     kind: z.literal('item'),
@@ -324,6 +337,7 @@ export const ItemDefSchema = z
       .optional(),
     attunement: z.boolean().optional(),
     charges: ItemChargesSchema.optional(),
+    use: ItemUseSchema.optional(),
   })
   .refine(srdTextOnly, SRD_TEXT_ONLY)
   .refine((item) => (item.category === 'weapon') === (item.weapon !== undefined), {
@@ -408,6 +422,7 @@ export type ClassDef = z.infer<typeof ClassDefSchema>;
 export type SubclassDef = z.infer<typeof SubclassDefSchema>;
 export type RaceDef = z.infer<typeof RaceDefSchema>;
 export type BackgroundDef = z.infer<typeof BackgroundDefSchema>;
+export type ItemUse = z.infer<typeof ItemUseSchema>;
 export type ItemDef = z.infer<typeof ItemDefSchema>;
 export type ItemCharges = z.infer<typeof ItemChargesSchema>;
 export type ItemRarity = z.infer<typeof ItemRaritySchema>;

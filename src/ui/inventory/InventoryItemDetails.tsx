@@ -8,6 +8,7 @@ import { useCommand } from '../commands/command-context';
 import { Icon } from '../components/Icon';
 import { useCharacter } from '../hooks/useCharacter';
 import { ItemChargeControls } from './InventoryCharges';
+import { ItemUseControls } from './InventoryUse';
 import { inventoryItem, regainText, type InventoryItem } from './inventory-model';
 
 const button =
@@ -172,6 +173,7 @@ export function InventoryItemControls({ instanceId }: { instanceId: string }) {
         </p>
       )}
       <ItemChargeControls instanceId={instanceId} />
+      <ItemUseControls instanceId={instanceId} />
       {checks
         .filter((check) => check.level === 'info')
         .map(({ reason }) => (

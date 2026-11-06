@@ -5,7 +5,21 @@ import { attunedItems } from '../calc/attunement';
 import { ATTUNEMENT_LIMIT } from '../rules2014';
 import type { ItemDef } from '../schema';
 import type { CharacterData, Command, CommandContext } from './runner';
-import { block, changeLiveItems, diceRange, info, warn, type ItemChange } from './shared';
+import {
+  block,
+  changeLiveItems,
+  deadCheck,
+  diceRange,
+  economyChecks,
+  endSelfInvisibility,
+  incapacitatedBy,
+  info,
+  restoreHp,
+  spendEconomy,
+  warn,
+  withNotes,
+  type ItemChange,
+} from './shared';
 
 const InstancePayloadSchema = z.strictObject({ instanceId: z.string().min(1) });
 const AdjustItemQuantityPayloadSchema = InstancePayloadSchema.extend({
@@ -300,5 +314,90 @@ export const skipItemRecharge: Command<z.infer<typeof InstancePayloadSchema>> = 
     const item = chargedItem(ctx, instanceId)!;
     changeItems(draft, ctx, [{ instanceId, values: { rechargePending: undefined } }]);
     return `${item.def.name}: recharge skipped`;
+  },
+};
+
+const ConsumeItemPayloadSchema = InstancePayloadSchema.extend({
+  /** Who benefits: you, or another creature (its outcome stays at the table). */
+  target: z.enum(['self', 'other']),
+  /** Another creature gives you the item, spending its own action instead of yours. */
+  byAlly: z.literal(true).optional(),
+  /** The entered healing dice total, before the item's flat bonus. */
+  roll: z.int().nonnegative().optional(),
+  /** Quantity shown when the player chose; a mismatch means the record changed. */
+  expected: z.int().nonnegative().optional(),
+});
+export type ConsumeItemPayload = z.infer<typeof ConsumeItemPayloadSchema>;
+
+/** The owned item and its use data, when its catalogue entry can be used up. */
+function usableItem(ctx: CommandContext, instanceId: string) {
+  const owned = ownedItem(ctx, instanceId);
+  return owned?.def.use ? { ...owned, use: owned.def.use } : undefined;
+}
+
+/** Whether this use spends your action: in combat, for action items you use yourself. */
+function spendsAction(ctx: CommandContext, use: ItemDef['use'], byAlly?: true) {
+  return ctx.live.combat !== undefined && use?.activation === 'action' && byAlly !== true;
+}
+
+/**
+ * Use up one item (2014: drinking or giving a potion is an action). Healing on yourself takes the
+ * entered roll plus the item's bonus; every other effect, target and roll stays at the table.
+ */
+export const consumeItem: Command<ConsumeItemPayload> = {
+  name: 'consumeItem',
+  check: (ctx, input) => {
+    const parsed = ConsumeItemPayloadSchema.safeParse(input);
+    if (!parsed.success) return [block('Item use details are invalid')];
+    const { instanceId, target, byAlly, roll, expected } = parsed.data;
+    const item = usableItem(ctx, instanceId);
+    if (!item) return [block('That item has no recorded use')];
+    if (expected !== undefined && expected !== item.live.qty)
+      return [block('The recorded quantity changed after review. Review it again.')];
+    if (item.live.qty === 0) return [block(`No ${item.def.name} left`)];
+    if (byAlly && target !== 'self')
+      return [block('Only an item given to you can come from an ally')];
+    const checks = [...deadCheck(ctx)];
+    const { healing } = item.use;
+    if (healing && target === 'self') {
+      if (roll === undefined) return [...checks, block(`Enter your ${healing.dice} roll`)];
+      const { min, max } = diceRange(healing.dice);
+      if (roll < min || roll > max)
+        return [...checks, block(`A ${healing.dice} roll is ${min}–${max}`)];
+      if (ctx.live.hp >= ctx.sheet.maxHp.value) checks.push(info('Your HP is already full'));
+    } else if (roll !== undefined) return [block(`${item.def.name} has no roll to enter here`)];
+    if (spendsAction(ctx, item.use, byAlly)) checks.push(...economyChecks(ctx, 'action'));
+    else if (!byAlly && item.use.activation !== 'none') {
+      const cause = incapacitatedBy(ctx.sheet.conditions);
+      if (cause) checks.push(warn(`Incapacitated (${cause}): no actions`));
+    }
+    if (item.use.activation === 'special')
+      checks.push(info(`${item.def.name} takes the time its own rule states.`));
+    if (item.use.attack) checks.push(info('Resolve the attack roll and damage at the table.'));
+    else if (!healing || target === 'other')
+      checks.push(info(`Resolve ${item.def.name}'s effect at the table.`));
+    return checks;
+  },
+  apply: (draft, { instanceId, target, byAlly, roll }, ctx) => {
+    const item = usableItem(ctx, instanceId)!;
+    const left = item.live.qty - 1;
+    changeItems(draft, ctx, [{ instanceId, values: { qty: left } }]);
+    const notes: string[] = [];
+    if (spendsAction(ctx, item.use, byAlly)) spendEconomy(draft.live, 'action');
+    if (item.use.attack) notes.push(...endSelfInvisibility(draft.live, 'attack'));
+    const { healing } = item.use;
+    if (healing && target === 'self') {
+      const amount = roll! + (healing.bonus ?? 0);
+      const { before, after } = restoreHp(draft.live, amount, ctx.sheet.maxHp.value);
+      const rolled = `${healing.dice}: ${roll}${healing.bonus ? ` + ${healing.bonus}` : ''}`;
+      notes.unshift(`healed ${amount} (${rolled}), HP ${before} → ${after}`);
+      if (before === 0 && after > 0) notes.push('conscious again');
+    }
+    const lead = byAlly
+      ? `${item.def.name} given to you`
+      : target === 'other'
+        ? `${item.def.name} used on another creature`
+        : `Used ${item.def.name}`;
+    return withNotes(`${lead}, ${left} left`, notes);
   },
 };

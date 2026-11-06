@@ -177,6 +177,8 @@ interface LiveState {
 
 **Inventory editing (M9):** catalogue additions create separate instances; edits preserve item identity, equipment, attunement and charges while changing the chosen quantity, notes or location. New locations require present containers without cycles, while unchanged accepted legacy links remain recorded.
 
+**Item use (M9):** `data/mechanics/items.json` gives each consumable a `use`: activation (`action`, `special`, `none`), an attack flag, and any healing dice plus bonus (D118).
+
 **Item charges (M9):** `data/srd/magic-items.json` imports SRD magic items with charges from a table checked against the item text; new items start full. A dice regain sets `rechargePending` until the entered roll is applied or skipped (D117).
 
 **Currency and weight (M9):** saved coin counts stay separate; value uses 2014 exchange rates and coins weigh 50 per pound. Weight counts each positive item instance once, divides purchase-bundle weights by bundle size, and marks missing weights as incomplete; capacity comes from the shared Sheet calculation.

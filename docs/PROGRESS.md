@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M9 — Inventory and Features.
-**Next up:** Consumables and potions: entered rolls/outcomes, 2014 combat action costs, shared Combat Items controls.
+**Next up:** Portable custom items, saved with the character and retained by import/export.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -141,7 +141,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Currency adjustments and computed carried weight/capacity, including coins, purchase bundles and unknown weights
 - [x] Attunement limit and explicit bond records, with focused-rest reminders and legacy record review
 - [x] Item charge counters and explicit recharge prompts tied to rests/game time
-- [ ] Consumables and potions: entered rolls/outcomes, 2014 combat action costs, shared Combat Items controls
+- [x] Consumables and potions: entered rolls/outcomes, 2014 combat action costs, shared Combat Items controls
 - [ ] Portable custom items, saved with the character and retained by import/export
 - [ ] Features screen: origin groups, passive/active/triggered details, uses/shared pools, recharge, favorites and supported explicit toggles
 - [ ] Gate: general characters, cross-screen values, offline reload and exact Undo at phone/desktop widths; manual QA documented
@@ -167,6 +167,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — Consumables: potions heal by entered roll, spend the action in combat, ally-given potions revive; shared Inventory and Combat Items controls. Next: custom items.
 - 2026-11-06 — M9 charges: SRD magic items, charge counters, dawn/rest recharge prompts with entered rolls, exact Undo. Consumables next.
 - 2026-11-06 — M9 attunement: record bonds with limits, manual rest reminders and exact Undo. Paused for user review; charges next.
 - 2026-11-06 — M9 currency and weight: adjust actual coins with previews and Undo; show bundles, unknown weights and computed capacity. Next: attunement and charges.

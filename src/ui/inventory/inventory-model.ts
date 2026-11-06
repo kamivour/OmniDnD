@@ -1,6 +1,6 @@
 import type { CharacterState } from '../../engine/calc/sheet';
 import type { Registry } from '../../engine/registry';
-import type { ItemCharges, ItemDef } from '../../engine/schema';
+import type { ItemCharges, ItemDef, ItemUse } from '../../engine/schema';
 
 export interface InventoryItem {
   instanceId: string;
@@ -166,4 +166,23 @@ export function regainText({ recharge, regain }: ItemCharges): string {
   const amount =
     regain === 'all' ? 'all charges' : `${regain.dice}${regain.bonus ? ` + ${regain.bonus}` : ''}`;
   return `Regains ${amount} ${when}`;
+}
+
+/** "Action to use or give · regains 2d4 + 2 HP": the 2014 cost of using one item. */
+export function itemUseText({ activation, attack, healing }: ItemUse): string {
+  const cost = {
+    action: attack ? 'Action to throw; resolve the attack at the table' : 'Action to use or give',
+    special: 'Takes the time its own rule states',
+    none: 'No action of its own',
+  }[activation];
+  return healing
+    ? `${cost} · regains ${healing.dice}${healing.bonus ? ` + ${healing.bonus}` : ''} HP`
+    : cost;
+}
+
+/** Items you still hold that can be used up, in inventory order. */
+export function usableItems(state: InventoryState, registry: Registry): InventoryItem[] {
+  return inventoryGroups(state, registry)
+    .flatMap((group) => group.items)
+    .filter((item) => item.def.use !== undefined && item.quantity > 0);
 }

@@ -327,9 +327,7 @@ test('Spells filters normal economy by default while Show all preserves explicit
   expect(await readSaved(page, file.build.id)).toEqual(initial);
 });
 
-test('blank imported characters do not inherit Fool actions and Items remains a phase placeholder', async ({
-  page,
-}) => {
+test('blank imported characters do not inherit Fool actions or items', async ({ page }) => {
   const file = combatFile('actions-empty-wizard');
   file.build.classes = [{ classId: 'class.wizard', level: 3 }];
   file.build.hpEntries = file.build.hpEntries.map((entry, index) => ({
@@ -350,7 +348,7 @@ test('blank imported characters do not inherit Fool actions and Items remains a 
   await main(page).getByRole('tab', { name: 'Spells', exact: true }).click();
   await expect(main(page).getByRole('button', { name: /^Healing Word\b/ })).toHaveCount(0);
   await main(page).getByRole('tab', { name: 'Items', exact: true }).click();
-  await expect(main(page)).toContainText(/coming in phase 2/i);
+  await expect(main(page)).toContainText('No usable items held.');
   await expect(
     main(page)
       .getByRole('tabpanel', { name: 'Items', exact: true })

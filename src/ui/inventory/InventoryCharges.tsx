@@ -6,37 +6,15 @@ import {
   setItemCharges,
   skipItemRecharge,
   spendItemCharges,
-  type Command,
 } from '../../engine/commands';
 import { storageStatusStore } from '../../state/persistence';
-import { useCommand } from '../commands/command-context';
 import { inputClass } from '../components/fields';
 import { useCharacter } from '../hooks/useCharacter';
 import { inventoryGroups, inventoryItem, regainText, type InventoryItem } from './inventory-model';
+import { useItemRun } from './use-item-run';
 import { parseWholeCount } from './whole-count';
 
 const button = 'min-h-11 rounded-btn border border-border px-3 text-sm disabled:opacity-40';
-
-/** Run a charge command and keep focus inside the controls when the clicked button disables. */
-function useChargeRun(container: React.RefObject<HTMLElement | null>) {
-  const { run } = useCommand();
-  const fallback = () =>
-    container.current?.querySelector<HTMLElement>('button:not(:disabled), input:not(:disabled)');
-  return <P,>(command: Command<P>, payload: P, done?: () => void) => {
-    const focused = document.activeElement;
-    run(command, payload, fallback, () => {
-      done?.();
-      requestAnimationFrame(() => {
-        if (
-          focused instanceof HTMLElement &&
-          (!focused.isConnected || focused.matches(':disabled')) &&
-          (document.activeElement === document.body || document.activeElement === focused)
-        )
-          fallback()?.focus();
-      });
-    });
-  };
-}
 
 /** Spend and correct one item's charges. Effects of the charge stay manual. */
 export function ItemChargeControls({ instanceId }: { instanceId: string }) {
@@ -44,7 +22,7 @@ export function ItemChargeControls({ instanceId }: { instanceId: string }) {
   const item = inventoryItem(state, registry, instanceId);
   const conflict = useStore(storageStatusStore, (status) => status.conflict);
   const container = useRef<HTMLDivElement>(null);
-  const apply = useChargeRun(container);
+  const apply = useItemRun(container);
   const [setting, setSetting] = useState<string | null>(null);
   const prefix = useId();
   if (!item?.def.charges || item.charges === undefined) return null;
@@ -99,7 +77,7 @@ export function ItemChargeControls({ instanceId }: { instanceId: string }) {
             inputMode="numeric"
             value={setting}
             onChange={(event) => setSetting(event.target.value)}
-            className={`${inputClass} w-24`}
+            className={`${inputClass} max-w-24`}
           />
           <button
             type="submit"
@@ -125,7 +103,7 @@ export function ItemChargeControls({ instanceId }: { instanceId: string }) {
 function RechargePrompt({ item }: { item: InventoryItem }) {
   const conflict = useStore(storageStatusStore, (status) => status.conflict);
   const container = useRef<HTMLDivElement>(null);
-  const apply = useChargeRun(container);
+  const apply = useItemRun(container);
   const [roll, setRoll] = useState('');
   const prefix = useId();
   const regain = item.def.charges?.regain;
@@ -160,7 +138,7 @@ function RechargePrompt({ item }: { item: InventoryItem }) {
               inputMode="numeric"
               value={roll}
               onChange={(event) => setRoll(event.target.value)}
-              className={`${inputClass} w-20`}
+              className={`${inputClass} max-w-20`}
             />
           </>
         )}

@@ -1,0 +1,394 @@
+[
+  {
+    "id": "item.acid-vial",
+    "use": {
+      "activation": "action",
+      "attack": true
+    }
+  },
+  {
+    "id": "item.alchemists-fire-flask",
+    "use": {
+      "activation": "action",
+      "attack": true
+    }
+  },
+  {
+    "id": "item.holy-water-flask",
+    "use": {
+      "activation": "action",
+      "attack": true
+    }
+  },
+  {
+    "id": "item.oil-flask",
+    "use": {
+      "activation": "action",
+      "attack": true
+    }
+  },
+  {
+    "id": "item.antitoxin-vial",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.poison-basic-vial",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.rations-1-day",
+    "use": {
+      "activation": "none"
+    }
+  },
+  {
+    "id": "item.arrow",
+    "use": {
+      "activation": "none"
+    }
+  },
+  {
+    "id": "item.blowgun-needle",
+    "use": {
+      "activation": "none"
+    }
+  },
+  {
+    "id": "item.crossbow-bolt",
+    "use": {
+      "activation": "none"
+    }
+  },
+  {
+    "id": "item.sling-bullet",
+    "use": {
+      "activation": "none"
+    }
+  },
+  {
+    "id": "item.ammunition-1",
+    "use": {
+      "activation": "none"
+    }
+  },
+  {
+    "id": "item.ammunition-2",
+    "use": {
+      "activation": "none"
+    }
+  },
+  {
+    "id": "item.ammunition-3",
+    "use": {
+      "activation": "none"
+    }
+  },
+  {
+    "id": "item.arrow-of-slaying",
+    "use": {
+      "activation": "none"
+    }
+  },
+  {
+    "id": "item.oil-of-etherealness",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.oil-of-sharpness",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.oil-of-slipperiness",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.philter-of-love",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-animal-friendship",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-clairvoyance",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-climbing",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-diminution",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-flying",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-gaseous-form",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-giant-strength-cloud",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-giant-strength-fire",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-giant-strength-frost",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-giant-strength-hill",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-giant-strength-stone",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-giant-strength-storm",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-growth",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-healing-common",
+    "use": {
+      "activation": "action",
+      "healing": {
+        "dice": "2d4",
+        "bonus": 2
+      }
+    }
+  },
+  {
+    "id": "item.potion-of-healing-greater",
+    "use": {
+      "activation": "action",
+      "healing": {
+        "dice": "4d4",
+        "bonus": 4
+      }
+    }
+  },
+  {
+    "id": "item.potion-of-healing-superior",
+    "use": {
+      "activation": "action",
+      "healing": {
+        "dice": "8d4",
+        "bonus": 8
+      }
+    }
+  },
+  {
+    "id": "item.potion-of-healing-supreme",
+    "use": {
+      "activation": "action",
+      "healing": {
+        "dice": "10d4",
+        "bonus": 20
+      }
+    }
+  },
+  {
+    "id": "item.potion-of-heroism",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-invisibility",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-mind-reading",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-poison",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-resistance-acid",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-resistance-cold",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-resistance-fire",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-resistance-force",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-resistance-lightning",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-resistance-necrotic",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-resistance-poison",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-resistance-psychic",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-resistance-radiant",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-resistance-thunder",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-speed",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.potion-of-water-breathing",
+    "use": {
+      "activation": "action"
+    }
+  },
+  {
+    "id": "item.spell-scroll-1st",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.spell-scroll-2nd",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.spell-scroll-3rd",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.spell-scroll-4th",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.spell-scroll-5th",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.spell-scroll-6th",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.spell-scroll-7th",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.spell-scroll-8th",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.spell-scroll-9th",
+    "use": {
+      "activation": "special"
+    }
+  },
+  {
+    "id": "item.spell-scroll-cantrip",
+    "use": {
+      "activation": "special"
+    }
+  }
+]

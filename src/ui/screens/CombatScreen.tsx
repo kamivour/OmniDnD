@@ -39,6 +39,7 @@ import { useCharacter } from '../hooks/useCharacter';
 import { useDetail } from '../layout/detail-context';
 import { LiveSpellDetail } from '../spells/LiveSpellDetail';
 import { LiveEffects } from '../effects/LiveEffects';
+import { CombatItems } from '../inventory/InventoryUse';
 import { RecentCharacterLog } from '../log/CharacterLog';
 import { SpellCastControls } from '../spells/SpellCastControls';
 import type { SpellbookEntry } from '../spells/spellbook-model';
@@ -578,10 +579,12 @@ export function CombatScreen() {
           </Tabs.Content>
 
           <Tabs.Content value="items" className="flex flex-col gap-3">
-            <p className="text-sm text-text-muted">
-              Manage quantity and equipped gear in Inventory. Consumable use stays manual at the
-              table.
+            {!economy.action && <SpentNote what="Action" />}
+            <p className="text-xs text-text-muted">
+              Drinking or giving a potion takes your action. Effects other than healing are resolved
+              at the table.
             </p>
+            <CombatItems />
           </Tabs.Content>
         </Tabs.Root>
 
