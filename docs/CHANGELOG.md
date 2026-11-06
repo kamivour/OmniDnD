@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 10:54 — Track item charges
+
+- SRD magic items (wands, staffs, rings and more) can be added from the catalogue. Charged items show a counter with Use 1 and Set.
+- At dawn or a rest, items that refill fully do so on their own; dice regains ask you to enter your roll, and you can Skip.
+- Check the Inventory screen with a wand or staff. Next: consumables and potions. Checks pass.
+
 ## 2026-11-06 10:38 — Plan optional accounts
 
 - New milestone MA after Inventory and Features: optional sign-in so each friend keeps their own campaigns and characters, with cloud sync.

@@ -16,6 +16,7 @@ import { InventoryEditor, type InventoryEditorRequest } from '../inventory/Inven
 import { InventoryCurrency } from '../inventory/InventoryCurrency';
 import { InventoryWeight } from '../inventory/InventoryWeight';
 import { InventoryAttunement } from '../inventory/InventoryAttunement';
+import { InventoryRechargesDue } from '../inventory/InventoryCharges';
 import { useDetail } from '../layout/detail-context';
 
 /** Instance identity and live counts are shared with equipment calculations and character exports. */
@@ -67,6 +68,7 @@ export function InventoryScreen() {
         <InventoryCurrency />
         <InventoryWeight />
       </div>
+      <InventoryRechargesDue />
       <InventoryAttunement />
       {groups.length === 0 ? (
         <h2 className="text-base font-semibold">No items recorded</h2>
@@ -105,7 +107,10 @@ export function InventoryScreen() {
                   <p className="text-xs text-text-muted">
                     {item.def.category}
                     {item.attuned ? ' · Attuned' : ''}
-                    {item.charges === undefined ? '' : ` · ${item.charges} charges`}
+                    {/* Catalogue charges show in the item controls below. */}
+                    {item.charges === undefined || item.def.charges
+                      ? ''
+                      : ` · ${item.charges} charges`}
                   </p>
                   {item.notes && (
                     <p className="whitespace-pre-line text-sm wrap-anywhere">{item.notes}</p>

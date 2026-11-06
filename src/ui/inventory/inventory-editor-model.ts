@@ -18,7 +18,8 @@ export function catalogueItems(
       (entry): entry is ItemDef =>
         entry.kind === 'item' &&
         (category === undefined || entry.category === category) &&
-        (sources === undefined || sources.includes(entry.source)) &&
+        // DMG magic items are DM-awarded treasure, so campaign source filters never hide them (D116).
+        (sources === undefined || entry.source === 'DMG' || sources.includes(entry.source)) &&
         (!query || `${entry.name} ${entry.summary?.effect ?? ''}`.toLowerCase().includes(query)),
     )
     .sort(

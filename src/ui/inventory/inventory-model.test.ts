@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { seedFile } from '../../data/seed';
 import type { CharacterState } from '../../engine/calc/sheet';
-import { inventoryGroups, inventoryItem } from './inventory-model';
+import { inventoryGroups, inventoryItem, regainText } from './inventory-model';
 
 type OwnedItem = CharacterState['build']['items'][number];
 
@@ -191,5 +191,20 @@ describe('inventoryGroups', () => {
       attuned: false,
     });
     expect(inventoryGroups(character, registry)[0]?.items[0]).not.toHaveProperty('charges');
+  });
+});
+
+describe('regainText', () => {
+  it('describes each recharge in plain words', () => {
+    expect(regainText({ max: 7, recharge: 'dawn', regain: { dice: '1d6', bonus: 1 } })).toBe(
+      'Regains 1d6 + 1 at dawn',
+    );
+    expect(regainText({ max: 3, recharge: 'dawn', regain: 'all' })).toBe(
+      'Regains all charges at dawn',
+    );
+    expect(regainText({ max: 3, recharge: 'long', regain: { dice: '1d3' } })).toBe(
+      'Regains 1d3 on a long rest',
+    );
+    expect(regainText({ max: 50, recharge: 'none' })).toBe('Does not recharge');
   });
 });

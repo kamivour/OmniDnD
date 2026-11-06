@@ -121,6 +121,8 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D113 | 2026-11-06 | Carried weight counts each positive item record and its contents once, plus coins; missing weights make the result incomplete. Capacity uses the shared Sheet calculation, while movement limits remain manual until M11 optional rules. | Unknown weights must not imply a complete load |
 | D114 | 2026-11-06 | Attunement records verified bonds separately from rest time and magical benefits; missing item requirements require explicit review in Assisted mode. All retained bonds, including zero-quantity records, count toward the three-item limit until explicitly ended, and duplicate copies cannot gain a new bond. | Preserve recorded state while keeping the 2014 limit visible |
 | D115 | 2026-11-06 | Replaces D11: add optional accounts with cloud sync in milestone MA. Local-first storage and guest mode stay; export/import remains. | Friends will use the app for their own campaigns and characters |
+| D116 | 2026-11-06 | SRD magic items (source DMG) are DM-awarded, so campaign source filters and warnings do not apply to them. | Magic items come from the table, not character options |
+| D117 | 2026-11-06 | At dawn or a rest, items that regain all charges refill automatically; dice regains wait for the player to enter the roll (the app adds the bonus and caps at the maximum). Zero-quantity records are skipped, and each entry keeps one counter. | Player rolls stay manual and visible |
 
 ## Open questions
 

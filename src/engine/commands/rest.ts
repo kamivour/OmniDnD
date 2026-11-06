@@ -11,6 +11,7 @@ import {
   passTime,
   rangeCheck,
   resetDeathSaves,
+  rechargeItems,
   restoreFeatures,
   restoreHp,
   timeRangeChecks,
@@ -110,6 +111,7 @@ export const completeShortRest: Command<ShortRestPayload> = {
       restored.push('pact slots');
     }
     if (restored.length > 0) notes.push(`restored ${restored.join(', ')}`);
+    notes.push(...rechargeItems(live, ctx, ctx.live.items, ['short']));
     return withNotes(`Short rest (${formatDuration(SHORT_REST_SECONDS)})`, notes);
   },
 };
@@ -165,6 +167,7 @@ export const completeLongRest: Command<null> = {
     }
     restored.push(...restoreFeatures(live, ctx.sheet, ['short', 'long']));
     if (restored.length > 0) notes.push(`restored ${restored.join(', ')}`);
+    notes.push(...rechargeItems(live, ctx, ctx.live.items, ['short', 'long']));
 
     // Half your total Hit Dice (at least 1) come back, largest dice first.
     const total = ctx.sheet.hitDice.reduce((sum, pool) => sum + pool.max, 0);

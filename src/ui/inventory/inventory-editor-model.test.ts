@@ -92,7 +92,16 @@ describe('catalogueItems', () => {
   it('retains all item categories and non-SRD entries without requiring a recorded weight', () => {
     const items = catalogueItems(registry, { search: '' });
     expect(new Set(items.map(({ category }) => category))).toEqual(
-      new Set(['weapon', 'armor', 'gear', 'tool', 'instrument', 'container', 'consumable']),
+      new Set([
+        'weapon',
+        'armor',
+        'gear',
+        'tool',
+        'instrument',
+        'container',
+        'consumable',
+        'magic',
+      ]),
     );
     const markedCards = catalogueItems(registry, { search: 'marked cards', sources: ['PHB'] });
     expect(markedCards).toHaveLength(1);

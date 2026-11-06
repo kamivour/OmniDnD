@@ -6,7 +6,7 @@ import { CONDITIONS, DAMAGE_TYPES, SCHOOLS, SKILLS, WEAPON_PROPERTIES } from '..
 export const SCHEMA_VERSION = 1;
 
 export const RulesetSchema = z.literal('5e-2014');
-export const SourceSchema = z.enum(['PHB', 'XGE', 'TCE', 'HB']);
+export const SourceSchema = z.enum(['PHB', 'DMG', 'XGE', 'TCE', 'HB']);
 export const AbilitySchema = z.enum(ABILITIES);
 export const SkillSchema = z.enum(SKILLS);
 export const ConditionSchema = z.enum(CONDITIONS);

@@ -30,6 +30,7 @@ const categories: ItemDef['category'][] = [
   'instrument',
   'container',
   'consumable',
+  'magic',
 ];
 
 /** Draft choices stay local; the engine owns creation, edits, removal and their Undo. */

@@ -261,6 +261,8 @@ export const LiveStateSchema = z
         charges: NonNegativeInt.optional(),
         equipped: z.boolean(),
         attuned: z.boolean(),
+        /** A dice regain is due; the player enters the roll or dismisses it (D117). */
+        rechargePending: z.literal(true).optional(),
       }),
     ),
     currency: z.strictObject({

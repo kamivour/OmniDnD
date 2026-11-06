@@ -182,6 +182,84 @@ export function restoreFeatures(live: Live, sheet: Sheet, recharges: readonly Re
   return names;
 }
 
+export type ItemChange = {
+  instanceId: string;
+  /** `undefined` removes the field. */
+  values: Partial<{
+    [K in keyof LiveState['items'][string]]: LiveState['items'][string][K] | undefined;
+  }>;
+};
+
+/** Apply live item edits. `original` is the pre-command map. */
+export function changeLiveItems(
+  live: Live,
+  original: LiveState['items'],
+  changes: readonly ItemChange[],
+) {
+  const merge = (base: LiveState['items'][string], values: ItemChange['values']) => {
+    const next = { ...base, ...values };
+    for (const key of Object.keys(values) as (keyof typeof values)[])
+      if (values[key] === undefined) delete next[key];
+    return next as LiveState['items'][string];
+  };
+  // Immer forbids inverse-patch traversal through these names. A legacy owned item can
+  // still use "constructor", so replace the map only when an affected key needs it.
+  if (
+    changes.some(({ instanceId }) => instanceId === 'constructor' || instanceId === '__proto__')
+  ) {
+    live.items = {
+      ...original,
+      ...Object.fromEntries(
+        changes.map(({ instanceId, values }) => [instanceId, merge(original[instanceId]!, values)]),
+      ),
+    };
+    return;
+  }
+  for (const { instanceId, values } of changes) {
+    const item = live.items[instanceId]!;
+    for (const key of Object.keys(values) as (keyof typeof values)[]) {
+      const value = values[key];
+      if (value === undefined) delete item[key];
+      else Object.assign(item, { [key]: value });
+    }
+  }
+}
+
+/**
+ * Items whose charges recharge on one of these occasions: "regain all" refills now; a dice
+ * regain waits for the player's roll (D117). Spent-out copies with quantity 0 are skipped.
+ */
+export function rechargeItems(
+  live: Live,
+  { build, registry }: Pick<CommandContext, 'build' | 'registry'>,
+  original: LiveState['items'],
+  recharges: readonly Recharge[],
+) {
+  const refilled: string[] = [];
+  const pending: string[] = [];
+  const changes: ItemChange[] = [];
+  for (const { instanceId, itemId } of build.items) {
+    const state = Object.hasOwn(original, instanceId) ? original[instanceId] : undefined;
+    const def = registry.entries.get(itemId);
+    if (!state || state.qty === 0 || def?.kind !== 'item' || !def.charges) continue;
+    const { max, recharge, regain } = def.charges;
+    if (!recharges.includes(recharge) || regain === undefined) continue;
+    if ((state.charges ?? max) >= max) continue;
+    if (regain === 'all') {
+      changes.push({ instanceId, values: { charges: max, rechargePending: undefined } });
+      refilled.push(def.name);
+    } else if (!state.rechargePending) {
+      changes.push({ instanceId, values: { rechargePending: true } });
+      pending.push(def.name);
+    }
+  }
+  if (changes.length > 0) changeLiveItems(live, original, changes);
+  return [
+    ...(refilled.length > 0 ? [`recharged ${refilled.join(', ')}`] : []),
+    ...(pending.length > 0 ? [`roll to recharge ${pending.join(', ')}`] : []),
+  ];
+}
+
 /** Keep elapsed time and persisted deadlines inside the schema's exact integer range. */
 export function timeRangeChecks(start: number, seconds: number): Check[] {
   return Number.isSafeInteger(seconds) && seconds >= 0 && Number.isSafeInteger(start + seconds)
@@ -193,7 +271,8 @@ export function timeRangeChecks(start: number, seconds: number): Check[] {
  * Moves the clock forward and ends what ran out: concentration, then timed effects (D46).
  * Passing 06:00 restores "at dawn" features. Returns log fragments.
  */
-export function passTime(live: Live, seconds: number, { registry, sheet }: CommandContext) {
+export function passTime(live: Live, seconds: number, ctx: CommandContext) {
+  const { registry, sheet } = ctx;
   const start = live.clock.seconds;
   const end = start + seconds;
   live.clock.seconds = end;
@@ -218,6 +297,7 @@ export function passTime(live: Live, seconds: number, { registry, sheet }: Comma
   if (dawn(end) > dawn(start)) {
     const restored = restoreFeatures(live, sheet, ['dawn']);
     if (restored.length > 0) notes.push(`dawn restored ${restored.join(', ')}`);
+    notes.push(...rechargeItems(live, ctx, ctx.live.items, ['dawn']));
   }
   return notes;
 }

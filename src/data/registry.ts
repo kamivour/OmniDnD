@@ -10,6 +10,7 @@ import srdClasses from '../../data/srd/classes.json';
 import srdConditions from '../../data/srd/conditions.json';
 import srdFeatures from '../../data/srd/features.json';
 import srdItems from '../../data/srd/items.json';
+import srdMagicItems from '../../data/srd/magic-items.json';
 import srdRaces from '../../data/srd/races.json';
 import srdSpells from '../../data/srd/spells.json';
 import srdSubclasses from '../../data/srd/subclasses.json';
@@ -27,6 +28,7 @@ export const srdPacks = {
   conditions: srdConditions,
   features: srdFeatures,
   items: srdItems,
+  magicItems: srdMagicItems,
   races: srdRaces,
   spells: srdSpells,
   subclasses: srdSubclasses,

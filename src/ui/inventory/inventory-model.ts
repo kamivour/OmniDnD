@@ -1,6 +1,6 @@
 import type { CharacterState } from '../../engine/calc/sheet';
 import type { Registry } from '../../engine/registry';
-import type { ItemDef } from '../../engine/schema';
+import type { ItemCharges, ItemDef } from '../../engine/schema';
 
 export interface InventoryItem {
   instanceId: string;
@@ -9,7 +9,9 @@ export interface InventoryItem {
   quantity: number;
   equipped: boolean;
   attuned: boolean;
+  /** Current charges, capped at the catalogue maximum when the item defines one. */
   charges?: number;
+  rechargePending?: boolean;
   locationNote?: string;
 }
 
@@ -26,14 +28,19 @@ type ResolvedItem = { owned: OwnedItem; item: InventoryItem };
 
 function resolveItem(owned: OwnedItem, state: InventoryState, registry: Registry): InventoryItem {
   const live = state.live.items[owned.instanceId];
+  const def = registry.get('item', owned.itemId);
+  const charges = def.charges
+    ? Math.min(live?.charges ?? def.charges.max, def.charges.max)
+    : live?.charges;
   return {
     instanceId: owned.instanceId,
-    def: registry.get('item', owned.itemId),
+    def,
     ...(owned.notes === undefined ? {} : { notes: owned.notes }),
     quantity: live?.qty ?? 0,
     equipped: live?.equipped ?? false,
     attuned: live?.attuned ?? false,
-    ...(live?.charges === undefined ? {} : { charges: live.charges }),
+    ...(charges === undefined ? {} : { charges }),
+    ...(live?.rechargePending && { rechargePending: true }),
   };
 }
 
@@ -148,4 +155,15 @@ export function inventoryGroups(state: InventoryState, registry: Registry): Inve
     }),
     ...(review.items.length ? [review] : []),
   ];
+}
+
+/** "Regains 1d6 + 1 at dawn" in plain words for the card and controls. */
+export function regainText({ recharge, regain }: ItemCharges): string {
+  if (recharge === 'none' || regain === undefined) return 'Does not recharge';
+  const when = { dawn: 'at dawn', short: 'on a short or long rest', long: 'on a long rest' }[
+    recharge
+  ];
+  const amount =
+    regain === 'all' ? 'all charges' : `${regain.dice}${regain.bonus ? ` + ${regain.bonus}` : ''}`;
+  return `Regains ${amount} ${when}`;
 }

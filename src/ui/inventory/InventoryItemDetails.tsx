@@ -7,7 +7,8 @@ import { storageStatusStore } from '../../state/persistence';
 import { useCommand } from '../commands/command-context';
 import { Icon } from '../components/Icon';
 import { useCharacter } from '../hooks/useCharacter';
-import { inventoryItem, type InventoryItem } from './inventory-model';
+import { ItemChargeControls } from './InventoryCharges';
+import { inventoryItem, regainText, type InventoryItem } from './inventory-model';
 
 const button =
   'grid min-h-11 min-w-11 place-items-center rounded-btn border border-border text-text hover:bg-surface-2 disabled:opacity-40';
@@ -76,8 +77,12 @@ export function InventoryItemCard({ item }: { item: InventoryItem }) {
         )}
         {item.charges !== undefined && (
           <>
-            <dt className="text-text-muted">Recorded charges</dt>
-            <dd>{item.charges}</dd>
+            <dt className="text-text-muted">Charges</dt>
+            <dd>
+              {def.charges
+                ? `${item.charges}/${def.charges.max} · ${regainText(def.charges)}`
+                : item.charges}
+            </dd>
           </>
         )}
       </dl>
@@ -166,6 +171,7 @@ export function InventoryItemControls({ instanceId }: { instanceId: string }) {
           Equipping replaces {replacements.map(({ def }) => def.name).join(', ')}.
         </p>
       )}
+      <ItemChargeControls instanceId={instanceId} />
       {checks
         .filter((check) => check.level === 'info')
         .map(({ reason }) => (

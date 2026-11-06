@@ -153,7 +153,7 @@ interface LiveState {
                    effectId?: string;              // effectId only when the spell targets you
                    pendingSaves?: { id: string; dc: number }[] };
   effects: ActiveEffect[]; conditions: string[]; exhaustion: number;
-  items: Record<string, { qty: number; charges?: number; equipped: boolean; attuned: boolean }>;
+  items: Record<string, { qty: number; charges?: number; rechargePending?: true; equipped: boolean; attuned: boolean }>;
   currency: { cp: number; sp: number; ep: number; gp: number; pp: number };
   clock: { seconds: number };                      // game seconds since Day 1 00:00 (D46); 1 round = 6 s
   lastLongRestEnd?: number;                        // game seconds
@@ -176,6 +176,8 @@ interface LiveState {
 **Containers (M9):** `container` points to another item instance; display groups follow immediate containers and show nested paths. Accepted legacy circular or non-container links stay visible for review without rewriting saved records.
 
 **Inventory editing (M9):** catalogue additions create separate instances; edits preserve item identity, equipment, attunement and charges while changing the chosen quantity, notes or location. New locations require present containers without cycles, while unchanged accepted legacy links remain recorded.
+
+**Item charges (M9):** `data/srd/magic-items.json` imports SRD magic items with charges from a table checked against the item text; new items start full. A dice regain sets `rechargePending` until the entered roll is applied or skipped (D117).
 
 **Currency and weight (M9):** saved coin counts stay separate; value uses 2014 exchange rates and coins weigh 50 per pound. Weight counts each positive item instance once, divides purchase-bundle weights by bundle size, and marks missing weights as incomplete; capacity comes from the shared Sheet calculation.
 

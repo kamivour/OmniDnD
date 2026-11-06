@@ -16,6 +16,7 @@ import {
   mapClassFeatures,
   mapCondition,
   mapItem,
+  mapMagicItem,
   mapRace,
   mapSpell,
   mapSubclass,
@@ -29,6 +30,7 @@ import {
   type RawFeature,
   type RawItem,
   type RawLevel,
+  type RawMagicItem,
   type RawRace,
   type RawSpell,
 } from './map.ts';
@@ -682,5 +684,94 @@ describe('referencedIds', () => {
       'race.half-elf',
       'spell.faerie-fire',
     ]);
+  });
+});
+
+describe('mapMagicItem', () => {
+  const magic = (patch: Partial<RawMagicItem> & Pick<RawMagicItem, 'index'>): RawMagicItem => ({
+    name: patch.index,
+    equipment_category: ref('wand'),
+    rarity: { name: 'Uncommon' },
+    variants: [],
+    variant: false,
+    desc: ['Wand, uncommon', 'Placeholder text.'],
+    ...patch,
+  });
+  const map = (raw: RawMagicItem, notes: string[] = []) => {
+    const entry = mapMagicItem(raw, notes);
+    expect(entry && ItemDefSchema.parse(entry)).toEqual(entry);
+    return entry;
+  };
+
+  it('reads charges from the checked table and attunement from the subtitle', () => {
+    const entry = map(
+      magic({
+        index: 'wand-of-magic-missiles',
+        desc: [
+          'Wand, uncommon (requires attunement)',
+          'Placeholder has 7 charges. It regains 1d6 + 1 expended charges daily at dawn.',
+        ],
+      }),
+    );
+    expect(entry).toMatchObject({
+      id: 'item.wand-of-magic-missiles',
+      source: 'DMG',
+      category: 'magic',
+      rarity: 'uncommon',
+      attunement: true,
+      charges: { max: 7, recharge: 'dawn', regain: { dice: '1d6', bonus: 1 } },
+    });
+    expect(
+      map(
+        magic({
+          index: 'eyes-of-charming',
+          desc: ['Placeholder has 3 charges and regains all expended charges daily at dawn.'],
+        }),
+      )?.charges,
+    ).toEqual({ max: 3, recharge: 'dawn', regain: 'all' });
+    expect(
+      map(magic({ index: 'gem-of-brightness', desc: ['Placeholder has 50 charges.'] }))?.charges,
+    ).toEqual({ max: 50, recharge: 'none' });
+  });
+
+  it('throws when item text disagrees with the table', () => {
+    expect(() =>
+      mapMagicItem(magic({ index: 'wand-of-fear', desc: ['Placeholder has 5 charges.'] }), []),
+    ).toThrow(/does not state 7 charges/);
+    expect(() =>
+      mapMagicItem(
+        magic({
+          index: 'wand-of-fear',
+          desc: ['Placeholder has 7 charges. It regains 1d4 expended charges daily at dawn.'],
+        }),
+        [],
+      ),
+    ).toThrow(/1d6 \+ 1/);
+    expect(() =>
+      mapMagicItem(
+        magic({
+          index: 'gem-of-brightness',
+          desc: ['Placeholder has 50 charges and regains 1d4 charges daily.'],
+        }),
+        [],
+      ),
+    ).toThrow(/recharges/);
+  });
+
+  it('skips variant parents, maps consumables and notes unlisted charges', () => {
+    expect(mapMagicItem(magic({ index: 'armor', variants: [ref('armor-plus-1')] }), [])).toBe(
+      undefined,
+    );
+    expect(map(magic({ index: 'potion-x', equipment_category: ref('potion') }))?.category).toBe(
+      'consumable',
+    );
+    const notes: string[] = [];
+    expect(
+      map(magic({ index: 'odd-item', desc: ['Placeholder has 1d4 charges.'] }), notes),
+    ).not.toHaveProperty('charges');
+    expect(notes).toEqual(['odd-item: charges left for notes']);
+    expect(() => mapMagicItem(magic({ index: 'x', rarity: { name: 'Mythic' } }), [])).toThrow(
+      /unknown rarity/,
+    );
   });
 });

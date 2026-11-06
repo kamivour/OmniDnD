@@ -12,7 +12,9 @@ import type {
   ClassDef,
   ConditionDef,
   FeatureDef,
+  ItemCharges,
   ItemDef,
+  ItemRarity,
   RaceDef,
   RefEntry,
   SpellDef,
@@ -147,6 +149,16 @@ export interface RawItem {
   armor_class?: { base: number };
   str_minimum?: number;
   stealth_disadvantage?: boolean;
+}
+
+export interface RawMagicItem {
+  index: string;
+  name: string;
+  equipment_category: ApiRef;
+  rarity: { name: string };
+  variants: ApiRef[];
+  variant: boolean;
+  desc: string[];
 }
 
 export interface RawCondition {
@@ -673,6 +685,130 @@ export function mapItem(raw: RawItem): ItemDef | undefined {
           stealthDisadvantage: raw.stealth_disadvantage ?? false,
         },
       }),
+  };
+}
+
+// Charge counts and regain rolls, checked against each item's text at import. Items whose
+// starting charges are random (Luck Blade, Nine Lives Stealer) or that recharge on a weekly
+// cycle (Ivory Goats) are left for the player's notes.
+type ChargeRow = readonly [
+  max: number,
+  regain: 'all' | 'none' | `${number}d${number}${'' | ` + ${number}`}`,
+];
+const D3 = [3, '1d3'] as const;
+const D6P1 = [7, '1d6 + 1'] as const;
+const D6P4 = [10, '1d6 + 4'] as const;
+const D4P1 = [5, '1d4 + 1'] as const;
+const MAGIC_ITEM_CHARGES: Record<string, ChargeRow> = {
+  'cube-of-force': [36, '1d20'],
+  'cubic-gate': D3,
+  'eyes-of-charming': [3, 'all'],
+  'gem-of-brightness': [50, 'none'],
+  'gem-of-seeing': D3,
+  'hammer-of-thunderbolts': D4P1,
+  'helm-of-teleportation': D3,
+  'mace-of-terror': D3,
+  'medallion-of-thoughts': D3,
+  'orb-of-dragonkind': [7, '1d4 + 3'],
+  'pipes-of-haunting': D3,
+  'pipes-of-the-sewers': D3,
+  'ring-of-animal-influence': D3,
+  'ring-of-elemental-command-air': D4P1,
+  'ring-of-elemental-command-earth': D4P1,
+  'ring-of-elemental-command-fire': D4P1,
+  'ring-of-elemental-command-water': D4P1,
+  'ring-of-evasion': D3,
+  'ring-of-shooting-stars': [6, '1d6'],
+  'ring-of-the-ram': D3,
+  'ring-of-three-wishes': [3, 'none'],
+  'robe-of-scintillating-colors': D3,
+  'scarab-of-protection': [12, 'none'],
+  'staff-of-charming': [10, '1d8 + 2'],
+  'staff-of-fire': D6P4,
+  'staff-of-frost': D6P4,
+  'staff-of-healing': D6P4,
+  'staff-of-power': [20, '2d8 + 4'],
+  'staff-of-striking': D6P4,
+  'staff-of-swarming-insects': D6P4,
+  'staff-of-the-magi': [50, '4d6 + 2'],
+  'staff-of-the-woodlands': D6P4,
+  'staff-of-withering': D3,
+  'talisman-of-pure-good': [7, 'none'],
+  'talisman-of-ultimate-evil': [6, 'none'],
+  'trident-of-fish-command': D3,
+  'wand-of-binding': D6P1,
+  'wand-of-enemy-detection': D6P1,
+  'wand-of-fear': D6P1,
+  'wand-of-fireballs': D6P1,
+  'wand-of-lightning-bolts': D6P1,
+  'wand-of-magic-detection': D3,
+  'wand-of-magic-missiles': D6P1,
+  'wand-of-paralysis': D6P1,
+  'wand-of-polymorph': D6P1,
+  'wand-of-secrets': D3,
+  'wand-of-web': D6P1,
+  'wand-of-wonder': D6P1,
+};
+
+const RARITIES: Record<string, ItemRarity> = {
+  Common: 'common',
+  Uncommon: 'uncommon',
+  Rare: 'rare',
+  'Very Rare': 'very-rare',
+  Legendary: 'legendary',
+  Artifact: 'artifact',
+  Varies: 'varies',
+};
+
+function magicItemCharges(raw: RawMagicItem, text: string): ItemCharges | undefined {
+  const row = MAGIC_ITEM_CHARGES[raw.index];
+  if (!row) return undefined;
+  const [max, regain] = row;
+  if (!new RegExp(`\\b${max} (?:magic )?charges\\b`).test(text))
+    throw new Error(`${raw.index}: text does not state ${max} charges`);
+  if (regain === 'none') {
+    if (/regains?[^.]*charges/.test(text)) throw new Error(`${raw.index}: text says it recharges`);
+    return { max, recharge: 'none' };
+  }
+  const stated =
+    regain === 'all'
+      ? 'all expended charges daily at dawn'
+      : `${regain} expended charges daily at dawn`;
+  if (!text.includes(`regain ${stated}`) && !text.includes(`regains ${stated}`))
+    throw new Error(`${raw.index}: text does not state "${stated}"`);
+  if (regain === 'all') return { max, recharge: 'dawn', regain: 'all' };
+  const [, dice, bonus] = /^(\d+d\d+)(?: \+ (\d+))?$/.exec(regain)!;
+  return {
+    max,
+    recharge: 'dawn',
+    regain: { dice: dice!, ...(bonus !== undefined && { bonus: Number(bonus) }) },
+  };
+}
+
+/**
+ * DMG magic items in the SRD. Generic parents ("Armor, +1") are skipped for their listed
+ * variants. Potions, scrolls and ammunition are consumables; everything else is 'magic' with
+ * no weapon or armor stats, so bonuses stay manual until the Effects editor (M10).
+ */
+export function mapMagicItem(raw: RawMagicItem, notes: string[]): ItemDef | undefined {
+  if (raw.variants.length > 0) return undefined;
+  const rarity = RARITIES[raw.rarity.name];
+  if (!rarity) throw new Error(`${raw.index}: unknown rarity ${raw.rarity.name}`);
+  const text = raw.desc.join(' ');
+  const charges = magicItemCharges(raw, text);
+  if (!charges && /\bcharges?\b/.test(text)) notes.push(`${raw.index}: charges left for notes`);
+  const consumable = ['potion', 'scroll', 'ammunition'].includes(raw.equipment_category.index);
+  return {
+    kind: 'item',
+    id: `item.${raw.index}`,
+    name: raw.name,
+    ...SRD,
+    source: 'DMG',
+    fullText: paragraphs(raw.desc),
+    category: consumable ? 'consumable' : 'magic',
+    rarity,
+    ...(/\(requires attunement/.test(raw.desc[0] ?? '') && { attunement: true }),
+    ...(charges && { charges }),
   };
 }
 

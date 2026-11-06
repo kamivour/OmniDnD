@@ -20,6 +20,7 @@ import {
   mapClassFeatures,
   mapCondition,
   mapItem,
+  mapMagicItem,
   mapRace,
   mapSpell,
   mapSubclass,
@@ -33,6 +34,7 @@ import {
   type RawFeature,
   type RawItem,
   type RawLevel,
+  type RawMagicItem,
   type RawRace,
   type RawSpell,
   type RawSubclass,
@@ -77,6 +79,7 @@ const [
   rawBackgrounds,
   rawEquipment,
   rawConditions,
+  rawMagicItems,
 ] = await Promise.all([
   load<RawSpell>('Spells'),
   load<RawClass>('Classes'),
@@ -89,6 +92,7 @@ const [
   load<RawBackground>('Backgrounds'),
   load<RawItem>('Equipment'),
   load<RawCondition>('Conditions'),
+  load<RawMagicItem>('Magic-Items'),
 ]);
 
 const notes: string[] = [];
@@ -102,6 +106,9 @@ const subraces = rawSubraces.map((raw) => {
 });
 const backgrounds = rawBackgrounds.map((raw) => mapBackground(raw, notes));
 const items = rawEquipment.map(mapItem).filter((item): item is ItemDef => item !== undefined);
+const magicItems = rawMagicItems
+  .map((raw) => mapMagicItem(raw, notes))
+  .filter((item): item is ItemDef => item !== undefined);
 
 const packs: Record<string, RefEntry[]> = {
   spells,
@@ -115,6 +122,7 @@ const packs: Record<string, RefEntry[]> = {
   races: [...races, ...subraces],
   backgrounds: backgrounds.map(({ background }) => background),
   items,
+  'magic-items': magicItems,
   conditions: rawConditions.map(mapCondition),
 };
 
@@ -129,6 +137,9 @@ const seed: unknown = JSON.parse(readFileSync(SEED, 'utf8'));
 const missing = [...referencedIds(seed)].filter((id) => !known.has(id)).sort();
 
 console.log(`\nskipped ${rawEquipment.length - items.length} mounts and vehicles`);
+console.log(
+  `skipped ${rawMagicItems.length - magicItems.length} magic item groups listed by variant`,
+);
 console.log(`\nnotes (${notes.length}):`);
 for (const note of notes) console.log(`  ${note}`);
 console.log(`\nthe-fool.json ids not in the SRD (${missing.length}), add to data/content/:`);

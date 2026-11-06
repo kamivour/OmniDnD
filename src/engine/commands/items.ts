@@ -5,7 +5,7 @@ import { attunedItems } from '../calc/attunement';
 import { ATTUNEMENT_LIMIT } from '../rules2014';
 import type { ItemDef } from '../schema';
 import type { CharacterData, Command, CommandContext } from './runner';
-import { block, info, warn } from './shared';
+import { block, changeLiveItems, diceRange, info, warn, type ItemChange } from './shared';
 
 const InstancePayloadSchema = z.strictObject({ instanceId: z.string().min(1) });
 const AdjustItemQuantityPayloadSchema = InstancePayloadSchema.extend({
@@ -32,33 +32,8 @@ function ownedItem(ctx: CommandContext, instanceId: string) {
   }
 }
 
-type ItemChange = {
-  instanceId: string;
-  values: Partial<CommandContext['live']['items'][string]>;
-};
-
 function changeItems(draft: Draft<CharacterData>, ctx: CommandContext, changes: ItemChange[]) {
-  // Immer forbids inverse-patch traversal through these names. A legacy owned item can
-  // still use "constructor", so replace the map only when an affected key needs it.
-  if (
-    changes.some(({ instanceId }) => instanceId === 'constructor' || instanceId === '__proto__')
-  ) {
-    draft.live.items = {
-      ...ctx.live.items,
-      ...Object.fromEntries(
-        changes.map(({ instanceId, values }) => [
-          instanceId,
-          {
-            ...ctx.live.items[instanceId]!,
-            ...values,
-          },
-        ]),
-      ),
-    };
-    return;
-  }
-  for (const { instanceId, values } of changes)
-    Object.assign(draft.live.items[instanceId]!, values);
+  changeLiveItems(draft.live, ctx.live.items, changes);
 }
 
 /** Change a recorded count without silently clearing equipment, charges or attunement. */
@@ -183,5 +158,147 @@ export const setItemAttunement: Command<SetItemAttunementPayload> = {
     const target = ownedItem(ctx, instanceId)!;
     changeItems(draft, ctx, [{ instanceId, values: { attuned } }]);
     return `${attuned ? 'Attune' : 'End attunement'}: ${target.def.name}`;
+  },
+};
+
+const SpendItemChargesPayloadSchema = InstancePayloadSchema.extend({
+  count: z.int().positive(),
+  /** Charges shown when the player chose; a mismatch means the record changed. */
+  expected: z.int().nonnegative().optional(),
+});
+const SetItemChargesPayloadSchema = InstancePayloadSchema.extend({
+  charges: z.int().nonnegative(),
+});
+const RechargeItemPayloadSchema = InstancePayloadSchema.extend({
+  /** The entered regain roll, before any flat bonus. Omitted for "regain all" items. */
+  roll: z.int().nonnegative().optional(),
+});
+
+export type SpendItemChargesPayload = z.infer<typeof SpendItemChargesPayloadSchema>;
+export type SetItemChargesPayload = z.infer<typeof SetItemChargesPayloadSchema>;
+export type RechargeItemPayload = z.infer<typeof RechargeItemPayloadSchema>;
+
+/** The owned item and its charge record, when its catalogue entry has charges. */
+function chargedItem(ctx: CommandContext, instanceId: string) {
+  const owned = ownedItem(ctx, instanceId);
+  if (!owned?.def.charges) return undefined;
+  return {
+    ...owned,
+    charges: owned.def.charges,
+    current: Math.min(owned.live.charges ?? owned.def.charges.max, owned.def.charges.max),
+  };
+}
+
+/** Record charges the player spent. Spell effects, targets and destruction rolls stay manual. */
+export const spendItemCharges: Command<SpendItemChargesPayload> = {
+  name: 'spendItemCharges',
+  check: (ctx, input) => {
+    const parsed = SpendItemChargesPayloadSchema.safeParse(input);
+    if (!parsed.success) return [block('Charge details are invalid')];
+    const { instanceId, count, expected } = parsed.data;
+    const item = chargedItem(ctx, instanceId);
+    if (!item) return [block('That item has no recorded charges')];
+    if (expected !== undefined && expected !== item.current)
+      return [block('The recorded charges changed after review. Review them again.')];
+    if (item.live.qty === 0) return [block('No quantity left to use')];
+    if (count > item.current)
+      return [block(`${item.def.name} has only ${item.current} charges left`)];
+    const checks = [];
+    if (item.def.attunement === true && !item.live.attuned)
+      checks.push(warn(`${item.def.name} requires attunement before you can use its charges`));
+    if (item.live.qty > 1)
+      checks.push(
+        info(
+          'This entry keeps one charge count for all its copies; add copies separately to track each.',
+        ),
+      );
+    if (count === item.current)
+      checks.push(
+        info(`Last charge spent. Check ${item.def.name}'s own rule for what happens now.`),
+      );
+    return checks;
+  },
+  apply: (draft, { instanceId, count }, ctx) => {
+    const item = chargedItem(ctx, instanceId)!;
+    const after = item.current - count;
+    changeItems(draft, ctx, [{ instanceId, values: { charges: after } }]);
+    return `${item.def.name}: spent ${count} ${count === 1 ? 'charge' : 'charges'}, ${item.current} → ${after}`;
+  },
+};
+
+/** Correct a charge count to match the table, e.g. after a DM ruling. */
+export const setItemCharges: Command<SetItemChargesPayload> = {
+  name: 'setItemCharges',
+  check: (ctx, input) => {
+    const parsed = SetItemChargesPayloadSchema.safeParse(input);
+    if (!parsed.success) return [block('Charges must be a whole number of zero or more')];
+    const item = chargedItem(ctx, parsed.data.instanceId);
+    if (!item) return [block('That item has no recorded charges')];
+    if (parsed.data.charges > item.charges.max)
+      return [block(`${item.def.name} holds at most ${item.charges.max} charges`)];
+    return [];
+  },
+  apply: (draft, { instanceId, charges }, ctx) => {
+    const item = chargedItem(ctx, instanceId)!;
+    changeItems(draft, ctx, [
+      {
+        instanceId,
+        values: {
+          charges,
+          ...(charges === item.charges.max && { rechargePending: undefined }),
+        },
+      },
+    ]);
+    return `${item.def.name}: charges set ${item.current} → ${charges}`;
+  },
+};
+
+/** Apply a due regain. The player rolls; the app adds the item's bonus and caps at maximum. */
+export const rechargeItem: Command<RechargeItemPayload> = {
+  name: 'rechargeItem',
+  check: (ctx, input) => {
+    const parsed = RechargeItemPayloadSchema.safeParse(input);
+    if (!parsed.success) return [block('Recharge details are invalid')];
+    const { instanceId, roll } = parsed.data;
+    const item = chargedItem(ctx, instanceId);
+    if (!item) return [block('That item has no recorded charges')];
+    if (!item.live.rechargePending) return [block(`No recharge is due for ${item.def.name}`)];
+    const { regain } = item.charges;
+    if (regain === undefined || regain === 'all') return [];
+    if (roll === undefined) return [block(`Enter your ${regain.dice} roll`)];
+    const { min, max } = diceRange(regain.dice);
+    if (roll < min || roll > max) return [block(`A ${regain.dice} roll is ${min}–${max}`)];
+    return [];
+  },
+  apply: (draft, { instanceId, roll }, ctx) => {
+    const item = chargedItem(ctx, instanceId)!;
+    const { regain, max } = item.charges;
+    const amount = regain === undefined || regain === 'all' ? max : roll! + (regain.bonus ?? 0);
+    const after = Math.min(max, item.current + amount);
+    changeItems(draft, ctx, [
+      { instanceId, values: { charges: after, rechargePending: undefined } },
+    ]);
+    const rolled =
+      regain === undefined || regain === 'all'
+        ? ''
+        : ` (${regain.dice}: ${roll}${regain.bonus ? ` + ${regain.bonus}` : ''})`;
+    return `${item.def.name}: regained charges${rolled}, ${item.current} → ${after}`;
+  },
+};
+
+/** Dismiss a due regain, e.g. when the table skipped it. */
+export const skipItemRecharge: Command<z.infer<typeof InstancePayloadSchema>> = {
+  name: 'skipItemRecharge',
+  check: (ctx, input) => {
+    const parsed = InstancePayloadSchema.safeParse(input);
+    if (!parsed.success) return [block('Recharge details are invalid')];
+    const item = chargedItem(ctx, parsed.data.instanceId);
+    if (!item) return [block('That item has no recorded charges')];
+    return item.live.rechargePending ? [] : [block(`No recharge is due for ${item.def.name}`)];
+  },
+  apply: (draft, { instanceId }, ctx) => {
+    const item = chargedItem(ctx, instanceId)!;
+    changeItems(draft, ctx, [{ instanceId, values: { rechargePending: undefined } }]);
+    return `${item.def.name}: recharge skipped`;
   },
 };

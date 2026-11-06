@@ -110,7 +110,8 @@ export const addInventoryItem: Command<AddInventoryItemPayload> = {
     const def = ctx.registry.entries.get(itemId);
     if (!def || def.kind !== 'item') return [block('That catalogue item is unavailable')];
     const checks = containerChecks(ctx, instanceId, container);
-    if (!ctx.campaign.sources.includes(def.source))
+    // DMG magic items are awarded by the DM, not chosen from campaign books (D116).
+    if (def.source !== 'DMG' && !ctx.campaign.sources.includes(def.source))
       checks.push(warn(`${def.name} is outside this campaign's enabled sources`));
     return checks;
   },
@@ -122,7 +123,12 @@ export const addInventoryItem: Command<AddInventoryItemPayload> = {
       ...(container === undefined ? {} : { container }),
       ...(notes === undefined ? {} : { notes }),
     });
-    draft.live.items[instanceId] = { qty: quantity, equipped: false, attuned: false };
+    draft.live.items[instanceId] = {
+      qty: quantity,
+      equipped: false,
+      attuned: false,
+      ...(def.charges && { charges: def.charges.max }),
+    };
     return `Add item: ${def.name} ×${quantity}`;
   },
 };

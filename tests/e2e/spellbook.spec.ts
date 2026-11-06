@@ -16,7 +16,9 @@ test('groups spells by level with slot pips', async ({ page }) => {
   await expect(main.getByRole('button', { name: 'Use one: Level 2 spell slots' })).toBeVisible();
 });
 
-test('rows show their main type and the saved seed has no active concentration', async ({ page }) => {
+test('rows show their main type and the saved seed has no active concentration', async ({
+  page,
+}) => {
   await expect(row(page, 'Healing Word')).toContainText('Healing ·');
   await expect(row(page, 'Faerie Fire')).not.toContainText('Active');
   await expect(row(page, 'Suggestion')).not.toContainText('Active');

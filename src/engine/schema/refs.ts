@@ -241,12 +241,57 @@ export const BackgroundDefSchema = z
 
 const CURRENCY_UNITS = ['cp', 'sp', 'ep', 'gp', 'pp'] as const;
 
+export const ItemRaritySchema = z.enum([
+  'common',
+  'uncommon',
+  'rare',
+  'very-rare',
+  'legendary',
+  'artifact',
+  'varies',
+]);
+
+/**
+ * Charges an item starts with and how it regains them. `regain` is absent only for items that
+ * never recharge; 'all' refills automatically, while dice need the player's entered roll.
+ */
+/** Item recharge rolls also use d3 (Wand of Secrets: 1d3). */
+const RegainDiceSchema = z
+  .string()
+  .regex(/^[1-9]d*d(3|4|6|8|10|12|20)$/, 'Expected dice like "1d6"');
+
+export const ItemChargesSchema = z
+  .strictObject({
+    max: z.int().positive(),
+    recharge: RechargeSchema,
+    regain: z
+      .union([
+        z.literal('all'),
+        z.strictObject({ dice: RegainDiceSchema, bonus: z.int().positive().optional() }),
+      ])
+      .optional(),
+  })
+  .refine((charges) => (charges.recharge === 'none') === (charges.regain === undefined), {
+    message: 'Only items that never recharge omit regain',
+    path: ['regain'],
+  });
+
 export const ItemDefSchema = z
   .strictObject({
     kind: z.literal('item'),
     id: refId('item'),
     ...refBase,
-    category: z.enum(['weapon', 'armor', 'gear', 'tool', 'instrument', 'container', 'consumable']),
+    category: z.enum([
+      'weapon',
+      'armor',
+      'gear',
+      'tool',
+      'instrument',
+      'container',
+      'consumable',
+      'magic',
+    ]),
+    rarity: ItemRaritySchema.optional(),
     weight: z.number().min(0).optional(),
     cost: z.strictObject({ amount: z.number().min(0), unit: z.enum(CURRENCY_UNITS) }).optional(),
     /** Cost and weight are for this many (Arrows: 20). */
@@ -278,6 +323,7 @@ export const ItemDefSchema = z
       })
       .optional(),
     attunement: z.boolean().optional(),
+    charges: ItemChargesSchema.optional(),
   })
   .refine(srdTextOnly, SRD_TEXT_ONLY)
   .refine((item) => (item.category === 'weapon') === (item.weapon !== undefined), {
@@ -363,6 +409,8 @@ export type SubclassDef = z.infer<typeof SubclassDefSchema>;
 export type RaceDef = z.infer<typeof RaceDefSchema>;
 export type BackgroundDef = z.infer<typeof BackgroundDefSchema>;
 export type ItemDef = z.infer<typeof ItemDefSchema>;
+export type ItemCharges = z.infer<typeof ItemChargesSchema>;
+export type ItemRarity = z.infer<typeof ItemRaritySchema>;
 export type ConditionDef = z.infer<typeof ConditionDefSchema>;
 export type RefEntry = z.infer<typeof RefEntrySchema>;
 export type SummaryOverlay = z.infer<typeof SummaryOverlaySchema>;
