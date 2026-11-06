@@ -9,6 +9,7 @@ import { characterStore } from '../../state/character-store';
 import { useManagement } from '../commands/useManagement';
 import { Field, inputClass } from '../components/fields';
 import { Sheet } from '../components/Sheet';
+import { QuickTables } from '../reference/QuickTables';
 import { RulesSearch } from '../reference/RulesSearch';
 import { cx } from '../cx';
 
@@ -75,6 +76,7 @@ export function ReferenceScreen() {
         Some libraries also contain newer rules; choose 2014 or SRD 5.1 material.
       </p>
       <RulesSearch />
+      <QuickTables />
       <section aria-labelledby="reference-links" className="flex flex-col gap-3">
         <h2 id="reference-links" className="text-base font-semibold">
           Rules and tools

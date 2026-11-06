@@ -201,7 +201,7 @@ New campaign defaults (D40, D44): XP leveling, average HP, allow negative level 
 
 ### Reference
 - Phase 1: link cards. D&D Beyond, 2014 Basic Rules, SRD 5.1, 5e.tools (2014), D&D 5e API, Open5e, Roll20, Hero Forge. User bookmarks (add/edit/remove). Credits page (SRD and icon attribution).
-- Phase 2: searchable conditions, rules summaries, quick tables. Spells/items link to their external page.
+- Phase 2 (built in M13): name search over bundled data, SRD condition text, quick tables. Spells/items link to their external page.
 
 ### Settings
 Theme, reduced motion, automation level (**Assisted:** validate + warn · **Manual:** track only, no warnings), export/import JSON, backups, reset character.

@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 00:05 — M13 complete
+
+- Reference now has seven short rules tables: actions, cover, exhaustion, death saves, DCs, advantage and rests. Tap a title to open it.
+- Check that the wording matches how your table plays these rules.
+- Next: M14 (level-up wizard, more classes).
+- Checks pass.
+
 ## 2026-11-06 23:40 — Rules search
 
 - The Reference page has a search box. Type a name to find conditions, spells, items, features, classes or races.

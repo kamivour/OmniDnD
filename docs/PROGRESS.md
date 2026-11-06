@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M13 — Searchable Reference.
-**Next up:** M13 tasks below. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M13 done. M14 (level-up wizard, more classes, multiclass) not started.
+**Next up:** plan M14 tasks. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -36,7 +36,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M10 | Effects editor + Conditions | 2 | done | Effects on you can be added, edited and end on their own; conditions show their consequences |
 | M11 | Campaign Setup: sources + optional rules | 2 | done | Each campaign picks its books and optional rules; changes never delete character choices |
 | M12 | Journal + Companions | 2 | done | |
-| M13 | Searchable Reference | 2 | doing | |
+| M13 | Searchable Reference | 2 | done | |
 | M14 | Full level-up wizard + more classes + multiclass | 3 | todo | |
 | M15 | Ally/enemy tracker | 3 | todo | |
 | M16 | Dice roller, themes, more books | 4 | todo | |
@@ -174,8 +174,8 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 ### M13 — Searchable Reference
 - [x] Rules search: name search over bundled 2014 data; conditions show their SRD text
-- [ ] Quick tables and rules summaries in our own words
-- [ ] Gate: phone and desktop widths, reload, manual QA documented
+- [x] Quick tables and rules summaries in our own words
+- [x] Gate: phone and desktop widths, reload, manual QA documented
 
 ## Backlog (not scheduled)
 
@@ -191,6 +191,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M13 complete: quick tables added; search and tables pass at 375 and 1440 px; manual QA listed. Next: M14.
 - 2026-11-06 — M13 rules search: Reference page searches conditions, spells, items, features, classes and races by name; conditions show SRD text.
 - 2026-11-06 — M12 gate: Journal and Companions pass at 375 and 1440 px with Undo and reload; manual QA listed. Next: M13.
 - 2026-11-06 — M12 Companions UI: screen with HP, conditions, uses, initiative and commanding that spends your turn economy; Mastiff and horse templates; sidekick option deferred (Q30).

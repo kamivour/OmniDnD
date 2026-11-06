@@ -114,6 +114,12 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Damage a companion to 0 HP. Judge whether "destroyed" and the Resummon option fit how your DM rules it.
 - [ ] Long rest, then check companion uses recharge when you expect.
 
+## Phase 2 — M13: Reference search
+
+- [ ] Search "grapple" or "poison". Judge whether the results and condition text are enough to settle a rules question.
+- [ ] Open each quick table. Judge whether the own-words wording matches how your table runs the rule.
+- [ ] Use search and tables on a phone. Judge whether they are easy to read one-handed.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

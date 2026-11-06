@@ -16,3 +16,10 @@ test('reference search shows condition text and handles no match', async ({ page
   await search.fill('zzzzqq');
   await expect(page.getByText('Nothing found', { exact: false })).toBeVisible();
 });
+
+test('quick tables open and show exhaustion levels', async ({ page }) => {
+  await page.goto('/reference');
+  await page.getByText('Exhaustion (2014)', { exact: true }).click();
+  await expect(page.getByText('Speed reduced to 0.', { exact: true })).toBeVisible();
+  await noOverflow(page);
+});
