@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 23:15 — M12 complete
+
+- Journal and Companions both work on phone and desktop, with Undo and reload keeping changes.
+- Please try the four M12 items in the manual QA list.
+- Next: M13.
+- Checks pass.
+
 ## 2026-11-06 23:05 — Companions screen
 
 - The Companions page now works: add a pet, mount or summon (or start from Mastiff or Riding horse), with its own HP, conditions and uses.

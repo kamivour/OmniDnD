@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M12 — Journal + Companions.
-**Next up:** M12 gate. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M13 (see the milestone table). Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -35,7 +35,7 @@ Build for multiple campaigns and characters, including friends' future character
 | MA | Accounts + cloud sync | 2 | done | Optional login keeps each person's campaigns and characters; guest mode and offline use unchanged |
 | M10 | Effects editor + Conditions | 2 | done | Effects on you can be added, edited and end on their own; conditions show their consequences |
 | M11 | Campaign Setup: sources + optional rules | 2 | done | Each campaign picks its books and optional rules; changes never delete character choices |
-| M12 | Journal + Companions | 2 | doing | |
+| M12 | Journal + Companions | 2 | done | |
 | M13 | Searchable Reference | 2 | todo | |
 | M14 | Full level-up wizard + more classes + multiclass | 3 | todo | |
 | M15 | Ally/enemy tracker | 3 | todo | |
@@ -170,7 +170,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Journal UI: character narrative, markdown notes, quests, NPCs, locations and session logs
 - [x] Companions engine: companion definitions, owner-derived stats, independent live state and commanding
 - [x] Companions UI: companions screen and combat actions with turn economy integration
-- [ ] Gate: phone and desktop widths, Undo, reload, manual QA documented
+- [x] Gate: phone and desktop widths, Undo, reload, manual QA documented
 
 ## Backlog (not scheduled)
 
@@ -186,6 +186,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M12 gate: Journal and Companions pass at 375 and 1440 px with Undo and reload; manual QA listed. Next: M13.
 - 2026-11-06 — M12 Companions UI: screen with HP, conditions, uses, initiative and commanding that spends your turn economy; Mastiff and horse templates; sidekick option deferred (Q30).
 - 2026-11-06 — M12 Companions engine: definitions, owner-derived stats, own HP, conditions and uses, commanding, timed expiry, undo and export checks; SRD creature import deferred (D130).
 - 2026-11-06 — Journal review fixes: "&" title, local session date, 44 px quest checkbox, DATA.md schema; Markdown shown unformatted (D129).
