@@ -2,7 +2,6 @@
 
 **Current milestone:** M9 — Inventory and Features.
 **Next up:** Item charge counters and explicit recharge prompts tied to rests/game time, with supported magic-item data.
-**Paused:** User review after attunement; resume only when requested.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -33,13 +32,14 @@ Build for multiple campaigns and characters, including friends' future character
 | M7 | Character Sheet + Exploration + level-up | 1 | done | All computed values match TEST_CHARACTER §4 |
 | M8 | Phase 1 hardening | 1 | done | Definition of done (SPEC §8) met |
 | M9 | Inventory + Features screen | 2 | doing | General inventory and feature controls sync across screens; custom items export; changes survive reload and Undo |
+| MA | Accounts + cloud sync | 2 | todo | Optional login keeps each person's campaigns and characters; guest mode and offline use unchanged |
 | M10 | Effects editor + Conditions | 2 | todo | |
 | M11 | Campaign Setup: sources + optional rules | 2 | todo | |
 | M12 | Journal + Companions | 2 | todo | |
 | M13 | Searchable Reference | 2 | todo | |
 | M14 | Full level-up wizard + more classes + multiclass | 3 | todo | |
 | M15 | Ally/enemy tracker | 3 | todo | |
-| M16 | Dice roller, themes, sync, more books | 4 | todo | |
+| M16 | Dice roller, themes, more books | 4 | todo | |
 
 Detail one milestone at a time. Later Phase 2+ screens remain placeholders until their milestone starts.
 
@@ -146,11 +146,18 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [ ] Features screen: origin groups, passive/active/triggered details, uses/shared pools, recharge, favorites and supported explicit toggles
 - [ ] Gate: general characters, cross-screen values, offline reload and exact Undo at phone/desktop widths; manual QA documented
 
+### MA — Accounts + cloud sync (after M9; going online waits for hosting, Q1/Q28)
+- [ ] Sync-ready local storage: per-record change times and deletion markers, with migration and no behavior change for guests
+- [ ] Database schema and row-level security policies in the repo, so each account can only read and write its own rows
+- [ ] Optional sign-in screen, hidden until a sync provider is configured; guest mode stays the default
+- [ ] Two-way sync through the persistence layer with revision conflict checks; conflicts ask the user, never silently overwrite
+- [ ] Gate: guest-only use unchanged; sync tested against a local or mocked provider; hosting steps documented for the user
+
 ## Backlog (not scheduled)
 
 - Optional dice roller with roll history
 - Parchment theme
-- Cloud sync / multi-device
+- Shared campaign view for a party or DM (after accounts)
 - Party view (several characters side by side)
 - Print / PDF character sheet export
 - Spell import from user-pasted text

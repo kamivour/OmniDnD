@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 10:38 — Plan optional accounts
+
+- New milestone MA after Inventory and Features: optional sign-in so each friend keeps their own campaigns and characters, with cloud sync.
+- Guest mode, offline use and file export/import stay. Going online waits until you choose hosting; Supabase is the default plan.
+- Work resumes on item charges. Checks pass.
+
 ## 2026-11-06 10:27 — Record and review attunement bonds
 
 - Inventory shows recorded bonds and lets you mark or end them with shared Undo. New bonds respect the three-item limit and duplicate-copy restriction.

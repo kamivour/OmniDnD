@@ -4,7 +4,7 @@
 
 One place to track a D&D 5e (2014) character during play. Fast in combat, complete between sessions.
 
-Support different campaigns and characters, including future friends' characters. The Fool is the first acceptance fixture, not the product's scope limit; local saves and character-file exchange do not require accounts or cloud sync.
+Support different campaigns and characters, including future friends' characters. The Fool is the first acceptance fixture, not the product's scope limit; local saves and character-file exchange never require an account. Optional accounts with cloud sync come in milestone MA (D115).
 
 **Principles (in priority order)**
 
@@ -15,16 +15,16 @@ Support different campaigns and characters, including future friends' characters
 5. **Undoable** — every change is logged and can be undone.
 6. **Logic apart from UI** — themes, layouts, classes, and books can change without touching each other.
 
-**Non-goals for v1:** battle map/grid, full combat simulator, DM tools, accounts/cloud sync, copying whole rulebooks, 2024 rules.
+**Non-goals for v1:** battle map/grid, full combat simulator, DM tools, copying whole rulebooks, 2024 rules.
 
 ## 2. Phases
 
 | Phase | Content |
 |---|---|
 | 1 — MVP | Key frames, rules engine core, nav shell, HUD, Dashboard, Character Sheet, Spellbook, Combat, Exploration (basic), Rest, basic conditions/effects, local save, Reference links, Campaign Setup (character rules), minimal level up |
-| 2 — Full management | Inventory, Features screen, full Effects editor, Companions, Journal, Campaign Setup (sources, optional rules), searchable Reference |
+| 2 — Full management | Inventory, Features screen, optional accounts + cloud sync, full Effects editor, Companions, Journal, Campaign Setup (sources, optional rules), searchable Reference |
 | 3 — Automation | Full level-up workflow (features, spells, ASI/feats), more classes, multiclass, ally/enemy tracker, advanced feature exceptions |
-| 4 — Extras | Dice roller, themes (Parchment), backups UI, cloud sync, more books, integrations |
+| 4 — Extras | Dice roller, themes (Parchment), backups UI, more books, integrations |
 
 Milestones and checklists live in [PROGRESS.md](PROGRESS.md).
 
