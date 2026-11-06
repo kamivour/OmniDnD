@@ -91,6 +91,14 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Change the same character on both devices before syncing. Judge whether the keep-this-device / keep-cloud choice is clear and does what it says.
 - [ ] Have a friend sign in with their own account and confirm neither of you sees the other's campaigns.
 
+## Phase 2 — M10: Effects editor and Conditions
+
+- [ ] Add an effect from a real spell or potion during play on your phone. Judge whether the editor is quick enough at the table.
+- [ ] Set an effect to end at the start of your next turn, then run a turn. Judge whether it ends when your table expects.
+- [ ] Turn on each condition one by one. Check the roll reminders and condition notes against your 2014 Player's Handbook.
+- [ ] Turn on prone and invisible together. Judge whether the situational lines and the cancel-out note read clearly.
+- [ ] Set exhaustion 1 to 6. Check the level list and the speed and HP limits match how your DM runs exhaustion.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

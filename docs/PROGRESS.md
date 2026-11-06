@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M10 — Effects editor + Conditions.
-**Next up:** M10 gate. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M11 — Campaign Setup: sources + optional rules.
+**Next up:** M11 task list. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -33,7 +33,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M8 | Phase 1 hardening | 1 | done | Definition of done (SPEC §8) met |
 | M9 | Inventory + Features screen | 2 | done | General inventory and feature controls sync across screens; custom items export; changes survive reload and Undo |
 | MA | Accounts + cloud sync | 2 | done | Optional login keeps each person's campaigns and characters; guest mode and offline use unchanged |
-| M10 | Effects editor + Conditions | 2 | doing | Effects on you can be added, edited and end on their own; conditions show their consequences |
+| M10 | Effects editor + Conditions | 2 | done | Effects on you can be added, edited and end on their own; conditions show their consequences |
 | M11 | Campaign Setup: sources + optional rules | 2 | todo | |
 | M12 | Journal + Companions | 2 | todo | |
 | M13 | Searchable Reference | 2 | todo | |
@@ -157,7 +157,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 - [x] Engine: effects can end at your next turn's start or end, or at a rest; carry damage defenses; can be edited in place
 - [x] Effect editor in Combat, Dashboard and Exploration: duration, end trigger, conditions, number modifiers, defenses, note; Sheet shows effect defenses
 - [x] Condition consequences: advantage, disadvantage and auto-fail reminders on checks, saves and attacks; exhaustion levels; condition details in own words
-- [ ] Gate: phone and desktop widths, exact Undo, reload; manual QA documented
+- [x] Gate: phone and desktop widths, exact Undo, reload; manual QA documented
 
 ## Backlog (not scheduled)
 
@@ -173,6 +173,7 @@ Detail one milestone at a time. Later Phase 2+ screens remain placeholders until
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-06 — M10 complete: effect with condition and AC bonus checked at phone and desktop width, exact Undo, reload; manual QA listed. Next: M11.
 - 2026-11-06 — M10 conditions: roll reminders for conditions and exhaustion, save tags, condition details in own words, exhaustion levels listed.
 - 2026-11-06 — M10 effect editor: add or edit effects with timing, conditions, bonuses and damage defenses; Sheet and damage pad show effect defenses.
 - 2026-11-06 — M10 engine: effects end at your next turn's start/end or at a rest, carry damage defenses, and can be edited; concentration survives a triggered end.

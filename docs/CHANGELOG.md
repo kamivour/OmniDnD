@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-06 13:03 — Effects and conditions milestone done
+
+- Effects on you and condition reminders are finished and checked on phone and desktop: Undo puts everything back exactly, and a reload keeps your effects.
+- Five new hands-on checks are in the manual QA list, mainly comparing condition notes with your Player's Handbook.
+- Next: Campaign Setup, where each campaign picks its books and optional rules. Checks pass.
+
 ## 2026-11-06 12:59 — What conditions do to your rolls
 
 - Combat, Dashboard and Exploration show **Roll reminders** when you have a condition or exhaustion: advantage, disadvantage or automatic failure on attacks, checks and saves. The app never rolls or changes numbers for you.
