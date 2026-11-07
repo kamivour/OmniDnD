@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 03:02 — Backups
+
+- Settings has a **Backups** section. **Export all data** saves every campaign and character to one file; **Restore from file** shows what is inside before it replaces anything.
+- Automatic recovery points (before an import, reset, long rest or restore) are listed there too. A restore always keeps the previous data as a recovery point.
+- A reminder appears in Settings and on Campaigns when there is no backup file, or it is over 14 days old. Check the wording and that restore feels safe.
+- Next: Xanathar's and Tasha's packs. Checks pass.
+
 ## 2026-11-08 02:57 — Parchment theme
 
 - Settings has a **Theme** choice: System, Dark or Parchment, a warm light paper look. System uses Parchment when your device is set to light.

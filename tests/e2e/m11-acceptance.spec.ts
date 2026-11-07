@@ -251,4 +251,3 @@ test('M11 gate: campaign rules apply in play, Undo restores, reload keeps', asyn
     animations: 'disabled',
   });
 });
-

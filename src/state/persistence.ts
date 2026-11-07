@@ -14,7 +14,14 @@ import { characterStore, createCharacterStore } from './character-store';
 import { ManagementEventSchema } from '../engine/commands/management';
 import { BookmarkSchema, PreferencesSchema } from '../engine/schema';
 import { ActivityOrderSchema } from './activity-order';
-import { createBackupIntent, planBackups, type BackupIntent } from '../db/backups';
+import {
+  createBackupIntent,
+  ownedBackup,
+  planBackups,
+  snapshotBackupIntent,
+  type BackupIntent,
+  type BackupPayload,
+} from '../db/backups';
 import { planSyncRecords, SyncRecordSchema } from '../db/sync-metadata';
 
 interface StorageStatus {
@@ -40,6 +47,8 @@ let writeQueue: Promise<void> = Promise.resolve();
 let workspaceRevision = 0;
 // Intent payloads capture command-time state. Retry must never reconstruct them from later edits.
 const pendingBackups = new Map<string, BackupIntent>();
+/** True while restoreWorkspace swaps the state; the restored history is not a new command. */
+let restoring = false;
 
 export class WorkspaceConflictError extends Error {
   constructor() {
@@ -250,10 +259,12 @@ export function initializePersistence(): Promise<void> {
             next.bookmarks !== previous.bookmarks ||
             next.activityOrder !== previous.activityOrder
           ) {
-            const backup = createBackupIntent(previous, next, {
-              id: `backup:${crypto.randomUUID()}`,
-              capturedAt: new Date().toISOString(),
-            });
+            const backup = restoring
+              ? undefined
+              : createBackupIntent(previous, next, {
+                  id: `backup:${crypto.randomUUID()}`,
+                  capturedAt: new Date().toISOString(),
+                });
             if (backup) pendingBackups.set(backup.id, backup);
             enqueueSave({
               characters: next.characters,
@@ -317,4 +328,59 @@ export async function retryPersistence(): Promise<void> {
     ...(activityOrder === undefined ? {} : { activityOrder }),
   });
   await flushPersistence();
+}
+
+export interface SavedBackup {
+  id: string;
+  reason: BackupPayload['reason'];
+  capturedAt: string;
+  workspace: Workspace;
+}
+
+/** Automatic recovery points, newest first. Damaged or unknown rows are skipped, never deleted. */
+export async function listBackups(): Promise<SavedBackup[]> {
+  const rows = await database.backups.toArray();
+  const found: SavedBackup[] = [];
+  for (const row of rows
+    .flatMap((entry) => ownedBackup(entry) ?? [])
+    .sort((a, b) => b.data.order - a.data.order)) {
+    try {
+      found.push({
+        id: row.id,
+        reason: row.data.reason,
+        capturedAt: row.data.capturedAt,
+        workspace: deserializeWorkspace(row.data.workspace),
+      });
+    } catch {
+      // A recovery point that no longer validates is left alone.
+    }
+  }
+  return found;
+}
+
+/**
+ * Replace the whole workspace with a validated one (a backup file or recovery point). The current
+ * workspace is saved as a recovery point in the same write, so a restore can be taken back.
+ */
+export function restoreWorkspace(workspace: Workspace): void {
+  const current = characterStore.getState();
+  const backup = snapshotBackupIntent(current, 'before-restore', {
+    id: `backup:${crypto.randomUUID()}`,
+    capturedAt: new Date().toISOString(),
+  });
+  pendingBackups.set(backup.id, backup);
+  restoring = true;
+  try {
+    characterStore.setState({
+      campaigns: workspace.campaigns,
+      characters: workspace.characters,
+      automation: workspace.automation,
+      reducedMotion: workspace.reducedMotion,
+      managementEvents: workspace.managementEvents,
+      bookmarks: workspace.bookmarks,
+      activityOrder: workspace.activityOrder,
+    });
+  } finally {
+    restoring = false;
+  }
 }

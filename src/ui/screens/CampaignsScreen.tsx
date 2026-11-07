@@ -15,6 +15,8 @@ import { OverrideMarker } from '../components/StatChip';
 import { inputClass } from '../components/fields';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { useManagement } from '../commands/useManagement';
+import { deviceStore } from '../../state/device-settings';
+import { backupReminder } from '../../state/backup-reminder';
 import { rulesSummary } from '../campaignOptions';
 
 const button =
@@ -42,6 +44,13 @@ export function CampaignsScreen() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const last = state.managementEvents.findLast(
     (event) => event.command !== 'undo' && !event.undoneBy,
+  );
+
+  const lastBackupAt = useStore(deviceStore, (state) => state.lastBackupAt);
+  const reminder = backupReminder(
+    lastBackupAt,
+    new Date(),
+    Object.keys(state.characters).length > 0,
   );
 
   return (
@@ -74,6 +83,14 @@ export function CampaignsScreen() {
           </Link>
         </div>
       </header>
+      {reminder && (
+        <p role="status" className="rounded-card border border-warn bg-surface p-3 text-sm">
+          {reminder}{' '}
+          <Link to="/settings" className="underline">
+            Save one in Settings.
+          </Link>
+        </p>
+      )}
       {importControls}
       {state.managementEvents.length > 0 && (
         <p aria-label="Recent management change" className="text-xs text-text-muted">

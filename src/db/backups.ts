@@ -44,9 +44,10 @@ const WorkspaceSnapshotSchema = z.custom<WorkspaceRows>((value) => {
 const BackupIntentDataSchema = z.strictObject({
   kind: z.literal('omnidnd-workspace-backup'),
   payloadVersion: z.literal(1),
-  reason: z.enum(['before-import', 'before-reset', 'after-long-rest']),
+  reason: z.enum(['before-import', 'before-reset', 'after-long-rest', 'before-restore']),
   capturedAt: z.iso.datetime(),
-  source: ActivityReferenceSchema,
+  /** Absent for a snapshot taken by the Backups screen rather than by a command. */
+  source: ActivityReferenceSchema.optional(),
   workspace: WorkspaceSnapshotSchema,
 });
 const BackupPayloadSchema = BackupIntentDataSchema.extend({ order: z.int().positive() });
@@ -104,7 +105,7 @@ export function createBackupIntent(
   });
 }
 
-function ownedBackup(row: StoredRecord<unknown>): StoredRecord<BackupPayload> | undefined {
+export function ownedBackup(row: StoredRecord<unknown>): StoredRecord<BackupPayload> | undefined {
   try {
     const parsed = parseStoredRecord(row, BackupPayloadSchema, 'backup');
     return parsed.id.startsWith('backup:') && parsed.id.length > 'backup:'.length
@@ -113,6 +114,21 @@ function ownedBackup(row: StoredRecord<unknown>): StoredRecord<BackupPayload> | 
   } catch {
     return undefined;
   }
+}
+
+/** A snapshot of the whole workspace taken on request, e.g. just before a restore replaces it. */
+export function snapshotBackupIntent(
+  workspace: Workspace,
+  reason: 'before-restore',
+  metadata: { id: string; capturedAt: string },
+): BackupIntent {
+  return storedRecord(metadata.id, {
+    kind: 'omnidnd-workspace-backup',
+    payloadVersion: 1,
+    reason,
+    capturedAt: z.iso.datetime().parse(metadata.capturedAt),
+    workspace: structuredClone(serializeWorkspace(workspace)),
+  });
 }
 
 /** Allocate local order inside the save transaction; wall-clock changes cannot evict newer saves. */

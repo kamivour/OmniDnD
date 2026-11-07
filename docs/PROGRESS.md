@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M16 (dice roller, themes, more books), in progress.
-**Next up:** M16 task 3, backups UI. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M16 task 4, Xanathar's and Tasha's packs. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -203,7 +203,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 ### M16 — Dice roller, themes, more books
 - [x] Optional dice roller (off by default, Settings toggle): roll from attack, damage, save and check buttons; roll history; results never applied without the player (Q5)
 - [x] Parchment theme and theme picker (system, dark, parchment); tokens only
-- [ ] Backups UI: export and import all data, restore preview, reminder when no recent backup
+- [x] Backups UI: export and import all data, restore preview, reminder when no recent backup
 - [ ] Xanathar's and Tasha's packs in our own words (Q6): subclasses, races, spells, feats; Artificer Alchemist and Armorer
 - [ ] Search and lists respect each campaign's books; content packs appear in Reference
 - [ ] Journal shows formatted Markdown safely (D129)
@@ -224,6 +224,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-08 — M16: backups in Settings. Export all data to one file, restore from a file or recovery point with preview, reminder after 14 days.
 - 2026-11-08 — M16: Parchment light theme and Theme picker in Settings (System, Dark, Parchment); System follows the device; choice stored on this device.
 - 2026-11-08 — M16: optional dice roller. Settings switch (device only), dice tray with history, Roll buttons on attacks, saves and skills; nothing is applied for you.
 - 2026-11-08 — M15: gate passed. Three-round fight with The Fool, a companion and three goblins at phone and desktop width; Undo and reload work.
