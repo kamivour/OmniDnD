@@ -24,4 +24,14 @@ describe('searchRules', () => {
   it('respects the limit', () => {
     expect(searchRules(registry, 'a', 5)).toHaveLength(5);
   });
+
+  it('hides books a campaign does not use, but keeps PHB', () => {
+    const all = searchRules(registry, 'toll the dead', 40);
+    expect(all.some((hit) => hit.source === 'XGE')).toBe(true);
+    const phbOnly = searchRules(registry, 'toll the dead', 40, ['PHB']);
+    expect(phbOnly.some((hit) => hit.source === 'XGE')).toBe(false);
+    const withTce = searchRules(registry, 'toll the dead', 40, ['PHB', 'XGE']);
+    expect(withTce.some((hit) => hit.source === 'XGE')).toBe(true);
+    expect(searchRules(registry, 'blind', 40, ['PHB'])[0]?.id).toBe('condition.blinded');
+  });
 });

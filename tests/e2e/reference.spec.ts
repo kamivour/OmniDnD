@@ -337,3 +337,13 @@ test('invalid bookmark URLs and dismissed forms leave the saved workspace untouc
   await expect(page.getByText('No bookmarks yet.', { exact: true })).toBeVisible();
   expect(await readDatabase(page)).toEqual(before);
 });
+
+test('reference search shows Xanathar content with its book', async ({ page }) => {
+  for (const path of ['/reference', '/characters/the-fool/reference']) {
+    await page.goto(path);
+    await page.getByRole('searchbox', { name: 'Search rules', exact: true }).fill('toll the dead');
+    await expect(
+      page.getByRole('listitem').filter({ hasText: 'Toll the Dead · Spell · XGE' }),
+    ).toBeVisible();
+  }
+});

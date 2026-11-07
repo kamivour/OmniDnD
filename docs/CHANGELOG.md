@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 03:22 — Search follows campaign books
+
+- Rules search inside a character now hides books the campaign does not use. Core Player's Handbook entries always show.
+- Xanathar and Tasha entries show up in search with their book name. Search from the main Reference page still shows everything.
+- Next: formatted notes in the Journal. Checks pass.
+
 ## 2026-11-08 03:17 — Xanathar and Tasha content
 
 - New subclasses: Cavalier, Gloom Stalker, War Magic (Xanathar) and Twilight Domain, Psi Warrior (Tasha). Eight spells and eleven feats from both books are added too.

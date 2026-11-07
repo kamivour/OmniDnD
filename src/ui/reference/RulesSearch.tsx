@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useParams } from 'react-router';
+import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { searchRules } from '../../engine/calc/rules-search';
+import { characterState, characterStore } from '../../state/character-store';
 import { inputClass } from '../components/fields';
 import { CreatureStatblock } from './CreatureStatblock';
 import { crText } from './creature-format';
@@ -17,10 +20,16 @@ const KIND_LABEL = {
   creature: 'Creature',
 } as const;
 
-/** Name search over bundled 2014 data. Conditions show their rules text; the rest show where they come from. */
+/** Name search over bundled 2014 data, limited to the campaign's books inside a character. Conditions show their rules text; the rest show where they come from. */
 export function RulesSearch() {
   const [query, setQuery] = useState('');
-  const hits = searchRules(registry, query);
+  const { characterId = '' } = useParams();
+  // Inside a character, only the books its campaign uses; outside, everything bundled.
+  const books = useStore(
+    characterStore,
+    (state) => characterState(state, characterId)?.campaign.sources,
+  );
+  const hits = searchRules(registry, query, undefined, books);
   const searching = query.trim() !== '';
 
   return (
