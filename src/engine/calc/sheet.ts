@@ -403,9 +403,14 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       'Initiative',
       sumParts([modPart('DEX'), ...modifierParts('initiative', 'checks', 'unproficient-checks')]),
     ),
-    ac: value('/ac', 'Armor class', armorClass(equipped, mods.DEX, modifierParts('ac'), unarmoredDefenses(features, mods)), {
-      min: 0,
-    }),
+    ac: value(
+      '/ac',
+      'Armor class',
+      armorClass(equipped, mods.DEX, modifierParts('ac'), unarmoredDefenses(features, mods)),
+      {
+        min: 0,
+      },
+    ),
     speed: value(
       '/speed',
       'Speed',
