@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 19:15 — Spells on level-up
+
+- A level-up can now add the new cantrips and spells the class table gives, copy spells into a Wizard's spellbook, and swap one known spell for another.
+- Picks beyond the class table are refused; prepared spell counts follow the new level on their own.
+- No screen yet: the level-up wizard comes next. Checks pass.
+
 ## 2026-11-07 18:24 — Level choices in the engine
 
 - A level-up can now carry a subclass, an ability score improvement (+2, or +1/+1, never above 20), a feat when the campaign allows feats, expertise, and picked options such as a Fighting Style.

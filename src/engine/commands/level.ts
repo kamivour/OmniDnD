@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { recordedLevel } from '../calc/advancement';
 import { applyLevelChoices, LevelChoicesSchema } from '../calc/level-choices';
+import { applyLevelSpells, LevelSpellsSchema } from '../calc/level-spells';
 import { optionalRules } from '../calc/campaign-rules';
 import { averageHpRoll, type HitDie } from '../calc/hp';
 import { MULTICLASS_RULES, meetsMinimum, minimumText } from '../calc/multiclass';
@@ -24,6 +25,7 @@ const LevelUpPayloadSchema = z.strictObject({
   roll: z.number().optional(),
   /** Multiclass only: the skill and instrument a new class lets you pick. */
   choices: LevelChoicesSchema.optional(),
+  spells: LevelSpellsSchema.optional(),
   skill: SkillSchema.optional(),
   tool: refId('item').optional(),
   expected: z
@@ -104,7 +106,7 @@ function multiclassGrants(
 function prepare(ctx: CommandContext, input: LevelUpPayload) {
   const parsed = LevelUpPayloadSchema.safeParse(input);
   if (!parsed.success) return { checks: [block('Level-up details are invalid')] };
-  const { classId, roll, skill, tool, expected, choices } = parsed.data;
+  const { classId, roll, skill, tool, expected, choices, spells } = parsed.data;
   const current = { campaign: ctx.campaign, build: ctx.build, live: ctx.live };
   if (expected !== undefined && !equalData(expected, current))
     return {
@@ -168,7 +170,30 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
     choices: choices ?? {},
   });
   if ('blocked' in applied) return { checks: [block(applied.blocked)] };
-  const finalBuild: CharacterBuild = applied.build;
+  let finalBuild: CharacterBuild = applied.build;
+  const summary = [...applied.summary];
+  if (spells) {
+    try {
+      const sheet = computeSheet({ ...current, build: finalBuild }, ctx.registry);
+      const picked = applyLevelSpells(
+        {
+          campaign: ctx.campaign,
+          build: finalBuild,
+          live: ctx.live,
+          sheet,
+          registry: ctx.registry,
+        },
+        classId,
+        entries.length === 0,
+        spells,
+      );
+      if ('blocked' in picked) return { checks: [block(picked.blocked)] };
+      finalBuild = picked.build;
+      summary.push(...picked.summary);
+    } catch {
+      return { checks: [block('The spell picks could not be checked')] };
+    }
+  }
   if (!CharacterBuildSchema.safeParse(finalBuild).success)
     return { checks: [block('This level would leave invalid class or HP records')] };
   try {
@@ -186,7 +211,7 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
     return {
       checks,
       build: finalBuild,
-      summary: applied.summary,
+      summary,
       live,
       name: def.name,
       classLevel: (entries[0]?.level ?? 0) + 1,
@@ -212,6 +237,7 @@ export const levelUp: Command<LevelUpPayload> = {
     draft.build.proficiencies = next.build.proficiencies;
     draft.build.abilityScores.bonuses = next.build.abilityScores.bonuses;
     draft.build.featureIds = next.build.featureIds;
+    draft.build.spells = next.build.spells;
     draft.live.hp = next.live.hp;
     return withNotes(
       `Level up: ${next.name} ${next.classLevel} (max HP ${next.before} → ${next.after})`,

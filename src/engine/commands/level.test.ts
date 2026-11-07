@@ -724,3 +724,116 @@ describe('levelUp choices', () => {
     ).toEqual(['You already have Fighting Style: Dueling']);
   });
 });
+
+describe('levelUp spells', () => {
+  const spellIds = (classId: string, level: number) =>
+    [...registry.entries.values()]
+      .filter((e) => e.kind === 'spell' && e.level === level && e.classes.includes(classId))
+      .map((e) => e.id);
+  const bard = (level: number, cantrips: number, spells: number) => {
+    const state = atLevel(level);
+    state.build.spells = [
+      {
+        classId: 'class.bard',
+        known: [
+          ...spellIds('class.bard', 0).slice(0, cantrips),
+          ...spellIds('class.bard', 1).slice(0, spells),
+        ],
+      },
+    ];
+    return state;
+  };
+
+  it('adds the new cantrip and spell a known caster gains, and Undo restores them', () => {
+    const session = new Session(bard(3, 2, 6));
+    const before = structuredClone(session.state);
+    const cantrip = spellIds('class.bard', 0)[2]!;
+    const spell = spellIds('class.bard', 1)[6]!;
+    session.run(levelUp, { classId: 'class.bard', roll: 5, spells: { add: [cantrip, spell] } });
+    expect(session.state.build.spells[0]!.known).toEqual(expect.arrayContaining([cantrip, spell]));
+    expect(session.state.build.spells[0]!.known).toHaveLength(10);
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('blocks more picks than the class table allows, duplicates and unknown spells', () => {
+    const session = new Session(bard(3, 2, 6));
+    const [c1, c2] = spellIds('class.bard', 0).slice(2, 4) as [string, string];
+    const [s1, s2] = spellIds('class.bard', 1).slice(6, 8) as [string, string];
+    const reasons = (spells: object) =>
+      session.preview(levelUp, { classId: 'class.bard', roll: 5, spells }).reasons;
+    expect(reasons({ add: [c1, c2] })).toEqual(['Bard learns 1 more cantrip(s) at this level']);
+    expect(reasons({ add: [s1, s2] })).toEqual(['Bard learns 1 more spell(s) at this level']);
+    expect(reasons({ add: [s1, s1] })).toEqual(['The same spell is picked twice']);
+    expect(reasons({ add: [spellIds('class.bard', 1)[0]!] })).toEqual([
+      `${registry.entries.get(spellIds('class.bard', 1)[0]!)!.name} is already known`,
+    ]);
+    expect(
+      reasons({
+        add: [spellIds('class.wizard', 1).find((id) => !spellIds('class.bard', 1).includes(id))!],
+      })[0],
+    ).toMatch(/is not available to Bard/);
+  });
+
+  it('lets a known caster swap one leveled spell, not a cantrip', () => {
+    const session = new Session(bard(3, 2, 6));
+    const [out, , , , , , replacement] = spellIds('class.bard', 1) as string[];
+    session.run(levelUp, {
+      classId: 'class.bard',
+      roll: 5,
+      spells: { swap: { remove: out!, add: replacement! } },
+    });
+    const known = session.state.build.spells[0]!.known;
+    expect(known).toContain(replacement);
+    expect(known).not.toContain(out);
+    const cantrip = spellIds('class.bard', 0)[0]!;
+    expect(
+      new Session(bard(3, 2, 6)).preview(levelUp, {
+        classId: 'class.bard',
+        roll: 5,
+        spells: { swap: { remove: cantrip, add: replacement! } },
+      }).reasons,
+    ).toEqual(['Swap out a leveled spell you know']);
+  });
+
+  it('gives a new Wizard a six-spell spellbook, no more', () => {
+    const state = structuredClone(freshState);
+    state.campaign.optionalRules = { ...state.campaign.optionalRules, multiclassing: true };
+    state.build.abilityScores.base.INT = 14;
+    const session = new Session(state);
+    const six = spellIds('class.wizard', 1).slice(0, 6);
+    const cantrips = spellIds('class.wizard', 0).slice(0, 3);
+    const seven = spellIds('class.wizard', 1).slice(0, 7);
+    expect(
+      session.preview(levelUp, { classId: 'class.wizard', roll: 4, spells: { add: seven } })
+        .reasons,
+    ).toEqual(['Wizard learns 6 more spell(s) at this level']);
+    session.run(levelUp, {
+      classId: 'class.wizard',
+      roll: 4,
+      spells: { add: [...cantrips, ...six] },
+    });
+    const row = session.state.build.spells.find((r) => r.classId === 'class.wizard');
+    expect(row!.known).toHaveLength(9);
+  });
+
+  it('adds two spellbook spells per Wizard level', () => {
+    const state = structuredClone(freshState);
+    state.build.classes = [{ classId: 'class.wizard', level: 1 }];
+    state.build.hpEntries = [
+      { level: 1, classId: 'class.wizard', value: 6, method: 'max', floor: 'none' },
+    ];
+    state.build.abilityScores.base.INT = 16;
+    state.build.abilityScores.bonuses = [];
+    state.build.spells = [
+      { classId: 'class.wizard', known: spellIds('class.wizard', 1).slice(0, 6) },
+    ];
+    const session = new Session(state);
+    const more = spellIds('class.wizard', 1).slice(6, 9);
+    expect(
+      session.preview(levelUp, { classId: 'class.wizard', roll: 4, spells: { add: more } }).reasons,
+    ).toEqual(['Wizard learns 2 more spell(s) at this level']);
+    session.run(levelUp, { classId: 'class.wizard', roll: 4, spells: { add: more.slice(0, 2) } });
+    expect(session.state.build.spells[0]!.known).toHaveLength(8);
+  });
+});
