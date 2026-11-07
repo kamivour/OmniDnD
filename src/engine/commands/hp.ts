@@ -36,18 +36,6 @@ const DeathSavePayloadSchema = z.strictObject({
     .optional(),
 });
 
-const TEMP_HP_MASSIVE_DAMAGE_REVIEW =
-  'Temp HP at 0 HP: massive-damage outcome needs DM review; current default uses damage remaining after temp HP';
-
-function needsTempHpMassiveDamageReview(
-  hp: number,
-  amount: number,
-  remaining: number,
-  maxHp: number,
-) {
-  return hp === 0 && amount >= maxHp && remaining < maxHp;
-}
-
 /** Shared legal-action/status flags, including dead imports with no condition entries. */
 export function healthDetails({ live, sheet }: Pick<CommandContext, 'live' | 'sheet'>): {
   hp: number;
@@ -96,8 +84,6 @@ export const applyDamage: Command<ApplyDamagePayload> = {
     const checks: Check[] = [...deadCheck(ctx), ...minCheck('Damage', amount, 1)];
     const { live } = ctx;
     const toHp = Math.max(0, amount - live.tempHp);
-    if (needsTempHpMassiveDamageReview(live.hp, amount, toHp, ctx.sheet.maxHp.value))
-      checks.push(info(TEMP_HP_MASSIVE_DAMAGE_REVIEW));
     if (live.concentration && live.hp - toHp > 0) {
       const spell = ctx.registry.get('spell', live.concentration.spellId);
       checks.push(info(`Concentration save DC ${concentrationSaveDc(amount)} (${spell.name})`));
@@ -113,11 +99,6 @@ export const applyDamage: Command<ApplyDamagePayload> = {
     if (absorbed > 0) notes.push(`temp HP absorbed ${absorbed}`);
     const rest = amount - absorbed;
     const before = live.hp;
-    if (
-      ctx.automation === 'assisted' &&
-      needsTempHpMassiveDamageReview(before, amount, rest, maxHp)
-    )
-      notes.push(TEMP_HP_MASSIVE_DAMAGE_REVIEW);
 
     if (before > 0) {
       if (rest >= before) {

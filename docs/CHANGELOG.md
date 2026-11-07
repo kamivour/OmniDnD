@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 04:12 — Rules review answers
+
+- Settled: potions take an action, and Ranger companions follow the 2014 book. A level 20 Barbarian keeps 6 Rage uses.
+- At 0 HP, only damage left after temporary HP counts toward instant death, and damage that temp HP absorb still adds a death-save failure. The old "ask your DM" note is gone.
+- The other open rulings keep their defaults. Next: the final M16 check. Checks pass.
+
 ## 2026-11-08 03:59 — Character portraits
 
 - In Edit character you can add a portrait from a picture file. It is cropped square and shrunk on your device; the original is not kept.

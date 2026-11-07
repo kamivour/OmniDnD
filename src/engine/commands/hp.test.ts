@@ -93,31 +93,19 @@ describe('applyDamage', () => {
     },
   );
 
-  it('flags the temp-HP massive-damage ambiguity for DM review and retains the remaining-damage default', () => {
+  it('counts only the damage left after temp HP toward instant death at 0 HP', () => {
     const state = withLive(down(), { tempHp: 10 });
+    const max = computeSheet(state, registry).maxHp.value;
+    // Temp HP soak 10: one point short of max HP leaves one failure; exactly max HP is death.
     const session = new Session(state);
-    const review =
-      'Temp HP at 0 HP: massive-damage outcome needs DM review; current default uses damage remaining after temp HP';
-    expect(session.preview(applyDamage, { amount: 19 })).toEqual({
+    expect(session.preview(applyDamage, { amount: max + 9 })).toEqual({
       result: 'ok',
-      reasons: [review],
+      reasons: [],
     });
-    expect(session.run(applyDamage, { amount: 19 })).toContain(review);
+    session.run(applyDamage, { amount: max + 9 });
     expect(session.live.deathSaves).toEqual({ success: 0, fail: 1 });
-    const manual = runCommand(applyDamage, state, { amount: 19 }, registry, {
-      eventId: 'manual-dm-review',
-      realTime: '2026-11-03T08:00:00.000Z',
-      automation: 'manual',
-    });
-    if (manual.result !== 'ok') throw new Error(manual.reasons.join());
-    expect(manual.reasons).toEqual([]);
-    expect(manual.event.text).toBe(
-      'Took 19 damage (HP 0 → 0); temp HP absorbed 10; 1 death save failure',
-    );
-    expect(manual.event.text).not.toContain('DM review');
-    expect(manual.next.live).toEqual(session.live);
     const massive = new Session(state);
-    massive.run(applyDamage, { amount: 29 });
+    massive.run(applyDamage, { amount: max + 10 });
     expect(massive.live.deathSaves.fail).toBe(3);
   });
 

@@ -148,8 +148,8 @@ Exploration shares Dashboard's GameClockControl under D91.
 
 - [ ] Check the Combat screen still feels fine without the tracker, with Start Turn and End Turn.
 
-## Deferred rules review — M5
+## Rules review — M5
 
-Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.
+Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).
 
-- [ ] At project end, review D80 (Q22) and Q21 with the DM, including damage at zero HP and instant-death thresholds. Record rulings before changing behavior.
+- [x] Rules review done with the user.

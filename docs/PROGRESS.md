@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M16 (dice roller, themes, more books), in progress.
-**Next up:** M16 task 8, rules review with the user (needs them), then task 9 gate. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M16 task 9, the gate (manual QA list, offline reload, widths). Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -208,7 +208,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Search and lists respect each campaign's books; content packs appear in Reference
 - [x] Journal shows formatted Markdown safely (D129)
 - [x] Portrait upload (Q12): image resized and stored on the device; icon stays the default
-- [ ] Rules review with the user: Q21, Q22, D80 and every default ruling; DECISIONS updated with the answers
+- [x] Rules review with the user: Q21, Q22, D80 and every default ruling; DECISIONS updated with the answers
 - [ ] Gate: switch themes, back up and restore, add a Tasha subclass, roll and apply damage by hand; phone and desktop widths, offline reload, manual QA documented
 
 ## Backlog (not scheduled)
@@ -224,6 +224,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-08 — M16: rules review. Q4, Q21, Q22, Q23, Q29 answered (D150–D153); instant-death DM-review note removed. Other defaults stay open.
 - 2026-11-08 — M16: portrait upload in Edit character: picture is cropped and shrunk to a small JPEG, shown on sheet, HUD and campaign list; icon is default.
 - 2026-11-08 — M16: Journal text shows bold, italic, lists, headings, quotes and web links; typed HTML stays plain text. Saved text unchanged.
 - 2026-11-08 — M16: Reference search hides books a campaign does not use (PHB always shows) and lists Xanathar and Tasha entries with their book.
