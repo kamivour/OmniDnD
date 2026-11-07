@@ -52,4 +52,6 @@ test('guided build picks class skills, kit and spells, then opens the saved shee
   await page.getByRole('button', { name: 'Create character', exact: true }).click();
   await expect(page).toHaveURL(/\/characters\/[^/]+$/);
   await expect(page.getByText('Guided Verse').first()).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('Guided Verse').first()).toBeVisible();
 });

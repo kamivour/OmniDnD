@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M14 (level-up wizard, more classes, multiclass), task 12 done.
-**Next up:** M14 task 13, gate. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M14 (level-up wizard, more classes, multiclass), complete (task 13 done).
+**Next up:** M15 (decide Q31 first). Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -190,7 +190,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Artificer (TCE, 2014-compatible, own words): class, infusions as choices, Battle Smith and Artillerist (D131)
 - [x] Owner-derived companion templates: Ranger's companion (PHB 2014, Q23, HP uses the higher of its normal HP or 4 × ranger level), Steel Defender, Eldritch Cannon, Find Familiar forms
 - [x] Guided character builder: race, class, background, ability method, skills, equipment and spells for a new character in any campaign; blank create stays available
-- [ ] Gate: build a Fighter 2 / Wizard 3 and a Warlock / Sorcerer through the wizard; one character per SRD class to level 5; phone and desktop widths, Undo, reload, manual QA documented
+- [x] Gate: build a Fighter 2 / Wizard 3 and a Warlock / Sorcerer through the wizard; one character per SRD class to level 5; phone and desktop widths, Undo, reload, manual QA documented
 
 ### M15 — Ally/enemy tracker
 - [ ] Engine, tracker: one encounter per character (Q31) with combatants (you, companions, allies, enemies), initiative order, round and turn; logged and undoable
@@ -224,6 +224,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-07 — M14: gate passed. Fighter 2 / Wizard 3, Warlock / Sorcerer and all 13 classes to level 5 build and undo; guided create survives reload.
 - 2026-11-07 — M14: guided new-character builder with a class start table: skills, kit choices, instruments and spells; blank create stays as the default.
 - 2026-11-07 — M14: owner-derived companion templates for Ranger beasts, Steel Defender, Eldritch Cannon and Find Familiar forms; ranger HP is the higher of normal or 4 x level.
 - 2026-11-07 — M14: Artificer class, four specialists, sixteen infusions as picks, round-up slots, prepared count, multiclass rule and spell list
