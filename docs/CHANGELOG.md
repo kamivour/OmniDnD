@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 02:57 — Parchment theme
+
+- Settings has a **Theme** choice: System, Dark or Parchment, a warm light paper look. System uses Parchment when your device is set to light.
+- The choice is saved on this device only. Check that text and the spell colors read well on Parchment, at phone and desktop width.
+- Next: backups screen. Checks pass.
+
 ## 2026-11-08 02:52 — Optional dice roller
 
 - Settings has a new **Show dice roller** switch, off by default and stored on this device. When on, a dice button opens a tray with d4 to d100, advantage or disadvantage, your own expression like 2d6+3, and a roll history.

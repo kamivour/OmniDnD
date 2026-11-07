@@ -42,6 +42,33 @@
   --omni-preview-delay: 250ms;
 }
 
+/* Parchment: the light theme. Set by the theme picker (data-theme on <html>). */
+:root[data-theme='parchment'] {
+  color-scheme: light;
+
+  --omni-bg: #efe4cc;
+  --omni-surface: #f7eed9;
+  --omni-surface-2: #e8dabc;
+  --omni-border: #c9b48a;
+  --omni-text: #2b2118;
+  --omni-text-muted: #66563f;
+  --omni-accent: #85561a;
+  --omni-magic: #1d6a73;
+  --omni-danger: #a3283a;
+  --omni-heal: #2c6a3d;
+  --omni-temp: #3a559b;
+  --omni-warn: #96570a;
+
+  --omni-type-damage: #a3283a;
+  --omni-type-control: #66429f;
+  --omni-type-healing: #2c6a3d;
+  --omni-type-buff: #2f5f9a;
+  --omni-type-debuff: #96570a;
+  --omni-type-utility: #5b5f6b;
+
+  --omni-shadow-pop: 0 8px 24px rgb(60 40 10 / 0.25);
+}
+
 /* Reduced motion: OS setting, or the Settings toggle (sets data-reduced-motion on <html>). */
 @media (prefers-reduced-motion: reduce) {
   :root {

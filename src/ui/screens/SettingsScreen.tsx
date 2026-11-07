@@ -5,7 +5,7 @@ import { Download, Undo2, Upload } from 'lucide-react';
 import { updatePreferences } from '../../engine/commands/preferences';
 import type { Preferences } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
-import { deviceStore } from '../../state/device-settings';
+import { deviceStore, type ThemeChoice } from '../../state/device-settings';
 import { useManagement } from '../commands/useManagement';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { ChoiceGroup, Field, inputClass } from '../components/fields';
@@ -26,6 +26,7 @@ export function SettingsScreen() {
   const { characterId } = useParams();
   const { automation, reducedMotion, characters, managementEvents } = useStore(characterStore);
   const diceRoller = useStore(deviceStore, (state) => state.diceRoller);
+  const theme = useStore(deviceStore, (state) => state.theme);
   const management = useManagement();
   const { pending, run, undo, confirmation } = management;
   const { openImport, exportCharacter, importControls } = useCharacterTransfer(management);
@@ -131,6 +132,21 @@ export function SettingsScreen() {
           </p>
         </section>
       </fieldset>
+      <ChoiceGroup<ThemeChoice>
+        legend="Theme"
+        name="theme"
+        value={theme}
+        options={[
+          {
+            value: 'system',
+            label: 'System',
+            hint: 'Dark, or Parchment when your device is light.',
+          },
+          { value: 'dark', label: 'Dark', hint: 'Deep blue with gold.' },
+          { value: 'parchment', label: 'Parchment', hint: 'Warm light paper for bright rooms.' },
+        ]}
+        onChange={(value) => deviceStore.getState().setTheme(value)}
+      />
       <section aria-labelledby="settings-dice" className="flex flex-col gap-3">
         <h2 id="settings-dice" className="text-base font-semibold">
           Dice roller

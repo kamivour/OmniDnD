@@ -7,6 +7,9 @@ import { createStore } from 'zustand/vanilla';
 const KEY = 'omnidnd.device';
 const HISTORY_LIMIT = 30;
 
+export type ThemeChoice = 'system' | 'dark' | 'parchment';
+export const THEME_CHOICES: readonly ThemeChoice[] = ['system', 'dark', 'parchment'];
+
 export interface RollEntry {
   id: number;
   label: string;
@@ -18,27 +21,32 @@ export interface RollEntry {
 
 interface DeviceState {
   diceRoller: boolean;
+  theme: ThemeChoice;
   history: RollEntry[];
   setDiceRoller: (on: boolean) => void;
+  setTheme: (theme: ThemeChoice) => void;
   addRoll: (entry: Omit<RollEntry, 'id'>) => void;
   clearHistory: () => void;
 }
 
-function read(): { diceRoller: boolean } {
+function read(): { diceRoller: boolean; theme: ThemeChoice } {
   try {
-    const parsed: unknown = JSON.parse(localStorage.getItem(KEY) ?? '{}');
-    const on = (parsed as { diceRoller?: unknown } | null)?.diceRoller;
-    return { diceRoller: on === true };
+    const parsed = JSON.parse(localStorage.getItem(KEY) ?? '{}') as {
+      diceRoller?: unknown;
+      theme?: unknown;
+    } | null;
+    const theme = THEME_CHOICES.find((choice) => choice === parsed?.theme) ?? 'system';
+    return { diceRoller: parsed?.diceRoller === true, theme };
   } catch {
-    return { diceRoller: false };
+    return { diceRoller: false, theme: 'system' };
   }
 }
 
-function write(diceRoller: boolean) {
+function write(settings: { diceRoller: boolean; theme: ThemeChoice }) {
   try {
-    localStorage.setItem(KEY, JSON.stringify({ diceRoller }));
+    localStorage.setItem(KEY, JSON.stringify(settings));
   } catch {
-    // Storage can be blocked; the switch then lasts until reload.
+    // Storage can be blocked; the choice then lasts until reload.
   }
 }
 
@@ -48,8 +56,12 @@ export const deviceStore = createStore<DeviceState>((set) => ({
   ...read(),
   history: [],
   setDiceRoller: (on) => {
-    write(on);
+    write({ diceRoller: on, theme: deviceStore.getState().theme });
     set({ diceRoller: on });
+  },
+  setTheme: (theme) => {
+    write({ diceRoller: deviceStore.getState().diceRoller, theme });
+    set({ theme });
   },
   addRoll: (entry) =>
     set((state) => ({
