@@ -61,6 +61,7 @@ function EditorForm({ editing, onDone }: { editing?: Companion; onDone: () => vo
   const { run } = useCommand();
   const [form, setForm] = useState<CompanionForm>(() => (editing ? toForm(editing) : emptyForm()));
   const [template, setTemplate] = useState('');
+  const [base, setBase] = useState<Omit<Companion, 'id'>>();
   const [error, setError] = useState<string | null>(null);
   const prefix = editing ? `edit-${editing.id}` : 'comp';
   const set = (patch: Partial<CompanionForm>) => {
@@ -72,12 +73,13 @@ function EditorForm({ editing, onDone }: { editing?: Companion; onDone: () => vo
     setTemplate(label);
     const chosen = COMPANION_TEMPLATES.find((entry) => entry.label === label)?.companion;
     setError(null);
+    setBase(chosen);
     setForm(chosen ? toForm(chosen) : emptyForm());
   };
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
-    const result = fromForm(form, editing?.id ?? crypto.randomUUID(), editing);
+    const result = fromForm(form, editing?.id ?? crypto.randomUUID(), editing ?? base);
     if ('error' in result) {
       setError(result.error);
       return;
@@ -108,10 +110,14 @@ function EditorForm({ editing, onDone }: { editing?: Companion; onDone: () => vo
             onChange={(event) => pick(event.target.value)}
           >
             <option value="">Custom</option>
-            {COMPANION_TEMPLATES.map((entry) => (
-              <option key={entry.label} value={entry.label}>
-                {entry.label}
-              </option>
+            {[...new Set(COMPANION_TEMPLATES.map((entry) => entry.group))].map((group) => (
+              <optgroup key={group} label={group}>
+                {COMPANION_TEMPLATES.filter((entry) => entry.group === group).map((entry) => (
+                  <option key={entry.label} value={entry.label}>
+                    {entry.label}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </Field>

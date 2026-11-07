@@ -28,6 +28,8 @@ export const OwnerNumberSchema = z.union([
     classId: refId('class').optional(),
     ownerAbilityMod: AbilitySchema.optional(),
     ownerProficiency: z.int().optional(),
+    /** The result is at least this many times the owner's level (the Ranger's companion HP). */
+    atLeastOwnerLevel: z.int().optional(),
   }),
 ]);
 

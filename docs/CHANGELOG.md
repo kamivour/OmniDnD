@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 20:40 — Companion templates
+
+- The Add companion picker now has Ranger's companion beasts, Steel Defender, Eldritch Cannon and Find Familiar forms, grouped by source.
+- Their AC, HP and attacks follow your level, Intelligence and proficiency bonus. A Ranger's companion has the higher of its normal HP or 4 × ranger level.
+- Adding a second ranger companion or cannon warns; the Artillerist's second cannon at level 15 stays manual. Checks pass.
+
 ## 2026-11-07 20:33 — Artificer
 
 - Artificer is a new class (Tasha's, your own-words summaries): spells from level 1, infusions you pick at level-up, and Alchemist, Armorer, Artillerist and Battle Smith specialists.

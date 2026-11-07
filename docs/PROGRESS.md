@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M14 (level-up wizard, more classes, multiclass), task 10 done.
-**Next up:** M14 task 11, owner-derived companions. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M14 (level-up wizard, more classes, multiclass), task 11 done.
+**Next up:** M14 task 12, guided character builder. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -188,7 +188,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Feats: SRD Grappler plus PHB feats in our own words in `data/content/`; ability, HP, initiative and proficiency effects applied, the rest shown as reminders
 - [x] Tasha options behind campaign toggles: optional class features and custom origin; turning a toggle off keeps choices and lists conflicts (as M11)
 - [x] Artificer (TCE, 2014-compatible, own words): class, infusions as choices, Battle Smith and Artillerist (D131)
-- [ ] Owner-derived companion templates: Ranger's companion (PHB 2014, Q23, HP uses the higher of its normal HP or 4 × ranger level), Steel Defender, Eldritch Cannon, Find Familiar forms
+- [x] Owner-derived companion templates: Ranger's companion (PHB 2014, Q23, HP uses the higher of its normal HP or 4 × ranger level), Steel Defender, Eldritch Cannon, Find Familiar forms
 - [ ] Guided character builder: race, class, background, ability method, skills, equipment and spells for a new character in any campaign; blank create stays available
 - [ ] Gate: build a Fighter 2 / Wizard 3 and a Warlock / Sorcerer through the wizard; one character per SRD class to level 5; phone and desktop widths, Undo, reload, manual QA documented
 
@@ -223,7 +223,8 @@ All remaining milestones are planned below. Still build one milestone at a time;
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
-- 2026-11-07 — M14: Artificer class, four specialists, sixteen infusions as picks, round-up slots, prepared count, multiclass rule and spell list
+
+- 2026-11-07 — M14: owner-derived companion templates for Ranger beasts, Steel Defender, Eldritch Cannon and Find Familiar forms; ranger HP is the higher of normal or 4 x level.- 2026-11-07 — M14: Artificer class, four specialists, sixteen infusions as picks, round-up slots, prepared count, multiclass rule and spell list
 - 2026-11-07 — M14: Tasha optional class features by level, seven fighting styles, custom origin command and sheet section, conflicts listed when off
 
 - 2026-11-07 — M14: All 42 PHB feats added in own words; ability, save, skill, armor, initiative, speed and HP effects apply when taken at level-up.

@@ -15,12 +15,14 @@ export function resolveOwnerNumber(value: OwnerNumber, owner: CompanionOwner): n
     value.classId === undefined
       ? owner.sheet.level
       : (owner.build.classes.find((entry) => entry.classId === value.classId)?.level ?? 0);
-  return (
+  const computed =
     (value.base ?? 0) +
     (value.ownerLevel ?? 0) * level +
     (value.ownerAbilityMod ? owner.sheet.abilities[value.ownerAbilityMod].mod : 0) +
-    (value.ownerProficiency ?? 0) * owner.sheet.proficiency
-  );
+    (value.ownerProficiency ?? 0) * owner.sheet.proficiency;
+  return value.atLeastOwnerLevel === undefined
+    ? computed
+    : Math.max(computed, value.atLeastOwnerLevel * level);
 }
 
 export interface CompanionStats {

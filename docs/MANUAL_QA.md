@@ -132,6 +132,8 @@ Exploration shares Dashboard's GameClockControl under D91.
 
 - [ ] Create an Artificer with Tasha's source on. Judge whether slots, prepared spells, infusion picks and the specialist features read correctly.
 
+- [ ] Add a Wolf (Ranger's companion), Steel Defender and Eldritch Cannon to an owner at different levels. Judge whether their HP, AC and attack numbers match your reading of the rules.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

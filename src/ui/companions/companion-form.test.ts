@@ -13,7 +13,7 @@ describe('companion form', () => {
 
   it('round-trips every template unchanged', () => {
     for (const { companion } of COMPANION_TEMPLATES) {
-      const result = fromForm(toForm(companion), 'id-1');
+      const result = fromForm(toForm(companion), 'id-1', companion);
       expect(result).toEqual({ companion: { ...companion, id: 'id-1' } });
     }
   });
