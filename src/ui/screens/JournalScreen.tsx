@@ -17,6 +17,7 @@ import {
 } from '../../engine/commands/journal';
 import type { LocationEntry, Npc, Quest, SessionNote } from '../../engine/schema';
 import { useCommand } from '../commands/command-context';
+import { Markdown } from '../components/Markdown';
 import { Field, inputClass } from '../components/fields';
 import { Sheet } from '../components/Sheet';
 import { cx } from '../cx';
@@ -282,9 +283,11 @@ function TraitCard({
       className="flex flex-col gap-1 rounded-card border border-border bg-surface p-4"
     >
       <h2 className="text-xs font-semibold uppercase tracking-wider text-text-muted">{title}</h2>
-      <p className="whitespace-pre-line text-sm text-text wrap-anywhere">
-        {text ? text : <span className="italic text-text-muted">{placeholder}</span>}
-      </p>
+      {text ? (
+        <Markdown text={text} className="text-sm text-text" />
+      ) : (
+        <p className="text-sm italic text-text-muted">{placeholder}</p>
+      )}
     </section>
   );
 }
@@ -519,11 +522,7 @@ function QuestRow({
           >
             {quest.title}
           </h3>
-          {quest.notes && (
-            <p className="mt-1 whitespace-pre-line text-xs text-text-muted wrap-anywhere">
-              {quest.notes}
-            </p>
-          )}
+          {quest.notes && <Markdown text={quest.notes} className="mt-1 text-xs text-text-muted" />}
         </div>
       </div>
 
@@ -701,11 +700,7 @@ function WorldTab({ npcs, locations }: { npcs: Npc[]; locations: LocationEntry[]
                     </div>
                   )}
 
-                  {npc.notes && (
-                    <p className="whitespace-pre-line text-xs text-text-muted wrap-anywhere">
-                      {npc.notes}
-                    </p>
-                  )}
+                  {npc.notes && <Markdown text={npc.notes} className="text-xs text-text-muted" />}
                 </div>
               </article>
             ))}
@@ -769,9 +764,7 @@ function WorldTab({ npcs, locations }: { npcs: Npc[]; locations: LocationEntry[]
                   </div>
 
                   {loc.notes && (
-                    <p className="mt-1 whitespace-pre-line text-xs text-text-muted wrap-anywhere">
-                      {loc.notes}
-                    </p>
+                    <Markdown text={loc.notes} className="mt-1 text-xs text-text-muted" />
                   )}
                 </div>
               </article>
@@ -1016,7 +1009,7 @@ function SessionNotesTab({ notes }: { notes: SessionNote[] }) {
                 </div>
               </div>
 
-              <p className="whitespace-pre-line text-sm text-text wrap-anywhere">{note.text}</p>
+              <Markdown text={note.text} className="text-sm text-text" />
             </article>
           ))}
         </div>

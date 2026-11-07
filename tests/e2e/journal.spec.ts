@@ -154,3 +154,24 @@ test('journal screen displays narrative, manages quests, npcs, notes, and undo r
   await main(page).getByRole('button', { name: 'Story & Traits', exact: true }).click();
   await expect(main(page).getByText('Allied with the Harpers')).toBeVisible();
 });
+
+test('journal notes show formatting and never run typed HTML', async ({ page }) => {
+  await page.goto(`/characters/${ID}`);
+  await saved(page);
+  await navigateToJournal(page);
+  await main(page).getByRole('button', { name: 'Edit story & traits', exact: true }).click();
+  const sheet = page.getByRole('dialog', { name: 'Edit story & traits', exact: true });
+  await sheet
+    .getByLabel('General Notes', { exact: true })
+    .fill(
+      '**Bold clue**\n\n- first\n- second\n\n<b id="injected">raw</b> [bad](javascript:alert(1))',
+    );
+  await sheet.getByRole('button', { name: 'Save story', exact: true }).click();
+  await expect(sheet).toBeHidden();
+  const notes = main(page).getByRole('region', { name: 'Freeform Notes', exact: true });
+  await expect(notes.locator('strong')).toHaveText('Bold clue');
+  await expect(notes.getByRole('listitem')).toHaveText(['first', 'second']);
+  await expect(notes).toContainText('<b id="injected">raw</b>');
+  await expect(page.locator('#injected')).toHaveCount(0);
+  await expect(notes.locator('a')).toHaveCount(0);
+});

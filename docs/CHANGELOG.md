@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 03:32 — Formatted journal text
+
+- Journal notes, backstory, quest, NPC and location text now show **bold**, *italic*, lists, headings, quotes and web links.
+- Typed HTML never runs; it shows as plain text. Only http and https links open. Saved text is unchanged.
+- Next: portrait upload. Checks pass.
+
 ## 2026-11-08 03:22 — Search follows campaign books
 
 - Rules search inside a character now hides books the campaign does not use. Core Player's Handbook entries always show.
