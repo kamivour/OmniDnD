@@ -144,6 +144,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D138 | 2026-11-07 | Artificer is bundled as Tasha content | Spells use the Tasha table (half level rounded up, slots at level 1; prepared spells are INT modifier plus half level rounded down). Only infusions you pick are tracked: items, charges and replication stay manual. Armorer is included too. |
 | D139 | 2026-11-07 | Companion templates follow the PHB 2014 ranger's companion | A Ranger's companion adds your proficiency bonus to AC, attacks and damage, and has the higher of its normal HP or 4 × ranger level. Familiars cannot attack. Summons and the second Eldritch Cannon are not forced by a hard limit; the app warns. |
 | D140 | 2026-11-07 | Guided build is opt-in and keeps the kit, not gold | The "Guided build" box is off by default so quick blank create stays one step. The kit options follow the class's starting equipment; the gold-instead option is shown as text only. Prepared casters choose spells on the sheet. A Wizard above level 1 gets a spellbook of 6 plus 2 per extra level. |
+| D141 | 2026-11-08 | Ally/enemy tracker is per character, saved with that character (was Q31). Encounters are kept as their own records so a shared, synced tracker can be added later | The app is a character manager, not a live combat table; shared sync stays in the backlog |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 
@@ -183,7 +184,6 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q28 | Which hosting and sync provider for accounts? | MA | Supabase (auth + Postgres with row-level security); the app keeps working offline and without an account | User |
 | Q29 | A level 20 Barbarian's Rage is unlimited. How should the app show it? | M10 | Keep 6 uses at level 17+; the player restores pips as needed | User |
 | Q30 | Should Tasha sidekicks be a campaign option, and should Artificer cannon and Steel Defender templates ship with M14? | M12 / M14 | Sidekicks are plain custom companions with type "sidekick"; no campaign option; Artificer templates wait for M14 | User |
-| Q31 | Should the ally/enemy tracker belong to one character or be shared by everyone in a campaign? | M15 (user will decide later) | One tracker per character, saved with that character; a shared party view stays in the backlog | User |
 
 ## How to add an entry
 
