@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 03:59 — Character portraits
+
+- In Edit character you can add a portrait from a picture file. It is cropped square and shrunk on your device; the original is not kept.
+- The portrait shows on the sheet, the top bar and the campaign list. Remove it to go back to the icon. Backups include it.
+- Next: rules review with you. Checks pass.
+
 ## 2026-11-08 03:32 — Formatted journal text
 
 - Journal notes, backstory, quest, NPC and location text now show **bold**, *italic*, lists, headings, quotes and web links.

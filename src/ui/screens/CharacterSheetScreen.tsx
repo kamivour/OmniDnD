@@ -4,6 +4,7 @@ import { ABILITIES } from '../../engine/calc/abilities';
 import { sheetBreakdowns } from '../../engine/calc/sheet-breakdowns';
 import { setInspiration } from '../../engine/commands';
 import { useCommand } from '../commands/command-context';
+import { CharacterPortrait } from '../components/CharacterPortrait';
 import { SectionLabel } from '../components/SectionLabel';
 import { PassiveList, SkillList } from '../components/SkillChecks';
 import { RollButton } from '../dice/RollButton';
@@ -106,12 +107,20 @@ export function CharacterSheetScreen() {
         </div>
         <Section label="Identity">
           <div className="flex flex-wrap items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h2 className="wrap-anywhere font-display text-xl text-text">{build.name}</h2>
-              <p className="mt-1 wrap-anywhere text-sm text-text-muted">
-                {race.name}
-                {subrace && subrace.id !== race.id ? ` · ${subrace.name}` : ''}
-              </p>
+            <div className="flex min-w-0 items-center gap-3">
+              <CharacterPortrait
+                id={build.id}
+                portrait={build.portrait}
+                size={40}
+                className="text-accent"
+              />
+              <div className="min-w-0">
+                <h2 className="wrap-anywhere font-display text-xl text-text">{build.name}</h2>
+                <p className="mt-1 wrap-anywhere text-sm text-text-muted">
+                  {race.name}
+                  {subrace && subrace.id !== race.id ? ` · ${subrace.name}` : ''}
+                </p>
+              </div>
             </div>
             <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-btn px-2 text-sm text-text">
               <input

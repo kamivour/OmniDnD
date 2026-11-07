@@ -8,7 +8,7 @@ import { deleteCharacter, duplicateCharacter } from '../../engine/commands/manag
 import type { Campaign } from '../../engine/schema';
 import { characterState, characterStore, type CharacterRecord } from '../../state/character-store';
 import { HpBar } from '../components/HpBar';
-import { Icon } from '../components/Icon';
+import { CharacterPortrait } from '../components/CharacterPortrait';
 import { Sheet } from '../components/Sheet';
 import { SectionLabel } from '../components/SectionLabel';
 import { OverrideMarker } from '../components/StatChip';
@@ -243,7 +243,12 @@ function CampaignCard({
                     to={`/characters/${path(record.build.id)}`}
                     className="hover-lift flex min-h-24 items-center gap-3 rounded-card p-3"
                   >
-                    <Icon id={`character.${record.build.id}`} size={40} className="text-accent" />
+                    <CharacterPortrait
+                      id={record.build.id}
+                      portrait={record.build.portrait}
+                      size={40}
+                      className="text-accent"
+                    />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-display text-base">
                         {record.build.name}

@@ -16,6 +16,8 @@ import {
 import { SKILLS } from '../../engine/rules2014';
 import type { CharacterBuild, RaceDef, RefEntry } from '../../engine/schema';
 import { useCommand } from '../commands/command-context';
+import { CharacterPortrait } from '../components/CharacterPortrait';
+import { isPortrait, resizePortrait } from '../portrait';
 import { Field, inputClass } from '../components/fields';
 import { SectionLabel } from '../components/SectionLabel';
 import { AbilityBaseInput } from '../components/AbilityBaseInput';
@@ -169,6 +171,11 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
   );
   const [name, setName] = useState(baseline.name);
   const [alignment, setAlignment] = useState(baseline.alignment ?? '');
+  // Older characters stored an icon id here; only a real picture counts as a portrait.
+  const baselinePortrait = isPortrait(baseline.portrait) ? baseline.portrait : undefined;
+  const [portrait, setPortrait] = useState<string | undefined>(baselinePortrait);
+  const [portraitError, setPortraitError] = useState<string>();
+  const portraitInput = useRef<HTMLInputElement>(null);
   const [raceId, setRaceId] = useState(baseline.raceId);
   const [subraceId, setSubraceId] = useState(baseline.subraceId ?? '');
   const [backgroundId, setBackgroundId] = useState(baseline.backgroundId);
@@ -242,6 +249,7 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
     (alignment.trim() || null) !== (baseline.alignment ?? null)
   )
     changes.alignment = alignment.trim() || null;
+  if (portrait !== baselinePortrait) changes.portrait = portrait ?? null;
   if (raceId !== baseline.raceId) changes.raceId = raceId;
   if (subraceId !== (baseline.subraceId ?? '')) changes.subraceId = subraceId || null;
   if (backgroundId !== baseline.backgroundId) changes.backgroundId = backgroundId;
@@ -378,6 +386,55 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
               className={inputClass}
             />
           </Field>
+          <div className="flex min-w-0 items-center gap-3 sm:col-span-2">
+            <CharacterPortrait
+              id={baseline.id}
+              portrait={portrait}
+              size={40}
+              className="text-accent"
+            />
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => portraitInput.current?.click()}
+                className="min-h-11 rounded-btn border border-border px-3 text-sm"
+              >
+                {portrait ? 'Change portrait' : 'Add portrait'}
+              </button>
+              {portrait && (
+                <button
+                  type="button"
+                  onClick={() => setPortrait(undefined)}
+                  className="min-h-11 rounded-btn border border-border px-3 text-sm"
+                >
+                  Remove portrait
+                </button>
+              )}
+              <input
+                ref={portraitInput}
+                type="file"
+                accept="image/*"
+                aria-label="Portrait file"
+                className="hidden"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  event.target.value = '';
+                  if (!file) return;
+                  setPortraitError(undefined);
+                  resizePortrait(file).then(setPortrait, (cause: unknown) =>
+                    setPortraitError(
+                      cause instanceof Error ? cause.message : 'Could not use this picture.',
+                    ),
+                  );
+                }}
+              />
+            </div>
+            {portraitError && (
+              <p role="alert" className="text-sm text-danger">
+                {portraitError}
+              </p>
+            )}
+          </div>
           <Field label="Alignment" htmlFor={`${prefix}-alignment`}>
             <input
               id={`${prefix}-alignment`}

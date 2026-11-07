@@ -152,6 +152,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D146 | 2026-11-08 | Xanathar and Tasha content is added in slices, subclasses and spells and feats first. Neither book adds races, and Tasha custom origin already exists, so no race entries | Keeps own-words writing reviewable; ask which subclasses a table needs |
 | D147 | 2026-11-08 | Reference search inside a character hides books its campaign does not use; PHB and SRD entries always show, and search outside a character shows all | Matches spell and item lists; change a campaign's books to see more |
 | D148 | 2026-11-08 | Journal text is formatted with a small built-in reader: headings, bold, italic, code, lists, quotes, http and https links. Images, tables and raw HTML are not supported | Replaces the plain-text display of D129; no new dependency, nothing typed can run |
+| D149 | 2026-11-08 | Portrait is an optional picture chosen on the device, cropped square and shrunk to a small JPEG kept inside the character, so backups and exports carry it. The icon stays the default (answers Q12) | Keeps the original photo off the app; no separate storage to lose |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 
@@ -172,7 +173,6 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q9 | ~~Repo public or private?~~ Answered → D16 (public) | — | — | — |
 | Q10 | ~~Future campaigns and friends using multiple characters?~~ Answered → D98 | — | — | — |
 | Q11 | ~~XP or milestone leveling?~~ Answered → D14 (campaign setting; #273 milestone) | — | — | — |
-| Q12 | Portrait: user image upload or icon only? | M3 | Icon; optional image upload stored in IndexedDB | User |
 | Q13 | How much of the SRD to summarize in house style beyond The Fool's content? | M2 | The Fool's content now; others show SRD text | User |
 | Q14 | ~~Is the nobleman's signet ring carried?~~ Answered → D34 | — | — | — |
 | Q15 | ~~Which two abilities got the Half-Elf +1?~~ Answered → D34 | — | — | — |

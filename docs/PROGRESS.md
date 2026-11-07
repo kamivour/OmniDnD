@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M16 (dice roller, themes, more books), in progress.
-**Next up:** M16 task 7, portrait upload. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M16 task 8, rules review with the user (needs them), then task 9 gate. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -207,7 +207,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Xanathar's and Tasha's packs in our own words (Q6): subclasses, races, spells, feats; Artificer Alchemist and Armorer
 - [x] Search and lists respect each campaign's books; content packs appear in Reference
 - [x] Journal shows formatted Markdown safely (D129)
-- [ ] Portrait upload (Q12): image resized and stored on the device; icon stays the default
+- [x] Portrait upload (Q12): image resized and stored on the device; icon stays the default
 - [ ] Rules review with the user: Q21, Q22, D80 and every default ruling; DECISIONS updated with the answers
 - [ ] Gate: switch themes, back up and restore, add a Tasha subclass, roll and apply damage by hand; phone and desktop widths, offline reload, manual QA documented
 
@@ -224,6 +224,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-08 — M16: portrait upload in Edit character: picture is cropped and shrunk to a small JPEG, shown on sheet, HUD and campaign list; icon is default.
 - 2026-11-08 — M16: Journal text shows bold, italic, lists, headings, quotes and web links; typed HTML stays plain text. Saved text unchanged.
 - 2026-11-08 — M16: Reference search hides books a campaign does not use (PHB always shows) and lists Xanathar and Tasha entries with their book.
 - 2026-11-08 — M16: first Xanathar and Tasha content, own words: 5 subclasses, 8 spells, 11 feats. Artificer subclasses already existed; no new races in either book.

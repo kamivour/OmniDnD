@@ -5,7 +5,7 @@ import { endConcentration } from '../../engine/commands';
 import { overridePath } from '../../engine/calc/value-overrides';
 import { ConcentrationChip } from '../components/chips';
 import { HpBar } from '../components/HpBar';
-import { Icon } from '../components/Icon';
+import { CharacterPortrait } from '../components/CharacterPortrait';
 import { PipRow } from '../components/PipRow';
 import { OverrideMarker, StatChip } from '../components/StatChip';
 import { compactInteger, resourceOverride } from '../components/resource-override';
@@ -55,8 +55,9 @@ export function HudBar() {
         className="@container sticky top-0 z-20 border-b border-border bg-bg/95 px-4 backdrop-blur-sm"
       >
         <div className="flex min-h-11 items-center gap-2">
-          <Icon
-            id={`character.${build.id}`}
+          <CharacterPortrait
+            id={build.id}
+            portrait={build.portrait}
             size={20}
             className="hidden shrink-0 text-accent sm:block"
           />

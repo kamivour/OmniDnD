@@ -554,4 +554,17 @@ describe('editBuild', () => {
       expect(seedState).toEqual(before);
     },
   );
+
+  it('accepts a small JPEG portrait and rejects anything else', () => {
+    const jpeg = 'data:image/jpeg;base64,/9j/4AAQSkZJRgAB';
+    const result = success(input({ portrait: jpeg }));
+    expect(result.next.build.portrait).toBe(jpeg);
+    expect(result.event.text).toContain('portrait');
+    for (const bad of [
+      'data:image/svg+xml;base64,PHN2Zz4=',
+      'https://example.com/me.png',
+      'data:image/jpeg;base64,' + 'A'.repeat(120_000),
+    ])
+      expect(run(input({ portrait: bad })).result).not.toBe('ok');
+  });
 });

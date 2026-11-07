@@ -14,9 +14,15 @@ import {
 import type { Check, Command, CommandContext } from './runner';
 import { block, warn, withNotes } from './shared';
 
+/** A small JPEG the app made itself; keeps saves and backups light and rejects other data. */
+export const PortraitSchema = z
+  .string()
+  .max(120_000)
+  .regex(/^data:image\/jpeg;base64,[A-Za-z0-9+/]+=*$/);
+
 const EditBuildChangesSchema = z.strictObject({
   name: z.string().trim().min(1).optional(),
-  portrait: z.string().nullable().optional(),
+  portrait: PortraitSchema.nullable().optional(),
   alignment: z.string().trim().nullable().optional(),
   raceId: refId('race').optional(),
   subraceId: refId('race').nullable().optional(),
@@ -356,7 +362,7 @@ export const editBuild: Command<EditBuildPayload> = {
     );
     if (payload.changes.subraceId === null && ctx.build.subraceId) labels.push('subrace');
     if (payload.changes.alignment === null && ctx.build.alignment) labels.push('alignment');
-    if (payload.changes.portrait === null && ctx.build.portrait) labels.push('portrait');
+    if (payload.changes.portrait !== undefined) labels.push('portrait');
     if (payload.changes.xp === null && ctx.build.xp !== undefined) labels.push('XP');
     return withNotes(
       `Edit character: ${next.name} (${[...new Set(labels)].join(', ')})`,
