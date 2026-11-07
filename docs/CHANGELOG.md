@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 02:20 — Ally/enemy tracker: the rules behind it
+
+- A fight can now hold you, your companions, allies and enemies, with initiative order, rounds and turns. Nothing shows in the app yet.
+- Enemies can be added from the creature list or typed in; groups are numbered (Goblin 1, Goblin 2). Hit points are the average or a number you enter.
+- Next turn passes six seconds each round and restores your actions on your turn. Reaching 0 HP only warns; you mark who is defeated.
+- Next: the Combat screen for it. Checks pass.
+
 ## 2026-11-07 20:55 — M14 gate: multiclass and every class to level 5
 
 - Checked a Fighter 2 / Wizard 3 and a Warlock / Sorcerer built level by level, and every class taken from level 1 to 5, each with Undo.

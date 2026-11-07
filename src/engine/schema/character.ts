@@ -14,6 +14,7 @@ import {
   SpellTypeSchema,
 } from './common';
 import { CompanionLiveSchema, CompanionSchema } from './companions';
+import { EncounterSchema } from './encounter';
 import { CustomItemSchema, FeatureDefensesSchema, ModifierSchema } from './refs';
 
 /** Campaign rules plus layers B (build) and C (live state). DATA.md §4. */
@@ -367,10 +368,15 @@ export const LiveStateSchema = z
         economy: EconomySchema,
       })
       .optional(),
+    /** The ally/enemy tracker, present while one is running (D141). */
+    encounter: EncounterSchema.optional(),
   })
   .superRefine((live, ctx) => {
     if (live.slotsUsed[0] !== 0) {
       ctx.addIssue({ code: 'custom', message: 'Cantrips use no slots', path: ['slotsUsed', 0] });
+    }
+    if (live.encounter && !live.combat) {
+      ctx.addIssue({ code: 'custom', message: 'An encounter needs combat', path: ['encounter'] });
     }
     const effectIds = new Set<string>();
     live.effects.forEach((effect, index) => {

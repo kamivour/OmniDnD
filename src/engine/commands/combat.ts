@@ -1,5 +1,6 @@
 import { formatDuration } from '../clock';
 import { SECONDS_PER_ROUND } from '../rules2014';
+import type { LiveState } from '../schema';
 import type { Command, CommandContext } from './runner';
 import {
   block,
@@ -16,8 +17,44 @@ import {
   type EconomySlot,
 } from './shared';
 
+type Live = LiveState;
+
+/** With a tracker running, Next turn moves the order, so the single-turn buttons step aside. */
+const trackerRuns = ({ live }: CommandContext) =>
+  live.encounter ? [block('The encounter tracker runs the turns: use Next turn')] : [];
+
+/** Your turn begins: a fresh economy, and the effects that end at the start of your turn go. */
+export function beginTurn(live: Live, round: number): string[] {
+  const combat = live.combat;
+  if (!combat) return [];
+  const ended = endTriggeredEffects(
+    live,
+    // A forgotten End Turn still closes last round's "until the end of your turn" effects.
+    (on) =>
+      (on.event === 'turn-start' && on.round <= round) ||
+      (on.event === 'turn-end' && on.round < round),
+  );
+  combat.turnActive = true;
+  combat.economy = freshEconomy();
+  return ended;
+}
+
+/** Your turn ends: end-of-turn effects go; the reaction stays spent until your next turn. */
+export function finishTurn(live: Live, round: number): string[] {
+  const combat = live.combat;
+  if (!combat) return [];
+  const ended = endTriggeredEffects(live, (on) => on.event === 'turn-end' && on.round <= round);
+  combat.turnActive = false;
+  // The bonus-action spell rule is per turn.
+  combat.economy.bonusActionSpellCast = false;
+  combat.economy.otherSpellCast = false;
+  // Dash grants movement only for the current turn.
+  delete combat.economy.dashCount;
+  return ended;
+}
+
 /**
- * No initiative or turn order (D42). Round 0 means combat started but your first turn has not.
+ * No initiative or turn order (D42) unless the ally/enemy tracker runs the fight (D141). Round 0 means combat started but your first turn has not.
  * Each Start Turn after the first moves the clock one round; End Combat adds the last round.
  */
 export const startCombat: Command<null> = {
@@ -32,7 +69,7 @@ export const startCombat: Command<null> = {
 export const startTurn: Command<null> = {
   name: 'startTurn',
   check: (ctx) => {
-    const checks = notInCombat(ctx);
+    const checks = [...notInCombat(ctx), ...trackerRuns(ctx)];
     if (ctx.live.combat?.turnActive) checks.push(warn('Your turn is already active'));
     if (ctx.live.combat && ctx.live.combat.round > 0) {
       checks.push(...timeRangeChecks(ctx.live.clock.seconds, SECONDS_PER_ROUND));
@@ -44,18 +81,7 @@ export const startTurn: Command<null> = {
     if (!combat) return 'Not in combat';
     combat.round += 1;
     const notes = combat.round > 1 ? passTime(live, SECONDS_PER_ROUND, ctx) : [];
-    const round = combat.round;
-    notes.push(
-      // A forgotten End Turn still closes last round's "until the end of your turn" effects.
-      ...endTriggeredEffects(
-        live,
-        (on) =>
-          (on.event === 'turn-start' && on.round <= round) ||
-          (on.event === 'turn-end' && on.round < round),
-      ),
-    );
-    combat.turnActive = true;
-    combat.economy = freshEconomy();
+    notes.push(...beginTurn(live, combat.round));
     return withNotes(`Round ${combat.round}: your turn`, notes);
   },
 };
@@ -63,7 +89,7 @@ export const startTurn: Command<null> = {
 export const endTurn: Command<null> = {
   name: 'endTurn',
   check: (ctx) => {
-    const checks = notInCombat(ctx);
+    const checks = [...notInCombat(ctx), ...trackerRuns(ctx)];
     if (ctx.live.combat && !ctx.live.combat.turnActive)
       checks.push(block('Your turn is not active'));
     return checks;
@@ -72,13 +98,7 @@ export const endTurn: Command<null> = {
     const combat = live.combat;
     if (!combat) return 'Not in combat';
     const round = Math.max(1, combat.round);
-    const ended = endTriggeredEffects(live, (on) => on.event === 'turn-end' && on.round <= round);
-    combat.turnActive = false;
-    // The bonus-action spell rule is per turn; the reaction stays spent until your next turn.
-    combat.economy.bonusActionSpellCast = false;
-    combat.economy.otherSpellCast = false;
-    // Dash grants movement only for the current turn; spent economy remains until Start Turn.
-    delete combat.economy.dashCount;
+    const ended = finishTurn(live, round);
     return withNotes(`End of turn (round ${round})`, ended);
   },
 };
@@ -159,6 +179,7 @@ export const endCombat: Command<null> = {
       ...endTriggeredEffects(live, (on) => on.event === 'turn-start' || on.event === 'turn-end'),
     );
     delete live.combat;
+    delete live.encounter;
     const unit = rounds === 1 ? 'round' : 'rounds';
     return withNotes(
       `Combat ended after ${rounds} ${unit} (${formatDuration(rounds * SECONDS_PER_ROUND)})`,
