@@ -12,5 +12,677 @@
     "summaryReviewed": false,
     "origin": "background",
     "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.actor",
+    "name": "Actor",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Needs no prerequisite. +1 CHA. Advantage on Deception and Performance checks when posing as someone else, and you can mimic voices you have heard."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["CHA"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.alert",
+    "name": "Alert",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "+5 to initiative. You cannot be surprised while conscious, and unseen attackers gain no advantage against you."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "initiative",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.athlete",
+    "name": "Athlete",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "+1 STR or DEX. Standing up costs 5 feet of movement, climbing costs no extra movement, and running jumps need only 5 feet of run-up."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "DEX"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.charger",
+    "name": "Charger",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "After you Dash, a bonus-action melee attack deals +5 damage or a shove 10 feet, if you moved 10+ feet in a straight line first."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.crossbow-expert",
+    "name": "Crossbow Expert",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Ignore the loading property of crossbows, no disadvantage for ranged attacks at 5 feet, and a bonus-action hand crossbow attack after a one-handed attack."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.defensive-duelist",
+    "name": "Defensive Duelist",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Needs DEX 13. Reaction with a finesse weapon: add your proficiency bonus to AC against one melee attack."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "reaction",
+    "trigger": "A creature hits you with a melee attack while you wield a finesse weapon"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.dual-wielder",
+    "name": "Dual Wielder",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "+1 AC while wielding two melee weapons, two-weapon fighting with non-light weapons, and drawing or stowing two weapons at once."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.dungeon-delver",
+    "name": "Dungeon Delver",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Advantage to find secret doors and on saves against traps, resistance to trap damage, and normal travel pace while searching for traps."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.durable",
+    "name": "Durable",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "+1 CON. When you roll a Hit Die to heal, the minimum you regain is twice your CON modifier."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["CON"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.elemental-adept",
+    "name": "Elemental Adept",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Choose acid, cold, fire, lightning or thunder. Your spells ignore resistance to it, and your 1s on its damage dice count as 2s."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.grappler",
+    "name": "Grappler",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Needs STR 13. Advantage on attacks against a creature you grapple, and you can try to pin it so both of you are restrained."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.great-weapon-master",
+    "name": "Great Weapon Master",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Heavy melee weapons: take -5 to hit for +10 damage. After a crit or a kill, make a bonus-action melee attack."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.healer",
+    "name": "Healer",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "With a healer’s kit, use an action to restore 1d6 + 4 + the target’s level in HP. Once per rest for each creature."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.heavily-armored",
+    "name": "Heavily Armored",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Needs medium armor training. +1 STR and heavy armor proficiency."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR"],
+      "armor": ["heavy"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.heavy-armor-master",
+    "name": "Heavy Armor Master",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Needs heavy armor training. +1 STR. While in heavy armor, reduce nonmagical bludgeoning, piercing and slashing damage by 3."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.inspiring-leader",
+    "name": "Inspiring Leader",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Needs CHA 13. After a 10-minute speech, up to six allies gain temporary HP equal to your level + CHA modifier."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.keen-mind",
+    "name": "Keen Mind",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "+1 INT. You always know north and the time to the next sunrise or sunset, and you recall anything seen or heard in the past month."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["INT"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.lightly-armored",
+    "name": "Lightly Armored",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "+1 STR or DEX and light armor proficiency."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "DEX"],
+      "armor": ["light"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.linguist",
+    "name": "Linguist",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "+1 INT. Learn three languages and create written ciphers that others need a check to read."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["INT"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.lucky",
+    "name": "Lucky",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Three luck points a long rest. Spend one to roll an extra d20 on your attack, check or save, or against an attack on you, and choose which die counts."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "special",
+    "uses": {
+      "max": 3,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.mage-slayer",
+    "name": "Mage Slayer",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Reaction attack against an adjacent caster. Advantage on saves against spells from adjacent creatures, and they lose concentration more easily."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "reaction",
+    "trigger": "A creature within 5 feet casts a spell"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.magic-initiate",
+    "name": "Magic Initiate",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Pick a class. Learn two of its cantrips and one 1st-level spell, and cast that spell once a long rest."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.martial-adept",
+    "name": "Martial Adept",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Learn two Battle Master maneuvers and gain one d6 superiority die, restored on a short or long rest."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    },
+    "die": {
+      "1": "d6"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.medium-armor-master",
+    "name": "Medium Armor Master",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Needs medium armor training. Medium armor does not impose stealth disadvantage, and the DEX bonus to AC can reach +3."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.mobile",
+    "name": "Mobile",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "+10 ft. speed. After you Dash, difficult terrain costs no extra movement, and creatures you attack in melee cannot make opportunity attacks against you that turn."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "speed",
+        "value": 10
+      }
+    ]
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.moderately-armored",
+    "name": "Moderately Armored",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Needs light armor training. +1 STR or DEX, plus medium armor and shield proficiency."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "DEX"],
+      "armor": ["medium", "shield"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.mounted-combatant",
+    "name": "Mounted Combatant",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Advantage against unmounted smaller creatures while mounted. You can redirect attacks aimed at your mount, and it takes no damage on a successful DEX save."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.observant",
+    "name": "Observant",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "+1 INT or WIS. Read lips, and add +5 to passive Perception and passive Investigation."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["INT", "WIS"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.polearm-master",
+    "name": "Polearm Master",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Bonus-action butt-end attack with a polearm, and opportunity attacks when a creature enters your reach."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.resilient",
+    "name": "Resilient",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Pick an ability. +1 to it and proficiency in its saving throws."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "DEX", "CON", "INT", "WIS", "CHA"],
+      "saveFromAbility": true
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.ritual-caster",
+    "name": "Ritual Caster",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Needs INT or WIS 13. Keep a ritual book and cast ritual spells from it, adding more you find."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.savage-attacker",
+    "name": "Savage Attacker",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Once per turn, roll a melee weapon’s damage dice twice and use either result."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.sentinel",
+    "name": "Sentinel",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Opportunity attacks stop the target’s movement, trigger even on Disengage, and you can strike when an ally within 5 feet is attacked."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "reaction",
+    "trigger": "A creature you can see within 5 feet attacks someone else"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.sharpshooter",
+    "name": "Sharpshooter",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Ranged weapons: no disadvantage at long range, ignore half and three-quarters cover, or take -5 to hit for +10 damage."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.shield-master",
+    "name": "Shield Master",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Bonus-action shove with a shield, add its AC bonus to DEX saves against single-target effects, and take no damage on a successful save that halves it."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.skilled",
+    "name": "Skilled",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Gain proficiency in any three skills or tools of your choice."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "skills": 3
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.skulker",
+    "name": "Skulker",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Needs DEX 13. Hide while lightly obscured, missing a ranged attack does not reveal you, and dim light does not impose perception disadvantage."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.spell-sniper",
+    "name": "Spell Sniper",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Doubled range for attack-roll spells, ignore half and three-quarters cover on them, and learn one attack cantrip."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.tavern-brawler",
+    "name": "Tavern Brawler",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "+1 STR or CON. Proficient with improvised weapons, d4 unarmed strikes, and a bonus-action grapple after hitting with one."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "CON"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.tough",
+    "name": "Tough",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your hit point maximum rises by 2 for every level you have, now and at each new level."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "hp",
+        "value": {
+          "perLevel": 2
+        }
+      }
+    ]
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.war-caster",
+    "name": "War Caster",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Needs the ability to cast a spell. Advantage on concentration saves, casting with hands full, and a spell as an opportunity attack."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.weapon-master",
+    "name": "Weapon Master",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "+1 STR or DEX and proficiency with four weapons of your choice."
+    },
+    "summaryReviewed": false,
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "DEX"]
+    }
   }
 ]

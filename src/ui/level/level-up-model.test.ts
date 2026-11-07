@@ -294,6 +294,29 @@ describe('level-up wizard model', () => {
     expect(featOptions(seedState, registry)).toEqual([]);
   });
 
+  it('offers the feats of an enabled campaign with their grants and sends the picks', () => {
+    const on = structuredClone(seedState);
+    on.campaign.optionalRules = { ...on.campaign.optionalRules, feats: true };
+    const feats = featOptions(on, registry);
+    expect(feats.length).toBeGreaterThanOrEqual(40);
+    expect(feats.find((feat) => feat.id === 'feature.feat.skilled')?.grants).toEqual({ skills: 3 });
+    const payload = picksToPayload(
+      {
+        ...emptyPicks,
+        asiMode: 'feat',
+        featId: 'feature.feat.resilient',
+        featAbility: 'WIS',
+      },
+      { subclass: false, asi: true },
+      false,
+    );
+    expect(payload.choices?.asi).toEqual({
+      kind: 'feat',
+      featId: 'feature.feat.resilient',
+      ability: 'WIS',
+    });
+  });
+
   it('reports what the new level lets a Bard learn', () => {
     const next = structuredClone(seedState);
     next.build.classes = next.build.classes.map((entry) => ({ ...entry, level: 4 }));

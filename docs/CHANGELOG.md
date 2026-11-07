@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 20:16 — Feats
+
+- With feats on in a campaign, level up can take any of 42 PHB feats instead of an ability score improvement.
+- Feats apply their numbers: +1 ability, Resilient save, Skilled skills, armor training, Alert initiative, Mobile speed and Tough HP. The rest show as reminders.
+- Feat requirements are shown in the text but not enforced.
+- Checks pass.
+
 ## 2026-11-07 20:12 — Full caster classes
 
 - Bard, Cleric, Druid, Sorcerer, Warlock and Wizard now work to level 20: slots, Warlock Pact Magic, Sorcery Points, Channel Divinity and Wild Shape.

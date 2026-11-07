@@ -1,6 +1,7 @@
 import { useId } from 'react';
-import { ABILITIES } from '../../engine/calc/abilities';
+import { ABILITIES, type Ability } from '../../engine/calc/abilities';
 import type { Registry } from '../../engine/registry';
+import type { FeatureDef } from '../../engine/schema';
 import { SKILLS } from '../../engine/rules2014';
 import { Field, inputClass } from '../components/fields';
 import { optionName, type LevelPicks, type NewClassOption } from './level-up-model';
@@ -8,6 +9,14 @@ import { optionName, type LevelPicks, type NewClassOption } from './level-up-mod
 interface PickProps {
   picks: LevelPicks;
   set: (patch: Partial<LevelPicks>) => void;
+}
+
+/** A feat the wizard can offer, with what it grants. */
+export interface FeatOption {
+  id: string;
+  name: string;
+  summary?: string;
+  grants?: FeatureDef['grants'];
 }
 
 const group = 'flex min-w-0 flex-col gap-2 rounded-card border border-border p-3';
@@ -96,12 +105,9 @@ export function SubclassPick({
   );
 }
 
-export function AsiPick({
-  feats,
-  picks,
-  set,
-}: PickProps & { feats: { id: string; name: string }[] }) {
+export function AsiPick({ feats, picks, set }: PickProps & { feats: FeatOption[] }) {
   const id = useId();
+  const feat = feats.find((entry) => entry.id === picks.featId);
   const abilitySelect = (label: string, key: 'ability1' | 'ability2') => (
     <Field label={label} htmlFor={`${id}-${key}`}>
       <select
@@ -160,21 +166,73 @@ export function AsiPick({
         </>
       )}
       {picks.asiMode === 'feat' && (
-        <Field label="Feat" htmlFor={`${id}-feat`}>
-          <select
-            id={`${id}-feat`}
-            value={picks.featId}
-            onChange={(event) => set({ featId: event.target.value })}
-            className={inputClass}
-          >
-            <option value="">Choose a feat</option>
-            {feats.map((entry) => (
-              <option key={entry.id} value={entry.id}>
-                {entry.name}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <>
+          <Field label="Feat" htmlFor={`${id}-feat`}>
+            <select
+              id={`${id}-feat`}
+              value={picks.featId}
+              onChange={(event) =>
+                set({ featId: event.target.value, featAbility: '', featSkills: [] })
+              }
+              className={inputClass}
+            >
+              <option value="">Choose a feat</option>
+              {feats.map((entry) => (
+                <option key={entry.id} value={entry.id}>
+                  {entry.name}
+                </option>
+              ))}
+            </select>
+          </Field>
+          {feat?.grants?.ability && feat.grants.ability.length > 1 && (
+            <Field label={`Ability ${feat.name} raises by 1`} htmlFor={`${id}-feat-ability`}>
+              <select
+                id={`${id}-feat-ability`}
+                value={picks.featAbility}
+                onChange={(event) => set({ featAbility: event.target.value as Ability })}
+                className={inputClass}
+              >
+                <option value="">Choose an ability</option>
+                {feat.grants.ability.map((ability) => (
+                  <option key={ability} value={ability}>
+                    {ability}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          )}
+          {feat?.grants?.skills && (
+            <fieldset className="flex min-w-0 flex-col gap-1">
+              <legend className="mb-1 text-sm font-semibold text-text">
+                Skills ({picks.featSkills.length} / {feat.grants.skills})
+              </legend>
+              <div className="flex max-h-60 flex-col overflow-y-auto">
+                {SKILLS.map((skill) => {
+                  const on = picks.featSkills.includes(skill);
+                  return (
+                    <label key={skill} className={radio}>
+                      <input
+                        type="checkbox"
+                        checked={on}
+                        disabled={!on && picks.featSkills.length >= (feat.grants?.skills ?? 0)}
+                        onChange={() =>
+                          set({
+                            featSkills: on
+                              ? picks.featSkills.filter((entry) => entry !== skill)
+                              : [...picks.featSkills, skill],
+                          })
+                        }
+                        className="size-4 accent-(--omni-accent)"
+                      />
+                      {skill}
+                    </label>
+                  );
+                })}
+              </div>
+            </fieldset>
+          )}
+          {feat && <p className="text-sm text-text-muted">{feat.summary}</p>}
+        </>
       )}
     </fieldset>
   );

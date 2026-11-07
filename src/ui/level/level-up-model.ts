@@ -3,7 +3,7 @@ import { optionalRules } from '../../engine/calc/campaign-rules';
 import { levelSpellGains } from '../../engine/calc/level-spells';
 import { MULTICLASS_RULES, type MulticlassRule } from '../../engine/calc/multiclass';
 import { averageHpRoll, type HitDie } from '../../engine/calc/hp';
-import type { ClassDef, HitDieName, SubclassDef } from '../../engine/schema';
+import type { ClassDef, FeatureDef, HitDieName, SubclassDef } from '../../engine/schema';
 import type { Skill } from '../../engine/rules2014';
 import { computeSheet, type CharacterState, type Sheet } from '../../engine/calc/sheet';
 import { levelHp } from '../../engine/calc/hp';
@@ -304,6 +304,8 @@ export interface LevelPicks {
   ability1: Ability;
   ability2: Ability;
   featId: string;
+  featAbility: Ability | '';
+  featSkills: string[];
   cantrips: string[];
   spells: string[];
   swapOut: string;
@@ -319,6 +321,8 @@ export const emptyPicks: LevelPicks = {
   ability1: 'STR',
   ability2: 'DEX',
   featId: '',
+  featAbility: '',
+  featSkills: [],
   cantrips: [],
   spells: [],
   swapOut: '',
@@ -346,7 +350,12 @@ export function picksToPayload(
             ],
     };
   if (needs.asi && picks.asiMode === 'feat' && picks.featId)
-    choices.asi = { kind: 'feat', featId: picks.featId };
+    choices.asi = {
+      kind: 'feat',
+      featId: picks.featId,
+      ...(picks.featAbility ? { ability: picks.featAbility } : {}),
+      ...(picks.featSkills.length > 0 ? { skills: picks.featSkills as Skill[] } : {}),
+    };
   const add = [...picks.cantrips, ...picks.spells];
   const spells: NonNullable<LevelUpPayload['spells']> = {};
   if (add.length > 0) spells.add = add;
@@ -415,7 +424,12 @@ export function featOptions(state: CharacterState, registry: Registry) {
         !owned.has(entry.id) &&
         state.campaign.sources.includes(entry.source),
     )
-    .map((entry) => ({ id: entry.id, name: entry.name }))
+    .map((entry) => ({
+      id: entry.id,
+      name: entry.name,
+      summary: (entry as FeatureDef).summary?.effect,
+      grants: (entry as FeatureDef).grants,
+    }))
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 

@@ -660,6 +660,27 @@ test('The Fool takes an ability score improvement and new spells in one undoable
   expect((await readSaved(page, file.build.id)).build).toEqual(before.build);
 });
 
+test('The Fool takes the Resilient feat with an ability pick instead of an improvement', async ({
+  page,
+}) => {
+  const file = foolFile('level-up-fool-feat');
+  file.campaign.optionalRules = { ...file.campaign.optionalRules, feats: true };
+  await importFile(page, file);
+  await goSheet(page, file.build.id);
+  await openLevelUp(page);
+  await roll(page).fill('5');
+  const asi = form(page).getByRole('group', { name: 'Ability score improvement' });
+  await asi.getByRole('radio', { name: 'Take a feat' }).check();
+  await asi.getByLabel('Feat', { exact: true }).selectOption({ label: 'Resilient' });
+  await asi.getByLabel('Ability Resilient raises by 1').selectOption('WIS');
+  await noOverflow(page);
+  await applyLevelUp(page);
+  const changed = await readSaved(page, file.build.id);
+  expect(changed.build.featureIds).toContain('feature.feat.resilient');
+  expect(changed.build.proficiencies.saves).toContain('WIS');
+  expect(changed.build.abilityScores.bonuses.at(-1)).toMatchObject({ ability: 'WIS', value: 1 });
+});
+
 test('a Fighter starts Wizard through the wizard with spellbook picks', async ({ page }) => {
   const file = friendFile('level-up-new-class', { classId: 'class.fighter', level: 3 });
   file.campaign.optionalRules = { ...file.campaign.optionalRules, multiclassing: true };

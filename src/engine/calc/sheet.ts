@@ -287,16 +287,21 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
   ];
 
   const race = registry.get('race', build.subraceId ?? build.raceId);
-  const hpParts = build.hpEntries.map((entry) => ({
-    label: `Level ${entry.level}`,
-    value: levelHp(entry.value, mods.CON, entry.floor ?? campaign.hpLevelFloor),
-  }));
-  const fullHp = maxHp(
-    build.hpEntries.map((entry) => entry.value),
-    mods.CON,
-    campaign.hpLevelFloor,
-    build.hpEntries.map((entry) => entry.floor),
-  );
+  const hpBonusParts = modifierParts('hp');
+  const hpParts = [
+    ...build.hpEntries.map((entry) => ({
+      label: `Level ${entry.level}`,
+      value: levelHp(entry.value, mods.CON, entry.floor ?? campaign.hpLevelFloor),
+    })),
+    ...hpBonusParts,
+  ];
+  const fullHp =
+    maxHp(
+      build.hpEntries.map((entry) => entry.value),
+      mods.CON,
+      campaign.hpLevelFloor,
+      build.hpEntries.map((entry) => entry.floor),
+    ) + hpBonusParts.reduce((sum, part) => sum + part.value, 0);
   const hpTotal = hpParts.reduce((sum, part) => sum + part.value, 0);
   if (fullHp !== hpTotal) hpParts.push({ label: 'Minimum max HP 1', value: fullHp - hpTotal });
   const halvedHp = live.exhaustion >= 4 ? Math.max(1, Math.floor(fullHp / 2)) : fullHp;

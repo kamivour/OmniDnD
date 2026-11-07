@@ -29,7 +29,14 @@ export const LevelChoicesSchema = z.strictObject({
           .min(1)
           .max(2),
       }),
-      z.strictObject({ kind: z.literal('feat'), featId: refId('feature') }),
+      z.strictObject({
+        kind: z.literal('feat'),
+        featId: refId('feature'),
+        /** The ability a feat raises by 1, when it offers a choice. */
+        ability: z.enum(ABILITIES).optional(),
+        /** Skills a feat lets you pick (Skilled). */
+        skills: z.array(SkillSchema).optional(),
+      }),
     ])
     .optional(),
   /** Skills, or tools by item id, that gain expertise at this level. */
@@ -103,6 +110,30 @@ export function applyLevelChoices(input: Input): ChoiceResult {
     if (feat?.kind !== 'feature' || feat.origin !== 'feat')
       return { blocked: 'The selected feat is unavailable' };
     if (build.featureIds.includes(feat.id)) return { blocked: `You already have ${feat.name}` };
+    const grants = feat.grants ?? {};
+    const options = grants.ability ?? [];
+    const ability = choices.asi.ability ?? (options.length === 1 ? options[0] : undefined);
+    if (options.length > 0) {
+      if (!ability || !options.includes(ability))
+        return { blocked: `Choose which ability ${feat.name} raises: ${options.join(', ')}` };
+      if (input.score(ability) + 1 > MAX_ABILITY_SCORE)
+        return { blocked: `${ability} cannot go above ${MAX_ABILITY_SCORE}` };
+      build.abilityScores.bonuses.push({ source: `Feat: ${feat.name}`, ability, value: 1 });
+      if (grants.saveFromAbility && !build.proficiencies.saves.includes(ability))
+        build.proficiencies.saves.push(ability);
+    } else if (choices.asi.ability) {
+      return { blocked: `${feat.name} does not raise an ability` };
+    }
+    const skills = choices.asi.skills ?? [];
+    if (skills.length > (grants.skills ?? 0) || new Set(skills).size !== skills.length)
+      return { blocked: `${feat.name} gives ${grants.skills ?? 0} skills` };
+    for (const skill of skills) {
+      if (build.proficiencies.skills.includes(skill))
+        return { blocked: `Already proficient in ${skill}` };
+      build.proficiencies.skills.push(skill);
+    }
+    for (const armor of grants.armor ?? [])
+      if (!build.proficiencies.armor.includes(armor)) build.proficiencies.armor.push(armor);
     build.featureIds.push(feat.id);
     summary.push(`Feat: ${feat.name}`);
   }

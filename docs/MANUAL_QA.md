@@ -126,6 +126,8 @@ Exploration shares Dashboard's GameClockControl under D91.
 
 - [ ] Level up a caster and a Fighter turned Wizard at 375 px. Judge whether the new-class, subclass, ability score and spell sections are clear and easy to tap.
 
+- [ ] Turn feats on and take Tough, Resilient and Skilled at level-up. Judge whether the HP, save and skill changes match your reading of the feats
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

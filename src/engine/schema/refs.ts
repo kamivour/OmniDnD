@@ -75,7 +75,7 @@ export const RechargeByLevelSchema = z.record(LevelKeySchema, RechargeSchema);
 export const DieByLevelSchema = z.record(LevelKeySchema, DieSchema);
 
 export const ModifierSchema = z.strictObject({
-  target: z.enum(['ac', 'initiative', 'speed', 'saves', 'checks', 'unproficient-checks']),
+  target: z.enum(['ac', 'initiative', 'speed', 'saves', 'checks', 'unproficient-checks', 'hp']),
   value: FormulaSchema,
 });
 
@@ -145,6 +145,16 @@ export const FeatureDefensesSchema = z.strictObject({
   magicalSleepImmunity: z.boolean().optional(),
 });
 
+export const FeatGrantsSchema = z.strictObject({
+  /** +1 to one of these abilities (the player picks when there is more than one). */
+  ability: z.array(AbilitySchema).optional(),
+  /** Also gain proficiency in the saving throw of the ability picked (Resilient). */
+  saveFromAbility: z.boolean().optional(),
+  /** Free skill proficiencies the player picks (Skilled). */
+  skills: z.int().positive().optional(),
+  armor: z.array(z.enum(['light', 'medium', 'heavy', 'shield'])).optional(),
+});
+
 export const FeatureDefSchema = z
   .strictObject({
     kind: z.literal('feature'),
@@ -168,6 +178,8 @@ export const FeatureDefSchema = z
     /** Display only: a flat bonus that grows with level (Rage damage). */
     bonus: z.record(LevelKeySchema, z.int()).optional(),
     modifiers: z.array(ModifierSchema).optional(),
+    /** Feats: what taking the feat adds to the build, applied once when it is picked. */
+    grants: FeatGrantsSchema.optional(),
     defenses: FeatureDefensesSchema.optional(),
     /** Complex logic in `src/engine/hooks/<hook>.ts`. */
     hook: z.string().optional(),

@@ -649,6 +649,86 @@ describe('levelUp choices', () => {
     ).toEqual(['The selected feat is unavailable']);
   });
 
+  it('applies what a feat grants: ability, save, skills, armor, initiative, HP and speed', () => {
+    const feats = (level: number) => {
+      const state = asBard(level);
+      state.campaign.optionalRules = { ...state.campaign.optionalRules, feats: true };
+      return new Session(state);
+    };
+    const take = (session: Session, featId: string, extra: object = {}) =>
+      session.run(levelUp, {
+        classId: 'class.bard',
+        roll: 5,
+        choices: { asi: { kind: 'feat' as const, featId, ...extra } },
+      });
+
+    const resilient = feats(3);
+    const before = computeSheet(resilient.state, registry);
+    expect(
+      resilient.preview(levelUp, {
+        classId: 'class.bard',
+        roll: 5,
+        choices: { asi: { kind: 'feat', featId: 'feature.feat.resilient' } },
+      }).reasons,
+    ).toEqual(['Choose which ability Resilient raises: STR, DEX, CON, INT, WIS, CHA']);
+    take(resilient, 'feature.feat.resilient', { ability: 'WIS' });
+    const after = computeSheet(resilient.state, registry);
+    expect(after.abilities.WIS.score.value).toBe(11);
+    expect(after.saves.WIS.proficient).toBe(true);
+    expect(before.saves.WIS.proficient).toBe(false);
+
+    const alert = feats(3);
+    take(alert, 'feature.feat.alert');
+    expect(computeSheet(alert.state, registry).initiative.value).toBe(
+      computeSheet(feats(3).state, registry).initiative.value + 5,
+    );
+
+    const tough = feats(3);
+    take(tough, 'feature.feat.tough');
+    const noFeat = feats(3);
+    noFeat.run(levelUp, { classId: 'class.bard', roll: 5 });
+    // 2 HP for each of the four levels.
+    expect(
+      computeSheet(tough.state, registry).maxHp.value -
+        computeSheet(noFeat.state, registry).maxHp.value,
+    ).toBe(8);
+
+    const skilled = feats(3);
+    expect(
+      skilled.preview(levelUp, {
+        classId: 'class.bard',
+        roll: 5,
+        choices: {
+          asi: {
+            kind: 'feat',
+            featId: 'feature.feat.skilled',
+            skills: ['history', 'nature', 'stealth'],
+          },
+        },
+      }).reasons,
+    ).toEqual(['Already proficient in stealth']);
+    const fresh = feats(3);
+    take(fresh, 'feature.feat.skilled', { skills: ['history', 'nature', 'religion'] });
+    expect(fresh.state.build.proficiencies.skills).toEqual([
+      'stealth',
+      'arcana',
+      'history',
+      'nature',
+      'religion',
+    ]);
+
+    const armored = feats(3);
+    take(armored, 'feature.feat.moderately-armored', { ability: 'DEX' });
+    expect(armored.state.build.proficiencies.armor).toEqual(
+      expect.arrayContaining(['medium', 'shield']),
+    );
+    const mobile = feats(3);
+    take(mobile, 'feature.feat.mobile');
+    expect(computeSheet(mobile.state, registry).speed.value).toBe(
+      computeSheet(feats(3).state, registry).speed.value + 10,
+    );
+  });
+
   it('sets a subclass once, at or after the subclass level', () => {
     const session = new Session(asFighter(2));
     expect(levelChoiceNeeds(registry, 'class.fighter', session.state.build)).toEqual({
