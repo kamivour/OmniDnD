@@ -11,6 +11,7 @@ export * from './items';
 export * from './inventory';
 export * from './currency';
 export * from './edit-build';
+export * from './custom-origin';
 export * from './value-overrides';
 export * from './level';
 export * from './rest';

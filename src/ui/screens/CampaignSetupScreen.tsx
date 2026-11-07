@@ -91,7 +91,7 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
     const notes = [
       ...campaignMethodConflicts(proposal, record.build),
       ...sourceConflicts(proposal, record.build, registry).map(
-        (choice) => `Keeps ${choice} from a book that is off.`,
+        (choice) => `Keeps ${choice}, which the campaign no longer allows.`,
       ),
     ];
     return notes.length > 0 ? [{ name: record.build.name, id: record.build.id, notes }] : [];

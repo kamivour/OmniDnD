@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 20:27 — Tasha options
+
+- With Tasha's optional class features on, classes gain them by level (Deft Explorer, Steady Aim, Ki-Fueled Attack and more). Ranger versions replace Natural Explorer, Favored Enemy and Primeval Awareness.
+- Seven Tasha fighting styles can be picked at level-up.
+- With custom origin on, the sheet editor can swap your race's ability bonuses for +2/+1 or +1/+1/+1. Undo reverses it.
+- Turning a rule off keeps your choices and lists them in the campaign warning. Checks pass.
+
 ## 2026-11-07 20:16 — Feats
 
 - With feats on in a campaign, level up can take any of 42 PHB feats instead of an ability score improvement.

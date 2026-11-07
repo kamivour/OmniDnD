@@ -128,6 +128,8 @@ Exploration shares Dashboard's GameClockControl under D91.
 
 - [ ] Turn feats on and take Tough, Resilient and Skilled at level-up. Judge whether the HP, save and skill changes match your reading of the feats
 
+- [ ] Turn on Tasha's optional class features and custom origin. Judge whether a Ranger's replaced features and the custom origin bonuses read correctly.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

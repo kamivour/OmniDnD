@@ -43,12 +43,16 @@ export const updateCampaign: ManagementCommand<{
     if (!Object.hasOwn(ctx.campaigns, parsed.data.campaignId))
       return [{ level: 'block', reason: 'Campaign does not exist' }];
     const { campaignId, changes } = parsed.data;
-    if (!changes.sources) return [];
-    const campaign = { sources: changes.sources };
+    if (!changes.sources && !changes.optionalRules) return [];
+    const current = ctx.campaigns[campaignId]!;
+    const campaign = {
+      sources: changes.sources ?? current.sources,
+      optionalRules: changes.optionalRules ?? current.optionalRules,
+    };
     // Choices from a removed book stay on the character; the player decides what to replace.
     return Object.values(ctx.characters).flatMap(({ build }) => {
       if (build.campaignId !== campaignId) return [];
-      const before = new Set(sourceConflicts(ctx.campaigns[campaignId]!, build, ctx.registry));
+      const before = new Set(sourceConflicts(current, build, ctx.registry));
       const added = sourceConflicts(campaign, build, ctx.registry).filter(
         (note) => !before.has(note),
       );

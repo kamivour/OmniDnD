@@ -56,6 +56,7 @@ export function characterFeatures(
   registry: Registry,
   ctx: FormulaContext,
   characterLevel?: number,
+  optionalClassFeatures = false,
 ): CharacterFeature[] {
   const totalLevel = characterLevel ?? build.classes.reduce((sum, entry) => sum + entry.level, 0);
   const granted: { featureId: string; level: number }[] = [];
@@ -74,7 +75,19 @@ export function characterFeatures(
   }
   build.featureIds.forEach(atCharacterLevel);
 
-  const seen = new Set<string>();
+  // Tasha optional class features: added by class level, and they replace the feature they name.
+  const replaced = new Set<string>();
+  if (optionalClassFeatures) {
+    for (const def of registry.entries.values()) {
+      if (def.kind !== 'feature' || !def.optional) continue;
+      const entry = build.classes.find((row) => row.classId === def.optional?.classId);
+      if (!entry || entry.level < def.optional.level) continue;
+      granted.push({ featureId: def.id, level: entry.level });
+      if (def.optional.replaces) replaced.add(def.optional.replaces);
+    }
+  }
+
+  const seen = new Set<string>(replaced);
   return granted.flatMap(({ featureId, level }) => {
     if (seen.has(featureId)) return [];
     seen.add(featureId);

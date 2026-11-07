@@ -156,6 +156,8 @@ export function applyLevelChoices(input: Input): ChoiceResult {
     const feature = registry.entries.get(id);
     if (feature?.kind !== 'feature') return { blocked: `Unknown feature ${id}` };
     if (build.featureIds.includes(id)) return { blocked: `You already have ${feature.name}` };
+    if (feature.source === 'TCE' && !optionalRules(input.campaign).optionalClassFeatures)
+      return { blocked: `${feature.name} needs Tasha's optional class features` };
     build.featureIds.push(id);
     summary.push(feature.name);
   }

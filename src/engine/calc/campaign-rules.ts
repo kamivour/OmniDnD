@@ -62,7 +62,7 @@ export const SOURCE_NAMES: Record<Source, string> = {
 
 /** Choices a character keeps from books the campaign no longer enables, by display name. */
 export function sourceConflicts(
-  campaign: Pick<Campaign, 'sources'>,
+  campaign: Pick<Campaign, 'sources'> & Partial<Pick<Campaign, 'optionalRules'>>,
   build: CharacterBuild,
   registry: Registry,
 ): string[] {
@@ -82,6 +82,19 @@ export function sourceConflicts(
     const entry = refs.entries.get(id);
     if (!entry || campaign.sources.includes(entry.source)) continue;
     notes.add(`${entry.name} (${entry.source})`);
+  }
+  if (campaign.optionalRules) {
+    const rules = optionalRules({ optionalRules: campaign.optionalRules });
+    if (
+      !rules.customOrigin &&
+      build.abilityScores.bonuses.some(({ source }) => source === 'Custom origin')
+    )
+      notes.add('Custom origin ability bonuses');
+    if (!rules.feats)
+      for (const id of build.featureIds) {
+        const entry = refs.entries.get(id);
+        if (entry?.kind === 'feature' && entry.origin === 'feat') notes.add(`${entry.name} (feat)`);
+      }
   }
   return [...notes];
 }

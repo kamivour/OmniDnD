@@ -57,7 +57,7 @@ function referenceCheck(ctx: CommandContext, kind: RefKind, id: string): Check[]
 }
 
 /** Only exact identifiable racial grants are replaced; ambiguous legacy bonuses remain. */
-function racialGrantIndexes(build: CharacterBuild, registry: Registry): Set<number> {
+export function racialGrantIndexes(build: CharacterBuild, registry: Registry): Set<number> {
   const entry = registry.entries.get(build.subraceId ?? build.raceId);
   if (entry?.kind !== 'race') return new Set();
   const sources = new Set([build.raceId, build.subraceId].filter((id) => id !== undefined));

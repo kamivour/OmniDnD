@@ -23,6 +23,7 @@ import type {
 } from '../schema';
 import { ABILITIES, abilityModifier, type Ability } from './abilities';
 import { characterFeatures, resolveFormula, type CharacterFeature } from './features';
+import { optionalRules } from './campaign-rules';
 import { levelHp, maxHp } from './hp';
 import { proficiencyBonus } from './proficiency';
 import { spellSlots, type SpellSlots } from './slots';
@@ -186,7 +187,13 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
   const ctx = { mods, proficiency };
   const modPart = (ability: Ability): Part => ({ label: ability, value: mods[ability] });
 
-  const features = characterFeatures(build, registry, ctx, level).map((feature) => {
+  const features = characterFeatures(
+    build,
+    registry,
+    ctx,
+    level,
+    optionalRules(campaign).optionalClassFeatures,
+  ).map((feature) => {
     const path = overridePath('features', feature.def.id);
     const result = { ...feature };
     if (feature.uses)

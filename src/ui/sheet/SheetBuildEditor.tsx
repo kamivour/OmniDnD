@@ -22,6 +22,8 @@ import { AbilityBaseInput } from '../components/AbilityBaseInput';
 import { OverrideMarker } from '../components/StatChip';
 import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
+import { optionalRules } from '../../engine/calc/campaign-rules';
+import { CustomOriginSection } from './CustomOriginSection';
 
 const card = 'flex min-w-0 flex-col gap-4 rounded-card border border-border bg-surface p-4';
 const button = 'min-h-11 rounded-btn border border-border px-4 text-sm disabled:opacity-40';
@@ -648,6 +650,7 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
           </>
         )}
       </section>
+      {optionalRules(campaign).customOrigin && <CustomOriginSection onDone={onDone} />}
       <section aria-label="Proficiency choices" className={card}>
         <SectionLabel>Proficiencies and languages</SectionLabel>
         <p className="text-xs text-text-muted">

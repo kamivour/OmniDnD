@@ -684,5 +684,521 @@
     "grants": {
       "ability": ["STR", "DEX"]
     }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.barbarian-primal-knowledge",
+    "name": "Primal Knowledge",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Gain one extra skill proficiency from the barbarian skill list. While raging you may use STR for some checks of those skills."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.barbarian",
+      "level": 3
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.barbarian-instinctive-pounce",
+    "name": "Instinctive Pounce",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When you start a rage, you can move up to half your speed as part of the same bonus action."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.barbarian",
+      "level": 7
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.bard-additional-magical-secrets",
+    "name": "Additional Magical Secrets",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Learn two spells of your choice from any class. They count as bard spells."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.bard",
+      "level": 6
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.bard-bardic-versatility",
+    "name": "Bardic Versatility",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When you gain an Ability Score Improvement you may also swap one expertise skill for another, or one bard cantrip for another."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.bard",
+      "level": 4
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.cleric-harness-divine-power",
+    "name": "Harness Divine Power",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Bonus action: spend a Channel Divinity use to regain one expended spell slot, up to half your proficiency bonus in level."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "bonus",
+    "optional": {
+      "classId": "class.cleric",
+      "level": 2
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.cleric-cantrip-versatility",
+    "name": "Cantrip Versatility",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When you gain an Ability Score Improvement you may swap one cleric cantrip for another."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.cleric",
+      "level": 4
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.druid-wild-companion",
+    "name": "Wild Companion",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Spend a Wild Shape use to cast Find Familiar without a component cost. The familiar lasts hours equal to half your druid level."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "action",
+    "optional": {
+      "classId": "class.druid",
+      "level": 2
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.druid-cantrip-versatility",
+    "name": "Cantrip Versatility",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When you gain an Ability Score Improvement you may swap one druid cantrip for another."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.druid",
+      "level": 4
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.fighter-martial-versatility",
+    "name": "Martial Versatility",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When you gain an Ability Score Improvement you may swap a fighting style or a maneuver you know for another."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.fighter",
+      "level": 4
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.monk-ki-fueled-attack",
+    "name": "Ki-Fueled Attack",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "If you spend ki on your action, you can make one unarmed or monk weapon attack as a bonus action before the end of that turn."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "bonus",
+    "optional": {
+      "classId": "class.monk",
+      "level": 3
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.monk-quickened-healing",
+    "name": "Quickened Healing",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Action: spend 2 ki to heal yourself for a martial arts die plus your proficiency bonus."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "action",
+    "optional": {
+      "classId": "class.monk",
+      "level": 4
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.monk-focused-aim",
+    "name": "Focused Aim",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "After missing with a monk attack, spend 1 to 3 ki to add +2 to the roll for each ki point spent."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.monk",
+      "level": 5
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.paladin-harness-divine-power",
+    "name": "Harness Divine Power",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Bonus action: spend a Channel Divinity use to regain one expended spell slot, up to half your proficiency bonus in level."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "bonus",
+    "optional": {
+      "classId": "class.paladin",
+      "level": 3
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.paladin-martial-versatility",
+    "name": "Martial Versatility",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When you gain an Ability Score Improvement you may swap a fighting style for another."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.paladin",
+      "level": 4
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.ranger-deft-explorer",
+    "name": "Deft Explorer",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Gain expertise in one skill and learn two languages. Bonus movement speeds and temporary HP arrive at higher levels."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.ranger",
+      "level": 1,
+      "replaces": "feature.ranger.natural-explorer"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.ranger-favored-foe",
+    "name": "Favored Foe",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When you hit a creature, mark it (needs concentration). Once per turn it takes extra damage that grows with level. Uses equal your proficiency bonus per long rest."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.ranger",
+      "level": 1,
+      "replaces": "feature.ranger.favored-enemy"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.ranger-primal-awareness",
+    "name": "Primal Awareness",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Cast a few nature spells, such as speak with animals, once per long rest without a slot as you level."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "special",
+    "optional": {
+      "classId": "class.ranger",
+      "level": 3,
+      "replaces": "feature.ranger.primeval-awareness"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.ranger-martial-versatility",
+    "name": "Martial Versatility",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When you gain an Ability Score Improvement you may swap a fighting style for another."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.ranger",
+      "level": 4
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.rogue-steady-aim",
+    "name": "Steady Aim",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Bonus action: gain advantage on your next attack roll this turn, but your speed drops to 0 until the end of the turn. You cannot use it if you moved."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "bonus",
+    "optional": {
+      "classId": "class.rogue",
+      "level": 3
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.sorcerer-sorcerous-versatility",
+    "name": "Sorcerous Versatility",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When you gain an Ability Score Improvement you may swap one sorcerer cantrip, or one Metamagic option, for another."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.sorcerer",
+      "level": 4
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.sorcerer-magical-guidance",
+    "name": "Magical Guidance",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When an ability check fails, spend 1 sorcery point to reroll the d20 and keep the new result."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "special",
+    "optional": {
+      "classId": "class.sorcerer",
+      "level": 5
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.warlock-eldritch-versatility",
+    "name": "Eldritch Versatility",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When you gain an Ability Score Improvement you may swap a cantrip, an Invocation, or a Mystic Arcanum spell."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.warlock",
+      "level": 4
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.wizard-cantrip-formulas",
+    "name": "Cantrip Formulas",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "When you finish a long rest you may swap one wizard cantrip you know for another from the wizard list."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.wizard",
+      "level": 3
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.fighting-style-blind-fighting",
+    "name": "Fighting Style: Blind Fighting",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Fighter, paladin or ranger. You sense creatures within 10 feet that are not fully hidden from you, even without sight."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.fighting-style-interception",
+    "name": "Fighting Style: Interception",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Fighter, paladin or ranger. Reaction: when an ally within 5 feet is hit, reduce the damage by 1d10 plus your proficiency bonus."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "reaction",
+    "trigger": "An ally within 5 feet is hit by an attack"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.fighting-style-superior-technique",
+    "name": "Fighting Style: Superior Technique",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Fighter, paladin or ranger. Learn one Battle Master maneuver and gain one d6 superiority die, restored on a short or long rest."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.fighting-style-thrown-weapon-fighting",
+    "name": "Fighting Style: Thrown Weapon Fighting",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Fighter, paladin or ranger. Draw a thrown weapon as part of the attack, and add +2 to its damage."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.fighting-style-unarmed-fighting",
+    "name": "Fighting Style: Unarmed Fighting",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Fighter, paladin or ranger. Unarmed strikes deal d6 (d8 with both hands empty), and you deal 1d4 to a creature you grapple."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.fighting-style-blessed-warrior",
+    "name": "Fighting Style: Blessed Warrior",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Paladin. Learn two cleric cantrips that count as paladin spells; swap one when you gain a level."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.fighting-style-druidic-warrior",
+    "name": "Fighting Style: Druidic Warrior",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "Ranger. Learn two druid cantrips that count as ranger spells; swap one when you gain a level."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive"
   }
 ]

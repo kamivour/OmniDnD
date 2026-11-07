@@ -180,6 +180,14 @@ export const FeatureDefSchema = z
     modifiers: z.array(ModifierSchema).optional(),
     /** Feats: what taking the feat adds to the build, applied once when it is picked. */
     grants: FeatGrantsSchema.optional(),
+    /** Tasha optional class feature: granted at this class level when the campaign enables them. */
+    optional: z
+      .strictObject({
+        classId: refId('class'),
+        level: z.int().min(1).max(20),
+        replaces: refId('feature').optional(),
+      })
+      .optional(),
     defenses: FeatureDefensesSchema.optional(),
     /** Complex logic in `src/engine/hooks/<hook>.ts`. */
     hook: z.string().optional(),
