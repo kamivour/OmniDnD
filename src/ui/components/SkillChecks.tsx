@@ -1,6 +1,7 @@
 import type { Sheet } from '../../engine/calc/sheet';
 import { SKILLS, SKILL_ABILITY } from '../../engine/rules2014';
 import { signed } from '../format';
+import { RollButton } from '../dice/RollButton';
 import { StatChip } from './StatChip';
 
 const titleCase = (value: string) =>
@@ -8,7 +9,7 @@ const titleCase = (value: string) =>
 const skillName = (value: string) =>
   value === 'sleight-of-hand' ? 'Sleight of Hand' : titleCase(value);
 
-/** Shared calculated checks; rolling and outcomes stay at the table. */
+/** Shared calculated checks; the optional roller never applies a result. */
 export function SkillList({ sheet }: { sheet: Sheet }) {
   return (
     <ul className="flex min-w-0 flex-col divide-y divide-border">
@@ -24,13 +25,19 @@ export function SkillList({ sheet }: { sheet: Sheet }) {
                 : 'Untrained';
         return (
           <li key={skill} className="flex min-w-0 flex-col py-1">
-            <StatChip
-              label={skillName(skill)}
-              value={signed(stat.value)}
-              stat={stat}
-              breakdownLabel={skillName(skill)}
-              className="w-full"
-            />
+            <div className="flex items-center gap-2">
+              <StatChip
+                label={skillName(skill)}
+                value={signed(stat.value)}
+                stat={stat}
+                breakdownLabel={skillName(skill)}
+                className="w-full"
+              />
+              <RollButton
+                label={`${skillName(skill)} check`}
+                spec={{ kind: 'd20', bonus: stat.value }}
+              />
+            </div>
             <span className="px-2 pb-1 text-xs text-text-muted">
               {SKILL_ABILITY[skill]} · {marker}
             </span>

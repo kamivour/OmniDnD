@@ -45,6 +45,8 @@ import { CombatItems } from '../inventory/InventoryUse';
 import { RecentCharacterLog } from '../log/CharacterLog';
 import { SpellCastControls } from '../spells/SpellCastControls';
 import type { SpellbookEntry } from '../spells/spellbook-model';
+import { parseDice } from '../../engine/calc/dice';
+import { RollButton } from '../dice/RollButton';
 
 const ECONOMY_NAME = { A: 'Action', BA: 'Bonus action', R: 'Reaction' };
 const actionButton =
@@ -159,6 +161,22 @@ export function CombatScreen() {
           ].join(' · ')}
           <OverrideMarker override={attack.toHitOverride} />
           <OverrideMarker override={attack.damageOverride} />
+        </span>
+      }
+      auxiliaryAction={
+        <span className="flex items-center gap-1">
+          <RollButton
+            label={`${attack.name} to hit`}
+            spec={{ kind: 'd20', bonus: attack.toHit }}
+            text="Hit"
+          />
+          {attack.damage !== undefined && parseDice(attack.damage) && (
+            <RollButton
+              label={`${attack.name} damage`}
+              spec={{ kind: 'dice', expression: attack.damage }}
+              text="Dmg"
+            />
+          )}
         </span>
       }
       actionLabel="Attack"

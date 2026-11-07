@@ -11,6 +11,7 @@ import { HudBar } from './HudBar';
 import { SideNav } from './SideNav';
 import { DetailPanel, DetailProvider } from './DetailPanel';
 import { CharacterToolbar } from '../log/CharacterLog';
+import { DiceTray } from '../dice/DiceTray';
 
 /** Character screens: sidebar (≥ 640 px) or bottom nav (< 640 px), sticky HUD, screen in the middle. */
 export function AppFrame() {
@@ -79,6 +80,7 @@ export function AppFrame() {
             </div>
           </div>
           <BottomNav />
+          <DiceTray />
         </RestProvider>
       </CommandProvider>
     </DetailProvider>

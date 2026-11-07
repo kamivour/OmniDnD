@@ -5,6 +5,7 @@ import { Download, Undo2, Upload } from 'lucide-react';
 import { updatePreferences } from '../../engine/commands/preferences';
 import type { Preferences } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
+import { deviceStore } from '../../state/device-settings';
 import { useManagement } from '../commands/useManagement';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { ChoiceGroup, Field, inputClass } from '../components/fields';
@@ -24,6 +25,7 @@ const button =
 export function SettingsScreen() {
   const { characterId } = useParams();
   const { automation, reducedMotion, characters, managementEvents } = useStore(characterStore);
+  const diceRoller = useStore(deviceStore, (state) => state.diceRoller);
   const management = useManagement();
   const { pending, run, undo, confirmation } = management;
   const { openImport, exportCharacter, importControls } = useCharacterTransfer(management);
@@ -129,6 +131,24 @@ export function SettingsScreen() {
           </p>
         </section>
       </fieldset>
+      <section aria-labelledby="settings-dice" className="flex flex-col gap-3">
+        <h2 id="settings-dice" className="text-base font-semibold">
+          Dice roller
+        </h2>
+        <label className="flex min-h-11 items-center gap-3 rounded-card border border-border bg-surface p-3">
+          <input
+            type="checkbox"
+            checked={diceRoller}
+            onChange={(event) => deviceStore.getState().setDiceRoller(event.target.checked)}
+            className="size-4 accent-(--omni-accent)"
+          />
+          Show dice roller
+        </label>
+        <p className="text-sm text-text-muted">
+          Adds Roll buttons and a dice tray. Results are only shown to you; nothing is applied to
+          your character until you enter it. Stored on this device only.
+        </p>
+      </section>
       {AccountSection && syncConfig && (
         <Suspense fallback={null}>
           <AccountSection config={syncConfig} />

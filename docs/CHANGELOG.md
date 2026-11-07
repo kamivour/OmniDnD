@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 02:52 — Optional dice roller
+
+- Settings has a new **Show dice roller** switch, off by default and stored on this device. When on, a dice button opens a tray with d4 to d100, advantage or disadvantage, your own expression like 2d6+3, and a roll history.
+- Roll buttons appear on attacks (Hit, Dmg), saves and skills. Results are only shown; you still enter damage and outcomes yourself.
+- Check the buttons are easy to tap at phone width. Next: Parchment theme. Checks pass.
+
 ## 2026-11-08 02:35 — Ally/enemy tracker on the Combat screen
 
 - Combat now has a **Start tracker** panel: you and your companions, plus goblins or any creature from the list, or a quick custom one. Enter each d20 and the order sorts itself.

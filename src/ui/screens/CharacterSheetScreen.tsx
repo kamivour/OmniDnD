@@ -6,6 +6,7 @@ import { setInspiration } from '../../engine/commands';
 import { useCommand } from '../commands/command-context';
 import { SectionLabel } from '../components/SectionLabel';
 import { PassiveList, SkillList } from '../components/SkillChecks';
+import { RollButton } from '../dice/RollButton';
 import { OverrideMarker, StatChip } from '../components/StatChip';
 import { signed } from '../format';
 import { DeathSaveTracker } from '../health/DeathSaveTracker';
@@ -193,6 +194,10 @@ export function CharacterSheetScreen() {
                   value={signed(sheet.saves[ability].value)}
                   stat={sheet.saves[ability]}
                   breakdownLabel={`${ability} save`}
+                />
+                <RollButton
+                  label={`${ability} save`}
+                  spec={{ kind: 'd20', bonus: sheet.saves[ability].value }}
                 />
                 {sheet.saves[ability].proficient && (
                   <p className="px-2 text-xs text-text-muted">Proficient</p>

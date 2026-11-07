@@ -146,6 +146,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D140 | 2026-11-07 | Guided build is opt-in and keeps the kit, not gold | The "Guided build" box is off by default so quick blank create stays one step. The kit options follow the class's starting equipment; the gold-instead option is shown as text only. Prepared casters choose spells on the sheet. A Wizard above level 1 gets a spellbook of 6 plus 2 per extra level. |
 | D141 | 2026-11-08 | Ally/enemy tracker is per character, saved with that character (was Q31). Encounters are kept as their own records so a shared, synced tracker can be added later | The app is a character manager, not a live combat table; shared sync stays in the backlog |
 | D142 | 2026-11-08 | Tracker order: highest initiative first, a tie goes to the higher bonus, then to who was added first, and any number can be edited. You enter the d20; the app adds the bonus. A combatant with no initiative is skipped until you enter one. A companion can act straight after you ("Acts on my turn"). Reaching 0 HP only warns; you mark defeated, and defeated combatants are skipped. With a tracker running, Next turn replaces Start and End Turn | The DM can rule ties and who acts differently, so the app proposes and the player corrects. Replaces the no-order part of D42 only while a tracker is open |
+| D143 | 2026-11-08 | The dice roller is optional and off by default. The switch and roll history stay on this device, not in the character, backups or sync. A roll is only shown: hits, saves and damage are still entered by you. A natural 20 only shows a note; critical damage dice are never rolled for you unless you tap Dmg, and then they roll as written | Supersedes Q5 (no roller). Keeps DM outcomes manual |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 
@@ -159,7 +160,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q2 | ~~Max HP: average or rolled?~~ Answered → D14 (campaign setting; #273 rolled) | — | — | — |
 | Q3 | ~~The Fool's choices~~ Answered → D17 | — | — | — |
 | Q4 | Drinking a potion: action (RAW) or bonus action (house rule)? | M9 | Action (RAW) | DM |
-| Q5 | Dice roller in Phase 1? | M5 | No. Manual entry only | User |
+| Q5 | Dice roller in Phase 1? | M5 | No in Phase 1. Optional, off by default from M16 (D143) | User |
 | Q6 | How to add Xanathar's/Tasha's content: agent writes JSON packs, or in-app "custom entry" form? | M9 | Agent writes own-words JSON packs in `data/content/` | User |
 | Q7 | Fonts Inter + Cinzel OK? | M1 | Yes | User |
 | Q8 | Icon set game-icons.net OK (needs attribution)? | M1 | Yes | User |
