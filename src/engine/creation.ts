@@ -3,6 +3,8 @@ import { AbilityBasesSchema, abilityBaseIssues } from './calc/ability-methods';
 export { STANDARD_ARRAY, POINT_BUY_COSTS } from './calc/ability-methods';
 import { averageHpRoll, type HitDie } from './calc/hp';
 import { xpForLevel } from './calc/advancement';
+import { CLASS_START, slotChoices } from './calc/class-start';
+import { applyLevelSpells, LevelSpellsSchema, levelSpellGains } from './calc/level-spells';
 export { xpForLevel } from './calc/advancement';
 import { computeSheet } from './calc/sheet';
 import type { Registry } from './registry';
@@ -14,6 +16,7 @@ import {
   LiveStateSchema,
   SCHEMA_VERSION,
   refId,
+  SkillSchema,
   type Campaign,
   type CharacterBuild,
   type LiveState,
@@ -22,6 +25,21 @@ import {
 } from './schema';
 
 const LevelSchema = z.int().min(1).max(20);
+
+/** Choices a guided build adds to the blank ones: class skills, starting kit and spells. */
+export const GuidedChoicesSchema = z.strictObject({
+  /** Class skills; the count and list come from the class. */
+  skills: z.array(SkillSchema),
+  /** Musical instruments (Bard). */
+  instruments: z.array(refId('item')).optional(),
+  /** One entry per class equipment step: the option picked and the items filling its open slots. */
+  equipment: z.array(
+    z.strictObject({ option: z.int().min(0), slots: z.array(refId('item')).optional() }),
+  ),
+  /** Cantrips and spells for the class, as when levelling. */
+  spells: LevelSpellsSchema.optional(),
+});
+export type GuidedChoices = z.infer<typeof GuidedChoicesSchema>;
 
 export const CreateCharacterInputSchema = z
   .strictObject({
@@ -38,6 +56,8 @@ export const CreateCharacterInputSchema = z
     racialChoices: z.array(AbilitySchema).optional(),
     /** Entries are for levels 2 through N. Level 1 always uses the die maximum. */
     hpRolls: z.array(z.int().positive()).optional(),
+    /** Present for a guided build; absent for a blank one. */
+    guided: GuidedChoicesSchema.optional(),
   })
   .superRefine(({ campaign, abilityBases }, ctx) => {
     for (const message of abilityBaseIssues(campaign.abilityMethod, abilityBases)) {
@@ -57,9 +77,10 @@ export interface CreatedCharacter {
 }
 
 /**
- * Creates a blank character from choices, with full derived resources. Throws ZodError
- * for invalid input or references. Class skill, spell and equipment choices stay empty
- * until the guided builder exists; fixed grants come from the registry.
+ * Creates a character from choices, with full derived resources. Throws ZodError for
+ * invalid input or references. Without `guided`, class skills, spells and equipment stay
+ * empty (blank create); with it, the class start table adds proficiencies, skills, kit
+ * and spells. Wizard spellbooks above level 1 are filled in steps of two, as when levelling.
  */
 export function createCharacter(input: CreateCharacterInput, registry: Registry): CreatedCharacter {
   // Parsing clones nested inputs; no saved record shares mutable choices with the form.
@@ -171,8 +192,137 @@ export function createCharacter(input: CreateCharacterInput, registry: Registry)
     currency: { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 },
     clock: { seconds: 8 * SECONDS_PER_HOUR },
   });
+  if (choices.guided) applyGuided(choices.guided, { campaign, build, live, registry, classId });
   live.hp = computeSheet({ campaign, build, live }, registry).maxHp.value;
   return { build, live: LiveStateSchema.parse(live), events: [] };
+}
+
+/** Adds class proficiencies, skill picks, starting kit and spells to a new build, in place. */
+function applyGuided(
+  guided: GuidedChoices,
+  ctx: {
+    campaign: Campaign;
+    build: CharacterBuild;
+    live: LiveState;
+    registry: Registry;
+    classId: string;
+  },
+) {
+  const { campaign, build, live, registry, classId } = ctx;
+  const start = CLASS_START[classId];
+  if (!start) invalid(['guided'], `No starting choices are defined for ${classId}`);
+  const add = <T>(list: T[], values: T[]) => {
+    for (const value of values) if (!list.includes(value)) list.push(value);
+  };
+
+  // Skills: exactly the class count, from its list, none already known.
+  const { skills } = guided;
+  if (
+    skills.length !== start.skills.count ||
+    new Set(skills).size !== skills.length ||
+    skills.some(
+      (skill) =>
+        (start.skills.from !== 'any' && !start.skills.from.includes(skill)) ||
+        build.proficiencies.skills.includes(skill),
+    )
+  ) {
+    invalid(
+      ['guided', 'skills'],
+      `Choose ${start.skills.count} different class skills you do not already have`,
+    );
+  }
+  add(build.proficiencies.skills, skills);
+  add(build.proficiencies.armor, start.armor);
+  add(build.proficiencies.weapons, start.weapons);
+  add(build.proficiencies.tools, start.tools);
+
+  // Instruments
+  const instruments = guided.instruments ?? [];
+  if (
+    instruments.length !== start.instruments ||
+    new Set(instruments).size !== instruments.length ||
+    instruments.some(
+      (id) => registry.entries.get(id)?.kind !== 'item' || !isInstrument(id, registry),
+    )
+  ) {
+    invalid(['guided', 'instruments'], `Choose ${start.instruments} different instruments`);
+  }
+  add(build.proficiencies.tools, instruments);
+
+  // Equipment
+  if (guided.equipment.length !== start.equipment.length)
+    invalid(
+      ['guided', 'equipment'],
+      `Pick an option for each of the ${start.equipment.length} steps`,
+    );
+  const granted: { itemId: string; quantity: number }[] = [];
+  start.equipment.forEach((step, index) => {
+    const pick = guided.equipment[index]!;
+    const option = step.options[pick.option];
+    if (!option) invalid(['guided', 'equipment', index], `Unknown option for ${step.label}`);
+    const slots = option.items.filter((entry) => entry.slot);
+    const fills = pick.slots ?? [];
+    if (fills.length !== slots.length)
+      invalid(['guided', 'equipment', index], `${step.label}: fill ${slots.length} open item(s)`);
+    let used = 0;
+    for (const entry of option.items) {
+      let itemId = entry.itemId;
+      if (entry.slot) {
+        itemId = fills[used++]!;
+        if (!slotChoices(entry.slot, registry).includes(itemId))
+          invalid(['guided', 'equipment', index], `${itemId} does not fit ${step.label}`);
+      }
+      granted.push({ itemId: itemId!, quantity: entry.quantity ?? 1 });
+    }
+  });
+  let wornBody = false;
+  let wornShield = false;
+  granted.forEach(({ itemId, quantity }, index) => {
+    const def = registry.get('item', itemId);
+    const instanceId = `${build.id}:start:${index + 1}`;
+    const shield = def.armor?.category === 'shield';
+    const equipped = def.armor !== undefined && (shield ? !wornShield : !wornBody);
+    if (equipped) {
+      if (shield) wornShield = true;
+      else wornBody = true;
+    }
+    build.items.push({ instanceId, itemId });
+    live.items[instanceId] = { qty: quantity, equipped, attuned: false };
+  });
+
+  // Spells
+  if (guided.spells) {
+    const sheet = computeSheet({ campaign, build, live }, registry);
+    const base = { campaign, live, sheet, registry };
+    const picks = guided.spells;
+    // A wizard's spellbook grows two at a time, so feed leveled picks in steps.
+    const leveled = (picks.add ?? []).filter((id) => {
+      const entry = registry.entries.get(id);
+      return entry?.kind === 'spell' && entry.level > 0;
+    });
+    const cantrips = (picks.add ?? []).filter((id) => !leveled.includes(id));
+    const gains = levelSpellGains({ ...base, build }, classId, true);
+    const steps: string[][] = [];
+    if (gains.mode === 'spellbook') {
+      steps.push([...cantrips, ...leveled.slice(0, gains.spells)]);
+      for (let at = gains.spells; at < leveled.length; at += 2)
+        steps.push(leveled.slice(at, at + 2));
+    } else {
+      steps.push([...cantrips, ...leveled]);
+    }
+    let current = build;
+    steps.forEach((add, step) => {
+      const result = applyLevelSpells({ ...base, build: current }, classId, step === 0, { add });
+      if ('blocked' in result) invalid(['guided', 'spells'], result.blocked);
+      current = result.build;
+    });
+    build.spells = current.spells;
+  }
+}
+
+function isInstrument(id: string, registry: Registry) {
+  const entry = registry.entries.get(id);
+  return entry?.kind === 'item' && entry.category === 'instrument';
 }
 
 function enabledReference<K extends RefKind>(

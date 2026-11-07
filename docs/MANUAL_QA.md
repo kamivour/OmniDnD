@@ -132,7 +132,9 @@ Exploration shares Dashboard's GameClockControl under D91.
 
 - [ ] Create an Artificer with Tasha's source on. Judge whether slots, prepared spells, infusion picks and the specialist features read correctly.
 
+
 - [ ] Add a Wolf (Ranger's companion), Steel Defender and Eldritch Cannon to an owner at different levels. Judge whether their HP, AC and attack numbers match your reading of the rules.
+- [ ] Create a Fighter, a Wizard 3 and a Warlock with "Guided build" ticked, at phone and desktop width. Judge whether the skill, kit and spell choices read clearly and match your book.
 
 ## Deferred rules review — M5
 

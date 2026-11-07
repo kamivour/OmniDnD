@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 20:50 — Guided character builder
+
+- New character has a "Guided build" box. Tick it to pick class skills, starting equipment, instruments (Bard) and cantrips and spells, with the counts shown.
+- Class armor, weapon and tool proficiencies are added for you. Armor and shield from the kit start equipped. Prepared casters (Cleric, Druid, Paladin, Wizard, Artificer) prepare on the sheet.
+- Leave the box off for the old quick, blank create.
+- Check that your class's kit options match your book. Checks pass.
+
 ## 2026-11-07 20:40 — Companion templates
 
 - The Add companion picker now has Ranger's companion beasts, Steel Defender, Eldritch Cannon and Find Familiar forms, grouped by source.

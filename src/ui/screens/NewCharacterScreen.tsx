@@ -14,6 +14,9 @@ import { AbilityBaseInput } from '../components/AbilityBaseInput';
 import { SectionLabel } from '../components/SectionLabel';
 import { ALIGNMENTS } from '../fixtures/new-character';
 import { signed } from '../format';
+import { computeSheet } from '../../engine/calc/sheet';
+import { GuidedChoicesSection } from './GuidedChoicesSection';
+import { emptyGuided, toGuidedChoices, type GuidedState } from './guided-state';
 import { PlaceholderScreen } from './PlaceholderScreen';
 
 type PerAbility<T> = Record<Ability, T>;
@@ -55,6 +58,8 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
   const [bases, setBases] = useState<PerAbility<string>>(perAbility(''));
   const [rolls, setRolls] = useState<string[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
+  const [guided, setGuided] = useState(false);
+  const [guidedState, setGuidedState] = useState<GuidedState>(() => emptyGuided(classId));
 
   const race = races.find((entry) => entry.id === raceId);
   const classDef = classes.find((entry) => entry.id === classId);
@@ -88,6 +93,39 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
   const complete = entries.every((e) => e !== undefined) && conMod !== undefined;
   const total = complete ? maxHp(entries as number[], conMod, campaign.hpLevelFloor) : undefined;
 
+  // Spell choices need the character's numbers, so build the blank version once the basics are valid.
+  const spellContext = (() => {
+    if (!guided || !complete) return undefined;
+    try {
+      const draft = createCharacter(
+        {
+          id,
+          name: name || 'Draft',
+          campaign,
+          raceId,
+          classId,
+          backgroundId,
+          level,
+          abilityBases: Object.fromEntries(
+            ABILITIES.map((ability) => [ability, Number(bases[ability])]),
+          ) as PerAbility<number>,
+          racialChoices,
+          hpRolls: campaign.hpMethod === 'rolled' ? Array.from({ length: level - 1 }, () => 1) : [],
+        },
+        registry,
+      );
+      const state = { campaign, ...draft };
+      return { ...state, sheet: computeSheet(state, registry), registry };
+    } catch {
+      return undefined;
+    }
+  })();
+  const taken = [
+    ...(registry.entries.get(backgroundId)?.kind === 'background'
+      ? registry.get('background', backgroundId).skills
+      : []),
+  ];
+
   return (
     <form
       onChange={() => {
@@ -112,6 +150,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
               ) as PerAbility<number>,
               racialChoices,
               hpRolls: campaign.hpMethod === 'rolled' ? rolls.slice(0, level - 1).map(Number) : [],
+              ...(guided ? { guided: toGuidedChoices(guidedState) } : {}),
             },
             registry,
           );
@@ -221,6 +260,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
               value={classId}
               onChange={(e) => {
                 setClassId(e.target.value);
+                setGuidedState(emptyGuided(e.target.value));
                 setRolls([]);
               }}
               required
@@ -423,10 +463,36 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
         </div>
       </section>
 
-      <p className="text-xs text-text-muted">
-        Creates a blank character with your race and background's fixed grants. Class skills, spells
-        and equipment stay empty. Full guided choices arrive in Phase 3.
-      </p>
+      <section aria-labelledby="nc-mode" className="flex flex-col gap-3">
+        <label className="flex min-h-11 items-center gap-2 text-sm text-text">
+          <input
+            id="nc-mode"
+            type="checkbox"
+            checked={guided}
+            onChange={(event) => setGuided(event.target.checked)}
+            className="size-4 accent-(--omni-accent)"
+          />
+          Guided build: pick class skills, starting equipment and spells
+        </label>
+        {!guided && (
+          <p className="text-xs text-text-muted">
+            Quick create makes a blank character with your race and background's fixed grants. Class
+            skills, spells and equipment stay empty; add them on the sheet.
+          </p>
+        )}
+      </section>
+
+      {guided && classId && (
+        <GuidedChoicesSection
+          key={classId}
+          classId={classId}
+          level={level}
+          taken={taken}
+          state={guidedState}
+          onChange={setGuidedState}
+          spellContext={spellContext}
+        />
+      )}
 
       <div className="flex justify-end gap-2 border-t border-border pt-4">
         <Link
@@ -513,6 +579,7 @@ function errorField(field: PropertyKey | undefined): string {
     abilityBases: 'Ability scores',
     racialChoices: 'Racial bonuses',
     hpRolls: 'HP rolls',
+    guided: 'Class choices',
   };
   return typeof field === 'string' ? (labels[field] ?? 'Character') : 'Character';
 }
