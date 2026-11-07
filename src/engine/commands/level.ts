@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { recordedLevel } from '../calc/advancement';
+import { applyLevelChoices, LevelChoicesSchema } from '../calc/level-choices';
 import { optionalRules } from '../calc/campaign-rules';
 import { averageHpRoll, type HitDie } from '../calc/hp';
 import { MULTICLASS_RULES, meetsMinimum, minimumText } from '../calc/multiclass';
@@ -22,6 +23,7 @@ const LevelUpPayloadSchema = z.strictObject({
   /** Absent: use the class die's fixed average. Die-specific roll bounds are checked below. */
   roll: z.number().optional(),
   /** Multiclass only: the skill and instrument a new class lets you pick. */
+  choices: LevelChoicesSchema.optional(),
   skill: SkillSchema.optional(),
   tool: refId('item').optional(),
   expected: z
@@ -102,7 +104,7 @@ function multiclassGrants(
 function prepare(ctx: CommandContext, input: LevelUpPayload) {
   const parsed = LevelUpPayloadSchema.safeParse(input);
   if (!parsed.success) return { checks: [block('Level-up details are invalid')] };
-  const { classId, roll, skill, tool, expected } = parsed.data;
+  const { classId, roll, skill, tool, expected, choices } = parsed.data;
   const current = { campaign: ctx.campaign, build: ctx.build, live: ctx.live };
   if (expected !== undefined && !equalData(expected, current))
     return {
@@ -156,10 +158,21 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
           ),
     hpEntries: [...ctx.build.hpEntries, hpEntry],
   };
-  if (!CharacterBuildSchema.safeParse(build).success)
+  const applied = applyLevelChoices({
+    campaign: ctx.campaign,
+    build,
+    registry: ctx.registry,
+    score: (ability) => ctx.sheet.abilities[ability].score.value,
+    classId,
+    newLevel: (entries[0]?.level ?? 0) + 1,
+    choices: choices ?? {},
+  });
+  if ('blocked' in applied) return { checks: [block(applied.blocked)] };
+  const finalBuild: CharacterBuild = applied.build;
+  if (!CharacterBuildSchema.safeParse(finalBuild).success)
     return { checks: [block('This level would leave invalid class or HP records')] };
   try {
-    const nextSheet = computeSheet({ ...current, build }, ctx.registry);
+    const nextSheet = computeSheet({ ...current, build: finalBuild }, ctx.registry);
     const before = ctx.sheet.maxHp.value;
     const after = nextSheet.maxHp.value;
     if (!Number.isSafeInteger(before) || !safeCalculatedNumbers(nextSheet))
@@ -172,7 +185,8 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
       return { checks: [block('This level produces invalid current HP')] };
     return {
       checks,
-      build,
+      build: finalBuild,
+      summary: applied.summary,
       live,
       name: def.name,
       classLevel: (entries[0]?.level ?? 0) + 1,
@@ -196,10 +210,15 @@ export const levelUp: Command<LevelUpPayload> = {
     draft.build.classes = next.build.classes;
     draft.build.hpEntries = next.build.hpEntries;
     draft.build.proficiencies = next.build.proficiencies;
+    draft.build.abilityScores.bonuses = next.build.abilityScores.bonuses;
+    draft.build.featureIds = next.build.featureIds;
     draft.live.hp = next.live.hp;
     return withNotes(
       `Level up: ${next.name} ${next.classLevel} (max HP ${next.before} → ${next.after})`,
-      next.live.hp !== ctx.live.hp ? [`HP ${ctx.live.hp} → ${next.live.hp}`] : [],
+      [
+        ...next.summary,
+        ...(next.live.hp !== ctx.live.hp ? [`HP ${ctx.live.hp} → ${next.live.hp}`] : []),
+      ],
     );
   },
 };

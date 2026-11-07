@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 18:24 — Level choices in the engine
+
+- A level-up can now carry a subclass, an ability score improvement (+2, or +1/+1, never above 20), a feat when the campaign allows feats, expertise, and picked options such as a Fighting Style.
+- Fighter and Rogue get their extra improvement levels; everything undoes in one step.
+- No screen yet: the level-up wizard comes later in M14. Checks pass.
+
 ## 2026-11-07 03:26 — Multiclass rules in the engine
 
 - Levelling up a class you do not have now adds it at level 1, only when the campaign allows multiclassing.

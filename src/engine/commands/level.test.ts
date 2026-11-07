@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { computeSheet, type CharacterState } from '../calc/sheet';
 import { CharacterBuildSchema, type ActiveEffect } from '../schema';
+import { asiLevels, levelChoiceNeeds } from '../calc/level-choices';
 import { levelUp, type LevelUpPayload } from './level';
 import { runCommand, undo } from './runner';
 import { freshState, seedState, Session, withLive } from './test-utils';
@@ -543,5 +544,183 @@ describe('levelUp multiclassing', () => {
     session.run(levelUp, { classId: 'class.rogue', roll: 4, skill: 'athletics' });
     expect(session.state.build.proficiencies.skills).toContain('athletics');
     expect(session.state.build.proficiencies.tools).toContain('item.thieves-tools');
+  });
+});
+
+describe('levelUp choices', () => {
+  const asBard = (level: number) => {
+    const state = atLevel(level);
+    state.build.abilityScores.base = { STR: 8, DEX: 14, CON: 12, INT: 10, WIS: 10, CHA: 16 };
+    state.build.abilityScores.bonuses = [];
+    state.build.proficiencies.expertise = [];
+    state.build.proficiencies.skills = ['stealth', 'arcana'];
+    state.build.featureIds = [];
+    return state;
+  };
+  const asFighter = (level: number) => {
+    const state = structuredClone(freshState);
+    state.build.classes = [{ classId: 'class.fighter', level }];
+    state.build.hpEntries = Array.from({ length: level }, (_, index) => ({
+      level: index + 1,
+      classId: 'class.fighter',
+      value: index === 0 ? 10 : 6,
+      method: index === 0 ? ('max' as const) : ('average' as const),
+      floor: 'none' as const,
+    }));
+    state.build.featureIds = [];
+    return state;
+  };
+
+  it('raises scores at an ASI level, in one step of 2 or two steps of 1, and Undo restores them', () => {
+    const session = new Session(asBard(3));
+    const before = structuredClone(session.state);
+    session.run(levelUp, {
+      classId: 'class.bard',
+      roll: 5,
+      choices: { asi: { kind: 'abilities', increases: [{ ability: 'CHA', value: 2 }] } },
+    });
+    expect(session.state.build.abilityScores.bonuses).toEqual([
+      { source: 'ASI: Bard 4', ability: 'CHA', value: 2 },
+    ]);
+    session.undo();
+    expect(session.state).toEqual(before);
+    const split = new Session(asBard(3));
+    split.run(levelUp, {
+      classId: 'class.bard',
+      roll: 5,
+      choices: {
+        asi: {
+          kind: 'abilities',
+          increases: [
+            { ability: 'DEX', value: 1 },
+            { ability: 'CON', value: 1 },
+          ],
+        },
+      },
+    });
+    expect(split.state.build.abilityScores.bonuses).toHaveLength(2);
+  });
+
+  it('blocks a wrong-sized ASI, a score above 20, and an ASI at the wrong level', () => {
+    const session = new Session(asBard(3));
+    const asi = (increases: { ability: 'CHA' | 'DEX'; value: 1 | 2 }[]) => ({
+      classId: 'class.bard',
+      roll: 5,
+      choices: { asi: { kind: 'abilities' as const, increases } },
+    });
+    expect(session.preview(levelUp, asi([{ ability: 'CHA', value: 1 }])).reasons).toEqual([
+      'Raise one ability by 2, or two different abilities by 1 each',
+    ]);
+    expect(
+      session.preview(
+        levelUp,
+        asi([
+          { ability: 'CHA', value: 1 },
+          { ability: 'CHA', value: 1 },
+        ]),
+      ).reasons,
+    ).toEqual(['Raise one ability by 2, or two different abilities by 1 each']);
+    const capped = asBard(3);
+    capped.build.abilityScores.base.CHA = 19;
+    expect(
+      new Session(capped).preview(levelUp, asi([{ ability: 'CHA', value: 2 }])).reasons,
+    ).toEqual(['CHA cannot go above 20']);
+    expect(
+      new Session(asBard(4)).preview(levelUp, asi([{ ability: 'CHA', value: 2 }])).reasons,
+    ).toEqual(['Bard 5 has no ability score improvement']);
+  });
+
+  it('gives Fighter and Rogue their extra ASI levels', () => {
+    expect(asiLevels('class.fighter')).toEqual([4, 6, 8, 12, 14, 16, 19]);
+    expect(asiLevels('class.rogue')).toEqual([4, 8, 10, 12, 16, 19]);
+    expect(asiLevels('class.bard')).toEqual([4, 8, 12, 16, 19]);
+  });
+
+  it('blocks feats while feats are off or the feat is unknown', () => {
+    const feat = { asi: { kind: 'feat' as const, featId: 'feature.feat.nope' } };
+    expect(
+      new Session(asBard(3)).preview(levelUp, { classId: 'class.bard', roll: 5, choices: feat })
+        .reasons,
+    ).toEqual(['Feats are off in this campaign']);
+    const on = asBard(3);
+    on.campaign.optionalRules = { ...on.campaign.optionalRules, feats: true };
+    expect(
+      new Session(on).preview(levelUp, { classId: 'class.bard', roll: 5, choices: feat }).reasons,
+    ).toEqual(['The selected feat is unavailable']);
+  });
+
+  it('sets a subclass once, at or after the subclass level', () => {
+    const session = new Session(asFighter(2));
+    expect(levelChoiceNeeds(registry, 'class.fighter', session.state.build)).toEqual({
+      subclass: true,
+      asi: false,
+    });
+    expect(
+      session.preview(levelUp, {
+        classId: 'class.fighter',
+        roll: 6,
+        choices: { subclassId: 'subclass.fighter.champion' },
+      }).reasons,
+    ).toEqual([]);
+    const early = new Session(asFighter(1));
+    expect(
+      early.preview(levelUp, {
+        classId: 'class.fighter',
+        roll: 6,
+        choices: { subclassId: 'subclass.fighter.champion' },
+      }).reasons,
+    ).toEqual(['Fighter chooses a subclass at level 3']);
+    const atThree = new Session(asFighter(2));
+    atThree.run(levelUp, {
+      classId: 'class.fighter',
+      roll: 6,
+      choices: { subclassId: 'subclass.fighter.champion' },
+    });
+    expect(atThree.state.build.classes[0]?.subclassId).toBe('subclass.fighter.champion');
+    expect(
+      atThree.preview(levelUp, {
+        classId: 'class.fighter',
+        roll: 6,
+        choices: { subclassId: 'subclass.fighter.champion' },
+      }).reasons,
+    ).toEqual(['Fighter already has a subclass']);
+    expect(
+      new Session(asBard(3)).preview(levelUp, {
+        classId: 'class.bard',
+        roll: 5,
+        choices: { subclassId: 'subclass.fighter.champion' },
+      }).reasons,
+    ).toEqual(['The selected subclass does not belong to this class']);
+  });
+
+  it('adds expertise only to proficient skills and picked option features once', () => {
+    const session = new Session(asBard(2));
+    session.run(levelUp, {
+      classId: 'class.bard',
+      roll: 5,
+      choices: { expertise: ['stealth', 'arcana'] },
+    });
+    expect(session.state.build.proficiencies.expertise).toEqual(['stealth', 'arcana']);
+    expect(
+      new Session(asBard(2)).preview(levelUp, {
+        classId: 'class.bard',
+        roll: 5,
+        choices: { expertise: ['history'] },
+      }).reasons,
+    ).toEqual(['Expertise needs a proficiency first: history']);
+    const fighter = new Session(asFighter(1));
+    fighter.run(levelUp, {
+      classId: 'class.fighter',
+      roll: 6,
+      choices: { features: ['feature.fighter.fighting-style-dueling'] },
+    });
+    expect(fighter.state.build.featureIds).toEqual(['feature.fighter.fighting-style-dueling']);
+    expect(
+      fighter.preview(levelUp, {
+        classId: 'class.fighter',
+        roll: 6,
+        choices: { features: ['feature.fighter.fighting-style-dueling'] },
+      }).reasons,
+    ).toEqual(['You already have Fighting Style: Dueling']);
   });
 });
