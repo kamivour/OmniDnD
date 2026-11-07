@@ -1,7 +1,9 @@
 import contentBackgrounds from '../../data/content/backgrounds.json';
+import contentClasses from '../../data/content/classes.json';
 import contentFeatures from '../../data/content/features.json';
 import contentItems from '../../data/content/items.json';
 import contentSpells from '../../data/content/spells.json';
+import contentSubclasses from '../../data/content/subclasses.json';
 import summaries from '../../data/content/summaries.json';
 import featureMechanics from '../../data/mechanics/features.json';
 import itemMechanics from '../../data/mechanics/items.json';
@@ -41,9 +43,11 @@ export const srdPacks = {
 /** Non-SRD entries in our own words (DATA.md §2). */
 export const contentPacks = {
   backgrounds: contentBackgrounds,
+  classes: contentClasses,
   features: contentFeatures,
   items: contentItems,
   spells: contentSpells,
+  subclasses: contentSubclasses,
 };
 
 export const mechanicsPacks = {

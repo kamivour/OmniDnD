@@ -13,7 +13,7 @@ export interface MulticlassRule {
   /** A skill you choose, from a class list or from any skill. */
   skill?: 'any' | Skill[];
   /** A fixed tool by item id, or one instrument you choose. */
-  tool?: string | 'instrument';
+  tool?: string | string[] | 'instrument';
 }
 
 const RANGER_SKILLS: Skill[] = [
@@ -42,6 +42,13 @@ const ROGUE_SKILLS: Skill[] = [
 ];
 
 export const MULTICLASS_RULES: Record<string, MulticlassRule> = {
+  // Tasha's Cauldron of Everything
+  'class.artificer': {
+    minimum: { abilities: ['INT'], mode: 'all' },
+    armor: ['light', 'medium', 'shield'],
+    weapons: [],
+    tool: ['item.thieves-tools', 'item.tinkers-tools'],
+  },
   'class.barbarian': {
     minimum: { abilities: ['STR'], mode: 'all' },
     armor: ['shield'],

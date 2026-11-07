@@ -843,5 +843,25 @@
   {
     "id": "feature.wizard.spellcasting",
     "activation": "passive"
+  },
+  {
+    "id": "feature.artificer.flash-of-genius",
+    "uses": {
+      "max": {
+        "abilityMod": "INT",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "id": "feature.artificer.spell-storing-item",
+    "uses": {
+      "max": {
+        "abilityMod": "INT",
+        "min": 1
+      },
+      "recharge": "long"
+    }
   }
 ]

@@ -210,7 +210,7 @@ export const ClassDefSchema = z
     spellcasting: z
       .strictObject({
         ability: AbilitySchema,
-        progression: z.enum(['full', 'half', 'third', 'pact']),
+        progression: z.enum(['full', 'half', 'third', 'artificer', 'pact']),
         /** Index = class level − 1. */
         cantripsKnown: ByClassLevelSchema.optional(),
         /** Known casters only (Bard, Sorcerer, ...). Index = class level − 1. */

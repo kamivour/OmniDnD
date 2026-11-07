@@ -1200,5 +1200,794 @@
     "summaryReviewed": false,
     "origin": "class",
     "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.magical-tinkering",
+    "name": "Magical Tinkering",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Touch a tiny nonmagical object to give it a minor effect for as long as you hold it: light, a recorded message, a smell or sound, or a visual. Number of objects equals your INT modifier."
+    },
+    "origin": "class",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.spellcasting",
+    "name": "Spellcasting",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "INT-based caster. Needs thieves tools or an artisan tool in hand as a focus. You prepare spells each long rest and can cast prepared rituals."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infuse-item",
+    "name": "Infuse Item",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a long rest, imbue up to your infusion limit of nonmagical items with infusions you know. Each item holds one infusion and works for one attuned creature. You learn more infusions as you level."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.the-right-tool-for-the-job",
+    "name": "The Right Tool for the Job",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "With thieves tools or an artisan tool, spend an hour to make a set of artisan tools in an empty space within 5 feet. They last until you use this again."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.ability-score-improvement",
+    "name": "Ability Score Improvement",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Raise one ability by 2, or two abilities by 1, or take a feat."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.tool-expertise",
+    "name": "Tool Expertise",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your proficiency bonus is doubled for any ability check using a tool you are proficient with."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.flash-of-genius",
+    "name": "Flash of Genius",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction: when you or a creature within 30 feet makes an ability check or saving throw, add your INT modifier to the roll."
+    },
+    "origin": "class",
+    "activation": "reaction",
+    "trigger": "You or a creature within 30 feet makes a check or save"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.magic-item-adept",
+    "name": "Magic Item Adept",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can attune to four magic items. Crafting a common or uncommon magic item takes a quarter of the normal time and half the gold."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.spell-storing-item",
+    "name": "Spell-Storing Item",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a long rest, store a 1st or 2nd level artificer spell in a weapon or spellcasting focus. A holder can cast it a number of times equal to twice your INT modifier before it empties."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.magic-item-savant",
+    "name": "Magic Item Savant",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can attune to five magic items. You ignore class, race, spell and level requirements for attuning to or using a magic item."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.magic-item-master",
+    "name": "Magic Item Master",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can attune to six magic items."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.soul-of-artifice",
+    "name": "Soul of Artifice",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add +1 to all saving throws per magic item you are attuned to. When reduced to 0 HP, end one infusion to drop to 1 HP instead."
+    },
+    "origin": "class",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.artificer-specialist",
+    "name": "Artificer Specialist",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Choose a specialty at 3rd level: Alchemist, Armorer, Artillerist or Battle Smith. It grants features at levels 3, 5, 9 and 15."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.alchemist-tool-proficiency",
+    "name": "Tool Proficiency",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain proficiency with alchemists supplies. If you already have it, pick another artisan tool."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.alchemist-alchemist-spells",
+    "name": "Alchemist Spells",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always prepared, not counted against your limit: healing word, ray of sickness (3), flaming sphere, Melf's acid arrow (5), gaseous form, mass healing word (9), blight, death ward (13), cloudkill, raise dead (17)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.alchemist-experimental-elixir",
+    "name": "Experimental Elixir",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a long rest, create elixirs in empty flasks (one at 3rd level, two at 6th, three at 15th), each with a random effect. Spend a spell slot to make one more any time."
+    },
+    "origin": "subclass",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.alchemist-alchemical-savant",
+    "name": "Alchemical Savant",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Using alchemists supplies as a focus, add your INT modifier (minimum +1) to one die of damage or healing from a spell you cast."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.alchemist-restorative-reagents",
+    "name": "Restorative Reagents",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Elixirs also give temporary HP of 2d6 plus INT modifier. Cast lesser restoration without a slot a number of times per long rest equal to your INT modifier."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": {
+        "abilityMod": "INT",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.alchemist-chemical-mastery",
+    "name": "Chemical Mastery",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Resistance to acid and poison damage and immunity to the poisoned condition. Once each per long rest, cast greater restoration or heal without a slot or components."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.armorer-tools-of-the-trade",
+    "name": "Tools of the Trade",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain proficiency with heavy armor and smith's tools."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.armorer-armorer-spells",
+    "name": "Armorer Spells",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always prepared: magic missile, thunderwave (3), mirror image, shatter (5), hypnotic pattern, lightning bolt (9), fire shield, greater invisibility (13), passwall, wall of force (17)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.armorer-arcane-armor",
+    "name": "Arcane Armor",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Turn a suit of armor you wear into arcane armor. It has no STR requirement, acts as a spellcasting focus, cannot be removed against your will, and replaces missing limbs."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.armorer-armor-model",
+    "name": "Armor Model",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Choose Guardian or Infiltrator when you create it. Guardian: thunder gauntlets that taunt and a defensive field. Infiltrator: lightning launcher, +5 speed and stealth advantage."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.armorer-extra-attack",
+    "name": "Extra Attack",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Attack twice instead of once when you take the Attack action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.armorer-armor-modifications",
+    "name": "Armor Modifications",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your armor counts as separate items for infusions: chest, boots, helmet and weapon. You gain two more infusion slots for it."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.armorer-perfected-armor",
+    "name": "Perfected Armor",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Guardian: pull a Large or smaller creature to you when it hits. Infiltrator: creatures hit by your launcher glow and are easier to hit."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.artillerist-tool-proficiency",
+    "name": "Tool Proficiency",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain proficiency with woodcarver's tools. If you already have it, pick another artisan tool."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.artillerist-artillerist-spells",
+    "name": "Artillerist Spells",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always prepared: shield, thunderwave (3), scorching ray, shatter (5), fireball, wind wall (9), ice storm, wall of fire (13), cone of cold, wall of force (17)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.artillerist-eldritch-cannon",
+    "name": "Eldritch Cannon",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: create a Small or Tiny cannon (flamethrower, force ballista or protector) that lasts one hour. Once per long rest free, or spend a spell slot for another."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.artillerist-arcane-firearm",
+    "name": "Arcane Firearm",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Carve runes in a wand, staff or rod to make an arcane firearm. Add 1d8 damage to one damage roll of a spell cast through it."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.artillerist-explosive-cannon",
+    "name": "Explosive Cannon",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cannon damage rises by 1d8. As an action you can detonate it for a 3d8 force blast, destroying it."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.artillerist-fortified-position",
+    "name": "Fortified Position",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You and allies within 10 feet of the cannon have half cover. You can have two cannons at once, activating both with one bonus action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.battle-smith-tool-proficiency",
+    "name": "Tool Proficiency",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain proficiency with smith's tools. If you already have it, pick another artisan tool."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.battle-smith-battle-smith-spells",
+    "name": "Battle Smith Spells",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always prepared: heroism, shield (3), branding smite, warding bond (5), aura of vitality, conjure barrage (9), aura of purity, fire shield (13), banishing smite, mass cure wounds (17)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.battle-smith-battle-ready",
+    "name": "Battle Ready",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain proficiency with martial weapons. Use INT instead of STR or DEX for attack and damage rolls with magic weapons."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.battle-smith-steel-defender",
+    "name": "Steel Defender",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a long rest, build a steel defender companion. It obeys your commands and acts on your initiative. Its stats scale with your proficiency bonus and artificer level."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.battle-smith-extra-attack",
+    "name": "Extra Attack",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Attack twice instead of once when you take the Attack action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.battle-smith-arcane-jolt",
+    "name": "Arcane Jolt",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you or your steel defender hit with a magic weapon attack, deal 2d6 extra force damage or heal a creature within 30 feet for 2d6. Uses equal your INT modifier."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": {
+        "abilityMod": "INT",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.battle-smith-improved-defender",
+    "name": "Improved Defender",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Arcane Jolt grows to 4d6. Steel defender gains +2 AC and its Deflect Attack deals 1d4 plus your INT modifier force damage."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-enhanced-arcane-focus",
+    "name": "Infusion: Enhanced Arcane Focus",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 2+. A rod, staff or wand gains +1 to spell attack rolls (+2 at 10th level) and ignores half cover."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-enhanced-defense",
+    "name": "Infusion: Enhanced Defense",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 2+. Armor or a shield gains +1 AC (+2 at 10th level)."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-enhanced-weapon",
+    "name": "Infusion: Enhanced Weapon",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 2+. A simple or martial weapon gains +1 to attack and damage (+2 at 10th level)."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-mind-sharpener",
+    "name": "Infusion: Mind Sharpener",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 2+. Armor or robes let the wearer use a reaction to turn aside a failed concentration check."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-homunculus-servant",
+    "name": "Infusion: Homunculus Servant",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 2+. Create a tiny homunculus servant in an item of at least 100 gp that obeys you."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-replicate-magic-item",
+    "name": "Infusion: Replicate Magic Item",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 2+. Copy one item from the replicable list, such as bag of holding or alchemy jug."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-repulsion-shield",
+    "name": "Infusion: Repulsion Shield",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 6+. A shield gains +1 AC and lets the user push an attacker 15 feet with a reaction."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-resistant-armor",
+    "name": "Infusion: Resistant Armor",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 6+. Armor gives resistance to one damage type chosen at infusion."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-returning-weapon",
+    "name": "Infusion: Returning Weapon",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 2+. A thrown weapon gains +1 and flies back to the hand after a ranged attack."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-repeating-shot",
+    "name": "Infusion: Repeating Shot",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 2+. A ranged weapon gains +1 and makes its own ammunition."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-radiant-weapon",
+    "name": "Infusion: Radiant Weapon",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 6+. A weapon gains +1, sheds light, and can blind its attacker with a reaction."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-arcane-propulsion-armor",
+    "name": "Infusion: Arcane Propulsion Armor",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 14+. Armor gives 5-foot reach melee attacks from metal gauntlets and a speed boost."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-boots-of-the-winding-path",
+    "name": "Infusion: Boots of the Winding Path",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 6+. Boots let the wearer teleport 15 feet by bonus action."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-armor-of-magical-strength",
+    "name": "Infusion: Armor of Magical Strength",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 6+. Armor stores a charge pool to boost STR checks and saves and prevent falling prone."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-helm-of-awareness",
+    "name": "Infusion: Helm of Awareness",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 10+. A helmet grants advantage on initiative and prevents being surprised."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.infusion-spell-refueling-ring",
+    "name": "Infusion: Spell-Refueling Ring",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Artificer level 6+. A ring lets the wearer regain one spell slot of up to 3rd level once per day."
+    },
+    "origin": "class",
+    "activation": "special"
   }
 ]

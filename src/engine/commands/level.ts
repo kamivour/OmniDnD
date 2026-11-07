@@ -86,7 +86,7 @@ function multiclassGrants(
       return { blocked: 'Pick a musical instrument' };
     if (!tools.includes(tool!)) tools.push(tool!);
   } else if (rule.tool) {
-    if (!tools.includes(rule.tool)) tools.push(rule.tool);
+    for (const fixed of [rule.tool].flat()) if (!tools.includes(fixed)) tools.push(fixed);
     if (tool !== undefined) return { blocked: `${className} grants a fixed tool` };
   } else if (tool !== undefined) return { blocked: `${className} grants no tool` };
   const merge = <T>(list: T[], more: T[]) => [...list, ...more.filter((x) => !list.includes(x))];

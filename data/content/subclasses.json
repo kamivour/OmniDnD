@@ -1,0 +1,166 @@
+[
+  {
+    "kind": "subclass",
+    "id": "subclass.artificer.alchemist",
+    "name": "Alchemist",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Brewer of elixirs that heal, shield and harm."
+    },
+    "classId": "class.artificer",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.artificer.alchemist-tool-proficiency"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.alchemist-alchemist-spells"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.alchemist-experimental-elixir"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.artificer.alchemist-alchemical-savant"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.artificer.alchemist-restorative-reagents"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.artificer.alchemist-chemical-mastery"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.artificer.armorer",
+    "name": "Armorer",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Wears an arcane suit of armor as a weapon and defense."
+    },
+    "classId": "class.artificer",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.artificer.armorer-tools-of-the-trade"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.armorer-armorer-spells"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.armorer-arcane-armor"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.armorer-armor-model"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.artificer.armorer-extra-attack"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.artificer.armorer-armor-modifications"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.artificer.armorer-perfected-armor"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.artificer.artillerist",
+    "name": "Artillerist",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Conjures arcane cannons for fire, force and protection."
+    },
+    "classId": "class.artificer",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.artificer.artillerist-tool-proficiency"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.artillerist-artillerist-spells"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.artillerist-eldritch-cannon"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.artificer.artillerist-arcane-firearm"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.artificer.artillerist-explosive-cannon"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.artificer.artillerist-fortified-position"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.artificer.battle-smith",
+    "name": "Battle Smith",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Fights beside a steel defender with magic weapons."
+    },
+    "classId": "class.artificer",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.artificer.battle-smith-tool-proficiency"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.battle-smith-battle-smith-spells"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.battle-smith-battle-ready"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.battle-smith-steel-defender"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.artificer.battle-smith-extra-attack"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.artificer.battle-smith-arcane-jolt"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.artificer.battle-smith-improved-defender"
+      }
+    ]
+  }
+]

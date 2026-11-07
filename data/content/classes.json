@@ -1,0 +1,93 @@
+[
+  {
+    "kind": "class",
+    "id": "class.artificer",
+    "name": "Artificer",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "hitDie": "d8",
+    "saves": ["CON", "INT"],
+    "summary": {
+      "effect": "Half caster who infuses everyday items with magic. Gains specialist features from level 3."
+    },
+    "spellcasting": {
+      "ability": "INT",
+      "progression": "artificer",
+      "ritual": "prepared",
+      "cantripsKnown": [2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4]
+    },
+    "subclassLevel": 3,
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.artificer.magical-tinkering"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.artificer.spellcasting"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.artificer.infuse-item"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.the-right-tool-for-the-job"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.artificer.artificer-specialist"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.artificer.ability-score-improvement"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.artificer.tool-expertise"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.artificer.flash-of-genius"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.artificer.ability-score-improvement"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.artificer.magic-item-adept"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.artificer.spell-storing-item"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.artificer.ability-score-improvement"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.artificer.magic-item-savant"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.artificer.ability-score-improvement"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.artificer.magic-item-master"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.artificer.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.artificer.soul-of-artifice"
+      }
+    ]
+  }
+]

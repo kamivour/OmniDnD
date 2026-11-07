@@ -1,8 +1,117 @@
 [
   {
+    "id": "spell.acid-splash",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.aid",
+    "classes": ["class.cleric", "class.paladin", "class.artificer"]
+  },
+  {
+    "id": "spell.alarm",
+    "classes": ["class.ranger", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.alter-self",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.animate-objects",
+    "classes": ["class.bard", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.arcane-eye",
+    "classes": ["class.cleric", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.arcane-lock",
+    "classes": ["class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.blink",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.blur",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.continual-flame",
+    "classes": ["class.cleric", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.create-food-and-water",
+    "classes": ["class.cleric", "class.druid", "class.paladin", "class.artificer"]
+  },
+  {
+    "id": "spell.creation",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.cure-wounds",
+    "classes": [
+      "class.bard",
+      "class.cleric",
+      "class.druid",
+      "class.paladin",
+      "class.ranger",
+      "class.artificer"
+    ]
+  },
+  {
+    "id": "spell.darkvision",
+    "classes": ["class.druid", "class.ranger", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.detect-magic",
+    "classes": [
+      "class.bard",
+      "class.cleric",
+      "class.druid",
+      "class.paladin",
+      "class.ranger",
+      "class.sorcerer",
+      "class.wizard",
+      "class.artificer"
+    ]
+  },
+  {
     "id": "spell.disguise-self",
     "tags": ["utility"],
-    "effect": { "target": "self", "note": "Disguised: touch or an Investigation check reveals it" }
+    "effect": {
+      "target": "self",
+      "note": "Disguised: touch or an Investigation check reveals it"
+    },
+    "classes": ["class.bard", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.dispel-magic",
+    "classes": [
+      "class.bard",
+      "class.cleric",
+      "class.druid",
+      "class.paladin",
+      "class.sorcerer",
+      "class.warlock",
+      "class.wizard",
+      "class.artificer"
+    ]
+  },
+  {
+    "id": "spell.enhance-ability",
+    "classes": ["class.bard", "class.cleric", "class.druid", "class.sorcerer", "class.artificer"]
+  },
+  {
+    "id": "spell.enlarge-reduce",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.expeditious-retreat",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.fabricate",
+    "classes": ["class.wizard", "class.artificer"]
   },
   {
     "id": "spell.faerie-fire",
@@ -10,9 +119,61 @@
     "effect": {
       "target": "any",
       "note": "Outlined: attacks against it have advantage; no benefit from invisible"
-    }
+    },
+    "classes": ["class.bard", "class.druid", "class.artificer"]
   },
-  { "id": "spell.healing-word", "tags": ["healing"] },
+  {
+    "id": "spell.false-life",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.feather-fall",
+    "classes": ["class.bard", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.fire-bolt",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.fly",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.freedom-of-movement",
+    "classes": ["class.bard", "class.cleric", "class.druid", "class.ranger", "class.artificer"]
+  },
+  {
+    "id": "spell.glyph-of-warding",
+    "classes": ["class.bard", "class.cleric", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.grease",
+    "classes": ["class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.greater-restoration",
+    "classes": ["class.bard", "class.cleric", "class.druid", "class.artificer"]
+  },
+  {
+    "id": "spell.guidance",
+    "classes": ["class.cleric", "class.druid", "class.artificer"]
+  },
+  {
+    "id": "spell.haste",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.healing-word",
+    "tags": ["healing"]
+  },
+  {
+    "id": "spell.heat-metal",
+    "classes": ["class.bard", "class.druid", "class.artificer"]
+  },
+  {
+    "id": "spell.identify",
+    "classes": ["class.bard", "class.wizard", "class.artificer"]
+  },
   {
     "id": "spell.invisibility",
     "tags": ["buff", "utility"],
@@ -20,9 +181,160 @@
       "target": "any",
       "conditions": ["invisible"],
       "note": "Ends for the target when it attacks or casts a spell"
-    }
+    },
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard", "class.artificer"]
   },
-  { "id": "spell.minor-illusion", "tags": ["utility"] },
-  { "id": "spell.suggestion", "tags": ["control"] },
-  { "id": "spell.vicious-mockery", "tags": ["damage", "debuff"] }
+  {
+    "id": "spell.jump",
+    "classes": ["class.druid", "class.ranger", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.lesser-restoration",
+    "classes": [
+      "class.bard",
+      "class.cleric",
+      "class.druid",
+      "class.paladin",
+      "class.ranger",
+      "class.artificer"
+    ]
+  },
+  {
+    "id": "spell.levitate",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.light",
+    "classes": ["class.bard", "class.cleric", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.longstrider",
+    "classes": ["class.bard", "class.druid", "class.ranger", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.mage-hand",
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.magic-mouth",
+    "classes": ["class.bard", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.magic-weapon",
+    "classes": ["class.paladin", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.mending",
+    "classes": [
+      "class.bard",
+      "class.cleric",
+      "class.druid",
+      "class.sorcerer",
+      "class.wizard",
+      "class.artificer"
+    ]
+  },
+  {
+    "id": "spell.message",
+    "classes": ["class.bard", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.minor-illusion",
+    "tags": ["utility"]
+  },
+  {
+    "id": "spell.poison-spray",
+    "classes": ["class.druid", "class.sorcerer", "class.warlock", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.prestidigitation",
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.protection-from-energy",
+    "classes": [
+      "class.cleric",
+      "class.druid",
+      "class.ranger",
+      "class.sorcerer",
+      "class.wizard",
+      "class.artificer"
+    ]
+  },
+  {
+    "id": "spell.protection-from-poison",
+    "classes": ["class.cleric", "class.druid", "class.paladin", "class.ranger", "class.artificer"]
+  },
+  {
+    "id": "spell.purify-food-and-drink",
+    "classes": ["class.cleric", "class.druid", "class.paladin", "class.artificer"]
+  },
+  {
+    "id": "spell.ray-of-frost",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.resistance",
+    "classes": ["class.cleric", "class.druid", "class.artificer"]
+  },
+  {
+    "id": "spell.revivify",
+    "classes": ["class.cleric", "class.paladin", "class.artificer"]
+  },
+  {
+    "id": "spell.rope-trick",
+    "classes": ["class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.sanctuary",
+    "classes": ["class.cleric", "class.artificer"]
+  },
+  {
+    "id": "spell.see-invisibility",
+    "classes": ["class.bard", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.shocking-grasp",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.spare-the-dying",
+    "classes": ["class.cleric", "class.artificer"]
+  },
+  {
+    "id": "spell.spider-climb",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.stone-shape",
+    "classes": ["class.cleric", "class.druid", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.stoneskin",
+    "classes": ["class.druid", "class.ranger", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.suggestion",
+    "tags": ["control"]
+  },
+  {
+    "id": "spell.vicious-mockery",
+    "tags": ["damage", "debuff"]
+  },
+  {
+    "id": "spell.wall-of-stone",
+    "classes": ["class.druid", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.water-breathing",
+    "classes": ["class.druid", "class.ranger", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.water-walk",
+    "classes": ["class.cleric", "class.druid", "class.ranger", "class.sorcerer", "class.artificer"]
+  },
+  {
+    "id": "spell.web",
+    "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  }
 ]

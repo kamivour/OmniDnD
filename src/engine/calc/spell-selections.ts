@@ -35,7 +35,20 @@ export interface SpellSelectionDetails {
  * https://www.dndbeyond.com/classes/4-paladin
  */
 export function isPreparedCaster2014(classId: string): boolean {
-  return ['class.cleric', 'class.druid', 'class.paladin', 'class.wizard'].includes(classId);
+  return [
+    'class.artificer',
+    'class.cleric',
+    'class.druid',
+    'class.paladin',
+    'class.wizard',
+  ].includes(classId);
+}
+
+/** Class level part of the prepared-spell count: half for Paladin and Artificer (TCE rounds down), full for the rest. */
+export function preparedLevelPart(classId: string, level: number): number {
+  return classId === 'class.paladin' || classId === 'class.artificer'
+    ? Math.floor(level / 2)
+    : level;
 }
 
 function spell(ctx: SpellSelectionContext, id: string): SpellDef | undefined {
@@ -152,8 +165,7 @@ export function spellSelectionDetails(
           ? 0
           : Math.max(
               1,
-              (classId === 'class.paladin' ? Math.floor(classLevel / 2) : classLevel) +
-                ctx.sheet.abilities[casting!.ability].mod,
+              preparedLevelPart(classId, classLevel) + ctx.sheet.abilities[casting!.ability].mod,
             )))
       : undefined;
   const eligible = [...ctx.registry.entries.values()]

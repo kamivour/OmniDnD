@@ -28,7 +28,7 @@ import { levelHp, maxHp } from './hp';
 import { proficiencyBonus } from './proficiency';
 import { spellSlots, type SpellSlots } from './slots';
 import { sumParts, type Part, type Stat } from './stat';
-import { isPreparedCaster2014 } from './spell-selections';
+import { isPreparedCaster2014, preparedLevelPart } from './spell-selections';
 import {
   overridePath,
   overrideStat,
@@ -493,11 +493,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
           `${def.name} prepared spells limit`,
           stats.maxSpellLevel === 0
             ? 0
-            : Math.max(
-                1,
-                (entry.classId === 'class.paladin' ? Math.floor(entry.level / 2) : entry.level) +
-                  mods[ability],
-              ),
+            : Math.max(1, preparedLevelPart(entry.classId, entry.level) + mods[ability]),
           { min: 0 },
         );
       return [stats];

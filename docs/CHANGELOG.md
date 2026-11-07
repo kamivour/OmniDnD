@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 20:33 — Artificer
+
+- Artificer is a new class (Tasha's, your own-words summaries): spells from level 1, infusions you pick at level-up, and Alchemist, Armorer, Artillerist and Battle Smith specialists.
+- Slots, prepared spells and multiclass rules follow the Tasha table. Tasha's source must be on in the campaign.
+- Summaries are unreviewed: check infusion and specialist wording. Checks pass.
+
 ## 2026-11-07 20:27 — Tasha options
 
 - With Tasha's optional class features on, classes gain them by level (Deft Explorer, Steady Aim, Ki-Fueled Attack and more). Ranger versions replace Natural Explorer, Favored Enemy and Primeval Awareness.

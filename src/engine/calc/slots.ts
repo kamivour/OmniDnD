@@ -20,6 +20,8 @@ function singleClassCasterLevel({ progression, level }: CasterClass): number {
   if (progression === 'full') return level;
   if (progression === 'half') return level < 2 ? 0 : Math.ceil(level / 2);
   if (progression === 'third') return level < 3 ? 0 : Math.ceil(level / 3);
+  // Tasha's Artificer rounds half its level up and casts from level 1.
+  if (progression === 'artificer') return Math.ceil(level / 2);
   return 0;
 }
 
@@ -29,6 +31,7 @@ function multiclassCasterLevel(casters: CasterClass[]): number {
     if (progression === 'full') return sum + level;
     if (progression === 'half') return sum + Math.floor(level / 2);
     if (progression === 'third') return sum + Math.floor(level / 3);
+    if (progression === 'artificer') return sum + Math.ceil(level / 2);
     return sum;
   }, 0);
 }
