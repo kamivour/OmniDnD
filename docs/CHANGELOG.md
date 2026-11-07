@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 04:40 — Milestone 16 complete
+
+- Dice roller, Parchment theme, backups, first Xanathar and Tasha content, Markdown journal and portraits are all in.
+- Please run the new Phase 4 list in MANUAL_QA, mainly the offline reload and Parchment readability.
+- All planned milestones are done. Next: your manual QA and picking backlog items. Checks pass.
+
 ## 2026-11-08 04:12 — Rules review answers
 
 - Settled: potions take an action, and Ranger companions follow the 2014 book. A level 20 Barbarian keeps 6 Rage uses.

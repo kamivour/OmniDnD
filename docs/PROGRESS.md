@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M16 (dice roller, themes, more books), in progress.
-**Next up:** M16 task 9, the gate (manual QA list, offline reload, widths). Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M16 (dice roller, themes, more books), done. All planned milestones are complete.
+**Next up:** user manual QA and backlog choices. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -39,7 +39,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M13 | Searchable Reference | 2 | done | Any bundled rule can be found by name; quick tables work offline |
 | M14 | Full level-up wizard + more classes + multiclass | 3 | todo | Every SRD class reaches level 20 through the wizard; multiclassing and feats follow campaign toggles |
 | M15 | Ally/enemy tracker | 3 | done | A whole fight can be tracked: order, HP and conditions for allies and enemies, all undoable |
-| M16 | Dice roller, themes, more books | 4 | todo | Optional dice roller, Parchment theme, backups, Xanathar's and Tasha's packs; rules review done with the user |
+| M16 | Dice roller, themes, more books | 4 | done | Optional dice roller, Parchment theme, backups, Xanathar's and Tasha's packs; rules review done with the user |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -209,7 +209,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Journal shows formatted Markdown safely (D129)
 - [x] Portrait upload (Q12): image resized and stored on the device; icon stays the default
 - [x] Rules review with the user: Q21, Q22, D80 and every default ruling; DECISIONS updated with the answers
-- [ ] Gate: switch themes, back up and restore, add a Tasha subclass, roll and apply damage by hand; phone and desktop widths, offline reload, manual QA documented
+- [x] Gate: switch themes, back up and restore, add a Tasha subclass, roll and apply damage by hand; phone and desktop widths, offline reload, manual QA documented
 
 ## Backlog (not scheduled)
 
@@ -224,6 +224,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-08 — M16 gate: all checks and e2e pass at both widths; Playwright now pins dark mode; M16 manual QA list added. Milestone done.
 - 2026-11-08 — M16: rules review. Q4, Q21, Q22, Q23, Q29 answered (D150–D153); instant-death DM-review note removed. Other defaults stay open.
 - 2026-11-08 — M16: portrait upload in Edit character: picture is cropped and shrunk to a small JPEG, shown on sheet, HUD and campaign list; icon is default.
 - 2026-11-08 — M16: Journal text shows bold, italic, lists, headings, quotes and web links; typed HTML stays plain text. Saved text unchanged.

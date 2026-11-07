@@ -148,6 +148,16 @@ Exploration shares Dashboard's GameClockControl under D91.
 
 - [ ] Check the Combat screen still feels fine without the tracker, with Start Turn and End Turn.
 
+## Phase 4 — M16: Dice roller, themes, more books
+
+- [ ] Switch Settings theme between System, Dark and Parchment. Judge whether text stays easy to read on every screen.
+- [ ] Turn the dice roller on, roll an attack and a damage roll, and apply the damage by hand. Judge whether nothing is applied for you.
+- [ ] Export a backup, change the character, then restore from the file. Judge whether the preview is clear before you confirm.
+- [ ] Add a Tasha or Xanathar subclass in Level up or Edit character. Judge whether its summary reads right and matches the book.
+- [ ] Add a portrait from a phone photo. Judge the crop on the sheet, the top bar and the campaign list.
+- [ ] Write Markdown in the Journal. Judge whether lists, bold and links look right and typed HTML stays plain.
+- [ ] Reload the installed app with the network off. Judge whether the sheet, theme and journal still open.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

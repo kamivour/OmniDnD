@@ -12,6 +12,7 @@ export default defineConfig({
   use: {
     baseURL: ORIGIN,
     browserName: 'chromium',
+    colorScheme: 'dark',
     trace: 'on-first-retry',
   },
   // Done = works at 375 px and at desktop width (AGENTS.md).
