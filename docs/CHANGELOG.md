@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 03:17 — Xanathar and Tasha content
+
+- New subclasses: Cavalier, Gloom Stalker, War Magic (Xanathar) and Twilight Domain, Psi Warrior (Tasha). Eight spells and eleven feats from both books are added too.
+- All text is in our own words and marked unreviewed. Check the summaries against your books, especially numbers and limits.
+- This is a first slice, not every subclass. Say which ones your table needs. Next: only show each campaign's books in lists. Checks pass.
+
 ## 2026-11-08 03:02 — Backups
 
 - Settings has a **Backups** section. **Export all data** saves every campaign and character to one file; **Restore from file** shows what is inside before it replaces anything.

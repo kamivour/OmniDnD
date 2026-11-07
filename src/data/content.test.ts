@@ -130,4 +130,23 @@ describe('registry', () => {
     expect(mockery.fullText).toBeDefined();
     expect(mockery.summaryReviewed).toBe(false);
   });
+
+  it('carries the Xanathar and Tasha subclasses, spells and feats with every feature resolving', () => {
+    for (const id of [
+      'subclass.fighter.cavalier',
+      'subclass.ranger.gloom-stalker',
+      'subclass.wizard.war-magic',
+      'subclass.cleric.twilight',
+      'subclass.fighter.psi-warrior',
+    ]) {
+      const subclass = registry.get('subclass', id);
+      expect(subclass.srd).toBe(false);
+      expect(['XGE', 'TCE']).toContain(subclass.source);
+      for (const { featureId } of subclass.features)
+        expect(registry.get('feature', featureId).name).toBeTruthy();
+    }
+    expect(registry.get('spell', 'spell.toll-the-dead').level).toBe(0);
+    expect(registry.get('spell', 'spell.booming-blade').classes).toContain('class.artificer');
+    expect(registry.get('feature', 'feature.feat.fey-touched').origin).toBe('feat');
+  });
 });

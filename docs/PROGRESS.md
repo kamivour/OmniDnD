@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M16 (dice roller, themes, more books), in progress.
-**Next up:** M16 task 4, Xanathar's and Tasha's packs. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M16 task 5, book filtering and Reference. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -204,7 +204,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Optional dice roller (off by default, Settings toggle): roll from attack, damage, save and check buttons; roll history; results never applied without the player (Q5)
 - [x] Parchment theme and theme picker (system, dark, parchment); tokens only
 - [x] Backups UI: export and import all data, restore preview, reminder when no recent backup
-- [ ] Xanathar's and Tasha's packs in our own words (Q6): subclasses, races, spells, feats; Artificer Alchemist and Armorer
+- [x] Xanathar's and Tasha's packs in our own words (Q6): subclasses, races, spells, feats; Artificer Alchemist and Armorer
 - [ ] Search and lists respect each campaign's books; content packs appear in Reference
 - [ ] Journal shows formatted Markdown safely (D129)
 - [ ] Portrait upload (Q12): image resized and stored on the device; icon stays the default
@@ -224,6 +224,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-08 — M16: first Xanathar and Tasha content, own words: 5 subclasses, 8 spells, 11 feats. Artificer subclasses already existed; no new races in either book.
 - 2026-11-08 — M16: backups in Settings. Export all data to one file, restore from a file or recovery point with preview, reminder after 14 days.
 - 2026-11-08 — M16: Parchment light theme and Theme picker in Settings (System, Dark, Parchment); System follows the device; choice stored on this device.
 - 2026-11-08 — M16: optional dice roller. Settings switch (device only), dice tray with history, Roll buttons on attacks, saves and skills; nothing is applied for you.

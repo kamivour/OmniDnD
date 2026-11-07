@@ -16,14 +16,305 @@
     "url": "https://www.dndbeyond.com/spells/dissonant-whispers",
     "level": 1,
     "school": "enchantment",
-    "casting": { "cost": "action" },
+    "casting": {
+      "cost": "action"
+    },
     "range": "60 ft",
-    "components": { "v": true, "s": false },
-    "duration": { "text": "Instant", "concentration": false },
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
     "ritual": false,
     "save": "WIS",
     "classes": ["class.bard"],
     "tags": ["damage", "control"],
-    "damage": { "dice": "3d6", "upcastPerLevel": "1d6", "type": "psychic" }
+    "damage": {
+      "dice": "3d6",
+      "upcastPerLevel": "1d6",
+      "type": "psychic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.toll-the-dead",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Toll the Dead",
+    "source": "XGE",
+    "summary": {
+      "effect": "One creature you can see within range makes a WIS save as a bell tolls for it.",
+      "fail": "1d8 necrotic, or 1d12 if it is missing any hit points. Damage grows at higher character levels."
+    },
+    "level": 0,
+    "school": "necromancy",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "WIS",
+    "classes": ["class.cleric", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d8",
+      "cantripScaling": true,
+      "type": "necrotic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.mind-sliver",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Mind Sliver",
+    "source": "TCE",
+    "summary": {
+      "effect": "One creature within range makes an INT save.",
+      "fail": "1d6 psychic, and it subtracts 1d4 from the next saving throw it makes before the end of your next turn. Damage grows at higher character levels."
+    },
+    "level": 0,
+    "school": "enchantment",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 round",
+      "seconds": 6,
+      "concentration": false
+    },
+    "save": "INT",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage", "debuff"],
+    "damage": {
+      "dice": "1d6",
+      "cantripScaling": true,
+      "type": "psychic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.booming-blade",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Booming Blade",
+    "source": "TCE",
+    "summary": {
+      "effect": "Make a melee weapon attack against a creature within 5 feet. On a hit it takes thunder damage if it moves before the start of your next turn, and your attack gains a little thunder damage at higher levels."
+    },
+    "level": 0,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (5-ft radius)",
+    "components": {
+      "v": false,
+      "s": true,
+      "m": "A melee weapon worth at least 1 sp."
+    },
+    "duration": {
+      "text": "1 round",
+      "seconds": 6,
+      "concentration": false
+    },
+    "classes": ["class.artificer", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.green-flame-blade",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Green-Flame Blade",
+    "source": "TCE",
+    "summary": {
+      "effect": "Make a melee weapon attack against a creature within 5 feet. On a hit, fire also leaps to a second creature within 5 feet of the target for damage equal to your spellcasting modifier. Extra fire damage at higher levels."
+    },
+    "level": 0,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (5-ft radius)",
+    "components": {
+      "v": false,
+      "s": true,
+      "m": "A melee weapon worth at least 1 sp."
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "classes": ["class.artificer", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.absorb-elements",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Absorb Elements",
+    "source": "XGE",
+    "summary": {
+      "effect": "Reaction when you take acid, cold, fire, lightning or thunder damage: gain resistance to that type against the hit. Your next melee hit on your following turn adds 1d6 of that type.",
+      "upcast": "+1d6 per slot level above 1."
+    },
+    "level": 1,
+    "school": "abjuration",
+    "casting": {
+      "cost": "reaction"
+    },
+    "range": "Self",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "1 round",
+      "seconds": 6,
+      "concentration": false
+    },
+    "classes": ["class.artificer", "class.druid", "class.ranger", "class.sorcerer", "class.wizard"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.catapult",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Catapult",
+    "source": "XGE",
+    "summary": {
+      "effect": "Hurl a loose object of 1 to 5 pounds at a target within range. The target makes a DEX save.",
+      "fail": "3d8 bludgeoning.",
+      "success": "No damage.",
+      "upcast": "+1d8 per slot level above 1."
+    },
+    "level": 1,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "DEX",
+    "classes": ["class.artificer", "class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "3d8",
+      "upcastPerLevel": "1d8",
+      "type": "bludgeoning"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.caustic-brew",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Caustic Brew",
+    "source": "TCE",
+    "summary": {
+      "effect": "A 30-foot line of acid, 5 feet wide, springs from you. Creatures in it make a DEX save and keep taking damage each turn while the spell lasts.",
+      "fail": "2d4 acid now and at the start of each of their turns until they use an action to wipe it off.",
+      "success": "No damage, and no lingering acid.",
+      "upcast": "+2d4 per slot level above 1."
+    },
+    "level": 1,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (30-ft line)",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "A bit of rotten food."
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "save": "DEX",
+    "classes": ["class.artificer", "class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "2d4",
+      "upcastPerLevel": "2d4",
+      "type": "acid"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.healing-spirit",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Healing Spirit",
+    "source": "XGE",
+    "summary": {
+      "effect": "Call a spirit in a 5-foot space within range. Bonus action: move it 30 feet. When a creature enters or starts its turn near it, it heals that creature, up to your spellcasting modifier times per turn.",
+      "upcast": "+1d6 per slot level above 2."
+    },
+    "level": 2,
+    "school": "conjuration",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "classes": ["class.druid", "class.ranger"],
+    "tags": ["healing"],
+    "heal": {
+      "dice": "1d6",
+      "addCastingMod": false,
+      "upcastPerLevel": "1d6"
+    }
   }
 ]

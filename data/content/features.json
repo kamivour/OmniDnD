@@ -1989,5 +1989,709 @@
     },
     "origin": "class",
     "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.cavalier-bonus-proficiency",
+    "name": "Bonus Proficiency",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Gain proficiency in one of Animal Handling, History, Insight, Performance or Persuasion, or learn one language."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.cavalier-born-to-the-saddle",
+    "name": "Born to the Saddle",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Advantage on saves to avoid falling off a mount. Land on your feet from a mount fall of under 10 feet. Mounting or dismounting costs only 5 feet of movement."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.cavalier-unwavering-mark",
+    "name": "Unwavering Mark",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "A melee hit marks the target until the end of your next turn. It has disadvantage against others. If it hurts someone else, attack it as a bonus action with advantage, adding half your fighter level in damage."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": {
+        "abilityMod": "STR",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.cavalier-warding-maneuver",
+    "name": "Warding Maneuver",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Reaction when you or an ally within 5 feet is hit: add 1d8 to the AC against that hit. If the attack still hits, the damage is halved."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "You or an ally within 5 ft is hit by an attack",
+    "uses": {
+      "max": {
+        "abilityMod": "CON",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.cavalier-hold-the-line",
+    "name": "Hold the Line",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Creatures provoke an opportunity attack from you when they move within your reach. A hit with that attack cuts the creature’s speed to 0 for the rest of the turn."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.cavalier-ferocious-charger",
+    "name": "Ferocious Charger",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "After moving at least 10 feet straight at a creature and hitting it, force a STR save (DC 8 + proficiency + STR) or it is knocked prone. Once per short or long rest."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.cavalier-vigilant-defender",
+    "name": "Vigilant Defender",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "On every creature’s turn (not just yours) you get a special reaction that can only be used for an opportunity attack."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.gloom-stalker-gloom-stalker-magic",
+    "name": "Gloom Stalker Magic",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Always prepared, not counted against your limit: disguise self (3), rope trick (5), fear (9), greater invisibility (13), seeming (17)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.gloom-stalker-dread-ambusher",
+    "name": "Dread Ambusher",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Add your WIS modifier to initiative. On the first turn of combat your speed rises by 10 feet and a weapon attack you make with the Attack action adds one extra attack that deals an extra 1d8."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.gloom-stalker-umbral-sight",
+    "name": "Umbral Sight",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Gain darkvision 60 feet, or add 30 feet to what you have. Creatures relying on darkvision cannot see you in darkness."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.gloom-stalker-iron-mind",
+    "name": "Iron Mind",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Gain proficiency in WIS saving throws. If you already have it, gain INT or CHA saves instead."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.gloom-stalker-stalkers-flurry",
+    "name": "Stalker’s Flurry",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Once per turn, when you miss with a weapon attack, make another weapon attack as part of the same action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.gloom-stalker-shadowy-dodge",
+    "name": "Shadowy Dodge",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Reaction when a creature attacks you without advantage: impose disadvantage on that attack roll."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature that does not have advantage makes an attack roll against you"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.war-magic-arcane-deflection",
+    "name": "Arcane Deflection",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Reaction when you are hit or fail a save: gain +2 AC against that attack or +4 to that save. Until the end of your next turn you can only cast cantrips."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "You are hit by an attack or fail a saving throw"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.war-magic-tactical-wit",
+    "name": "Tactical Wit",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Add your INT modifier to initiative rolls."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "initiative",
+        "value": {
+          "abilityMod": "INT"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.war-magic-power-surge",
+    "name": "Power Surge",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Hold surges up to your INT modifier (minimum 1); a long rest resets you to one. Dispel magic or counterspell succeeding earns one. Once per turn, spend one for extra force damage of half your wizard level."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.war-magic-durable-magic",
+    "name": "Durable Magic",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "While concentrating on a spell, gain +2 AC and +2 to all saving throws."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.war-magic-deflecting-shroud",
+    "name": "Deflecting Shroud",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "When you use Arcane Deflection, up to three creatures you choose within 60 feet take force damage equal to half your wizard level."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.twilight-twilight-spells",
+    "name": "Twilight Domain Spells",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Always prepared, not counted against your limit: faerie fire, sleep (1), moonbeam, see invisibility (3), aura of vitality, leomund’s tiny hut (5), aura of life, greater invisibility (7), circle of power, mislead (9)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.twilight-bonus-proficiencies",
+    "name": "Bonus Proficiencies",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Gain proficiency with martial weapons and heavy armor."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.twilight-eyes-of-night",
+    "name": "Eyes of Night",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Gain darkvision 300 feet. As an action, share it for 1 hour with a number of creatures equal to your WIS modifier (minimum 1). Once per long rest, or by spending a spell slot."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.twilight-vigilant-blessing",
+    "name": "Vigilant Blessing",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "As an action, touch a creature (not yourself) to give it advantage on its next initiative roll. The blessing ends when used or when you give it again."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.twilight-twilight-sanctuary",
+    "name": "Channel Divinity: Twilight Sanctuary",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "A 30-foot sphere of twilight lasts 1 minute around you. A creature ending its turn there gains 1d6 + your cleric level temporary hit points, or you end one charm or fright effect on it."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.twilight-steps-of-night",
+    "name": "Steps of Night",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "In dim light or darkness, use a bonus action to gain a flying speed equal to your walking speed for 1 minute. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.twilight-divine-strike",
+    "name": "Divine Strike",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Once per turn, a weapon hit deals extra 1d8 radiant damage (2d8 from level 14)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.twilight-twilight-shroud",
+    "name": "Twilight Shroud",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "You and allies in your Twilight Sanctuary have half cover."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-psionic-power",
+    "name": "Psionic Power",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "A pool of psionic dice, twice your proficiency bonus in number, regained on a long rest. The die is d6, then d8, d10 and d12 at levels 5, 11 and 17. Spend dice to power the features below."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-protective-field",
+    "name": "Protective Field",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Reaction when you or a creature within 30 feet takes damage: spend a die and reduce the damage by the roll plus your INT modifier."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "You or another creature you can see within 30 ft takes damage"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-psionic-strike",
+    "name": "Psionic Strike",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Once per turn, when you hit with a weapon, spend a die to add force damage equal to the roll plus your INT modifier."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-telekinetic-movement",
+    "name": "Telekinetic Movement",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Action: move a loose object or willing creature up to 30 feet within 30 feet of you. Once per short or long rest, or by spending a die."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-telekinetic-adept",
+    "name": "Telekinetic Adept",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Leap: bonus action, fly at twice your speed until turn end (once per rest, or spend a die). Thrust: Psionic Strike adds a STR save (DC 8 + proficiency + INT) or the target is prone or pushed 10 feet."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-guarded-mind",
+    "name": "Guarded Mind",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Resistance to psychic damage. At the start of your turn, spend a die to end a charm or fright effect on you."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-bulwark-of-force",
+    "name": "Bulwark of Force",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Bonus action: up to your INT modifier creatures you choose within 30 feet (you included) gain half cover for 1 minute. Once per long rest, or by spending a die."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-telekinetic-master",
+    "name": "Telekinetic Master",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Cast telekinesis using INT, once per long rest. While concentrating on it you can make a weapon attack as a bonus action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.fey-touched",
+    "name": "Fey Touched",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "+1 INT, WIS or CHA. Learn misty step and one 1st-level divination or enchantment spell. Cast each once per long rest for free, or with spell slots."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["INT", "WIS", "CHA"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.shadow-touched",
+    "name": "Shadow Touched",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "+1 INT, WIS or CHA. Learn invisibility and one 1st-level illusion or necromancy spell. Cast each once per long rest for free, or with spell slots."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["INT", "WIS", "CHA"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.telekinetic",
+    "name": "Telekinetic",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "+1 INT, WIS or CHA. Learn mage hand with an invisible hand and longer range. As a bonus action, target a creature within 30 feet: STR save or it moves 5 feet toward or away from you."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["INT", "WIS", "CHA"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.telepathic",
+    "name": "Telepathic",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "+1 INT, WIS or CHA. Speak mind to mind within 60 feet in a language you know. Cast detect thoughts once per long rest without a slot."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["INT", "WIS", "CHA"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.crusher",
+    "name": "Crusher",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "+1 STR or CON. Once per turn, a bludgeoning hit moves the target 5 feet. A critical hit gives all attackers advantage against it until the start of your next turn."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "CON"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.piercer",
+    "name": "Piercer",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "+1 STR or DEX. Once per turn, reroll one piercing damage die and keep the new roll. A critical hit adds one more damage die."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "DEX"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.slasher",
+    "name": "Slasher",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "+1 STR or DEX. Once per turn, a slashing hit cuts the target’s speed by 10 feet until the start of your next turn. A critical hit gives it disadvantage on attacks until then."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "DEX"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.skill-expert",
+    "name": "Skill Expert",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "+1 to any ability. Gain one skill proficiency and expertise in one skill you are already proficient in."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "DEX", "CON", "INT", "WIS", "CHA"],
+      "skills": 1
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.elven-accuracy",
+    "name": "Elven Accuracy",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs elf or half-elf. +1 DEX, INT, WIS or CHA. When you have advantage on an attack with one of those abilities, reroll one of the dice once."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["DEX", "INT", "WIS", "CHA"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.dwarven-fortitude",
+    "name": "Dwarven Fortitude",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs dwarf. +1 CON. When you take the Dodge action, you can spend one Hit Die to heal as if on a short rest."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["CON"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.fade-away",
+    "name": "Fade Away",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs gnome. +1 DEX or INT. Reaction after you take damage: become invisible until the end of your next turn, ending early if you attack or cast. Once per short or long rest."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["DEX", "INT"]
+    }
   }
 ]

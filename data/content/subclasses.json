@@ -162,5 +162,216 @@
         "featureId": "feature.artificer.battle-smith-improved-defender"
       }
     ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.fighter.cavalier",
+    "name": "Cavalier",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Mounted or on foot, a guardian who marks foes and holds the line."
+    },
+    "classId": "class.fighter",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.fighter.cavalier-bonus-proficiency"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.cavalier-born-to-the-saddle"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.cavalier-unwavering-mark"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.fighter.cavalier-warding-maneuver"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.fighter.cavalier-hold-the-line"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.fighter.cavalier-ferocious-charger"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.fighter.cavalier-vigilant-defender"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.ranger.gloom-stalker",
+    "name": "Gloom Stalker",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Ambusher at home in darkness who strikes first and vanishes."
+    },
+    "classId": "class.ranger",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.ranger.gloom-stalker-gloom-stalker-magic"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.ranger.gloom-stalker-dread-ambusher"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.ranger.gloom-stalker-umbral-sight"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.ranger.gloom-stalker-iron-mind"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.ranger.gloom-stalker-stalkers-flurry"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.ranger.gloom-stalker-shadowy-dodge"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.wizard.war-magic",
+    "name": "War Magic",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Battle wizard who blends defense with spell damage."
+    },
+    "classId": "class.wizard",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.wizard.war-magic-arcane-deflection"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.wizard.war-magic-tactical-wit"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.wizard.war-magic-power-surge"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.wizard.war-magic-durable-magic"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.wizard.war-magic-deflecting-shroud"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.cleric.twilight",
+    "name": "Twilight Domain",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Guardian of the dusk who shelters allies and watches through the night."
+    },
+    "classId": "class.cleric",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.twilight-twilight-spells"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.twilight-bonus-proficiencies"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.twilight-eyes-of-night"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.twilight-vigilant-blessing"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.twilight-twilight-sanctuary"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.twilight-steps-of-night"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.twilight-divine-strike"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.twilight-twilight-shroud"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.fighter.psi-warrior",
+    "name": "Psi Warrior",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "TCE",
+    "summary": {
+      "effect": "Fighter who channels psionic energy into shielding, striking and moving things."
+    },
+    "classId": "class.fighter",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.fighter.psi-warrior-psionic-power"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.psi-warrior-protective-field"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.psi-warrior-psionic-strike"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.psi-warrior-telekinetic-movement"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.fighter.psi-warrior-telekinetic-adept"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.fighter.psi-warrior-guarded-mind"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.fighter.psi-warrior-bulwark-of-force"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.fighter.psi-warrior-telekinetic-master"
+      }
+    ]
   }
 ]
