@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M15 (ally/enemy tracker), engine done; tracker UI next.
-**Next up:** M15 tracker UI in Combat. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M15 (ally/enemy tracker), complete.
+**Next up:** M16. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -38,7 +38,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M12 | Journal + Companions | 2 | done | Journal entries and companions save, show on every screen, survive reload and Undo |
 | M13 | Searchable Reference | 2 | done | Any bundled rule can be found by name; quick tables work offline |
 | M14 | Full level-up wizard + more classes + multiclass | 3 | todo | Every SRD class reaches level 20 through the wizard; multiclassing and feats follow campaign toggles |
-| M15 | Ally/enemy tracker | 3 | todo | A whole fight can be tracked: order, HP and conditions for allies and enemies, all undoable |
+| M15 | Ally/enemy tracker | 3 | done | A whole fight can be tracked: order, HP and conditions for allies and enemies, all undoable |
 | M16 | Dice roller, themes, more books | 4 | todo | Optional dice roller, Parchment theme, backups, Xanathar's and Tasha's packs; rules review done with the user |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
@@ -196,9 +196,9 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Engine, tracker: one encounter per character (Q31) with combatants (you, companions, allies, enemies), initiative order, round and turn; logged and undoable
 - [x] Engine, combatants: add from an SRD creature or a quick custom entry (name, AC, HP, initiative bonus); groups get numbers ("Goblin 2"); HP is average or a roll the player enters
 - [x] Engine, turn flow: next turn moves through the order; your turn start resets your action economy; rounds drive existing effect timers; companions act on their own or the owner's initiative
-- [ ] Tracker UI in Combat: initiative list, quick damage and heal, conditions, defeated toggle, statblock preview; compact at 375 px
-- [ ] Hits, saves and damage dealt stay player-entered; the tracker warns (concentration, 0 HP) but never decides
-- [ ] Gate: run a three-round fight with The Fool, a companion and three enemies; phone and desktop widths, Undo, reload, manual QA documented
+- [x] Tracker UI in Combat: initiative list, quick damage and heal, conditions, defeated toggle, statblock preview; compact at 375 px
+- [x] Hits, saves and damage dealt stay player-entered; the tracker warns (concentration, 0 HP) but never decides
+- [x] Gate: run a three-round fight with The Fool, a companion and three enemies; phone and desktop widths, Undo, reload, manual QA documented
 
 ### M16 — Dice roller, themes, more books
 - [ ] Optional dice roller (off by default, Settings toggle): roll from attack, damage, save and check buttons; roll history; results never applied without the player (Q5)
@@ -224,6 +224,8 @@ All remaining milestones are planned below. Still build one milestone at a time;
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-08 — M15: gate passed. Three-round fight with The Fool, a companion and three goblins at phone and desktop width; Undo and reload work.
+- 2026-11-08 — M15: tracker UI in Combat: initiative rows, damage, heal, conditions, defeated, statblock, add combatants; 0 HP and concentration only warn.
 - 2026-11-08 — M15: tracker engine. One encounter per character with order, rounds, groups, damage, defeated marks and Next turn driving effect timers; all undoable.
 - 2026-11-07 — M14: gate passed. Fighter 2 / Wizard 3, Warlock / Sorcerer and all 13 classes to level 5 build and undo; guided create survives reload.
 - 2026-11-07 — M14: guided new-character builder with a class start table: skills, kit choices, instruments and spells; blank create stays as the default.

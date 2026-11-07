@@ -164,13 +164,21 @@ interface LiveState {
   clock: { seconds: number };                      // game seconds since Day 1 00:00 (D46); 1 round = 6 s
   lastLongRestEnd?: number;                        // game seconds
   combat?: {
-    round: number;                                 // no initiative order (D42); Start Turn advances it
+    round: number;                                 // Start Turn advances it; the tracker's Next turn does when one runs
     turnActive: boolean;                           // between Start Turn and End Turn
     economy: { actionUsed: boolean; bonusUsed: boolean; reactionUsed: boolean;
                movementUsed: number; objectInteractionUsed: boolean;
                dashCount?: number;                // extra movement allowances, removed at End Turn
                bonusActionSpellCast: boolean;      // bonus-action spell rule
                otherSpellCast: boolean };          // any spell but a 1-action cantrip
+  };
+  encounter?: {                                  // the ally/enemy tracker (M15, D141); needs combat
+    id: string; round: number; currentId?: string;
+    combatants: { id: string; name: string; side: 'you' | 'companion' | 'ally' | 'enemy';
+                  companionId?: string; creatureId?: string;
+                  ac?: number; maxHp?: number; hp?: number; tempHp?: number;   // allies and enemies only
+                  conditions: string[]; initiativeBonus: number; initiative?: number;
+                  withOwner?: boolean; defeated: boolean; note?: string }[];
   };
 }
 ```

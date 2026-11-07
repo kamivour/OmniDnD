@@ -138,6 +138,16 @@ Exploration shares Dashboard's GameClockControl under D91.
 
 - [ ] Level a Fighter to 2 and add three Wizard levels. Judge whether the sheet, slots and proficiencies look right for a Fighter 2 / Wizard 3.
 
+## Phase 3 — M15: Ally/enemy tracker
+
+- [ ] Run a fight at 375 px with a companion and three goblins. Judge whether the order, HP and Next turn are easy to read and tap.
+
+- [ ] Compare the order with your table's: enter the d20s and check ties and a companion that acts with you.
+
+- [ ] Take an enemy to 0 HP. Judge whether the warning is clear and that nothing is marked defeated for you.
+
+- [ ] Check the Combat screen still feels fine without the tracker, with Start Turn and End Turn.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

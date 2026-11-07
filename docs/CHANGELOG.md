@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 02:35 — Ally/enemy tracker on the Combat screen
+
+- Combat now has a **Start tracker** panel: you and your companions, plus goblins or any creature from the list, or a quick custom one. Enter each d20 and the order sorts itself.
+- **Next turn** walks the order. Tap a row for damage, heal, temp HP, conditions, Defeated and the statblock. Reaching 0 HP only shows a warning.
+- Check at phone width that the rows are easy to read and tap. Start Turn and End Turn still work when no tracker is open.
+- Milestone 15 is complete. Next: milestone 16. Checks pass.
+
 ## 2026-11-08 02:20 — Ally/enemy tracker: the rules behind it
 
 - A fight can now hold you, your companions, allies and enemies, with initiative order, rounds and turns. Nothing shows in the app yet.

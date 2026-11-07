@@ -5,6 +5,7 @@ import {
   combatMovement,
   endCombat,
   endTurn,
+  nextTurn,
   healthDetails,
   STANDARD_ACTIONS,
   startCombat,
@@ -21,6 +22,7 @@ import {
   type CombatWeapon,
 } from '../combat/combat-model';
 import { useCommand } from '../commands/command-context';
+import { EncounterTracker } from '../combat/EncounterTracker';
 import { LiveFeatureDetail, LiveWeaponDetail } from '../combat/LiveCombatDetails';
 import { ActionRow } from '../components/ActionRow';
 import { AttackCard, FeatureCard, RuleCard } from '../components/cards';
@@ -260,11 +262,13 @@ export function CombatScreen() {
                   Round {Math.max(1, liveCombat.round)}
                 </p>
                 <p className="text-sm text-accent">
-                  {liveCombat.round === 0
-                    ? 'Before your first turn'
-                    : liveCombat.turnActive
-                      ? 'Your turn'
-                      : 'Waiting for your turn'}
+                  {state.live.encounter
+                    ? 'The tracker runs the turns'
+                    : liveCombat.round === 0
+                      ? 'Before your first turn'
+                      : liveCombat.turnActive
+                        ? 'Your turn'
+                        : 'Waiting for your turn'}
                 </p>
               </>
             ) : (
@@ -275,7 +279,15 @@ export function CombatScreen() {
               <OverrideMarker override={sheet.initiative.override} />
             </p>
           </div>
-          {liveCombat ? (
+          {liveCombat && state.live.encounter ? (
+            <button
+              type="button"
+              onClick={() => run(nextTurn, null, combatStatus.current ?? undefined)}
+              className="min-h-14 rounded-btn bg-accent px-4 font-semibold text-bg sm:min-h-11"
+            >
+              Next turn
+            </button>
+          ) : liveCombat ? (
             <button
               type="button"
               onClick={() =>
@@ -317,6 +329,8 @@ export function CombatScreen() {
             </button>
           )}
         </section>
+
+        {liveCombat && <EncounterTracker />}
 
         {liveCombat && (
           <section aria-label="Turn economy">

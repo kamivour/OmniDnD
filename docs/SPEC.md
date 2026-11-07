@@ -115,7 +115,7 @@ Resources, concentration, effects on you, conditions, Quick Access (favorited sp
 - Pact Magic (Warlock) is a separate slot pool. Phase 3, but the data model supports it from day one.
 
 ### Combat
-The Combat screen tracks **this character's** turn: what they can still do, what it costs, and what is left. It has no initiative order (D42); the DM runs the table.
+The Combat screen tracks **this character's** turn: what they can still do, what it costs, and what is left. Without the tracker it has no initiative order (D42); the DM runs the table. The optional tracker below adds one.
 
 - **Start Combat:** round counter starts at 1. Initiative modifier is shown for reference; the roll is not stored.
 - **Turn controls:** Start Turn (advances the round after the first turn; restores action, bonus action, movement, reaction; ticks start-of-turn effects), End Turn (ticks end-of-turn effects).
@@ -130,6 +130,13 @@ The Combat screen tracks **this character's** turn: what they can still do, what
 - **Log + Undo** always visible in the shared header row (last entry + one Undo; full history in a sheet).
 - **End Combat:** clear turn state; remaining round durations convert to game time (1 round = 6 s).
 - Validates action requirements and spends resources (see §6). Attack hits and damage dealt to others stay manual.
+
+#### Encounter tracker (M15, D141, D142)
+- **Start tracker** (while in combat) lists you and your active companions. Add allies and enemies from the creature list (group numbering "Goblin 2"; average HP or HP you enter) or as a quick custom entry (name, AC, HP, initiative bonus).
+- **Order:** enter each d20; the app adds the bonus. Next turn moves through the order, skipping defeated and un-rolled combatants. A new round passes 6 seconds. Your turn start restores your economy.
+- **Row:** AC, HP, temp HP, conditions, quick Damage, Heal and Temp HP for allies and enemies, a Defeated toggle, and the statblock. Your and your companions' HP stay on their usual screens.
+- **Warnings only:** 0 HP and concentration show a note. Hits, saves and damage dealt stay entered by the player.
+- One tracker per character, saved with it, and logged and undoable like any command.
 
 ### Exploration (basic in Phase 1)
 - Reuse Dashboard's shared Game Clock control and saved clock (D91): `Day N, HH:MM`, with `+1 min · +10 min · +1 h · +8 h · custom`. No second clock or real-world timer.
