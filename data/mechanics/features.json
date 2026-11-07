@@ -1,46 +1,169 @@
 [
-  { "id": "feature.barbarian.intimidating-presence", "activation": "action" },
+  {
+    "id": "feature.barbarian.ability-score-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.barbarian.brutal-critical",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.barbarian.danger-sense",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.barbarian.extra-attack",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.barbarian.fast-movement",
+    "activation": "passive",
+    "bonus": {
+      "5": 10
+    }
+  },
+  {
+    "id": "feature.barbarian.feral-instinct",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.barbarian.indomitable-might",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.barbarian.intimidating-presence",
+    "activation": "action"
+  },
+  {
+    "id": "feature.barbarian.persistent-rage",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.barbarian.primal-champion",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.barbarian.primal-path",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.barbarian.primal-path-improvement",
+    "activation": "passive"
+  },
   {
     "id": "feature.barbarian.rage",
     "activation": "bonus",
     "uses": {
-      "max": { "byLevel": { "1": 2, "3": 3, "6": 4, "12": 5, "17": 6 } },
+      "max": {
+        "byLevel": {
+          "1": 2,
+          "3": 3,
+          "6": 4,
+          "12": 5,
+          "17": 6
+        }
+      },
       "recharge": "long"
+    },
+    "bonus": {
+      "1": 2,
+      "9": 3,
+      "16": 4
     }
   },
-  { "id": "feature.barbarian.reckless-attack", "activation": "free" },
-  { "id": "feature.bard.ability-score-improvement", "activation": "passive" },
+  {
+    "id": "feature.barbarian.reckless-attack",
+    "activation": "free"
+  },
+  {
+    "id": "feature.barbarian.unarmored-defense",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.bard.ability-score-improvement",
+    "activation": "passive"
+  },
   {
     "id": "feature.bard.bardic-inspiration",
     "activation": "bonus",
-    "uses": { "max": { "abilityMod": "CHA", "min": 1 }, "recharge": { "1": "long", "5": "short" } },
-    "die": { "1": "d6", "5": "d8", "10": "d10", "15": "d12" }
+    "uses": {
+      "max": {
+        "abilityMod": "CHA",
+        "min": 1
+      },
+      "recharge": {
+        "1": "long",
+        "5": "short"
+      }
+    },
+    "die": {
+      "1": "d6",
+      "5": "d8",
+      "10": "d10",
+      "15": "d12"
+    }
   },
-  { "id": "feature.bard.bonus-proficiencies", "activation": "passive" },
-  { "id": "feature.bard.college", "activation": "passive" },
-  { "id": "feature.bard.countercharm", "activation": "action" },
+  {
+    "id": "feature.bard.bonus-proficiencies",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.bard.college",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.bard.countercharm",
+    "activation": "action"
+  },
   {
     "id": "feature.bard.cutting-words",
     "activation": "reaction",
     "trigger": "A creature you can see within 60 ft makes an attack roll, ability check, or damage roll",
     "usesFrom": "feature.bard.bardic-inspiration"
   },
-  { "id": "feature.bard.expertise", "activation": "passive" },
+  {
+    "id": "feature.bard.expertise",
+    "activation": "passive"
+  },
   {
     "id": "feature.bard.jack-of-all-trades",
     "activation": "passive",
-    "modifiers": [{ "target": "unproficient-checks", "value": { "proficiency": "half" } }]
+    "modifiers": [
+      {
+        "target": "unproficient-checks",
+        "value": {
+          "proficiency": "half"
+        }
+      }
+    ]
   },
   {
     "id": "feature.bard.song-of-rest",
     "activation": "special",
-    "die": { "2": "d6", "9": "d8", "13": "d10", "17": "d12" }
+    "die": {
+      "2": "d6",
+      "9": "d8",
+      "13": "d10",
+      "17": "d12"
+    }
   },
-  { "id": "feature.bard.spellcasting", "activation": "passive" },
+  {
+    "id": "feature.bard.spellcasting",
+    "activation": "passive"
+  },
   {
     "id": "feature.cleric.channel-divinity",
     "activation": "special",
-    "uses": { "max": { "byLevel": { "2": 1, "6": 2, "18": 3 } }, "recharge": "short" }
+    "uses": {
+      "max": {
+        "byLevel": {
+          "2": 1,
+          "6": 2,
+          "18": 3
+        }
+      },
+      "recharge": "short"
+    }
   },
   {
     "id": "feature.cleric.channel-divinity-preserve-life",
@@ -52,57 +175,184 @@
     "activation": "action",
     "usesFrom": "feature.cleric.channel-divinity"
   },
-  { "id": "feature.darkvision", "activation": "passive" },
+  {
+    "id": "feature.darkvision",
+    "activation": "passive"
+  },
   {
     "id": "feature.druid.natural-recovery",
     "activation": "special",
-    "uses": { "max": 1, "recharge": "long" }
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
   },
   {
     "id": "feature.druid.wild-shape",
     "activation": "action",
-    "uses": { "max": 2, "recharge": "short" }
+    "uses": {
+      "max": 2,
+      "recharge": "short"
+    }
   },
   {
     "id": "feature.dwarven-resilience",
-    "defenses": { "resistances": ["poison"], "saveAdvantages": ["poison"] }
+    "defenses": {
+      "resistances": ["poison"],
+      "saveAdvantages": ["poison"]
+    }
   },
   {
     "id": "feature.fey-ancestry",
     "activation": "passive",
-    "defenses": { "saveAdvantages": ["charmed"], "magicalSleepImmunity": true }
+    "defenses": {
+      "saveAdvantages": ["charmed"],
+      "magicalSleepImmunity": true
+    }
+  },
+  {
+    "id": "feature.fighter.ability-score-improvement",
+    "activation": "passive"
   },
   {
     "id": "feature.fighter.action-surge",
     "activation": "free",
-    "uses": { "max": { "byLevel": { "2": 1, "17": 2 } }, "recharge": "short" }
+    "uses": {
+      "max": {
+        "byLevel": {
+          "2": 1,
+          "17": 2
+        }
+      },
+      "recharge": "short"
+    }
+  },
+  {
+    "id": "feature.fighter.extra-attack",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.fighter.fighting-style",
+    "activation": "passive"
   },
   {
     "id": "feature.fighter.indomitable",
     "activation": "free",
     "trigger": "You fail a saving throw",
-    "uses": { "max": { "byLevel": { "9": 1, "13": 2, "17": 3 } }, "recharge": "long" }
+    "uses": {
+      "max": {
+        "byLevel": {
+          "9": 1,
+          "13": 2,
+          "17": 3
+        }
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "id": "feature.fighter.martial-archetype",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.fighter.martial-archetype-improvement",
+    "activation": "passive"
   },
   {
     "id": "feature.fighter.second-wind",
     "activation": "bonus",
-    "uses": { "max": 1, "recharge": "short" }
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
   },
-  { "id": "feature.hellish-resistance", "defenses": { "resistances": ["fire"] } },
+  {
+    "id": "feature.hellish-resistance",
+    "defenses": {
+      "resistances": ["fire"]
+    }
+  },
+  {
+    "id": "feature.monk.ability-score-improvement",
+    "activation": "passive"
+  },
   {
     "id": "feature.monk.deflect-missiles",
     "activation": "reaction",
     "trigger": "A ranged weapon attack hits you"
   },
-  { "id": "feature.monk.flurry-of-blows", "activation": "bonus", "usesFrom": "feature.monk.ki" },
+  {
+    "id": "feature.monk.diamond-soul",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.monk.evasion",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.monk.extra-attack",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.monk.flurry-of-blows",
+    "activation": "bonus",
+    "usesFrom": "feature.monk.ki"
+  },
   {
     "id": "feature.monk.ki",
     "activation": "special",
-    "uses": { "max": { "perLevel": 1 }, "recharge": "short" }
+    "uses": {
+      "max": {
+        "perLevel": 1
+      },
+      "recharge": "short"
+    }
   },
-  { "id": "feature.monk.patient-defense", "activation": "bonus", "usesFrom": "feature.monk.ki" },
-  { "id": "feature.monk.slow-fall", "activation": "reaction", "trigger": "You fall" },
-  { "id": "feature.monk.step-of-the-wind", "activation": "bonus", "usesFrom": "feature.monk.ki" },
+  {
+    "id": "feature.monk.ki-empowered-strikes",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.monk.martial-arts",
+    "activation": "passive",
+    "die": {
+      "1": "d4",
+      "5": "d6",
+      "11": "d8",
+      "17": "d10"
+    }
+  },
+  {
+    "id": "feature.monk.monastic-tradition",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.monk.monastic-tradition-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.monk.patient-defense",
+    "activation": "bonus",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "id": "feature.monk.purity-of-body",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.monk.slow-fall",
+    "activation": "reaction",
+    "trigger": "You fall"
+  },
+  {
+    "id": "feature.monk.step-of-the-wind",
+    "activation": "bonus",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "id": "feature.monk.stillness-of-mind",
+    "activation": "action"
+  },
   {
     "id": "feature.monk.stunning-strike",
     "activation": "free",
@@ -110,14 +360,59 @@
     "usesFrom": "feature.monk.ki"
   },
   {
+    "id": "feature.monk.timeless-body",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.monk.tongue-of-the-sun-and-moon",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.monk.unarmored-defense",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.monk.unarmored-movement",
+    "activation": "passive",
+    "bonus": {
+      "2": 10,
+      "5": 15,
+      "9": 20,
+      "13": 25,
+      "17": 30
+    }
+  },
+  {
     "id": "feature.monk.wholeness-of-body",
     "activation": "action",
-    "uses": { "max": 1, "recharge": "long" }
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "id": "feature.paladin.ability-score-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.paladin.aura-improvements",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.paladin.aura-of-courage",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.paladin.aura-of-protection",
+    "activation": "passive"
   },
   {
     "id": "feature.paladin.channel-divinity",
     "activation": "special",
-    "uses": { "max": 1, "recharge": "short" }
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
   },
   {
     "id": "feature.paladin.channel-divinity-sacred-weapon",
@@ -132,41 +427,234 @@
   {
     "id": "feature.paladin.cleansing-touch",
     "activation": "action",
-    "uses": { "max": { "abilityMod": "CHA", "min": 1 }, "recharge": "long" }
+    "uses": {
+      "max": {
+        "abilityMod": "CHA",
+        "min": 1
+      },
+      "recharge": "long"
+    }
   },
-  { "id": "feature.paladin.divine-sense", "activation": "action" },
-  { "id": "feature.paladin.lay-on-hands", "activation": "action" },
-  { "id": "feature.rogue.cunning-action", "activation": "bonus" },
+  {
+    "id": "feature.paladin.divine-health",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.paladin.divine-sense",
+    "activation": "action",
+    "uses": {
+      "max": {
+        "abilityMod": "CHA",
+        "min": 0,
+        "plus": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "id": "feature.paladin.extra-attack",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.paladin.fighting-style",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.paladin.improved-divine-smite",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.paladin.lay-on-hands",
+    "activation": "action",
+    "uses": {
+      "max": {
+        "perLevel": 5
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "id": "feature.paladin.oath-spells",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.paladin.sacred-oath",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.paladin.sacred-oath-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.paladin.spellcasting",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.ability-score-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.archetype",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.archetype-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.extra-attack",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.favored-enemy",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.feral-senses",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.fighting-style",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.foe-slayer",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.hide-in-plain-sight",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.lands-stride",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.natural-explorer",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.primeval-awareness",
+    "activation": "action"
+  },
+  {
+    "id": "feature.ranger.spellcasting",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.vanish",
+    "activation": "bonus"
+  },
+  {
+    "id": "feature.rogue.ability-score-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.rogue.blindsense",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.rogue.cunning-action",
+    "activation": "bonus"
+  },
+  {
+    "id": "feature.rogue.elusive",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.rogue.evasion",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.rogue.expertise",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.rogue.reliable-talent",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.rogue.roguish-archetype",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.rogue.roguish-archetype-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.rogue.slippery-mind",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.rogue.sneak-attack",
+    "activation": "passive",
+    "dice": {
+      "1": "1d6",
+      "3": "2d6",
+      "5": "3d6",
+      "7": "4d6",
+      "9": "5d6",
+      "11": "6d6",
+      "13": "7d6",
+      "15": "8d6",
+      "17": "9d6",
+      "19": "10d6"
+    }
+  },
   {
     "id": "feature.rogue.stroke-of-luck",
     "activation": "free",
-    "uses": { "max": 1, "recharge": "short" }
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "id": "feature.rogue.thieves-cant",
+    "activation": "passive"
   },
   {
     "id": "feature.rogue.uncanny-dodge",
     "activation": "reaction",
     "trigger": "An attacker you can see hits you with an attack"
   },
-  { "id": "feature.skill-versatility", "activation": "passive" },
+  {
+    "id": "feature.skill-versatility",
+    "activation": "passive"
+  },
   {
     "id": "feature.sorcerer.font-of-magic",
     "activation": "special",
-    "uses": { "max": { "perLevel": 1 }, "recharge": "long" }
+    "uses": {
+      "max": {
+        "perLevel": 1
+      },
+      "recharge": "long"
+    }
   },
   {
     "id": "feature.warlock.dark-ones-own-luck",
     "activation": "free",
-    "uses": { "max": 1, "recharge": "short" }
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
   },
   {
     "id": "feature.warlock.hurl-through-hell",
     "activation": "free",
     "trigger": "You hit a creature with an attack",
-    "uses": { "max": 1, "recharge": "long" }
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
   },
   {
     "id": "feature.wizard.arcane-recovery",
     "activation": "special",
-    "uses": { "max": 1, "recharge": "long" }
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
   }
 ]

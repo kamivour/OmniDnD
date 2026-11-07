@@ -9,6 +9,9 @@ export interface CharacterFeature {
   level: number;
   uses?: { max: number; recharge: Recharge };
   die?: Die;
+  /** Display only: dice count or flat bonus at the feature level. */
+  dice?: string;
+  bonus?: number;
   dieOverride?: { path: string; note: string; calculated: Die; value: Die };
 }
 
@@ -36,7 +39,7 @@ export function resolveFormula(
   if (typeof formula === 'number') return formula;
   if ('byLevel' in formula) return byLevel(formula.byLevel, level) ?? 0;
   if ('perLevel' in formula) return formula.perLevel * level;
-  if ('abilityMod' in formula) return Math.max(formula.min ?? -Infinity, mods[formula.abilityMod]);
+  if ('abilityMod' in formula) return Math.max(formula.min ?? -Infinity, mods[formula.abilityMod]) + (formula.plus ?? 0);
   if (formula.proficiency === 'half') return Math.floor(proficiency / 2);
   if (formula.proficiency === 'double') return proficiency * 2;
   return proficiency;
@@ -83,6 +86,10 @@ export function characterFeatures(
     }
     const die = def.die && byLevel(def.die, level);
     if (die) feature.die = die;
+    const dice = def.dice && byLevel(def.dice, level);
+    if (dice) feature.dice = dice;
+    const bonus = def.bonus && byLevel(def.bonus, level);
+    if (bonus !== undefined) feature.bonus = bonus;
     return [feature];
   });
 }

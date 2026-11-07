@@ -403,7 +403,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       'Initiative',
       sumParts([modPart('DEX'), ...modifierParts('initiative', 'checks', 'unproficient-checks')]),
     ),
-    ac: value('/ac', 'Armor class', armorClass(equipped, mods.DEX, modifierParts('ac')), {
+    ac: value('/ac', 'Armor class', armorClass(equipped, mods.DEX, modifierParts('ac'), unarmoredDefenses(features, mods)), {
       min: 0,
     }),
     speed: value(
@@ -521,7 +521,34 @@ function sourceLabel(source: string, registry: Registry): string {
 type Equipped = { instanceId: string; def: ItemDef }[];
 
 /** PHB 2014: armor base + DEX (light full, medium max +2, heavy none); 10 + DEX unarmored; a shield adds its bonus. */
-function armorClass(equipped: Equipped, dexMod: number, extra: Part[]): Stat {
+/** PHB 2014 Unarmored Defense: Barbarian adds CON (a shield is fine), Monk adds WIS (no shield). */
+const UNARMORED_DEFENSES: Record<string, { ability: Ability; shield: boolean }> = {
+  'feature.barbarian.unarmored-defense': { ability: 'CON', shield: true },
+  'feature.monk.unarmored-defense': { ability: 'WIS', shield: false },
+};
+
+interface UnarmoredDefense {
+  ability: Ability;
+  shield: boolean;
+  mod: number;
+}
+
+function unarmoredDefenses(
+  features: readonly { def: { id: string } }[],
+  mods: Record<Ability, number>,
+): UnarmoredDefense[] {
+  return features.flatMap(({ def }) => {
+    const rule = UNARMORED_DEFENSES[def.id];
+    return rule ? [{ ...rule, mod: mods[rule.ability] }] : [];
+  });
+}
+
+function armorClass(
+  equipped: Equipped,
+  dexMod: number,
+  extra: Part[],
+  unarmored: UnarmoredDefense[] = [],
+): Stat {
   const body = equipped.find(({ def }) => def.armor && def.armor.category !== 'shield')?.def;
   const shield = equipped.find(({ def }) => def.armor?.category === 'shield')?.def;
   const parts: Part[] = [];
@@ -532,6 +559,11 @@ function armorClass(equipped: Equipped, dexMod: number, extra: Part[]): Stat {
     if (category !== 'heavy') parts.push({ label: 'DEX', value: dex });
   } else {
     parts.push({ label: 'Unarmored', value: 10 }, { label: 'DEX', value: dexMod });
+    // The best allowed source wins; a Monk with a shield gets no Unarmored Defense.
+    const best = unarmored
+      .filter((rule) => (rule.shield || !shield) && rule.mod > 0)
+      .sort((a, b) => b.mod - a.mod)[0];
+    if (best) parts.push({ label: `Unarmored Defense (${best.ability})`, value: best.mod });
   }
   if (shield?.armor) parts.push({ label: shield.name, value: shield.armor.baseAc });
   return sumParts([...parts, ...extra]);

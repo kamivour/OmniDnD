@@ -58,7 +58,12 @@ const SRD_TEXT_ONLY = { message: 'fullText is only allowed on SRD entries', path
 /** Small declarative numbers. Anything more complex is a code hook, never an expression language. */
 export const FormulaSchema = z.union([
   z.int(),
-  z.strictObject({ abilityMod: AbilitySchema, min: z.int().optional() }),
+  z.strictObject({
+    abilityMod: AbilitySchema,
+    min: z.int().optional(),
+    /** Added after the minimum is applied (Divine Sense: 1 + CHA). */
+    plus: z.int().optional(),
+  }),
   z.strictObject({ proficiency: z.enum(['half', 'full', 'double']) }),
   /** A count that grows with the feature's level (Rage, Action Surge). */
   z.strictObject({ byLevel: z.record(LevelKeySchema, z.int().min(0)) }),
@@ -158,6 +163,10 @@ export const FeatureDefSchema = z
     /** Spends another feature's uses (Cutting Words spends Bardic Inspiration). */
     usesFrom: refId('feature').optional(),
     die: DieByLevelSchema.optional(),
+    /** Display only: a dice count that grows with level (Sneak Attack). */
+    dice: z.record(LevelKeySchema, DiceSchema).optional(),
+    /** Display only: a flat bonus that grows with level (Rage damage). */
+    bonus: z.record(LevelKeySchema, z.int()).optional(),
     modifiers: z.array(ModifierSchema).optional(),
     defenses: FeatureDefensesSchema.optional(),
     /** Complex logic in `src/engine/hooks/<hook>.ts`. */

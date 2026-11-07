@@ -86,7 +86,8 @@ export function featuresModel(
 ): { origin: FeatureOrigin; title: string; entries: FeatureEntry[] }[] {
   const labels = grantLabels(state.build, registry);
   const favorites = new Set(state.build.favorites);
-  const entries = sheet.features.map(({ def }): FeatureEntry => {
+  const entries = sheet.features.map(({ def, dice, bonus }): FeatureEntry => {
+    // Level-scaled value shown beside the feature: a die, a dice count or a flat bonus.
     const details = featureUseDetails({ live: state.live, sheet }, def.id);
     const { kind, label } = ACTIVATION[def.activation];
     const shared = details.poolId !== def.id;
@@ -104,7 +105,9 @@ export function featuresModel(
       lines,
       summarized: !!def.summary,
       automatic: !!(def.modifiers?.length || def.defenses),
-      ...(details.die ? { die: details.die } : {}),
+      ...(details.die || dice || bonus !== undefined
+        ? { die: details.die ?? dice ?? `+${bonus}` }
+        : {}),
       ...(details.uses && !shared
         ? {
             ownPool: {

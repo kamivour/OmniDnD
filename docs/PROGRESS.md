@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M14 (level-up wizard, more classes, multiclass), task 5 done.
-**Next up:** M14 task 6, martial and half-caster classes. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M14 (level-up wizard, more classes, multiclass), task 6 done.
+**Next up:** M14 task 7, full casters. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -183,7 +183,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Engine, level choices: subclass at the class's subclass level; ASI (+2 or +1/+1, cap 20) or a feat only when feats are on; class picks such as Fighting Style, Expertise, Favored Enemy, Metamagic, Invocations
 - [x] Engine, spells on level-up: new cantrips and spells known per class table, Wizard adds two spellbook spells, known casters may swap one spell; prepared counts recompute
 - [x] Level-up wizard UI: class, HP, new features, subclass, ASI or feat, class picks, spells, review; applies as one undoable command; replaces the minimal level-up
-- [ ] Martial and half-caster classes end to end, levels 1–20: Barbarian, Fighter, Monk, Rogue, Paladin, Ranger; features, resources and slots checked per level
+- [x] Martial and half-caster classes end to end, levels 1–20: Barbarian, Fighter, Monk, Rogue, Paladin, Ranger; features, resources and slots checked per level
 - [ ] Full casters end to end, levels 1–20: Bard, Cleric, Druid, Sorcerer, Warlock, Wizard; Pact Magic and Mystic Arcanum, Sorcery Points, Wild Shape uses, Channel Divinity
 - [ ] Feats: SRD Grappler plus PHB feats in our own words in `data/content/`; ability, HP, initiative and proficiency effects applied, the rest shown as reminders
 - [ ] Tasha options behind campaign toggles: optional class features and custom origin; turning a toggle off keeps choices and lists conflicts (as M11)
@@ -224,6 +224,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-07 — M14: Barbarian, Fighter, Monk, Paladin, Ranger, Rogue checked at levels 1–20: scaling dice and bonuses, pools, Unarmored Defense AC, half-caster slots.
 - 2026-11-07 — M14: Level up now offers new class, subclass, ability score improvement or feat, and spells in one undoable step. Class picks arrive with tasks 6–7.
 - 2026-11-07 — M14: `levelUp` can add the new cantrips and spells a class table allows, Wizard spellbook copies, and one known-caster swap; prepared counts follow the level.
 - 2026-11-07 — M14: `levelUp` takes subclass, ASI (cap 20) or feat, expertise and picked option features in one undoable step. Next: spells on level-up.

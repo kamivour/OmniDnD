@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 20:05 — Martial and half-caster classes
+
+- Barbarian, Fighter, Monk, Paladin, Ranger and Rogue now show their level-based numbers: Rage damage, Sneak Attack dice, Martial Arts die, Unarmored Movement, Lay on Hands pool, Divine Sense uses.
+- Barbarian and Monk Unarmored Defense now counts in armor class (Monk loses it with a shield).
+- Check a Monk or Barbarian without armor. Rage stays at 6 uses past level 17 (no unlimited). Checks pass.
+
 ## 2026-11-07 19:51 — Level-up wizard
 
 - Level up now lets you start a new class, pick a subclass, raise ability scores or take a feat, and choose new spells, all in one step you can undo.
