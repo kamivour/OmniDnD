@@ -124,6 +124,8 @@ Exploration shares Dashboard's GameClockControl under D91.
 
 - [ ] Search "goblin", "mage" and "dragon". Judge whether the statblocks are readable and complete enough to run a fight from.
 
+- [ ] Level up a caster and a Fighter turned Wizard at 375 px. Judge whether the new-class, subclass, ability score and spell sections are clear and easy to tap.
+
 ## Deferred rules review — M5
 
 Existing D80 behavior remains in place: damage at zero HP ends stability and adds death-save failures even when temporary HP absorb it. Q21's instant-death threshold still uses damage remaining after temporary HP. Assisted shows a DM-review note when interpretations differ; Manual suppresses that reminder.

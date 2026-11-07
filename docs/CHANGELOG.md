@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 19:51 — Level-up wizard
+
+- Level up now lets you start a new class, pick a subclass, raise ability scores or take a feat, and choose new spells, all in one step you can undo.
+- Anything you skip says "Decide later" and can be set afterward. Check the Spells section on a caster and a multiclass level.
+- Class-specific picks (expertise, fighting styles, invocations) come with the class tasks next. Checks pass.
+
 ## 2026-11-07 19:15 — Spells on level-up
 
 - A level-up can now add the new cantrips and spells the class table gives, copy spells into a Wizard's spellbook, and swap one known spell for another.

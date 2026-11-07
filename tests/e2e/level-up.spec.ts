@@ -629,3 +629,59 @@ test('Manual mode applies an alternate roll without a warning and zero HP and de
     await noOverflow(page);
   }
 });
+
+test('The Fool takes an ability score improvement and new spells in one undoable level', async ({
+  page,
+}) => {
+  const file = foolFile('level-up-fool-choices');
+  await importFile(page, file);
+  await goSheet(page, file.build.id);
+  const before = await readSaved(page, file.build.id);
+  await openLevelUp(page);
+  await roll(page).fill('5');
+  const asi = form(page).getByRole('group', { name: 'Ability score improvement' });
+  await asi.getByRole('radio', { name: 'Raise ability scores' }).check();
+  await asi.getByRole('radio', { name: '+2 to one ability' }).check();
+  await asi.getByLabel('Ability', { exact: true }).selectOption('DEX');
+  const cantrips = form(page).getByRole('group', { name: /^Cantrips \(0 \/ 1\)/ });
+  await cantrips.getByRole('checkbox').first().check();
+  const spells = form(page).getByRole('group', { name: /^Spells known/ });
+  await spells.getByRole('checkbox').first().check();
+  await expect(spells.getByRole('checkbox', { checked: false }).first()).toBeDisabled();
+  await noOverflow(page);
+  await page.screenshot({ path: test.info().outputPath('level-up-choices.png') });
+  await applyLevelUp(page);
+  const changed = await readSaved(page, file.build.id);
+  expect(changed.build.abilityScores.bonuses.at(-1)).toMatchObject({ ability: 'DEX', value: 2 });
+  expect(changed.build.spells[0]!.known).toHaveLength(before.build.spells[0]!.known.length + 2);
+  expect(changed.events).toHaveLength(before.events.length + 1);
+  await undo(page).click();
+  await saved(page);
+  expect((await readSaved(page, file.build.id)).build).toEqual(before.build);
+});
+
+test('a Fighter starts Wizard through the wizard with spellbook picks', async ({ page }) => {
+  const file = friendFile('level-up-new-class', { classId: 'class.fighter', level: 3 });
+  file.campaign.optionalRules = { ...file.campaign.optionalRules, multiclassing: true };
+  file.build.abilityScores.base.INT = 14;
+  file.build.abilityScores.base.STR = 13;
+  await importFile(page, file);
+  await goSheet(page, file.build.id);
+  const before = await readSaved(page, file.build.id);
+  await openLevelUp(page);
+  await form(page).getByLabel('Class to advance', { exact: true }).selectOption('class.wizard');
+  await change(page, 'Wizard class level', '0', '1');
+  await expect(form(page).getByRole('group', { name: /^Spells to copy/ })).toBeVisible();
+  const book = form(page).getByRole('group', {
+    name: /^Spells to copy/,
+  });
+  for (let index = 0; index < 6; index += 1) await book.getByRole('checkbox').nth(index).check();
+  await noOverflow(page);
+  await applyLevelUp(page);
+  const changed = await readSaved(page, file.build.id);
+  expect(changed.build.classes).toContainEqual({ classId: 'class.wizard', level: 1 });
+  expect(changed.build.spells.find((row) => row.classId === 'class.wizard')?.known).toHaveLength(6);
+  await undo(page).click();
+  await saved(page);
+  expect((await readSaved(page, file.build.id)).build).toEqual(before.build);
+});

@@ -10,7 +10,19 @@ import { Field, inputClass } from '../components/fields';
 import { SectionLabel } from '../components/SectionLabel';
 import { OverrideMarker } from '../components/StatChip';
 import { useCharacter } from '../hooks/useCharacter';
-import { levelUpChanges, previewLevelUp } from './level-up-model';
+import { levelChoiceNeeds } from '../../engine/calc/level-choices';
+import { AsiPick, NewClassPicks, SpellPicks, SubclassPick } from './LevelUpChoices';
+import {
+  emptyPicks,
+  featOptions,
+  levelSpellInfo,
+  levelUpChanges,
+  newClassOptions,
+  picksToPayload,
+  previewLevelUp,
+  subclassOptions,
+  type LevelPicks,
+} from './level-up-model';
 
 const button = 'min-h-11 rounded-btn border border-border px-3 text-sm disabled:opacity-40';
 
@@ -104,16 +116,43 @@ function LevelUpForm({
   const prefix = useId();
   const stale =
     JSON.stringify(state) !== JSON.stringify(reviewed.state) || automation !== reviewed.automation;
-  const chosen = details.classes.find((entry) => entry.classId === classId);
+  const [picks, setPicks] = useState<LevelPicks>(emptyPicks);
+  const setPick = (patch: Partial<LevelPicks>) => setPicks((now) => ({ ...now, ...patch }));
+  const newClasses = newClassOptions(reviewed.state, registry);
+  const newClass = newClasses.find((entry) => entry.classId === classId);
+  const existing = details.classes.find((entry) => entry.classId === classId);
+  const chosen = existing ?? (newClass ? { ...newClass, level: 0, ambiguous: false } : undefined);
+  const pickClass = (id: string) => {
+    setClassId(id);
+    setPicks(emptyPicks);
+  };
   const faces = chosen ? Number(chosen.hitDie.slice(1)) : 0;
   const rollNumber = roll.trim() === '' ? NaN : Number(roll);
   const validRoll =
     mode === 'average' || (Number.isInteger(rollNumber) && rollNumber >= 1 && rollNumber <= faces);
-  const payload: LevelUpPayload = {
+  const needs = chosen
+    ? levelChoiceNeeds(registry, classId, reviewed.state.build)
+    : { subclass: false, asi: false };
+  const basePayload: LevelUpPayload = {
     classId,
     ...(mode === 'rolled' ? { roll: rollNumber } : {}),
     expected: reviewed.state,
+    ...picksToPayload(picks, needs, newClass !== undefined, false),
   };
+  const payload: LevelUpPayload = {
+    ...basePayload,
+    ...picksToPayload(picks, needs, newClass !== undefined),
+  };
+  // Spell choices depend on the character after this level, before any spell picks.
+  const base = chosen
+    ? previewLevelUp(reviewed.state, registry, basePayload, reviewed.automation)
+    : undefined;
+  const spellInfo =
+    base?.result === 'ok'
+      ? levelSpellInfo(base.next, registry, classId, newClass !== undefined)
+      : undefined;
+  const subclasses = needs.subclass ? subclassOptions(reviewed.state, registry, classId) : [];
+  const feats = needs.asi ? featOptions(reviewed.state, registry) : [];
   const preview = previewLevelUp(reviewed.state, registry, payload, reviewed.automation);
   const changes =
     preview.result === 'ok' ? levelUpChanges(reviewed.state, preview.next, registry, classId) : [];
@@ -160,14 +199,15 @@ function LevelUpForm({
       }}
     >
       <p className="text-sm text-text-muted">
-        Record one class level and its HP entry. Review any new spell or build choices separately.
+        Record one class level and its HP, then make this level's choices. Anything left undecided
+        can be added later.
       </p>
-      {details.classes.length > 1 || !chosen ? (
+      {details.classes.length > 1 || newClasses.length > 0 || !chosen ? (
         <Field label="Class to advance" htmlFor={`${prefix}-class`}>
           <select
             id={`${prefix}-class`}
             value={classId}
-            onChange={(event) => setClassId(event.target.value)}
+            onChange={(event) => pickClass(event.target.value)}
             className={inputClass}
           >
             {!chosen && (
@@ -185,6 +225,15 @@ function LevelUpForm({
                 {entry.ambiguous ? ' (ambiguous entry)' : ''}
               </option>
             ))}
+            {newClasses.length > 0 && (
+              <optgroup label="Start a new class">
+                {newClasses.map((entry) => (
+                  <option key={entry.classId} value={entry.classId}>
+                    {entry.name} (new)
+                  </option>
+                ))}
+              </optgroup>
+            )}
           </select>
         </Field>
       ) : (
@@ -247,6 +296,15 @@ function LevelUpForm({
           </p>
         )
       )}
+      {newClass && (
+        <NewClassPicks option={newClass} picks={picks} set={setPick} registry={registry} />
+      )}
+      {subclasses.length > 0 && <SubclassPick options={subclasses} picks={picks} set={setPick} />}
+      {needs.asi && <AsiPick feats={feats} picks={picks} set={setPick} />}
+      {spellInfo &&
+        (spellInfo.gains.cantrips > 0 || spellInfo.gains.spells > 0 || spellInfo.gains.canSwap) && (
+          <SpellPicks info={spellInfo} picks={picks} set={setPick} registry={registry} />
+        )}
       {stale && (
         <div
           role="alert"

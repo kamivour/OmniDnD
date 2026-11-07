@@ -4,7 +4,16 @@ import { buildRegistry } from '../../engine/registry';
 import { levelUp } from '../../engine/commands/level';
 import { seedState, Session, withLive } from '../../engine/commands/test-utils';
 import type { CharacterState } from '../../engine/calc/sheet';
-import { levelUpChanges, previewLevelUp } from './level-up-model';
+import {
+  emptyPicks,
+  featOptions,
+  levelSpellInfo,
+  levelUpChanges,
+  newClassOptions,
+  picksToPayload,
+  previewLevelUp,
+  subclassOptions,
+} from './level-up-model';
 
 const row = (rows: ReturnType<typeof levelUpChanges>, label: string) =>
   rows.find((entry) => entry.label === label);
@@ -240,5 +249,64 @@ describe('level-up preview', () => {
     expect(preview.next.build.overrides).toEqual(state.build.overrides);
     expect(preview.next.live.hitDiceSpent).toEqual(state.live.hitDiceSpent);
     expect(state).toEqual(before);
+  });
+});
+
+describe('level-up wizard model', () => {
+  const needs = { subclass: true, asi: true };
+
+  it('turns picks into payload fields and leaves undecided choices out', () => {
+    expect(picksToPayload(emptyPicks, needs, false)).toEqual({});
+    expect(
+      picksToPayload(
+        { ...emptyPicks, subclassId: 'subclass.bard.lore', asiMode: 'abilities', ability1: 'CHA' },
+        needs,
+        false,
+      ),
+    ).toEqual({
+      choices: {
+        subclassId: 'subclass.bard.lore',
+        asi: { kind: 'abilities', increases: [{ ability: 'CHA', value: 2 }] },
+      },
+    });
+    const spells = { ...emptyPicks, cantrips: ['spell.light'], spells: ['spell.bane'] };
+    expect(picksToPayload(spells, needs, false).spells).toEqual({
+      add: ['spell.light', 'spell.bane'],
+    });
+    expect(picksToPayload(spells, needs, false, false).spells).toBeUndefined();
+    expect(picksToPayload({ ...emptyPicks, skill: 'arcana' }, needs, false).skill).toBeUndefined();
+    expect(picksToPayload({ ...emptyPicks, skill: 'arcana' }, needs, true).skill).toBe('arcana');
+  });
+
+  it('offers new classes only when multiclassing is on', () => {
+    expect(newClassOptions(seedState, registry)).toEqual([]);
+    const on = structuredClone(seedState);
+    on.campaign.optionalRules = { ...on.campaign.optionalRules, multiclassing: true };
+    const names = newClassOptions(on, registry).map((entry) => entry.name);
+    expect(names).toContain('Wizard');
+    expect(names).not.toContain('Bard');
+  });
+
+  it('lists subclasses of the class and no feats when feats are off', () => {
+    expect(subclassOptions(seedState, registry, 'class.bard').map((e) => e.id)).toContain(
+      'subclass.bard.lore',
+    );
+    expect(featOptions(seedState, registry)).toEqual([]);
+  });
+
+  it('reports what the new level lets a Bard learn', () => {
+    const next = structuredClone(seedState);
+    next.build.classes = next.build.classes.map((entry) => ({ ...entry, level: 4 }));
+    const info = levelSpellInfo(next, registry, 'class.bard', false);
+    expect(info.gains).toMatchObject({ mode: 'known', cantrips: 1, spells: 1, canSwap: true });
+    expect(info.cantrips.length).toBeGreaterThan(0);
+  });
+
+  it('adds a New features row for features the level grants', () => {
+    const state = withClasses([{ classId: 'class.bard', level: 2 }]);
+    const preview = previewLevelUp(state, registry, payloadFor(state));
+    if (preview.result !== 'ok') throw new Error('expected ok');
+    const rows = levelUpChanges(state, preview.next, registry, 'class.bard');
+    expect(row(rows, 'New features')?.after).toBeTruthy();
   });
 });
