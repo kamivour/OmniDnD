@@ -147,3 +147,63 @@ describe('Unarmored Defense', () => {
     expect(strong('class.fighter').value).toBe(12);
   });
 });
+
+const FULL_CASTERS = ['bard', 'cleric', 'druid', 'sorcerer', 'warlock', 'wizard'];
+
+describe.each(FULL_CASTERS)('%s levels 1–20', (name) => {
+  it('computes a sheet at every level', () => {
+    for (let level = 1; level <= 20; level++) {
+      const sheet = sheetAt(`class.${name}`, level);
+      expect(sheet.level).toBe(level);
+      expect(sheet.maxHp.value).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('full caster slots and pools', () => {
+  const slots = (classId: string, level: number) => sheetAt(classId, level).slots.max.slice(1, 10);
+
+  it.each(['class.bard', 'class.cleric', 'class.druid', 'class.sorcerer', 'class.wizard'])(
+    '%s follows the full-caster table',
+    (classId) => {
+      expect(slots(classId, 1)).toEqual([2, 0, 0, 0, 0, 0, 0, 0, 0]);
+      expect(slots(classId, 5)).toEqual([4, 3, 2, 0, 0, 0, 0, 0, 0]);
+      expect(slots(classId, 11)).toEqual([4, 3, 3, 3, 2, 1, 0, 0, 0]);
+      expect(slots(classId, 20)).toEqual([4, 3, 3, 3, 3, 2, 2, 1, 1]);
+    },
+  );
+
+  it('Warlock uses Pact Magic slots, not the shared table', () => {
+    const pact = (level: number) => sheetAt('class.warlock', level).slots.pact;
+    expect(pact(1)).toEqual({ count: 1, level: 1 });
+    expect(pact(2)).toEqual({ count: 2, level: 1 });
+    expect(pact(5)).toEqual({ count: 2, level: 3 });
+    expect(pact(11)).toEqual({ count: 3, level: 5 });
+    expect(pact(17)).toEqual({ count: 4, level: 5 });
+    expect(slots('class.warlock', 11)).toEqual([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  });
+
+  it('Sorcery Points, Channel Divinity and Wild Shape follow the class', () => {
+    const uses = (classId: string, level: number, id: string) =>
+      feature(classId, level, id)?.uses?.max;
+    expect([2, 10, 20].map((l) => uses('class.sorcerer', l, 'sorcerer.font-of-magic'))).toEqual([
+      2, 10, 20,
+    ]);
+    expect([2, 6, 18].map((l) => uses('class.cleric', l, 'cleric.channel-divinity'))).toEqual([
+      1, 2, 3,
+    ]);
+    expect(feature('class.cleric', 10, 'cleric.divine-intervention')?.uses?.max).toBe(1);
+    expect(uses('class.druid', 2, 'druid.wild-shape')).toBe(2);
+  });
+
+  it('Mystic Arcanum and Signature Spell are limited pools', () => {
+    const arcanum = [10, 11, 13, 15, 17].map(
+      (l) => feature('class.warlock', l, 'warlock.mystic-arcanum')?.uses?.max,
+    );
+    expect(arcanum).toEqual([undefined, 1, 2, 3, 4]);
+    expect(feature('class.wizard', 20, 'wizard.signature-spell')?.uses).toEqual({
+      max: 2,
+      recharge: 'short',
+    });
+  });
+});

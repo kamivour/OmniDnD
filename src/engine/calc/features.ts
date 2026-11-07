@@ -39,7 +39,8 @@ export function resolveFormula(
   if (typeof formula === 'number') return formula;
   if ('byLevel' in formula) return byLevel(formula.byLevel, level) ?? 0;
   if ('perLevel' in formula) return formula.perLevel * level;
-  if ('abilityMod' in formula) return Math.max(formula.min ?? -Infinity, mods[formula.abilityMod]) + (formula.plus ?? 0);
+  if ('abilityMod' in formula)
+    return Math.max(formula.min ?? -Infinity, mods[formula.abilityMod]) + (formula.plus ?? 0);
   if (formula.proficiency === 'half') return Math.floor(proficiency / 2);
   if (formula.proficiency === 'double') return proficiency * 2;
   return proficiency;

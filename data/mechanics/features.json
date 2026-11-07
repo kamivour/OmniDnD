@@ -112,6 +112,10 @@
     "activation": "passive"
   },
   {
+    "id": "feature.bard.college-improvement",
+    "activation": "passive"
+  },
+  {
     "id": "feature.bard.countercharm",
     "activation": "action"
   },
@@ -123,6 +127,10 @@
   },
   {
     "id": "feature.bard.expertise",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.bard.font-of-inspiration",
     "activation": "passive"
   },
   {
@@ -138,6 +146,10 @@
     ]
   },
   {
+    "id": "feature.bard.magical-secrets",
+    "activation": "passive"
+  },
+  {
     "id": "feature.bard.song-of-rest",
     "activation": "special",
     "die": {
@@ -149,6 +161,14 @@
   },
   {
     "id": "feature.bard.spellcasting",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.bard.superior-inspiration",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.cleric.ability-score-improvement",
     "activation": "passive"
   },
   {
@@ -176,7 +196,63 @@
     "usesFrom": "feature.cleric.channel-divinity"
   },
   {
+    "id": "feature.cleric.destroy-undead",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.cleric.divine-domain",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.cleric.divine-domain-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.cleric.divine-intervention",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "id": "feature.cleric.divine-intervention-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.cleric.domain-spells",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.cleric.spellcasting",
+    "activation": "passive"
+  },
+  {
     "id": "feature.darkvision",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.druid.ability-score-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.druid.archdruid",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.druid.beast-spells",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.druid.circle",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.druid.circle-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.druid.druidic",
     "activation": "passive"
   },
   {
@@ -186,6 +262,14 @@
       "max": 1,
       "recharge": "long"
     }
+  },
+  {
+    "id": "feature.druid.spellcasting",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.druid.timeless-body",
+    "activation": "passive"
   },
   {
     "id": "feature.druid.wild-shape",
@@ -623,6 +707,18 @@
     "activation": "passive"
   },
   {
+    "id": "feature.sorcerer.ability-score-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.sorcerer.flexible-casting-converting-spell-slot",
+    "activation": "bonus"
+  },
+  {
+    "id": "feature.sorcerer.flexible-casting-creating-spell-slots",
+    "activation": "bonus"
+  },
+  {
     "id": "feature.sorcerer.font-of-magic",
     "activation": "special",
     "uses": {
@@ -633,12 +729,44 @@
     }
   },
   {
+    "id": "feature.sorcerer.metamagic",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.sorcerer.sorcerous-origin",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.sorcerer.sorcerous-origin-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.sorcerer.sorcerous-restoration",
+    "activation": "special"
+  },
+  {
+    "id": "feature.sorcerer.spellcasting",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.warlock.ability-score-improvement",
+    "activation": "passive"
+  },
+  {
     "id": "feature.warlock.dark-ones-own-luck",
     "activation": "free",
     "uses": {
       "max": 1,
       "recharge": "short"
     }
+  },
+  {
+    "id": "feature.warlock.eldritch-invocations",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.warlock.eldritch-master",
+    "activation": "passive"
   },
   {
     "id": "feature.warlock.hurl-through-hell",
@@ -650,11 +778,70 @@
     }
   },
   {
+    "id": "feature.warlock.mystic-arcanum",
+    "activation": "special",
+    "uses": {
+      "max": {
+        "byLevel": {
+          "11": 1,
+          "13": 2,
+          "15": 3,
+          "17": 4
+        }
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "id": "feature.warlock.otherworldly-patron",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.warlock.otherworldly-patron-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.warlock.pact-boon",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.warlock.pact-magic",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.wizard.ability-score-improvement",
+    "activation": "passive"
+  },
+  {
     "id": "feature.wizard.arcane-recovery",
     "activation": "special",
     "uses": {
       "max": 1,
       "recharge": "long"
     }
+  },
+  {
+    "id": "feature.wizard.arcane-tradition",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.wizard.arcane-tradition-improvement",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.wizard.signature-spell",
+    "activation": "special",
+    "uses": {
+      "max": 2,
+      "recharge": "short"
+    }
+  },
+  {
+    "id": "feature.wizard.spell-mastery",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.wizard.spellcasting",
+    "activation": "passive"
   }
 ]

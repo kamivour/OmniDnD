@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-07 20:12 — Full caster classes
+
+- Bard, Cleric, Druid, Sorcerer, Warlock and Wizard now work to level 20: slots, Warlock Pact Magic, Sorcery Points, Channel Divinity and Wild Shape.
+- New pools you can spend and track: Divine Intervention, Mystic Arcanum and Signature Spell.
+- Sorcerer slot conversion and Mystic Arcanum casting are tracked by hand for now; Fighting Style, Metamagic and Invocation picks are not in the level-up wizard yet.
+- Checks pass.
+
 ## 2026-11-07 20:05 — Martial and half-caster classes
 
 - Barbarian, Fighter, Monk, Paladin, Ranger and Rogue now show their level-based numbers: Rage damage, Sneak Attack dice, Martial Arts die, Unarmored Movement, Lay on Hands pool, Divine Sense uses.
