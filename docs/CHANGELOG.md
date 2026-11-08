@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 00:06 — Tools page
+
+- Reference now has a Tools button. It lists outside tools by goal, such as maps, tokens, minis and audio.
+- Filter by free only, platform, or hide AI tools, or search. Each card opens the site in a new tab.
+- Check it on your phone: find a free map maker with AI hidden.
+- Checks pass.
+
 ## 2026-11-09 00:03 — Tools list written
 
 - 61 outside tools are now in the list: virtual tabletops, map makers, generators, tokens, minis, AI art and 3D, audio, builders, prep and other game systems.

@@ -66,6 +66,9 @@ export function ReferenceScreen() {
               Undo management
             </button>
           )}
+          <Link to={`${base}/reference/tools`} className={button}>
+            Tools
+          </Link>
           <Link to={`${base}/reference/credits`} className={button}>
             Credits
           </Link>

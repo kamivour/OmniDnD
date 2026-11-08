@@ -20,6 +20,7 @@ import { PlaceholderScreen } from './ui/screens/PlaceholderScreen';
 import { SpellbookScreen } from './ui/screens/SpellbookScreen';
 import { ReferenceScreen } from './ui/screens/ReferenceScreen';
 import { CreditsScreen } from './ui/screens/CreditsScreen';
+import { ToolsScreen } from './ui/screens/ToolsScreen';
 import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { MotionPreference } from './ui/components/MotionPreference';
 import { StorageGate } from './ui/storage/StorageGate';
@@ -54,6 +55,7 @@ export function App() {
               <Route path="reference" element={<ReferenceScreen />} />
               <Route path="settings" element={<SettingsScreen />} />
               <Route path="reference/credits" element={<CreditsScreen />} />
+              <Route path="reference/tools" element={<ToolsScreen />} />
               <Route path="*" element={<PlaceholderScreen title="Not found" />} />
             </Route>
             <Route path="characters/:characterId/print" element={<PrintScreen />} />
@@ -84,6 +86,7 @@ export function App() {
                 />
               ))}
               <Route path="reference/credits" element={<CreditsScreen />} />
+              <Route path="reference/tools" element={<ToolsScreen />} />
               <Route path="*" element={<PlaceholderScreen title="Not found" />} />
             </Route>
           </Routes>

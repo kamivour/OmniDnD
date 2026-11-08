@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M20 (tools directory), doing.
-**Next up:** M20 task 3 (Reference > Tools screen). Run the M17, M18 and M19 manual QA lists when you can. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M20 task 4 (check:tools script, Credits thanks). Run the M17, M18 and M19 manual QA lists when you can. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -251,7 +251,7 @@ Rules: PHB 2014 chapters 7–8 (jumping, lifting, suffocating, food, travel, fal
 Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) plus the user's list; one entry per tool, duplicates merged.
 - [x] Data: `data/content/tools.json` with zod schema: id, name, url, objective, platforms, cost (free, freemium, paid), one-line summary in our own words, `ai` flag, search synonyms. A test fails on duplicate ids or urls
 - [x] Content, objectives: Play online (VTTs), Maps and battle maps, Dungeon and town generators, Tokens and art, Miniatures and 3D printing, AI art and 3D pipeline, Music and ambience, Character builders and rules lookup, DM prep and campaign notes, Other game systems (marked "not supported by this app")
-- [ ] UI, Reference > Tools: groups by objective, filters for free only, platform and AI; each card opens the site in a new tab; works offline as a list (links need internet)
+- [x] UI, Reference > Tools: groups by objective, filters for free only, platform and AI; each card opens the site in a new tab; works offline as a list (links need internet)
 - [ ] Script `npm run check:tools`: reports dead links; run by hand, not in CI. Credits screen thanks awesome-dnd
 - [ ] Gate: find a free map maker on a phone, filter out AI tools, open one link; manual QA documented
 
@@ -273,6 +273,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M20: Reference > Tools page groups tools by goal with free only, platform, hide AI and search; cards open in a new tab.
 - M20: 61 tools written in own words across 10 objectives, duplicates merged; other-system entries marked not supported.
 - M20: tools data schema, loader and test for duplicate ids and urls; one seed entry.
 - M19 gate: cast sheet shows material cover or warning and never blocks; e2e with Fool flute, no flute and Wizard Identify; manual QA written.
