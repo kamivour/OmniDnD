@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M17 (newbie-friendly character creation), todo.
-**Next up:** no milestone queued. Run the M17 and M18 manual QA lists. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M19 (physical checks and spell components), todo.
+**Next up:** M19 task 1. Run the M17 and M18 manual QA lists when you can. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -40,8 +40,11 @@ Build for multiple campaigns and characters, including friends' future character
 | M14 | Full level-up wizard + more classes + multiclass | 3 | done | Every SRD class reaches level 20 through the wizard; multiclassing and feats follow campaign toggles |
 | M15 | Ally/enemy tracker | 3 | done | A whole fight can be tracked: order, HP and conditions for allies and enemies, all undoable |
 | M16 | Dice roller, themes, more books | 4 | done | Optional dice roller, Parchment theme, backups, Xanathar's and Tasha's packs; rules review done with the user |
-| M17 | Newbie-friendly character creation | 5 | todo | Step-by-step or one-page creation with own-words guidance and suggestions for every class, race and background |
-| M18 | Print and PDF sheet | 5 | todo | Any character prints to paper or PDF from the browser, offline |
+| M17 | Newbie-friendly character creation | 5 | done | Step-by-step or one-page creation with own-words guidance and suggestions for every class, race and background |
+| M18 | Print and PDF sheet | 5 | done | Any character prints to paper or PDF from the browser, offline |
+| M19 | Physical checks and spell components | 6 | todo | Jump, carry, breath and travel numbers come from the engine with breakdowns; casting says when a focus covers the material |
+| M20 | Tools directory | 6 | todo | Outside tools grouped by what you want to do, in our own words, with working links |
+| M21 | Find and Related links | 6 | todo | One search box reaches any screen, rule, tool or character item in two steps or fewer |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -233,6 +236,32 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Print / Save as PDF button on the sheet uses the browser's print dialog (no PDF library); works offline
 - [x] Gate: print The Fool and a level 5 Wizard to PDF in Chrome and on a phone; checks match the sheet; manual QA documented
 
+### M19 — Physical checks and spell components
+Rules: PHB 2014 chapters 7–8 (jumping, lifting, suffocating, food, travel, falling) and chapter 10 (components, focus). Numbers are computed; the DM still rules on edge cases.
+- [ ] Engine, body numbers (`src/engine/calc/physical.ts`): long jump (running = STR score ft, standing = half), high jump (running = 3 + STR mod ft, min 0; standing = half), push/drag/lift (2 × carrying capacity), hold breath (1 + CON mod minutes, min 30 s), choking rounds (CON mod, min 1), days without food (3 + CON mod, min 1), climb and swim speed (half speed unless a feature grants one). Each value returns a breakdown. Unit tests for The Fool and a STR 8 and STR 20 character
+- [ ] Engine, modifiers: Remarkable Athlete adds STR mod to running long jump; active *Jump* spell triples jump distance; Athlete feat makes the run-up 5 ft; Step of the Wind shows "double jump distance" as a reminder only. Sources come from features and active effects, never hard-coded names in the UI
+- [ ] UI, Explore panel "Movement and body": the numbers above as stat chips with breakdowns; works at 375 px
+- [ ] UI, Reference quick tables: travel pace (fast, normal, slow with their effects), forced march (CON save DC 10 + 1 per extra hour), falling (1d6 per 10 ft, max 20d6). Text in our own words
+- [ ] Engine, material components: classify each spell's material as none, focus-covered (no cost, not consumed), costly (gp parsed from the text) or consumed. Test with Shatter (covered), Revivify (costly and consumed) and Identify (costly, kept)
+- [ ] Engine, focus rules: Bard instrument, Cleric and Paladin holy symbol, Druid druidic focus, Sorcerer, Warlock and Wizard arcane focus, Artificer thieves' or artisan's tools (infusion item too); a component pouch works for any class; Ranger has no focus. Read from carried or equipped items
+- [ ] UI, cast note: when casting, show "Material covered by your Flute" or "Needs a 300 gp diamond (consumed)". It warns when nothing covers it but never blocks the cast
+- [ ] Gate: The Fool jumps (breakdown checked), casts Shatter with the flute equipped and without it; a Wizard casts Identify without a pearl and sees the warning; phone and desktop widths, Undo, reload; manual QA documented
+
+### M20 — Tools directory
+Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) plus the user's list; one entry per tool, duplicates merged.
+- [ ] Data: `data/content/tools.json` with zod schema: id, name, url, objective, platforms, cost (free, freemium, paid), one-line summary in our own words, `ai` flag, search synonyms. A test fails on duplicate ids or urls
+- [ ] Content, objectives: Play online (VTTs), Maps and battle maps, Dungeon and town generators, Tokens and art, Miniatures and 3D printing, AI art and 3D pipeline, Music and ambience, Character builders and rules lookup, DM prep and campaign notes, Other game systems (marked "not supported by this app")
+- [ ] UI, Reference > Tools: groups by objective, filters for free only, platform and AI; each card opens the site in a new tab; works offline as a list (links need internet)
+- [ ] Script `npm run check:tools`: reports dead links; run by hand, not in CI. Credits screen thanks awesome-dnd
+- [ ] Gate: find a free map maker on a phone, filter out AI tools, open one link; manual QA documented
+
+### M21 — Find and Related links
+- [ ] Engine, search index (`src/engine/calc/find.ts`): one ranked list over app places and actions (screens, panels, commands such as "Long rest"), the open character's spells, items and features, rules (reuse `searchRules`) and tools; synonyms ("jump" finds Movement and body, "PDF" finds Print). Pure and tested
+- [ ] Registry of places: every screen and panel registers an id, title, route, section anchor and synonyms in one file; a test fails if a built route has no entry. Add the rule "new sections register a Find entry" to AGENTS.md
+- [ ] UI, Find: top-bar search icon, Ctrl/Cmd+K and `/` open it; results grouped (Go to, Do, Your character, Rules, Tools); Enter goes there, scrolls to the section and highlights it briefly
+- [ ] UI, Related links: small "Related" row on key panels (Jump next to Athletics, Falling next to Jump, Focus next to spell components). Suggest only; never redirect on its own
+- [ ] Gate: from the Dashboard, reach Jump, Print, Shatter, Long rest and a map tool in two steps or fewer, by keyboard and by touch; manual QA documented
+
 ## Backlog (not scheduled)
 
 - Going online with accounts: user-led, follow [HOSTING.md](HOSTING.md) (Q1, Q28)
@@ -244,6 +273,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- Planned M19 (physical checks, spell components), M20 (tools directory) and M21 (Find, Related links) as concrete task lists.
 - Review: draft Start over and safe restore; print page toggles, missing-character guard, PDF title; new gate e2e (suggested scores, subclass via To do); stale Explore test fixed.
 - M18: Print view at /characters/:id/print with light paper styles, page breaks and a Print / Save as PDF button; e2e checks it; manual QA written.
 - M17 gate: New character draft survives reload (per tab); e2e covers beginner Wizard, expert one-page build and reload; manual QA written.

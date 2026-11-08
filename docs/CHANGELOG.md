@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 17:33 — Plan for M19 to M21
+
+- Next three milestones are written as short task lists in PROGRESS: M19 jump, carry, breath, travel and spell focus checks; M20 tools directory; M21 Find search.
+- Check the task lists and say if anything is missing or in the wrong order.
+- Checks pass.
+
 ## 2026-11-08 17:31 — Review fixes for creation and print
 
 - New character: a restored draft now shows "Picked up where you left off" with a Start over button. Old drafts can no longer break the page.
