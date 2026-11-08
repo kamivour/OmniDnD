@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 10:11 — To do list engine
+
+- The app can now work out what a character still has to decide: subclass, ability score or feat, fighting style, expertise, invocations, and spell picks.
+- Nothing shows on screen yet. The To do badge and list come next.
+- Checks pass.
+
 ## 2026-11-08 10:06 — Level choices at creation
 
 - Starting above level 1 adds a Levels step (a Level choices section on One page) for each level that gives a subclass or an ability score increase or feat.
