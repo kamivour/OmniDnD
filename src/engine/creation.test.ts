@@ -304,4 +304,46 @@ describe('createCharacter', () => {
     ]);
     expect(createCharacter(choices, registry).live.slotsUsed[1]).toBe(0);
   });
+
+  it('applies subclass and ability improvements picked for each level', () => {
+    const fighter = (levelChoices: CreateCharacterInput['levelChoices']) =>
+      input({
+        classId: 'class.fighter',
+        level: 4,
+        racialChoices: ['DEX', 'CON'],
+        hpRolls: [5, 5, 5],
+        levelChoices,
+      });
+    const created = createCharacter(
+      fighter([
+        { level: 3, choices: { subclassId: 'subclass.fighter.champion' } },
+        {
+          level: 4,
+          choices: { asi: { kind: 'abilities', increases: [{ ability: 'STR', value: 2 }] } },
+        },
+      ]),
+      registry,
+    );
+    expect(created.build.classes).toEqual([
+      { classId: 'class.fighter', level: 4, subclassId: 'subclass.fighter.champion' },
+    ]);
+    expect(created.build.abilityScores.bonuses.at(-1)).toMatchObject({ ability: 'STR', value: 2 });
+  });
+
+  it('rejects level choices that are not legal at that level', () => {
+    const bad = (levelChoices: CreateCharacterInput['levelChoices']) =>
+      createCharacter(
+        input({ classId: 'class.fighter', level: 3, hpRolls: [5, 5], levelChoices }),
+        registry,
+      );
+    expect(() =>
+      bad([
+        {
+          level: 3,
+          choices: { asi: { kind: 'abilities', increases: [{ ability: 'STR', value: 2 }] } },
+        },
+      ]),
+    ).toThrow(ZodError);
+    expect(() => bad([{ level: 4, choices: {} }])).toThrow(ZodError);
+  });
 });

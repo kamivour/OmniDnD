@@ -1,5 +1,7 @@
 import { ABILITIES, type Ability } from '../../engine/calc/abilities';
+import { asiLevels } from '../../engine/calc/level-choices';
 import { STANDARD_ARRAY } from '../../engine/creation';
+import type { Registry } from '../../engine/registry';
 import type { Campaign } from '../../engine/schema';
 
 /** Order the step-by-step builder asks for things. */
@@ -11,6 +13,7 @@ export const STEPS = [
   { id: 'level', label: 'Level' },
   { id: 'abilities', label: 'Abilities' },
   { id: 'choices', label: 'Choices' },
+  { id: 'levels', label: 'Levels' },
   { id: 'review', label: 'Review' },
 ] as const;
 
@@ -77,4 +80,26 @@ export function stepProblems(step: StepId, input: StepInput): string[] {
       break;
   }
   return problems;
+}
+
+/** Levels up to the starting level where the class asks for a subclass or an ability score improvement. */
+export function levelPickRows(
+  registry: Registry,
+  classId: string,
+  level: number,
+): { level: number; subclass: boolean; asi: boolean }[] {
+  const def = registry.entries.get(classId);
+  if (def?.kind !== 'class') return [];
+  const hasSubclasses = [...registry.entries.values()].some(
+    (row) => row.kind === 'subclass' && row.classId === classId,
+  );
+  const subclassAt = Math.max(1, def.subclassLevel);
+  const asi = asiLevels(classId);
+  return Array.from({ length: level }, (_, index) => index + 1)
+    .map((at) => ({
+      level: at,
+      subclass: hasSubclasses && at === subclassAt,
+      asi: asi.includes(at),
+    }))
+    .filter((row) => row.subclass || row.asi);
 }

@@ -161,6 +161,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D155 | 2026-11-08 | Beginner hints cover every class, subclass, race and background in our own words and are only suggestions, never enforced; a Beginner hints toggle turns them off | Helps new players without slowing experienced ones |
 | D156 | 2026-11-08 | Print and PDF use the browser print dialog with a print-only layout, not a PDF library | Works offline and adds no download weight |
 | D157 | 2026-11-08 | Choices skipped during level-up or creation go on a To do list that clears itself when done; preparing spells is listed but optional and can be dismissed | Skipping stays allowed, but nothing is forgotten |
+| D158 | 2026-11-08 | A character created above level 1 picks subclass and ability increase or feat for each level up front, but may skip any; class picks and per-level spells wait for the To do list | Keeps creation short while still allowing a full build |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 

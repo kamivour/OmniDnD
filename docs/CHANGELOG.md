@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 10:06 — Level choices at creation
+
+- Starting above level 1 adds a Levels step (a Level choices section on One page) for each level that gives a subclass or an ability score increase or feat.
+- Subclass cards show strengths and weaknesses. Anything you skip stays open for the To do list coming next.
+- Fighting styles, expertise and per-level spells are not asked here yet; spells still come from Class choices.
+- Checks pass.
+
 ## 2026-11-08 09:59 — Suggestions while building
 
 - Under Abilities, a "Suggested scores" button fills a sensible spread for your class (not shown when you roll scores). You can change every number afterward.

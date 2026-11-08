@@ -23,7 +23,9 @@ import { GuidedChoicesSection } from './GuidedChoicesSection';
 import { emptyGuided, toGuidedChoices, type GuidedState } from './guided-state';
 import { PlaceholderScreen } from './PlaceholderScreen';
 import { deviceStore, type CreationMode } from '../../state/device-settings';
-import { STEPS, stepProblems, type StepId } from './new-character-steps';
+import { LevelChoicesSection } from './LevelChoicesSection';
+import { levelPickRows, STEPS, stepProblems, type StepId } from './new-character-steps';
+import { emptyPicks, picksToPayload, type LevelPicks } from '../level/level-up-model';
 
 type PerAbility<T> = Record<Ability, T>;
 const perAbility = <T,>(value: T) =>
@@ -71,7 +73,14 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
   const [mode, setMode] = useState<CreationMode>(savedMode);
   const [stepIndex, setStepIndex] = useState(0);
   const [stepErrors, setStepErrors] = useState<string[]>([]);
-  const step: StepId = STEPS[stepIndex]!.id;
+  const [levelPicks, setLevelPicks] = useState<Record<number, LevelPicks>>({});
+  const pickRows = levelPickRows(registry, classId, level);
+  const steps = STEPS.filter((entry) => entry.id !== 'levels' || pickRows.length > 0);
+  const step: StepId = steps[stepIndex]!.id;
+  const levelChoices = pickRows.flatMap((row) => {
+    const { choices } = picksToPayload(levelPicks[row.level] ?? emptyPicks, row, false, false);
+    return choices ? [{ level: row.level, choices }] : [];
+  });
   const stepped = mode === 'steps';
 
   const race = races.find((entry) => entry.id === raceId);
@@ -151,6 +160,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
           ) as PerAbility<number>,
           racialChoices,
           hpRolls: campaign.hpMethod === 'rolled' ? rolls.slice(0, level - 1).map(Number) : [],
+          ...(levelChoices.length > 0 ? { levelChoices } : {}),
           ...(guided ? { guided: toGuidedChoices(guidedState) } : {}),
         },
         registry,
@@ -190,11 +200,12 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
     setClassId(id);
     setGuidedState(emptyGuided(id));
     setRolls([]);
+    setLevelPicks({});
   };
   const show = (id: StepId) => !stepped || step === id;
   const goTo = (index: number) => {
     setStepErrors([]);
-    setStepIndex(Math.max(0, Math.min(STEPS.length - 1, index)));
+    setStepIndex(Math.max(0, Math.min(steps.length - 1, index)));
   };
   const next = () => {
     if (problems.length > 0) setStepErrors(problems);
@@ -234,6 +245,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
               ) as PerAbility<number>,
               racialChoices,
               hpRolls: campaign.hpMethod === 'rolled' ? rolls.slice(0, level - 1).map(Number) : [],
+              ...(levelChoices.length > 0 ? { levelChoices } : {}),
               ...(guided ? { guided: toGuidedChoices(guidedState) } : {}),
             },
             registry,
@@ -302,7 +314,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
       {stepped && (
         <nav aria-label="Steps">
           <ol className="flex flex-wrap gap-1 text-xs">
-            {STEPS.map((entry, index) => (
+            {steps.map((entry, index) => (
               <li key={entry.id}>
                 <button
                   type="button"
@@ -704,6 +716,17 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
           state={guidedState}
           onChange={setGuidedState}
           spellContext={spellContext}
+          hints={hints}
+        />
+      )}
+
+      {classId && show('levels') && pickRows.length > 0 && (
+        <LevelChoicesSection
+          campaign={campaign}
+          classId={classId}
+          level={level}
+          picks={levelPicks}
+          onChange={setLevelPicks}
           hints={hints}
         />
       )}

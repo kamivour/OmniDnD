@@ -98,3 +98,52 @@ test('guided build tags recommended skills and spells with a reason', async ({ p
     page.getByRole('checkbox', { name: 'Persuasion', exact: true }),
   ).toHaveAccessibleDescription(/Recommended/);
 });
+
+test('a level 4 Fighter picks a subclass and an ability increase during creation', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page
+    .getByRole('article', { name: 'Campaign #273', exact: true })
+    .getByRole('link', { name: 'New character', exact: true })
+    .click();
+  await page.getByRole('button', { name: 'Step by step', exact: true }).click();
+  const next = page.getByRole('button', { name: 'Next', exact: true });
+  await page.getByLabel('Name', { exact: true }).fill('Leveled Hero');
+  await next.click();
+  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await next.click();
+  await page.getByLabel('Class', { exact: true }).selectOption('class.fighter');
+  await next.click();
+  await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
+  await next.click();
+  await page.getByLabel('Level', { exact: true }).fill('4');
+  await next.click();
+  for (const [ability, score] of Object.entries({
+    STR: 15,
+    DEX: 13,
+    CON: 14,
+    INT: 8,
+    WIS: 12,
+    CHA: 10,
+  })) {
+    await page.getByLabel(`${ability} base`, { exact: true }).fill(String(score));
+  }
+  await next.click();
+  for (const at of [2, 3, 4]) {
+    await page.getByLabel(`Level ${at} roll (d10)`).fill('6');
+  }
+  await next.click();
+
+  // Level choices: subclass at 3, ability increase at 4.
+  await expect(page.getByRole('group', { name: 'Level 3' })).toBeVisible();
+  await page.getByLabel('Subclass', { exact: true }).selectOption('subclass.fighter.champion');
+  await expect(page.getByRole('article', { name: 'Champion guide' })).toBeVisible();
+  await page.getByRole('radio', { name: 'Raise ability scores' }).check();
+  await next.click();
+
+  await expect(page.getByText('Leveled Hero: Human Fighter, level 4')).toBeVisible();
+  await expect(page.getByText('18 (+4)')).toBeVisible();
+  await page.getByRole('button', { name: 'Create character', exact: true }).click();
+  await expect(page).toHaveURL(/\/characters\/[^/]+$/);
+});

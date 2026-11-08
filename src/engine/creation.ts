@@ -4,6 +4,7 @@ export { STANDARD_ARRAY, POINT_BUY_COSTS } from './calc/ability-methods';
 import { averageHpRoll, type HitDie } from './calc/hp';
 import { xpForLevel } from './calc/advancement';
 import { CLASS_START, slotChoices } from './calc/class-start';
+import { applyLevelChoices, LevelChoicesSchema } from './calc/level-choices';
 import { applyLevelSpells, LevelSpellsSchema, levelSpellGains } from './calc/level-spells';
 export { xpForLevel } from './calc/advancement';
 import { computeSheet } from './calc/sheet';
@@ -56,6 +57,10 @@ export const CreateCharacterInputSchema = z
     racialChoices: z.array(AbilitySchema).optional(),
     /** Entries are for levels 2 through N. Level 1 always uses the die maximum. */
     hpRolls: z.array(z.int().positive()).optional(),
+    /** Subclass, ability score improvement or feat, expertise and option features picked for levels 1 through N. */
+    levelChoices: z
+      .array(z.strictObject({ level: LevelSchema, choices: LevelChoicesSchema }))
+      .optional(),
     /** Present for a guided build; absent for a blank one. */
     guided: GuidedChoicesSchema.optional(),
   })
@@ -192,9 +197,51 @@ export function createCharacter(input: CreateCharacterInput, registry: Registry)
     currency: { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 },
     clock: { seconds: 8 * SECONDS_PER_HOUR },
   });
+  if (choices.levelChoices?.length)
+    applyLevelPicks(choices.levelChoices, { campaign, build, live, registry, classId });
   if (choices.guided) applyGuided(choices.guided, { campaign, build, live, registry, classId });
   live.hp = computeSheet({ campaign, build, live }, registry).maxHp.value;
   return { build, live: LiveStateSchema.parse(live), events: [] };
+}
+
+/** Applies each level's picks in order, as if the character had levelled up one step at a time. */
+function applyLevelPicks(
+  picks: { level: number; choices: z.infer<typeof LevelChoicesSchema> }[],
+  ctx: {
+    campaign: Campaign;
+    build: CharacterBuild;
+    live: LiveState;
+    registry: Registry;
+    classId: string;
+  },
+) {
+  const { campaign, build, live, registry, classId } = ctx;
+  const finalLevel = build.classes[0]!.level;
+  const levels = picks.map((pick) => pick.level);
+  if (new Set(levels).size !== levels.length || levels.some((level) => level > finalLevel))
+    invalid(
+      ['levelChoices'],
+      'Level choices must be for different levels up to the starting level',
+    );
+  for (const { level, choices } of [...picks].sort((a, b) => a.level - b.level)) {
+    build.classes[0]!.level = level;
+    const result = applyLevelChoices({
+      campaign,
+      build,
+      registry,
+      score: (ability) =>
+        computeSheet({ campaign, build, live }, registry).abilities[ability].score.value,
+      classId,
+      newLevel: level,
+      choices,
+    });
+    if ('blocked' in result) invalid(['levelChoices', level], result.blocked);
+    build.classes = result.build.classes;
+    build.abilityScores = result.build.abilityScores;
+    build.proficiencies = result.build.proficiencies;
+    build.featureIds = result.build.featureIds;
+  }
+  build.classes[0]!.level = finalLevel;
 }
 
 /** Adds class proficiencies, skill picks, starting kit and spells to a new build, in place. */

@@ -400,7 +400,11 @@ export function newClassOptions(state: CharacterState, registry: Registry): NewC
 
 export const optionName = (registry: Registry, id: string) => registry.entries.get(id)?.name ?? id;
 
-export function subclassOptions(state: CharacterState, registry: Registry, classId: string) {
+export function subclassOptions(
+  state: Pick<CharacterState, 'campaign'>,
+  registry: Registry,
+  classId: string,
+) {
   return [...registry.entries.values()]
     .filter(
       (entry): entry is SubclassDef =>
@@ -413,7 +417,10 @@ export function subclassOptions(state: CharacterState, registry: Registry, class
 }
 
 /** Feats the player may pick instead of an ability score improvement; empty when the campaign has feats off. */
-export function featOptions(state: CharacterState, registry: Registry) {
+export function featOptions(
+  state: Pick<CharacterState, 'campaign'> & { build: Pick<CharacterState['build'], 'featureIds'> },
+  registry: Registry,
+) {
   if (!optionalRules(state.campaign).feats) return [];
   const owned = new Set(state.build.featureIds);
   return [...registry.entries.values()]

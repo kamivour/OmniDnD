@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { stepProblems, type StepInput } from './new-character-steps';
+import { registry } from '../../data/registry';
+import { levelPickRows, stepProblems, type StepInput } from './new-character-steps';
 
 const blank = { STR: '', DEX: '', CON: '', INT: '', WIS: '', CHA: '' };
 const input = (patch: Partial<StepInput> = {}): StepInput => ({
@@ -54,5 +55,19 @@ describe('stepProblems', () => {
   it('needs every HP roll before the choices step is done', () => {
     expect(stepProblems('choices', input({ complete: false }))).toEqual(['Fill in every HP roll.']);
     expect(stepProblems('review', input({ complete: false }))).toEqual([]);
+  });
+});
+
+describe('levelPickRows', () => {
+  it('lists the levels that ask for a subclass or an ability score improvement', () => {
+    expect(levelPickRows(registry, 'class.fighter', 1)).toEqual([]);
+    expect(levelPickRows(registry, 'class.fighter', 6)).toEqual([
+      { level: 3, subclass: true, asi: false },
+      { level: 4, subclass: false, asi: true },
+      { level: 6, subclass: false, asi: true },
+    ]);
+    expect(levelPickRows(registry, 'class.cleric', 1)).toEqual([
+      { level: 1, subclass: true, asi: false },
+    ]);
   });
 });
