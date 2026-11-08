@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M19 (physical checks and spell components), todo.
-**Next up:** M19 task 1. Run the M17 and M18 manual QA lists when you can. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M20 (tools directory), todo.
+**Next up:** M20 task 1. Run the M17, M18 and M19 manual QA lists when you can. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -42,7 +42,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M16 | Dice roller, themes, more books | 4 | done | Optional dice roller, Parchment theme, backups, Xanathar's and Tasha's packs; rules review done with the user |
 | M17 | Newbie-friendly character creation | 5 | done | Step-by-step or one-page creation with own-words guidance and suggestions for every class, race and background |
 | M18 | Print and PDF sheet | 5 | done | Any character prints to paper or PDF from the browser, offline |
-| M19 | Physical checks and spell components | 6 | todo | Jump, carry, breath and travel numbers come from the engine with breakdowns; casting says when a focus covers the material |
+| M19 | Physical checks and spell components | 6 | done | Jump, carry, breath and travel numbers come from the engine with breakdowns; casting says when a focus covers the material |
 | M20 | Tools directory | 6 | todo | Outside tools grouped by what you want to do, in our own words, with working links |
 | M21 | Find and Related links | 6 | todo | One search box reaches any screen, rule, tool or character item in two steps or fewer |
 
@@ -244,8 +244,8 @@ Rules: PHB 2014 chapters 7–8 (jumping, lifting, suffocating, food, travel, fal
 - [x] UI, Reference quick tables: travel pace (fast, normal, slow with their effects), forced march (CON save DC 10 + 1 per extra hour), falling (1d6 per 10 ft, max 20d6). Text in our own words
 - [x] Engine, material components: classify each spell's material as none, focus-covered (no cost, not consumed), costly (gp parsed from the text) or consumed. Test with Shatter (covered), Revivify (costly and consumed) and Identify (costly, kept)
 - [x] Engine, focus rules: Bard instrument, Cleric and Paladin holy symbol, Druid druidic focus, Sorcerer, Warlock and Wizard arcane focus, Artificer thieves' or artisan's tools (infusion item too); a component pouch works for any class; Ranger has no focus. Read from carried or equipped items
-- [ ] UI, cast note: when casting, show "Material covered by your Flute" or "Needs a 300 gp diamond (consumed)". It warns when nothing covers it but never blocks the cast
-- [ ] Gate: The Fool jumps (breakdown checked), casts Shatter with the flute equipped and without it; a Wizard casts Identify without a pearl and sees the warning; phone and desktop widths, Undo, reload; manual QA documented
+- [x] UI, cast note: when casting, show "Material covered by your Flute" or "Needs a 300 gp diamond (consumed)". It warns when nothing covers it but never blocks the cast
+- [x] Gate: The Fool jumps (breakdown checked), casts Shatter with the flute equipped and without it; a Wizard casts Identify without a pearl and sees the warning; phone and desktop widths, Undo, reload; manual QA documented
 
 ### M20 — Tools directory
 Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) plus the user's list; one entry per tool, duplicates merged.
@@ -273,6 +273,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M19 gate: cast sheet shows material cover or warning and never blocks; e2e with Fool flute, no flute and Wizard Identify; manual QA written.
 - M19: engine reads spell materials (none, plain, costly, consumed) and checks carried focus by class or component pouch. Infusion items skipped, no data.
 - M19: Reference quick tables for travel pace, forced march and falling, in own words, with e2e.
 - M19: Explore "Movement and body" panel with jump, lift, breath, food, climb and swim chips and breakdowns; e2e at phone and desktop.

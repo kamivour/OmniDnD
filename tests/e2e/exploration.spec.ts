@@ -617,3 +617,37 @@ test('Explore shows jump, lift and breath numbers with breakdowns', async ({ pag
   await expect(page.getByText('STR score').first()).toBeVisible();
   await noOverflow(page);
 });
+
+test('the cast sheet says whether a focus covers the material, and never blocks the cast', async ({
+  page,
+}) => {
+  const covered = foolFile('explore-material-flute');
+  await importFile(page, covered);
+  await go(page, covered.build.id);
+  let dialog = await castDialog(page, 'Invisibility');
+  await expect(dialog).toContainText('Material covered by your Flute');
+  await dialog.getByRole('button', { name: 'Close', exact: true }).first().click();
+
+  const bare = foolFile('explore-material-none');
+  bare.build.items = bare.build.items.filter((item) => item.itemId !== 'item.flute');
+  delete bare.live.items['flute-1'];
+  await importFile(page, bare);
+  await go(page, bare.build.id);
+  dialog = await castDialog(page, 'Invisibility');
+  await expect(dialog).toContainText('No focus or component pouch carried');
+  await expect(
+    dialog.getByRole('button', { name: 'Cast Invisibility (L2)', exact: true }),
+  ).toBeEnabled();
+  await noOverflow(page);
+
+  const wizard = ritualFile('explore-material-wizard', 'class.wizard', true);
+  wizard.build.spells = [
+    { classId: 'class.wizard', known: ['spell.identify'], prepared: ['spell.identify'] },
+  ];
+  wizard.live.slotsUsed = wizard.live.slotsUsed.map(() => 0);
+  await importFile(page, wizard);
+  await go(page, wizard.build.id);
+  dialog = await castDialog(page, 'Identify');
+  await expect(dialog).toContainText('Needs 100 gp of material (not used up)');
+  await expect(dialog.getByRole('button', { name: /^Cast Identify/ }).first()).toBeEnabled();
+});

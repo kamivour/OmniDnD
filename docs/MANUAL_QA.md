@@ -177,6 +177,17 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Open Print on a phone and save as PDF. Judge whether the layout fits the page.
 - [ ] Open Print with the network off. Judge whether it still loads.
 
+## Phase 6 — M19: Physical checks and spell components
+
+- [ ] Open Explore for The Fool. Judge whether the jump, lift, breath and food numbers look right for STR 8 and CON 14.
+- [ ] Tap a jump number. Judge whether the breakdown explains it in plain words.
+- [ ] Cast Jump on a character. Judge whether the jump numbers triple and a note says so.
+- [ ] Give a Fighter Remarkable Athlete. Judge whether only the running long jump grows.
+- [ ] Open the cast sheet for a spell with a plain material while carrying your focus. Judge whether the note names it.
+- [ ] Do the same without a focus. Judge whether the warning is clear and the Cast button still works.
+- [ ] Cast Revivify or Identify. Judge whether the gold cost and "consumed" wording read right.
+- [ ] Open Reference > Quick tables. Judge whether travel pace, forced march and falling match your 2014 book.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

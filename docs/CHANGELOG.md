@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 18:05 — Material note on the cast sheet
+
+- Casting a spell now shows a line about its material: "Material covered by your Flute", a warning when no focus or pouch is carried, or the gold cost and whether it is used up.
+- It only warns. You can always cast.
+- M19 is complete; manual checks are in MANUAL_QA.
+- Checks pass.
+
 ## 2026-11-08 18:02 — Spell materials and focus in the engine
 
 - The app can tell if a spell needs a costly material, whether it is used up, and whether your focus, instrument, holy symbol or component pouch covers it.

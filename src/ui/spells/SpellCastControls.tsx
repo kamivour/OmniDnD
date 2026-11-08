@@ -6,6 +6,7 @@ import {
   spellCastDetails,
   type CastSpellPayload,
 } from '../../engine/commands';
+import { materialCover } from '../../engine/calc/focus';
 import { useCommand } from '../commands/command-context';
 import { CastFooter } from '../components/CastFooter';
 import { Field, inputClass } from '../components/fields';
@@ -32,6 +33,10 @@ export function SpellCastControls({
   const entry = model.entries.find((item) => item.spell.id === spellId && item.classId === classId);
   const definition = registry.get('spell', spellId);
   const base = spellCastDetails(context, { spellId, classId });
+  const carried = state.build.items
+    .filter((item) => (state.live.items[item.instanceId]?.qty ?? 0) > 0)
+    .map((item) => item.itemId);
+  const material = materialCover(definition, classId, carried, registry);
   const [applyToMe, setApplyToMe] = useState(false);
   const [roll, setRoll] = useState<{ context: string; value: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -77,6 +82,17 @@ export function SpellCastControls({
             {definition.ritual && base.ritualEligible && state.live.combat && (
               <p className="text-xs text-text-muted">
                 Ritual casting is not offered during combat.
+              </p>
+            )}
+            {material.note && (
+              <p
+                role="note"
+                data-material={material.status}
+                className={
+                  material.status === 'covered' ? 'text-xs text-text-muted' : 'text-xs text-warn'
+                }
+              >
+                {material.note}
               </p>
             )}
             {automaticSelf && (
