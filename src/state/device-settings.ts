@@ -2,7 +2,8 @@ import { createStore } from 'zustand/vanilla';
 
 /**
  * Device-only conveniences (not character or workspace state, never synced or backed up):
- * the optional dice roller switch, its short roll history, the theme and the last backup time.
+ * the optional dice roller switch, its short roll history, the theme, how new characters are made,
+ * beginner hints and the last backup time.
  */
 const KEY = 'omnidnd.device';
 const HISTORY_LIMIT = 30;
@@ -19,7 +20,13 @@ export interface RollEntry {
   note?: string;
 }
 
+export type CreationMode = 'steps' | 'page';
+
 interface Saved {
+  /** Step by step wizard or the one-page form for new characters. */
+  creationMode: CreationMode;
+  /** Beginner cards, suggestions and the to do list. */
+  beginnerHints: boolean;
   diceRoller: boolean;
   theme: ThemeChoice;
   /** When a whole-workspace backup file was last saved from this device. */
@@ -30,6 +37,8 @@ interface DeviceState extends Saved {
   history: RollEntry[];
   setDiceRoller: (on: boolean) => void;
   setTheme: (theme: ThemeChoice) => void;
+  setCreationMode: (mode: CreationMode) => void;
+  setBeginnerHints: (on: boolean) => void;
   markBackedUp: (at: string) => void;
   addRoll: (entry: Omit<RollEntry, 'id'>) => void;
   clearHistory: () => void;
@@ -40,18 +49,29 @@ function read(): Saved {
     const parsed = JSON.parse(localStorage.getItem(KEY) ?? '{}') as Record<string, unknown> | null;
     const at = parsed?.lastBackupAt;
     return {
+      creationMode: parsed?.creationMode === 'page' ? 'page' : 'steps',
+      beginnerHints: parsed?.beginnerHints !== false,
       diceRoller: parsed?.diceRoller === true,
       theme: THEME_CHOICES.find((choice) => choice === parsed?.theme) ?? 'system',
       lastBackupAt: typeof at === 'string' && !Number.isNaN(Date.parse(at)) ? at : undefined,
     };
   } catch {
-    return { diceRoller: false, theme: 'system', lastBackupAt: undefined };
+    return {
+      creationMode: 'steps',
+      beginnerHints: true,
+      diceRoller: false,
+      theme: 'system',
+      lastBackupAt: undefined,
+    };
   }
 }
 
-function write({ diceRoller, theme, lastBackupAt }: Saved) {
+function write({ creationMode, beginnerHints, diceRoller, theme, lastBackupAt }: Saved) {
   try {
-    localStorage.setItem(KEY, JSON.stringify({ diceRoller, theme, lastBackupAt }));
+    localStorage.setItem(
+      KEY,
+      JSON.stringify({ creationMode, beginnerHints, diceRoller, theme, lastBackupAt }),
+    );
   } catch {
     // Storage can be blocked; the choice then lasts until reload.
   }
@@ -61,8 +81,11 @@ let nextId = 1;
 
 export const deviceStore = createStore<DeviceState>((set) => {
   const change = (patch: Partial<Saved>) => {
-    const { diceRoller, theme, lastBackupAt } = { ...deviceStore.getState(), ...patch };
-    write({ diceRoller, theme, lastBackupAt });
+    const { creationMode, beginnerHints, diceRoller, theme, lastBackupAt } = {
+      ...deviceStore.getState(),
+      ...patch,
+    };
+    write({ creationMode, beginnerHints, diceRoller, theme, lastBackupAt });
     set(patch);
   };
   return {
@@ -70,6 +93,8 @@ export const deviceStore = createStore<DeviceState>((set) => {
     history: [],
     setDiceRoller: (diceRoller) => change({ diceRoller }),
     setTheme: (theme) => change({ theme }),
+    setCreationMode: (creationMode) => change({ creationMode }),
+    setBeginnerHints: (beginnerHints) => change({ beginnerHints }),
     markBackedUp: (lastBackupAt) => change({ lastBackupAt }),
     addRoll: (entry) =>
       set((state) => ({

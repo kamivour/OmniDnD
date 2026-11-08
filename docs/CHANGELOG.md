@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 09:47 — Creation settings
+
+- Settings now has a "New characters" choice (Step by step or One page) and a "Show beginner hints" switch.
+- Both are saved on this device. Nothing uses them yet; the step-by-step screen comes next.
+- Checks pass.
+
 ## 2026-11-08 09:44 — Beginner guidance written
 
 - Every class, subclass, race and background now has a short guide: pitch, difficulty, strengths, weaknesses, and pairings that work well.

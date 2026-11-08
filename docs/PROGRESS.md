@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M17 (newbie-friendly character creation), todo.
-**Next up:** M17 task 5, creation settings. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M17 task 6, step-by-step new character UI. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -218,7 +218,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Content, classes and subclasses: role, difficulty (Easy/Medium/Hard), main abilities, strengths, weaknesses, suggested skills and starter spells with a reason, for every class and subclass in the app (SRD, PHB, Xanathar, Tasha)
 - [x] Content, races and backgrounds: one-line pitch, good-with notes (for example "Hill Dwarf: extra HP suits any front-liner") and suggested pairings
 - [x] Engine, suggestions: pure functions for a suggested standard array or point-buy spread from class and race, skill tags from strong abilities, and starter spell picks; tested, never auto-applied
-- [ ] Device settings: creation mode (Step by step or One page, Step by step by default) and a Beginner hints toggle (on by default); switching mode keeps everything entered
+- [x] Device settings: creation mode (Step by step or One page, Step by step by default) and a Beginner hints toggle (on by default); switching mode keeps everything entered
 - [ ] Step-by-step UI: Name, Race, Class, Background, Level, Abilities, Choices, Review; Back and Next, a step indicator, each step checks its own choices; Review shows the computed sheet before Create
 - [ ] Choice cards in both modes: race, class, background and subclass options show pitch, difficulty, strengths and weaknesses before picking
 - [ ] Suggestions in both modes: Suggested scores button, Recommended tags on skills and spells with a one-line reason, synergy notes for the current race, class and background
@@ -244,6 +244,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M17 task 5: Settings gets New characters (Step by step or One page) and Beginner hints, saved on this device.
 - 2026-11-08 — M17: engine suggestions: suggested ability spread (fits standard array and point buy), skill tags, starter-spell reasons and synergy notes; nothing auto-applied.
 - 2026-11-08 — M17: guidance data for all 13 classes, 21 subclasses, 13 races and 2 backgrounds in our own words; a test fails if any entry is missing.
 - 2026-11-08 — M17: guidance data for all 13 classes, 21 subclasses, 13 races and 2 backgrounds in our own words; a test fails if any entry is missing.

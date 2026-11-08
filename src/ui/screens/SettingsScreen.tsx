@@ -5,7 +5,7 @@ import { Download, Undo2, Upload } from 'lucide-react';
 import { updatePreferences } from '../../engine/commands/preferences';
 import type { Preferences } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
-import { deviceStore, type ThemeChoice } from '../../state/device-settings';
+import { type CreationMode, deviceStore, type ThemeChoice } from '../../state/device-settings';
 import { useManagement } from '../commands/useManagement';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { ChoiceGroup, Field, inputClass } from '../components/fields';
@@ -28,6 +28,8 @@ export function SettingsScreen() {
   const { automation, reducedMotion, characters, managementEvents } = useStore(characterStore);
   const diceRoller = useStore(deviceStore, (state) => state.diceRoller);
   const theme = useStore(deviceStore, (state) => state.theme);
+  const creationMode = useStore(deviceStore, (state) => state.creationMode);
+  const beginnerHints = useStore(deviceStore, (state) => state.beginnerHints);
   const management = useManagement();
   const { pending, run, undo, confirmation } = management;
   const { openImport, exportCharacter, importControls } = useCharacterTransfer(management);
@@ -148,6 +150,39 @@ export function SettingsScreen() {
         ]}
         onChange={(value) => deviceStore.getState().setTheme(value)}
       />
+      <ChoiceGroup<CreationMode>
+        legend="New characters"
+        name="creation-mode"
+        value={creationMode}
+        options={[
+          {
+            value: 'steps',
+            label: 'Step by step',
+            hint: 'One choice at a time, with a review before you create.',
+          },
+          { value: 'page', label: 'One page', hint: 'Every choice on a single form.' },
+        ]}
+        onChange={(value) => deviceStore.getState().setCreationMode(value)}
+      />
+      <section aria-labelledby="settings-hints" className="flex flex-col gap-3">
+        <h2 id="settings-hints" className="text-base font-semibold">
+          Beginner hints
+        </h2>
+        <label className="flex min-h-11 items-center gap-3 rounded-card border border-border bg-surface p-3">
+          <input
+            type="checkbox"
+            checked={beginnerHints}
+            onChange={(event) => deviceStore.getState().setBeginnerHints(event.target.checked)}
+            className="size-4 accent-(--omni-accent)"
+          />
+          Show beginner hints
+        </label>
+        <p className="text-sm text-text-muted">
+          Short guides for races, classes and backgrounds, suggested scores, skills and spells, and
+          a to do list after level-up. Suggestions never change your character on their own. Stored
+          on this device only.
+        </p>
+      </section>
       <section aria-labelledby="settings-dice" className="flex flex-col gap-3">
         <h2 id="settings-dice" className="text-base font-semibold">
           Dice roller
