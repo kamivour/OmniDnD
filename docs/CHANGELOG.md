@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 17:59 — Travel and falling tables
+
+- Reference > Quick tables now has Travel pace, Forced march and Falling.
+- Wording is short and our own. Check that the numbers match your book.
+- Checks pass.
+
 ## 2026-11-08 17:57 — Movement and body on Explore
 
 - Explore has a new "Movement and body" card: jump distances, lift limit, breath, choking rounds, days without food, climb and swim speed.

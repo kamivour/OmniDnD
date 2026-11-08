@@ -24,6 +24,17 @@ test('quick tables open and show exhaustion levels', async ({ page }) => {
   await noOverflow(page);
 });
 
+test('travel pace, forced march and falling tables are listed', async ({ page }) => {
+  await page.goto('/reference');
+  await page.getByText('Falling', { exact: true }).click();
+  await expect(page.getByText('1d6 bludgeoning for every 10 feet fallen.')).toBeVisible();
+  await page.getByText('Travel pace', { exact: true }).click();
+  await expect(page.getByText('30 miles a day', { exact: false })).toBeVisible();
+  await page.getByText('Forced march', { exact: true }).click();
+  await expect(page.getByText('DC 10 plus 1', { exact: false })).toBeVisible();
+  await noOverflow(page);
+});
+
 test('reference search finds a creature and opens its statblock', async ({ page }, info) => {
   await page.goto('/reference');
   await page.getByRole('searchbox', { name: 'Search rules', exact: true }).fill('goblin');

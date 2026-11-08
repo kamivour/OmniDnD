@@ -98,4 +98,35 @@ export const QUICK_TABLES: QuickTable[] = [
       { label: 'Limit', text: 'One long rest per 24 hours, and you need at least 1 HP.' },
     ],
   },
+  {
+    id: 'travel-pace',
+    title: 'Travel pace',
+    note: 'Per party, on foot. The slowest member sets the pace.',
+    rows: [
+      { label: 'Fast', text: '4 miles an hour, 30 miles a day. Passive Perception drops by 5.' },
+      { label: 'Normal', text: '3 miles an hour, 24 miles a day.' },
+      { label: 'Slow', text: '2 miles an hour, 18 miles a day. The party can sneak.' },
+    ],
+  },
+  {
+    id: 'forced-march',
+    title: 'Forced march',
+    rows: [
+      { label: 'Normal day', text: 'Up to 8 hours of travel.' },
+      {
+        label: 'Extra hour',
+        text: 'Each one needs a Constitution save, DC 10 plus 1 for every hour past 8.',
+      },
+      { label: 'Failed save', text: 'You gain one level of exhaustion.' },
+    ],
+  },
+  {
+    id: 'falling',
+    title: 'Falling',
+    rows: [
+      { label: 'Damage', text: '1d6 bludgeoning for every 10 feet fallen.' },
+      { label: 'Cap', text: 'No more than 20d6, however far you fall.' },
+      { label: 'Landing', text: 'You land prone unless the fall hurt you not at all.' },
+    ],
+  },
 ];

@@ -17,3 +17,11 @@ describe('quick tables', () => {
     expect(QUICK_TABLES.find((table) => table.id === 'exhaustion')?.rows).toHaveLength(6);
   });
 });
+
+describe('travel and falling tables', () => {
+  it('are present', () => {
+    for (const id of ['travel-pace', 'forced-march', 'falling']) {
+      expect(QUICK_TABLES.some((table) => table.id === id)).toBe(true);
+    }
+  });
+});
