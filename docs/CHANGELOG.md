@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 17:57 — Movement and body on Explore
+
+- Explore has a new "Movement and body" card: jump distances, lift limit, breath, choking rounds, days without food, climb and swim speed.
+- Tap a number to see how it was worked out. An active Jump spell triples the jumps.
+- Check it at phone width.
+- Checks pass.
+
 ## 2026-11-08 17:55 — Body numbers in the engine
 
 - The app can now work out jump distance, how much you can lift, how long you can hold your breath, days without food, and climb and swim speed.

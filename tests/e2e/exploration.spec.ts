@@ -605,3 +605,15 @@ test('Explore preserves active combat and shares the ritual block and manual-clo
   await expect(main(page)).toContainText('Round 7');
   await oneUndo(page);
 });
+
+test('Explore shows jump, lift and breath numbers with breakdowns', async ({ page }) => {
+  const fool = foolFile('explore-body-fool');
+  await importFile(page, fool);
+  await go(page, fool.build.id);
+  const body = main(page).getByRole('region', { name: 'Movement and body', exact: true });
+  await expect(body).toBeVisible();
+  await expect(body).toContainText('Hold breath');
+  await body.getByRole('button', { name: 'Show Long jump (run) breakdown', exact: true }).click();
+  await expect(page.getByText('STR score').first()).toBeVisible();
+  await noOverflow(page);
+});

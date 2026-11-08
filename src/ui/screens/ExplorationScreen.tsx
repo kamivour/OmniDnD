@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { registry, registryFor } from '../../data/registry';
 import { spellCastDetails } from '../../engine/commands';
+import { BodyNumbers } from '../components/BodyNumbers';
 import { SectionLabel } from '../components/SectionLabel';
 import { Sheet } from '../components/Sheet';
 import { PassiveList, SkillList } from '../components/SkillChecks';
@@ -126,6 +127,10 @@ export function ExplorationScreen() {
           <PassiveList sheet={sheet} />
         </section>
       </div>
+      <section aria-label="Movement and body" className={card}>
+        <SectionLabel>Movement and body</SectionLabel>
+        <BodyNumbers sheet={sheet} effects={state.live.effects} />
+      </section>
       <Sheet
         open={casting !== null}
         onOpenChange={(open) => !open && setCasting(null)}
