@@ -8,6 +8,7 @@ Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
 - Next milestone (M17): new characters can be made step by step or on one page, your pick, with beginner hints for every class, subclass, race and background.
 - Hints show strengths, weaknesses, difficulty and suggested scores, skills and spells; they never choose for you and can be turned off.
+- Also in M17: after a level-up, a To do badge lists anything still to decide (new spells, prepared spells, subclass, ASI) and clears itself when done.
 - After that (M18): print the sheet or save it as PDF from the browser, offline.
 - Shared campaign view, spell import and session recaps are parked for later. Checks pass.
 

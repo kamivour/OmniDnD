@@ -223,7 +223,9 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [ ] Choice cards in both modes: race, class, background and subclass options show pitch, difficulty, strengths and weaknesses before picking
 - [ ] Suggestions in both modes: Suggested scores button, Recommended tags on skills and spells with a one-line reason, synergy notes for the current race, class and background
 - [ ] Starting above level 1: walk each extra level (subclass, ASI or feat, class picks, spells) using the level-up steps before Create; One page gets a Level choices section
-- [ ] Gate: a beginner builds a level 1 Fighter and a level 5 Wizard step by step using only suggestions; an expert builds one on One page with hints off; phone and desktop widths, reload mid-build, manual QA documented
+- [ ] Engine, to-do list: pure `pendingChoices` lists what a character still has to decide: subclass, ASI or feat, class picks (fighting style, Expertise, invocations, metamagic, infusions), cantrips, spells known, spellbook spells, and prepared spells below the daily number; each item links to where it is done
+- [ ] To-do UI: after a level-up, a summary of what changed (new features, HP, slots, proficiency) and a To do badge on the HUD and Dashboard that opens the list; items clear themselves when done, optional ones (preparing spells) can be dismissed
+- [ ] Gate: a beginner builds a level 1 Fighter and a level 5 Wizard step by step using only suggestions; an expert builds one on One page with hints off; phone and desktop widths, reload mid-build; level a Wizard and a Cleric, skip choices, and clear them from the To do list; manual QA documented
 
 ### M18 — Print and PDF sheet
 - [ ] Print view at `/characters/:id/print`: identity, abilities, saves, skills, AC, HP, attacks, features, inventory and spells, all computed by the engine
@@ -242,7 +244,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
-- 2026-11-08 — Planned M17 (newbie-friendly creation, both modes, guidance for every class) and M18 (print and PDF). M14 status fixed to done.
+- 2026-11-08 — Planned M17 (newbie-friendly creation, level-up to-do list, guidance for every class) and M18 (print and PDF). M14 status fixed to done.
 - 2026-11-08 — M16 gate: all checks and e2e pass at both widths; Playwright now pins dark mode; M16 manual QA list added. Milestone done.
 - 2026-11-08 — M16: rules review. Q4, Q21, Q22, Q23, Q29 answered (D150–D153); instant-death DM-review note removed. Other defaults stay open.
 - 2026-11-08 — M16: portrait upload in Edit character: picture is cropped and shrunk to a small JPEG, shown on sheet, HUD and campaign list; icon is default.

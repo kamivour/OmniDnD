@@ -85,6 +85,8 @@ Create blank (inside a campaign), import JSON, duplicate, delete (confirm). Full
 
 **Beginner hints (M17, on by default):** race, class, background and subclass options show a short own-words card: pitch, difficulty, strengths, weaknesses. Suggestions (scores, skills, starter spells, synergy notes) carry a one-line reason, appear only as tags or a button, and are never applied without the player.
 
+**To do after level-up (M17):** the level-up ends with a short summary of what changed. Anything skipped (subclass, ASI or feat, class picks, cantrips, spells, spellbook, prepared spells) shows as a To do badge on the HUD and Dashboard, links to where it is done, and clears itself.
+
 **Print (M18):** a print view lays out the computed sheet on light paper; Print / Save as PDF uses the browser's print dialog and works offline.
 
 **Manual vs automatic:** the user enters every *choice* (race, class, skills, Expertise, languages, tools, spells, items, ability scores or rolls, HP rolls). The app computes every *derived number* (modifiers, saves, skills, passives, initiative, DC, attacks, AC, max HP, slots, uses). Never ask the user to type a number the app can compute.
