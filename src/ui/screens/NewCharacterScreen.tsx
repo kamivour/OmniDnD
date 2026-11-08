@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useStore } from 'zustand';
 import { Link, useNavigate } from 'react-router';
 import { ZodError } from 'zod';
@@ -23,6 +23,7 @@ import { GuidedChoicesSection } from './GuidedChoicesSection';
 import { emptyGuided, toGuidedChoices, type GuidedState } from './guided-state';
 import { PlaceholderScreen } from './PlaceholderScreen';
 import { deviceStore, type CreationMode } from '../../state/device-settings';
+import { clearDraft, loadDraft, saveDraft } from './new-character-draft';
 import { LevelChoicesSection } from './LevelChoicesSection';
 import { levelPickRows, STEPS, stepProblems, type StepId } from './new-character-steps';
 import { emptyPicks, picksToPayload, type LevelPicks } from '../level/level-up-model';
@@ -54,26 +55,53 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
   const classes = available.filter((entry) => entry.kind === 'class');
   const backgrounds = available.filter((entry) => entry.kind === 'background');
   const [id] = useState(() => crypto.randomUUID());
-  const [name, setName] = useState('');
-  const [raceId, setRaceId] = useState('');
+  const [draft] = useState(() => loadDraft(campaign.id));
+  const [name, setName] = useState(draft?.name ?? '');
+  const [raceId, setRaceId] = useState(draft?.raceId ?? '');
   const [classId, setClassId] = useState(
-    classes.some((entry) => entry.id === 'class.bard') ? 'class.bard' : '',
+    draft?.classId ?? (classes.some((entry) => entry.id === 'class.bard') ? 'class.bard' : ''),
   );
-  const [backgroundId, setBackgroundId] = useState('');
-  const [alignment, setAlignment] = useState('');
-  const [racialChoices, setRacialChoices] = useState<Ability[]>([]);
-  const [level, setLevel] = useState(1);
-  const [bases, setBases] = useState<PerAbility<string>>(perAbility(''));
-  const [rolls, setRolls] = useState<string[]>([]);
+  const [backgroundId, setBackgroundId] = useState(draft?.backgroundId ?? '');
+  const [alignment, setAlignment] = useState(draft?.alignment ?? '');
+  const [racialChoices, setRacialChoices] = useState<Ability[]>(
+    (draft?.racialChoices as Ability[] | undefined) ?? [],
+  );
+  const [level, setLevel] = useState(draft?.level ?? 1);
+  const [bases, setBases] = useState<PerAbility<string>>(
+    (draft?.bases as PerAbility<string> | undefined) ?? perAbility(''),
+  );
+  const [rolls, setRolls] = useState<string[]>(draft?.rolls ?? []);
   const [errors, setErrors] = useState<string[]>([]);
-  const [guided, setGuided] = useState(false);
-  const [guidedState, setGuidedState] = useState<GuidedState>(() => emptyGuided(classId));
+  const [guided, setGuided] = useState(draft?.guided ?? false);
+  const [guidedState, setGuidedState] = useState<GuidedState>(
+    () => (draft?.guidedState as GuidedState | undefined) ?? emptyGuided(classId),
+  );
   const hints = useStore(deviceStore, (state) => state.beginnerHints);
   const savedMode = useStore(deviceStore, (state) => state.creationMode);
-  const [mode, setMode] = useState<CreationMode>(savedMode);
-  const [stepIndex, setStepIndex] = useState(0);
+  const [mode, setMode] = useState<CreationMode>(draft?.mode ?? savedMode);
+  const [stepIndex, setStepIndex] = useState(draft?.stepIndex ?? 0);
   const [stepErrors, setStepErrors] = useState<string[]>([]);
-  const [levelPicks, setLevelPicks] = useState<Record<number, LevelPicks>>({});
+  const [levelPicks, setLevelPicks] = useState<Record<number, LevelPicks>>(
+    (draft?.levelPicks as Record<number, LevelPicks> | undefined) ?? {},
+  );
+  useEffect(() => {
+    saveDraft(campaign.id, {
+      name,
+      raceId,
+      classId,
+      backgroundId,
+      alignment,
+      racialChoices,
+      level,
+      bases,
+      rolls,
+      guided,
+      guidedState,
+      mode,
+      stepIndex,
+      levelPicks,
+    });
+  });
   const pickRows = levelPickRows(registry, classId, level);
   const steps = STEPS.filter((entry) => entry.id !== 'levels' || pickRows.length > 0);
   const step: StepId = steps[stepIndex]!.id;
@@ -258,6 +286,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
             ...created,
           };
           const result = run(addCharacter, { file }, () => {
+            clearDraft(campaign.id);
             void navigate(`/characters/${id}`);
           });
           if (result.result === 'blocked') setErrors(result.reasons);

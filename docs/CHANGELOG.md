@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 10:20 — Character creation gate
+
+- A half-built New character form now comes back after a reload, until you create the character or close the tab.
+- Manual checks for the whole creation flow are listed in MANUAL_QA.
+- Checks pass.
+
 ## 2026-11-08 10:17 — To do list
 
 - A To do badge appears in the top bar, and a note on Home, whenever a character has choices left: subclass, ability increase or feat, fighting style, expertise, invocations and so on.

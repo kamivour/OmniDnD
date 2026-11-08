@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M17 (newbie-friendly character creation), todo.
-**Next up:** M17 task 12, the gate (needs draft persistence for the reload check). Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M18, Print and PDF sheet. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -225,7 +225,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Starting above level 1: subclass and ASI or feat picks for each level, with subclass cards, in a Levels step (One page: Level choices section); class picks and per-level spells are left to the To do list
 - [x] Engine, to-do list: pure `pendingChoices` lists what a character still has to decide: subclass, ASI or feat, class picks (fighting style, Expertise, invocations, metamagic, infusions), cantrips, spells known, spellbook spells, and prepared spells below the daily number; each item links to where it is done
 - [x] To-do UI: after a level-up, a summary of what changed (new features, HP, slots, proficiency) and a To do badge on the HUD and Dashboard that opens the list; items clear themselves when done, optional ones (preparing spells) can be dismissed
-- [ ] Gate: a beginner builds a level 1 Fighter and a level 5 Wizard step by step using only suggestions; an expert builds one on One page with hints off; phone and desktop widths, reload mid-build; level a Wizard and a Cleric, skip choices, and clear them from the To do list; manual QA documented
+- [x] Gate: a beginner builds a level 1 Fighter and a level 5 Wizard step by step using only suggestions; an expert builds one on One page with hints off; phone and desktop widths, reload mid-build; level a Wizard and a Cleric, skip choices, and clear them from the To do list; manual QA documented
 
 ### M18 — Print and PDF sheet
 - [ ] Print view at `/characters/:id/print`: identity, abilities, saves, skills, AC, HP, attacks, features, inventory and spells, all computed by the engine
@@ -244,6 +244,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M17 gate: New character draft survives reload (per tab); e2e covers beginner Wizard, expert one-page build and reload; manual QA written.
 - M17 task 11: To do list with HUD badge and Home banner; resolveChoices command settles subclass, ability increase, class picks and expertise; spells open the Spellbook.
 - M17 task 10: pure pendingChoices lists open subclass, ASI, class picks, expertise and spell choices; prepared spells optional. Next: To do UI.
 - M17 task 8: Suggested scores button, Recommended tags with a reason on class skills and spells, and Good together notes, in both modes.

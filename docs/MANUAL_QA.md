@@ -158,6 +158,17 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Write Markdown in the Journal. Judge whether lists, bold and links look right and typed HTML stays plain.
 - [ ] Reload the installed app with the network off. Judge whether the sheet, theme and journal still open.
 
+## Phase 5 — M17: Newbie-friendly character creation
+
+- [ ] As a new player, build a level 1 Fighter step by step. Judge whether each step explains itself without the rulebook.
+- [ ] Open the class, race and background guides. Judge whether strengths and weaknesses are fair and plain.
+- [ ] Press Suggested scores. Judge whether the numbers suit the class.
+- [ ] Check Recommended tags on skills and spells. Judge whether each reason makes sense.
+- [ ] Build a level 5 Wizard. Judge whether the subclass and ability increase picks are clear.
+- [ ] Turn beginner hints off in Settings and use One page. Judge whether the form is quick for an expert.
+- [ ] Reload mid-build. Judge whether the draft comes back as you left it.
+- [ ] Level a Wizard and a Cleric, skip the picks, and clear the To do list. Judge whether each item names what is missing.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

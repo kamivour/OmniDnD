@@ -1,0 +1,73 @@
+import type { Page } from '@playwright/test';
+import { expect, test } from './fixtures';
+
+async function openNewCharacter(page: Page) {
+  await page.goto('/');
+  await page
+    .getByRole('article', { name: 'Campaign #273', exact: true })
+    .getByRole('link', { name: 'New character', exact: true })
+    .click();
+}
+
+const scores = { STR: 8, DEX: 14, CON: 13, INT: 15, WIS: 12, CHA: 10 };
+
+test('a half-built character survives a reload', async ({ page }) => {
+  await openNewCharacter(page);
+  await page.getByLabel('Name', { exact: true }).fill('Reload Hero');
+  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await page.getByLabel('Class', { exact: true }).selectOption('class.wizard');
+  await page.getByLabel('Level', { exact: true }).fill('3');
+  await page.reload();
+  await expect(page.getByLabel('Name', { exact: true })).toHaveValue('Reload Hero');
+  await expect(page.getByLabel('Race', { exact: true })).toHaveValue('race.human');
+  await expect(page.getByLabel('Class', { exact: true })).toHaveValue('class.wizard');
+  await expect(page.getByLabel('Level', { exact: true })).toHaveValue('3');
+});
+
+test('a beginner builds a level 5 Wizard step by step', async ({ page }) => {
+  await openNewCharacter(page);
+  await page.getByRole('button', { name: 'Step by step', exact: true }).click();
+  const next = page.getByRole('button', { name: 'Next', exact: true });
+  await page.getByLabel('Name', { exact: true }).fill('Beginner Wizard');
+  await next.click();
+  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await next.click();
+  await page.getByLabel('Class', { exact: true }).selectOption('class.wizard');
+  await expect(page.getByRole('article', { name: 'Wizard guide' })).toBeVisible();
+  await next.click();
+  await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
+  await next.click();
+  await page.getByLabel('Level', { exact: true }).fill('5');
+  await next.click();
+  for (const [ability, score] of Object.entries(scores)) {
+    await page.getByLabel(`${ability} base`, { exact: true }).fill(String(score));
+  }
+  await next.click();
+  for (const at of [2, 3, 4, 5]) {
+    await page.getByLabel(`Level ${at} roll (d6)`).fill('4');
+  }
+  await next.click();
+  // Level 4 ability increase is the only forced pick; subclass comes at level 2.
+  await page.getByLabel('Subclass', { exact: true }).selectOption('subclass.wizard.evocation');
+  await page.getByRole('radio', { name: 'Raise ability scores' }).check();
+  await next.click();
+  await expect(page.getByText('Beginner Wizard: Human Wizard, level 5')).toBeVisible();
+  await page.getByRole('button', { name: 'Create character', exact: true }).click();
+  await expect(page).toHaveURL(/\/characters\/[^/]+$/);
+});
+
+test('an expert builds a Fighter on one page with hints off', async ({ page }) => {
+  await page.goto('/settings');
+  await page.getByLabel('Show beginner hints').uncheck();
+  await openNewCharacter(page);
+  await page.getByLabel('Name', { exact: true }).fill('Expert Fighter');
+  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await page.getByLabel('Class', { exact: true }).selectOption('class.fighter');
+  await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
+  await expect(page.getByRole('article', { name: /guide$/ })).toHaveCount(0);
+  for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
+    await page.getByLabel(`${ability} base`, { exact: true }).fill('13');
+  }
+  await page.getByRole('button', { name: 'Create character', exact: true }).click();
+  await expect(page).toHaveURL(/\/characters\/[^/]+$/);
+});
