@@ -456,7 +456,7 @@ export const SLOT_LABELS: Record<ItemSlot, string> = {
   instrument: 'Musical instrument',
 };
 
-const FOCUS_IDS: Partial<Record<ItemSlot, string[]>> = {
+export const FOCUS_IDS: Partial<Record<ItemSlot, string[]>> = {
   'holy-symbol': ['item.amulet', 'item.emblem', 'item.reliquary'],
   'druidic-focus': ['item.sprig-of-mistletoe', 'item.totem', 'item.wooden-staff', 'item.yew-wand'],
   'arcane-focus': ['item.crystal', 'item.orb', 'item.rod', 'item.staff', 'item.wand'],

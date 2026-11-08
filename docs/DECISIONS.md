@@ -167,6 +167,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D161 | 2026-11-08 | Print uses the browser print dialog with a dedicated light page; no PDF library, and live state (HP, slots used) prints as it is now | Works offline and stays small; the printed HP is a snapshot |
 | D162 | 2026-11-08 | Spell material checks (M19) only warn; a missing focus or costly component never blocks a cast | The DM may allow it, and the player stays in control |
 | D163 | 2026-11-08 | Find and Related links (M21) suggest places; the app never moves you to another screen on its own | Surprise jumps mid-session lose your place |
+| D164 | 2026-11-08 | A focus or pouch covers only materials with no gold price, and any carried item counts, equipped or not. Climb and swim speed are half walking speed | Matches the 2014 rule; the Artificer infusion item is not read yet |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 

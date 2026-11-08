@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 18:02 — Spell materials and focus in the engine
+
+- The app can tell if a spell needs a costly material, whether it is used up, and whether your focus, instrument, holy symbol or component pouch covers it.
+- Nothing shows on the cast screen yet; that is next.
+- Checks pass.
+
 ## 2026-11-08 17:59 — Travel and falling tables
 
 - Reference > Quick tables now has Travel pace, Forced march and Falling.

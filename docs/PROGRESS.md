@@ -242,8 +242,8 @@ Rules: PHB 2014 chapters 7–8 (jumping, lifting, suffocating, food, travel, fal
 - [x] Engine, modifiers: Remarkable Athlete adds STR mod to running long jump; active *Jump* spell triples jump distance; Athlete feat makes the run-up 5 ft; Step of the Wind shows "double jump distance" as a reminder only. Sources come from features and active effects, never hard-coded names in the UI
 - [x] UI, Explore panel "Movement and body": the numbers above as stat chips with breakdowns; works at 375 px
 - [x] UI, Reference quick tables: travel pace (fast, normal, slow with their effects), forced march (CON save DC 10 + 1 per extra hour), falling (1d6 per 10 ft, max 20d6). Text in our own words
-- [ ] Engine, material components: classify each spell's material as none, focus-covered (no cost, not consumed), costly (gp parsed from the text) or consumed. Test with Shatter (covered), Revivify (costly and consumed) and Identify (costly, kept)
-- [ ] Engine, focus rules: Bard instrument, Cleric and Paladin holy symbol, Druid druidic focus, Sorcerer, Warlock and Wizard arcane focus, Artificer thieves' or artisan's tools (infusion item too); a component pouch works for any class; Ranger has no focus. Read from carried or equipped items
+- [x] Engine, material components: classify each spell's material as none, focus-covered (no cost, not consumed), costly (gp parsed from the text) or consumed. Test with Shatter (covered), Revivify (costly and consumed) and Identify (costly, kept)
+- [x] Engine, focus rules: Bard instrument, Cleric and Paladin holy symbol, Druid druidic focus, Sorcerer, Warlock and Wizard arcane focus, Artificer thieves' or artisan's tools (infusion item too); a component pouch works for any class; Ranger has no focus. Read from carried or equipped items
 - [ ] UI, cast note: when casting, show "Material covered by your Flute" or "Needs a 300 gp diamond (consumed)". It warns when nothing covers it but never blocks the cast
 - [ ] Gate: The Fool jumps (breakdown checked), casts Shatter with the flute equipped and without it; a Wizard casts Identify without a pearl and sees the warning; phone and desktop widths, Undo, reload; manual QA documented
 
@@ -273,6 +273,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M19: engine reads spell materials (none, plain, costly, consumed) and checks carried focus by class or component pouch. Infusion items skipped, no data.
 - M19: Reference quick tables for travel pace, forced march and falling, in own words, with e2e.
 - M19: Explore "Movement and body" panel with jump, lift, breath, food, climb and swim chips and breakdowns; e2e at phone and desktop.
 - M19: engine body numbers (jumps, lift, breath, food, climb, swim) with Remarkable Athlete, Jump spell, Athlete feat and Step of the Wind note.
