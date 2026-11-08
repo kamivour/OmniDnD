@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M21 (Find and Related links), todo.
-**Next up:** M21 task 1 (Find search index). Run the M17, M18 and M19 manual QA lists when you can. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M21 task 2 (places registry). Run the M17, M18 and M19 manual QA lists when you can. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -256,7 +256,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 - [x] Gate: find a free map maker on a phone, filter out AI tools, open one link; manual QA documented
 
 ### M21 — Find and Related links
-- [ ] Engine, search index (`src/engine/calc/find.ts`): one ranked list over app places and actions (screens, panels, commands such as "Long rest"), the open character's spells, items and features, rules (reuse `searchRules`) and tools; synonyms ("jump" finds Movement and body, "PDF" finds Print). Pure and tested
+- [x] Engine, search index (`src/engine/calc/find.ts`): one ranked list over app places and actions (screens, panels, commands such as "Long rest"), the open character's spells, items and features, rules (reuse `searchRules`) and tools; synonyms ("jump" finds Movement and body, "PDF" finds Print). Pure and tested
 - [ ] Registry of places: every screen and panel registers an id, title, route, section anchor and synonyms in one file; a test fails if a built route has no entry. Add the rule "new sections register a Find entry" to AGENTS.md
 - [ ] UI, Find: top-bar search icon, Ctrl/Cmd+K and `/` open it; results grouped (Go to, Do, Your character, Rules, Tools); Enter goes there, scrolls to the section and highlights it briefly
 - [ ] UI, Related links: small "Related" row on key panels (Jump next to Athletics, Falling next to Jump, Focus next to spell components). Suggest only; never redirect on its own
@@ -273,6 +273,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M21 task 1: pure Find search index ranks titles, synonyms and details, groups results and caps each group; unit tests added.
 - M20 gate: e2e finds a free web map maker with AI hidden and opens-in-new-tab links; check:tools script and Credits thanks added; manual QA written.
 - M20: Reference > Tools page groups tools by goal with free only, platform, hide AI and search; cards open in a new tab.
 - M20: 61 tools written in own words across 10 objectives, duplicates merged; other-system entries marked not supported.
