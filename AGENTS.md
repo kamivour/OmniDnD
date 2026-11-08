@@ -21,6 +21,7 @@ D&D 5e **2014** character companion for future campaigns and friends' characters
 - **User enters choices, app computes numbers.** Never make the user type a value the engine can derive.
 - **One milestone at a time.** Future screens exist as placeholders only. Do not build Phase 2+ modules early.
 - **DM outcomes stay manual.** Hits, saves, target behavior, rulings: player enters them. App warns, never silently decides.
+- **New screens and sections register a Find entry** in `src/ui/find/places.ts` (title, route, anchor, synonyms). `places.test.ts` fails when a nav route has none.
 
 ## Workflow per task
 
