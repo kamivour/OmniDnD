@@ -1,3 +1,4 @@
+import { PrintScreen } from './ui/screens/PrintScreen';
 import { TodoScreen } from './ui/todo/TodoScreen';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { ToastProvider } from './ui/components/ToastProvider';
@@ -55,6 +56,7 @@ export function App() {
               <Route path="reference/credits" element={<CreditsScreen />} />
               <Route path="*" element={<PlaceholderScreen title="Not found" />} />
             </Route>
+            <Route path="characters/:characterId/print" element={<PrintScreen />} />
             <Route path="characters/:characterId" element={<AppFrame />}>
               <Route index element={<DashboardScreen />} />
               <Route path="sheet" element={<CharacterSheetScreen />} />

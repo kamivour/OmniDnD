@@ -4,7 +4,14 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
-## 2026-11-08 10:20 — Character creation gate
+## 2026-11-08 10:23 — Print sheet
+
+- The Sheet screen has a Print button. It opens a paper copy of the character: abilities, skills, attacks, inventory, features and spells.
+- Press Print / Save as PDF to use your browser's print dialog. The paper stays light even in the dark theme.
+- Check the printed PDF against the sheet, on desktop and phone.
+- Checks pass.
+
+## 2026-11-08 10:21 — Character creation gate
 
 - A half-built New character form now comes back after a reload, until you create the character or close the tab.
 - Manual checks for the whole creation flow are listed in MANUAL_QA.

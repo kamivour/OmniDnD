@@ -97,3 +97,24 @@ body:has([data-character-dialog-undo]) [data-character-toolbar-undo] {
     }
   }
 }
+
+/* Print view: paper colours whatever the theme. */
+.print-sheet {
+  color-scheme: light;
+  --omni-bg: #ffffff;
+  --omni-surface: #ffffff;
+  --omni-surface-2: #f2f2f2;
+  --omni-border: #9a9a9a;
+  --omni-text: #111111;
+  --omni-text-muted: #444444;
+  --omni-accent: #5a3a0c;
+}
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+  body {
+    background: #ffffff;
+  }
+}

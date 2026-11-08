@@ -164,6 +164,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D158 | 2026-11-08 | A character created above level 1 picks subclass and ability increase or feat for each level up front, but may skip any; class picks and per-level spells wait for the To do list | Keeps creation short while still allowing a full build |
 | D159 | 2026-11-08 | The To do list shows only what the data can verify. Preparing spells is optional and can be hidden on this device; everything else stays until chosen | A hidden item never blocks play, but a missing subclass or fighting style is a real gap |
 | D160 | 2026-11-08 | The New character draft is kept for the current browser tab only, and cleared on create | A draft never lingers on a shared device, but closing the tab loses it |
+| D161 | 2026-11-08 | Print uses the browser print dialog with a dedicated light page; no PDF library, and live state (HP, slots used) prints as it is now | Works offline and stays small; the printed HP is a snapshot |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 

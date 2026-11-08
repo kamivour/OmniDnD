@@ -169,6 +169,14 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Reload mid-build. Judge whether the draft comes back as you left it.
 - [ ] Level a Wizard and a Cleric, skip the picks, and clear the To do list. Judge whether each item names what is missing.
 
+## Phase 5 — M18: Print and PDF sheet
+
+- [ ] Print The Fool to PDF in Chrome (Sheet, then Print). Judge whether every number matches the sheet.
+- [ ] Print a level 5 Wizard. Judge whether features and spells start on their own pages and no box is cut in half.
+- [ ] Print with the dark theme on. Judge whether the paper stays light and easy to read.
+- [ ] Open Print on a phone and save as PDF. Judge whether the layout fits the page.
+- [ ] Open Print with the network off. Judge whether it still loads.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

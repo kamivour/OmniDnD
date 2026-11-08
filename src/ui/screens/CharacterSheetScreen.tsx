@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import { useRef, useState, type ReactNode } from 'react';
 import { registry, registryFor } from '../../data/registry';
 import { ABILITIES } from '../../engine/calc/abilities';
@@ -95,15 +96,23 @@ export function CharacterSheetScreen() {
       <div className="flex min-w-0 flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h1 className="font-display text-xl text-text">Character sheet</h1>
-          <button
-            ref={editButton}
-            type="button"
-            aria-label="Edit character"
-            onClick={() => setEditing(true)}
-            className="min-h-11 rounded-btn border border-border px-3 text-sm text-accent"
-          >
-            Edit
-          </button>
+          <div className="flex gap-2">
+            <Link
+              to={`/characters/${build.id}/print`}
+              className="inline-flex min-h-11 items-center rounded-btn border border-border px-3 text-sm text-accent"
+            >
+              Print
+            </Link>
+            <button
+              ref={editButton}
+              type="button"
+              aria-label="Edit character"
+              onClick={() => setEditing(true)}
+              className="min-h-11 rounded-btn border border-border px-3 text-sm text-accent"
+            >
+              Edit
+            </button>
+          </div>
         </div>
         <Section label="Identity">
           <div className="flex flex-wrap items-start justify-between gap-3">

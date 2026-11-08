@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M17 (newbie-friendly character creation), todo.
-**Next up:** M18, Print and PDF sheet. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** no milestone queued. Run the M17 and M18 manual QA lists. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -228,10 +228,10 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Gate: a beginner builds a level 1 Fighter and a level 5 Wizard step by step using only suggestions; an expert builds one on One page with hints off; phone and desktop widths, reload mid-build; level a Wizard and a Cleric, skip choices, and clear them from the To do list; manual QA documented
 
 ### M18 — Print and PDF sheet
-- [ ] Print view at `/characters/:id/print`: identity, abilities, saves, skills, AC, HP, attacks, features, inventory and spells, all computed by the engine
-- [ ] Print styles: light paper colours whatever the theme, clean page breaks, optional spell and feature summary pages
-- [ ] Print / Save as PDF button on the sheet uses the browser's print dialog (no PDF library); works offline
-- [ ] Gate: print The Fool and a level 5 Wizard to PDF in Chrome and on a phone; checks match the sheet; manual QA documented
+- [x] Print view at `/characters/:id/print`: identity, abilities, saves, skills, AC, HP, attacks, features, inventory and spells, all computed by the engine
+- [x] Print styles: light paper colours whatever the theme, clean page breaks, optional spell and feature summary pages
+- [x] Print / Save as PDF button on the sheet uses the browser's print dialog (no PDF library); works offline
+- [x] Gate: print The Fool and a level 5 Wizard to PDF in Chrome and on a phone; checks match the sheet; manual QA documented
 
 ## Backlog (not scheduled)
 
@@ -244,6 +244,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M18: Print view at /characters/:id/print with light paper styles, page breaks and a Print / Save as PDF button; e2e checks it; manual QA written.
 - M17 gate: New character draft survives reload (per tab); e2e covers beginner Wizard, expert one-page build and reload; manual QA written.
 - M17 task 11: To do list with HUD badge and Home banner; resolveChoices command settles subclass, ability increase, class picks and expertise; spells open the Spellbook.
 - M17 task 10: pure pendingChoices lists open subclass, ASI, class picks, expertise and spell choices; prepared spells optional. Next: To do UI.
