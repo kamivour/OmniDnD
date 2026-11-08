@@ -12,6 +12,7 @@ import { compactInteger, resourceOverride } from '../components/resource-overrid
 import { useCommand } from '../commands/command-context';
 import { useCharacter } from '../hooks/useCharacter';
 import { signed } from '../format';
+import { TodoBadge } from '../todo/TodoBadge';
 import { useRest } from '../rest/rest-context';
 import { HudAdjustments, type HudSelection } from './HudAdjustments';
 
@@ -223,6 +224,7 @@ export function HudBar() {
               className="ml-auto max-w-32"
             />
           )}
+          <TodoBadge />
           <button
             type="button"
             aria-label="Adjust conditions and effects"

@@ -16,6 +16,8 @@ export * from './edit-build';
 export * from './custom-origin';
 export * from './value-overrides';
 export * from './level';
+export * from './resolve-choices';
+export * from '../calc/pending-choices';
 export * from './rest';
 export * from './reset';
 export * from './spells';

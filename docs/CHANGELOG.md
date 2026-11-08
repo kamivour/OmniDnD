@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 10:17 — To do list
+
+- A To do badge appears in the top bar, and a note on Home, whenever a character has choices left: subclass, ability increase or feat, fighting style, expertise, invocations and so on.
+- Open the list to make each choice there. Spell picks link to the Spellbook. Preparing spells is optional and can be hidden.
+- Check that the list clears as you choose.
+- Checks pass.
+
 ## 2026-11-08 10:11 — To do list engine
 
 - The app can now work out what a character still has to decide: subclass, ability score or feat, fighting style, expertise, invocations, and spell picks.

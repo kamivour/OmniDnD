@@ -13,6 +13,7 @@ import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
 import { HudAdjustments } from '../layout/HudAdjustments';
 import { RecentCharacterLog } from '../log/CharacterLog';
+import { TodoBanner } from '../todo/TodoBanner';
 import { GameClockControl } from '../time/GameClockControl';
 
 /** Frame A: the same saved character, engine numbers and commands used by every live screen. */
@@ -47,6 +48,7 @@ export function DashboardScreen() {
     <div className="mx-auto max-w-screen-2xl px-4 py-4 lg:px-6">
       <h1 className="sr-only">Home</h1>
       <div className="flex min-w-0 flex-col gap-6">
+        <TodoBanner />
         <GameClockControl />
         <div className="grid min-w-0 gap-6 @min-[680px]:grid-cols-2">
           <section aria-label="Resources" className="flex min-w-0 flex-col gap-4">

@@ -1,3 +1,4 @@
+import { TodoScreen } from './ui/todo/TodoScreen';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { ToastProvider } from './ui/components/ToastProvider';
 import { AppFrame } from './ui/layout/AppFrame';
@@ -63,6 +64,7 @@ export function App() {
               <Route path="inventory" element={<InventoryScreen />} />
               <Route path="features" element={<FeaturesScreen />} />
               <Route path="journal" element={<JournalScreen />} />
+              <Route path="todo" element={<TodoScreen />} />
               <Route path="companions" element={<CompanionsScreen />} />
               <Route path="reference" element={<ReferenceScreen />} />
               <Route path="settings" element={<SettingsScreen />} />
