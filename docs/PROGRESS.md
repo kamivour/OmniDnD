@@ -244,6 +244,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- Review: draft Start over and safe restore; print page toggles, missing-character guard, PDF title; new gate e2e (suggested scores, subclass via To do); stale Explore test fixed.
 - M18: Print view at /characters/:id/print with light paper styles, page breaks and a Print / Save as PDF button; e2e checks it; manual QA written.
 - M17 gate: New character draft survives reload (per tab); e2e covers beginner Wizard, expert one-page build and reload; manual QA written.
 - M17 task 11: To do list with HUD badge and Home banner; resolveChoices command settles subclass, ability increase, class picks and expertise; spells open the Spellbook.

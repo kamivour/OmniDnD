@@ -1,13 +1,8 @@
 import type { Sheet } from '../../engine/calc/sheet';
 import { SKILLS, SKILL_ABILITY } from '../../engine/rules2014';
-import { signed } from '../format';
+import { signed, skillName } from '../format';
 import { RollButton } from '../dice/RollButton';
 import { StatChip } from './StatChip';
-
-const titleCase = (value: string) =>
-  value.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
-const skillName = (value: string) =>
-  value === 'sleight-of-hand' ? 'Sleight of Hand' : titleCase(value);
 
 /** Shared calculated checks; the optional roller never applies a result. */
 export function SkillList({ sheet }: { sheet: Sheet }) {
@@ -52,7 +47,7 @@ export function PassiveList({ sheet }: { sheet: Sheet }) {
   return (['perception', 'investigation', 'insight'] as const).map((skill) => (
     <StatChip
       key={skill}
-      label={`Passive ${titleCase(skill)}`}
+      label={`Passive ${skillName(skill)}`}
       value={sheet.passives[skill].value}
       stat={sheet.passives[skill]}
       className="w-full"

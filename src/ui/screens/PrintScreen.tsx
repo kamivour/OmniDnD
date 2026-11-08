@@ -1,9 +1,12 @@
-import type { ReactNode } from 'react';
-import { Link } from 'react-router';
+import { useEffect, useState, type ReactNode } from 'react';
+import { Link, useParams } from 'react-router';
+import { useStore } from 'zustand';
+import { characterStore } from '../../state/character-store';
 import { registry, registryFor } from '../../data/registry';
 import { ABILITIES } from '../../engine/calc/abilities';
 import { SKILLS, SKILL_ABILITY } from '../../engine/rules2014';
-import { signed } from '../format';
+import { signed, skillName } from '../format';
+import { PlaceholderScreen } from './PlaceholderScreen';
 import { useCharacter } from '../hooks/useCharacter';
 
 const titleCase = (value: string) =>
@@ -27,9 +30,29 @@ function Stat({ label, value }: { label: string; value: ReactNode }) {
   );
 }
 
-/** A paper copy of the sheet: light colours whatever the theme, every number from the engine. */
+/** Print route sits outside AppFrame, so it guards a missing character itself. */
 export function PrintScreen() {
+  const { characterId = '' } = useParams();
+  const exists = useStore(characterStore, (store) => Object.hasOwn(store.characters, characterId));
+  if (!exists)
+    return (
+      <main>
+        <PlaceholderScreen title="Character not found" />
+        <p className="text-center">
+          <Link to="/" className="text-accent">
+            All campaigns
+          </Link>
+        </p>
+      </main>
+    );
+  return <PrintSheet />;
+}
+
+/** A paper copy of the sheet: light colours whatever the theme, every number from the engine. */
+function PrintSheet() {
   const { characterId, state, sheet } = useCharacter();
+  const [withFeatures, setWithFeatures] = useState(true);
+  const [withSpells, setWithSpells] = useState(true);
   const { build, live } = state;
   const reg = registryFor(build);
   const race = registry.get('race', build.raceId);
@@ -43,7 +66,7 @@ export function PrintScreen() {
   const spellLists = build.spells.map((list) => ({
     classId: list.classId,
     spells: [...new Set([...list.known, ...(list.prepared ?? [])])]
-      .map((id) => registry.get('spell', id))
+      .map((id) => reg.get('spell', id))
       .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name)),
     prepared: new Set(list.prepared ?? []),
   }));
@@ -51,6 +74,15 @@ export function PrintScreen() {
     .map((max, level) => ({ level, max }))
     .filter(({ level, max }) => level > 0 && max > 0);
   const coins = Object.entries(live.currency).filter(([, amount]) => amount > 0);
+  const hasSpells = spellLists.some((list) => list.spells.length > 0);
+  // The browser suggests the tab title as the PDF file name.
+  useEffect(() => {
+    const before = document.title;
+    document.title = `${build.name} - character sheet`;
+    return () => {
+      document.title = before;
+    };
+  }, [build.name]);
 
   return (
     <div className="print-sheet min-h-screen bg-bg text-text">
@@ -62,6 +94,26 @@ export function PrintScreen() {
           >
             Back to sheet
           </Link>
+          <div className="flex flex-wrap items-center gap-3 text-sm">
+            <label className="flex min-h-11 items-center gap-2">
+              <input
+                type="checkbox"
+                checked={withFeatures}
+                onChange={(event) => setWithFeatures(event.target.checked)}
+              />
+              Features page
+            </label>
+            {hasSpells && (
+              <label className="flex min-h-11 items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={withSpells}
+                  onChange={(event) => setWithSpells(event.target.checked)}
+                />
+                Spells page
+              </label>
+            )}
+          </div>
           <button
             type="button"
             onClick={() => window.print()}
@@ -123,18 +175,19 @@ export function PrintScreen() {
               return (
                 <Stat
                   key={skill}
-                  label={`${titleCase(skill)} (${SKILL_ABILITY[skill]})${mark}`}
+                  label={`${skillName(skill)} (${SKILL_ABILITY[skill]})${mark}`}
                   value={signed(stat.value)}
                 />
               );
             })}
+            <p className="mt-1 text-xs text-text-muted">* proficient, ** expertise</p>
           </Block>
           <div className="flex flex-col gap-3">
             <Block label="Passives">
               {(['perception', 'investigation', 'insight'] as const).map((skill) => (
                 <Stat
                   key={skill}
-                  label={`Passive ${titleCase(skill)}`}
+                  label={`Passive ${skillName(skill)}`}
                   value={sheet.passives[skill].value}
                 />
               ))}
@@ -218,25 +271,27 @@ export function PrintScreen() {
           )}
         </Block>
 
-        <section aria-label="Features" className="break-before-page">
-          <h2 className="mb-2 text-sm font-bold tracking-wide text-accent uppercase">
-            Features and traits
-          </h2>
-          <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 print:grid-cols-2">
-            {[...sheet.features.filter(({ def }) => def.origin === 'race'), ...features].map(
-              ({ def }) => (
-                <li key={def.id} className="break-inside-avoid border border-border p-2 text-xs">
-                  <h3 className="text-sm font-semibold">{def.name}</h3>
-                  <p className="whitespace-pre-line text-text-muted">
-                    {def.summary?.effect ?? def.fullText ?? 'No summary recorded.'}
-                  </p>
-                </li>
-              ),
-            )}
-          </ul>
-        </section>
+        {withFeatures && (
+          <section aria-label="Features" className="break-before-page">
+            <h2 className="mb-2 text-sm font-bold tracking-wide text-accent uppercase">
+              Features and traits
+            </h2>
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 print:grid-cols-2">
+              {[...sheet.features.filter(({ def }) => def.origin === 'race'), ...features].map(
+                ({ def }) => (
+                  <li key={def.id} className="break-inside-avoid border border-border p-2 text-xs">
+                    <h3 className="text-sm font-semibold">{def.name}</h3>
+                    <p className="whitespace-pre-line text-text-muted">
+                      {def.summary?.effect ?? def.fullText ?? 'No summary recorded.'}
+                    </p>
+                  </li>
+                ),
+              )}
+            </ul>
+          </section>
+        )}
 
-        {spellLists.some((list) => list.spells.length > 0) && (
+        {withSpells && hasSpells && (
           <section aria-label="Spell list" className="break-before-page">
             <h2 className="mb-2 text-sm font-bold tracking-wide text-accent uppercase">Spells</h2>
             {spellLists.map((list) => (

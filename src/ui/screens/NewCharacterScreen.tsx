@@ -41,11 +41,27 @@ const small = 'min-h-11 w-16 rounded-btn border border-border bg-surface px-2 te
  */
 export function NewCharacterScreen() {
   const campaign = useCampaign();
+  const [fresh, setFresh] = useState(0);
   if (!campaign) return <PlaceholderScreen title="Campaign not found" />;
-  return <NewCharacterForm key={campaign.id} campaign={campaign} />;
+  return (
+    <NewCharacterForm
+      key={`${campaign.id}:${fresh}`}
+      campaign={campaign}
+      onStartOver={() => {
+        clearDraft(campaign.id);
+        setFresh((count) => count + 1);
+      }}
+    />
+  );
 }
 
-function NewCharacterForm({ campaign }: { campaign: Campaign }) {
+function NewCharacterForm({
+  campaign,
+  onStartOver,
+}: {
+  campaign: Campaign;
+  onStartOver: () => void;
+}) {
   const navigate = useNavigate();
   const { run, confirmation, pending } = useManagement();
   const available = [...registry.entries.values()]
@@ -56,12 +72,16 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
   const backgrounds = available.filter((entry) => entry.kind === 'background');
   const [id] = useState(() => crypto.randomUUID());
   const [draft] = useState(() => loadDraft(campaign.id));
+  // A draft can outlive a change to the campaign's sources; drop ids the campaign no longer offers.
+  const offered = (list: typeof available, value: string | undefined) =>
+    value && list.some((entry) => entry.id === value) ? value : undefined;
   const [name, setName] = useState(draft?.name ?? '');
-  const [raceId, setRaceId] = useState(draft?.raceId ?? '');
+  const [raceId, setRaceId] = useState(offered(races, draft?.raceId) ?? '');
   const [classId, setClassId] = useState(
-    draft?.classId ?? (classes.some((entry) => entry.id === 'class.bard') ? 'class.bard' : ''),
+    offered(classes, draft?.classId) ??
+      (classes.some((entry) => entry.id === 'class.bard') ? 'class.bard' : ''),
   );
-  const [backgroundId, setBackgroundId] = useState(draft?.backgroundId ?? '');
+  const [backgroundId, setBackgroundId] = useState(offered(backgrounds, draft?.backgroundId) ?? '');
   const [alignment, setAlignment] = useState(draft?.alignment ?? '');
   const [racialChoices, setRacialChoices] = useState<Ability[]>(
     (draft?.racialChoices as Ability[] | undefined) ?? [],
@@ -104,7 +124,8 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
   });
   const pickRows = levelPickRows(registry, classId, level);
   const steps = STEPS.filter((entry) => entry.id !== 'levels' || pickRows.length > 0);
-  const step: StepId = steps[stepIndex]!.id;
+  const at = Math.max(0, Math.min(stepIndex, steps.length - 1));
+  const step: StepId = steps[at]!.id;
   const levelChoices = pickRows.flatMap((row) => {
     const { choices } = picksToPayload(levelPicks[row.level] ?? emptyPicks, row, false, false);
     return choices ? [{ level: row.level, choices }] : [];
@@ -237,7 +258,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
   };
   const next = () => {
     if (problems.length > 0) setStepErrors(problems);
-    else goTo(stepIndex + 1);
+    else goTo(at + 1);
   };
   const taken = [
     ...(registry.entries.get(backgroundId)?.kind === 'background'
@@ -315,6 +336,18 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
             Campaign settings
           </Link>
         </p>
+        {draft && (
+          <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-text-muted">
+            Picked up where you left off.
+            <button
+              type="button"
+              onClick={onStartOver}
+              className="min-h-11 rounded-btn border border-border px-3 text-accent"
+            >
+              Start over
+            </button>
+          </p>
+        )}
       </header>
 
       <div className="flex flex-wrap items-center gap-2 text-sm">
@@ -347,13 +380,13 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
               <li key={entry.id}>
                 <button
                   type="button"
-                  aria-current={index === stepIndex ? 'step' : undefined}
-                  disabled={index > stepIndex}
+                  aria-current={index === at ? 'step' : undefined}
+                  disabled={index > at}
                   onClick={() => goTo(index)}
                   className={`min-h-11 rounded-btn px-2 ${
-                    index === stepIndex
+                    index === at
                       ? 'bg-surface font-semibold text-accent'
-                      : index < stepIndex
+                      : index < at
                         ? 'text-text'
                         : 'text-text-muted'
                   }`}
@@ -806,10 +839,10 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
         >
           Cancel
         </Link>
-        {stepped && stepIndex > 0 && (
+        {stepped && at > 0 && (
           <button
             type="button"
-            onClick={() => goTo(stepIndex - 1)}
+            onClick={() => goTo(at - 1)}
             className="min-h-11 rounded-btn border border-border px-4 text-sm text-text"
           >
             Back

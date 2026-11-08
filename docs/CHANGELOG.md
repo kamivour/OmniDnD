@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 17:31 — Review fixes for creation and print
+
+- New character: a restored draft now shows "Picked up where you left off" with a Start over button. Old drafts can no longer break the page.
+- Print view: tick or untick the Features and Spells pages before printing. The PDF is named after the character, and skills show a * / ** legend.
+- Opening the print link for a deleted character now says "Character not found" instead of crashing.
+- Checks pass.
+
 ## 2026-11-08 10:23 — Print sheet
 
 - The Sheet screen has a Print button. It opens a paper copy of the character: abilities, skills, attacks, inventory, features and spells.

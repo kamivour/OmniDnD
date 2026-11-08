@@ -456,7 +456,7 @@ test('Explore uses the Sheet skill and passive calculations, explicit overrides 
     exact: true,
   });
   await expect(athletics).toContainText('+1');
-  await expect(athletics.locator('..')).toContainText('Jack of All Trades');
+  await expect(athletics.locator('xpath=ancestor::li[1]')).toContainText('Jack of All Trades');
   await expect(
     main(page).getByRole('button', { name: 'Show Passive Perception breakdown', exact: true }),
   ).toContainText('13');
@@ -477,7 +477,7 @@ test('Explore uses the Sheet skill and passive calculations, explicit overrides 
     await go(page, file.build.id, screen);
     const stealth = main(page).getByRole('button', { name: 'Show Stealth breakdown', exact: true });
     await expect(stealth).toContainText('+6');
-    await expect(stealth.locator('..')).toContainText('Expertise');
+    await expect(stealth.locator('xpath=ancestor::li[1]')).toContainText('Expertise');
     await expect(
       main(page).getByRole('button', { name: 'Show Athletics breakdown', exact: true }),
     ).toContainText('+0');

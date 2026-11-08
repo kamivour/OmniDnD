@@ -19,3 +19,9 @@ export function hpTone(current: number, max: number): 'heal' | 'warn' | 'danger'
   if (ratio >= 0.25) return 'warn';
   return 'danger';
 }
+
+/** Skill id to display name: "sleight-of-hand" becomes "Sleight of Hand". */
+export function skillName(skill: string): string {
+  if (skill === 'sleight-of-hand') return 'Sleight of Hand';
+  return skill.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
