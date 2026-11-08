@@ -76,3 +76,25 @@ test('choice cards show strengths and weaknesses, and can be switched off', asyn
   await page.goBack();
   await expect(page.getByRole('article', { name: /guide$/ })).toHaveCount(0);
 });
+
+test('guided build tags recommended skills and spells with a reason', async ({ page }) => {
+  await page.goto('/');
+  await page
+    .getByRole('article', { name: 'Campaign #273', exact: true })
+    .getByRole('link', { name: 'New character', exact: true })
+    .click();
+  await page.getByLabel('Name', { exact: true }).fill('Tagged');
+  await page.getByLabel('Race', { exact: true }).selectOption('race.half-elf');
+  await page.getByLabel('Class', { exact: true }).selectOption('class.bard');
+  await page.getByLabel('Background', { exact: true }).selectOption('background.charlatan');
+  for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
+    await page.getByLabel(`${ability} base`, { exact: true }).fill('12');
+  }
+  await page.getByLabel(/^Guided build/).check();
+  await expect(page.getByText(/Recommended:/).first()).toBeVisible();
+  // The tag describes the box without changing its name.
+  await expect(page.getByRole('checkbox', { name: 'Persuasion', exact: true })).toBeVisible();
+  await expect(
+    page.getByRole('checkbox', { name: 'Persuasion', exact: true }),
+  ).toHaveAccessibleDescription(/Recommended/);
+});

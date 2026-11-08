@@ -1,4 +1,6 @@
+import { guidanceFor } from '../../data/guidance';
 import { registry } from '../../data/registry';
+import { skillSuggestions, spellSuggestions } from '../../engine/calc/suggestions';
 import { CLASS_START, SLOT_LABELS, slotChoices } from '../../engine/calc/class-start';
 import { levelSpellGains } from '../../engine/calc/level-spells';
 import {
@@ -22,6 +24,7 @@ export function GuidedChoicesSection({
   state,
   onChange,
   spellContext,
+  hints = false,
 }: {
   classId: string;
   level: number;
@@ -31,6 +34,8 @@ export function GuidedChoicesSection({
   onChange: (next: GuidedState) => void;
   /** The character without class choices; absent until the basics are complete. */
   spellContext?: SpellSelectionContext;
+  /** Show Recommended tags with a reason (Settings, Beginner hints). */
+  hints?: boolean;
 }) {
   const start = CLASS_START[classId];
   if (!start) return <p className="text-sm text-text-muted">No guided choices for this class.</p>;
@@ -42,6 +47,9 @@ export function GuidedChoicesSection({
       : list.length < limit
         ? [...list, value]
         : list;
+
+  const guidance = hints ? guidanceFor(classId) : undefined;
+  const skillTags = skillSuggestions(skillOptions, guidance);
 
   const details = spellContext ? spellSelectionDetails(spellContext, classId) : undefined;
   const gains = spellContext ? levelSpellGains(spellContext, classId, true) : undefined;
@@ -71,20 +79,24 @@ export function GuidedChoicesSection({
         </legend>
         <div className="grid gap-1 sm:grid-cols-2">
           {skillOptions.map((skill) => (
-            <label key={skill} className="flex min-h-11 items-center gap-2 text-sm text-text">
-              <input
-                type="checkbox"
-                checked={state.skills.includes(skill)}
-                disabled={
-                  !state.skills.includes(skill) && state.skills.length >= start.skills.count
-                }
-                onChange={() =>
-                  onChange({ ...state, skills: toggle(state.skills, skill, start.skills.count) })
-                }
-                className="size-4 accent-(--omni-accent)"
-              />
-              {skillName(skill)}
-            </label>
+            <div key={skill}>
+              <label className="flex min-h-11 items-center gap-2 text-sm text-text">
+                <input
+                  type="checkbox"
+                  aria-describedby={skillTags[skill] ? `tag-${skill}` : undefined}
+                  checked={state.skills.includes(skill)}
+                  disabled={
+                    !state.skills.includes(skill) && state.skills.length >= start.skills.count
+                  }
+                  onChange={() =>
+                    onChange({ ...state, skills: toggle(state.skills, skill, start.skills.count) })
+                  }
+                  className="size-4 accent-(--omni-accent)"
+                />
+                {skillName(skill)}
+              </label>
+              <Tag id={`tag-${skill}`} reason={skillTags[skill]} />
+            </div>
           ))}
         </div>
       </fieldset>
@@ -188,6 +200,7 @@ export function GuidedChoicesSection({
           <SpellPicker
             label={`Cantrips: choose ${cantripsWanted} (${pickedCantrips.length} chosen)`}
             ids={details.candidates.cantrips}
+            tags={spellSuggestions(guidance, details.candidates.cantrips)}
             picked={pickedCantrips}
             limit={cantripsWanted}
             onToggle={(id) =>
@@ -201,6 +214,7 @@ export function GuidedChoicesSection({
             <SpellPicker
               label={`${gains.mode === 'spellbook' ? 'Spellbook' : 'Spells known'}: choose ${spellsWanted} (${pickedSpells.length} chosen)`}
               ids={details.candidates.known}
+              tags={spellSuggestions(guidance, details.candidates.known)}
               picked={pickedSpells}
               limit={spellsWanted}
               onToggle={(id) =>
@@ -225,12 +239,14 @@ export function GuidedChoicesSection({
 function SpellPicker({
   label,
   ids,
+  tags,
   picked,
   limit,
   onToggle,
 }: {
   label: string;
   ids: string[];
+  tags: Record<string, string>;
   picked: string[];
   limit: number;
   onToggle: (id: string) => void;
@@ -251,20 +267,34 @@ function SpellPicker({
           const entry = registry.entries.get(id);
           const spellLevel = entry?.kind === 'spell' ? entry.level : 0;
           return (
-            <label key={id} className="flex min-h-11 items-center gap-2 text-sm text-text">
-              <input
-                type="checkbox"
-                checked={picked.includes(id)}
-                disabled={!picked.includes(id) && picked.length >= limit}
-                onChange={() => onToggle(id)}
-                className="size-4 accent-(--omni-accent)"
-              />
-              {nameOf(id)}
-              {spellLevel > 0 && <span className="text-xs text-text-muted">L{spellLevel}</span>}
-            </label>
+            <div key={id}>
+              <label className="flex min-h-11 items-center gap-2 text-sm text-text">
+                <input
+                  type="checkbox"
+                  aria-describedby={tags[id] ? `tag-${id}` : undefined}
+                  checked={picked.includes(id)}
+                  disabled={!picked.includes(id) && picked.length >= limit}
+                  onChange={() => onToggle(id)}
+                  className="size-4 accent-(--omni-accent)"
+                />
+                {nameOf(id)}
+                {spellLevel > 0 && <span className="text-xs text-text-muted">L{spellLevel}</span>}
+              </label>
+              <Tag id={`tag-${id}`} reason={tags[id]} />
+            </div>
           );
         })}
       </div>
     </fieldset>
+  );
+}
+
+/** A "Recommended" note under an option; the checkbox points at it as its description. */
+function Tag({ id, reason }: { id: string; reason: string | undefined }) {
+  if (!reason) return null;
+  return (
+    <p id={id} className="-mt-2 mb-1 pl-6 text-xs text-accent">
+      Recommended: <span className="text-text-muted">{reason}</span>
+    </p>
   );
 }

@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 09:59 — Suggestions while building
+
+- Under Abilities, a "Suggested scores" button fills a sensible spread for your class (not shown when you roll scores). You can change every number afterward.
+- Class skills and starting spells that suit your class carry a "Recommended" note with the reason.
+- A "Good together" box points out race, class and background pairings that work well.
+- Checks pass.
+
 ## 2026-11-08 09:57 — Choice cards
 
 - Picking a race, class or background now shows a short guide: what it is, how hard it is to play, its strengths and its weaknesses.

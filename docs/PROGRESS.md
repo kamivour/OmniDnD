@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M17 (newbie-friendly character creation), todo.
-**Next up:** M17 task 8, suggestions in both modes. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M17 task 9, starting above level 1. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -221,7 +221,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Device settings: creation mode (Step by step or One page, Step by step by default) and a Beginner hints toggle (on by default); switching mode keeps everything entered
 - [x] Step-by-step UI: Name, Race, Class, Background, Level, Abilities, Choices, Review; Back and Next, a step indicator, each step checks its own choices; Review shows the computed sheet before Create
 - [x] Choice cards in both modes: race, class, background and subclass options show pitch, difficulty, strengths and weaknesses before picking (subclass cards arrive with the level choices in task 9)
-- [ ] Suggestions in both modes: Suggested scores button, Recommended tags on skills and spells with a one-line reason, synergy notes for the current race, class and background
+- [x] Suggestions in both modes: Suggested scores button, Recommended tags on skills and spells with a one-line reason, synergy notes for the current race, class and background
 - [ ] Starting above level 1: walk each extra level (subclass, ASI or feat, class picks, spells) using the level-up steps before Create; One page gets a Level choices section
 - [ ] Engine, to-do list: pure `pendingChoices` lists what a character still has to decide: subclass, ASI or feat, class picks (fighting style, Expertise, invocations, metamagic, infusions), cantrips, spells known, spellbook spells, and prepared spells below the daily number; each item links to where it is done
 - [ ] To-do UI: after a level-up, a summary of what changed (new features, HP, slots, proficiency) and a To do badge on the HUD and Dashboard that opens the list; items clear themselves when done, optional ones (preparing spells) can be dismissed
@@ -244,6 +244,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M17 task 8: Suggested scores button, Recommended tags with a reason on class skills and spells, and Good together notes, in both modes.
 - M17 task 7: Race, class and background show a guide card (pitch, difficulty, strengths, weaknesses) and a Compare list, in both modes; hints can be switched off.
 - M17 task 6: New character has a Step by step mode (Name to Review) beside One page; each step checks itself, entries survive switching.
 - M17 task 5: Settings gets New characters (Step by step or One page) and Beginner hints, saved on this device.

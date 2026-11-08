@@ -11,6 +11,8 @@ import { SCHEMA_VERSION, type Campaign, type ExportFile } from '../../engine/sch
 import { useCampaign } from '../hooks/useCampaign';
 import { useManagement } from '../commands/useManagement';
 import { Field, inputClass } from '../components/fields';
+import { guidanceFor } from '../../data/guidance';
+import { suggestAbilityBases, synergyNotes } from '../../engine/calc/suggestions';
 import { OptionGuide } from '../components/OptionGuide';
 import { AbilityBaseInput } from '../components/AbilityBaseInput';
 import { SectionLabel } from '../components/SectionLabel';
@@ -172,6 +174,14 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
     complete,
     pointCost,
   });
+  const classGuidance = guidanceFor(classId);
+  const synergies = hints
+    ? synergyNotes(
+        [guidanceFor(raceId), classGuidance, guidanceFor(backgroundId)],
+        [raceId, classId, backgroundId],
+      )
+    : [];
+  const nameOfId = (entryId: string) => registry.entries.get(entryId)?.name ?? entryId;
   const pickRace = (id: string) => {
     setRaceId(id);
     setRacialChoices([]);
@@ -456,6 +466,22 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
         </div>
       </section>
 
+      {synergies.length > 0 && (!stepped || ['background', 'level', 'review'].includes(step)) && (
+        <section
+          aria-label="Good together"
+          className="rounded-card border border-border bg-surface p-3 text-sm"
+        >
+          <p className="text-xs font-semibold text-text-muted">Good together</p>
+          <ul className="list-disc pl-5 text-text">
+            {synergies.map((note) => (
+              <li key={`${note.from}|${note.with}`}>
+                {nameOfId(note.from)} + {nameOfId(note.with)}: {note.why}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section
         aria-labelledby="nc-abilities"
         hidden={!show('abilities')}
@@ -465,6 +491,27 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
           <span id="nc-abilities">Ability scores</span>
         </SectionLabel>
         <p className="text-xs text-text-muted">{abilityHint(campaign)}</p>
+        {hints && classGuidance?.mainAbilities && campaign.abilityMethod !== 'rolled' && (
+          <div className="flex flex-col items-start gap-1">
+            <button
+              type="button"
+              onClick={() => {
+                const suggested = suggestAbilityBases(classGuidance.mainAbilities!);
+                setBases(
+                  Object.fromEntries(
+                    ABILITIES.map((a) => [a, String(suggested[a])]),
+                  ) as PerAbility<string>,
+                );
+              }}
+              className="min-h-11 rounded-btn border border-border px-3 text-sm text-accent"
+            >
+              Suggested scores
+            </button>
+            <p className="text-xs text-text-muted">
+              Puts your best scores in {classGuidance.mainAbilities.join(', ')}. Change them freely.
+            </p>
+          </div>
+        )}
         {campaign.abilityMethod === 'point-buy' && (
           <p className="text-sm text-text" aria-live="polite">
             Points used: {pointCost} / 27
@@ -657,6 +704,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
           state={guidedState}
           onChange={setGuidedState}
           spellContext={spellContext}
+          hints={hints}
         />
       )}
 
