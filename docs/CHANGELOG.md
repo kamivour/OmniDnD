@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 09:21 — Plan: easier character creation and printing
+
+- Next milestone (M17): new characters can be made step by step or on one page, your pick, with beginner hints for every class, subclass, race and background.
+- Hints show strengths, weaknesses, difficulty and suggested scores, skills and spells; they never choose for you and can be turned off.
+- After that (M18): print the sheet or save it as PDF from the browser, offline.
+- Shared campaign view, spell import and session recaps are parked for later. Checks pass.
+
 ## 2026-11-08 04:40 — Milestone 16 complete
 
 - Dice roller, Parchment theme, backups, first Xanathar and Tasha content, Markdown journal and portraits are all in.

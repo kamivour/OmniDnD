@@ -25,6 +25,7 @@ Support different campaigns and characters, including future friends' characters
 | 2 — Full management | Inventory, Features screen, optional accounts + cloud sync, full Effects editor, Companions, Journal, Campaign Setup (sources, optional rules), searchable Reference |
 | 3 — Automation | Full level-up workflow (features, spells, ASI/feats), more classes, multiclass, ally/enemy tracker, advanced feature exceptions |
 | 4 — Extras | Dice roller, themes (Parchment), backups UI, more books, integrations |
+| 5 — Polish | Newbie-friendly character creation (step by step or one page, guidance for every option), print and PDF sheet |
 
 Milestones and checklists live in [PROGRESS.md](PROGRESS.md).
 
@@ -79,6 +80,12 @@ One card per campaign: name, rules summary (e.g. `Milestone · HP rolled · Abil
 Create blank (inside a campaign), import JSON, duplicate, delete (confirm). Full guided builder is Phase 3.
 
 **New character (Phase 1):** name, level, race, class, background, alignment; an ability table whose Base inputs follow the campaign method (standard array picker, point-buy range, or typed rolls) plus a racial bonus column; a per-level HP table (level 1 = die maximum; later levels = typed roll or fixed average per campaign). Score, modifier, Hit Dice, and max HP are computed.
+
+**New character modes (M17):** the player picks **Step by step** (Name, Race, Class, Background, Level, Abilities, Choices, Review) or **One page** (the form above). The choice is remembered per device, and switching keeps everything entered. Above level 1, each extra level's choices (subclass, ASI or feat, class picks, spells) are made before Create.
+
+**Beginner hints (M17, on by default):** race, class, background and subclass options show a short own-words card: pitch, difficulty, strengths, weaknesses. Suggestions (scores, skills, starter spells, synergy notes) carry a one-line reason, appear only as tags or a button, and are never applied without the player.
+
+**Print (M18):** a print view lays out the computed sheet on light paper; Print / Save as PDF uses the browser's print dialog and works offline.
 
 **Manual vs automatic:** the user enters every *choice* (race, class, skills, Expertise, languages, tools, spells, items, ability scores or rolls, HP rolls). The app computes every *derived number* (modifiers, saves, skills, passives, initiative, DC, attacks, AC, max HP, slots, uses). Never ask the user to type a number the app can compute.
 

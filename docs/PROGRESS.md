@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M16 (dice roller, themes, more books), done. All planned milestones are complete.
-**Next up:** user manual QA and backlog choices. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** M17 (newbie-friendly character creation), todo.
+**Next up:** M17 task 1, guidance data schema. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -37,9 +37,11 @@ Build for multiple campaigns and characters, including friends' future character
 | M11 | Campaign Setup: sources + optional rules | 2 | done | Each campaign picks its books and optional rules; changes never delete character choices |
 | M12 | Journal + Companions | 2 | done | Journal entries and companions save, show on every screen, survive reload and Undo |
 | M13 | Searchable Reference | 2 | done | Any bundled rule can be found by name; quick tables work offline |
-| M14 | Full level-up wizard + more classes + multiclass | 3 | todo | Every SRD class reaches level 20 through the wizard; multiclassing and feats follow campaign toggles |
+| M14 | Full level-up wizard + more classes + multiclass | 3 | done | Every SRD class reaches level 20 through the wizard; multiclassing and feats follow campaign toggles |
 | M15 | Ally/enemy tracker | 3 | done | A whole fight can be tracked: order, HP and conditions for allies and enemies, all undoable |
 | M16 | Dice roller, themes, more books | 4 | done | Optional dice roller, Parchment theme, backups, Xanathar's and Tasha's packs; rules review done with the user |
+| M17 | Newbie-friendly character creation | 5 | todo | Step-by-step or one-page creation with own-words guidance and suggestions for every class, race and background |
+| M18 | Print and PDF sheet | 5 | todo | Any character prints to paper or PDF from the browser, offline |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -211,19 +213,36 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Rules review with the user: Q21, Q22, D80 and every default ruling; DECISIONS updated with the answers
 - [x] Gate: switch themes, back up and restore, add a Tasha subclass, roll and apply damage by hand; phone and desktop widths, offline reload, manual QA documented
 
+### M17 — Newbie-friendly character creation
+- [ ] Data, guidance schema: `data/content/guidance.json` (own words) with a zod schema; a test fails if any class, subclass, race or background in the registry lacks an entry
+- [ ] Content, classes and subclasses: role, difficulty (Easy/Medium/Hard), main abilities, strengths, weaknesses, suggested skills and starter spells with a reason, for every class and subclass in the app (SRD, PHB, Xanathar, Tasha)
+- [ ] Content, races and backgrounds: one-line pitch, good-with notes (for example "Hill Dwarf: extra HP suits any front-liner") and suggested pairings
+- [ ] Engine, suggestions: pure functions for a suggested standard array or point-buy spread from class and race, skill tags from strong abilities, and starter spell picks; tested, never auto-applied
+- [ ] Device settings: creation mode (Step by step or One page, Step by step by default) and a Beginner hints toggle (on by default); switching mode keeps everything entered
+- [ ] Step-by-step UI: Name, Race, Class, Background, Level, Abilities, Choices, Review; Back and Next, a step indicator, each step checks its own choices; Review shows the computed sheet before Create
+- [ ] Choice cards in both modes: race, class, background and subclass options show pitch, difficulty, strengths and weaknesses before picking
+- [ ] Suggestions in both modes: Suggested scores button, Recommended tags on skills and spells with a one-line reason, synergy notes for the current race, class and background
+- [ ] Starting above level 1: walk each extra level (subclass, ASI or feat, class picks, spells) using the level-up steps before Create; One page gets a Level choices section
+- [ ] Gate: a beginner builds a level 1 Fighter and a level 5 Wizard step by step using only suggestions; an expert builds one on One page with hints off; phone and desktop widths, reload mid-build, manual QA documented
+
+### M18 — Print and PDF sheet
+- [ ] Print view at `/characters/:id/print`: identity, abilities, saves, skills, AC, HP, attacks, features, inventory and spells, all computed by the engine
+- [ ] Print styles: light paper colours whatever the theme, clean page breaks, optional spell and feature summary pages
+- [ ] Print / Save as PDF button on the sheet uses the browser's print dialog (no PDF library); works offline
+- [ ] Gate: print The Fool and a level 5 Wizard to PDF in Chrome and on a phone; checks match the sheet; manual QA documented
+
 ## Backlog (not scheduled)
 
 - Going online with accounts: user-led, follow [HOSTING.md](HOSTING.md) (Q1, Q28)
-- Shared campaign view for a party or DM (after accounts)
+- Later: shared campaign view for a party or DM (after accounts)
 - Party view (several characters side by side)
-- Print / PDF character sheet export
-- Spell import from user-pasted text
-- Session recap generated from the event log
+- Later: spell import from user-pasted text
+- Later: session recap generated from the event log
 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
-
+- 2026-11-08 — Planned M17 (newbie-friendly creation, both modes, guidance for every class) and M18 (print and PDF). M14 status fixed to done.
 - 2026-11-08 — M16 gate: all checks and e2e pass at both widths; Playwright now pins dark mode; M16 manual QA list added. Milestone done.
 - 2026-11-08 — M16: rules review. Q4, Q21, Q22, Q23, Q29 answered (D150–D153); instant-death DM-review note removed. Other defaults stay open.
 - 2026-11-08 — M16: portrait upload in Edit character: picture is cropped and shrunk to a small JPEG, shown on sheet, HUD and campaign list; icon is default.

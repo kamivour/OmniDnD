@@ -157,6 +157,9 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D151 | 2026-11-08 | At 0 HP, only the damage left after temporary HP counts toward instant death, so 10 temp HP with 20 max HP means 30 damage kills and 29 does not (answers Q21). The DM-review note is removed | The user confirmed this reading from the rules text |
 | D152 | 2026-11-08 | At 0 HP, damage fully absorbed by temporary HP still counts as a hit: it clears stability and adds a death-save failure (answers Q22, confirms D80) | The user confirmed the 2014 wording |
 | D153 | 2026-11-08 | Ranger companions use the PHB 2014 version unless the campaign picks the Tasha option; a level 20 Barbarian keeps 6 Rage uses and restores them by hand (answers Q23 and Q29) | The user kept both defaults |
+| D154 | 2026-11-08 | New characters can be made Step by step or on One page; the player picks, Step by step is the default and the choice is remembered per device | The user asked for both |
+| D155 | 2026-11-08 | Beginner hints cover every class, subclass, race and background in our own words and are only suggestions, never enforced; a Beginner hints toggle turns them off | Helps new players without slowing experienced ones |
+| D156 | 2026-11-08 | Print and PDF use the browser print dialog with a print-only layout, not a PDF library | Works offline and adds no download weight |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 

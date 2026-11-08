@@ -264,6 +264,25 @@ interface CompanionLive {
 - **Creatures:** `kind: 'creature'` entries (size, type, AC, HP, speeds, abilities, saves, skills, defenses, senses, CR, traits, actions, reactions, legendary actions) come from the SRD import into `data/srd/creatures.json` and show in Reference search.
 - **Still to come:** templates for Steel Defender, Eldritch Cannon, Ranger companions and Find Familiar. Artificer templates depend on M14 and use the 2014-compatible `TCE` class only.
 
+### Guidance (M17)
+
+```ts
+// data/content/guidance.json — own words, validated by zod; keyed by registry id
+interface Guidance {
+  id; kind: 'class'|'subclass'|'race'|'background';
+  pitch: string;                       // one line, ≤ 20 words
+  difficulty?: 'easy'|'medium'|'hard';
+  mainAbilities?: Ability[];           // classes and subclasses
+  strengths: string[]; weaknesses: string[];   // ≤ 3 each, ≤ 12 words each
+  skills?: Skill[];                    // suggested picks
+  starterSpells?: { id; why: string }[];
+  goodWith?: { id; why: string }[];    // synergy notes
+}
+```
+
+- **Coverage:** a test fails if any class, subclass, race or background in the registry has no entry.
+- **Suggestions only:** the engine turns guidance into tags and a suggested ability spread; nothing is applied without the player.
+
 ## 5. Commands and event log
 
 ```ts
