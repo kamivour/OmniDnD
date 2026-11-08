@@ -52,3 +52,27 @@ test('step by step builds a level 1 Fighter and keeps entries when switching mod
   await page.getByRole('button', { name: 'Create character', exact: true }).click();
   await expect(page).toHaveURL(/\/characters\/[^/]+$/);
 });
+
+test('choice cards show strengths and weaknesses, and can be switched off', async ({ page }) => {
+  await page.goto('/');
+  await page
+    .getByRole('article', { name: 'Campaign #273', exact: true })
+    .getByRole('link', { name: 'New character', exact: true })
+    .click();
+  await page.getByLabel('Class', { exact: true }).selectOption('class.fighter');
+  const card = page.getByRole('article', { name: 'Fighter guide' });
+  await expect(card.getByRole('region', { name: 'Strengths' })).toBeVisible();
+  await expect(card.getByRole('region', { name: 'Weaknesses' })).toBeVisible();
+
+  // Pick another class from the comparison list.
+  await page.getByText('Compare classes').click();
+  await page.getByRole('button', { name: /^Wizard/ }).click();
+  await expect(page.getByLabel('Class', { exact: true })).toHaveValue('class.wizard');
+  await expect(page.getByRole('article', { name: 'Wizard guide' })).toBeVisible();
+
+  // The Settings switch hides the cards.
+  await page.goto('/settings');
+  await page.getByLabel('Show beginner hints').uncheck();
+  await page.goBack();
+  await expect(page.getByRole('article', { name: /guide$/ })).toHaveCount(0);
+});

@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M17 (newbie-friendly character creation), todo.
-**Next up:** M17 task 7, choice cards. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M17 task 8, suggestions in both modes. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -220,7 +220,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 - [x] Engine, suggestions: pure functions for a suggested standard array or point-buy spread from class and race, skill tags from strong abilities, and starter spell picks; tested, never auto-applied
 - [x] Device settings: creation mode (Step by step or One page, Step by step by default) and a Beginner hints toggle (on by default); switching mode keeps everything entered
 - [x] Step-by-step UI: Name, Race, Class, Background, Level, Abilities, Choices, Review; Back and Next, a step indicator, each step checks its own choices; Review shows the computed sheet before Create
-- [ ] Choice cards in both modes: race, class, background and subclass options show pitch, difficulty, strengths and weaknesses before picking
+- [x] Choice cards in both modes: race, class, background and subclass options show pitch, difficulty, strengths and weaknesses before picking (subclass cards arrive with the level choices in task 9)
 - [ ] Suggestions in both modes: Suggested scores button, Recommended tags on skills and spells with a one-line reason, synergy notes for the current race, class and background
 - [ ] Starting above level 1: walk each extra level (subclass, ASI or feat, class picks, spells) using the level-up steps before Create; One page gets a Level choices section
 - [ ] Engine, to-do list: pure `pendingChoices` lists what a character still has to decide: subclass, ASI or feat, class picks (fighting style, Expertise, invocations, metamagic, infusions), cantrips, spells known, spellbook spells, and prepared spells below the daily number; each item links to where it is done
@@ -244,6 +244,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M17 task 7: Race, class and background show a guide card (pitch, difficulty, strengths, weaknesses) and a Compare list, in both modes; hints can be switched off.
 - M17 task 6: New character has a Step by step mode (Name to Review) beside One page; each step checks itself, entries survive switching.
 - M17 task 5: Settings gets New characters (Step by step or One page) and Beginner hints, saved on this device.
 - 2026-11-08 — M17: engine suggestions: suggested ability spread (fits standard array and point buy), skill tags, starter-spell reasons and synergy notes; nothing auto-applied.

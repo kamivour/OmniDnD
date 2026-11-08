@@ -11,6 +11,7 @@ import { SCHEMA_VERSION, type Campaign, type ExportFile } from '../../engine/sch
 import { useCampaign } from '../hooks/useCampaign';
 import { useManagement } from '../commands/useManagement';
 import { Field, inputClass } from '../components/fields';
+import { OptionGuide } from '../components/OptionGuide';
 import { AbilityBaseInput } from '../components/AbilityBaseInput';
 import { SectionLabel } from '../components/SectionLabel';
 import { ALIGNMENTS } from '../fixtures/new-character';
@@ -63,6 +64,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
   const [errors, setErrors] = useState<string[]>([]);
   const [guided, setGuided] = useState(false);
   const [guidedState, setGuidedState] = useState<GuidedState>(() => emptyGuided(classId));
+  const hints = useStore(deviceStore, (state) => state.beginnerHints);
   const savedMode = useStore(deviceStore, (state) => state.creationMode);
   const [mode, setMode] = useState<CreationMode>(savedMode);
   const [stepIndex, setStepIndex] = useState(0);
@@ -170,6 +172,15 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
     complete,
     pointCost,
   });
+  const pickRace = (id: string) => {
+    setRaceId(id);
+    setRacialChoices([]);
+  };
+  const pickClass = (id: string) => {
+    setClassId(id);
+    setGuidedState(emptyGuided(id));
+    setRolls([]);
+  };
   const show = (id: StepId) => !stepped || step === id;
   const goTo = (index: number) => {
     setStepErrors([]);
@@ -381,12 +392,12 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
               label="Race"
               options={races}
               value={raceId}
-              onChange={(id) => {
-                setRaceId(id);
-                setRacialChoices([]);
-              }}
+              onChange={pickRace}
               required
             />
+          )}
+          {hints && show('race') && (
+            <OptionGuide noun="races" options={races} value={raceId} onChange={pickRace} />
           )}
           {show('class') && (
             <Field
@@ -397,11 +408,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
               <select
                 id="nc-class"
                 value={classId}
-                onChange={(e) => {
-                  setClassId(e.target.value);
-                  setGuidedState(emptyGuided(e.target.value));
-                  setRolls([]);
-                }}
+                onChange={(e) => pickClass(e.target.value)}
                 required
                 className={inputClass}
               >
@@ -416,6 +423,9 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
               </select>
             </Field>
           )}
+          {hints && show('class') && (
+            <OptionGuide noun="classes" options={classes} value={classId} onChange={pickClass} />
+          )}
           {show('background') && (
             <Select
               id="nc-background"
@@ -424,6 +434,14 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
               value={backgroundId}
               onChange={setBackgroundId}
               required
+            />
+          )}
+          {hints && show('background') && (
+            <OptionGuide
+              noun="backgrounds"
+              options={backgrounds}
+              value={backgroundId}
+              onChange={setBackgroundId}
             />
           )}
           {show('name') && (

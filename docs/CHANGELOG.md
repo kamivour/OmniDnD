@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 09:57 — Choice cards
+
+- Picking a race, class or background now shows a short guide: what it is, how hard it is to play, its strengths and its weaknesses.
+- "Compare" lists every option with a one-line pitch, and you can pick from there. Turn it all off in Settings under Beginner hints.
+- Subclass cards come with the level choices later in this milestone.
+- Checks pass.
+
 ## 2026-11-08 09:55 — Step-by-step new character
 
 - New character can now be built one step at a time: Name, Race, Class, Background, Level, Abilities, Choices, Review. Back and Next move between steps, and each step tells you what is missing.
