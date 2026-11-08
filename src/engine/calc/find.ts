@@ -16,7 +16,12 @@ export const FIND_GROUP_LABELS: Record<FindGroup, string> = {
 
 export type FindTarget =
   /** A screen under the character base (or the hub when no character is open). '' = Home. */
-  | { kind: 'go'; path: string; anchor?: string; /** Prefills the screen's search box. */ query?: string }
+  | {
+      kind: 'go';
+      path: string;
+      anchor?: string;
+      /** Prefills the screen's search box. */ query?: string;
+    }
   /** A command the frame can start. */
   | { kind: 'action'; action: 'long-rest' | 'short-rest' }
   | { kind: 'external'; url: string };

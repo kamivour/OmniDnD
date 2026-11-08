@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from 'react-router';
 import { Library, Settings } from 'lucide-react';
 import { cx } from '../cx';
+import { FindLauncher } from '../find/FindLauncher';
 import { StorageStatus } from '../storage/StorageStatus';
 
 const LINKS = [
@@ -17,14 +18,15 @@ export function HubFrame() {
           <Link to="/" className="rounded-btn font-display text-lg text-accent">
             OmniDnD
           </Link>
-          <nav aria-label="Main" className="ml-auto flex gap-1">
+          <nav aria-label="Main" className="ml-auto flex items-center gap-1">
+            <FindLauncher withCharacter={false} />
             {LINKS.map(({ to, label, icon: Glyph }) => (
               <NavLink
                 key={to}
                 to={to}
                 className={({ isActive }) =>
                   cx(
-                    'flex min-h-11 items-center gap-2 rounded-btn px-3 transition-colors duration-(--omni-motion-hover)',
+                    'flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-btn px-2 sm:px-3 transition-colors duration-(--omni-motion-hover)',
                     isActive
                       ? 'bg-surface-2 text-accent'
                       : 'text-text-muted hover:bg-surface hover:text-text',
@@ -32,7 +34,7 @@ export function HubFrame() {
                 }
               >
                 <Glyph size={18} aria-hidden />
-                {label}
+                <span className="sr-only sm:not-sr-only">{label}</span>
               </NavLink>
             ))}
           </nav>

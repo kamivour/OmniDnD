@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router';
+import { Link, useParams, useSearchParams } from 'react-router';
 import { useStore } from 'zustand';
 import { ExternalLink, Pencil, Plus, Trash2, Undo2 } from 'lucide-react';
 import { REFERENCE_LINKS } from '../../data/reference';
@@ -19,6 +19,7 @@ const button =
 /** Links and personal bookmarks are shared by all campaigns on this device. */
 export function ReferenceScreen() {
   const { characterId } = useParams();
+  const [searchParams] = useSearchParams();
   const base = characterId ? `/characters/${encodeURIComponent(characterId)}` : '';
   const { bookmarks, managementEvents } = useStore(characterStore);
   const { run, undo, confirmation, pending } = useManagement();
@@ -78,7 +79,7 @@ export function ReferenceScreen() {
         OmniDnD uses 2014 rules. External links open in a new tab and need an internet connection.
         Some libraries also contain newer rules; choose 2014 or SRD 5.1 material.
       </p>
-      <RulesSearch />
+      <RulesSearch key={searchParams.get('q') ?? ''} />
       <QuickTables />
       <section aria-labelledby="reference-links" className="flex flex-col gap-3">
         <h2 id="reference-links" className="text-base font-semibold">

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { searchRules } from '../../engine/calc/rules-search';
@@ -22,7 +22,8 @@ const KIND_LABEL = {
 
 /** Name search over bundled 2014 data, limited to the campaign's books inside a character. Conditions show their rules text; the rest show where they come from. */
 export function RulesSearch() {
-  const [query, setQuery] = useState('');
+  const [params] = useSearchParams();
+  const [query, setQuery] = useState(params.get('q') ?? '');
   const { characterId = '' } = useParams();
   // Inside a character, only the books its campaign uses; outside, everything bundled.
   const books = useStore(

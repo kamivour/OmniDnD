@@ -118,3 +118,19 @@ body:has([data-character-dialog-undo]) [data-character-toolbar-undo] {
     background: #ffffff;
   }
 }
+
+/* Find: brief outline on the section it scrolled to. */
+@keyframes omni-find-flash {
+  from {
+    outline: 2px solid var(--omni-accent);
+    outline-offset: 4px;
+  }
+  to {
+    outline: 2px solid transparent;
+    outline-offset: 4px;
+  }
+}
+
+.omni-find-highlight {
+  animation: omni-find-flash 1600ms ease-out;
+}

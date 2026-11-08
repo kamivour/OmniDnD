@@ -5,6 +5,7 @@ import { LogList } from '../components/LogList';
 import { SectionLabel } from '../components/SectionLabel';
 import { Sheet } from '../components/Sheet';
 import { useCharacter } from '../hooks/useCharacter';
+import { FindLauncher } from '../find/FindLauncher';
 import { useDetail } from '../layout/detail-context';
 import { useRest } from '../rest/rest-context';
 import { StorageStatus } from '../storage/StorageStatus';
@@ -98,6 +99,7 @@ export function CharacterToolbar() {
         Long Rest
       </button>
       {undoButton()}
+      <FindLauncher withCharacter />
       <button
         id="detail-toggle"
         type="button"

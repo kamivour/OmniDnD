@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 00:39 — Find
+
+- New search icon beside Undo (and in the top bar outside a character). Ctrl+K or / also opens it.
+- Type "jump", "pdf", a spell, a rule, "long rest" or "map" and press Enter. It goes there and flashes the section.
+- On a phone the top bar now shows icons only, so it fits.
+- Checks pass.
+
 ## 2026-11-09 00:10 — Tools list finished
 
 - Credits now thanks awesome-dnd, where many tool ideas came from.

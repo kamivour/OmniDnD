@@ -10,8 +10,19 @@ const entries: FindEntry[] = [
     synonyms: ['jump', 'lift'],
     target: { kind: 'go', path: 'explore' },
   },
-  { id: 'go.print', group: 'go', title: 'Print view', synonyms: ['pdf'], target: { kind: 'go', path: 'print' } },
-  { id: 'do.rest', group: 'do', title: 'Long rest', target: { kind: 'action', action: 'long-rest' } },
+  {
+    id: 'go.print',
+    group: 'go',
+    title: 'Print view',
+    synonyms: ['pdf'],
+    target: { kind: 'go', path: 'print' },
+  },
+  {
+    id: 'do.rest',
+    group: 'do',
+    title: 'Long rest',
+    target: { kind: 'action', action: 'long-rest' },
+  },
   {
     id: 'spell.shatter',
     group: 'character',
@@ -47,7 +58,13 @@ describe('searchFind', () => {
 
   it('ranks title prefix before synonym', () => {
     const list: FindEntry[] = [
-      { id: 'b', group: 'go', title: 'Other', synonyms: ['rest'], target: { kind: 'go', path: 'b' } },
+      {
+        id: 'b',
+        group: 'go',
+        title: 'Other',
+        synonyms: ['rest'],
+        target: { kind: 'go', path: 'b' },
+      },
       { id: 'a', group: 'go', title: 'Restore', target: { kind: 'go', path: 'a' } },
     ];
     expect(searchFind(list, 'rest').map((result) => result.entry.id)).toEqual(['a', 'b']);
