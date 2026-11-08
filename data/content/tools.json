@@ -1,0 +1,13 @@
+[
+  {
+    "id": "tool.owlbear-rodeo",
+    "name": "Owlbear Rodeo",
+    "url": "https://www.owlbear.rodeo",
+    "objective": "vtt",
+    "platforms": ["web"],
+    "cost": "freemium",
+    "summary": "Simple browser table for sharing a map and tokens with your group.",
+    "ai": false,
+    "synonyms": ["virtual tabletop", "battlemap", "online play"]
+  }
+]

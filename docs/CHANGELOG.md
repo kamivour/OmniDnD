@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 23:59 — Tools directory data format
+
+- The tools list now has a data format and a check that stops duplicate names or links.
+- Nothing shows on screen yet; the full list and the page come next.
+- Checks pass.
+
 ## 2026-11-08 18:05 — Material note on the cast sheet
 
 - Casting a spell now shows a line about its material: "Material covered by your Flute", a warning when no focus or pouch is carried, or the gold cost and whether it is used up.

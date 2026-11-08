@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M20 (tools directory), todo.
+**Current milestone:** M20 (tools directory), doing.
 **Next up:** M20 task 1. Run the M17, M18 and M19 manual QA lists when you can. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -43,7 +43,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M17 | Newbie-friendly character creation | 5 | done | Step-by-step or one-page creation with own-words guidance and suggestions for every class, race and background |
 | M18 | Print and PDF sheet | 5 | done | Any character prints to paper or PDF from the browser, offline |
 | M19 | Physical checks and spell components | 6 | done | Jump, carry, breath and travel numbers come from the engine with breakdowns; casting says when a focus covers the material |
-| M20 | Tools directory | 6 | todo | Outside tools grouped by what you want to do, in our own words, with working links |
+| M20 | Tools directory | 6 | doing | Outside tools grouped by what you want to do, in our own words, with working links |
 | M21 | Find and Related links | 6 | todo | One search box reaches any screen, rule, tool or character item in two steps or fewer |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
@@ -249,7 +249,7 @@ Rules: PHB 2014 chapters 7–8 (jumping, lifting, suffocating, food, travel, fal
 
 ### M20 — Tools directory
 Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) plus the user's list; one entry per tool, duplicates merged.
-- [ ] Data: `data/content/tools.json` with zod schema: id, name, url, objective, platforms, cost (free, freemium, paid), one-line summary in our own words, `ai` flag, search synonyms. A test fails on duplicate ids or urls
+- [x] Data: `data/content/tools.json` with zod schema: id, name, url, objective, platforms, cost (free, freemium, paid), one-line summary in our own words, `ai` flag, search synonyms. A test fails on duplicate ids or urls
 - [ ] Content, objectives: Play online (VTTs), Maps and battle maps, Dungeon and town generators, Tokens and art, Miniatures and 3D printing, AI art and 3D pipeline, Music and ambience, Character builders and rules lookup, DM prep and campaign notes, Other game systems (marked "not supported by this app")
 - [ ] UI, Reference > Tools: groups by objective, filters for free only, platform and AI; each card opens the site in a new tab; works offline as a list (links need internet)
 - [ ] Script `npm run check:tools`: reports dead links; run by hand, not in CI. Credits screen thanks awesome-dnd
@@ -273,6 +273,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M20: tools data schema, loader and test for duplicate ids and urls; one seed entry.
 - M19 gate: cast sheet shows material cover or warning and never blocks; e2e with Fool flute, no flute and Wizard Identify; manual QA written.
 - M19: engine reads spell materials (none, plain, costly, consumed) and checks carried focus by class or component pouch. Infusion items skipped, no data.
 - M19: Reference quick tables for travel pace, forced march and falling, in own words, with e2e.
