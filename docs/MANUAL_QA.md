@@ -196,6 +196,15 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Read the summaries. Judge whether any tool is described wrongly or any good tool is missing.
 - [ ] Check the Other game systems group. Judge whether "not supported by this app" is clear.
 
+## Phase 6 — M21: Find and Related links
+
+- [ ] On your phone, tap the search icon and type "jump". Judge whether you reach Movement and body in two taps and the flash is easy to see.
+- [ ] Try "pdf", "shatter", "long rest" and "map". Judge whether each result is what you expected.
+- [ ] On a computer, press Ctrl+K, type, then Enter. Judge whether it feels fast.
+- [ ] Type a word that exists nowhere. Judge whether the empty message is clear.
+- [ ] On Explore, tap the Related links under Skills and Movement and body. Judge whether they help or just add clutter.
+- [ ] Cast a spell with a material component. Judge whether the Inventory link is useful and easy to ignore.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

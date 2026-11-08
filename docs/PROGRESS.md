@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M21 (Find and Related links), todo.
-**Next up:** M21 gate (Find reaches five targets in two steps, manual QA). Run the M17, M18 and M19 manual QA lists when you can. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Current milestone:** None scheduled. M21 done.
+**Next up:** Nothing scheduled. Run the M17 to M21 manual QA lists when you can, then pick from the backlog. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -44,7 +44,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M18 | Print and PDF sheet | 5 | done | Any character prints to paper or PDF from the browser, offline |
 | M19 | Physical checks and spell components | 6 | done | Jump, carry, breath and travel numbers come from the engine with breakdowns; casting says when a focus covers the material |
 | M20 | Tools directory | 6 | done | Outside tools grouped by what you want to do, in our own words, with working links |
-| M21 | Find and Related links | 6 | todo | One search box reaches any screen, rule, tool or character item in two steps or fewer |
+| M21 | Find and Related links | 6 | done | One search box reaches any screen, rule, tool or character item in two steps or fewer |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -260,7 +260,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 - [x] Registry of places: every screen and panel registers an id, title, route, section anchor and synonyms in one file; a test fails if a built route has no entry. Add the rule "new sections register a Find entry" to AGENTS.md
 - [x] UI, Find: top-bar search icon, Ctrl/Cmd+K and `/` open it; results grouped (Go to, Do, Your character, Rules, Tools); Enter goes there, scrolls to the section and highlights it briefly
 - [x] UI, Related links: small "Related" row on key panels (Jump next to Athletics, Falling next to Jump, Focus next to spell components). Suggest only; never redirect on its own
-- [ ] Gate: from the Dashboard, reach Jump, Print, Shatter, Long rest and a map tool in two steps or fewer, by keyboard and by touch; manual QA documented
+- [x] Gate: from the Dashboard, reach Jump, Print, Shatter, Long rest and a map tool in two steps or fewer, by keyboard and by touch; manual QA documented
 
 ## Backlog (not scheduled)
 
@@ -273,6 +273,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M21 gate: Jump, Print, Shatter, Long rest and a map tool each reachable from the Dashboard in two steps; manual QA added. M21 done.
 - M21 task 4: Related rows on Skills, Movement and body, and the cast sheet; links only suggest and move nowhere on their own; e2e added.
 - M21 task 3: Find search icon in the character toolbar and hub header, Ctrl/Cmd+K and / open it; results jump to the section and flash it.
 - M21 task 2: places registry lists every screen, section and rest action for Find; a test fails if a nav route has no entry; AGENTS rule added.

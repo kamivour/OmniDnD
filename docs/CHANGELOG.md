@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 00:46 — M21 done
+
+- From the Dashboard, Find reaches Jump, Print, Shatter, Long rest and a map tool in two steps, by keyboard or touch.
+- Please run the new M21 list in MANUAL_QA.md, especially on a phone.
+- Checks pass.
+
 ## 2026-11-09 00:44 — Related links
 
 - Small "Related" rows now sit on Skills (jump and carry), Movement and body (Athletics, falling table) and the spell cast sheet (focus and gear in Inventory).
