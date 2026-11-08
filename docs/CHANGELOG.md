@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 17:55 — Body numbers in the engine
+
+- The app can now work out jump distance, how much you can lift, how long you can hold your breath, days without food, and climb and swim speed.
+- Remarkable Athlete, the Jump spell and the Athlete feat change the jump numbers. Step of the Wind shows as a reminder only.
+- Nothing shows on screen yet; the Explore panel comes next.
+- Checks pass.
+
 ## 2026-11-08 17:33 — Plan for M19 to M21
 
 - Next three milestones are written as short task lists in PROGRESS: M19 jump, carry, breath, travel and spell focus checks; M20 tools directory; M21 Find search.

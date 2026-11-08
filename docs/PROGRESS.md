@@ -238,8 +238,8 @@ All remaining milestones are planned below. Still build one milestone at a time;
 
 ### M19 — Physical checks and spell components
 Rules: PHB 2014 chapters 7–8 (jumping, lifting, suffocating, food, travel, falling) and chapter 10 (components, focus). Numbers are computed; the DM still rules on edge cases.
-- [ ] Engine, body numbers (`src/engine/calc/physical.ts`): long jump (running = STR score ft, standing = half), high jump (running = 3 + STR mod ft, min 0; standing = half), push/drag/lift (2 × carrying capacity), hold breath (1 + CON mod minutes, min 30 s), choking rounds (CON mod, min 1), days without food (3 + CON mod, min 1), climb and swim speed (half speed unless a feature grants one). Each value returns a breakdown. Unit tests for The Fool and a STR 8 and STR 20 character
-- [ ] Engine, modifiers: Remarkable Athlete adds STR mod to running long jump; active *Jump* spell triples jump distance; Athlete feat makes the run-up 5 ft; Step of the Wind shows "double jump distance" as a reminder only. Sources come from features and active effects, never hard-coded names in the UI
+- [x] Engine, body numbers (`src/engine/calc/physical.ts`): long jump (running = STR score ft, standing = half), high jump (running = 3 + STR mod ft, min 0; standing = half), push/drag/lift (2 × carrying capacity), hold breath (1 + CON mod minutes, min 30 s), choking rounds (CON mod, min 1), days without food (3 + CON mod, min 1), climb and swim speed (half speed unless a feature grants one). Each value returns a breakdown. Unit tests for The Fool and a STR 8 and STR 20 character
+- [x] Engine, modifiers: Remarkable Athlete adds STR mod to running long jump; active *Jump* spell triples jump distance; Athlete feat makes the run-up 5 ft; Step of the Wind shows "double jump distance" as a reminder only. Sources come from features and active effects, never hard-coded names in the UI
 - [ ] UI, Explore panel "Movement and body": the numbers above as stat chips with breakdowns; works at 375 px
 - [ ] UI, Reference quick tables: travel pace (fast, normal, slow with their effects), forced march (CON save DC 10 + 1 per extra hour), falling (1d6 per 10 ft, max 20d6). Text in our own words
 - [ ] Engine, material components: classify each spell's material as none, focus-covered (no cost, not consumed), costly (gp parsed from the text) or consumed. Test with Shatter (covered), Revivify (costly and consumed) and Identify (costly, kept)
@@ -273,6 +273,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M19: engine body numbers (jumps, lift, breath, food, climb, swim) with Remarkable Athlete, Jump spell, Athlete feat and Step of the Wind note.
 - Planned M19 (physical checks, spell components), M20 (tools directory) and M21 (Find, Related links) as concrete task lists.
 - Review: draft Start over and safe restore; print page toggles, missing-character guard, PDF title; new gate e2e (suggested scores, subclass via To do); stale Explore test fixed.
 - M18: Print view at /characters/:id/print with light paper styles, page breaks and a Print / Save as PDF button; e2e checks it; manual QA written.
