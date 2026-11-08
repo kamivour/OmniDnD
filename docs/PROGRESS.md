@@ -245,6 +245,7 @@ All remaining milestones are planned below. Still build one milestone at a time;
 
 Newest first. One line per task, about 25 words at most.
 - 2026-11-08 — M17: guidance data for all 13 classes, 21 subclasses, 13 races and 2 backgrounds in our own words; a test fails if any entry is missing.
+- 2026-11-08 — M17: guidance data for all 13 classes, 21 subclasses, 13 races and 2 backgrounds in our own words; a test fails if any entry is missing.
 - 2026-11-08 — Planned M17 (newbie-friendly creation, level-up to-do list, guidance for every class) and M18 (print and PDF). M14 status fixed to done.
 - 2026-11-08 — M16 gate: all checks and e2e pass at both widths; Playwright now pins dark mode; M16 manual QA list added. Milestone done.
 - 2026-11-08 — M16: rules review. Q4, Q21, Q22, Q23, Q29 answered (D150–D153); instant-death DM-review note removed. Other defaults stay open.

@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 09:44 — Beginner guidance written
+
+- Every class, subclass, race and background now has a short guide: pitch, difficulty, strengths, weaknesses, and pairings that work well.
+- Nothing shows in the app yet; the creation screens will use it next.
+- Checks pass.
+
 ## 2026-11-08 09:21 — Plan: easier character creation and printing
 
 - Next milestone (M17): new characters can be made step by step or on one page, your pick, with beginner hints for every class, subclass, race and background.
