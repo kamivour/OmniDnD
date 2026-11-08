@@ -7,3 +7,4 @@ export * from './log';
 export * from './export';
 export * from './bookmark';
 export * from './preferences';
+export * from './guidance';

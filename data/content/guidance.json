@@ -1,0 +1,799 @@
+[
+  {
+    "id": "class.barbarian",
+    "kind": "class",
+    "pitch": "A tough front-line fighter who rages to hit harder and shrug off damage.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "CON"],
+    "strengths": ["Very hard to kill", "Simple to play: hit things", "Strong in every fight"],
+    "weaknesses": [
+      "Few options away from combat",
+      "Weak against mental effects",
+      "No ranged tricks"
+    ],
+    "skills": ["athletics", "perception", "survival", "intimidation"],
+    "goodWith": [
+      { "id": "race.half-orc", "why": "Extra STR and CON, plus a second chance at 0 HP" },
+      { "id": "race.hill-dwarf", "why": "Extra CON and HP stack with a big hit die" }
+    ]
+  },
+  {
+    "id": "class.bard",
+    "kind": "class",
+    "pitch": "A charming caster who supports allies, talks well and fills any gap.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA", "DEX"],
+    "strengths": [
+      "Great at talking and skills",
+      "Boosts allies with Inspiration",
+      "Learns a wide range of spells"
+    ],
+    "weaknesses": ["Fragile in a straight fight", "Many choices to track", "Spell slots run out"],
+    "skills": ["persuasion", "performance", "deception", "insight", "perception"],
+    "starterSpells": [
+      { "id": "spell.vicious-mockery", "why": "Reliable cantrip that weakens an enemy's next hit" },
+      { "id": "spell.healing-word", "why": "Heal an ally from range as a bonus action" },
+      { "id": "spell.dissonant-whispers", "why": "Strong damage that can force an enemy to run" },
+      { "id": "spell.faerie-fire", "why": "Gives your whole party advantage on hits" }
+    ],
+    "goodWith": [
+      { "id": "race.half-elf", "why": "Extra CHA and two free skills" },
+      { "id": "race.lightfoot-halfling", "why": "Extra DEX and CHA suit a light-armour caster" }
+    ]
+  },
+  {
+    "id": "class.cleric",
+    "kind": "class",
+    "pitch": "A divine caster who heals, protects and, with the right domain, fights in armour.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS", "CON"],
+    "strengths": [
+      "Best healing in the game",
+      "Sturdy armour and hit points",
+      "Spells ready from the whole list"
+    ],
+    "weaknesses": [
+      "Needs WIS first, so melee is harder",
+      "Spell choice is large",
+      "Few skill options"
+    ],
+    "skills": ["insight", "medicine", "religion", "persuasion"],
+    "starterSpells": [
+      { "id": "spell.sacred-flame", "why": "Ranged damage that ignores armour" },
+      { "id": "spell.guidance", "why": "Small boost to any ability check" },
+      { "id": "spell.bless", "why": "Adds to hits and saves for three allies" },
+      { "id": "spell.cure-wounds", "why": "Dependable healing when you are close" }
+    ],
+    "goodWith": [
+      { "id": "race.hill-dwarf", "why": "Extra WIS and HP help a durable healer" },
+      { "id": "race.human", "why": "Extra points everywhere help a three-score class" }
+    ]
+  },
+  {
+    "id": "class.druid",
+    "kind": "class",
+    "pitch": "A nature caster with strong control spells who can turn into animals.",
+    "difficulty": "hard",
+    "mainAbilities": ["WIS", "CON"],
+    "strengths": [
+      "Powerful control and healing",
+      "Wild Shape adds a second set of hit points",
+      "Great scouting and travel"
+    ],
+    "weaknesses": [
+      "Many rules to learn",
+      "Metal armour and shields are off limits",
+      "Wild Shape is easy to misuse"
+    ],
+    "skills": ["perception", "nature", "survival", "animal-handling"],
+    "starterSpells": [
+      { "id": "spell.produce-flame", "why": "Light and a simple ranged attack" },
+      { "id": "spell.guidance", "why": "Small boost to any ability check" },
+      { "id": "spell.entangle", "why": "Pins several enemies in place" },
+      { "id": "spell.goodberry", "why": "Cheap healing and food for the party" },
+      { "id": "spell.healing-word", "why": "Heal an ally from range as a bonus action" }
+    ],
+    "goodWith": [
+      { "id": "race.hill-dwarf", "why": "Extra WIS and HP make up for medium armour limits" },
+      { "id": "race.high-elf", "why": "Extra DEX and a free wizard cantrip" }
+    ]
+  },
+  {
+    "id": "class.fighter",
+    "kind": "class",
+    "pitch": "A weapon expert with the most attacks and the most flexible build.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "DEX", "CON"],
+    "strengths": [
+      "Reliable damage every turn",
+      "Heavy armour and many hit points",
+      "Easy to learn, deep to master"
+    ],
+    "weaknesses": [
+      "Few options outside combat",
+      "No magic until a subclass gives it",
+      "Relies on a good weapon"
+    ],
+    "skills": ["athletics", "perception", "acrobatics", "intimidation"],
+    "goodWith": [
+      { "id": "race.human", "why": "Every score goes up, which suits a flexible fighter" },
+      { "id": "race.dragonborn", "why": "Extra STR plus a breath weapon" }
+    ]
+  },
+  {
+    "id": "class.monk",
+    "kind": "class",
+    "pitch": "A fast unarmoured fighter who strikes many times and moves around the field.",
+    "difficulty": "hard",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": ["Very mobile", "Many attacks per turn", "Strong at stunning enemies"],
+    "weaknesses": ["Needs three good scores", "Resource points run out", "Low damage per hit"],
+    "skills": ["acrobatics", "stealth", "perception", "insight"],
+    "goodWith": [
+      { "id": "race.high-elf", "why": "Extra DEX and keen senses" },
+      { "id": "race.lightfoot-halfling", "why": "Extra DEX and a good stealth boost" }
+    ]
+  },
+  {
+    "id": "class.paladin",
+    "kind": "class",
+    "pitch": "A holy warrior in heavy armour who adds burst damage and heals with a touch.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "CHA"],
+    "strengths": [
+      "Huge burst damage with Divine Smite",
+      "Heavy armour and an aura for saves",
+      "Some healing and support"
+    ],
+    "weaknesses": [
+      "Needs STR and CHA both",
+      "Limited spell slots",
+      "Oath rules can clash with the group"
+    ],
+    "skills": ["persuasion", "athletics", "insight", "intimidation"],
+    "goodWith": [
+      { "id": "race.dragonborn", "why": "Extra STR and CHA hit both main scores" },
+      { "id": "race.half-elf", "why": "Extra CHA plus two free skills" }
+    ]
+  },
+  {
+    "id": "class.ranger",
+    "kind": "class",
+    "pitch": "A wilderness hunter with a bow or blades, a few spells and strong tracking.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": [
+      "Strong at range",
+      "Excellent scout and tracker",
+      "Light spellcasting for utility"
+    ],
+    "weaknesses": [
+      "Some features only help in set terrain",
+      "Fewer spell slots",
+      "Less damage than a Fighter"
+    ],
+    "skills": ["stealth", "perception", "survival", "nature", "athletics"],
+    "starterSpells": [
+      { "id": "spell.hunters-mark", "why": "Extra damage on one target you are chasing" },
+      { "id": "spell.goodberry", "why": "Healing and food on a budget" },
+      { "id": "spell.cure-wounds", "why": "Basic healing when you are close" }
+    ],
+    "goodWith": [
+      { "id": "race.high-elf", "why": "Extra DEX and keen senses" },
+      { "id": "race.lightfoot-halfling", "why": "Extra DEX and natural stealth" }
+    ]
+  },
+  {
+    "id": "class.rogue",
+    "kind": "class",
+    "pitch": "A sneaky skill expert who deals big damage with one precise strike a turn.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "CON"],
+    "strengths": [
+      "Best skill user in the game",
+      "High damage with Sneak Attack",
+      "Escapes danger easily"
+    ],
+    "weaknesses": ["Needs help from an ally to hit well", "Few hit points", "Weak when alone"],
+    "skills": [
+      "stealth",
+      "perception",
+      "sleight-of-hand",
+      "acrobatics",
+      "investigation",
+      "deception"
+    ],
+    "goodWith": [
+      { "id": "race.lightfoot-halfling", "why": "Extra DEX and hiding behind larger allies" },
+      { "id": "race.high-elf", "why": "Extra DEX and a free cantrip" }
+    ]
+  },
+  {
+    "id": "class.sorcerer",
+    "kind": "class",
+    "pitch": "A caster born with magic who shapes spells with a small pool of Sorcery Points.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA", "CON"],
+    "strengths": ["Strong damage spells", "Flexible with Metamagic", "Good at talking too"],
+    "weaknesses": ["Few hit points", "Knows only a few spells", "Slots and points both run out"],
+    "skills": ["persuasion", "intimidation", "arcana", "insight"],
+    "starterSpells": [
+      { "id": "spell.fire-bolt", "why": "Strong ranged damage cantrip" },
+      { "id": "spell.mage-hand", "why": "Handy for small tasks from a distance" },
+      { "id": "spell.shield", "why": "Blocks an incoming hit as a reaction" },
+      { "id": "spell.magic-missile", "why": "Never misses" },
+      { "id": "spell.sleep", "why": "Puts weak enemies down at low levels" }
+    ],
+    "goodWith": [
+      { "id": "race.tiefling", "why": "Extra CHA and fire resistance" },
+      { "id": "race.half-elf", "why": "Extra CHA plus two free skills" }
+    ]
+  },
+  {
+    "id": "class.warlock",
+    "kind": "class",
+    "pitch": "A caster who made a pact with a patron and recovers a few strong slots on a short rest.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA", "CON"],
+    "strengths": [
+      "Eldritch Blast is a top cantrip",
+      "Slots return on a short rest",
+      "Invocations customise your build"
+    ],
+    "weaknesses": [
+      "Only a few spell slots",
+      "Wants short rests often",
+      "Light armour only to start"
+    ],
+    "skills": ["intimidation", "arcana", "deception", "investigation"],
+    "starterSpells": [
+      { "id": "spell.eldritch-blast", "why": "Best damage cantrip, and it grows with level" },
+      { "id": "spell.minor-illusion", "why": "Cheap trick that solves many problems" },
+      { "id": "spell.hellish-rebuke", "why": "Burns an enemy that just hit you" },
+      { "id": "spell.protection-from-evil-and-good", "why": "Guards against several kinds of foes" }
+    ],
+    "goodWith": [
+      { "id": "race.tiefling", "why": "Extra CHA and a thematic fit with a fiend patron" },
+      { "id": "race.half-elf", "why": "Extra CHA plus two free skills" }
+    ]
+  },
+  {
+    "id": "class.wizard",
+    "kind": "class",
+    "pitch": "A scholar caster with the biggest spell list, who learns spells from books.",
+    "difficulty": "hard",
+    "mainAbilities": ["INT", "CON", "DEX"],
+    "strengths": [
+      "Largest and most flexible spell list",
+      "Prepares different spells each day",
+      "Strong control and damage at higher levels"
+    ],
+    "weaknesses": ["Fewest hit points", "A lot of choices every day", "Easy to run dry"],
+    "skills": ["arcana", "investigation", "history", "insight"],
+    "starterSpells": [
+      { "id": "spell.fire-bolt", "why": "Strong ranged damage cantrip" },
+      { "id": "spell.mage-hand", "why": "Handy for small tasks from a distance" },
+      { "id": "spell.shield", "why": "Blocks an incoming hit as a reaction" },
+      { "id": "spell.magic-missile", "why": "Never misses" },
+      { "id": "spell.sleep", "why": "Puts weak enemies down at low levels" },
+      { "id": "spell.find-familiar", "why": "A helper that scouts and delivers touch spells" }
+    ],
+    "goodWith": [
+      { "id": "race.high-elf", "why": "Extra INT, an extra cantrip and a DEX boost" },
+      { "id": "race.rock-gnome", "why": "Extra INT and CON, and advantage on mental saves" }
+    ]
+  },
+  {
+    "id": "class.artificer",
+    "kind": "class",
+    "pitch": "An inventor who casts through tools and crafts temporary magic items.",
+    "difficulty": "hard",
+    "mainAbilities": ["INT", "CON"],
+    "strengths": ["Sturdy for a caster", "Infusions make useful gear", "Great utility and support"],
+    "weaknesses": [
+      "Many things to track",
+      "Spells need your tools",
+      "Not a big damage dealer without a subclass"
+    ],
+    "skills": ["arcana", "investigation", "perception", "history"],
+    "starterSpells": [
+      { "id": "spell.mending", "why": "Fixes broken gear for free" },
+      { "id": "spell.guidance", "why": "Small boost to any ability check" },
+      { "id": "spell.cure-wounds", "why": "Dependable healing when you are close" },
+      { "id": "spell.faerie-fire", "why": "Gives your whole party advantage on hits" }
+    ],
+    "goodWith": [
+      { "id": "race.rock-gnome", "why": "Extra INT and CON, and a bonus for tinkering" },
+      { "id": "race.hill-dwarf", "why": "Extra CON and HP for a front-line crafter" }
+    ]
+  },
+
+  {
+    "id": "subclass.barbarian.berserker",
+    "kind": "subclass",
+    "pitch": "Rage turns into extra attacks, at the cost of tiredness afterwards.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "CON"],
+    "strengths": [
+      "Highest damage output of the Barbarian paths",
+      "Simple to use",
+      "Great at intimidating foes"
+    ],
+    "weaknesses": [
+      "Exhaustion builds up",
+      "Less defence than the other paths",
+      "Needs rests to stay at its best"
+    ]
+  },
+  {
+    "id": "subclass.bard.lore",
+    "kind": "subclass",
+    "pitch": "A knowledgeable bard who steals spells from other classes and trips up enemies.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA", "DEX"],
+    "strengths": ["Extra skills early", "Gets spells from any class", "Can lower an enemy's roll"],
+    "weaknesses": [
+      "Needs planning to pick good spells",
+      "Little extra fighting power",
+      "Fragile up close"
+    ]
+  },
+  {
+    "id": "subclass.cleric.life",
+    "kind": "subclass",
+    "pitch": "The healer's healer: every heal restores more and you wear heavy armour.",
+    "difficulty": "easy",
+    "mainAbilities": ["WIS", "CON"],
+    "strengths": [
+      "Heavy armour from level 1",
+      "Stronger healing from every spell",
+      "A steady, easy role"
+    ],
+    "weaknesses": ["Little damage of its own", "Few non-healing tricks", "Can feel passive"]
+  },
+  {
+    "id": "subclass.druid.land",
+    "kind": "subclass",
+    "pitch": "A druid tied to one terrain, gaining extra spells and recovering slots on a short rest.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS", "CON"],
+    "strengths": [
+      "Extra spells for your terrain",
+      "Recovers some slots with a short rest",
+      "Strong travel and survival tools"
+    ],
+    "weaknesses": [
+      "Terrain choice limits spells",
+      "Fewer Wild Shape benefits than the Moon path",
+      "Still needs careful spell picks"
+    ]
+  },
+  {
+    "id": "subclass.fighter.champion",
+    "kind": "subclass",
+    "pitch": "Plain, strong fighting with a larger chance to land critical hits.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "DEX"],
+    "strengths": [
+      "No extra rules to learn",
+      "Wider critical hit range",
+      "Good for first-time players"
+    ],
+    "weaknesses": ["Few new options", "Limited outside combat", "Less impact than other paths"]
+  },
+  {
+    "id": "subclass.monk.open-hand",
+    "kind": "subclass",
+    "pitch": "A master of unarmed combat who shoves, trips and heals with ki.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": [
+      "Controls enemies on a hit",
+      "Self-healing at higher levels",
+      "Easier than the other paths"
+    ],
+    "weaknesses": ["Needs ki for the best tricks", "Little ranged option", "Low armour"]
+  },
+  {
+    "id": "subclass.paladin.devotion",
+    "kind": "subclass",
+    "pitch": "A classic knight in shining armour: good with weapons, protection and truthfulness.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "CHA"],
+    "strengths": [
+      "Sacred Weapon boosts your hits",
+      "Strong protection against charm",
+      "A clear, simple theme"
+    ],
+    "weaknesses": [
+      "Strict oath behaviour",
+      "Fewer new spells than other paths",
+      "Still limited by slots"
+    ]
+  },
+  {
+    "id": "subclass.ranger.hunter",
+    "kind": "subclass",
+    "pitch": "Pick a combat style that suits the current threat, one-on-one or against crowds.",
+    "difficulty": "easy",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": [
+      "Flexible damage options",
+      "Easy to use",
+      "Good against both single foes and groups"
+    ],
+    "weaknesses": ["Needs to choose a style each time", "Less spell support", "Little utility"]
+  },
+  {
+    "id": "subclass.rogue.thief",
+    "kind": "subclass",
+    "pitch": "A nimble burglar who climbs fast, uses items as a bonus action and strikes first.",
+    "difficulty": "easy",
+    "mainAbilities": ["DEX", "INT"],
+    "strengths": ["Bonus-action item use", "Fast climber", "Strong opening round"],
+    "weaknesses": ["Fewer clever tricks", "Less social flavour", "Benefits are narrow"]
+  },
+  {
+    "id": "subclass.sorcerer.draconic",
+    "kind": "subclass",
+    "pitch": "Your blood has dragon in it: tougher skin, bonus HP and a boost to one damage type.",
+    "difficulty": "easy",
+    "mainAbilities": ["CHA", "CON"],
+    "strengths": [
+      "More hit points",
+      "Natural armour without a spell",
+      "Extra damage for one element"
+    ],
+    "weaknesses": [
+      "Locked into one element's boost",
+      "Fewer special tricks",
+      "Still a fragile caster"
+    ]
+  },
+  {
+    "id": "subclass.warlock.fiend",
+    "kind": "subclass",
+    "pitch": "Your patron is a devil or demon: you gain temporary HP when you drop foes.",
+    "difficulty": "easy",
+    "mainAbilities": ["CHA", "CON"],
+    "strengths": ["Temporary HP after each kill", "Extra fire spells", "Good survivability"],
+    "weaknesses": ["Fewer utility options", "Less control", "Tied to fire damage"]
+  },
+  {
+    "id": "subclass.wizard.evocation",
+    "kind": "subclass",
+    "pitch": "A battle mage who shapes blasts to avoid hitting allies and deals bigger damage.",
+    "difficulty": "easy",
+    "mainAbilities": ["INT", "CON"],
+    "strengths": [
+      "Area spells that skip your allies",
+      "Extra damage on cantrips",
+      "Straightforward and powerful"
+    ],
+    "weaknesses": ["Narrow focus on damage", "Fewer utility options", "Still the Wizard's low HP"]
+  },
+  {
+    "id": "subclass.artificer.alchemist",
+    "kind": "subclass",
+    "pitch": "A potion maker who heals, buffs and blasts with experimental elixirs.",
+    "difficulty": "medium",
+    "mainAbilities": ["INT", "CON"],
+    "strengths": [
+      "Strong healing from your spells",
+      "Elixirs for the whole group",
+      "Good party support"
+    ],
+    "weaknesses": ["Elixirs are random", "Little weapon play", "Needs time to craft"]
+  },
+  {
+    "id": "subclass.artificer.armorer",
+    "kind": "subclass",
+    "pitch": "You build your armour into a suit: either a tough guardian or a stealthy infiltrator.",
+    "difficulty": "medium",
+    "mainAbilities": ["INT", "CON"],
+    "strengths": ["Heavy armour and weapons from your suit", "Sturdy front-liner", "Clear role"],
+    "weaknesses": [
+      "Armour depends on your spells and tools",
+      "Less spell power",
+      "Strong focus on melee"
+    ]
+  },
+  {
+    "id": "subclass.artificer.artillerist",
+    "kind": "subclass",
+    "pitch": "An arcane cannon builder who blasts enemies or shields allies from range.",
+    "difficulty": "medium",
+    "mainAbilities": ["INT", "CON"],
+    "strengths": ["Strong ranged damage", "Cannon can protect or heal", "Reliable at a distance"],
+    "weaknesses": ["Cannon can be destroyed", "Needs space to set up", "Fewer close-range options"]
+  },
+  {
+    "id": "subclass.artificer.battle-smith",
+    "kind": "subclass",
+    "pitch": "A tough defender with a steel companion who fights using your mind instead of strength.",
+    "difficulty": "easy",
+    "mainAbilities": ["INT", "CON"],
+    "strengths": [
+      "Steel Defender fights beside you",
+      "INT used for weapon attacks",
+      "Sturdy and simple"
+    ],
+    "weaknesses": [
+      "Companion adds turn complexity",
+      "Less utility than other paths",
+      "Slot use is tight"
+    ]
+  },
+  {
+    "id": "subclass.fighter.cavalier",
+    "kind": "subclass",
+    "pitch": "A mounted protector who draws enemies to you and defends nearby allies.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "CON"],
+    "strengths": [
+      "Great at holding enemy attention",
+      "Strong on a mount",
+      "Protects allies from attacks"
+    ],
+    "weaknesses": ["Best with a mount", "Fewer options in tight spaces", "Little ranged play"]
+  },
+  {
+    "id": "subclass.ranger.gloom-stalker",
+    "kind": "subclass",
+    "pitch": "A hunter of dark places who strikes hard in the first round and hides from darkvision.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": ["Huge opening round", "Hard to see in the dark", "Better initiative"],
+    "weaknesses": [
+      "Less impact later in a fight",
+      "Needs dark or enclosed fights",
+      "Fewer extra spells"
+    ]
+  },
+  {
+    "id": "subclass.wizard.war-magic",
+    "kind": "subclass",
+    "pitch": "A defensive battle caster who uses magic to protect themselves and blast foes.",
+    "difficulty": "medium",
+    "mainAbilities": ["INT", "CON"],
+    "strengths": [
+      "Better initiative",
+      "Can protect yourself with spells",
+      "Less fragile than other Wizards"
+    ],
+    "weaknesses": [
+      "Fewer scholarly tricks",
+      "Gains depend on casting often",
+      "More to track in fights"
+    ]
+  },
+  {
+    "id": "subclass.cleric.twilight",
+    "kind": "subclass",
+    "pitch": "A protector of the night who gives allies temporary HP and sees in the dark.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS", "CON"],
+    "strengths": [
+      "Strong party protection",
+      "Heavy armour and martial weapons",
+      "Sees in the dark"
+    ],
+    "weaknesses": ["Less direct healing", "Temporary HP needs good timing", "Many choices to track"]
+  },
+  {
+    "id": "subclass.fighter.psi-warrior",
+    "kind": "subclass",
+    "pitch": "A fighter who uses psionic energy for extra damage, shields and short bursts of movement.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "INT"],
+    "strengths": [
+      "Flexible psionic dice",
+      "Protects allies and itself",
+      "Good mix of offence and defence"
+    ],
+    "weaknesses": [
+      "Dice run out and need rests",
+      "More to track than a Champion",
+      "INT helps more than expected"
+    ]
+  },
+
+  {
+    "id": "race.dragonborn",
+    "kind": "race",
+    "pitch": "A proud dragon-blooded humanoid with a breath weapon and strong body.",
+    "difficulty": "easy",
+    "strengths": [
+      "Strong breath attack",
+      "Boosts to STR and CHA",
+      "Damage resistance for your colour"
+    ],
+    "weaknesses": ["No darkvision", "Breath weapon uses up your action", "Fewer skill perks"],
+    "goodWith": [
+      { "id": "class.paladin", "why": "STR and CHA both go up" },
+      { "id": "class.fighter", "why": "STR boost and a ranged option" }
+    ]
+  },
+  {
+    "id": "race.dwarf",
+    "kind": "race",
+    "pitch": "A sturdy, resilient folk who resist poison and keep going in heavy armour.",
+    "difficulty": "easy",
+    "strengths": ["High CON and tough hit points", "Resists poison", "Darkvision"],
+    "weaknesses": ["Slow walking speed", "Few mental perks", "No DEX or CHA boost"],
+    "goodWith": [
+      { "id": "class.fighter", "why": "CON and heavy armour suit a sturdy front-liner" },
+      { "id": "class.cleric", "why": "CON helps a close-range healer" }
+    ]
+  },
+  {
+    "id": "race.elf",
+    "kind": "race",
+    "pitch": "A graceful, long-lived folk with sharp senses and resistance to being charmed.",
+    "difficulty": "easy",
+    "strengths": ["DEX boost", "Sharp senses", "Trance means less sleeping"],
+    "weaknesses": [
+      "Fewer hit points",
+      "No extra strength",
+      "No bonus to toughness or spellcasting"
+    ],
+    "goodWith": [
+      { "id": "class.rogue", "why": "DEX boost and stealthy senses" },
+      { "id": "class.ranger", "why": "DEX boost and sharp perception" }
+    ]
+  },
+  {
+    "id": "race.gnome",
+    "kind": "race",
+    "pitch": "A curious, clever small folk who resist magic and love tinkering.",
+    "difficulty": "easy",
+    "strengths": ["INT boost", "Advantage on saves against magic of the mind", "Darkvision"],
+    "weaknesses": ["Small and slow", "Few physical perks", "Weak against heavy weapons"],
+    "goodWith": [
+      { "id": "class.wizard", "why": "INT boost and magic-resistant saves" },
+      { "id": "class.artificer", "why": "INT boost and a tinkering theme" }
+    ]
+  },
+  {
+    "id": "race.half-elf",
+    "kind": "race",
+    "pitch": "A flexible and charming blend of human and elf with two free skills.",
+    "difficulty": "easy",
+    "strengths": ["CHA boost plus two free +1s", "Two free skills", "Darkvision and Fey Ancestry"],
+    "weaknesses": ["No standout combat perk", "Average speed", "Spread-out bonuses"],
+    "goodWith": [
+      { "id": "class.bard", "why": "CHA boost and two extra skills" },
+      { "id": "class.sorcerer", "why": "CHA boost and extra versatility" },
+      { "id": "class.warlock", "why": "CHA boost and extra skills" }
+    ]
+  },
+  {
+    "id": "race.half-orc",
+    "kind": "race",
+    "pitch": "A powerful fighter who is hard to put down and hits harder on a critical.",
+    "difficulty": "easy",
+    "strengths": [
+      "STR and CON boost",
+      "Relentless Endurance saves you once a day",
+      "Extra damage on critical hits"
+    ],
+    "weaknesses": ["No mental boost", "Little spell help", "Few skill options"],
+    "goodWith": [
+      { "id": "class.barbarian", "why": "STR and CON plus a second chance at 0 HP" },
+      { "id": "class.fighter", "why": "STR and CON suit a front-liner" }
+    ]
+  },
+  {
+    "id": "race.halfling",
+    "kind": "race",
+    "pitch": "A small, lucky and nimble folk who are hard to frighten.",
+    "difficulty": "easy",
+    "strengths": ["DEX boost", "Lucky rerolls of 1s", "Resists fear"],
+    "weaknesses": ["Small and slow", "No darkvision", "Little raw strength"],
+    "goodWith": [{ "id": "class.rogue", "why": "DEX boost and lucky rolls" }]
+  },
+  {
+    "id": "race.high-elf",
+    "kind": "race",
+    "pitch": "An elf who adds INT and knows an extra wizard cantrip.",
+    "difficulty": "easy",
+    "strengths": ["DEX and INT boost", "Free wizard cantrip", "Sharp senses"],
+    "weaknesses": ["Fewer hit points", "No extra STR", "Not tough in melee"],
+    "goodWith": [
+      { "id": "class.wizard", "why": "INT boost and an extra cantrip" },
+      { "id": "class.rogue", "why": "DEX boost and a handy free cantrip" }
+    ]
+  },
+  {
+    "id": "race.hill-dwarf",
+    "kind": "race",
+    "pitch": "A dwarf with sharp instincts and extra hit points at every level.",
+    "difficulty": "easy",
+    "strengths": ["CON and WIS boost", "Extra HP every level", "Resists poison"],
+    "weaknesses": ["Slow walking speed", "No DEX boost", "Few skill perks"],
+    "goodWith": [
+      { "id": "class.cleric", "why": "WIS boost and tough HP" },
+      { "id": "class.druid", "why": "WIS boost and extra HP help in wild shape" },
+      { "id": "class.barbarian", "why": "CON and HP stack with a big hit die" }
+    ]
+  },
+  {
+    "id": "race.human",
+    "kind": "race",
+    "pitch": "A flexible folk with a small boost to every score.",
+    "difficulty": "easy",
+    "strengths": ["+1 to every score", "Fits any class", "Simple choices"],
+    "weaknesses": ["No special perks", "No darkvision", "Small bonuses only"],
+    "goodWith": [
+      { "id": "class.fighter", "why": "Small boosts everywhere help a flexible build" },
+      { "id": "class.cleric", "why": "Helps a class that needs several scores" }
+    ]
+  },
+  {
+    "id": "race.lightfoot-halfling",
+    "kind": "race",
+    "pitch": "A halfling with a gift for hiding behind bigger creatures.",
+    "difficulty": "easy",
+    "strengths": ["DEX and CHA boost", "Can hide behind larger allies", "Lucky rerolls of 1s"],
+    "weaknesses": ["Small and slow", "No darkvision", "Little raw strength"],
+    "goodWith": [
+      { "id": "class.rogue", "why": "DEX boost and easy hiding" },
+      { "id": "class.bard", "why": "DEX and CHA both help" }
+    ]
+  },
+  {
+    "id": "race.rock-gnome",
+    "kind": "race",
+    "pitch": "A gnome who is good at tinkering and a little sturdier than most.",
+    "difficulty": "easy",
+    "strengths": ["INT and CON boost", "Can build tiny gadgets", "Advantage on mental saves"],
+    "weaknesses": ["Small and slow", "Few combat perks", "Weak in a straight fight"],
+    "goodWith": [
+      { "id": "class.wizard", "why": "INT and CON help a fragile caster" },
+      { "id": "class.artificer", "why": "INT and a tinkering theme" }
+    ]
+  },
+  {
+    "id": "race.tiefling",
+    "kind": "race",
+    "pitch": "A person with fiendish blood who resists fire and knows a few innate spells.",
+    "difficulty": "easy",
+    "strengths": ["CHA boost", "Fire resistance", "Free innate spells"],
+    "weaknesses": ["Other people may be wary of you", "No STR or CON boost", "Few perks in melee"],
+    "goodWith": [
+      { "id": "class.warlock", "why": "CHA boost and a fiendish theme" },
+      { "id": "class.sorcerer", "why": "CHA boost and innate spells" }
+    ]
+  },
+
+  {
+    "id": "background.acolyte",
+    "kind": "background",
+    "pitch": "You served in a temple and know its customs, rites and allies.",
+    "difficulty": "easy",
+    "strengths": ["Insight and Religion skills", "Free lodging at temples", "Two extra languages"],
+    "weaknesses": ["Few combat benefits", "Little gold", "Narrow social reach"],
+    "skills": ["insight", "religion"],
+    "goodWith": [
+      { "id": "class.cleric", "why": "The skills match a Cleric's best scores" },
+      { "id": "class.paladin", "why": "A natural fit for a holy warrior" }
+    ]
+  },
+  {
+    "id": "background.charlatan",
+    "kind": "background",
+    "pitch": "You are a con artist with a ready false identity and a talent for tricks.",
+    "difficulty": "easy",
+    "strengths": [
+      "Deception and Sleight of Hand skills",
+      "A ready-made false identity",
+      "Disguise and forgery tools"
+    ],
+    "weaknesses": ["Few combat benefits", "Your lies can catch up with you", "No extra languages"],
+    "skills": ["deception", "sleight-of-hand"],
+    "goodWith": [
+      { "id": "class.rogue", "why": "Both skills fit a Rogue's best scores" },
+      { "id": "class.bard", "why": "Deception pairs well with Bard charm" }
+    ]
+  }
+]
