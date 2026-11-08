@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-08 09:55 — Step-by-step new character
+
+- New character can now be built one step at a time: Name, Race, Class, Background, Level, Abilities, Choices, Review. Back and Next move between steps, and each step tells you what is missing.
+- Review shows the computed sheet before you press Create. Switch to One page any time; nothing you typed is lost.
+- Not yet: race and class cards, suggestions and reload-safe drafts come in the next tasks.
+- Checks pass.
+
 ## 2026-11-08 09:47 — Creation settings
 
 - Settings now has a "New characters" choice (Step by step or One page) and a "Show beginner hints" switch.

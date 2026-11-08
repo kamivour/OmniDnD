@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useStore } from 'zustand';
 import { Link, useNavigate } from 'react-router';
 import { ZodError } from 'zod';
 import { registry } from '../../data/registry';
@@ -18,6 +19,8 @@ import { computeSheet } from '../../engine/calc/sheet';
 import { GuidedChoicesSection } from './GuidedChoicesSection';
 import { emptyGuided, toGuidedChoices, type GuidedState } from './guided-state';
 import { PlaceholderScreen } from './PlaceholderScreen';
+import { deviceStore, type CreationMode } from '../../state/device-settings';
+import { STEPS, stepProblems, type StepId } from './new-character-steps';
 
 type PerAbility<T> = Record<Ability, T>;
 const perAbility = <T,>(value: T) =>
@@ -60,6 +63,12 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
   const [errors, setErrors] = useState<string[]>([]);
   const [guided, setGuided] = useState(false);
   const [guidedState, setGuidedState] = useState<GuidedState>(() => emptyGuided(classId));
+  const savedMode = useStore(deviceStore, (state) => state.creationMode);
+  const [mode, setMode] = useState<CreationMode>(savedMode);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [stepErrors, setStepErrors] = useState<string[]>([]);
+  const step: StepId = STEPS[stepIndex]!.id;
+  const stepped = mode === 'steps';
 
   const race = races.find((entry) => entry.id === raceId);
   const classDef = classes.find((entry) => entry.id === classId);
@@ -120,6 +129,56 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
       return undefined;
     }
   })();
+  const review = (() => {
+    if (!stepped || step !== 'review' || !complete) return undefined;
+    try {
+      const draft = createCharacter(
+        {
+          id,
+          name,
+          campaign,
+          raceId,
+          classId,
+          backgroundId,
+          alignment,
+          level,
+          abilityBases: Object.fromEntries(
+            ABILITIES.map((ability) => [ability, Number(bases[ability])]),
+          ) as PerAbility<number>,
+          racialChoices,
+          hpRolls: campaign.hpMethod === 'rolled' ? rolls.slice(0, level - 1).map(Number) : [],
+          ...(guided ? { guided: toGuidedChoices(guidedState) } : {}),
+        },
+        registry,
+      );
+      const state = { campaign, ...draft };
+      return computeSheet(state, registry);
+    } catch {
+      return undefined;
+    }
+  })();
+  const problems = stepProblems(step, {
+    name,
+    raceId,
+    classId,
+    backgroundId,
+    level,
+    bases,
+    racialChoices,
+    race,
+    campaign,
+    complete,
+    pointCost,
+  });
+  const show = (id: StepId) => !stepped || step === id;
+  const goTo = (index: number) => {
+    setStepErrors([]);
+    setStepIndex(Math.max(0, Math.min(STEPS.length - 1, index)));
+  };
+  const next = () => {
+    if (problems.length > 0) setStepErrors(problems);
+    else goTo(stepIndex + 1);
+  };
   const taken = [
     ...(registry.entries.get(backgroundId)?.kind === 'background'
       ? registry.get('background', backgroundId).skills
@@ -133,6 +192,10 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
       }}
       onSubmit={(e) => {
         e.preventDefault();
+        if (stepped && step !== 'review') {
+          next();
+          return;
+        }
         setErrors([]);
         try {
           const created = createCharacter(
@@ -192,6 +255,69 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
         </p>
       </header>
 
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-text-muted">Mode:</span>
+        {(['steps', 'page'] as const).map((value) => (
+          <button
+            key={value}
+            type="button"
+            aria-pressed={mode === value}
+            onClick={() => {
+              setMode(value);
+              setStepErrors([]);
+              deviceStore.getState().setCreationMode(value);
+            }}
+            className={`min-h-11 rounded-btn border px-3 ${
+              mode === value
+                ? 'border-accent bg-surface text-accent'
+                : 'border-border text-text-muted hover:text-text'
+            }`}
+          >
+            {value === 'steps' ? 'Step by step' : 'One page'}
+          </button>
+        ))}
+      </div>
+
+      {stepped && (
+        <nav aria-label="Steps">
+          <ol className="flex flex-wrap gap-1 text-xs">
+            {STEPS.map((entry, index) => (
+              <li key={entry.id}>
+                <button
+                  type="button"
+                  aria-current={index === stepIndex ? 'step' : undefined}
+                  disabled={index > stepIndex}
+                  onClick={() => goTo(index)}
+                  className={`min-h-11 rounded-btn px-2 ${
+                    index === stepIndex
+                      ? 'bg-surface font-semibold text-accent'
+                      : index < stepIndex
+                        ? 'text-text'
+                        : 'text-text-muted'
+                  }`}
+                >
+                  {index + 1}. {entry.label}
+                </button>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
+
+      {stepErrors.length > 0 && (
+        <div
+          role="alert"
+          className="rounded-card border border-border bg-surface p-4 text-sm text-text"
+        >
+          <p className="font-semibold">Finish this step first:</p>
+          <ul className="mt-2 list-disc pl-5">
+            {stepErrors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {errors.length > 0 && (
         <div
           role="alert"
@@ -206,95 +332,117 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
         </div>
       )}
 
-      <section aria-labelledby="nc-basics" className="flex flex-col gap-3">
-        <SectionLabel>
-          <span id="nc-basics">Basics</span>
-        </SectionLabel>
+      <section
+        aria-labelledby="nc-basics"
+        hidden={stepped && !['name', 'race', 'class', 'background', 'level'].includes(step)}
+        className="flex flex-col gap-3"
+      >
+        {!stepped && (
+          <SectionLabel>
+            <span id="nc-basics">Basics</span>
+          </SectionLabel>
+        )}
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Name" htmlFor="nc-name">
-            <input
-              id="nc-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className={inputClass}
-            />
-          </Field>
-          <Field
-            label="Level"
-            htmlFor="nc-level"
-            hint={
-              campaign.leveling === 'milestone'
-                ? 'Milestone: the DM decides when you level up.'
-                : 'XP starts at this level’s threshold.'
-            }
-          >
-            <input
-              id="nc-level"
-              type="number"
-              min={1}
-              max={20}
-              value={level}
-              onChange={(e) => setLevel(Math.min(20, Math.max(1, Number(e.target.value) || 1)))}
-              className={inputClass}
-            />
-          </Field>
-          <Select
-            id="nc-race"
-            label="Race"
-            options={races}
-            value={raceId}
-            onChange={(id) => {
-              setRaceId(id);
-              setRacialChoices([]);
-            }}
-            required
-          />
-          <Field
-            label="Class"
-            htmlFor="nc-class"
-            hint={die === undefined ? undefined : `Hit die d${die}`}
-          >
-            <select
-              id="nc-class"
-              value={classId}
-              onChange={(e) => {
-                setClassId(e.target.value);
-                setGuidedState(emptyGuided(e.target.value));
-                setRolls([]);
+          {show('name') && (
+            <Field label="Name" htmlFor="nc-name">
+              <input
+                id="nc-name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className={inputClass}
+              />
+            </Field>
+          )}
+          {show('level') && (
+            <Field
+              label="Level"
+              htmlFor="nc-level"
+              hint={
+                campaign.leveling === 'milestone'
+                  ? 'Milestone: the DM decides when you level up.'
+                  : 'XP starts at this level’s threshold.'
+              }
+            >
+              <input
+                id="nc-level"
+                type="number"
+                min={1}
+                max={20}
+                value={level}
+                onChange={(e) => setLevel(Math.min(20, Math.max(1, Number(e.target.value) || 1)))}
+                className={inputClass}
+              />
+            </Field>
+          )}
+          {show('race') && (
+            <Select
+              id="nc-race"
+              label="Race"
+              options={races}
+              value={raceId}
+              onChange={(id) => {
+                setRaceId(id);
+                setRacialChoices([]);
               }}
               required
-              className={inputClass}
+            />
+          )}
+          {show('class') && (
+            <Field
+              label="Class"
+              htmlFor="nc-class"
+              hint={die === undefined ? undefined : `Hit die d${die}`}
             >
-              <option value="" disabled>
-                Choose…
-              </option>
-              {classes.map((entry) => (
-                <option key={entry.id} value={entry.id}>
-                  {entry.name}
+              <select
+                id="nc-class"
+                value={classId}
+                onChange={(e) => {
+                  setClassId(e.target.value);
+                  setGuidedState(emptyGuided(e.target.value));
+                  setRolls([]);
+                }}
+                required
+                className={inputClass}
+              >
+                <option value="" disabled>
+                  Choose…
                 </option>
-              ))}
-            </select>
-          </Field>
-          <Select
-            id="nc-background"
-            label="Background"
-            options={backgrounds}
-            value={backgroundId}
-            onChange={setBackgroundId}
-            required
-          />
-          <Select
-            id="nc-alignment"
-            label="Alignment"
-            options={ALIGNMENTS.map((name) => ({ id: name, name }))}
-            value={alignment}
-            onChange={setAlignment}
-          />
+                {classes.map((entry) => (
+                  <option key={entry.id} value={entry.id}>
+                    {entry.name}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          )}
+          {show('background') && (
+            <Select
+              id="nc-background"
+              label="Background"
+              options={backgrounds}
+              value={backgroundId}
+              onChange={setBackgroundId}
+              required
+            />
+          )}
+          {show('name') && (
+            <Select
+              id="nc-alignment"
+              label="Alignment"
+              options={ALIGNMENTS.map((name) => ({ id: name, name }))}
+              value={alignment}
+              onChange={setAlignment}
+            />
+          )}
         </div>
       </section>
 
-      <section aria-labelledby="nc-abilities" className="flex flex-col gap-3">
+      <section
+        aria-labelledby="nc-abilities"
+        hidden={!show('abilities')}
+        className="flex flex-col gap-3"
+      >
         <SectionLabel>
           <span id="nc-abilities">Ability scores</span>
         </SectionLabel>
@@ -385,7 +533,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
         </div>
       </section>
 
-      <section aria-labelledby="nc-hp" className="flex flex-col gap-3">
+      <section aria-labelledby="nc-hp" hidden={!show('choices')} className="flex flex-col gap-3">
         <SectionLabel>
           <span id="nc-hp">Hit points</span>
         </SectionLabel>
@@ -463,7 +611,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
         </div>
       </section>
 
-      <section aria-labelledby="nc-mode" className="flex flex-col gap-3">
+      <section aria-labelledby="nc-mode" hidden={!show('choices')} className="flex flex-col gap-3">
         <label className="flex min-h-11 items-center gap-2 text-sm text-text">
           <input
             id="nc-mode"
@@ -482,7 +630,7 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
         )}
       </section>
 
-      {guided && classId && (
+      {guided && classId && show('choices') && (
         <GuidedChoicesSection
           key={classId}
           classId={classId}
@@ -494,6 +642,45 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
         />
       )}
 
+      {stepped && step === 'review' && (
+        <section aria-labelledby="nc-review" className="flex flex-col gap-3">
+          <SectionLabel>
+            <span id="nc-review">Review</span>
+          </SectionLabel>
+          <p className="text-sm text-text">
+            {name || 'Unnamed'}: {race?.name} {classDef?.name}, level {level}
+            {registry.entries.get(backgroundId)?.name
+              ? `, ${registry.entries.get(backgroundId)?.name}`
+              : ''}
+            {alignment ? `, ${alignment}` : ''}
+          </p>
+          {review ? (
+            <dl className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
+              {[
+                ['Max HP', review.maxHp.value],
+                ['Armor Class', review.ac.value],
+                ['Speed', review.speed.value],
+                ['Initiative', signed(review.initiative.value)],
+                ['Proficiency', signed(review.proficiency)],
+                ...ABILITIES.map((a) => [
+                  a,
+                  `${review.abilities[a].score.value} (${signed(review.abilities[a].mod)})`,
+                ]),
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-card border border-border bg-surface p-2">
+                  <dt className="text-xs text-text-muted">{label}</dt>
+                  <dd className="font-semibold text-text">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          ) : (
+            <p className="text-sm text-text-muted">
+              The sheet could not be computed yet. Go back and check your choices.
+            </p>
+          )}
+        </section>
+      )}
+
       <div className="flex justify-end gap-2 border-t border-border pt-4">
         <Link
           to="/"
@@ -501,13 +688,34 @@ function NewCharacterForm({ campaign }: { campaign: Campaign }) {
         >
           Cancel
         </Link>
-        <button
-          type="submit"
-          disabled={pending}
-          className="min-h-11 rounded-btn bg-accent px-5 text-sm font-semibold text-bg disabled:opacity-50"
-        >
-          Create character
-        </button>
+        {stepped && stepIndex > 0 && (
+          <button
+            type="button"
+            onClick={() => goTo(stepIndex - 1)}
+            className="min-h-11 rounded-btn border border-border px-4 text-sm text-text"
+          >
+            Back
+          </button>
+        )}
+        {stepped && step !== 'review' ? (
+          <button
+            key="next"
+            type="button"
+            onClick={next}
+            className="min-h-11 rounded-btn bg-accent px-5 text-sm font-semibold text-bg"
+          >
+            Next
+          </button>
+        ) : (
+          <button
+            key="create"
+            type="submit"
+            disabled={pending}
+            className="min-h-11 rounded-btn bg-accent px-5 text-sm font-semibold text-bg disabled:opacity-50"
+          >
+            Create character
+          </button>
+        )}
       </div>
       {confirmation}
     </form>

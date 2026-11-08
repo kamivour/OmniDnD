@@ -5,7 +5,28 @@ export type { Page } from '@playwright/test';
 
 const LOOPBACK_HTTP = 'http://127.0.0.1:4173/**';
 
-export const test = base.extend<{ forwardLoopbackHttp: void }>({
+export const test = base.extend<{ forwardLoopbackHttp: void; defaultToOnePage: void }>({
+  // Most specs fill the whole New character form, so they start in One page mode.
+  // The step-by-step spec switches mode on screen.
+  defaultToOnePage: [
+    async ({ context }, runTest) => {
+      await context.addInitScript(() => {
+        try {
+          const saved = JSON.parse(localStorage.getItem('omnidnd.device') ?? '{}') as object;
+          if (!('creationMode' in saved)) {
+            localStorage.setItem(
+              'omnidnd.device',
+              JSON.stringify({ ...saved, creationMode: 'page' }),
+            );
+          }
+        } catch {
+          // Storage unavailable: the app default applies.
+        }
+      });
+      await runTest();
+    },
+    { auto: true },
+  ],
   forwardLoopbackHttp: [
     async ({ context }, runTest) => {
       if (process.env.OMNI_E2E_FORWARD_HTTP === '1') {
