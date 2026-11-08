@@ -143,6 +143,9 @@ test('Credits has required SRD, icon and font attribution and returns to its own
     await expect(
       page.locator('main a[href="https://creativecommons.org/licenses/by/3.0/"]'),
     ).toBeVisible();
+    await expect(
+      page.locator('main a[href="https://github.com/flamableconcrete/awesome-dnd"]'),
+    ).toBeVisible();
     for (const { author, name } of Object.values(GAME_ICONS)) {
       const source = page.locator(
         `main a[href="https://game-icons.net/1x1/${author}/${name}.html"]`,

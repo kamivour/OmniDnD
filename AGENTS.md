@@ -53,6 +53,7 @@ npm run format      # Prettier (Markdown is not formatted)
 npm run e2e         # Playwright: builds, serves on :4173, runs at 375 px and 1440 px
 npm run build       # typecheck + production build to dist/
 npm run generate:icons # regenerate install icons from favicon.svg (uses Playwright Chromium)
+npm run check:tools # report dead links in the tools list (by hand, needs internet)
 npm run import:srd  # regenerate data/srd/ from the pinned SRD source (--from <dir> for a local copy)
 ```
 

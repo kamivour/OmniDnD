@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 00:10 — Tools list finished
+
+- Credits now thanks awesome-dnd, where many tool ideas came from.
+- A new command, npm run check:tools, reports tool links that no longer work. Run it by hand now and then.
+- Please run the five M20 checks in MANUAL_QA, mainly on your phone. Next: Find and Related links.
+- Checks pass.
+
 ## 2026-11-09 00:06 — Tools page
 
 - Reference now has a Tools button. It lists outside tools by goal, such as maps, tokens, minis and audio.

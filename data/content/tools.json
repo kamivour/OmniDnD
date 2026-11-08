@@ -431,7 +431,7 @@
   {
     "id": "tool.makehuman",
     "name": "MakeHuman",
-    "url": "https://www.makehumancommunity.org",
+    "url": "https://github.com/makehumancommunity/makehuman",
     "objective": "ai-3d",
     "platforms": ["windows", "mac", "linux"],
     "cost": "free",
@@ -519,11 +519,11 @@
   {
     "id": "tool.morepurplemorebetter",
     "name": "MorePurpleMoreBetter",
-    "url": "https://morepurplemorebetter.github.io/",
+    "url": "https://www.flapkan.com/",
     "objective": "builders",
     "platforms": ["web"],
     "cost": "free",
-    "summary": "Set of free tools for 5e, such as a spell sheet and character helpers.",
+    "summary": "Fillable 5e character sheets that compute rules for you, from one author.",
     "ai": false,
     "synonyms": ["character tools", "5e tools"]
   },
@@ -662,7 +662,7 @@
   {
     "id": "tool.call-of-cthulhu",
     "name": "Call of Cthulhu 7e",
-    "url": "https://www.chaosium.com/call-of-cthulhu/",
+    "url": "https://www.chaosium.com/",
     "objective": "other-systems",
     "platforms": ["web"],
     "cost": "paid",

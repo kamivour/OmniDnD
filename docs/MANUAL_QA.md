@@ -188,6 +188,14 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Cast Revivify or Identify. Judge whether the gold cost and "consumed" wording read right.
 - [ ] Open Reference > Quick tables. Judge whether travel pace, forced march and falling match your 2014 book.
 
+## Phase 6 — M20: Tools directory
+
+- [ ] On your phone, open Reference > Tools. Judge whether the groups and cards are easy to scan.
+- [ ] Tick Free only, pick Web, tick Hide AI tools. Judge whether a free map maker is easy to find.
+- [ ] Open one card. Judge whether it opens the site in a new tab and you can come back.
+- [ ] Read the summaries. Judge whether any tool is described wrongly or any good tool is missing.
+- [ ] Check the Other game systems group. Judge whether "not supported by this app" is clear.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

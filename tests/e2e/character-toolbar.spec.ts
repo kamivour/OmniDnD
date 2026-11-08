@@ -177,6 +177,7 @@ test('every built and placeholder character route shares one compact log and Und
     'journal',
     'reference',
     'reference/credits',
+    'reference/tools',
     'settings',
     'unknown-screen',
   ];

@@ -103,6 +103,23 @@ export function CreditsScreen() {
           ))}
         </ul>
       </section>
+      <section aria-labelledby="credits-tools" className="flex flex-col gap-3">
+        <h2 id="credits-tools" className="text-base font-semibold">
+          Tools list
+        </h2>
+        <p className="text-text-muted">
+          Many entries in the Tools page were found through{' '}
+          <a
+            className={linkClass}
+            href="https://github.com/flamableconcrete/awesome-dnd"
+            target="_blank"
+            rel="noreferrer"
+          >
+            awesome-dnd
+          </a>
+          , released under CC0. Thank you to its contributors. The summaries are our own words.
+        </p>
+      </section>
       <section aria-labelledby="credits-lucide" className="flex flex-col gap-3">
         <h2 id="credits-lucide" className="text-base font-semibold">
           Lucide
