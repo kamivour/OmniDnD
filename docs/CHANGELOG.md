@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 00:44 — Related links
+
+- Small "Related" rows now sit on Skills (jump and carry), Movement and body (Athletics, falling table) and the spell cast sheet (focus and gear in Inventory).
+- They only suggest. Nothing moves until you tap one.
+- Checks pass.
+
 ## 2026-11-09 00:39 — Find
 
 - New search icon beside Undo (and in the top bar outside a character). Ctrl+K or / also opens it.

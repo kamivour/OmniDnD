@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M21 (Find and Related links), todo.
-**Next up:** M21 task 4 (Related links). Run the M17, M18 and M19 manual QA lists when you can. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** M21 gate (Find reaches five targets in two steps, manual QA). Run the M17, M18 and M19 manual QA lists when you can. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -259,7 +259,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 - [x] Engine, search index (`src/engine/calc/find.ts`): one ranked list over app places and actions (screens, panels, commands such as "Long rest"), the open character's spells, items and features, rules (reuse `searchRules`) and tools; synonyms ("jump" finds Movement and body, "PDF" finds Print). Pure and tested
 - [x] Registry of places: every screen and panel registers an id, title, route, section anchor and synonyms in one file; a test fails if a built route has no entry. Add the rule "new sections register a Find entry" to AGENTS.md
 - [x] UI, Find: top-bar search icon, Ctrl/Cmd+K and `/` open it; results grouped (Go to, Do, Your character, Rules, Tools); Enter goes there, scrolls to the section and highlights it briefly
-- [ ] UI, Related links: small "Related" row on key panels (Jump next to Athletics, Falling next to Jump, Focus next to spell components). Suggest only; never redirect on its own
+- [x] UI, Related links: small "Related" row on key panels (Jump next to Athletics, Falling next to Jump, Focus next to spell components). Suggest only; never redirect on its own
 - [ ] Gate: from the Dashboard, reach Jump, Print, Shatter, Long rest and a map tool in two steps or fewer, by keyboard and by touch; manual QA documented
 
 ## Backlog (not scheduled)
@@ -273,6 +273,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M21 task 4: Related rows on Skills, Movement and body, and the cast sheet; links only suggest and move nowhere on their own; e2e added.
 - M21 task 3: Find search icon in the character toolbar and hub header, Ctrl/Cmd+K and / open it; results jump to the section and flash it.
 - M21 task 2: places registry lists every screen, section and rest action for Find; a test fails if a nav route has no entry; AGENTS rule added.
 - M21 task 1: pure Find search index ranks titles, synonyms and details, groups results and caps each group; unit tests added.

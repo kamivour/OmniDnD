@@ -94,3 +94,35 @@ test('Find works without a character, and hides character-only places', async ({
   await page.getByRole('option', { name: /^Tools Outside tools/ }).click();
   await expect(page).toHaveURL(/\/reference\/tools$/);
 });
+
+test.describe('Related links', () => {
+  test('Skills point to Movement and body, which points to Athletics and the Falling table', async ({
+    page,
+  }) => {
+    await page.goto('/characters/the-fool/explore');
+    const skills = page.getByRole('region', { name: 'Skills', exact: true });
+    await skills.getByRole('link', { name: 'Jump and carry' }).click();
+    await expect(page).toHaveURL(/\/explore$/);
+    await expect(page.getByRole('region', { name: 'Movement and body' })).toHaveClass(
+      /omni-find-highlight/,
+    );
+    const body = page.getByRole('region', { name: 'Movement and body' });
+    await body.getByRole('link', { name: 'Falling table' }).click();
+    await expect(page).toHaveURL(/\/reference$/);
+    await expect(page.getByRole('heading', { name: 'Quick tables' })).toBeVisible();
+    await noOverflow(page);
+  });
+
+  test('the cast sheet suggests Inventory when a material component matters', async ({ page }) => {
+    await page.goto('/characters/the-fool/explore');
+    await page
+      .getByRole('listitem')
+      .filter({ hasText: 'Invisibility' })
+      .getByRole('button', { name: 'Cast', exact: true })
+      .first()
+      .click();
+    const dialog = page.getByRole('dialog', { name: 'Cast Invisibility', exact: true });
+    await dialog.getByRole('link', { name: 'Focus and gear in Inventory' }).click();
+    await expect(page).toHaveURL(/\/inventory$/);
+  });
+});

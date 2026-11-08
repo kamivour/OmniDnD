@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { registry, registryFor } from '../../data/registry';
 import { spellCastDetails } from '../../engine/commands';
 import { BodyNumbers } from '../components/BodyNumbers';
+import { Related } from '../find/Related';
 import { SectionLabel } from '../components/SectionLabel';
 import { Sheet } from '../components/Sheet';
 import { PassiveList, SkillList } from '../components/SkillChecks';
@@ -121,6 +122,9 @@ export function ExplorationScreen() {
         <section aria-label="Skills" className={card}>
           <SectionLabel>Skills</SectionLabel>
           <SkillList sheet={sheet} />
+          <Related
+            items={[{ label: 'Jump and carry', path: 'explore', anchor: 'Movement and body' }]}
+          />
         </section>
         <section aria-label="Passives" className={card}>
           <SectionLabel>Passives</SectionLabel>
@@ -130,6 +134,12 @@ export function ExplorationScreen() {
       <section aria-label="Movement and body" className={card}>
         <SectionLabel>Movement and body</SectionLabel>
         <BodyNumbers sheet={sheet} effects={state.live.effects} />
+        <Related
+          items={[
+            { label: 'Athletics and Acrobatics', path: 'explore', anchor: 'Skills' },
+            { label: 'Falling table', path: 'reference', anchor: 'reference-tables' },
+          ]}
+        />
       </section>
       <Sheet
         open={casting !== null}

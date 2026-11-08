@@ -8,6 +8,7 @@ import {
 } from '../../engine/commands';
 import { materialCover } from '../../engine/calc/focus';
 import { useCommand } from '../commands/command-context';
+import { Related } from '../find/Related';
 import { CastFooter } from '../components/CastFooter';
 import { Field, inputClass } from '../components/fields';
 import { signed } from '../format';
@@ -94,6 +95,9 @@ export function SpellCastControls({
               >
                 {material.note}
               </p>
+            )}
+            {material.note && (
+              <Related items={[{ label: 'Focus and gear in Inventory', path: 'inventory' }]} />
             )}
             {automaticSelf && (
               <p className="text-xs text-text-muted">This spell's effect applies to you.</p>
