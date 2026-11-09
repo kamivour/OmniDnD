@@ -274,6 +274,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- Testing fix: Find now matches edit, fix, override and correct to Sheet, where the Edit button fixes numbers and build choices.
 - Testing fix: spell names in level-up picks and Manage spells open the spell card (hover or focus on desktop, tap on phones); Escape closes only the card.
 - Testing fix: skipped spell picks show as Pending buttons on Spells (cantrips under Cantrips, others under the first level) and open Manage; e2e added.
 - Testing fix: Parchment theme toned down (less glare, darker text colors); Theme options in Settings show Monitor, Moon and Sun icons.
