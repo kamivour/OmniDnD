@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M23 Tutorial (see PLAN.md). Tasks 1–4 done.
-**Next up:** M23 task 5 (gate), then M24, M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
+**Current milestone:** M24 Roles and shared campaigns (see PLAN.md). Not started.
+**Next up:** M24, then M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -46,7 +46,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M20 | Tools directory | 6 | done | Outside tools grouped by what you want to do, in our own words, with working links |
 | M21 | Find and Related links | 6 | done | One search box reaches any screen, rule, tool or character item in two steps or fewer |
 | M22 | Accounts, finished | 8 | done | Automatic sync, password reset, display name; see [PLAN.md](PLAN.md) |
-| M23 | Tutorial | 5 | doing | First visit on each device: guide with Skip and Replay; see [PLAN.md](PLAN.md) |
+| M23 | Tutorial | 5 | done | First visit on each device: guide with Skip and Replay; see [PLAN.md](PLAN.md) |
 | M24 | Roles and shared campaigns | 7 | todo | DM or player role; party sees every character live, each player changes only their own; see [PLAN.md](PLAN.md) |
 | M25 | DM party overview | 7 | todo | Read-only overview of the whole party for the DM; see [PLAN.md](PLAN.md) |
 
@@ -277,6 +277,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M23 gate: tests, typecheck, lint and e2e pass (every tour target exists at both widths); manual QA added. M23 done.
 - M23 task 4: Screen tips on first visit to Combat, Spells and Inventory, following the Show screen tips switch; Rest and level-up have no screen, so no tip; e2e added.
 - M23 task 3: Character tour (HUD, menus, To do, History and Undo, Sheet Edit) starts on first character visit; e2e added.
 - M23 task 2: Welcome tour on first campaign-list visit, Settings → Tutorial (tips switch, Replay, Reset tips), Find entry; e2e added; other specs skip the tour.

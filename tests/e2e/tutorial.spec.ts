@@ -1,4 +1,5 @@
 import { expect, test } from './fixtures';
+import { CHAPTERS } from '../../src/ui/tutorial/steps';
 
 test.describe('first visit', () => {
   test.use({ showTutorial: true });
@@ -121,4 +122,40 @@ test.describe('screen tips', () => {
     await page.waitForTimeout(800);
     await expect(page.getByTestId('tour')).toHaveCount(0);
   });
+});
+
+test.describe('targets', () => {
+  // These appear only when there is something to show; the card centers without them.
+  const OPTIONAL = new Set(['todo', 'combat-economy']);
+  const ROUTES: Record<string, string> = {
+    welcome: '/',
+    character: '/characters/the-fool',
+    combat: '/characters/the-fool/combat',
+    spells: '/characters/the-fool/spells',
+    inventory: '/characters/the-fool/inventory',
+  };
+
+  for (const chapter of CHAPTERS) {
+    test(`${chapter.id}: every highlighted element exists`, async ({ page }) => {
+      const route = ROUTES[chapter.id] ?? '/';
+      for (const step of chapter.steps) {
+        if (!step.target || OPTIONAL.has(step.target)) continue;
+        const where = step.target === 'sheet-edit' ? '/characters/the-fool/sheet' : route;
+        await page.goto(where);
+        await expect
+          .poll(
+            () =>
+              page.evaluate(
+                (id) =>
+                  [...document.querySelectorAll(`[data-tour="${id}"]`)].some(
+                    (node) => node.getClientRects().length > 0,
+                  ),
+                step.target,
+              ),
+            { message: `${chapter.id}/${step.id} → ${step.target}` },
+          )
+          .toBe(true);
+      }
+    });
+  }
 });

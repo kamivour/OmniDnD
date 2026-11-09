@@ -215,6 +215,16 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Use Forgot password, open the emailed link, and set a new password. Judge whether every step is clear.
 - [ ] Open Delete account. Judge whether the warning is clear enough.
 
+## Phase 7 — M23: Tutorial
+
+- [ ] Open the app in a fresh browser profile. Judge whether the Welcome tour is clear and short.
+- [ ] On your phone, judge whether each card sits clear of what it highlights and is easy to reach.
+- [ ] Skip on the first card, then reload. Judge whether it stays gone.
+- [ ] Open a character for the first time. Judge whether the five cards explain the menus well.
+- [ ] Visit Combat, Spells and Inventory for the first time. Judge whether each tip helps or gets in the way.
+- [ ] Turn off Show screen tips, then visit a new screen. Judge whether no tip appears.
+- [ ] Use Replay in Settings → Tutorial. Judge whether it starts at once.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

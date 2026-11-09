@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 15:35 — Tutorial finished
+
+- The tutorial is complete: Welcome, Your character, and tips for Combat, Spells and Inventory. Skip and Replay work everywhere.
+- Seven short checks are in the manual QA list. Please try the tour on your phone.
+- Next: roles and shared campaigns.
+- Checks pass.
+
 ## 2026-11-09 15:32 — Screen tips
 
 - The first time you open Combat, Spells or Inventory, a short tip points at the main controls. Turn tips off in Settings → Tutorial.
