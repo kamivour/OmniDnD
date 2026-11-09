@@ -6,7 +6,16 @@ export type { Page } from '@playwright/test';
 const LOOPBACK_HTTP = 'http://127.0.0.1:4173/**';
 
 /** Chapters the tutorial spec sets to be seen; every other spec starts with the tour already done. */
-const ALL_CHAPTERS = ['welcome', 'character', 'combat', 'spells', 'rest', 'inventory'];
+const ALL_CHAPTERS = [
+  'welcome',
+  'character',
+  'combat',
+  'spells',
+  'rest',
+  'inventory',
+  'party',
+  'party-dm',
+];
 
 export const test = base.extend<{
   forwardLoopbackHttp: void;

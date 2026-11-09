@@ -9,11 +9,13 @@ import { HpBar } from '../components/HpBar';
 import { useCampaign } from '../hooks/useCampaign';
 import { PlaceholderScreen } from '../screens/PlaceholderScreen';
 import { useTourAutostart } from '../tutorial/useTour';
+import { DmOverview } from './DmOverview';
 
 /** One card per party character: the numbers a table asks for. Read only. */
 export function PartyScreen() {
-  useTourAutostart('party');
   const campaign = useCampaign();
+  const isDm = campaign?.role === 'dm';
+  useTourAutostart(isDm ? 'party-dm' : 'party', !!campaign);
   const state = useStore(characterStore);
   const { members } = usePartyState();
   if (!campaign) return <PlaceholderScreen title="Campaign not found" />;
@@ -36,6 +38,8 @@ export function PartyScreen() {
       </header>
       {records.length === 0 ? (
         <p className="text-text-muted">No characters in the party yet.</p>
+      ) : isDm ? (
+        <DmOverview state={state} characterIds={records.map((record) => record.build.id)} />
       ) : (
         <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {records.map((record, index) => {

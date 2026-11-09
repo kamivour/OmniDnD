@@ -215,6 +215,14 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Use Forgot password, open the emailed link, and set a new password. Judge whether every step is clear.
 - [ ] Open Delete account. Judge whether the warning is clear enough.
 
+## Phase 7 — M25: DM party overview
+
+- [ ] As DM, open Party. Judge whether the default columns are what you want at the table.
+- [ ] Try the column picker. Judge whether any column you need is missing.
+- [ ] Sort by HP and AC. Judge whether the order feels right.
+- [ ] On a phone, judge whether the table is readable with the pinned name.
+- [ ] Change a player's HP and sync. Judge whether the DM row updates fast enough.
+
 ## Phase 7 — M24: Roles and shared campaigns
 
 Run the migration `supabase/migrations/20261109170000_party.sql` in Supabase first. Use a throwaway project for `npm run check:party`.

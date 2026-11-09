@@ -9,7 +9,7 @@ export interface TourStep {
 }
 
 export type ChapterId =
-  'welcome' | 'character' | 'combat' | 'spells' | 'rest' | 'inventory' | 'party';
+  'welcome' | 'character' | 'combat' | 'spells' | 'rest' | 'inventory' | 'party' | 'party-dm';
 
 export interface Chapter {
   id: ChapterId;
@@ -29,7 +29,9 @@ export interface TutorialProgress {
 export const EMPTY_PROGRESS: TutorialProgress = { done: [], tipsOn: true };
 
 const ProgressSchema = z.object({
-  done: z.array(z.enum(['welcome', 'character', 'combat', 'spells', 'rest', 'inventory', 'party'])),
+  done: z.array(
+    z.enum(['welcome', 'character', 'combat', 'spells', 'rest', 'inventory', 'party', 'party-dm']),
+  ),
   tipsOn: z.boolean(),
 });
 

@@ -185,6 +185,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D179 | 2026-11-09 | Characters played by the DM stay private and never go to the party | The DM sees players' characters; DM characters are not party members | Share on request |
 | D180 | 2026-11-09 | Other members' characters are read-only copies on your device, not part of your account backup. Losing membership makes the campaign private again and removes those copies; your own characters stay | Keeps each account's data its own | Keep the copies |
 | D181 | 2026-11-09 | The DM edits the shared campaign rules; while nobody is DM, the owner does. Players get the rules read-only | One source of truth for rules | Anyone edits |
+| D182 | 2026-11-09 | The DM sees the party as a sortable table with a column picker; the choice is kept on that device only. To do counts only required choices | Phone scrolls sideways with the name pinned | Cards only |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 

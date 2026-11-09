@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 23:25 — DM party overview
+
+- As DM, the Party view is now a table: HP, AC, passives, saves, slots, conditions, languages, death saves, Inspiration and To do. Tap a title to sort.
+- Pick the columns you want under Columns; the choice stays on your device. On a phone the table scrolls sideways with names pinned.
+- Players still see cards. Nobody can edit from this view.
+- Checks pass.
+
 ## 2026-11-09 23:14 — Shared campaigns done
 
 - Roles, invites, party sync, view-only characters and the Party view are finished. Signed-out use is unchanged.

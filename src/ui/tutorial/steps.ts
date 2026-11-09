@@ -168,4 +168,23 @@ export const CHAPTERS: readonly Chapter[] = [
       },
     ],
   },
+  {
+    id: 'party-dm',
+    title: 'DM overview tips',
+    tip: true,
+    steps: [
+      {
+        id: 'table',
+        target: 'party-table',
+        title: 'Your whole party',
+        body: 'One row per player character. Tap a column title to sort. Rows update after each player syncs; you only look, never edit.',
+      },
+      {
+        id: 'columns',
+        target: 'party-columns',
+        title: 'Pick columns',
+        body: 'Show saves, passive Insight, languages, death saves and more. Your choice is kept on this device.',
+      },
+    ],
+  },
 ];
