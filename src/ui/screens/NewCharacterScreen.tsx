@@ -7,7 +7,12 @@ import { ABILITIES, abilityModifier, type Ability } from '../../engine/calc/abil
 import { averageHpRoll, levelHp, maxHp, type HitDie } from '../../engine/calc/hp';
 import { addCharacter } from '../../engine/commands/management';
 import { createCharacter, POINT_BUY_COSTS, STANDARD_ARRAY } from '../../engine/creation';
-import { SCHEMA_VERSION, type Campaign, type ExportFile } from '../../engine/schema';
+import {
+  SCHEMA_VERSION,
+  type Campaign,
+  type CharacterBuild,
+  type ExportFile,
+} from '../../engine/schema';
 import { useCampaign } from '../hooks/useCampaign';
 import { useManagement } from '../commands/useManagement';
 import { Field, inputClass } from '../components/fields';
@@ -25,6 +30,9 @@ import { PlaceholderScreen } from './PlaceholderScreen';
 import { deviceStore, type CreationMode } from '../../state/device-settings';
 import { clearDraft, loadDraft, saveDraft } from './new-character-draft';
 import { LevelChoicesSection } from './LevelChoicesSection';
+import { PlayedByDialog } from '../roles/RoleDialogs';
+import { useAskRoles } from '../roles/useAskRoles';
+import { PLAYED_BY_OPTIONS } from '../campaignOptions';
 import { levelPickRows, STEPS, stepProblems, type StepId } from './new-character-steps';
 import { emptyPicks, picksToPayload, type LevelPicks } from '../level/level-up-model';
 
@@ -75,6 +83,9 @@ function NewCharacterForm({
   // A draft can outlive a change to the campaign's sources; drop ids the campaign no longer offers.
   const offered = (list: typeof available, value: string | undefined) =>
     value && list.some((entry) => entry.id === value) ? value : undefined;
+  const askRoles = useAskRoles();
+  const [playedBy, setPlayedBy] = useState<NonNullable<CharacterBuild['playedBy']>>('me');
+  const [playedByAsked, setPlayedByAsked] = useState(false);
   const [name, setName] = useState(draft?.name ?? '');
   const [raceId, setRaceId] = useState(offered(races, draft?.raceId) ?? '');
   const [classId, setClassId] = useState(
@@ -305,6 +316,7 @@ function NewCharacterForm({
             exportedAt: new Date().toISOString(),
             campaign,
             ...created,
+            build: { ...created.build, ...(playedBy === 'me' ? {} : { playedBy }) },
           };
           const result = run(addCharacter, { file }, () => {
             clearDraft(campaign.id);
@@ -325,6 +337,14 @@ function NewCharacterForm({
       }}
       className="mx-auto flex max-w-3xl flex-col gap-6"
     >
+      <PlayedByDialog
+        open={askRoles && !playedByAsked}
+        isDm={campaign.role === 'dm'}
+        onChoose={(chosen) => {
+          setPlayedBy(chosen);
+          setPlayedByAsked(true);
+        }}
+      />
       <header>
         <h1 className="font-display text-xl text-text">New character</h1>
         <p className="text-xs text-text-muted">
@@ -335,6 +355,16 @@ function NewCharacterForm({
           >
             Campaign settings
           </Link>
+        </p>
+        <p className="mt-2 text-sm text-text-muted">
+          Played by: {PLAYED_BY_OPTIONS.find((option) => option.value === playedBy)?.label}
+          <button
+            type="button"
+            onClick={() => setPlayedByAsked(false)}
+            className="ml-2 min-h-11 rounded-btn px-2 text-accent"
+          >
+            Change
+          </button>
         </p>
         {draft && (
           <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-text-muted">

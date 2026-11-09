@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 15:50 — Roles
+
+- A new campaign now asks if you are the DM or a player. A new character asks who plays it; the DM option shows only in a DM campaign.
+- Change the role later in Campaign Setup. Tick "Don't ask again" or use Settings → Tutorial to turn the questions off. Existing campaigns count as Player.
+- Next: the shared-campaign database.
+- Checks pass.
+
 ## 2026-11-09 15:35 — Tutorial finished
 
 - The tutorial is complete: Welcome, Your character, and tips for Combat, Spells and Inventory. Skip and Replay work everywhere.

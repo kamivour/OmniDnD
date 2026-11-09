@@ -2,7 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { seedFile } from '../../data/seed';
 import { computeSheet } from '../calc/sheet';
-import type { Campaign, CharacterBuild, ExportFile } from '../schema';
+import {
+  CampaignSchema,
+  CharacterBuildSchema,
+  type Campaign,
+  type CharacterBuild,
+  type ExportFile,
+} from '../schema';
 import { campaignMethodConflicts, updateCampaign, type CampaignChanges } from './campaigns';
 import { applyDamage } from './hp';
 import { levelUp } from './level';
@@ -58,6 +64,28 @@ function weakWorkspace(floor: Campaign['hpLevelFloor']): ManagementData {
   file.live.hp = 3;
   return workspace(file);
 }
+
+describe('campaign role', () => {
+  it('older campaigns without a role stay valid and a role can be set and undone', () => {
+    expect(CampaignSchema.parse(seedFile.campaign).role).toBeUndefined();
+    const initial = workspace();
+    const { next, event } = update(initial, { role: 'dm' });
+    expect(next.campaigns[campaignId]!.role).toBe('dm');
+    const undone = undoManagement(next, [event], registry, metadata('u1'));
+    if (undone.result !== 'ok') throw new Error(undone.reasons.join());
+    expect(undone.next.campaigns[campaignId]!.role).toBeUndefined();
+  });
+
+  it('refuses an unknown role and an unknown player', () => {
+    expect(CampaignSchema.safeParse({ ...seedFile.campaign, role: 'owner' }).success).toBe(false);
+    expect(CharacterBuildSchema.safeParse({ ...seedFile.build, playedBy: 'other' }).success).toBe(
+      true,
+    );
+    expect(CharacterBuildSchema.safeParse({ ...seedFile.build, playedBy: 'nobody' }).success).toBe(
+      false,
+    );
+  });
+});
 
 describe('updateCampaign', () => {
   it('logs a trimmed settings change and undoes it exactly', () => {

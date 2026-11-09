@@ -22,6 +22,12 @@ import { CustomItemSchema, FeatureDefensesSchema, ModifierSchema } from './refs'
 /** D44. `none`: a level adds roll + CON as is. `one`: each level adds at least 1. */
 export const HpLevelFloorSchema = z.enum(['none', 'one']);
 
+/** How the person using this device takes part in a campaign (M24). A missing role means player. */
+export const CampaignRoleSchema = z.enum(['dm', 'player']);
+
+/** Who plays a character: this person, another player (claimed when they join), or the DM (NPC). */
+export const PlayedBySchema = z.enum(['me', 'other', 'dm']);
+
 export const CampaignSchema = z.strictObject({
   id: z.string().min(1),
   schemaVersion: z.literal(SCHEMA_VERSION),
@@ -34,6 +40,7 @@ export const CampaignSchema = z.strictObject({
   sources: z.array(SourceSchema).min(1),
   /** Flags are off unless enabled; choice rules (encumbrance, rests) hold their option name. Read through optionalRules(). */
   optionalRules: z.record(z.string(), z.union([z.boolean(), z.string()])),
+  role: CampaignRoleSchema.optional(),
 });
 
 const HpEntrySchema = z.strictObject({
@@ -104,6 +111,7 @@ export const CharacterBuildSchema = z
     campaignId: z.string().min(1),
     name: z.string().min(1),
     portrait: z.string().optional(),
+    playedBy: PlayedBySchema.optional(),
     raceId: refId('race'),
     subraceId: refId('race').optional(),
     backgroundId: refId('background'),

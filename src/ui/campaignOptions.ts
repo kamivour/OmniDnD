@@ -5,7 +5,7 @@ import {
   type OptionalRules,
   type RestRule,
 } from '../engine/calc/campaign-rules';
-import type { Campaign, Source } from '../engine/schema';
+import type { Campaign, CharacterBuild, Source } from '../engine/schema';
 
 /** Campaign Setup choices (SPEC §5 Campaign Setup). Labels and one-line hints, own words. */
 
@@ -107,4 +107,19 @@ export const REST_OPTIONS: Option<RestRule>[] = [
   { value: 'standard', label: 'Standard', hint: 'Short rest 1 hour, long rest 8 hours.' },
   { value: 'gritty', label: 'Gritty realism', hint: 'Short rest 8 hours, long rest 7 days.' },
   { value: 'epic', label: 'Epic heroism', hint: 'Short rest 5 minutes, long rest 1 hour.' },
+];
+
+export const CAMPAIGN_ROLE_OPTIONS: Option<NonNullable<Campaign['role']>>[] = [
+  { value: 'dm', label: "I'm the DM", hint: 'Run the game and see the whole party.' },
+  { value: 'player', label: "I'm a player", hint: 'Play your own character.' },
+];
+
+export const PLAYED_BY_OPTIONS: Option<NonNullable<CharacterBuild['playedBy']>>[] = [
+  { value: 'me', label: 'Me', hint: 'I play this character.' },
+  {
+    value: 'other',
+    label: 'Another player',
+    hint: 'Build it now; they claim it when they join.',
+  },
+  { value: 'dm', label: 'The DM (NPC or sidekick)', hint: 'The DM plays it.' },
 ];

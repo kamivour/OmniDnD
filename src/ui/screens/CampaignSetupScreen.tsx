@@ -15,12 +15,15 @@ import { characterStore } from '../../state/character-store';
 import { useCampaign } from '../hooks/useCampaign';
 import { useManagement } from '../commands/useManagement';
 import { ChoiceGroup, Field, inputClass } from '../components/fields';
+import { CampaignRoleDialog } from '../roles/RoleDialogs';
+import { useAskRoles } from '../roles/useAskRoles';
 import { cx } from '../cx';
 import {
   ABILITY_OPTIONS,
   ENCUMBRANCE_OPTIONS,
   HP_FLOOR_OPTIONS,
   HP_OPTIONS,
+  CAMPAIGN_ROLE_OPTIONS,
   LEVELING_OPTIONS,
   REST_OPTIONS,
   RULE_FLAG_OPTIONS,
@@ -55,6 +58,9 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
         optionalRules: {},
       },
   );
+  const askRoles = useAskRoles();
+  const [role, setRole] = useState<NonNullable<Campaign['role']>>(base.role ?? 'player');
+  const [roleAsked, setRoleAsked] = useState(false);
   const [name, setName] = useState(base.name);
   const [leveling, setLeveling] = useState(base.leveling);
   const [hpMethod, setHpMethod] = useState(base.hpMethod);
@@ -75,6 +81,7 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
     hpLevelFloor,
     abilityMethod,
     sources,
+    ...(existing && role === (existing.role ?? 'player') ? {} : { role }),
     // Store only rules the player changed so an untouched save leaves the campaign as it was.
     optionalRules: {
       ...base.optionalRules,
@@ -99,6 +106,13 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
 
   return (
     <>
+      <CampaignRoleDialog
+        open={!existing && askRoles && !roleAsked}
+        onChoose={(chosen) => {
+          setRole(chosen);
+          setRoleAsked(true);
+        }}
+      />
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -141,6 +155,13 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
             </span>
           </Field>
         </div>
+        <ChoiceGroup
+          legend="Your role"
+          name="role"
+          options={CAMPAIGN_ROLE_OPTIONS}
+          value={role}
+          onChange={setRole}
+        />
         <ChoiceGroup
           legend="Leveling"
           name="leveling"

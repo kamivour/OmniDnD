@@ -10,7 +10,7 @@ export type CampaignChanges = Pick<
   Campaign,
   'name' | 'leveling' | 'hpMethod' | 'hpLevelFloor' | 'abilityMethod'
 > &
-  Partial<Pick<Campaign, 'sources' | 'optionalRules'>>;
+  Partial<Pick<Campaign, 'sources' | 'optionalRules' | 'role'>>;
 
 const CampaignChangesSchema = CampaignSchema.pick({
   name: true,
@@ -24,6 +24,7 @@ const CampaignChangesSchema = CampaignSchema.pick({
     .refine((sources) => sources.includes('PHB'), "The Player's Handbook stays enabled")
     .optional(),
   optionalRules: CampaignSchema.shape.optionalRules.optional(),
+  role: CampaignSchema.shape.role,
 });
 
 const UpdateCampaignSchema = z.strictObject({

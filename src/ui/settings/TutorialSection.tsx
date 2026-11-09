@@ -1,3 +1,5 @@
+import { useStore } from 'zustand';
+import { deviceStore } from '../../state/device-settings';
 import { CHAPTERS } from '../tutorial/steps';
 import { tour } from '../tutorial/store';
 import { useTourProgress } from '../tutorial/useTour';
@@ -8,6 +10,7 @@ const button =
 /** Replay the guided tour or turn off the short tips. Stored on this device only. */
 export function TutorialSection() {
   const progress = useTourProgress();
+  const askRoles = useStore(deviceStore, (state) => state.askRoles);
   return (
     <section
       aria-labelledby="settings-tutorial-title"
@@ -29,6 +32,15 @@ export function TutorialSection() {
       <p className="text-sm text-text-muted">
         Short tips appear the first time you open a screen. Stored on this device only.
       </p>
+      <label className="flex min-h-11 items-center gap-3 rounded-card border border-border bg-surface p-3">
+        <input
+          type="checkbox"
+          checked={askRoles}
+          onChange={(event) => deviceStore.getState().setAskRoles(event.target.checked)}
+          className="size-4 accent-(--omni-accent)"
+        />
+        Ask who plays (DM or player) when creating a campaign or character
+      </label>
       <div className="flex flex-wrap gap-2">
         {CHAPTERS.map((chapter) => (
           <button

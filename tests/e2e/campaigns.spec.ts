@@ -123,6 +123,7 @@ test('new campaign saves the 2014 defaults and standard-array creation validates
     id: createdCampaign.id,
     schemaVersion: 1,
     name: 'New Horizons',
+    role: 'player',
     ruleset: '5e-2014',
     leveling: 'xp',
     hpMethod: 'average',

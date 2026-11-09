@@ -12,9 +12,12 @@ export const test = base.extend<{
   forwardLoopbackHttp: void;
   defaultToOnePage: void;
   showTutorial: boolean;
+  showRoles: boolean;
   tutorialDone: void;
 }>({
   showTutorial: [false, { option: true }],
+  // The role questions block the New campaign and New character forms, so only the roles spec sees them.
+  showRoles: [false, { option: true }],
   // The tour covers the page and blocks clicks, so other specs start with it finished.
   tutorialDone: [
     async ({ context, showTutorial }, runTest) => {
@@ -35,20 +38,20 @@ export const test = base.extend<{
   // Most specs fill the whole New character form, so they start in One page mode.
   // The step-by-step spec switches mode on screen.
   defaultToOnePage: [
-    async ({ context }, runTest) => {
-      await context.addInitScript(() => {
+    async ({ context, showRoles }, runTest) => {
+      await context.addInitScript((askRoles) => {
         try {
           const saved = JSON.parse(localStorage.getItem('omnidnd.device') ?? '{}') as object;
           if (!('creationMode' in saved)) {
             localStorage.setItem(
               'omnidnd.device',
-              JSON.stringify({ ...saved, creationMode: 'page' }),
+              JSON.stringify({ ...saved, creationMode: 'page', askRoles }),
             );
           }
         } catch {
           // Storage unavailable: the app default applies.
         }
-      });
+      }, showRoles);
       await runTest();
     },
     { auto: true },

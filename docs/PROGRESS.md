@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M24 Roles and shared campaigns (see PLAN.md). Not started.
+**Current milestone:** M24 Roles and shared campaigns (see PLAN.md). Task 1 of 8 done.
 **Next up:** M24, then M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -277,6 +277,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M24 task 1: DM or player role asked for new campaigns, who-plays asked for new characters; Settings switch and Don't ask again; old campaigns count as Player; e2e added.
 - M23 gate: tests, typecheck, lint and e2e pass (every tour target exists at both widths); manual QA added. M23 done.
 - M23 task 4: Screen tips on first visit to Combat, Spells and Inventory, following the Show screen tips switch; Rest and level-up have no screen, so no tip; e2e added.
 - M23 task 3: Character tour (HUD, menus, To do, History and Undo, Sheet Edit) starts on first character visit; e2e added.
