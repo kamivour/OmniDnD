@@ -9,6 +9,7 @@ import { useCharacter } from '../hooks/useCharacter';
 import { useCharacterHistory } from '../log/useCharacterHistory';
 import { overridePath } from '../../engine/calc/value-overrides';
 import { OverrideMarker } from '../components/StatChip';
+import { SpellInfoName } from './SpellInfoName';
 import { SPELL_TYPE_ORDER, SPELL_TYPES, type SpellType } from '../spellTypes';
 
 type SelectionList = 'known' | 'prepared';
@@ -238,22 +239,20 @@ export function SpellManage({
         ) : (
           <ul className="divide-y divide-border rounded-card border border-border bg-surface">
             {visible.map((id) => (
-              <li key={id} className="min-w-0">
-                <label className="flex min-h-11 cursor-pointer items-start gap-3 p-3">
+              <li key={id} className="flex min-w-0 items-start gap-1 py-1 pr-3">
+                <label className="flex min-h-11 min-w-11 shrink-0 cursor-pointer items-center justify-center">
                   <input
                     type="checkbox"
                     aria-label={`${list === 'prepared' ? 'Prepare' : 'Know'} ${spellName(id)}`}
                     checked={details?.selection[list].includes(id) ?? false}
                     onChange={(event) => toggle(list, id, event.target.checked)}
-                    className="mt-1 size-4 shrink-0 accent-(--omni-accent)"
+                    className="size-4 accent-(--omni-accent)"
                   />
-                  <span className="min-w-0">
-                    <span className="block break-words text-sm text-text">
-                      {list === 'prepared' ? 'Prepare' : 'Know'} {spellName(id)}
-                    </span>
-                    <span className="block text-xs text-text-muted">{spellMeta(id)}</span>
-                  </span>
                 </label>
+                <span className="flex min-w-0 flex-col">
+                  <SpellInfoName spellId={id} registry={registry} className="text-sm text-text" />
+                  <span className="-mt-2 block pb-1 text-xs text-text-muted">{spellMeta(id)}</span>
+                </span>
               </li>
             ))}
           </ul>

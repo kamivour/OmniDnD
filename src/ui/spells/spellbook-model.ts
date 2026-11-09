@@ -75,27 +75,8 @@ export function spellbookModel(
       if (selected.has(key)) continue;
       selected.add(key);
       const def = registry.get('spell', id);
-      const tags = [...(state.build.spellTags?.[id] ?? def.tags)];
-      if (tags.length === 0) tags.push('utility');
       const spell: SpellView = {
-        id: def.id,
-        name: def.name,
-        level: def.level,
-        school: def.school[0]!.toUpperCase() + def.school.slice(1),
-        cost: castingCost(def),
-        range: def.range,
-        ...(def.save === undefined ? {} : { save: def.save }),
-        ...(def.attack === undefined ? {} : { attack: def.attack }),
-        duration: def.duration.text,
-        concentration: def.duration.concentration,
-        ritual: def.ritual,
-        components: components(def),
-        source: def.source,
-        lines: spellLines(def),
-        // Imported SRD entries may not have an individual link. Keep the fallback in 2014.
-        url: def.url ?? BASIC_RULES_2014,
-        type: tags[0]!,
-        tags,
+        ...spellView(def, state.build.spellTags?.[id]),
         ...(derived?.saveDc.override ? { dcOverride: derived.saveDc.override } : {}),
         ...(derived?.attack.override ? { attackOverride: derived.attack.override } : {}),
       };
@@ -120,6 +101,32 @@ export function spellbookModel(
     ...new Set([...entries.map(({ spell }) => spell.level), ...slots.map((s) => s.level)]),
   ].sort((a, b) => a - b);
   return { entries, slots, levels, classes, unsupportedClassIds: [...unsupportedClassIds].sort() };
+}
+
+/** Card view of one spell definition, without character-specific casting stats. */
+export function spellView(def: SpellDef, tagOverride?: readonly SpellView['type'][]): SpellView {
+  const tags = [...(tagOverride ?? def.tags)];
+  if (tags.length === 0) tags.push('utility');
+  return {
+    id: def.id,
+    name: def.name,
+    level: def.level,
+    school: def.school[0]!.toUpperCase() + def.school.slice(1),
+    cost: castingCost(def),
+    range: def.range,
+    ...(def.save === undefined ? {} : { save: def.save }),
+    ...(def.attack === undefined ? {} : { attack: def.attack }),
+    duration: def.duration.text,
+    concentration: def.duration.concentration,
+    ritual: def.ritual,
+    components: components(def),
+    source: def.source,
+    lines: spellLines(def),
+    // Imported SRD entries may not have an individual link. Keep the fallback in 2014.
+    url: def.url ?? BASIC_RULES_2014,
+    type: tags[0]!,
+    tags,
+  };
 }
 
 function castingCost({ casting }: SpellDef): Cost {

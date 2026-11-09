@@ -210,7 +210,8 @@ test('a blank bard shows derived stats and slots without inheriting the Fool spe
   await expect(main(page)).toContainText('Attack +2');
   await expect(main(page)).toContainText('Cantrips 0 / 2');
   await expect(main(page)).toContainText('Known 0 / 4');
-  await expect(main(page).getByRole('heading', { name: 'Cantrips', exact: true })).toHaveCount(0);
+  // Cantrips shows only because two cantrip picks are still pending.
+  await expect(main(page).getByRole('button', { name: /^Pending Bard cantrips/ })).toBeVisible();
   await expect(main(page).getByRole('heading', { name: 'Level 1', exact: true })).toBeVisible();
   await expect(main(page).getByRole('heading', { name: 'Level 2', exact: true })).toHaveCount(0);
   await expect(main(page).getByRole('button', { name: /^Healing Word/ })).toHaveCount(0);

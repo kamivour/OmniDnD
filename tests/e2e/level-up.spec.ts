@@ -632,6 +632,7 @@ test('Manual mode applies an alternate roll without a warning and zero HP and de
 
 test('The Fool takes an ability score improvement and new spells in one undoable level', async ({
   page,
+  isMobile,
 }) => {
   const file = foolFile('level-up-fool-choices');
   await importFile(page, file);
@@ -644,6 +645,21 @@ test('The Fool takes an ability score improvement and new spells in one undoable
   await asi.getByRole('radio', { name: '+2 to one ability' }).check();
   await asi.getByLabel('Ability', { exact: true }).selectOption('DEX');
   const cantrips = form(page).getByRole('group', { name: /^Cantrips \(0 \/ 1\)/ });
+  // A spell name shows its card before picking: popover on desktop, sheet on phones.
+  const about = cantrips.getByRole('button', { name: /^About / }).first();
+  const spellName = (await about.textContent())!.trim();
+  await about.click();
+  const card = isMobile
+    ? page.getByRole('dialog', { name: spellName, exact: true })
+    : page.getByRole('tooltip');
+  await expect(card).toContainText(spellName);
+  await noOverflow(page);
+  await page.screenshot({
+    path: test.info().outputPath(`level-up-spell-card-${isMobile ? 375 : 1440}.png`),
+  });
+  await page.keyboard.press('Escape');
+  await expect(card).toHaveCount(0);
+  await expect(cantrips.getByRole('checkbox', { checked: true })).toHaveCount(0);
   await cantrips.getByRole('checkbox').first().check();
   const spells = form(page).getByRole('group', { name: /^Spells known/ });
   await spells.getByRole('checkbox').first().check();

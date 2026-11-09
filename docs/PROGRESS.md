@@ -274,6 +274,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- Testing fix: spell names in level-up picks and Manage spells open the spell card (hover or focus on desktop, tap on phones); Escape closes only the card.
 - Testing fix: skipped spell picks show as Pending buttons on Spells (cantrips under Cantrips, others under the first level) and open Manage; e2e added.
 - Testing fix: Parchment theme toned down (less glare, darker text colors); Theme options in Settings show Monitor, Moon and Sun icons.
 - M21 gate: Jump, Print, Shatter, Long rest and a map tool each reachable from the Dashboard in two steps; manual QA added. M21 done.

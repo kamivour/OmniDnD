@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import {
   FloatingPortal,
   autoUpdate,
@@ -87,6 +87,20 @@ export function Preview({ title, content, sheetFooter, onPin, children }: Previe
     duration: reduced ? 0 : 120,
     initial: { opacity: 0, transform: 'scale(0.97)' },
   });
+
+  // Escape closes the popover first. A window capture listener runs before Radix Dialog's
+  // document listener, so a popover inside a sheet closes without closing the sheet too.
+  const popoverOpen = popover && open;
+  useEffect(() => {
+    if (!popoverOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      event.stopPropagation();
+      context.onOpenChange(false, event, 'escape-key');
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+  }, [popoverOpen, context]);
 
   const onClick = () => {
     if (sidebar && onPin) {

@@ -522,6 +522,22 @@ test('skipped spell picks wait under their section and open Manage to finish', a
 
   await cantrips.getByRole('button', { name: /^Pending Bard cantrips/ }).click();
   await expect(manage(page)).toBeVisible();
+
+  // Spell names in the list show the spell card before picking.
+  await manage(page).getByRole('searchbox', { name: 'Search available spells' }).fill('Mage Hand');
+  await manage(page).getByRole('button', { name: 'About Mage Hand', exact: true }).click();
+  const card = isMobile
+    ? page.getByRole('dialog', { name: 'Mage Hand', exact: true })
+    : page.getByRole('tooltip');
+  await expect(card).toContainText('Mage Hand');
+  if (isMobile) {
+    // Wait until the card sheet holds focus, so Escape reaches it and not Manage.
+    await expect.poll(() => card.evaluate((el) => el.contains(document.activeElement))).toBe(true);
+  }
+  await page.keyboard.press('Escape');
+  await expect(card).toHaveCount(0);
+  await expect(manage(page)).toBeVisible();
+
   for (const name of ['Mage Hand', 'Vicious Mockery']) {
     await manage(page).getByRole('searchbox', { name: 'Search available spells' }).fill(name);
     await manage(page)

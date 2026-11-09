@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 14:27 — Read a spell before picking it
+
+- When you level up or use Manage spells, hover a spell name (desktop) or tap it (phone) to read its card before you tick it.
+- Ticking still uses the checkbox beside the name, so reading a spell never picks it.
+- Escape closes just the spell card and leaves the pick list open.
+- Checks pass.
+
 ## 2026-11-09 14:03 — Pending spell picks on Spells
 
 - If you skip a cantrip or spell pick at level up, a Pending button now waits on the Spells screen: cantrips under Cantrips, other spells under Level 1.

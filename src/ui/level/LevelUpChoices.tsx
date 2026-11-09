@@ -4,6 +4,7 @@ import type { Registry } from '../../engine/registry';
 import type { FeatureDef } from '../../engine/schema';
 import { SKILLS } from '../../engine/rules2014';
 import { Field, inputClass } from '../components/fields';
+import { SpellInfoName } from '../spells/SpellInfoName';
 import { optionName, type LevelPicks, type NewClassOption } from './level-up-model';
 
 interface PickProps {
@@ -270,18 +271,21 @@ function SpellChecks({
         {ids.map((spell) => {
           const on = chosen.includes(spell);
           return (
-            <label key={spell} className={radio}>
-              <input
-                type="checkbox"
-                checked={on}
-                disabled={!on && chosen.length >= limit}
-                onChange={() =>
-                  onChange(on ? chosen.filter((entry) => entry !== spell) : [...chosen, spell])
-                }
-                className="size-4 accent-(--omni-accent)"
-              />
-              {optionName(registry, spell)}
-            </label>
+            <div key={spell} className="flex min-h-11 items-center gap-1 text-sm text-text">
+              <label className="flex min-h-11 min-w-11 shrink-0 cursor-pointer items-center justify-center">
+                <input
+                  type="checkbox"
+                  aria-label={optionName(registry, spell)}
+                  checked={on}
+                  disabled={!on && chosen.length >= limit}
+                  onChange={() =>
+                    onChange(on ? chosen.filter((entry) => entry !== spell) : [...chosen, spell])
+                  }
+                  className="size-4 accent-(--omni-accent)"
+                />
+              </label>
+              <SpellInfoName spellId={spell} registry={registry} />
+            </div>
           );
         })}
       </div>
@@ -310,7 +314,8 @@ export function SpellPicks({
     <div className={group}>
       <p className="text-sm font-semibold text-text">New spells</p>
       <p className="text-sm text-text-muted">
-        Pick now or add them later on the Spells screen. Prepared spells are set there too.
+        Pick now or add them later on the Spells screen. Prepared spells are set there too. Tap or
+        hover a spell name to read it.
       </p>
       {gains.cantrips > 0 && (
         <SpellChecks
