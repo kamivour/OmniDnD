@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 23:10 — Party view
+
+- Shared campaigns now have a Party link on their card. It shows one card per player character: HP, AC, passive Perception, spell save DC, slots left, concentration and conditions.
+- Tap a card to open that character, view only. Cards update after each player syncs.
+- A short Party tips tour runs the first time you open the view.
+- Checks pass.
+
 ## 2026-11-09 23:08 — View-only party characters
 
 - Another player's character opens with a "View only" bar. Nothing on it changes the character; "Duplicate to play" makes your own copy to play with.

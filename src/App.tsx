@@ -23,6 +23,7 @@ import { SpellbookScreen } from './ui/screens/SpellbookScreen';
 import { ReferenceScreen } from './ui/screens/ReferenceScreen';
 import { CreditsScreen } from './ui/screens/CreditsScreen';
 import { ToolsScreen } from './ui/screens/ToolsScreen';
+import { PartyScreen } from './ui/party/PartyScreen';
 import { JoinScreen } from './ui/screens/JoinScreen';
 import { ResetPasswordScreen } from './ui/screens/ResetPasswordScreen';
 import { SettingsScreen } from './ui/screens/SettingsScreen';
@@ -64,6 +65,7 @@ export function App() {
               <Route index element={<CampaignsScreen />} />
               <Route path="campaigns/new" element={<CampaignSetupScreen />} />
               <Route path="campaigns/:campaignId/settings" element={<CampaignSetupScreen />} />
+              <Route path="campaigns/:campaignId/party" element={<PartyScreen />} />
               <Route path="campaigns/:campaignId/characters/new" element={<NewCharacterScreen />} />
               <Route path="reference" element={<ReferenceScreen />} />
               <Route path="settings" element={<SettingsScreen />} />

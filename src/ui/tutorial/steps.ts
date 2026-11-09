@@ -149,4 +149,23 @@ export const CHAPTERS: readonly Chapter[] = [
       },
     ],
   },
+  {
+    id: 'party',
+    title: 'Party tips',
+    tip: true,
+    steps: [
+      {
+        id: 'header',
+        target: 'party-header',
+        title: 'Your party',
+        body: 'Every player character in this campaign, with the numbers a table asks for. Anything a player changes shows here after their next sync.',
+      },
+      {
+        id: 'card',
+        target: 'party-card',
+        title: 'View only',
+        body: 'Open a card to look at the full sheet. Only its player changes it; use Duplicate to play with a copy.',
+      },
+    ],
+  },
 ];

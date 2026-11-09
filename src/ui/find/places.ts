@@ -160,8 +160,8 @@ export const PLACES: readonly FindEntry[] = [
     id: 'go.party-account',
     group: 'go',
     title: 'Share a campaign',
-    detail: 'Sign in, then use Campaign settings',
-    synonyms: ['party', 'invite', 'join', 'share', 'friends', 'dm', 'players', 'sign in'],
+    detail: 'Sign in, then Campaign settings. Party view is on the campaign card',
+    synonyms: ['party', 'party view', 'invite', 'join', 'share', 'friends', 'dm', 'players', 'sign in'],
     target: { kind: 'go', path: 'settings', anchor: 'settings-account' },
   },
   {

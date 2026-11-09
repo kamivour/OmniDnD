@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { Link } from 'react-router';
-import { Copy, Download, Plus, Settings2, Trash2, Undo2, Upload } from 'lucide-react';
+import { Copy, Download, Plus, Settings2, Trash2, Undo2, Upload, Users } from 'lucide-react';
 import { registry } from '../../data/registry';
 import { computeSheet } from '../../engine/calc/sheet';
 import { deleteCharacter, duplicateCharacter } from '../../engine/commands/management';
@@ -224,6 +224,15 @@ function CampaignCard({
           </h2>
           <p className="text-xs text-text-muted">{rulesSummary(campaign)}</p>
         </div>
+        {campaign.shared && (
+          <Link
+            to={`/campaigns/${path(campaign.id)}/party`}
+            className="inline-flex min-h-11 items-center gap-2 rounded-btn px-2 text-sm text-accent"
+          >
+            <Users size={16} aria-hidden />
+            Party
+          </Link>
+        )}
         <Link
           to={`/campaigns/${path(campaign.id)}/settings`}
           className="inline-flex min-h-11 items-center gap-2 rounded-btn px-2 text-sm text-accent"
