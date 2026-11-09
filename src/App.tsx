@@ -26,6 +26,7 @@ import { ToolsScreen } from './ui/screens/ToolsScreen';
 import { ResetPasswordScreen } from './ui/screens/ResetPasswordScreen';
 import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { MotionPreference } from './ui/components/MotionPreference';
+import { TourHost } from './ui/tutorial/TourHost';
 import { StorageGate } from './ui/storage/StorageGate';
 
 const SyncHost = syncConfig ? lazy(() => import('./ui/settings/SyncHost')) : null;
@@ -56,6 +57,7 @@ export function App() {
               <SyncHost config={syncConfig} />
             </Suspense>
           )}
+          <TourHost />
           <Routes>
             <Route element={<HubFrame />}>
               <Route index element={<CampaignsScreen />} />

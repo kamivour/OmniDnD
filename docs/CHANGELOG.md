@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 15:45 — Tour engine
+
+- The spotlight card for the tutorial is built: it dims the page, highlights one element, and has Back, Next and Skip tutorial.
+- No tour text yet, so nothing shows. Next: the Welcome tour and Settings → Tutorial.
+- Checks pass.
+
 ## 2026-11-09 15:30 — Accounts finished
 
 - Accounts are complete: sign in, automatic sync, merging, password help, display name and delete account.
