@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** None scheduled. M21 done.
-**Next up:** Nothing scheduled. Run the M17 to M21 manual QA lists when you can, then pick from the backlog. Going online with accounts: follow [HOSTING.md](HOSTING.md) when ready.
+**Next up:** Testing phase on the live site (https://omnidnd.netlify.app): run the MA (accounts) list first, then the M17 to M21 lists. No new features until testing is done.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -264,7 +264,8 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 
 ## Backlog (not scheduled)
 
-- Going online with accounts: user-led, follow [HOSTING.md](HOSTING.md) (Q1, Q28)
+- Done 2026-11-09: site live on Netlify with Supabase accounts (HOSTING.md)
+- Automatic sync: on open or focus, a few seconds after changes, and when back online; conflicts show a calm notice; Sync now stays (after testing, revisits D124)
 - Later: shared campaign view for a party or DM (after accounts)
 - Party view (several characters side by side)
 - Later: spell import from user-pasted text
