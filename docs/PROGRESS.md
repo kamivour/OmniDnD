@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M22 Accounts, finished (see PLAN.md). Tasks 1–5 done.
-**Next up:** M22 task 6 (sync status chip), then 7–8; then M23 Tutorial, M24, M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
+**Current milestone:** M22 Accounts, finished (see PLAN.md). Tasks 1–6 done.
+**Next up:** M22 task 7 (automatic merge), then 8; then M23 Tutorial, M24, M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -277,6 +277,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M22 task 6: top-bar sync chip (Synced, Syncing, Offline, Sync problem, Needs your choice) on hub and character screens; opens Settings.
 - M22 task 5: automatic sync on sign-in, open, tab return, network return and after edits, with retries; one tab syncs; D176 replaces D124.
 - M22 task 4: Delete account in Settings → Account (type DELETE); a database function removes cloud data, device copies stay.
 - M22 task 3: Forgot password and Change password in Settings → Account, plus a /reset-password page for the emailed link.

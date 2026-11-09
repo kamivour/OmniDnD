@@ -6,6 +6,8 @@ import { SectionLabel } from '../components/SectionLabel';
 import { Sheet } from '../components/Sheet';
 import { useCharacter } from '../hooks/useCharacter';
 import { FindLauncher } from '../find/FindLauncher';
+import { useCharacterBase } from '../hooks/useCharacterBase';
+import { SyncChipSlot } from '../settings/SyncChipSlot';
 import { useDetail } from '../layout/detail-context';
 import { useRest } from '../rest/rest-context';
 import { StorageStatus } from '../storage/StorageStatus';
@@ -16,6 +18,7 @@ import { useCharacterHistory } from './useCharacterHistory';
 export function CharacterToolbar() {
   const { activity, target, undo, pending, confirmation } = useCharacterHistory();
   const details = useDetail();
+  const base = useCharacterBase();
   const { openShortRest, openLongRest } = useRest();
   const [open, setOpen] = useState(false);
   const opener = useRef<HTMLButtonElement>(null);
@@ -99,6 +102,7 @@ export function CharacterToolbar() {
         Long Rest
       </button>
       {undoButton()}
+      <SyncChipSlot to={`${base}/settings`} />
       <FindLauncher withCharacter />
       <button
         id="detail-toggle"
