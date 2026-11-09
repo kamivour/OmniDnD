@@ -46,9 +46,9 @@ Build for multiple campaigns and characters, including friends' future character
 | M20 | Tools directory | 6 | done | Outside tools grouped by what you want to do, in our own words, with working links |
 | M21 | Find and Related links | 6 | done | One search box reaches any screen, rule, tool or character item in two steps or fewer |
 | M22 | Accounts, finished | 7 | todo | Automatic sync, password reset, display name; see [PLAN.md](PLAN.md) |
-| M23 | Tutorial | 7 | todo | First-run guide with Skip and Replay; see [PLAN.md](PLAN.md) |
-| M24 | Roles and shared campaigns | 7 | todo | DM or player role; party sees and fixes each other's characters, with names on changes; see [PLAN.md](PLAN.md) |
-| M25 | DM tools | 7 | todo | Party overview, party rests, time and rewards; see [PLAN.md](PLAN.md) |
+| M23 | Tutorial | 7 | todo | First visit on each device: guide with Skip and Replay; see [PLAN.md](PLAN.md) |
+| M24 | Roles and shared campaigns | 7 | todo | DM or player role; party sees every character live, each player changes only their own; see [PLAN.md](PLAN.md) |
+| M25 | DM party overview | 7 | todo | Read-only overview of the whole party for the DM; see [PLAN.md](PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -270,13 +270,14 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 
 - Done 2026-11-09: site live on Netlify with Supabase accounts (HOSTING.md)
 - Moved to PLAN.md: automatic sync (M22), shared campaign for a party or DM (M24), party view (M24)
-- Later: shared encounter tracker run by the DM (after M25)
+- Later DM ideas (after M25): map import, monsters and NPCs, rewards, DM level-ups, ambient sounds, party rests and clock, notes and handouts, shared encounter tracker
 - Later: spell import from user-pasted text
 - Later: session recap generated from the event log
 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- Plan: user answered Q32–Q38 (D168–D174); party characters are view only with Duplicate; M25 is the overview only; Q39 open.
 - Plan: M22 accounts finished, M23 tutorial, M24 roles and shared campaigns, M25 DM tools written in PLAN.md; open questions Q32–Q38.
 - Testing fix: Find now matches edit, fix, override and correct to Sheet, where the Edit button fixes numbers and build choices.
 - Testing fix: spell names in level-up picks and Manage spells open the spell card (hover or focus on desktop, tap on phones); Escape closes only the card.

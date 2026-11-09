@@ -171,6 +171,13 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D165 | 2026-11-09 | Free only on the Tools page keeps tools with a free tier and hides paid-only tools. Other game systems are listed but marked not supported | A freemium tool can still cost money for the best features |
 | D166 | 2026-11-09 | Find and Related links only suggest. Tool results open in a new tab, and Long rest opens its sheet instead of resting at once | You stay in control; nothing changes your character from a search |
 | D167 | 2026-11-09 | Skipped spell picks also show as Pending buttons on Spells, under Cantrips or the first spell level, and hide while searching or filtering | Players find the open pick where they look for spells, not only on the To do list |
+| D168 | 2026-11-09 | The tutorial shows on the first visit on each device, for guests and accounts alike; its progress stays on the device and does not sync (answers Q32) | Simple, and fits D121: device state stays on the device |
+| D169 | 2026-11-09 | In a shared campaign, players see every party character but can change only their own; the most they can do with another's is duplicate it into their own space (answers Q33) | Each player owns their sheet; nobody's character changes behind their back |
+| D170 | 2026-11-09 | When more than one person can change a character, Undo reverses your own latest change, warns if someone changed the same values after you, and blocks if it no longer fits (answers Q34) | Undo stays yours and never silently breaks someone else's change |
+| D171 | 2026-11-09 | A shared campaign has exactly one DM for now (answers Q35) | Keeps permissions simple; co-DMs can come later |
+| D172 | 2026-11-09 | When a player leaves a shared campaign, they keep a private copy of their character; the party copy stays, marked "left" and view only (answers Q36) | Nobody loses a character, and the party keeps its record |
+| D173 | 2026-11-09 | The first DM milestone is the party overview only; map import, monster and NPC management, rewards, DM level-ups, ambient sounds and other DM tools wait in the backlog (answers Q37) | Ship the useful core first |
+| D174 | 2026-11-09 | No "?" help button in the top bar; the tutorial is replayed from Settings → Tutorial or Find (answers Q38) | Keeps the top bar uncluttered |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 
@@ -204,13 +211,14 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q27 | Should attunement controls complete focused rests or automatically end bonds after death, prerequisite loss or separation? | M9 | Record verified bonds explicitly; use shared rest/clock controls and review contact, prerequisites, curses and ending conditions at the table | User / DM |
 | Q28 | Which hosting and sync provider for accounts? | MA | Supabase (auth + Postgres with row-level security); the app keeps working offline and without an account | User |
 | Q30 | Should Tasha sidekicks be a campaign option, and should Artificer cannon and Steel Defender templates ship with M14? | M12 / M14 | Sidekicks are plain custom companions with type "sidekick"; no campaign option; Artificer templates wait for M14 | User |
-| Q32 | Should guests see the tutorial, or only new accounts? | M23 | Guests too, on their first visit | User |
-| Q33 | May other players change a party member's build, or only live state? | M24 | Both while the campaign's "Party can fix each other's characters" is on; the DM always can | User |
-| Q34 | How does Undo work when several people edit one character? | M24 | Undo your own latest change; warn when someone changed the same values after you; block if it no longer fits | User |
-| Q35 | How many DMs can a campaign have? | M24 | Any number of co-DMs, chosen by the owner | User |
-| Q36 | What happens to a character when its player leaves a shared campaign? | M24 | The player keeps a private copy; the party copy stays, marked "left" and view only | User |
-| Q37 | Which DM tools come first? | M25 | Party overview, party rest and clock, rewards | User |
-| Q38 | Should there be a "?" help button in the top bar? | M23 | No; Settings → Tutorial and Find cover it | User |
+| Q32 | ~~Should guests see the tutorial, or only new accounts?~~ Answered → D168 | — | — | — |
+| Q33 | ~~May other players change a party member's build, or only live state?~~ Answered → D169 | — | — | — |
+| Q34 | ~~How does Undo work when several people edit one character?~~ Answered → D170 | — | — | — |
+| Q35 | ~~How many DMs can a campaign have?~~ Answered → D171 | — | — | — |
+| Q36 | ~~What happens to a character when its player leaves a shared campaign?~~ Answered → D172 | — | — | — |
+| Q37 | ~~Which DM tools come first?~~ Answered → D173 | — | — | — |
+| Q38 | ~~Should there be a "?" help button in the top bar?~~ Answered → D174 | — | — | — |
+| Q39 | Can the DM change players' characters in a shared campaign? | M24 | View only, like other players; the DM can duplicate, and the player makes the fix | User |
 
 ## How to add an entry
 

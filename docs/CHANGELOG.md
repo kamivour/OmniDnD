@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 14:47 — Plan updated with your answers
+
+- Tutorial shows on the first visit on each device. Party characters are view only; others can only duplicate them. One DM per campaign.
+- The first DM milestone is just the party overview; other DM ideas wait in the backlog.
+- One new question (Q39): can the DM change players' characters? Until you answer, the DM can only view them, like everyone else.
+
 ## 2026-11-09 14:34 — Plan for accounts, party play and tutorial
 
 - New plan in docs/PLAN.md: M22 finishes accounts (automatic sync, password reset, display name), M23 adds a skippable tutorial, M24 adds DM or player roles and shared campaigns, M25 adds DM tools.
