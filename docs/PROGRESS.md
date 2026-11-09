@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M22 Accounts, finished (see PLAN.md). Tasks 1–2 done.
-**Next up:** M22 task 3 (password reset), then 4–8; then M23 Tutorial, M24, M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
+**Current milestone:** M22 Accounts, finished (see PLAN.md). Tasks 1–3 done.
+**Next up:** M22 task 4 (delete account), then 5–8; then M23 Tutorial, M24, M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -277,6 +277,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M22 task 3: Forgot password and Change password in Settings → Account, plus a /reset-password page for the emailed link.
 - M22 tasks 1–2: profiles table with owner-only access, and a display name field in Settings → Account; unit tests added.
 - Plan: Q39 answered (D175); the DM cannot change players' characters either. No open plan questions.
 - Plan: user answered Q32–Q38 (D168–D174); party characters are view only with Duplicate; M25 is the overview only; Q39 open.

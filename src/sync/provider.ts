@@ -46,6 +46,10 @@ export interface SyncProvider {
   /** The signed-in account's display name, or null until one is chosen. */
   getDisplayName(): Promise<string | null>;
   setDisplayName(name: string): Promise<void>;
+  /** Email a reset link that opens `redirectTo`. Never reveals whether the email has an account. */
+  requestPasswordReset(email: string, redirectTo: string): Promise<void>;
+  /** Set a new password for the signed-in account (also used after a reset link). */
+  updatePassword(password: string): Promise<void>;
   /** Every row the signed-in account owns, deletion markers included. */
   pull(): Promise<RemoteEntity[]>;
   /**

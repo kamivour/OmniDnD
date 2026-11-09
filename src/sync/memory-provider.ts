@@ -17,6 +17,8 @@ export class MemoryCloud {
   readonly rows = new Map<string, RemoteEntity>();
   /** Display names by account id. */
   readonly names = new Map<string, string>();
+  /** Emails that asked for a password reset link. */
+  readonly resetRequests: string[] = [];
 
   key(accountId: string, kind: string, entityId: string) {
     return `${accountId}|${kind}|${entityId}`;
@@ -68,6 +70,20 @@ export class MemoryProvider implements SyncProvider {
     if (trimmed.length < 1 || trimmed.length > 40)
       return Promise.reject(new Error('Use 1 to 40 characters.'));
     this.cloud.names.set(this.require().id, trimmed);
+    return Promise.resolve();
+  }
+
+  requestPasswordReset(email: string, redirectTo?: string) {
+    void redirectTo;
+    this.cloud.resetRequests.push(email.trim().toLowerCase());
+    return Promise.resolve();
+  }
+
+  updatePassword(password: string) {
+    if (password.length < 8) return Promise.reject(new Error('Use at least 8 characters.'));
+    const account = this.require();
+    const saved = this.cloud.accounts.get(account.email);
+    if (saved) saved.password = password;
     return Promise.resolve();
   }
 

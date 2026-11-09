@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 15:02 — Password help
+
+- Settings → Account has Forgot password (emails a reset link) and Change password for signed-in accounts.
+- In Supabase, add your site address plus /reset-password under Redirect URLs (see HOSTING.md) or the email link will not open the app.
+- Next: delete account.
+- Checks pass.
+
 ## 2026-11-09 14:56 — Display name for accounts
 
 - Signed-in accounts can set a display name in Settings → Account. Your party will see it later; your email is never shown.

@@ -135,7 +135,17 @@ export const PLACES: readonly FindEntry[] = [
     group: 'go',
     title: 'Settings',
     detail: 'Theme, hints, data',
-    synonyms: ['preferences', 'options', 'theme', 'backup', 'export', 'import'],
+    synonyms: [
+      'preferences',
+      'options',
+      'theme',
+      'backup',
+      'export',
+      'import',
+      'account',
+      'password',
+      'forgot password',
+    ],
     target: { kind: 'go', path: 'settings' },
   },
   {

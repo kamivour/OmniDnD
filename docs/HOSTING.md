@@ -37,7 +37,7 @@ The app is a static site: upload `dist/`. It currently expects to live at the si
 
 ## 5. Tell Supabase where the site lives
 
-In **Authentication → URL Configuration**, set **Site URL** to your published address so confirmation emails link back to the app.
+In **Authentication → URL Configuration**, set **Site URL** to your published address so confirmation emails link back to the app. Under **Redirect URLs**, add `https://<your address>/reset-password` (and `http://localhost:5173/reset-password` for local work) so password reset emails open the app.
 
 ## Checking it works
 

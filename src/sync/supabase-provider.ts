@@ -80,6 +80,17 @@ export class SupabaseProvider implements SyncProvider {
     if (error) throw new Error(error.message);
   }
 
+  async requestPasswordReset(email: string, redirectTo: string) {
+    const { error } = await this.client.auth.resetPasswordForEmail(email, { redirectTo });
+    if (error) throw new Error(error.message);
+  }
+
+  async updatePassword(password: string) {
+    if (password.length < 8) throw new Error('Use at least 8 characters.');
+    const { error } = await this.client.auth.updateUser({ password });
+    if (error) throw new Error(error.message);
+  }
+
   async pull(): Promise<RemoteEntity[]> {
     const { data, error } = await this.client.from(TABLE).select(COLUMNS).returns<Row[]>();
     if (error) throw new Error(error.message);

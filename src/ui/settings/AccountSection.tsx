@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { CloudUpload, LogIn, LogOut, RefreshCw, UserPlus } from 'lucide-react';
+import { CloudUpload, KeyRound, LogIn, LogOut, RefreshCw, UserPlus } from 'lucide-react';
 import type { SyncConfig } from '../../sync/config';
 import type { ConflictChoice, SyncConflict } from '../../sync/engine';
 import type { Account, SignInResult, SyncProvider } from '../../sync/provider';
@@ -138,6 +138,25 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
     });
   };
 
+  const forgotPassword = () => {
+    if (!provider) return;
+    void act(async () => {
+      await provider.requestPasswordReset(email.trim(), `${window.location.origin}/reset-password`);
+      setNotice('If that email has an account, a reset link is on its way.');
+    });
+  };
+
+  const [newPassword, setNewPassword] = useState('');
+  const changePassword = (event: FormEvent) => {
+    event.preventDefault();
+    if (!provider) return;
+    void act(async () => {
+      await provider.updatePassword(newPassword);
+      setNewPassword('');
+      setNotice('Password changed.');
+    });
+  };
+
   const signOut = () => {
     if (!provider) return;
     void act(async () => {
@@ -205,6 +224,15 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
               <UserPlus size={16} aria-hidden />
               Create account
             </button>
+            <button
+              type="button"
+              disabled={busy || !email.trim()}
+              onClick={forgotPassword}
+              className={button}
+            >
+              <KeyRound size={16} aria-hidden />
+              Forgot password
+            </button>
           </div>
         </form>
       )}
@@ -249,6 +277,31 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
               className={`${button} self-start`}
             >
               Save name
+            </button>
+          </form>
+          <form className="flex flex-col gap-2" onSubmit={changePassword}>
+            <Field
+              label="New password"
+              htmlFor="account-new-password"
+              hint="At least 8 characters."
+            >
+              <input
+                id="account-new-password"
+                type="password"
+                autoComplete="new-password"
+                minLength={8}
+                value={newPassword}
+                onChange={(event) => setNewPassword(event.target.value)}
+                className={inputClass}
+              />
+            </Field>
+            <button
+              type="submit"
+              disabled={busy || newPassword.length < 8}
+              className={`${button} self-start`}
+            >
+              <KeyRound size={16} aria-hidden />
+              Change password
             </button>
           </form>
           <div className="flex flex-wrap gap-2">
