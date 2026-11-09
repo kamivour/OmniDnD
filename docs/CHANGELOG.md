@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 23:08 — View-only party characters
+
+- Another player's character opens with a "View only" bar. Nothing on it changes the character; "Duplicate to play" makes your own copy to play with.
+- Party characters have no Delete button on the Campaigns page.
+- Next: the party view with a card per character.
+- Checks pass.
+
 ## 2026-11-09 23:05 — Share and join campaigns
 
 - Campaign settings has a Party section: share the campaign, make a 7-day invite link, see members, hand over DM, remove someone or leave. Shared campaigns show a "Shared" tag.

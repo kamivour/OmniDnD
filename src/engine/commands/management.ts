@@ -345,6 +345,11 @@ export const duplicateCharacter: ManagementCommand<{ sourceId: string; id: strin
       source.build.name = name.trim();
       source.live.characterId = id;
       source.events = [];
+      // A copy of a party character is the copier's own, playable character.
+      if (source.build.partyOwner) {
+        delete source.build.partyOwner;
+        source.build.playedBy = 'me';
+      }
       draft.characters[id] = source;
       return `Duplicate ${ctx.characters[sourceId]!.build.name}: ${source.build.name}`;
     },
@@ -353,9 +358,11 @@ export const duplicateCharacter: ManagementCommand<{ sourceId: string; id: strin
 export const deleteCharacter: ManagementCommand<{ characterId: string }> = {
   name: 'deleteCharacter',
   check: (ctx, { characterId }) =>
-    Object.hasOwn(ctx.characters, characterId)
-      ? []
-      : [{ level: 'block', reason: 'Character does not exist' }],
+    !Object.hasOwn(ctx.characters, characterId)
+      ? [{ level: 'block', reason: 'Character does not exist' }]
+      : ctx.characters[characterId]?.build.partyOwner
+        ? [{ level: 'block', reason: "Another player's character cannot be deleted here." }]
+        : [],
   apply: (draft, { characterId }) => {
     const name = draft.characters[characterId]!.build.name;
     delete draft.characters[characterId];

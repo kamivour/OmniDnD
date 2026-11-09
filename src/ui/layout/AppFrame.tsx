@@ -13,6 +13,7 @@ import { DetailPanel, DetailProvider } from './DetailPanel';
 import { CharacterToolbar } from '../log/CharacterLog';
 import { DiceTray } from '../dice/DiceTray';
 import { useTourAutostart } from '../tutorial/useTour';
+import { ViewOnlyBanner } from '../party/ViewOnlyBanner';
 
 /** Character screens: sidebar (≥ 640 px) or bottom nav (< 640 px), sticky HUD, screen in the middle. */
 export function AppFrame() {
@@ -74,6 +75,13 @@ export function AppFrame() {
                   tabIndex={-1}
                   className="@container min-w-0 flex-1 pb-20 sm:pb-0"
                 >
+                  {character.build.partyOwner && (
+                    <ViewOnlyBanner
+                      characterId={character.build.id}
+                      characterName={character.build.name}
+                      ownerName={character.build.partyOwner.name}
+                    />
+                  )}
                   <CommandNotes />
                   <Outlet />
                 </main>

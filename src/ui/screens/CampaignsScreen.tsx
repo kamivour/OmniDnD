@@ -291,16 +291,22 @@ function CampaignCard({
                       <Download size={14} aria-hidden />
                       Export
                     </button>
-                    <button
-                      type="button"
-                      aria-label={`Delete ${record.build.name}`}
-                      disabled={pending}
-                      onClick={() => onDelete(record.build.id)}
-                      className="flex min-h-11 items-center justify-center gap-1 text-xs text-danger"
-                    >
-                      <Trash2 size={14} aria-hidden />
-                      Delete
-                    </button>
+                    {record.build.partyOwner ? (
+                      <span className="flex min-h-11 items-center justify-center text-xs text-text-muted">
+                        {record.build.partyOwner.name || 'Party'}
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        aria-label={`Delete ${record.build.name}`}
+                        disabled={pending}
+                        onClick={() => onDelete(record.build.id)}
+                        className="flex min-h-11 items-center justify-center gap-1 text-xs text-danger"
+                      >
+                        <Trash2 size={14} aria-hidden />
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </article>
               </li>

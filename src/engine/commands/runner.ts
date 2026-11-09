@@ -63,6 +63,10 @@ export type RunResult =
   /** `reasons` holds the Info notes. */
   | { result: 'ok'; reasons: string[]; next: CharacterState; event: LogEvent };
 
+/** Party members' characters are read-only copies; only their owner changes them (D169). */
+export const VIEW_ONLY =
+  "This is another player's character. It is view only. Duplicate it to play with a copy.";
+
 /** Keep the last 500 events per character (DATA.md §5). */
 export const EVENT_LIMIT = 500;
 
@@ -73,6 +77,7 @@ export function runCommand<Payload>(
   registry: Registry,
   { eventId, realTime, force = false, automation = 'assisted' }: RunOptions,
 ): RunResult {
+  if (state.build.partyOwner) return { result: 'blocked', reasons: [VIEW_ONLY] };
   const scoped = characterRegistry(registry, state.build);
   const ctx: CommandContext = { ...state, registry: scoped, sheet: computeSheet(state, scoped) };
   const checks = command.check?.(ctx, payload) ?? [];
@@ -125,6 +130,7 @@ export function undo(
   events: readonly LogEvent[],
   { eventId, realTime }: Pick<RunOptions, 'eventId' | 'realTime'>,
 ): UndoResult {
+  if (state.build.partyOwner) return { result: 'blocked', reasons: [VIEW_ONLY] };
   const target = events.findLast((event) => event.command !== 'undo' && !event.undoneBy);
   if (!target) return { result: 'blocked', reasons: ['Nothing to undo'] };
 
