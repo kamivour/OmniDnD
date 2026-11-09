@@ -1,6 +1,6 @@
 # OmniDnD — Plan: accounts, party play, tutorial
 
-Proposed 2026-11-09. User answers to the open questions are recorded as D168–D174. Nothing here is built yet; work starts after the live-site testing phase. Build one milestone at a time, in the order below.
+Proposed 2026-11-09. User answers to the open questions are recorded as D168–D175. Nothing here is built yet; work starts after the live-site testing phase. Build one milestone at a time, in the order below.
 
 | ID | Milestone | Needs | Exit criteria |
 |---|---|---|---|
@@ -90,15 +90,14 @@ Each chapter has at most 8 steps and starts only when its screen exists, so nobo
 | Action | Character's player | Other players | DM |
 |---|---|---|---|
 | See every party character, live | Yes | Yes | Yes |
-| Change the character (live state or build) | Yes | No | No (Q39) |
+| Change the character (live state or build) | Yes | No | No (D175) |
 | Duplicate it into your own space | Yes | Yes | Yes |
 | Delete it or remove it from the campaign | Yes | No | Remove only |
 | Change campaign books and optional rules | No | No | Yes (owner, if no DM) |
 | Read a private journal entry | Yes | No | No |
 
 - Opening someone else's character shows the full sheet with all screens read-only and a banner: "Ana's character · view only." with a **Duplicate** button. Commands are disabled, not hidden, so the layout matches.
-- To fix a mistake, a player tells the owner; the owner makes the change. (A later idea, not planned: "suggest a fix" that the owner accepts.)
-- If Q39 is answered "the DM can change characters", add event authorship (`by { userId, name }` on each log event) and multi-editor Undo (D170) to this milestone.
+- To fix a mistake, a player or the DM tells the owner; the owner makes the change. (A later idea, not planned: "suggest a fix" that the owner accepts.)
 
 ### Data and sync
 - **Tables:** `shared_campaigns`, `campaign_members (campaign_id, user_id, role)` with at most one DM per campaign, `campaign_invites` (code stored hashed, expiry, revoked), `party_entities` (like `sync_entities`, keyed by campaign, plus `owner_id`).
@@ -142,7 +141,5 @@ Map import, monster and NPC management, rewards (XP, Inspiration, coins, items),
 - **Free hosting limits:** Supabase allows 200 live connections and 500 MB of storage; records are capped at 5 MB (our limit). Long event logs grow records; a later fix is a snapshot plus trimmed history.
 - **Security:** shared access depends entirely on row-level security, so every rule gets a test. Invite codes are random, hashed and expire. Emails are never shown to other members.
 
-## Open question
-| Q | Question | Default |
-|---|---|---|
-| Q39 | Can the DM change players' characters? | No: view only like other players; the DM can duplicate, and the player makes the fix |
+## Open questions
+None. Answers are recorded as D168–D175.

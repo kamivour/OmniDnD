@@ -178,6 +178,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D172 | 2026-11-09 | When a player leaves a shared campaign, they keep a private copy of their character; the party copy stays, marked "left" and view only (answers Q36) | Nobody loses a character, and the party keeps its record |
 | D173 | 2026-11-09 | The first DM milestone is the party overview only; map import, monster and NPC management, rewards, DM level-ups, ambient sounds and other DM tools wait in the backlog (answers Q37) | Ship the useful core first |
 | D174 | 2026-11-09 | No "?" help button in the top bar; the tutorial is replayed from Settings → Tutorial or Find (answers Q38) | Keeps the top bar uncluttered |
+| D175 | 2026-11-09 | The DM cannot change players' characters either; like everyone else, the DM can view and duplicate them, and only the owner makes changes (answers Q39). D170 stays for any future case where more than one person can change a character | Only the owner ever changes a character |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 
@@ -218,7 +219,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q36 | ~~What happens to a character when its player leaves a shared campaign?~~ Answered → D172 | — | — | — |
 | Q37 | ~~Which DM tools come first?~~ Answered → D173 | — | — | — |
 | Q38 | ~~Should there be a "?" help button in the top bar?~~ Answered → D174 | — | — | — |
-| Q39 | Can the DM change players' characters in a shared campaign? | M24 | View only, like other players; the DM can duplicate, and the player makes the fix | User |
+| Q39 | ~~Can the DM change players' characters in a shared campaign?~~ Answered → D175 | — | — | — |
 
 ## How to add an entry
 

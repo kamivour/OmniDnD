@@ -277,6 +277,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- Plan: Q39 answered (D175); the DM cannot change players' characters either. No open plan questions.
 - Plan: user answered Q32–Q38 (D168–D174); party characters are view only with Duplicate; M25 is the overview only; Q39 open.
 - Plan: M22 accounts finished, M23 tutorial, M24 roles and shared campaigns, M25 DM tools written in PLAN.md; open questions Q32–Q38.
 - Testing fix: Find now matches edit, fix, override and correct to Sheet, where the Edit button fixes numbers and build choices.

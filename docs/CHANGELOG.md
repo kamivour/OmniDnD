@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 14:51 — DM is view only too
+
+- The DM can view and duplicate players' characters but not change them; only the owner ever changes a character.
+- The plan has no open questions left. Nothing is built yet.
+
 ## 2026-11-09 14:47 — Plan updated with your answers
 
 - Tutorial shows on the first visit on each device. Party characters are view only; others can only duplicate them. One DM per campaign.
