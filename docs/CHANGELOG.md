@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 15:15 — Automatic sync
+
+- When signed in, your campaigns and characters now sync on their own: at sign-in, on opening the app, when you return to the tab or get back online, and a few seconds after you change something.
+- If the cloud is unreachable it retries quietly. Sync now still works. If the same item changed in both places, it still asks you which to keep.
+- Next: a sync status chip in the top bar.
+- Checks pass.
+
 ## 2026-11-09 15:10 — Delete account
 
 - Settings → Account has Delete account. Type DELETE to confirm; your cloud account and cloud copies are removed.

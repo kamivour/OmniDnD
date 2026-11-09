@@ -1,15 +1,20 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { CloudUpload, KeyRound, LogIn, LogOut, RefreshCw, Trash2, UserPlus } from 'lucide-react';
 import type { SyncConfig } from '../../sync/config';
-import type { ConflictChoice, SyncConflict } from '../../sync/engine';
-import type { Account, SignInResult, SyncProvider } from '../../sync/provider';
+import type { ConflictChoice } from '../../sync/engine';
+import type { SignInResult } from '../../sync/provider';
 import type { SyncReport } from '../../sync/runner';
+import {
+  autoSync,
+  setAccount,
+  startAccounts,
+  useAccountSession,
+  useAutoSyncState,
+} from '../../sync/service';
 import { Field, inputClass } from '../components/fields';
 
 const button =
   'inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-border px-3 text-sm hover:bg-surface-2 disabled:opacity-40';
-
-type Status = 'loading' | 'unavailable' | 'signed-out' | 'signed-in';
 
 function message(error: unknown): string {
   const text = error instanceof Error ? error.message : String(error);
@@ -33,37 +38,19 @@ function reportText(report: SyncReport): string {
  * the provider library loads on first render so guests never download it.
  */
 export default function AccountSection({ config }: { config: SyncConfig }) {
-  const [provider, setProvider] = useState<SyncProvider | null>(null);
-  const [status, setStatus] = useState<Status>('loading');
-  const [account, setAccount] = useState<Account | null>(null);
+  const session = useAccountSession();
+  const { provider, account, status } = session;
+  const syncState = useAutoSyncState();
+  const conflicts = status === 'signed-in' ? syncState.conflicts : [];
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
-  const [conflicts, setConflicts] = useState<SyncConflict[]>([]);
   const [choices, setChoices] = useState<Map<string, ConflictChoice>>(new Map());
 
   useEffect(() => {
-    let live = true;
-    void (async () => {
-      try {
-        const { createSupabaseProvider } = await import('../../sync/supabase-provider');
-        const created = await createSupabaseProvider(config);
-        const current = await created.currentAccount();
-        if (!live) return;
-        setProvider(created);
-        setAccount(current);
-        setStatus(current ? 'signed-in' : 'signed-out');
-      } catch (cause) {
-        if (!live) return;
-        setStatus('unavailable');
-        setError(`Accounts are unavailable right now: ${message(cause)}`);
-      }
-    })();
-    return () => {
-      live = false;
-    };
+    void startAccounts(config);
   }, [config]);
 
   // `undefined`: not loaded yet. `null`: signed in but no name chosen.
@@ -90,15 +77,20 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
     };
   }, [status, provider]);
 
-  const sync = async (active: SyncProvider, settled = new Map<string, ConflictChoice>()) => {
-    const { runSync } = await import('../../sync/runner');
-    const report = await runSync(active, settled);
-    setConflicts(report.conflicts);
+  /** Sync now and report the outcome in the notice or error line. */
+  const sync = async (settled = new Map<string, ConflictChoice>()) => {
+    await autoSync.syncNow(settled);
     setChoices(new Map());
+    const { lastReport, error: failure, conflicts: open } = autoSync.getState();
+    if (failure) {
+      setError(`Sync failed: ${message(failure)}`);
+      return;
+    }
+    if (!lastReport) return;
     setNotice(
-      report.conflicts.length > 0
-        ? `${reportText(report)} Some items changed both here and in the cloud. Choose which to keep.`
-        : reportText(report),
+      open.length > 0
+        ? `${reportText(lastReport)} Some items changed both here and in the cloud. Choose which to keep.`
+        : reportText(lastReport),
     );
   };
 
@@ -109,7 +101,7 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
     try {
       await work();
     } catch (cause) {
-      setError(`Sync failed: ${message(cause)}`);
+      setError(message(cause));
     } finally {
       setBusy(false);
     }
@@ -133,8 +125,7 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
       }
       setPassword('');
       setAccount(result.account);
-      setStatus('signed-in');
-      await sync(provider);
+      await sync();
     });
   };
 
@@ -163,8 +154,6 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
     void act(async () => {
       await provider.signOut();
       setAccount(null);
-      setConflicts([]);
-      setStatus('signed-out');
       setNotice('Signed out. Campaigns and characters stay on this device.');
     });
   };
@@ -186,6 +175,16 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
         account, everything stays on this device.
       </p>
       {status === 'loading' && <p className="text-sm text-text-muted">Checking sign-in…</p>}
+      {status === 'unavailable' && (
+        <p role="alert" className="text-sm text-danger">
+          Accounts are unavailable right now: {message(session.error)}
+        </p>
+      )}
+      {status === 'signed-in' && syncState.status === 'error' && (
+        <p role="alert" className="text-sm text-danger">
+          Automatic sync failed ({message(syncState.error)}). It will try again.
+        </p>
+      )}
       {status === 'signed-out' && (
         <form onSubmit={enter('sign-in')} className="flex flex-col gap-3">
           <Field label="Email" htmlFor="account-email">
@@ -309,7 +308,7 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
             <button
               type="button"
               disabled={busy}
-              onClick={() => void act(() => sync(provider))}
+              onClick={() => void act(() => sync())}
               className={button}
             >
               <RefreshCw size={16} aria-hidden />
@@ -331,9 +330,7 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
                 void act(async () => {
                   await provider.deleteAccount();
                   setAccount(null);
-                  setConflicts([]);
                   setDeleteText('');
-                  setStatus('signed-out');
                   setNotice('Account deleted. Campaigns and characters stay on this device.');
                 });
               }}
@@ -403,7 +400,7 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
               <button
                 type="button"
                 disabled={busy || conflicts.some((conflict) => !choices.has(conflict.id))}
-                onClick={() => void act(() => sync(provider, choices))}
+                onClick={() => void act(() => sync(choices))}
                 className={`${button} self-start`}
               >
                 <CloudUpload size={16} aria-hidden />

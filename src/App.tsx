@@ -1,3 +1,5 @@
+import { lazy, Suspense } from 'react';
+import { syncConfig } from './sync/config';
 import { PrintScreen } from './ui/screens/PrintScreen';
 import { TodoScreen } from './ui/todo/TodoScreen';
 import { BrowserRouter, Route, Routes } from 'react-router';
@@ -26,6 +28,8 @@ import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { MotionPreference } from './ui/components/MotionPreference';
 import { StorageGate } from './ui/storage/StorageGate';
 
+const SyncHost = syncConfig ? lazy(() => import('./ui/settings/SyncHost')) : null;
+
 const BUILT = new Set([
   '',
   'sheet',
@@ -47,6 +51,11 @@ export function App() {
       <ToastProvider>
         <StorageGate>
           <MotionPreference />
+          {SyncHost && syncConfig && (
+            <Suspense fallback={null}>
+              <SyncHost config={syncConfig} />
+            </Suspense>
+          )}
           <Routes>
             <Route element={<HubFrame />}>
               <Route index element={<CampaignsScreen />} />
