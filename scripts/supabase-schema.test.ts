@@ -17,8 +17,8 @@ const tables = [...sql.matchAll(/create table if not exists public\.(\w+)/g)].ma
 );
 
 describe('Supabase schema', () => {
-  it('defines the sync table', () => {
-    expect(tables).toEqual(['sync_entities']);
+  it('defines the sync and profile tables', () => {
+    expect(tables).toEqual(['sync_entities', 'profiles']);
   });
 
   it.each(tables)('locks %s to its owner with row-level security', (table) => {

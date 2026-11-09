@@ -61,6 +61,25 @@ export class SupabaseProvider implements SyncProvider {
     if (error) throw new Error(error.message);
   }
 
+  async getDisplayName() {
+    const { data, error } = await this.client
+      .from('profiles')
+      .select('display_name')
+      .returns<{ display_name: string }[]>();
+    if (error) throw new Error(error.message);
+    return data[0]?.display_name ?? null;
+  }
+
+  async setDisplayName(name: string) {
+    const trimmed = name.trim();
+    if (trimmed.length < 1 || trimmed.length > 40) throw new Error('Use 1 to 40 characters.');
+    // user_id defaults to auth.uid(); row-level security keeps this to the caller's own row.
+    const { error } = await this.client
+      .from('profiles')
+      .upsert({ display_name: trimmed }, { onConflict: 'user_id' });
+    if (error) throw new Error(error.message);
+  }
+
   async pull(): Promise<RemoteEntity[]> {
     const { data, error } = await this.client.from(TABLE).select(COLUMNS).returns<Row[]>();
     if (error) throw new Error(error.message);

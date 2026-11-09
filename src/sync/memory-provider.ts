@@ -15,6 +15,8 @@ import type {
 export class MemoryCloud {
   readonly accounts = new Map<string, { account: Account; password: string }>();
   readonly rows = new Map<string, RemoteEntity>();
+  /** Display names by account id. */
+  readonly names = new Map<string, string>();
 
   key(accountId: string, kind: string, entityId: string) {
     return `${accountId}|${kind}|${entityId}`;
@@ -54,6 +56,18 @@ export class MemoryProvider implements SyncProvider {
 
   signOut() {
     this.account = null;
+    return Promise.resolve();
+  }
+
+  getDisplayName() {
+    return Promise.resolve(this.cloud.names.get(this.require().id) ?? null);
+  }
+
+  setDisplayName(name: string) {
+    const trimmed = name.trim();
+    if (trimmed.length < 1 || trimmed.length > 40)
+      return Promise.reject(new Error('Use 1 to 40 characters.'));
+    this.cloud.names.set(this.require().id, trimmed);
     return Promise.resolve();
   }
 

@@ -66,6 +66,30 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
     };
   }, [config]);
 
+  // `undefined`: not loaded yet. `null`: signed in but no name chosen.
+  const [savedName, setSavedNameState] = useState<string | null | undefined>(undefined);
+  const [nameDraft, setNameDraft] = useState('');
+  const setSavedName = (name: string | null) => {
+    setSavedNameState(name);
+    setNameDraft(name ?? '');
+  };
+
+  useEffect(() => {
+    if (status !== 'signed-in' || !provider) return;
+    let live = true;
+    provider
+      .getDisplayName()
+      .then((name) => {
+        if (live) setSavedName(name);
+      })
+      .catch(() => {
+        if (live) setSavedName(null);
+      });
+    return () => {
+      live = false;
+    };
+  }, [status, provider]);
+
   const sync = async (active: SyncProvider, settled = new Map<string, ConflictChoice>()) => {
     const { runSync } = await import('../../sync/runner');
     const report = await runSync(active, settled);
@@ -189,6 +213,44 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
           <p className="text-sm">
             Signed in as <span className="font-semibold break-all">{account.email}</span>
           </p>
+          <form
+            className="flex flex-col gap-2"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void act(async () => {
+                await provider.setDisplayName(nameDraft);
+                setSavedName(nameDraft.trim());
+                setNotice('Display name saved.');
+              });
+            }}
+          >
+            <Field
+              label="Display name"
+              htmlFor="account-display-name"
+              hint={
+                savedName === null
+                  ? 'Choose a name. Your party will see it later; your email is never shown.'
+                  : 'Your party will see this name, never your email.'
+              }
+            >
+              <input
+                id="account-display-name"
+                type="text"
+                maxLength={40}
+                autoComplete="nickname"
+                value={nameDraft}
+                onChange={(event) => setNameDraft(event.target.value)}
+                className={inputClass}
+              />
+            </Field>
+            <button
+              type="submit"
+              disabled={busy || !nameDraft.trim() || nameDraft.trim() === savedName}
+              className={`${button} self-start`}
+            >
+              Save name
+            </button>
+          </form>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"

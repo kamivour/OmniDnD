@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** None scheduled. M21 done.
-**Next up:** Testing phase on the live site (https://omnidnd.netlify.app): run the MA (accounts) list first, then the M17 to M21 lists. No new features until testing is done. Then M22 to M25 from [PLAN.md](PLAN.md), once the user approves it.
+**Current milestone:** M22 Accounts, finished (see PLAN.md). Tasks 1–2 done.
+**Next up:** M22 task 3 (password reset), then 4–8; then M23 Tutorial, M24, M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -45,7 +45,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M19 | Physical checks and spell components | 6 | done | Jump, carry, breath and travel numbers come from the engine with breakdowns; casting says when a focus covers the material |
 | M20 | Tools directory | 6 | done | Outside tools grouped by what you want to do, in our own words, with working links |
 | M21 | Find and Related links | 6 | done | One search box reaches any screen, rule, tool or character item in two steps or fewer |
-| M22 | Accounts, finished | 7 | todo | Automatic sync, password reset, display name; see [PLAN.md](PLAN.md) |
+| M22 | Accounts, finished | 7 | doing | Automatic sync, password reset, display name; see [PLAN.md](PLAN.md) |
 | M23 | Tutorial | 7 | todo | First visit on each device: guide with Skip and Replay; see [PLAN.md](PLAN.md) |
 | M24 | Roles and shared campaigns | 7 | todo | DM or player role; party sees every character live, each player changes only their own; see [PLAN.md](PLAN.md) |
 | M25 | DM party overview | 7 | todo | Read-only overview of the whole party for the DM; see [PLAN.md](PLAN.md) |
@@ -277,6 +277,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M22 tasks 1–2: profiles table with owner-only access, and a display name field in Settings → Account; unit tests added.
 - Plan: Q39 answered (D175); the DM cannot change players' characters either. No open plan questions.
 - Plan: user answered Q32–Q38 (D168–D174); party characters are view only with Duplicate; M25 is the overview only; Q39 open.
 - Plan: M22 accounts finished, M23 tutorial, M24 roles and shared campaigns, M25 DM tools written in PLAN.md; open questions Q32–Q38.

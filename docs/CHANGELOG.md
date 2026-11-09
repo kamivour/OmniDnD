@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 14:56 — Display name for accounts
+
+- Signed-in accounts can set a display name in Settings → Account. Your party will see it later; your email is never shown.
+- Before this works online, run the new file supabase/migrations/20261109150000_profiles.sql once in the Supabase SQL Editor (see HOSTING.md).
+- Next: password reset.
+- Checks pass.
+
 ## 2026-11-09 14:51 — DM is view only too
 
 - The DM can view and duplicate players' characters but not change them; only the owner ever changes a character.

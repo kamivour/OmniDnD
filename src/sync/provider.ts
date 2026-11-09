@@ -43,6 +43,9 @@ export interface SyncProvider {
   signIn(email: string, password: string): Promise<SignInResult>;
   signUp(email: string, password: string): Promise<SignInResult>;
   signOut(): Promise<void>;
+  /** The signed-in account's display name, or null until one is chosen. */
+  getDisplayName(): Promise<string | null>;
+  setDisplayName(name: string): Promise<void>;
   /** Every row the signed-in account owns, deletion markers included. */
   pull(): Promise<RemoteEntity[]>;
   /**
