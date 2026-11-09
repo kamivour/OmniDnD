@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 import seed from '../../data/characters/the-fool.json' with { type: 'json' };
 import {
   ExportFileSchema,

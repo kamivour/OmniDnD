@@ -48,6 +48,20 @@ export default defineConfig(({ command }) => ({
       devOptions: { enabled: false },
     }),
   ],
+  build: {
+    rolldownOptions: {
+      output: {
+        // Reference data and libraries change less often than app code, so an app update
+        // re-downloads only the app chunks. Supabase stays out of `vendor` to keep it lazy.
+        codeSplitting: {
+          groups: [
+            { name: 'data', test: /[\\/]data[\\/](srd|content|mechanics)[\\/]/ },
+            { name: 'vendor', test: /[\\/]node_modules[\\/](?!@supabase[\\/])/ },
+          ],
+        },
+      },
+    },
+  },
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },

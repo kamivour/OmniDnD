@@ -270,6 +270,8 @@ test('long latest entries truncate without overflow and log and Undo stay reacha
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/characters/the-fool/sheet');
     await saved(page);
+    // Screens load on first open; scroll only once the sheet has rendered.
+    await expect(page.getByRole('button', { name: 'Edit character', exact: true })).toBeVisible();
     await settledLayout(page);
     await page.evaluate(() =>
       window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }),

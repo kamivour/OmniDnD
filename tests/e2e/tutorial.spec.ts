@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures';
+import { expect, importPartyFool, test } from './fixtures';
 import { CHAPTERS } from '../../src/ui/tutorial/steps';
 
 test.describe('first visit', () => {
@@ -133,11 +133,16 @@ test.describe('targets', () => {
     combat: '/characters/the-fool/combat',
     spells: '/characters/the-fool/spells',
     inventory: '/characters/the-fool/inventory',
+    party: '/campaigns/table-one/party',
+    'party-dm': '/campaigns/table-one/party',
   };
+  const ROLES: Record<string, 'dm' | 'player'> = { party: 'player', 'party-dm': 'dm' };
 
   for (const chapter of CHAPTERS) {
     test(`${chapter.id}: every highlighted element exists`, async ({ page }) => {
       const route = ROUTES[chapter.id] ?? '/';
+      const role = ROLES[chapter.id];
+      if (role) await importPartyFool(page, role);
       for (const step of chapter.steps) {
         if (!step.target || OPTIONAL.has(step.target)) continue;
         const where = step.target === 'sheet-edit' ? '/characters/the-fool/sheet' : route;

@@ -31,5 +31,8 @@ export default defineConfig({
     url: ORIGIN,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
+    // Test the default guest build even when .env.local holds a sync project: process
+    // variables win over .env files, and an empty URL leaves sync off.
+    env: { VITE_SUPABASE_URL: '', VITE_SUPABASE_ANON_KEY: '' },
   },
 });

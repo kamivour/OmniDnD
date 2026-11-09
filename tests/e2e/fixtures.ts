@@ -1,7 +1,31 @@
-import { expect, test as base } from '@playwright/test';
+import { expect, test as base, type Page } from '@playwright/test';
+import seed from '../../data/characters/the-fool.json' with { type: 'json' };
+import { ExportFileSchema } from '../../src/engine/schema';
 
 export { expect };
-export type { Page } from '@playwright/test';
+export type { Page };
+
+/** Import a copy of the Fool as "Party Fool" into campaign `table-one`, played as `role`. */
+export async function importPartyFool(page: Page, role: 'dm' | 'player') {
+  await page.goto('/');
+  const file = ExportFileSchema.parse(seed);
+  file.campaign.id = 'table-one';
+  file.campaign.name = 'Table One';
+  file.campaign.role = role;
+  file.build.id = 'party-fool';
+  file.build.name = 'Party Fool';
+  file.build.campaignId = file.campaign.id;
+  file.live.characterId = file.build.id;
+  file.events = [];
+  await page.getByLabel('Import character JSON', { exact: true }).setInputFiles({
+    name: 'party-fool.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(file)),
+  });
+  const dialog = page.getByRole('dialog', { name: 'Import character', exact: true });
+  await dialog.getByRole('button', { name: 'Add character', exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+}
 
 const LOOPBACK_HTTP = 'http://127.0.0.1:4173/**';
 

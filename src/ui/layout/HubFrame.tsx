@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Link, NavLink, Outlet } from 'react-router';
 import { Library, Settings } from 'lucide-react';
 import { cx } from '../cx';
@@ -47,7 +48,9 @@ export function HubFrame() {
         <StorageStatus />
       </div>
       <main id="hub-workspace" tabIndex={-1} className="mx-auto max-w-5xl px-4 py-6">
-        <Outlet />
+        <Suspense fallback={null}>
+          <Outlet />
+        </Suspense>
       </main>
     </div>
   );

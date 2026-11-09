@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-10 01:05 — Faster start and smaller updates
+
+- The app's main file shrank from about 3 MB to under 300 kB. Each screen now loads the first time you open it, so first start is quicker.
+- Libraries and rules data are kept in their own files. After an app update, your device downloads only the changed screens, not the rules data again.
+- Works offline as before: every file is still saved on install. Watch for a brief blank screen area the first time you open a screen.
+- Checks pass.
+
 ## 2026-11-09 23:25 — DM party overview
 
 - As DM, the Party view is now a table: HP, AC, passives, saves, slots, conditions, languages, death saves, Inspiration and To do. Tap a title to sort.

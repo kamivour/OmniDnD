@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 import type { Campaign, CharacterBuild, LiveState, LogEvent } from '../../src/engine/schema';
 
 // Deliberately use native Playwright, without fixtures.ts's optional HTTP forwarding.

@@ -1,35 +1,63 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, type ComponentType } from 'react';
 import { syncConfig } from './sync/config';
-import { PrintScreen } from './ui/screens/PrintScreen';
-import { TodoScreen } from './ui/todo/TodoScreen';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { ToastProvider } from './ui/components/ToastProvider';
 import { AppFrame } from './ui/layout/AppFrame';
 import { HubFrame } from './ui/layout/HubFrame';
 import { NAV } from './ui/layout/nav';
-import { CampaignSetupScreen } from './ui/screens/CampaignSetupScreen';
 import { CampaignsScreen } from './ui/screens/CampaignsScreen';
-import { CombatScreen } from './ui/screens/CombatScreen';
-import { CharacterSheetScreen } from './ui/screens/CharacterSheetScreen';
 import { DashboardScreen } from './ui/screens/DashboardScreen';
-import { ExplorationScreen } from './ui/screens/ExplorationScreen';
-import { FeaturesScreen } from './ui/screens/FeaturesScreen';
-import { InventoryScreen } from './ui/screens/InventoryScreen';
-import { CompanionsScreen } from './ui/screens/CompanionsScreen';
-import { JournalScreen } from './ui/screens/JournalScreen';
-import { NewCharacterScreen } from './ui/screens/NewCharacterScreen';
 import { PlaceholderScreen } from './ui/screens/PlaceholderScreen';
-import { SpellbookScreen } from './ui/screens/SpellbookScreen';
-import { ReferenceScreen } from './ui/screens/ReferenceScreen';
-import { CreditsScreen } from './ui/screens/CreditsScreen';
-import { ToolsScreen } from './ui/screens/ToolsScreen';
-import { PartyScreen } from './ui/party/PartyScreen';
-import { JoinScreen } from './ui/screens/JoinScreen';
-import { ResetPasswordScreen } from './ui/screens/ResetPasswordScreen';
-import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { MotionPreference } from './ui/components/MotionPreference';
 import { TourHost } from './ui/tutorial/TourHost';
 import { StorageGate } from './ui/storage/StorageGate';
+
+/**
+ * Load a screen's code the first time it opens; the service worker precaches every chunk.
+ * Warming every screen on idle was tried and dropped: it left the next full page load blank
+ * for seconds on mobile emulation (m6 acceptance spec).
+ */
+function screen<K extends string>(
+  load: () => Promise<Record<K, ComponentType>>,
+  name: K,
+): ComponentType {
+  return lazy(async () => ({ default: (await load())[name] as ComponentType }));
+}
+
+const PrintScreen = screen(() => import('./ui/screens/PrintScreen'), 'PrintScreen');
+const TodoScreen = screen(() => import('./ui/todo/TodoScreen'), 'TodoScreen');
+const CampaignSetupScreen = screen(
+  () => import('./ui/screens/CampaignSetupScreen'),
+  'CampaignSetupScreen',
+);
+const CombatScreen = screen(() => import('./ui/screens/CombatScreen'), 'CombatScreen');
+const CharacterSheetScreen = screen(
+  () => import('./ui/screens/CharacterSheetScreen'),
+  'CharacterSheetScreen',
+);
+const ExplorationScreen = screen(
+  () => import('./ui/screens/ExplorationScreen'),
+  'ExplorationScreen',
+);
+const FeaturesScreen = screen(() => import('./ui/screens/FeaturesScreen'), 'FeaturesScreen');
+const InventoryScreen = screen(() => import('./ui/screens/InventoryScreen'), 'InventoryScreen');
+const CompanionsScreen = screen(() => import('./ui/screens/CompanionsScreen'), 'CompanionsScreen');
+const JournalScreen = screen(() => import('./ui/screens/JournalScreen'), 'JournalScreen');
+const NewCharacterScreen = screen(
+  () => import('./ui/screens/NewCharacterScreen'),
+  'NewCharacterScreen',
+);
+const SpellbookScreen = screen(() => import('./ui/screens/SpellbookScreen'), 'SpellbookScreen');
+const ReferenceScreen = screen(() => import('./ui/screens/ReferenceScreen'), 'ReferenceScreen');
+const CreditsScreen = screen(() => import('./ui/screens/CreditsScreen'), 'CreditsScreen');
+const ToolsScreen = screen(() => import('./ui/screens/ToolsScreen'), 'ToolsScreen');
+const PartyScreen = screen(() => import('./ui/party/PartyScreen'), 'PartyScreen');
+const JoinScreen = screen(() => import('./ui/screens/JoinScreen'), 'JoinScreen');
+const ResetPasswordScreen = screen(
+  () => import('./ui/screens/ResetPasswordScreen'),
+  'ResetPasswordScreen',
+);
+const SettingsScreen = screen(() => import('./ui/screens/SettingsScreen'), 'SettingsScreen');
 
 const SyncHost = syncConfig ? lazy(() => import('./ui/settings/SyncHost')) : null;
 
@@ -75,7 +103,14 @@ export function App() {
               <Route path="reference/tools" element={<ToolsScreen />} />
               <Route path="*" element={<PlaceholderScreen title="Not found" />} />
             </Route>
-            <Route path="characters/:characterId/print" element={<PrintScreen />} />
+            <Route
+              path="characters/:characterId/print"
+              element={
+                <Suspense fallback={null}>
+                  <PrintScreen />
+                </Suspense>
+              }
+            />
             <Route path="characters/:characterId" element={<AppFrame />}>
               <Route index element={<DashboardScreen />} />
               <Route path="sheet" element={<CharacterSheetScreen />} />

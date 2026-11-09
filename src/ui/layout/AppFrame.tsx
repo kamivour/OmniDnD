@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useRef } from 'react';
 import { Link, Outlet, useNavigate, useParams } from 'react-router';
 import { useStore } from 'zustand';
 import { characterStore } from '../../state/character-store';
@@ -83,7 +83,9 @@ export function AppFrame() {
                     />
                   )}
                   <CommandNotes />
-                  <Outlet />
+                  <Suspense fallback={null}>
+                    <Outlet />
+                  </Suspense>
                 </main>
                 <DetailPanel />
               </div>

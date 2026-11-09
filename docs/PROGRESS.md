@@ -277,6 +277,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-10 — Performance: screens load on first visit; app, library and reference data ship as separate cached files. Main file 3 MB to 285 kB.
 - 2026-11-09 — M25 done: DM overview table with sort and column picker, DM tutorial tips, Find synonym, e2e at 375 and 1440 px; QA list added.
 - 2026-11-09 — M24 gate: sharing, party sync, view-only and non-member checks covered by tests; QA list added. Run the migration in Supabase.
 - 2026-11-09 — M24 tasks 6–7: party view with a card per character, "Party" link on shared campaign cards, party tutorial tips, Find synonym.
