@@ -12,6 +12,7 @@ import { SideNav } from './SideNav';
 import { DetailPanel, DetailProvider } from './DetailPanel';
 import { CharacterToolbar } from '../log/CharacterLog';
 import { DiceTray } from '../dice/DiceTray';
+import { useTourAutostart } from '../tutorial/useTour';
 
 /** Character screens: sidebar (≥ 640 px) or bottom nav (< 640 px), sticky HUD, screen in the middle. */
 export function AppFrame() {
@@ -43,6 +44,7 @@ export function AppFrame() {
       navigate('/');
     previous.current = { id: characterId, existed: !!character };
   }, [characterId, character, navigate]);
+  useTourAutostart('character', characterExists);
   if (!character)
     return (
       <main>

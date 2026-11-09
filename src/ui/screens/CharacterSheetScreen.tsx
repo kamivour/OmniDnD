@@ -107,6 +107,7 @@ export function CharacterSheetScreen() {
               ref={editButton}
               type="button"
               aria-label="Edit character"
+              data-tour="sheet-edit"
               onClick={() => setEditing(true)}
               className="min-h-11 rounded-btn border border-border px-3 text-sm text-accent"
             >

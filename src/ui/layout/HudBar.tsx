@@ -53,6 +53,7 @@ export function HudBar() {
     <>
       <header
         aria-label="Character HUD"
+        data-tour="hud"
         className="@container sticky top-0 z-20 border-b border-border bg-bg/95 px-4 backdrop-blur-sm"
       >
         <div className="flex min-h-11 items-center gap-2">

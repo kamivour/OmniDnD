@@ -9,6 +9,7 @@ export function TodoBadge({ className = '' }: { className?: string }) {
   return (
     <Link
       to={`/characters/${characterId}/todo`}
+      data-tour="todo"
       className={`inline-flex min-h-11 items-center gap-1.5 rounded-btn border border-accent bg-surface px-3 text-xs text-accent ${className}`}
     >
       <ListTodo size={14} aria-hidden />

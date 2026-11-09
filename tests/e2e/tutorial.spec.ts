@@ -52,3 +52,34 @@ test.describe('first visit', () => {
     await expect(page.getByRole('heading', { name: 'Tutorial' })).toBeVisible();
   });
 });
+
+test.describe('character tour', () => {
+  test.use({ showTutorial: true });
+
+  test('starts on the first character visit and highlights the workspace', async ({ page }) => {
+    // The Welcome chapter is already finished on this device.
+    await page.addInitScript(() => {
+      if (!localStorage.getItem('omnidnd.tutorial'))
+        localStorage.setItem(
+          'omnidnd.tutorial',
+          JSON.stringify({ done: ['welcome'], tipsOn: true }),
+        );
+    });
+    await page.goto('/characters/the-fool');
+    await expect(page.getByRole('dialog', { name: 'Your numbers' })).toBeVisible();
+    const card = page.getByTestId('tour').getByRole('dialog');
+    await expect(card.getByText('1 of 5')).toBeVisible();
+    for (let step = 1; step <= 5; step += 1) {
+      await expect(card.getByText(`${step} of 5`)).toBeVisible();
+      const box = await card.boundingBox();
+      const viewport = page.viewportSize()!;
+      expect(box!.x).toBeGreaterThanOrEqual(0);
+      expect(box!.x + box!.width).toBeLessThanOrEqual(viewport.width);
+      await card.getByRole('button', { name: step === 5 ? 'Done' : 'Next' }).click();
+    }
+    await expect(page.getByTestId('tour')).toHaveCount(0);
+    await page.reload();
+    await page.waitForTimeout(800);
+    await expect(page.getByTestId('tour')).toHaveCount(0);
+  });
+});

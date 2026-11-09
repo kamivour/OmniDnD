@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 15:27 — Character tour
+
+- The first time you open a character, a five-card tour points at the top numbers, the menus, To do, History with Undo, and Sheet → Edit.
+- Replay it from Settings → Tutorial. Skip is remembered on this device.
+- Check that each card sits clear of what it highlights on your phone. Next: short tips on Combat, Spells, Rest and Inventory.
+- Checks pass.
+
 ## 2026-11-09 16:05 — Welcome tour
 
 - On the first visit to the campaign list on a device, a short tour points at Campaigns, New campaign, New character, Find and Settings. Skip it at any time.

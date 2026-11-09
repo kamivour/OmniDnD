@@ -49,4 +49,41 @@ export const CHAPTERS: readonly Chapter[] = [
       },
     ],
   },
+  {
+    id: 'character',
+    title: 'Your character',
+    tip: false,
+    steps: [
+      {
+        id: 'hud',
+        target: 'hud',
+        title: 'Your numbers',
+        body: 'Hit points, armor class, spell slots and conditions stay at the top of every screen. Tap one to change it.',
+      },
+      {
+        id: 'nav',
+        target: 'nav',
+        title: 'The menus',
+        body: 'Combat for turns and attacks, Spells for casting, Inventory for gear, Features for class abilities, Journal for notes, Companions for allies, Reference for rules.',
+      },
+      {
+        id: 'todo',
+        target: 'todo',
+        title: 'To do',
+        body: 'When a choice is waiting for you or your DM, this badge counts it. It appears only when something is open.',
+      },
+      {
+        id: 'history',
+        target: 'history',
+        title: 'History and Undo',
+        body: 'Every change is logged here. Made a mistake? Undo takes back the last one.',
+      },
+      {
+        id: 'sheet-edit',
+        target: 'sheet-edit',
+        title: 'Fix any number',
+        body: 'Open Sheet and tap Edit to correct a score, a class level or anything else you entered.',
+      },
+    ],
+  },
 ];

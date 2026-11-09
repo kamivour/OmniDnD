@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M23 Tutorial (see PLAN.md). Tasks 1–2 done.
-**Next up:** M23 task 3 (Chapter B, character workspace), then M24, M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
+**Current milestone:** M23 Tutorial (see PLAN.md). Tasks 1–3 done.
+**Next up:** M23 task 4 (Chapter C, screen tips), then M24, M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -277,6 +277,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M23 task 3: Character tour (HUD, menus, To do, History and Undo, Sheet Edit) starts on first character visit; e2e added.
 - M23 task 2: Welcome tour on first campaign-list visit, Settings → Tutorial (tips switch, Replay, Reset tips), Find entry; e2e added; other specs skip the tour.
 - M23 task 1: tour engine (spotlight, card, Back/Next/Skip, keyboard, device-only progress in localStorage); no chapters yet; unit tests added.
 - M22 gate: tests, typecheck, lint and e2e pass; manual QA added. M22 done.

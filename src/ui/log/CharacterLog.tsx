@@ -65,6 +65,7 @@ export function CharacterToolbar() {
   return (
     <section
       aria-label="Character log"
+      data-tour="history"
       className="flex min-w-0 flex-wrap items-center gap-1 border-b border-border bg-bg px-3 sm:gap-2 sm:px-4"
     >
       <StorageStatus compact />
