@@ -204,6 +204,13 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q27 | Should attunement controls complete focused rests or automatically end bonds after death, prerequisite loss or separation? | M9 | Record verified bonds explicitly; use shared rest/clock controls and review contact, prerequisites, curses and ending conditions at the table | User / DM |
 | Q28 | Which hosting and sync provider for accounts? | MA | Supabase (auth + Postgres with row-level security); the app keeps working offline and without an account | User |
 | Q30 | Should Tasha sidekicks be a campaign option, and should Artificer cannon and Steel Defender templates ship with M14? | M12 / M14 | Sidekicks are plain custom companions with type "sidekick"; no campaign option; Artificer templates wait for M14 | User |
+| Q32 | Should guests see the tutorial, or only new accounts? | M23 | Guests too, on their first visit | User |
+| Q33 | May other players change a party member's build, or only live state? | M24 | Both while the campaign's "Party can fix each other's characters" is on; the DM always can | User |
+| Q34 | How does Undo work when several people edit one character? | M24 | Undo your own latest change; warn when someone changed the same values after you; block if it no longer fits | User |
+| Q35 | How many DMs can a campaign have? | M24 | Any number of co-DMs, chosen by the owner | User |
+| Q36 | What happens to a character when its player leaves a shared campaign? | M24 | The player keeps a private copy; the party copy stays, marked "left" and view only | User |
+| Q37 | Which DM tools come first? | M25 | Party overview, party rest and clock, rewards | User |
+| Q38 | Should there be a "?" help button in the top bar? | M23 | No; Settings → Tutorial and Find cover it | User |
 
 ## How to add an entry
 

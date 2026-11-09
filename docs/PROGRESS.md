@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** None scheduled. M21 done.
-**Next up:** Testing phase on the live site (https://omnidnd.netlify.app): run the MA (accounts) list first, then the M17 to M21 lists. No new features until testing is done.
+**Next up:** Testing phase on the live site (https://omnidnd.netlify.app): run the MA (accounts) list first, then the M17 to M21 lists. No new features until testing is done. Then M22 to M25 from [PLAN.md](PLAN.md), once the user approves it.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -45,6 +45,10 @@ Build for multiple campaigns and characters, including friends' future character
 | M19 | Physical checks and spell components | 6 | done | Jump, carry, breath and travel numbers come from the engine with breakdowns; casting says when a focus covers the material |
 | M20 | Tools directory | 6 | done | Outside tools grouped by what you want to do, in our own words, with working links |
 | M21 | Find and Related links | 6 | done | One search box reaches any screen, rule, tool or character item in two steps or fewer |
+| M22 | Accounts, finished | 7 | todo | Automatic sync, password reset, display name; see [PLAN.md](PLAN.md) |
+| M23 | Tutorial | 7 | todo | First-run guide with Skip and Replay; see [PLAN.md](PLAN.md) |
+| M24 | Roles and shared campaigns | 7 | todo | DM or player role; party sees and fixes each other's characters, with names on changes; see [PLAN.md](PLAN.md) |
+| M25 | DM tools | 7 | todo | Party overview, party rests, time and rewards; see [PLAN.md](PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -265,15 +269,15 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Backlog (not scheduled)
 
 - Done 2026-11-09: site live on Netlify with Supabase accounts (HOSTING.md)
-- Automatic sync: on open or focus, a few seconds after changes, and when back online; conflicts show a calm notice; Sync now stays (after testing, revisits D124)
-- Later: shared campaign view for a party or DM (after accounts)
-- Party view (several characters side by side)
+- Moved to PLAN.md: automatic sync (M22), shared campaign for a party or DM (M24), party view (M24)
+- Later: shared encounter tracker run by the DM (after M25)
 - Later: spell import from user-pasted text
 - Later: session recap generated from the event log
 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- Plan: M22 accounts finished, M23 tutorial, M24 roles and shared campaigns, M25 DM tools written in PLAN.md; open questions Q32–Q38.
 - Testing fix: Find now matches edit, fix, override and correct to Sheet, where the Edit button fixes numbers and build choices.
 - Testing fix: spell names in level-up picks and Manage spells open the spell card (hover or focus on desktop, tap on phones); Escape closes only the card.
 - Testing fix: skipped spell picks show as Pending buttons on Spells (cantrips under Cantrips, others under the first level) and open Manage; e2e added.

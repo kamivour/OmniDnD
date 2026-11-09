@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 14:34 — Plan for accounts, party play and tutorial
+
+- New plan in docs/PLAN.md: M22 finishes accounts (automatic sync, password reset, display name), M23 adds a skippable tutorial, M24 adds DM or player roles and shared campaigns, M25 adds DM tools.
+- Please review the seven open questions (Q32–Q38) at the end of the plan; each has a default the plan uses until you answer.
+- Nothing is built yet; work starts after the testing phase.
+
 ## 2026-11-09 14:28 — Find the Edit button
 
 - Searching Find for "edit", "fix", "override" or "correct" now points to Sheet.

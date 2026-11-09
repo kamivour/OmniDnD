@@ -4,7 +4,7 @@ D&D 5e **2014** character companion for future campaigns and friends' characters
 
 ## Read first (in this order)
 
-1. [docs/PROGRESS.md](docs/PROGRESS.md) — where we are, what to do next
+1. [docs/PROGRESS.md](docs/PROGRESS.md) — where we are, what to do next ([docs/PLAN.md](docs/PLAN.md) details M22–M25)
 2. [docs/SPEC.md](docs/SPEC.md) — what to build, screen by screen, plus rules engine
 3. [docs/DESIGN.md](docs/DESIGN.md) — visual direction, tokens, key frames
 4. [docs/DATA.md](docs/DATA.md) — data layers, schemas, sources, summary style
