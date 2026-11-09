@@ -86,4 +86,67 @@ export const CHAPTERS: readonly Chapter[] = [
       },
     ],
   },
+  {
+    id: 'combat',
+    title: 'Combat tips',
+    tip: true,
+    steps: [
+      {
+        id: 'status',
+        target: 'combat-status',
+        title: 'Start combat',
+        body: 'Start combat to track rounds and turns. Your DM runs the fight; you tell the app what happened.',
+      },
+      {
+        id: 'economy',
+        target: 'combat-economy',
+        title: 'Your turn',
+        body: 'Action, bonus action, reaction and movement show here once combat starts. Using one marks it spent.',
+      },
+      {
+        id: 'options',
+        target: 'combat-options',
+        title: 'Act',
+        body: 'Pick an action tab. You enter the hit, the damage and the saves your DM calls; the app never decides them.',
+      },
+    ],
+  },
+  {
+    id: 'spells',
+    title: 'Spell tips',
+    tip: true,
+    steps: [
+      {
+        id: 'header',
+        target: 'spells-header',
+        title: 'Slots',
+        body: 'Your spell slots are here. Casting a leveled spell spends one.',
+      },
+      {
+        id: 'filters',
+        target: 'spell-filters',
+        title: 'Find and cast',
+        body: 'Search or filter your spells. Tap a name to read it, and use Cast to spend the slot.',
+      },
+      {
+        id: 'manage',
+        target: 'spells-manage',
+        title: 'Manage spells',
+        body: 'Learn, prepare or swap spells here. Choices you skipped wait as Pending buttons below.',
+      },
+    ],
+  },
+  {
+    id: 'inventory',
+    title: 'Inventory tips',
+    tip: true,
+    steps: [
+      {
+        id: 'header',
+        target: 'inventory-header',
+        title: 'Your gear',
+        body: 'Add items, create your own, and tap one to equip it, attune to it or edit it. Currency lives here too.',
+      },
+    ],
+  },
 ];

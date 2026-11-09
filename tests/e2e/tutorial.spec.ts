@@ -83,3 +83,42 @@ test.describe('character tour', () => {
     await expect(page.getByTestId('tour')).toHaveCount(0);
   });
 });
+
+test.describe('screen tips', () => {
+  test.use({ showTutorial: true });
+  const seed =
+    (tipsOn: boolean) =>
+    async ({ page }: { page: import('@playwright/test').Page }) => {
+      await page.addInitScript((on) => {
+        if (!localStorage.getItem('omnidnd.tutorial'))
+          localStorage.setItem(
+            'omnidnd.tutorial',
+            JSON.stringify({ done: ['welcome', 'character'], tipsOn: on }),
+          );
+      }, tipsOn);
+    };
+
+  for (const [route, title] of [
+    ['combat', 'Start combat'],
+    ['spells', 'Slots'],
+    ['inventory', 'Your gear'],
+  ] as const) {
+    test(`${route} tip shows once and Skip is remembered`, async ({ page }) => {
+      await seed(true)({ page });
+      await page.goto(`/characters/the-fool/${route}`);
+      const card = page.getByRole('dialog', { name: title });
+      await expect(card).toBeVisible();
+      await card.getByRole('button', { name: 'Skip tutorial' }).click();
+      await page.reload();
+      await page.waitForTimeout(800);
+      await expect(page.getByTestId('tour')).toHaveCount(0);
+    });
+  }
+
+  test('no tips when the switch is off', async ({ page }) => {
+    await seed(false)({ page });
+    await page.goto('/characters/the-fool/combat');
+    await page.waitForTimeout(800);
+    await expect(page.getByTestId('tour')).toHaveCount(0);
+  });
+});

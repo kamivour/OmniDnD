@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type Ref } from 'react';
 import { Search } from 'lucide-react';
+import { useTourAutostart } from '../tutorial/useTour';
 import { registry, registryFor } from '../../data/registry';
 import { adjustSlot, setSpellFavorite, spellCastDetails } from '../../engine/commands';
 import { SchoolSchema } from '../../engine/schema';
@@ -85,6 +86,7 @@ function matches(
 export function SpellbookScreen() {
   const { state, sheet, events } = useCharacter();
   const { run } = useCommand();
+  useTourAutostart('spells');
   const model = spellbookModel(state, sheet, registry);
   const { slots, levels } = model;
   const context = { ...state, sheet, registry: registryFor(state.build) };
@@ -150,7 +152,7 @@ export function SpellbookScreen() {
   return (
     <div className="mx-auto max-w-screen-2xl px-4 py-4 lg:px-6">
       <div className="flex min-w-0 flex-col gap-4">
-        <header className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+        <header data-tour="spells-header" className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
           <h1 className="font-display text-lg text-text">Spells</h1>
           <div className="flex flex-col gap-1 text-xs text-text-muted">
             {model.classes.map((casting) => (
@@ -216,6 +218,7 @@ export function SpellbookScreen() {
           <button
             ref={manageOpener}
             type="button"
+            data-tour="spells-manage"
             onClick={() => openManage()}
             className="ml-auto min-h-11 rounded-btn px-2 text-sm text-accent"
           >
@@ -237,7 +240,7 @@ export function SpellbookScreen() {
           </p>
         )}
 
-        <section aria-label="Filters" className="flex flex-col gap-2">
+        <section aria-label="Filters" data-tour="spell-filters" className="flex flex-col gap-2">
           <div className="flex gap-2">
             <label className="flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-btn border border-border bg-surface px-3 focus-within:border-accent">
               <Search size={16} aria-hidden className="shrink-0 text-text-muted" />

@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 15:32 — Screen tips
+
+- The first time you open Combat, Spells or Inventory, a short tip points at the main controls. Turn tips off in Settings → Tutorial.
+- Rest and level-up are dialogs, not screens, so they have no tip yet.
+- Next: the tutorial gate and manual checks.
+- Checks pass.
+
 ## 2026-11-09 15:27 — Character tour
 
 - The first time you open a character, a five-card tour points at the top numbers, the menus, To do, History with Undo, and Sheet → Edit.

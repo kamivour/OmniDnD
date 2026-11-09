@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { useStore } from 'zustand';
+import { useTourAutostart } from '../tutorial/useTour';
 import { registry } from '../../data/registry';
 import { storageStatusStore } from '../../state/persistence';
 import { armorEquipmentNotes } from '../../engine/calc/equipment';
@@ -23,6 +24,7 @@ import { useDetail } from '../layout/detail-context';
 /** Instance identity and live counts are shared with equipment calculations and character exports. */
 export function InventoryScreen() {
   const { state, sheet } = useCharacter();
+  useTourAutostart('inventory');
   const { pin } = useDetail();
   const [editor, setEditor] = useState<InventoryEditorRequest | null>(null);
   const [custom, setCustom] = useState<CustomItemRequest | null>(null);
@@ -34,7 +36,7 @@ export function InventoryScreen() {
   const notes = armorEquipmentNotes(state, registry, sheet);
   return (
     <div className="mx-auto flex min-w-0 max-w-5xl flex-col gap-6 px-4 py-4 lg:px-6">
-      <header>
+      <header data-tour="inventory-header">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h1 className="font-display text-xl">Inventory</h1>
           <div className="flex flex-wrap gap-2">

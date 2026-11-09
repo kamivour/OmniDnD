@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Tabs } from 'radix-ui';
+import { useTourAutostart } from '../tutorial/useTour';
 import { registry } from '../../data/registry';
 import {
   combatMovement,
@@ -68,6 +69,7 @@ const TABS = [
 export function CombatScreen() {
   const { state, sheet, events } = useCharacter();
   const { run } = useCommand();
+  useTourAutostart('combat');
   const combatStatus = useRef<HTMLDivElement>(null);
   const restoreStatusFocus = useRef(false);
   const castOpener = useRef<HTMLElement | null>(null);
@@ -272,6 +274,7 @@ export function CombatScreen() {
             tabIndex={-1}
             role="status"
             aria-label="Combat status"
+            data-tour="combat-status"
             className="min-w-0 flex-1"
           >
             {liveCombat ? (
@@ -351,7 +354,7 @@ export function CombatScreen() {
         {liveCombat && <EncounterTracker />}
 
         {liveCombat && (
-          <section aria-label="Turn economy">
+          <section aria-label="Turn economy" data-tour="combat-economy">
             <EconomyBar
               economy={economy}
               movement={{
@@ -383,6 +386,7 @@ export function CombatScreen() {
         <Tabs.Root value={tab} onValueChange={setTab} className="flex flex-col gap-3">
           <Tabs.List
             aria-label="Combat options"
+            data-tour="combat-options"
             className="grid grid-cols-5 rounded-card border border-border bg-surface p-1"
           >
             {TABS.map((t) => (
