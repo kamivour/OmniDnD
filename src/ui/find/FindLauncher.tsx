@@ -46,6 +46,7 @@ export function FindLauncher({ withCharacter }: { withCharacter: boolean }) {
         ref={opener}
         type="button"
         aria-label="Find"
+        data-tour="find"
         title="Find (Ctrl+K or /)"
         onClick={() => setOpen(true)}
         className="grid size-11 shrink-0 place-items-center rounded-btn text-text-muted hover:bg-surface hover:text-text"

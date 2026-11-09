@@ -17,6 +17,7 @@ import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { useManagement } from '../commands/useManagement';
 import { deviceStore } from '../../state/device-settings';
 import { backupReminder } from '../../state/backup-reminder';
+import { useTourAutostart } from '../tutorial/useTour';
 import { rulesSummary } from '../campaignOptions';
 
 const button =
@@ -25,6 +26,7 @@ const path = (id: string) => encodeURIComponent(id);
 
 /** The landing page reads the same saved characters as the HUD. */
 export function CampaignsScreen() {
+  useTourAutostart('welcome');
   const state = useStore(characterStore);
   const management = useManagement();
   const { run, undo, confirmation, pending } = management;
@@ -56,7 +58,9 @@ export function CampaignsScreen() {
   return (
     <section className="flex flex-col gap-6">
       <header className="flex flex-wrap items-center gap-2">
-        <h1 className="font-display text-xl">Campaigns</h1>
+        <h1 data-tour="campaigns" className="font-display text-xl">
+          Campaigns
+        </h1>
         <div className="ml-auto flex flex-wrap gap-2">
           <button
             type="button"
@@ -77,7 +81,7 @@ export function CampaignsScreen() {
             <Upload size={16} aria-hidden />
             Import
           </button>
-          <Link to="/campaigns/new" className={button}>
+          <Link to="/campaigns/new" data-tour="new-campaign" className={button}>
             <Plus size={16} aria-hidden />
             New campaign
           </Link>
@@ -300,6 +304,7 @@ function CampaignCard({
           <li>
             <Link
               to={`/campaigns/${path(campaign.id)}/characters/new`}
+              data-tour="new-character"
               className="flex h-full min-h-16 items-center justify-center gap-2 rounded-card border border-dashed border-border p-3 text-text-muted hover:border-accent hover:text-text"
             >
               <Plus size={16} aria-hidden />

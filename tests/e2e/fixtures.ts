@@ -5,7 +5,33 @@ export type { Page } from '@playwright/test';
 
 const LOOPBACK_HTTP = 'http://127.0.0.1:4173/**';
 
-export const test = base.extend<{ forwardLoopbackHttp: void; defaultToOnePage: void }>({
+/** Chapters the tutorial spec sets to be seen; every other spec starts with the tour already done. */
+const ALL_CHAPTERS = ['welcome', 'character', 'combat', 'spells', 'rest', 'inventory'];
+
+export const test = base.extend<{
+  forwardLoopbackHttp: void;
+  defaultToOnePage: void;
+  showTutorial: boolean;
+  tutorialDone: void;
+}>({
+  showTutorial: [false, { option: true }],
+  // The tour covers the page and blocks clicks, so other specs start with it finished.
+  tutorialDone: [
+    async ({ context, showTutorial }, runTest) => {
+      if (!showTutorial) {
+        await context.addInitScript((done) => {
+          try {
+            if (!localStorage.getItem('omnidnd.tutorial'))
+              localStorage.setItem('omnidnd.tutorial', JSON.stringify({ done, tipsOn: true }));
+          } catch {
+            // Storage unavailable: the tour may show.
+          }
+        }, ALL_CHAPTERS);
+      }
+      await runTest();
+    },
+    { auto: true },
+  ],
   // Most specs fill the whole New character form, so they start in One page mode.
   // The step-by-step spec switches mode on screen.
   defaultToOnePage: [

@@ -149,6 +149,14 @@ export const PLACES: readonly FindEntry[] = [
     target: { kind: 'go', path: 'settings' },
   },
   {
+    id: 'go.tutorial',
+    group: 'go',
+    title: 'Tutorial',
+    detail: 'Settings: replay the guided tour',
+    synonyms: ['tour', 'help', 'guide', 'tips', 'welcome', 'how to'],
+    target: { kind: 'go', path: 'settings', anchor: 'settings-tutorial' },
+  },
+  {
     id: 'go.print',
     group: 'go',
     title: 'Print view',

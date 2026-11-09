@@ -26,6 +26,7 @@ export function HubFrame() {
               <NavLink
                 key={to}
                 to={to}
+                data-tour={to === '/settings' ? 'settings' : undefined}
                 className={({ isActive }) =>
                   cx(
                     'flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-btn px-2 sm:px-3 transition-colors duration-(--omni-motion-hover)',

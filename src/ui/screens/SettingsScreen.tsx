@@ -10,6 +10,7 @@ import { useManagement } from '../commands/useManagement';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { ChoiceGroup, Field, inputClass } from '../components/fields';
 import { syncConfig } from '../../sync/config';
+import { TutorialSection } from '../settings/TutorialSection';
 import { BackupsSection } from '../settings/BackupsSection';
 import { ResetCharacterControl } from '../settings/ResetCharacterControl';
 import { cx } from '../cx';
@@ -212,6 +213,7 @@ export function SettingsScreen() {
           your character until you enter it. Stored on this device only.
         </p>
       </section>
+      <TutorialSection />
       <BackupsSection />
       {AccountSection && syncConfig && (
         <Suspense fallback={null}>

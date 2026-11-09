@@ -4,10 +4,7 @@ import type { SyncStatus } from '../../sync/auto-sync';
 import { useAutoSyncState } from '../../sync/service';
 import { cx } from '../cx';
 
-const SYNC_CHIP: Record<
-  Exclude<SyncStatus, 'signed-out'>,
-  { label: string; tone: string }
-> = {
+const SYNC_CHIP: Record<Exclude<SyncStatus, 'signed-out'>, { label: string; tone: string }> = {
   idle: { label: 'Synced', tone: 'text-text-muted' },
   syncing: { label: 'Syncing', tone: 'text-text-muted' },
   offline: { label: 'Offline', tone: 'text-text-muted' },
