@@ -3,7 +3,8 @@
 What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
-n## 2026-11-09 15:10 — Delete account
+
+## 2026-11-09 15:10 — Delete account
 
 - Settings → Account has Delete account. Type DELETE to confirm; your cloud account and cloud copies are removed.
 - Campaigns and characters stay on this device. Before it works online, run supabase/migrations/20261109160000_delete_account.sql once (see HOSTING.md).
