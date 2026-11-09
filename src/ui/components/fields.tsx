@@ -40,7 +40,7 @@ export function ChoiceGroup<T extends string>({
 }: {
   legend: string;
   name: string;
-  options: Option<T>[];
+  options: (Option<T> & { icon?: ReactNode })[];
   value: T;
   onChange: (value: T) => void;
 }) {
@@ -66,6 +66,11 @@ export function ChoiceGroup<T extends string>({
                 onChange={() => onChange(o.value)}
                 className="size-4 accent-(--omni-accent)"
               />
+              {o.icon && (
+                <span aria-hidden className="text-accent">
+                  {o.icon}
+                </span>
+              )}
               <span className="font-semibold text-text">{o.label}</span>
             </span>
             <span className="text-xs text-text-muted">{o.hint}</span>

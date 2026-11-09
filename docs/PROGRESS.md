@@ -274,6 +274,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- Testing fix: Parchment theme toned down (less glare, darker text colors); Theme options in Settings show Monitor, Moon and Sun icons.
 - M21 gate: Jump, Print, Shatter, Long rest and a map tool each reachable from the Dashboard in two steps; manual QA added. M21 done.
 - M21 task 4: Related rows on Skills, Movement and body, and the cast sheet; links only suggest and move nowhere on their own; e2e added.
 - M21 task 3: Find search icon in the character toolbar and hub header, Ctrl/Cmd+K and / open it; results jump to the section and flash it.

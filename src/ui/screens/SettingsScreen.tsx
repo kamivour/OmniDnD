@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { useStore } from 'zustand';
-import { Download, Undo2, Upload } from 'lucide-react';
+import { Download, Monitor, Moon, Sun, Undo2, Upload } from 'lucide-react';
 import { updatePreferences } from '../../engine/commands/preferences';
 import type { Preferences } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
@@ -144,9 +144,20 @@ export function SettingsScreen() {
             value: 'system',
             label: 'System',
             hint: 'Dark, or Parchment when your device is light.',
+            icon: <Monitor className="size-4" />,
           },
-          { value: 'dark', label: 'Dark', hint: 'Deep blue with gold.' },
-          { value: 'parchment', label: 'Parchment', hint: 'Warm light paper for bright rooms.' },
+          {
+            value: 'dark',
+            label: 'Dark',
+            hint: 'Deep blue with gold.',
+            icon: <Moon className="size-4" />,
+          },
+          {
+            value: 'parchment',
+            label: 'Parchment',
+            hint: 'Soft light paper for bright rooms.',
+            icon: <Sun className="size-4" />,
+          },
         ]}
         onChange={(value) => deviceStore.getState().setTheme(value)}
       />
