@@ -493,3 +493,45 @@ test('ordered tags change the main row type; empty tags, reset and durable Undo 
   await manage(page).getByRole('button', { name: 'Done', exact: true }).click();
   await expect(row(page, 'Healing Word')).toContainText('Utility');
 });
+
+test('skipped spell picks wait under their section and open Manage to finish', async ({
+  page,
+  isMobile,
+}, info) => {
+  const file = importedSeed('manage-pending-bard');
+  file.build.spells = [];
+  await importCharacter(page, file);
+  const cantrips = main(page).getByRole('region', { name: 'Cantrips', exact: true });
+  const level1 = main(page).getByRole('region', { name: 'Level 1', exact: true });
+  await expect(
+    cantrips.getByRole('button', { name: 'Pending Bard cantrips: 2 to pick', exact: true }),
+  ).toBeVisible();
+  await expect(
+    level1.getByRole('button', { name: 'Pending Bard spells known: 6 to pick', exact: true }),
+  ).toBeVisible();
+  await expectNoOverflow(page);
+  await page.screenshot({
+    path: info.outputPath(`pending-picks-${isMobile ? '375' : '1440'}.png`),
+    animations: 'disabled',
+  });
+
+  // Filtering hides the reminders so search results stay clean.
+  await main(page).getByRole('searchbox').fill('zzz');
+  await expect(main(page).getByRole('button', { name: /^Pending/ })).toHaveCount(0);
+  await main(page).getByRole('searchbox').fill('');
+
+  await cantrips.getByRole('button', { name: /^Pending Bard cantrips/ }).click();
+  await expect(manage(page)).toBeVisible();
+  for (const name of ['Mage Hand', 'Vicious Mockery']) {
+    await manage(page).getByRole('searchbox', { name: 'Search available spells' }).fill(name);
+    await manage(page)
+      .getByRole('checkbox', { name: `Know ${name}`, exact: true })
+      .check();
+    await expectSaved(page);
+  }
+  await manage(page).getByRole('button', { name: 'Done', exact: true }).click();
+  await expect(main(page).getByRole('button', { name: /^Pending Bard cantrips/ })).toHaveCount(0);
+  await expect(
+    level1.getByRole('button', { name: 'Pending Bard spells known: 6 to pick', exact: true }),
+  ).toBeVisible();
+});

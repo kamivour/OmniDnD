@@ -21,6 +21,7 @@ import { spellbookModel } from '../spells/spellbook-model';
 import { SpellCastControls } from '../spells/SpellCastControls';
 import { SpellManage } from '../spells/SpellManage';
 import { LiveSpellDetail } from '../spells/LiveSpellDetail';
+import { useTodo } from '../todo/useTodo';
 
 interface Filters {
   query: string;
@@ -95,6 +96,7 @@ export function SpellbookScreen() {
   }));
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
   const [manageOpen, setManageOpen] = useState(false);
+  const [manageClass, setManageClass] = useState<string | undefined>(undefined);
   const manageOpener = useRef<HTMLButtonElement>(null);
   const [casting, setCasting] = useState<{
     spellId: string;
@@ -125,6 +127,25 @@ export function SpellbookScreen() {
   );
   const costs = [...new Set<Cost>([...COSTS, ...entries.map(({ spell }) => spell.cost)])];
   const filtered = JSON.stringify(filters) !== JSON.stringify(NO_FILTERS);
+  // Picks skipped at level up stay here until made: cantrips under Cantrips, the rest under the
+  // first spell level. Hidden while filtering so search results stay clean.
+  const pendingSpells = useTodo().open.filter((item) => item.area === 'spells' && !filtered);
+  const leveledHome = levels.find((level) => level > 0) ?? 1;
+  const pendingAt = (level: number) =>
+    pendingSpells.filter((item) =>
+      level === 0 ? item.kind === 'cantrips' : level === leveledHome && item.kind !== 'cantrips',
+    );
+  const shownLevels = [
+    ...new Set([
+      ...levels,
+      ...(pendingAt(0).length > 0 ? [0] : []),
+      ...(pendingAt(leveledHome).length > 0 ? [leveledHome] : []),
+    ]),
+  ].sort((a, b) => a - b);
+  const openManage = (classId?: string) => {
+    setManageClass(classId);
+    setManageOpen(true);
+  };
 
   return (
     <div className="mx-auto max-w-screen-2xl px-4 py-4 lg:px-6">
@@ -195,7 +216,7 @@ export function SpellbookScreen() {
           <button
             ref={manageOpener}
             type="button"
-            onClick={() => setManageOpen(true)}
+            onClick={() => openManage()}
             className="ml-auto min-h-11 rounded-btn px-2 text-sm text-accent"
           >
             Manage
@@ -327,7 +348,9 @@ export function SpellbookScreen() {
         {visible.length === 0 && (
           <p className="py-8 text-center text-text-muted">
             {model.entries.length === 0
-              ? 'No spells selected yet.'
+              ? pendingSpells.length > 0
+                ? 'No spells selected yet. Use a Pending button below to choose.'
+                : 'No spells selected yet.'
               : 'No spells match these filters.'}
           </p>
         )}
@@ -339,10 +362,11 @@ export function SpellbookScreen() {
           </p>
         )}
 
-        {levels.map((level) => {
+        {shownLevels.map((level) => {
           const group = visible.filter(({ spell }) => spell.level === level);
           const slot = slots.find((s) => s.level === level);
-          if (group.length === 0 && !slot) return null;
+          const picks = pendingAt(level);
+          if (group.length === 0 && !slot && picks.length === 0) return null;
           return (
             <section
               key={level}
@@ -371,6 +395,17 @@ export function SpellbookScreen() {
                   />
                 )}
               </div>
+              {picks.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => openManage(item.classId)}
+                  className="flex min-h-11 items-center gap-2 rounded-card border border-dashed border-accent px-3 py-2 text-left text-sm text-text hover:bg-surface-2"
+                >
+                  <span className="font-semibold text-accent">Pending</span>
+                  <span className="min-w-0 wrap-anywhere">{item.label}</span>
+                </button>
+              ))}
               <ul className="flex flex-col gap-2">
                 {group.map(({ spell, classId, dc, attack, ritualAvailable }) => (
                   <SpellRow
@@ -428,7 +463,11 @@ export function SpellbookScreen() {
           )?.focus();
         }}
       >
-        <SpellManage onClose={() => setManageOpen(false)} />
+        <SpellManage
+          key={manageClass ?? ''}
+          initialClassId={manageClass}
+          onClose={() => setManageOpen(false)}
+        />
       </Sheet>
       <Sheet
         open={casting !== null}

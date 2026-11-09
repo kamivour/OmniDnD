@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 14:03 — Pending spell picks on Spells
+
+- If you skip a cantrip or spell pick at level up, a Pending button now waits on the Spells screen: cantrips under Cantrips, other spells under Level 1.
+- Tap it to open Manage spells for that class and finish the pick later.
+- The buttons hide while you search or filter.
+- Checks pass.
+
 ## 2026-11-09 13:58 — Softer Parchment theme
 
 - Parchment is less bright: the paper is a calmer tan and text colors are darker, so words are easier to read.

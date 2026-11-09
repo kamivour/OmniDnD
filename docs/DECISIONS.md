@@ -170,6 +170,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D164 | 2026-11-08 | A focus or pouch covers only materials with no gold price, and any carried item counts, equipped or not. Climb and swim speed are half walking speed | Matches the 2014 rule; the Artificer infusion item is not read yet |
 | D165 | 2026-11-09 | Free only on the Tools page keeps tools with a free tier and hides paid-only tools. Other game systems are listed but marked not supported | A freemium tool can still cost money for the best features |
 | D166 | 2026-11-09 | Find and Related links only suggest. Tool results open in a new tab, and Long rest opens its sheet instead of resting at once | You stay in control; nothing changes your character from a search |
+| D167 | 2026-11-09 | Skipped spell picks also show as Pending buttons on Spells, under Cantrips or the first spell level, and hide while searching or filtering | Players find the open pick where they look for spells, not only on the To do list |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 
