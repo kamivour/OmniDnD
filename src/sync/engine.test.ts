@@ -3,6 +3,7 @@ import { seedFile } from '../data/seed';
 import { serializeWorkspace, type Workspace } from '../db/database';
 import { planSyncRecords, type SyncRecord } from '../db/sync-metadata';
 import { applyDamage } from '../engine/commands/hp';
+import { setInspiration } from '../engine/commands/inspiration';
 import { deleteCharacter, duplicateCharacter } from '../engine/commands/management';
 import { createCharacterStore } from '../state/character-store';
 import { syncWorkspace, type ConflictChoice } from './engine';
@@ -140,6 +141,32 @@ describe('two-way sync', () => {
     const back = await laptop.sync();
     expect(back.downloaded).toBe(1);
     expect(laptop.store.getState().characters[FOOL]?.events.at(-1)?.id).toBe('phone-hit');
+  });
+
+  it('merges edits to different fields on both devices without asking', async () => {
+    const cloud = new MemoryCloud();
+    const laptop = await device(cloud);
+    await laptop.sync();
+    const phone = await device(cloud);
+    await phone.sync();
+
+    laptop.store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, laptop.act('laptop-hit'));
+    await laptop.sync();
+    phone.store
+      .getState()
+      .dispatch(FOOL, setInspiration, { inspired: true }, phone.act('phone-inspired'));
+
+    const merged = await phone.sync();
+    expect(merged.conflicts).toEqual([]);
+    expect([merged.uploaded, merged.downloaded]).toEqual([1, 1]);
+    const character = phone.store.getState().characters[FOOL];
+    expect(character?.live.inspiration).toBe(true);
+    expect(character?.events.map(({ id }) => id)).toEqual(['phone-inspired', 'laptop-hit']);
+    expect(character?.live.hp).toBe(laptop.store.getState().characters[FOOL]?.live.hp);
+
+    await laptop.sync();
+    expect(laptop.store.getState().characters[FOOL]?.live.inspiration).toBe(true);
+    expect((await phone.sync()).conflicts).toEqual([]);
   });
 
   it('can settle a conflict by taking the cloud version', async () => {

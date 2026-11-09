@@ -4,11 +4,16 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 15:25 — Automatic merge
+
+- If you change one thing on your phone and another on your laptop, the two versions now combine on their own. No question asked.
+- If both devices changed the same thing (for example hit points), the app still asks which to keep.
+- Checks pass.
+
 ## 2026-11-09 15:20 — Sync status chip
 
 - Signed-in accounts show a small chip in the top bar: Synced, Syncing, Offline, Sync problem, or Needs your choice. Tap it to open Account settings.
 - Guests see nothing new. Check it at phone width: only the icon shows until a choice is needed.
-- Next: merge changes from two devices automatically.
 - Checks pass.
 
 ## 2026-11-09 15:15 — Automatic sync

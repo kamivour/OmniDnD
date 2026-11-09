@@ -15,6 +15,7 @@ import {
   SCHEMA_VERSION,
 } from '../engine/schema';
 import { createCharacterStore } from '../state/character-store';
+import { mergeCharacters } from './merge';
 import { planSync, remoteFingerprint, type SyncStep } from './plan';
 import type { RemoteEntity, SyncProvider } from './provider';
 
@@ -42,11 +43,17 @@ export interface SyncOutcome {
   skipped: number;
 }
 
+/** Both sides changed different fields: the combined character, to upload and keep. */
+type Step =
+  SyncStep | { type: 'merge'; id: string; remote: RemoteEntity; content: CharacterPayload };
+
 const CharacterPayloadSchema = z.strictObject({
   build: CharacterBuildSchema,
   live: LiveStateSchema,
   events: z.array(LogEventSchema),
 });
+
+type CharacterPayload = z.infer<typeof CharacterPayloadSchema>;
 
 function nameOf(content: unknown): string | undefined {
   if (typeof content !== 'object' || content === null) return undefined;
@@ -107,10 +114,25 @@ export async function syncWorkspace(
   let uploaded = 0;
   let downloaded = 0;
 
-  const settle = (step: SyncStep): SyncStep | null => {
+  /** Edits to different fields on both sides combine without asking. */
+  const tryMerge = (id: string, theirs: RemoteEntity): Step | null => {
+    if (theirs.kind !== 'character' || theirs.deleted) return null;
+    const mine = contents.get(id)?.content;
+    const parsedMine = CharacterPayloadSchema.safeParse(mine);
+    const parsedTheirs = CharacterPayloadSchema.safeParse(theirs.payload);
+    if (!parsedMine.success || !parsedTheirs.success) return null;
+    const content = mergeCharacters(parsedMine.data, parsedTheirs.data, CharacterPayloadSchema);
+    return content ? { type: 'merge', id, remote: theirs, content } : null;
+  };
+
+  const settle = (step: Step): Step | null => {
     if (step.type !== 'conflict') return step;
     const { id, remote: theirs } = step;
     const choice = choices.get(id);
+    if (!choice) {
+      const merged = tryMerge(id, theirs);
+      if (merged) return merged;
+    }
     if (choice === 'cloud') return { type: 'pull', id, remote: theirs };
     if (choice === 'this-device')
       return {
@@ -134,6 +156,33 @@ export async function syncWorkspace(
     const step = settle(planned);
     if (!step) continue;
     const mine = byId.get(step.id);
+    if (step.type === 'merge') {
+      if (!mine) continue;
+      const result = await provider.push(
+        {
+          kind: 'character',
+          entityId: step.remote.entityId,
+          deleted: false,
+          changedAt: mine.changedAt,
+          schemaVersion: SCHEMA_VERSION,
+          payload: step.content,
+        },
+        step.remote.revision,
+      );
+      // Lost a race: the next pass sees the newer cloud row and tries again.
+      if (result.result !== 'ok') continue;
+      characters[step.remote.entityId] = step.content;
+      uploaded += 1;
+      downloaded += 1;
+      const merged = fingerprint(step.content);
+      changed.push({
+        ...mine,
+        fingerprint: merged,
+        syncedFingerprint: merged,
+        baseRevision: result.revision,
+      });
+      continue;
+    }
     if (step.type === 'push') {
       if (!mine) continue;
       const entity = contents.get(step.id);
