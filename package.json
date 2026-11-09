@@ -16,6 +16,7 @@
     "format": "prettier --write .",
     "import:srd": "node scripts/import-srd.ts",
     "check:tools": "node scripts/check-tools.ts",
+    "check:party": "node scripts/check-party-rls.ts",
     "e2e": "playwright test"
   },
   "dependencies": {

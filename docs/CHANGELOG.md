@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 15:54 — Shared campaign database
+
+- The database for shared campaigns is written: members, invites that last 7 days, and party characters only their owner can change. Nothing in the app uses it yet.
+- Before sharing works online, run supabase/migrations/20261109170000_party.sql once (see HOSTING.md).
+- Next: Share with party and invite links.
+- Checks pass.
+
 ## 2026-11-09 15:50 — Roles
 
 - A new campaign now asks if you are the DM or a player. A new character asks who plays it; the DM option shows only in a DM campaign.

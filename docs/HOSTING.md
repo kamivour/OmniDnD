@@ -5,7 +5,7 @@ Accounts are optional. Without the two settings in step 3, the app builds as a g
 ## 1. Create the account database (Supabase, free tier)
 
 1. Sign up at supabase.com and create a project. Pick a region near your players.
-2. Open **SQL Editor** and run each file in `supabase/migrations/` once, oldest first: `20261106120000_sync_entities.sql`, then `20261109150000_profiles.sql` (display names), then `20261109160000_delete_account.sql` (delete account). Already set up? Run only the files you have not run.
+2. Open **SQL Editor** and run each file in `supabase/migrations/` once, oldest first: `20261106120000_sync_entities.sql`, then `20261109150000_profiles.sql` (display names), then `20261109160000_delete_account.sql` (delete account), then `20261109170000_party.sql` (shared campaigns). Already set up? Run only the files you have not run.
 3. Open **Authentication → Sign In / Providers** and keep **Email** enabled. "Confirm email" on is safer; players then click a link before their first sign-in.
 
 ## 2. Copy the public connection values

@@ -386,7 +386,7 @@ data/
   private/      gitignored
   characters/   seed characters (the-fool.json)
 scripts/        import-srd.ts, srd/map.ts (pure mappers, unit-tested)
-supabase/       migrations/: account database schema and row-level security (MA)
+supabase/       migrations/: account and party database schema and row-level security (MA, M24)
 tests/          e2e/ (Playwright)
 docs/
 ```
