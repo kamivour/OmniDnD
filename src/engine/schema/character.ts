@@ -41,6 +41,8 @@ export const CampaignSchema = z.strictObject({
   /** Flags are off unless enabled; choice rules (encumbrance, rests) hold their option name. Read through optionalRules(). */
   optionalRules: z.record(z.string(), z.union([z.boolean(), z.string()])),
   role: CampaignRoleSchema.optional(),
+  /** True while this campaign is shared with a party (M24). Mirrors the cloud; not undoable. */
+  shared: z.boolean().optional(),
 });
 
 const HpEntrySchema = z.strictObject({
@@ -112,6 +114,8 @@ export const CharacterBuildSchema = z
     name: z.string().min(1),
     portrait: z.string().optional(),
     playedBy: PlayedBySchema.optional(),
+    /** Set only on a read-only copy of another member's character in a shared campaign. */
+    partyOwner: z.strictObject({ userId: z.string().min(1), name: z.string() }).optional(),
     raceId: refId('race'),
     subraceId: refId('race').optional(),
     backgroundId: refId('background'),

@@ -216,6 +216,11 @@ function CampaignCard({
         <div className="min-w-0 flex-1">
           <h2 id={headingId} className="font-display text-lg">
             {campaign.name}
+            {campaign.shared && (
+              <span className="ml-2 rounded-btn bg-surface-2 px-2 py-0.5 align-middle font-sans text-xs text-text-muted">
+                Shared
+              </span>
+            )}
           </h2>
           <p className="text-xs text-text-muted">{rulesSummary(campaign)}</p>
         </div>

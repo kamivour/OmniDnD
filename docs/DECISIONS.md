@@ -182,6 +182,9 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D176 | 2026-11-09 | Signed-in accounts sync automatically (replaces the manual-only part of D124): on sign-in, on open, when the tab returns, when the network returns, and about 3 s after a change (at most 30 s of steady edits). Failures retry after 5 s, 30 s, then every 2 min. Sync now stays. Conflicts still ask you (D122) and pause automatic sync until answered | Friends should not have to remember to sync | Manual-only sync |
 | D177 | 2026-11-09 | A character edited on two devices merges automatically when the edits touch different fields. Edits to the same field, or logs with no shared history, still ask (D122) | Fewer needless prompts without silent overwrites | Always ask |
 | D178 | 2026-11-09 | New campaigns and characters ask for a role (DM or player; who plays the character). A missing role means Player / Me. "Don't ask again" is a device setting, also in Settings; guests get the same questions | Roles must exist before sharing, with no migration | Ask only when sharing |
+| D179 | 2026-11-09 | Characters played by the DM stay private and never go to the party | The DM sees players' characters; DM characters are not party members | Share on request |
+| D180 | 2026-11-09 | Other members' characters are read-only copies on your device, not part of your account backup. Losing membership makes the campaign private again and removes those copies; your own characters stay | Keeps each account's data its own | Keep the copies |
+| D181 | 2026-11-09 | The DM edits the shared campaign rules; while nobody is DM, the owner does. Players get the rules read-only | One source of truth for rules | Anyone edits |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 
@@ -223,6 +226,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q37 | ~~Which DM tools come first?~~ Answered → D173 | — | — | — |
 | Q38 | ~~Should there be a "?" help button in the top bar?~~ Answered → D174 | — | — | — |
 | Q39 | ~~Can the DM change players' characters in a shared campaign?~~ Answered → D175 | — | — | — |
+| Q40 | Deleting a shared campaign on this device comes back at the next party sync. Should delete leave the party first? | M24 | Leave first; Delete is not blocked yet | User |
 
 ## How to add an entry
 

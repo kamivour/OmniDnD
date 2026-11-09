@@ -4,11 +4,22 @@ import { characterStore } from '../state/character-store';
 import { AutoSync, VISIBLE_MIN_AGE_MS, type AutoSyncState } from './auto-sync';
 import type { SyncConfig } from './config';
 import type { Account, SyncProvider } from './provider';
+import { partyStore } from '../state/party-store';
+import { runPartySync } from './party-runner';
 import { runSync } from './runner';
 
 /** The one background sync for this tab. Settings and the top bar both read it. */
 export const autoSync = new AutoSync({
-  run: runSync,
+  run: async (provider, choices) => {
+    const report = await runSync(provider, choices);
+    // A party problem (for example the party tables are not set up yet) must not break account sync.
+    try {
+      await runPartySync(provider);
+    } catch (cause) {
+      partyStore.setState({ error: cause instanceof Error ? cause.message : String(cause) });
+    }
+    return report;
+  },
   now: () => Date.now(),
   setTimer: (work, ms) => setTimeout(work, ms),
   clearTimer: (handle) => clearTimeout(handle as ReturnType<typeof setTimeout>),
@@ -39,8 +50,12 @@ export const accountSession = createStore<AccountSession>(() => ({
 }));
 
 /** Sign in or out of this tab's session; background sync follows. */
+let stopParty: (() => void) | null = null;
+
 export function setAccount(account: Account | null) {
   const { provider } = accountSession.getState();
+  stopParty?.();
+  stopParty = account && provider ? provider.subscribeParty(() => autoSync.wake()) : null;
   accountSession.setState({ account, status: account ? 'signed-in' : 'signed-out' });
   if (account && provider) autoSync.attach(provider);
   else autoSync.detach();

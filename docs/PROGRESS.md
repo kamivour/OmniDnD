@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M24 Roles and shared campaigns (see PLAN.md). Task 2 of 8 done.
+**Current milestone:** M24 Roles and shared campaigns (see PLAN.md). Task 4 of 8 done.
 **Next up:** M24, then M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -277,6 +277,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M24 tasks 3–4: Party section in Campaign settings, /join/CODE page, party sync both ways with read-only copies, live updates, Find entry.
 - M24 task 2: party tables, row-level security, one DM, hashed 7-day invites, join and member functions, party names readable; schema tests and a throwaway-project check script.
 - M24 task 1: DM or player role asked for new campaigns, who-plays asked for new characters; Settings switch and Don't ask again; old campaigns count as Player; e2e added.
 - M23 gate: tests, typecheck, lint and e2e pass (every tour target exists at both widths); manual QA added. M23 done.

@@ -4,6 +4,14 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 23:05 — Share and join campaigns
+
+- Campaign settings has a Party section: share the campaign, make a 7-day invite link, see members, hand over DM, remove someone or leave. Shared campaigns show a "Shared" tag.
+- Opening an invite link shows the campaign and lets you join. Party characters now sync both ways and arrive read-only.
+- Check: it needs the party migration run in Supabase and two accounts to try.
+- Next: view-only character screens, then the party view.
+- Checks pass.
+
 ## 2026-11-09 15:54 — Shared campaign database
 
 - The database for shared campaigns is written: members, invites that last 7 days, and party characters only their owner can change. Nothing in the app uses it yet.

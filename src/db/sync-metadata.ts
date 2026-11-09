@@ -68,6 +68,8 @@ export function workspaceContents(rows: WorkspaceRows): Map<string, SyncContent>
   for (const { id, data } of rows.campaigns)
     entities.set(syncId('campaign', id), { kind: 'campaign', entityId: id, content: data });
   for (const { id, data: build } of rows.builds) {
+    // Read-only copies of other members' characters belong to the party, not to this account.
+    if (build.partyOwner) continue;
     entities.set(syncId('character', id), {
       kind: 'character',
       entityId: id,

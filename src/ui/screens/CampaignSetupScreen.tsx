@@ -18,6 +18,8 @@ import { ChoiceGroup, Field, inputClass } from '../components/fields';
 import { CampaignRoleDialog } from '../roles/RoleDialogs';
 import { useAskRoles } from '../roles/useAskRoles';
 import { cx } from '../cx';
+import { syncConfig } from '../../sync/config';
+import { PartySection } from '../party/PartySection';
 import {
   ABILITY_OPTIONS,
   ENCUMBRANCE_OPTIONS,
@@ -293,6 +295,11 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
           </button>
         </div>
       </form>
+      {existing && syncConfig && (
+        <div className="mx-auto mt-6 max-w-3xl">
+          <PartySection campaign={existing} />
+        </div>
+      )}
       {confirmation}
     </>
   );
