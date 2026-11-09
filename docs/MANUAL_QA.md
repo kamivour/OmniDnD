@@ -215,6 +215,20 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] Use Forgot password, open the emailed link, and set a new password. Judge whether every step is clear.
 - [ ] Open Delete account. Judge whether the warning is clear enough.
 
+## Phase 7 — M24: Roles and shared campaigns
+
+Run the migration `supabase/migrations/20261109170000_party.sql` in Supabase first. Use a throwaway project for `npm run check:party`.
+
+- [ ] Create a campaign as DM and as player. Judge whether the role question is clear.
+- [ ] Sign in, share a campaign and copy the invite link. Judge whether the steps are easy to follow.
+- [ ] Open the link on a second account. Judge whether the join page explains what you join.
+- [ ] Change HP on one account. Judge whether the other account sees it after sync, and how fast.
+- [ ] Open another player's character. Judge whether the view-only banner is clear and Duplicate to play works.
+- [ ] Open the Party view on a phone. Judge whether the cards are readable.
+- [ ] Make a player leave. Judge whether the "left" label and their private copy make sense.
+- [ ] Open the invite link on a third account that is not a member after revoking it. Judge whether nothing is shown.
+- [ ] Use the app signed out. Judge whether nothing changed.
+
 ## Phase 7 — M23: Tutorial
 
 - [ ] Open the app in a fresh browser profile. Judge whether the Welcome tour is clear and short.

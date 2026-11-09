@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M24 Roles and shared campaigns (see PLAN.md). Task 7 of 8 done.
+**Current milestone:** M24 Roles and shared campaigns (see PLAN.md). All 8 tasks done.
 **Next up:** M24, then M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -47,7 +47,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M21 | Find and Related links | 6 | done | One search box reaches any screen, rule, tool or character item in two steps or fewer |
 | M22 | Accounts, finished | 8 | done | Automatic sync, password reset, display name; see [PLAN.md](PLAN.md) |
 | M23 | Tutorial | 5 | done | First visit on each device: guide with Skip and Replay; see [PLAN.md](PLAN.md) |
-| M24 | Roles and shared campaigns | 7 | todo | DM or player role; party sees every character live, each player changes only their own; see [PLAN.md](PLAN.md) |
+| M24 | Roles and shared campaigns | 7 | done | DM or player role; party sees every character live, each player changes only their own; see [PLAN.md](PLAN.md) |
 | M25 | DM party overview | 7 | todo | Read-only overview of the whole party for the DM; see [PLAN.md](PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
@@ -277,6 +277,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-09 — M24 gate: sharing, party sync, view-only and non-member checks covered by tests; QA list added. Run the migration in Supabase.
 - 2026-11-09 — M24 tasks 6–7: party view with a card per character, "Party" link on shared campaign cards, party tutorial tips, Find synonym.
 - M24 task 5: party characters are view only (commands, undo, delete blocked in the engine); banner with Duplicate to play; Duplicate makes an own copy.
 - M24 tasks 3–4: Party section in Campaign settings, /join/CODE page, party sync both ways with read-only copies, live updates, Find entry.
