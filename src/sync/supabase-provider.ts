@@ -80,6 +80,13 @@ export class SupabaseProvider implements SyncProvider {
     if (error) throw new Error(error.message);
   }
 
+  async deleteAccount() {
+    const { error } = await this.client.rpc('delete_my_account');
+    if (error) throw new Error(error.message);
+    // The session token is dead now; clear it locally. A failure here changes nothing.
+    await this.client.auth.signOut({ scope: 'local' }).catch(() => undefined);
+  }
+
   async requestPasswordReset(email: string, redirectTo: string) {
     const { error } = await this.client.auth.resetPasswordForEmail(email, { redirectTo });
     if (error) throw new Error(error.message);

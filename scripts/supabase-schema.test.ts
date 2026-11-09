@@ -41,6 +41,17 @@ describe('Supabase schema', () => {
     );
   });
 
+  it('lets a user delete only their own account', () => {
+    expect(sql).toContain('create or replace function public.delete_my_account()');
+    expect(sql).toContain("set search_path = ''");
+    expect(sql).toContain('delete from auth.users where id = (select auth.uid())');
+    expect(sql).toContain('revoke all on function public.delete_my_account() from anon');
+    expect(sql).toContain('grant execute on function public.delete_my_account() to authenticated');
+    expect(sql).not.toMatch(
+      /grant execute on function public\.delete_my_account\(\) to (anon|public)/,
+    );
+  });
+
   it('assigns revisions on the server', () => {
     expect(sql).toContain('new.revision := old.revision + 1');
     expect(sql).toContain('before insert or update on public.sync_entities');

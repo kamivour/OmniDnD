@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { CloudUpload, KeyRound, LogIn, LogOut, RefreshCw, UserPlus } from 'lucide-react';
+import { CloudUpload, KeyRound, LogIn, LogOut, RefreshCw, Trash2, UserPlus } from 'lucide-react';
 import type { SyncConfig } from '../../sync/config';
 import type { ConflictChoice, SyncConflict } from '../../sync/engine';
 import type { Account, SignInResult, SyncProvider } from '../../sync/provider';
@@ -146,6 +146,7 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
     });
   };
 
+  const [deleteText, setDeleteText] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const changePassword = (event: FormEvent) => {
     event.preventDefault();
@@ -319,6 +320,49 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
               Sign out
             </button>
           </div>
+          <details className="rounded-card border border-border p-3">
+            <summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold">
+              Delete account
+            </summary>
+            <form
+              className="flex flex-col gap-2"
+              onSubmit={(event) => {
+                event.preventDefault();
+                void act(async () => {
+                  await provider.deleteAccount();
+                  setAccount(null);
+                  setConflicts([]);
+                  setDeleteText('');
+                  setStatus('signed-out');
+                  setNotice('Account deleted. Campaigns and characters stay on this device.');
+                });
+              }}
+            >
+              <p className="text-sm text-text-muted">
+                This removes your account and every campaign and character copy in the cloud. It
+                cannot be undone. Copies on your devices stay. Export a character from the Data
+                section below first if you want a file.
+              </p>
+              <Field label="Type DELETE to confirm" htmlFor="account-delete-confirm">
+                <input
+                  id="account-delete-confirm"
+                  type="text"
+                  autoComplete="off"
+                  value={deleteText}
+                  onChange={(event) => setDeleteText(event.target.value)}
+                  className={inputClass}
+                />
+              </Field>
+              <button
+                type="submit"
+                disabled={busy || deleteText !== 'DELETE'}
+                className={`${button} self-start text-danger`}
+              >
+                <Trash2 size={16} aria-hidden />
+                Delete my account
+              </button>
+            </form>
+          </details>
           {conflicts.length > 0 && (
             <div className="flex flex-col gap-3">
               {conflicts.map((conflict) => (

@@ -50,6 +50,8 @@ export interface SyncProvider {
   requestPasswordReset(email: string, redirectTo: string): Promise<void>;
   /** Set a new password for the signed-in account (also used after a reset link). */
   updatePassword(password: string): Promise<void>;
+  /** Permanently remove the signed-in account and its cloud data, then sign out. */
+  deleteAccount(): Promise<void>;
   /** Every row the signed-in account owns, deletion markers included. */
   pull(): Promise<RemoteEntity[]>;
   /**

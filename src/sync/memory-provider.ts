@@ -73,6 +73,16 @@ export class MemoryProvider implements SyncProvider {
     return Promise.resolve();
   }
 
+  deleteAccount() {
+    const account = this.require();
+    this.cloud.accounts.delete(account.email);
+    this.cloud.names.delete(account.id);
+    for (const key of [...this.cloud.rows.keys()])
+      if (key.startsWith(`${account.id}|`)) this.cloud.rows.delete(key);
+    this.account = null;
+    return Promise.resolve();
+  }
+
   requestPasswordReset(email: string, redirectTo?: string) {
     void redirectTo;
     this.cloud.resetRequests.push(email.trim().toLowerCase());

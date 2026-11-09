@@ -16,6 +16,34 @@ describe('password help', () => {
   });
 });
 
+describe('delete account', () => {
+  it('removes the account, its names and rows, and leaves other accounts alone', async () => {
+    const cloud = new MemoryCloud();
+    const ana = new MemoryProvider(cloud);
+    const bo = new MemoryProvider(cloud);
+    await ana.signUp('ana@example.com', 'password1');
+    await bo.signUp('bo@example.com', 'password1');
+    await ana.setDisplayName('Ana');
+    const entity = {
+      kind: 'campaign' as const,
+      entityId: 'c1',
+      deleted: false,
+      changedAt: '2026-01-01T00:00:00Z',
+      schemaVersion: 1,
+      payload: {},
+    };
+    await ana.push(entity, null);
+    await bo.push(entity, null);
+
+    await ana.deleteAccount();
+    expect(await ana.currentAccount()).toBeNull();
+    expect((await new MemoryProvider(cloud).signIn('ana@example.com', 'password1')).result).toBe(
+      'error',
+    );
+    expect(await bo.pull()).toHaveLength(1);
+  });
+});
+
 describe('display name', () => {
   it('starts empty, saves trimmed, and is private to each account', async () => {
     const cloud = new MemoryCloud();
