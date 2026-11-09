@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M22 Accounts, finished (see PLAN.md). Tasks 1–7 done.
-**Next up:** M22 task 8 (gate); then M23 Tutorial, M24, M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
+**Current milestone:** M22 Accounts, finished (see PLAN.md). Done.
+**Next up:** M23 Tutorial, M24, M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -45,7 +45,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M19 | Physical checks and spell components | 6 | done | Jump, carry, breath and travel numbers come from the engine with breakdowns; casting says when a focus covers the material |
 | M20 | Tools directory | 6 | done | Outside tools grouped by what you want to do, in our own words, with working links |
 | M21 | Find and Related links | 6 | done | One search box reaches any screen, rule, tool or character item in two steps or fewer |
-| M22 | Accounts, finished | 7 | doing | Automatic sync, password reset, display name; see [PLAN.md](PLAN.md) |
+| M22 | Accounts, finished | 8 | done | Automatic sync, password reset, display name; see [PLAN.md](PLAN.md) |
 | M23 | Tutorial | 7 | todo | First visit on each device: guide with Skip and Replay; see [PLAN.md](PLAN.md) |
 | M24 | Roles and shared campaigns | 7 | todo | DM or player role; party sees every character live, each player changes only their own; see [PLAN.md](PLAN.md) |
 | M25 | DM party overview | 7 | todo | Read-only overview of the whole party for the DM; see [PLAN.md](PLAN.md) |
@@ -277,6 +277,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- M22 gate: tests, typecheck, lint and e2e pass; manual QA added. M22 done.
 - M22 task 7: edits to different fields on two devices merge automatically using event patches; same-field edits still ask; D177.
 - M22 task 6: top-bar sync chip (Synced, Syncing, Offline, Sync problem, Needs your choice) on hub and character screens; opens Settings.
 - M22 task 5: automatic sync on sign-in, open, tab return, network return and after edits, with retries; one tab syncs; D176 replaces D124.

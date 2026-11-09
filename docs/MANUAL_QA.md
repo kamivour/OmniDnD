@@ -205,6 +205,16 @@ Exploration shares Dashboard's GameClockControl under D91.
 - [ ] On Explore, tap the Related links under Skills and Movement and body. Judge whether they help or just add clutter.
 - [ ] Cast a spell with a material component. Judge whether the Inventory link is useful and easy to ignore.
 
+## Phase 7 — M22: Accounts
+
+- [ ] Create an account, set a display name, and sign in on a second device. Judge whether your characters appear without any button press.
+- [ ] Change hit points on one device and wait a few seconds. Judge whether the other device catches up on its own.
+- [ ] Change different things on two devices (hit points on one, Inspiration on the other). Judge whether the result keeps both.
+- [ ] Change the same thing on both devices. Judge whether the choice prompt is clear.
+- [ ] Turn off the network and edit. Judge whether the top-bar chip shows Offline, then Synced when you reconnect.
+- [ ] Use Forgot password, open the emailed link, and set a new password. Judge whether every step is clear.
+- [ ] Open Delete account. Judge whether the warning is clear enough.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

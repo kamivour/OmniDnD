@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-09 15:30 — Accounts finished
+
+- Accounts are complete: sign in, automatic sync, merging, password help, display name and delete account.
+- Try the new Phase 7 checks in the manual QA list with two devices.
+- Next: the tutorial.
+- Checks pass.
+
 ## 2026-11-09 15:25 — Automatic merge
 
 - If you change one thing on your phone and another on your laptop, the two versions now combine on their own. No question asked.
