@@ -228,6 +228,8 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q38 | ~~Should there be a "?" help button in the top bar?~~ Answered → D174 | — | — | — |
 | Q39 | ~~Can the DM change players' characters in a shared campaign?~~ Answered → D175 | — | — | — |
 | Q40 | Deleting a shared campaign on this device comes back at the next party sync. Should delete leave the party first? | M24 | Leave first; Delete is not blocked yet | User |
+| Q41 | A tester missed "neutral". Is that True Neutral, or something else such as Unaligned? | M26 | Rename "Neutral" to "True Neutral"; no Unaligned for player characters | User |
+| Q42 | Backgrounds: the 13 PHB ones only, or also the PHB variants and a Custom background? | M26 | All 13, the 5 PHB variants and Custom (2 skills, 2 tools or languages, any background feature) | User |
 
 ## How to add an entry
 

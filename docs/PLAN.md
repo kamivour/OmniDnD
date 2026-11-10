@@ -8,6 +8,7 @@ Proposed 2026-11-09. User answers to the open questions are recorded as D168–D
 | M23 | Tutorial | — | A first-time visitor on a device learns the menus in about two minutes, can skip at any time, and can replay any part later |
 | M24 | Roles and shared campaigns | M22 | A DM and players share one campaign; everyone sees every party character live; each player changes only their own |
 | M25 | DM party overview | M24 | The DM sees the whole party's key numbers at a glance |
+| M26 | Friend-testing fixes | M25 | A new player on a phone creates a character without confusion, finds sign-up, and starts with no sample character |
 
 The tutorial comes before party play because friends are testing now, and it builds the tour system that M24 and M25 add their own steps to.
 
@@ -137,9 +138,26 @@ Map import, monster and NPC management, rewards (XP, Inspiration, coins, items),
 
 ---
 
+## M26 — Friend-testing fixes
+
+From friends testing the live site on 2026-11-10. Small fixes first, the larger content and layout work last.
+
+### Tasks
+1. **Number fields.** One shared number input: Backspace clears it while typing, and the value is checked and clamped when you leave the field. Use it for Level and every other number field that snaps back today. In ability scores, Enter moves to the next score (the last one moves on to the next section) instead of submitting.
+2. **True Neutral.** The alignment list says "True Neutral" instead of "Neutral"; characters saved as "Neutral" read as True Neutral (Q41).
+3. **Spell Pending opens the right list.** Pending on a Level 1 row opens Manage spells scrolled to and filtered on 1st-level picks, with cantrips hidden behind "Show all". Pending on Cantrips does the same for cantrips.
+4. **No sample character on new devices.** A fresh device starts empty. The Campaigns page offers "Try the sample character" to add the Fool on demand. Devices that already have the Fool keep it. Tests still start with the Fool.
+5. **Accounts are easy to find.** When signed out (and accounts are set up), the Campaigns page shows a short card, "Keep your characters on every device", with Sign in and Create account. It can be hidden; Settings keeps the full panel. The welcome tour points at it.
+6. **Cautions stand out.** One caution style (warn colour, warning icon, slightly bolder) for weaknesses in the class, race and background guides, unmet requirements, and hints that warn of a consequence ("locks once saved", "can't be undone"). Errors that block saving use the danger colour.
+7. **Clearer headings and subclass cards.** Field labels and section headings get bigger and bolder so each block has a clear title. The subclass choice becomes separate cards, each with an icon, name, one-line pitch and difficulty, in creation and level-up. Icons come from game-icons.net (already credited). DESIGN.md gets the new heading sizes.
+8. **All PHB backgrounds.** Schema: backgrounds gain language choices, tool choices and variants. Data in our own words for the 11 missing PHB backgrounds (Criminal, Entertainer, Folk Hero, Guild Artisan, Hermit, Noble, Outlander, Sage, Sailor, Soldier, Urchin), their features and guidance; the PHB variants (Spy, Gladiator, Guild Merchant, Knight, Pirate) and a Custom background (Q42). Creation asks for the background's languages and tools.
+9. **Gate.** At 375 px and 1440 px a new visitor sees no sample character, finds Create account, picks True Neutral and any PHB background, types scores with Enter, clears Level with Backspace, sees subclass cards and orange or red cautions, and Pending at Level 1 shows only 1st-level spells. Manual QA list added.
+
+---
+
 ## Risks
 - **Free hosting limits:** Supabase allows 200 live connections and 500 MB of storage; records are capped at 5 MB (our limit). Long event logs grow records; a later fix is a snapshot plus trimmed history.
 - **Security:** shared access depends entirely on row-level security, so every rule gets a test. Invite codes are random, hashed and expire. Emails are never shown to other members.
 
 ## Open questions
-None. Answers are recorded as D168–D175.
+M26: Q41 (alignment label) and Q42 (background scope) in DECISIONS.md. Earlier answers are D168–D175.

@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M25 DM party overview (see PLAN.md). All 3 tasks done.
-**Next up:** M24, then M25 from [PLAN.md](PLAN.md). The user asked to build them one after another while live testing continues.
+**Current milestone:** M26 Friend-testing fixes (see PLAN.md). 0 of 9 tasks done.
+**Next up:** M26 task 1, number fields. Q40–Q42 wait for the user; defaults apply meanwhile.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -49,6 +49,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M23 | Tutorial | 5 | done | First visit on each device: guide with Skip and Replay; see [PLAN.md](PLAN.md) |
 | M24 | Roles and shared campaigns | 7 | done | DM or player role; party sees every character live, each player changes only their own; see [PLAN.md](PLAN.md) |
 | M25 | DM party overview | 7 | done | Read-only overview of the whole party for the DM; see [PLAN.md](PLAN.md) |
+| M26 | Friend-testing fixes | 5 | planned | New players on a phone create a character without confusion and find sign-up; see [PLAN.md](PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -277,6 +278,7 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-11 — Plan: M26 friend-testing fixes (inputs, True Neutral, spell Pending, no sample character, sign-up card, cautions, headings, PHB backgrounds); Q41–Q42.
 - 2026-11-10 — Performance: screens load on first visit; app, library and reference data ship as separate cached files. Main file 3 MB to 285 kB.
 - 2026-11-09 — M25 done: DM overview table with sort and column picker, DM tutorial tips, Find synonym, e2e at 375 and 1440 px; QA list added.
 - 2026-11-09 — M24 gate: sharing, party sync, view-only and non-member checks covered by tests; QA list added. Run the migration in Supabase.
