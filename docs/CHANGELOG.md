@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 00:06 — PHB caster subclasses
+
+- Added College of Valor, six cleric domains, Circle of the Moon, Wild Magic, Archfey, Great Old One and the seven wizard schools.
+- Domain Channel Divinity options spend the shared Channel Divinity uses. Moon druid forms spend Wild Shape uses.
+- Check that domain and patron spell lists are text only: add those spells by hand. Next: PHB spells missing from the SRD.
+Checks pass.
+
 ## 2026-11-12 00:00 — PHB martial subclasses
 
 - Added Totem Warrior, Battle Master, Eldritch Knight, Way of Shadow, Way of the Four Elements, Oath of the Ancients, Oath of Vengeance, Assassin and Arcane Trickster.

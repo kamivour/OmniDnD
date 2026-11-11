@@ -719,5 +719,671 @@
       "ritual": "none",
       "spellList": "class.wizard"
     }
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.bard.valor",
+    "name": "College of Valor",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bard who fights on the front line and inspires allies to hit harder or stay safer."
+    },
+    "classId": "class.bard",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.bard.valor-bonus-proficiencies"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.bard.valor-combat-inspiration"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.bard.valor-extra-attack"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.bard.valor-battle-magic"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.cleric.knowledge",
+    "name": "Knowledge Domain",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cleric of lore and the mind who reads thoughts and borrows skills."
+    },
+    "classId": "class.cleric",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.knowledge-domain-spells"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.knowledge-blessings-of-knowledge"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.knowledge-knowledge-of-the-ages"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.knowledge-read-thoughts"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.knowledge-potent-spellcasting"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.knowledge-visions-of-the-past"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.cleric.light",
+    "name": "Light Domain",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cleric of fire and radiance who burns foes and flares to protect allies."
+    },
+    "classId": "class.cleric",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.light-domain-spells"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.light-bonus-cantrip"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.light-warding-flare"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.light-radiance-of-the-dawn"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.light-improved-flare"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.light-potent-spellcasting"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.light-corona-of-light"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.cleric.nature",
+    "name": "Nature Domain",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cleric of the wild who charms beasts and plants and wears heavy armor."
+    },
+    "classId": "class.cleric",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.nature-domain-spells"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.nature-acolyte-of-nature"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.nature-bonus-proficiency"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.nature-charm-animals-and-plants"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.nature-dampen-elements"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.nature-divine-strike"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.nature-master-of-nature"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.cleric.tempest",
+    "name": "Tempest Domain",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cleric of storms who strikes with thunder and lightning in heavy armor."
+    },
+    "classId": "class.cleric",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.tempest-domain-spells"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.tempest-bonus-proficiencies"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.tempest-wrath-of-the-storm"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.tempest-destructive-wrath"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.tempest-thunderbolt-strike"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.tempest-divine-strike"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.tempest-stormborn"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.cleric.trickery",
+    "name": "Trickery Domain",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cleric of deception who makes illusory duplicates and helps allies sneak."
+    },
+    "classId": "class.cleric",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.trickery-domain-spells"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.trickery-blessing-of-the-trickster"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.trickery-invoke-duplicity"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.trickery-cloak-of-shadows"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.trickery-divine-strike"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.trickery-improved-duplicity"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.cleric.war",
+    "name": "War Domain",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cleric of battle who attacks with weapons and boosts accuracy for the party."
+    },
+    "classId": "class.cleric",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.war-domain-spells"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.war-bonus-proficiencies"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.war-war-priest"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.war-guided-strike"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.war-war-gods-blessing"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.war-divine-strike"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.war-avatar-of-battle"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.druid.moon",
+    "name": "Circle of the Moon",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Druid who turns into powerful beasts and fights in animal form."
+    },
+    "classId": "class.druid",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.druid.moon-combat-wild-shape"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.druid.moon-circle-forms"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.druid.moon-primal-strike"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.druid.moon-elemental-wild-shape"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.druid.moon-thousand-forms"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.sorcerer.wild-magic",
+    "name": "Wild Magic",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sorcerer whose spells sometimes trigger chaotic surges."
+    },
+    "classId": "class.sorcerer",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.wild-magic-wild-magic-surge"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.wild-magic-tides-of-chaos"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.sorcerer.wild-magic-bend-luck"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.sorcerer.wild-magic-controlled-chaos"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.sorcerer.wild-magic-spell-bombardment"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.warlock.archfey",
+    "name": "The Archfey",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Warlock bound to a fey lord who charms, frightens and teleports."
+    },
+    "classId": "class.warlock",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.warlock.archfey-expanded-spells"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.warlock.archfey-fey-presence"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.warlock.archfey-misty-escape"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.warlock.archfey-beguiling-defenses"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.warlock.archfey-dark-delirium"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.warlock.great-old-one",
+    "name": "The Great Old One",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Warlock tied to a distant alien mind that grants telepathy and psychic power."
+    },
+    "classId": "class.warlock",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.warlock.great-old-one-expanded-spells"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.warlock.great-old-one-awakened-mind"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.warlock.great-old-one-entropic-ward"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.warlock.great-old-one-thought-shield"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.warlock.great-old-one-create-thrall"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.wizard.abjuration",
+    "name": "School of Abjuration",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Wizard who protects with wards and counters magic."
+    },
+    "classId": "class.wizard",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.wizard.abjuration-abjuration-savant"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.wizard.abjuration-arcane-ward"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.wizard.abjuration-projected-ward"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.wizard.abjuration-improved-abjuration"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.wizard.abjuration-spell-resistance"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.wizard.conjuration",
+    "name": "School of Conjuration",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Wizard who summons creatures, objects and teleports."
+    },
+    "classId": "class.wizard",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.wizard.conjuration-conjuration-savant"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.wizard.conjuration-minor-conjuration"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.wizard.conjuration-benign-transposition"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.wizard.conjuration-focused-conjuration"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.wizard.conjuration-durable-summons"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.wizard.divination",
+    "name": "School of Divination",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Wizard who sees the future and rewrites rolls with portent dice."
+    },
+    "classId": "class.wizard",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.wizard.divination-divination-savant"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.wizard.divination-portent"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.wizard.divination-expert-divination"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.wizard.divination-the-third-eye"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.wizard.divination-greater-portent"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.wizard.enchantment",
+    "name": "School of Enchantment",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Wizard who charms minds and redirects attacks."
+    },
+    "classId": "class.wizard",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.wizard.enchantment-enchantment-savant"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.wizard.enchantment-hypnotic-gaze"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.wizard.enchantment-instinctive-charm"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.wizard.enchantment-split-enchantment"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.wizard.enchantment-alter-memories"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.wizard.illusion",
+    "name": "School of Illusion",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Wizard who bends senses with flexible illusions."
+    },
+    "classId": "class.wizard",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.wizard.illusion-illusion-savant"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.wizard.illusion-improved-minor-illusion"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.wizard.illusion-malleable-illusions"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.wizard.illusion-illusory-self"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.wizard.illusion-illusory-reality"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.wizard.necromancy",
+    "name": "School of Necromancy",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Wizard who drains life, raises undead and resists death."
+    },
+    "classId": "class.wizard",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.wizard.necromancy-necromancy-savant"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.wizard.necromancy-grim-harvest"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.wizard.necromancy-undead-thralls"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.wizard.necromancy-inured-to-undeath"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.wizard.necromancy-command-undead"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.wizard.transmutation",
+    "name": "School of Transmutation",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Wizard who reshapes matter and carries a transmuter’s stone."
+    },
+    "classId": "class.wizard",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.wizard.transmutation-transmutation-savant"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.wizard.transmutation-minor-alchemy"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.wizard.transmutation-transmuters-stone"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.wizard.transmutation-shapechanger"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.wizard.transmutation-master-transmuter"
+      }
+    ]
   }
 ]

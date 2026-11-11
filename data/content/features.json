@@ -4338,5 +4338,1488 @@
       "max": 1,
       "recharge": "long"
     }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.valor-bonus-proficiencies",
+    "name": "Bonus Proficiencies",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You gain proficiency with medium armor, shields and martial weapons."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.valor-combat-inspiration",
+    "name": "Combat Inspiration",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A creature holding your Bardic Inspiration die can add it to a weapon damage roll, or use a reaction to add it to its AC against one attack."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.valor-extra-attack",
+    "name": "Extra Attack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can attack twice when you take the Attack action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.valor-battle-magic",
+    "name": "Battle Magic",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you cast a spell with your action, you can make one weapon attack as a bonus action."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.knowledge-domain-spells",
+    "name": "Domain Spells",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always-prepared spells by cleric level: 1 command, identify; 3 augury, suggestion; 5 nondetection, speak with dead; 7 arcane eye, confusion; 9 legend lore, scrying."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.knowledge-blessings-of-knowledge",
+    "name": "Blessings of Knowledge",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You learn two languages and gain expertise in two of Arcana, History, Nature and Religion."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.knowledge-knowledge-of-the-ages",
+    "name": "Channel Divinity: Knowledge of the Ages",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: gain proficiency in one skill or tool of your choice for 10 minutes."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.knowledge-read-thoughts",
+    "name": "Channel Divinity: Read Thoughts",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: a creature within 60 ft makes a Wisdom save. On a fail you read its surface thoughts and can cast suggestion on it without a slot for 1 minute."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.knowledge-potent-spellcasting",
+    "name": "Potent Spellcasting",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You add your Wisdom modifier to the damage of any cleric cantrip."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.knowledge-visions-of-the-past",
+    "name": "Visions of the Past",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Meditate on an object or a place to see its past, for up to your Wisdom modifier in minutes. Needs a short or long rest to use again."
+    },
+    "origin": "subclass",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.light-domain-spells",
+    "name": "Domain Spells",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always-prepared spells by cleric level: 1 burning hands, faerie fire; 3 flaming sphere, scorching ray; 5 daylight, fireball; 7 guardian of faith, wall of fire; 9 flame strike, scrying."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.light-bonus-cantrip",
+    "name": "Bonus Cantrip",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You learn the light cantrip."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.light-warding-flare",
+    "name": "Warding Flare",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction when a creature you can see within 30 ft attacks you: impose disadvantage on the attack. Uses equal your Wisdom modifier (minimum 1), regained on a long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature within 30 ft attacks you",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.light-radiance-of-the-dawn",
+    "name": "Channel Divinity: Radiance of the Dawn",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: end magical darkness within 30 ft. Hostile creatures within 30 ft make a Constitution save or take 2d10 + cleric level radiant damage, half on a success."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.light-improved-flare",
+    "name": "Improved Flare",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can use Warding Flare when a creature attacks an ally within 30 ft of you, not only you."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.light-potent-spellcasting",
+    "name": "Potent Spellcasting",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You add your Wisdom modifier to the damage of any cleric cantrip."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.light-corona-of-light",
+    "name": "Corona of Light",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action, 1 minute: you shed bright light for 60 ft and dim light 30 ft beyond. Enemies in the bright light have disadvantage on saves against fire or radiant spells."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.nature-domain-spells",
+    "name": "Domain Spells",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always-prepared spells by cleric level: 1 animal friendship, speak with animals; 3 barkskin, spike growth; 5 plant growth, wind wall; 7 dominate beast, grasping vine; 9 insect plague, tree stride."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.nature-acolyte-of-nature",
+    "name": "Acolyte of Nature",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You learn one druid cantrip and gain proficiency in one of Animal Handling, Nature or Survival."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.nature-bonus-proficiency",
+    "name": "Bonus Proficiency",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You gain proficiency with heavy armor."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.nature-charm-animals-and-plants",
+    "name": "Channel Divinity: Charm Animals and Plants",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: animals and plants within 30 ft make a Wisdom save or are charmed by you for 1 minute, or until you or your allies harm them."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.nature-dampen-elements",
+    "name": "Dampen Elements",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction when you or a creature within 30 ft takes acid, cold, fire, lightning or thunder damage: grant resistance to that damage."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature within 30 ft takes elemental damage"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.nature-divine-strike",
+    "name": "Divine Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per turn when you hit with a weapon, add 1d8 cold, fire or lightning (your choice) damage (2d8 at level 14)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.nature-master-of-nature",
+    "name": "Master of Nature",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While creatures are charmed by Charm Animals and Plants, you can command them as a bonus action."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.tempest-domain-spells",
+    "name": "Domain Spells",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always-prepared spells by cleric level: 1 fog cloud, thunderwave; 3 gust of wind, shatter; 5 call lightning, sleet storm; 7 control water, ice storm; 9 destructive wave, insect plague."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.tempest-bonus-proficiencies",
+    "name": "Bonus Proficiencies",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You gain proficiency with martial weapons and heavy armor."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.tempest-wrath-of-the-storm",
+    "name": "Wrath of the Storm",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction when a creature within 5 ft hits you: it makes a Dexterity save or takes 2d8 lightning or thunder damage, half on a success. Uses equal your Wisdom modifier, regained on a long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature within 5 ft hits you",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.tempest-destructive-wrath",
+    "name": "Channel Divinity: Destructive Wrath",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you roll lightning or thunder damage, spend a Channel Divinity use to deal the maximum instead of rolling."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.tempest-thunderbolt-strike",
+    "name": "Thunderbolt Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When your lightning damage hits a Large or smaller creature, you can push it up to 10 ft away."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.tempest-divine-strike",
+    "name": "Divine Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per turn when you hit with a weapon, add 1d8 thunder damage (2d8 at level 14)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.tempest-stormborn",
+    "name": "Stormborn",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Outdoors and not underground, you have a flying speed equal to your walking speed."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.trickery-domain-spells",
+    "name": "Domain Spells",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always-prepared spells by cleric level: 1 charm person, disguise self; 3 mirror image, pass without trace; 5 blink, dispel magic; 7 dimension door, polymorph; 9 dominate person, modify memory."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.trickery-blessing-of-the-trickster",
+    "name": "Blessing of the Trickster",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: touch a willing creature other than you to give it advantage on Stealth checks for 1 hour or until you use this again."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.trickery-invoke-duplicity",
+    "name": "Channel Divinity: Invoke Duplicity",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action, 1 minute (concentration): make an illusory duplicate of you within 30 ft. You and it give advantage on attacks against a creature both are within 5 ft of."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.trickery-cloak-of-shadows",
+    "name": "Channel Divinity: Cloak of Shadows",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: become invisible until the end of your next turn, or until you attack or cast a spell."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.trickery-divine-strike",
+    "name": "Divine Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per turn when you hit with a weapon, add 1d8 poison damage (2d8 at level 14)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.trickery-improved-duplicity",
+    "name": "Improved Duplicity",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can create up to four duplicates with Invoke Duplicity, and move any number of them as a bonus action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.war-domain-spells",
+    "name": "Domain Spells",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always-prepared spells by cleric level: 1 divine favor, shield of faith; 3 magic weapon, spiritual weapon; 5 crusader’s mantle, spirit guardians; 7 freedom of movement, stoneskin; 9 flame strike, hold monster."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.war-bonus-proficiencies",
+    "name": "Bonus Proficiencies",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You gain proficiency with martial weapons and heavy armor."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.war-war-priest",
+    "name": "War Priest",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you take the Attack action, you can make one weapon attack as a bonus action. Uses equal your Wisdom modifier, regained on a long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.war-guided-strike",
+    "name": "Channel Divinity: Guided Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you make an attack roll, add +10 to it after seeing the roll, before knowing the result."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.war-war-gods-blessing",
+    "name": "Channel Divinity: War God's Blessing",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction when a creature within 30 ft makes an attack roll: add +10 to it."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "usesFrom": "feature.cleric.channel-divinity",
+    "trigger": "A creature within 30 ft makes an attack roll"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.war-divine-strike",
+    "name": "Divine Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per turn when you hit with a weapon, add 1d8 weapon-type damage (2d8 at level 14)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.war-avatar-of-battle",
+    "name": "Avatar of Battle",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You resist bludgeoning, piercing and slashing damage from nonmagical weapons."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.moon-combat-wild-shape",
+    "name": "Combat Wild Shape",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can Wild Shape as a bonus action. While shaped, you can spend a spell slot as a bonus action to heal 1d8 per slot level."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.druid.wild-shape"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.moon-circle-forms",
+    "name": "Circle Forms",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Wild Shape beast limit is CR 1 at level 2, then your druid level divided by 3, rounded down, from level 6. Flying and swimming limits are ignored."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.moon-primal-strike",
+    "name": "Primal Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your attacks in beast form count as magical for overcoming resistance and immunity to nonmagical damage."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.moon-elemental-wild-shape",
+    "name": "Elemental Wild Shape",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend two Wild Shape uses to become an air, earth, fire or water elemental."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.druid.wild-shape"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.moon-thousand-forms",
+    "name": "Thousand Forms",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can cast alter self at will."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.wild-magic-wild-magic-surge",
+    "name": "Wild Magic Surge",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After you cast a spell of 1st level or higher, the DM can ask for a d20. On a 1, roll on the Wild Magic Surge table. The DM sets the result; enter it yourself."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.wild-magic-tides-of-chaos",
+    "name": "Tides of Chaos",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain advantage on one attack roll, ability check or saving throw. You regain this after a long rest, or when the DM calls a surge after a spell."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.wild-magic-bend-luck",
+    "name": "Bend Luck",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction, spend 2 sorcery points: when a creature you can see rolls, add or subtract 1d4."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "usesFrom": "feature.sorcerer.font-of-magic",
+    "trigger": "A creature you can see makes an attack roll, ability check or saving throw"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.wild-magic-controlled-chaos",
+    "name": "Controlled Chaos",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you roll on the Wild Magic Surge table, roll twice and use either result."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.wild-magic-spell-bombardment",
+    "name": "Spell Bombardment",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per turn, when a damage die of a spell shows its maximum, roll it again and add the new roll."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.archfey-expanded-spells",
+    "name": "Expanded Spell List",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Added to your warlock spell list by spell level: 1 faerie fire, sleep; 2 calm emotions, phantasmal force; 3 blink, plant growth; 4 dominate beast, greater invisibility; 5 dominate person, seeming."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.archfey-fey-presence",
+    "name": "Fey Presence",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: creatures in a 10-ft cube from you make a Wisdom save or are charmed or frightened (your choice) until the end of your next turn."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.archfey-misty-escape",
+    "name": "Misty Escape",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction when you take damage: teleport up to 60 ft and turn invisible until the start of your next turn or until you attack or cast."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "You take damage",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.archfey-beguiling-defenses",
+    "name": "Beguiling Defenses",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You are immune to being charmed. Reaction when something tries to charm you: turn the charm on it for 1 minute on a failed Wisdom save."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature tries to charm you"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.archfey-dark-delirium",
+    "name": "Dark Delirium",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: a creature within 60 ft makes a Wisdom save or is charmed or frightened for 1 minute, lost in an illusory realm. You must concentrate."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.great-old-one-expanded-spells",
+    "name": "Expanded Spell List",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Added to your warlock spell list by spell level: 1 dissonant whispers, Tasha’s hideous laughter; 2 detect thoughts, phantasmal force; 3 clairvoyance, sending; 4 dominate beast, Evard’s black tentacles; 5 dominate person, telekinesis."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.great-old-one-awakened-mind",
+    "name": "Awakened Mind",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can speak telepathically to any creature within 30 ft that you can see. It needs no shared language, but must understand at least one."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.great-old-one-entropic-ward",
+    "name": "Entropic Ward",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction when a creature attacks you: impose disadvantage on the roll. If it misses, your next attack against it has advantage."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature attacks you",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.great-old-one-thought-shield",
+    "name": "Thought Shield",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your thoughts cannot be read by telepathy. You resist psychic damage, and a creature that deals psychic damage to you takes the same amount."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.great-old-one-create-thrall",
+    "name": "Create Thrall",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: touch an incapacitated humanoid to charm it until remove curse or similar magic ends this. You can speak to it telepathically at any distance on the same plane."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.abjuration-abjuration-savant",
+    "name": "Abjuration Savant",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Copying abjuration spells into your spellbook costs half the gold and time."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.abjuration-arcane-ward",
+    "name": "Arcane Ward",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After casting an abjuration spell, make a ward with HP equal to twice your wizard level + Intelligence modifier. It takes damage first. Abjuration spells you cast restore 2 HP per spell level."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.abjuration-projected-ward",
+    "name": "Projected Ward",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction when a creature within 30 ft takes damage: your Arcane Ward takes that damage instead."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature within 30 ft takes damage"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.abjuration-improved-abjuration",
+    "name": "Improved Abjuration",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add your proficiency bonus to ability checks you make for counterspell and dispel magic."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.abjuration-spell-resistance",
+    "name": "Spell Resistance",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You have advantage on saving throws against spells, and you resist spell damage."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.conjuration-conjuration-savant",
+    "name": "Conjuration Savant",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Copying conjuration spells into your spellbook costs half the gold and time."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.conjuration-minor-conjuration",
+    "name": "Minor Conjuration",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: create a nonmagical object up to 3 ft on a side and 10 lb that you have seen. It lasts 1 hour, or until it takes damage."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.conjuration-benign-transposition",
+    "name": "Benign Transposition",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: teleport up to 30 ft, or swap places with a willing Small or Medium creature within 30 ft. Regained after a long rest or after you cast a 1st-level or higher conjuration spell."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.conjuration-focused-conjuration",
+    "name": "Focused Conjuration",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While concentrating on a conjuration spell, taking damage cannot break your concentration."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.conjuration-durable-summons",
+    "name": "Durable Summons",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Creatures you summon or create with a conjuration spell gain 30 temporary HP."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.divination-divination-savant",
+    "name": "Divination Savant",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Copying divination spells into your spellbook costs half the gold and time."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.divination-portent",
+    "name": "Portent",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a long rest, roll two d20s. Replace any attack roll, saving throw or ability check made by you or a creature you can see with one of them. Each die is used once."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "uses": {
+      "max": {
+        "byLevel": {
+          "2": 2,
+          "14": 3
+        }
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.divination-expert-divination",
+    "name": "Expert Divination",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you cast a divination spell of 2nd level or higher, you regain one expended slot of a lower level, up to 5th."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.divination-the-third-eye",
+    "name": "The Third Eye",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: gain one benefit until your next rest: darkvision 60 ft, ethereal sight 60 ft, greater comprehension of language, or see invisibility to 10 ft."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.divination-greater-portent",
+    "name": "Greater Portent",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You roll three d20s for Portent instead of two."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.enchantment-enchantment-savant",
+    "name": "Enchantment Savant",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Copying enchantment spells into your spellbook costs half the gold and time."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.enchantment-hypnotic-gaze",
+    "name": "Hypnotic Gaze",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: a creature within 5 ft that sees or hears you makes a Wisdom save or is charmed and incapacitated until the end of your next turn. You can keep this up each turn. Once per long rest per target."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.enchantment-instinctive-charm",
+    "name": "Instinctive Charm",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction when a creature you can see within 30 ft attacks you: it makes a Wisdom save or must target another creature within range. Once per long rest per attacker."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature within 30 ft attacks you",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.enchantment-split-enchantment",
+    "name": "Split Enchantment",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you cast a single-target enchantment spell of 1st level or higher, you can target a second creature."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.enchantment-alter-memories",
+    "name": "Alter Memories",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you charm a creature, you can make it unaware of being charmed. Later you can reduce its memory of the last hours."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.illusion-illusion-savant",
+    "name": "Illusion Savant",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Copying illusion spells into your spellbook costs half the gold and time."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.illusion-improved-minor-illusion",
+    "name": "Improved Minor Illusion",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You learn minor illusion, and it can create a sound and an image together with one casting."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.illusion-malleable-illusions",
+    "name": "Malleable Illusions",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: change the nature of an illusion you cast that lasts 1 minute or longer, while you can see it."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.illusion-illusory-self",
+    "name": "Illusory Self",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction when a creature attacks you: an illusion of you makes the attack miss automatically."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature attacks you",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.illusion-illusory-reality",
+    "name": "Illusory Reality",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bonus action: pick a nonmagical object in an illusion you cast. It becomes real for 1 minute. It cannot deal damage or harm anyone."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.necromancy-necromancy-savant",
+    "name": "Necromancy Savant",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Copying necromancy spells into your spellbook costs half the gold and time."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.necromancy-grim-harvest",
+    "name": "Grim Harvest",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you kill a creature with a 1st-level or higher spell, regain HP equal to twice the spell level (three times for necromancy). Constructs and undead give nothing."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.necromancy-undead-thralls",
+    "name": "Undead Thralls",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You add animate dead to your spellbook. It raises one extra creature, and your undead have extra HP equal to your wizard level and add your proficiency bonus to damage."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.necromancy-inured-to-undeath",
+    "name": "Inured to Undeath",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You resist necrotic damage, and your hit point maximum cannot be reduced."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.necromancy-command-undead",
+    "name": "Command Undead",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: an undead within 60 ft makes a Charisma save or is charmed by you. Intelligent undead save with advantage, and a failed save can repeat each hour."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.transmutation-transmutation-savant",
+    "name": "Transmutation Savant",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Copying transmutation spells into your spellbook costs half the gold and time."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.transmutation-minor-alchemy",
+    "name": "Minor Alchemy",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 10 minutes per cubic foot to change wood, stone, iron, copper or silver into another of these. The change lasts 1 hour."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.transmutation-transmuters-stone",
+    "name": "Transmuter's Stone",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 8 hours to make a stone. The holder gets one benefit: darkvision 60 ft, +10 speed, Constitution save proficiency, or resistance to acid, cold, fire, lightning or thunder."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.transmutation-shapechanger",
+    "name": "Shapechanger",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You add polymorph to your spellbook and can cast it on yourself into a beast of CR 1 or lower without a slot."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.transmutation-master-transmuter",
+    "name": "Master Transmuter",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: destroy your stone to transmute an object, grant a panacea, restore youth or raise a dead creature."
+    },
+    "origin": "subclass",
+    "activation": "action"
   }
 ]

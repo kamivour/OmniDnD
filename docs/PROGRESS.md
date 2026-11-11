@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M28 PHB martial subclasses done; M29 next (see PLAN.md).
+**Current milestone:** M29 PHB caster subclasses done; M30 next (see PLAN.md).
 **Next up:** Manual QA for M26 by the user; Q40–Q43 wait for the user, defaults apply.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -53,7 +53,7 @@ Build for multiple campaigns and characters, including friends' future character
 
 | M27 | PHB races and Beast Master | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M28 | PHB martial subclasses | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
-| M29 | PHB caster subclasses | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M29 | PHB caster subclasses | 18 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M30 | PHB non-SRD spells | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M31 | Tasha's options | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M32 | Tasha's spells | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
@@ -306,6 +306,7 @@ Details in [PLAN.md](PLAN.md).
 Newest first. One line per task, about 25 words at most.
 - 2026-11-11 — M27: six PHB subraces, Beast Master with Ranger companion Stats link, guidance and tests.
 - 2026-11-12 — M28: nine PHB martial subclasses, maneuver, discipline and totem picks, subclass spellcasting for Eldritch Knight and Arcane Trickster.
+- 2026-11-12 — M29: 18 PHB caster subclasses (Valor, six domains, Moon, Wild Magic, two patrons, seven schools) with Channel Divinity and Wild Shape links.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.

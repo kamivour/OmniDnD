@@ -1699,5 +1699,215 @@
       "Utility out of combat"
     ],
     "weaknesses": ["Few spell slots", "Needs Dexterity and Intelligence", "Spell school limits"]
+  },
+  {
+    "id": "subclass.bard.valor",
+    "kind": "subclass",
+    "pitch": "A battle bard in medium armor with a weapon.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA", "DEX"],
+    "strengths": [
+      "Sturdier than other bards",
+      "Inspiration boosts damage or AC",
+      "Extra Attack at 6"
+    ],
+    "weaknesses": ["Spell slots limit melee plans", "Still less armor than a fighter"]
+  },
+  {
+    "id": "subclass.cleric.knowledge",
+    "kind": "subclass",
+    "pitch": "A scholar-priest with extra skills and mind magic.",
+    "difficulty": "easy",
+    "mainAbilities": ["WIS"],
+    "strengths": [
+      "Many skills and languages",
+      "Strong utility spells",
+      "Read Thoughts opens social play"
+    ],
+    "weaknesses": ["Less combat help than other domains", "Weak armor"]
+  },
+  {
+    "id": "subclass.cleric.light",
+    "kind": "subclass",
+    "pitch": "A blaster cleric with fire and radiant spells.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS"],
+    "strengths": [
+      "Fireball and flame spells early",
+      "Warding Flare protects you",
+      "Strong area damage"
+    ],
+    "weaknesses": ["Light armor only", "Resisted by fire-immune foes"]
+  },
+  {
+    "id": "subclass.cleric.nature",
+    "kind": "subclass",
+    "pitch": "An armored priest of the natural world.",
+    "difficulty": "easy",
+    "mainAbilities": ["WIS"],
+    "strengths": ["Heavy armor", "Charm animals and plants", "Strong damage rider"],
+    "weaknesses": ["Charm works on few foes", "Spells are situational"]
+  },
+  {
+    "id": "subclass.cleric.tempest",
+    "kind": "subclass",
+    "pitch": "A thunder-slinging front-liner.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS", "STR"],
+    "strengths": [
+      "Heavy armor and martial weapons",
+      "Thunder and lightning damage",
+      "Punishes melee attackers"
+    ],
+    "weaknesses": ["Few uses of Wrath", "Needs Strength and Wisdom to shine"]
+  },
+  {
+    "id": "subclass.cleric.trickery",
+    "kind": "subclass",
+    "pitch": "A sneaky priest with illusions and tricks.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS"],
+    "strengths": [
+      "Advantage engine with duplicates",
+      "Great stealth support",
+      "Invisibility at will-ish"
+    ],
+    "weaknesses": ["Medium armor at best", "Needs good action planning"]
+  },
+  {
+    "id": "subclass.cleric.war",
+    "kind": "subclass",
+    "pitch": "A heavily armored holy warrior.",
+    "difficulty": "easy",
+    "mainAbilities": ["WIS", "STR"],
+    "strengths": [
+      "Martial weapons and heavy armor",
+      "Bonus action attack",
+      "Big attack-roll boosts"
+    ],
+    "weaknesses": ["Limited War Priest uses", "Needs Strength and Wisdom"]
+  },
+  {
+    "id": "subclass.druid.moon",
+    "kind": "subclass",
+    "pitch": "A shapeshifter who tanks and brawls as a beast.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS", "CON"],
+    "strengths": [
+      "Strong forms from level 2",
+      "Wild Shape as a bonus action",
+      "Heal by spending slots"
+    ],
+    "weaknesses": ["Forms fall behind mid levels", "Cannot cast while shaped until 18"]
+  },
+  {
+    "id": "subclass.sorcerer.wild-magic",
+    "kind": "subclass",
+    "pitch": "A chaotic caster whose magic can go either way.",
+    "difficulty": "hard",
+    "mainAbilities": ["CHA"],
+    "strengths": ["Tides of Chaos gives advantage", "Surprising effects", "Bend Luck tweaks rolls"],
+    "weaknesses": [
+      "Surges can hurt the party",
+      "Needs DM buy-in",
+      "Less reliable than other sorcerers"
+    ]
+  },
+  {
+    "id": "subclass.warlock.archfey",
+    "kind": "subclass",
+    "pitch": "A trickster who controls the field with charm and escape.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA"],
+    "strengths": ["Strong crowd control", "Misty Escape saves you", "Immune to charm"],
+    "weaknesses": ["Fey Presence is short range", "Few direct damage boosts"]
+  },
+  {
+    "id": "subclass.warlock.great-old-one",
+    "kind": "subclass",
+    "pitch": "A mind-bending caster with psychic gifts.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA"],
+    "strengths": [
+      "Telepathy with anyone",
+      "Psychic resistance and reflection",
+      "Mind-control options"
+    ],
+    "weaknesses": ["Gifts are narrow", "Create Thrall comes late"]
+  },
+  {
+    "id": "subclass.wizard.abjuration",
+    "kind": "subclass",
+    "pitch": "A defensive wizard with a recharging shield of HP.",
+    "difficulty": "easy",
+    "mainAbilities": ["INT"],
+    "strengths": [
+      "Arcane Ward adds a lot of HP",
+      "Counterspell gets better",
+      "Protects allies later"
+    ],
+    "weaknesses": ["Few attack tricks", "Ward needs slot upkeep"]
+  },
+  {
+    "id": "subclass.wizard.conjuration",
+    "kind": "subclass",
+    "pitch": "A summoner who protects their conjurations.",
+    "difficulty": "medium",
+    "mainAbilities": ["INT"],
+    "strengths": ["Creates useful objects", "Teleports allies", "Summons are tougher"],
+    "weaknesses": ["Summons slow down play", "Few direct damage options"]
+  },
+  {
+    "id": "subclass.wizard.divination",
+    "kind": "subclass",
+    "pitch": "A seer who replaces rolls before they happen.",
+    "difficulty": "medium",
+    "mainAbilities": ["INT"],
+    "strengths": ["Portent turns any roll into a good one", "Strong utility", "Regain slots"],
+    "weaknesses": ["Portent dice are set each dawn", "Little burst damage"]
+  },
+  {
+    "id": "subclass.wizard.enchantment",
+    "kind": "subclass",
+    "pitch": "A manipulator who controls and redirects.",
+    "difficulty": "medium",
+    "mainAbilities": ["INT"],
+    "strengths": [
+      "Hypnotic Gaze can lock a foe down",
+      "Instinctive Charm diverts attacks",
+      "Control spells hit more targets"
+    ],
+    "weaknesses": ["Charm often fails against immune foes", "Needs the DM to allow social play"]
+  },
+  {
+    "id": "subclass.wizard.illusion",
+    "kind": "subclass",
+    "pitch": "A trickster whose illusions are improved and made flexible.",
+    "difficulty": "medium",
+    "mainAbilities": ["INT"],
+    "strengths": [
+      "Strong minor illusion",
+      "Change illusions on the fly",
+      "Real objects from illusions"
+    ],
+    "weaknesses": ["Depends on DM adjudication", "Illusions fail against some senses"]
+  },
+  {
+    "id": "subclass.wizard.necromancy",
+    "kind": "subclass",
+    "pitch": "A dark caster who heals from kills and commands undead.",
+    "difficulty": "medium",
+    "mainAbilities": ["INT"],
+    "strengths": ["Heals when spells kill", "Stronger undead minions", "Resists necrotic"],
+    "weaknesses": ["Healing needs kills", "Social stigma at many tables"]
+  },
+  {
+    "id": "subclass.wizard.transmutation",
+    "kind": "subclass",
+    "pitch": "An alchemical wizard with a stone that grants buffs.",
+    "difficulty": "easy",
+    "mainAbilities": ["INT"],
+    "strengths": ["Flexible stone boosts", "Turn into a beast", "Powerful capstone options"],
+    "weaknesses": ["Few combat tricks early", "Stone needs an hour to make"]
   }
 ]
