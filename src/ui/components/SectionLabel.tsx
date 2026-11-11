@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { cx } from '../cx';
 
-/** Small uppercase section heading ("RESOURCES", "EFFECTS"). */
+/** Uppercase section heading ("RESOURCES", "EFFECTS"). */
 export function SectionLabel({
   children,
   as: Tag = 'h2',
@@ -12,7 +12,7 @@ export function SectionLabel({
   className?: string;
 }) {
   return (
-    <Tag className={cx('text-xs font-semibold tracking-wide text-text-muted uppercase', className)}>
+    <Tag className={cx('text-sm font-bold tracking-wide text-text uppercase', className)}>
       {children}
     </Tag>
   );

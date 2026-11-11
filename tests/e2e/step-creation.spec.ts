@@ -137,7 +137,7 @@ test('a level 4 Fighter picks a subclass and an ability increase during creation
 
   // Level choices: subclass at 3, ability increase at 4.
   await expect(page.getByRole('group', { name: 'Level 3' })).toBeVisible();
-  await page.getByLabel('Subclass', { exact: true }).selectOption('subclass.fighter.champion');
+  await page.locator('input[type="radio"][value="subclass.fighter.champion"]').check();
   await expect(page.getByRole('article', { name: 'Champion guide' })).toBeVisible();
   await page.getByRole('radio', { name: 'Raise ability scores' }).check();
   await next.click();

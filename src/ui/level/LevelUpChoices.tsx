@@ -3,6 +3,9 @@ import { ABILITIES, type Ability } from '../../engine/calc/abilities';
 import type { Registry } from '../../engine/registry';
 import type { FeatureDef } from '../../engine/schema';
 import { SKILLS } from '../../engine/rules2014';
+import { guidanceFor } from '../../data/guidance';
+import { cx } from '../cx';
+import { Icon } from '../components/Icon';
 import { Field, inputClass } from '../components/fields';
 import { SpellInfoName } from '../spells/SpellInfoName';
 import { optionName, type LevelPicks, type NewClassOption } from './level-up-model';
@@ -79,6 +82,58 @@ export function NewClassPicks({
   );
 }
 
+const DIFFICULTY_LABEL = {
+  easy: 'Easy to play',
+  medium: 'Medium',
+  hard: 'Harder to play',
+} as const;
+
+/** One subclass as a card: icon, name, difficulty and a one-line pitch. */
+function SubclassCard({
+  name,
+  value,
+  groupName,
+  checked,
+  onPick,
+  iconId,
+}: {
+  name: string;
+  value: string;
+  groupName: string;
+  checked: boolean;
+  onPick: () => void;
+  iconId?: string;
+}) {
+  const guidance = value ? guidanceFor(value) : undefined;
+  return (
+    <label
+      className={cx(
+        'flex min-h-11 cursor-pointer items-start gap-3 rounded-card border p-3 text-sm hover:bg-surface-2',
+        checked ? 'border-accent bg-surface' : 'border-border',
+      )}
+    >
+      <input
+        type="radio"
+        name={groupName}
+        value={value}
+        checked={checked}
+        onChange={onPick}
+        className="mt-1 size-4 shrink-0 accent-(--omni-accent)"
+      />
+      {iconId && <Icon id={iconId} size={40} className="text-accent" />}
+      <span className="flex min-w-0 flex-col gap-0.5">
+        <span className="flex flex-wrap items-baseline gap-x-2">
+          <span className="text-base font-semibold text-text">{name}</span>
+          {guidance?.difficulty && (
+            <span className="text-xs text-text-muted">{DIFFICULTY_LABEL[guidance.difficulty]}</span>
+          )}
+        </span>
+        {guidance && <span className="text-text-muted">{guidance.pitch}</span>}
+      </span>
+    </label>
+  );
+}
+
 export function SubclassPick({
   options,
   picks,
@@ -86,23 +141,30 @@ export function SubclassPick({
 }: PickProps & { options: { id: string; name: string }[] }) {
   const id = useId();
   return (
-    <div className={group}>
-      <Field label="Subclass" htmlFor={`${id}-subclass`} hint="Choose now, or leave it for later.">
-        <select
-          id={`${id}-subclass`}
-          value={picks.subclassId}
-          onChange={(event) => set({ subclassId: event.target.value })}
-          className={inputClass}
-        >
-          <option value="">Decide later</option>
-          {options.map((entry) => (
-            <option key={entry.id} value={entry.id}>
-              {entry.name}
-            </option>
-          ))}
-        </select>
-      </Field>
-    </div>
+    <fieldset className={group}>
+      <legend className="px-1 text-base font-semibold text-text">Subclass</legend>
+      <p className="text-sm text-text-muted">Choose now, or leave it for later.</p>
+      <div className="grid gap-2">
+        {options.map((entry) => (
+          <SubclassCard
+            key={entry.id}
+            name={entry.name}
+            value={entry.id}
+            groupName={id}
+            iconId={entry.id}
+            checked={picks.subclassId === entry.id}
+            onPick={() => set({ subclassId: entry.id })}
+          />
+        ))}
+        <SubclassCard
+          name="Decide later"
+          value=""
+          groupName={id}
+          checked={picks.subclassId === ''}
+          onPick={() => set({ subclassId: '' })}
+        />
+      </div>
+    </fieldset>
   );
 }
 

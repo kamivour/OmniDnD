@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-11 13:57 — Clearer labels and subclass cards
+- Field labels and section headings are bigger and bolder.
+- Subclass is now a list of cards with an icon, short pitch and difficulty, in creation, level-up and To do.
+- Check both themes at phone width.
+- Checks pass.
+
 ## 2026-11-11 13:52 — Cautions stand out
 - Guide weaknesses, unfinished-step lists and level-up exceptions now show in orange with a warning icon.
 - Blocking level-up errors are red.

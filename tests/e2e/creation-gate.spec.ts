@@ -53,7 +53,7 @@ test('a beginner builds a level 5 Wizard step by step', async ({ page }) => {
   }
   await next.click();
   // Level 4 ability increase is the only forced pick; subclass comes at level 2.
-  await page.getByLabel('Subclass', { exact: true }).selectOption('subclass.wizard.evocation');
+  await page.locator('input[type="radio"][value="subclass.wizard.evocation"]').check();
   await page.getByRole('radio', { name: 'Raise ability scores' }).check();
   await next.click();
   await expect(page.getByText('Beginner Wizard: Human Wizard, level 5')).toBeVisible();
@@ -132,7 +132,7 @@ for (const hero of [
     const label = `Choose a ${hero.name} subclass`;
     const item = page.getByRole('listitem').filter({ hasText: label });
     await item.getByRole('button', { name: 'Choose', exact: true }).click();
-    await item.getByLabel('Subclass', { exact: true }).selectOption(hero.subclass);
+    await item.locator(`input[type="radio"][value="${hero.subclass}"]`).check();
     await item.getByRole('button', { name: 'Save choice' }).click();
     await expect(page.getByText(label)).toHaveCount(0);
   });

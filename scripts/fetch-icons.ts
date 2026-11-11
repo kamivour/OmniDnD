@@ -45,6 +45,29 @@ const ICONS: Record<string, string> = {
   'school.transmutation': 'delapouite/transform',
 
   'ui.concentration': 'lorc/concentration-orb',
+
+  // Subclass cards.
+  'subclass.artificer.alchemist': 'lorc/potion-ball',
+  'subclass.artificer.armorer': 'lorc/breastplate',
+  'subclass.artificer.artillerist': 'lorc/cannon',
+  'subclass.artificer.battle-smith': 'lorc/anvil-impact',
+  'subclass.barbarian.berserker': 'delapouite/enrage',
+  'subclass.bard.lore': 'lorc/book-cover',
+  'subclass.cleric.life': 'delapouite/caduceus',
+  'subclass.cleric.twilight': 'delapouite/moon-bats',
+  'subclass.druid.land': 'lorc/oak',
+  'subclass.fighter.cavalier': 'delapouite/horse-head',
+  'subclass.fighter.champion': 'lorc/laurel-crown',
+  'subclass.fighter.psi-warrior': 'lorc/psychic-waves',
+  'subclass.monk.open-hand': 'lorc/fist',
+  'subclass.paladin.devotion': 'lorc/winged-sword',
+  'subclass.ranger.gloom-stalker': 'lorc/hood',
+  'subclass.ranger.hunter': 'delapouite/crosshair',
+  'subclass.rogue.thief': 'delapouite/robber',
+  'subclass.sorcerer.draconic': 'lorc/dragon-head',
+  'subclass.warlock.fiend': 'lorc/daemon-skull',
+  'subclass.wizard.evocation': 'lorc/fireball',
+  'subclass.wizard.war-magic': 'lorc/crossed-swords',
 };
 
 const BACKGROUND = '<path d="M0 0h512v512H0z"/>';

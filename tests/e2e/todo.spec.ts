@@ -27,7 +27,7 @@ test('skipped level choices wait on the To do list and clear when chosen', async
   // Choose the subclass; the item clears.
   const subclass = page.getByRole('listitem').filter({ hasText: 'Choose a Fighter subclass' });
   await subclass.getByRole('button', { name: 'Choose', exact: true }).click();
-  await subclass.getByLabel('Subclass', { exact: true }).selectOption('subclass.fighter.champion');
+  await subclass.locator('input[type="radio"][value="subclass.fighter.champion"]').check();
   await subclass.getByRole('button', { name: 'Save choice' }).click();
   await expect(page.getByText('Choose a Fighter subclass')).toHaveCount(0);
 

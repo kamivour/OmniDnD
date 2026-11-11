@@ -51,6 +51,8 @@ Defined as CSS variables on `:root`; Tailwind reads them (`bg-surface`, `text-ac
 - **Cinzel** for the character name and screen titles only.
 - Sizes: 12 / 14 / 16 / 20 / 28 px. HP number in Combat: 40 px.
 - Self-host fonts (offline PWA).
+- Field labels are 14 px semibold in full text colour. Section headings (`SectionLabel`) are 14 px bold uppercase. Muted text is for hints only.
+- Cautions use `Caution`: warn colour, a triangle icon and medium weight. Blocking errors use danger colour with the octagon icon.
 
 ## 4. Icons
 
@@ -58,6 +60,7 @@ Defined as CSS variables on `:root`; Tailwind reads them (`bg-surface`, `text-ac
 - **Content (spells, items, features, conditions):** [game-icons.net](https://game-icons.net) SVGs, CC BY 3.0 → credit on Reference → Credits page.
 - Monochrome, `currentColor`. 20 px in lists, 40 px in detail panels. Muted at rest, `accent` on hover/selection.
 - Each data entry has optional `iconId`. Missing → fallback by spell school / item category / feature type.
+- Subclass choices (creation, level-up, To do) are separate cards: 40 px icon (`subclass.<class>.<name>`), name, difficulty and a one-line pitch; "Decide later" is the last card.
 - Bundle only used icons as local SVG files. No runtime fetching.
 
 ## 5. Motion budget
