@@ -291,6 +291,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-11 — M26 task 5: M26-5: sign-in card on Campaigns when signed out (sync builds only), hideable; welcome tour points at it.
 - 2026-11-11 — M26 task 4: M26-4: new devices start empty; Campaigns offers a Try the sample character button.
 - 2026-11-11 — M26 task 3: Pending spell picks open Manage spells on just that pick; Show all brings back the rest.
 - 2026-11-11 — M26 task 2: Alignment list says True Neutral; old Neutral shows as True Neutral.

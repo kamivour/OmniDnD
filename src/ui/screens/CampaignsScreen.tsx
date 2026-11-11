@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { lazy, Suspense, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { Link } from 'react-router';
 import { Copy, Download, Plus, Settings2, Trash2, Undo2, Upload, Users } from 'lucide-react';
@@ -24,9 +24,15 @@ import { deviceStore } from '../../state/device-settings';
 import { backupReminder } from '../../state/backup-reminder';
 import { useTourAutostart } from '../tutorial/useTour';
 import { rulesSummary } from '../campaignOptions';
+import { syncConfig } from '../../sync/config';
 
 const button =
   'hover-lift inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-border bg-surface px-3 text-sm text-text disabled:opacity-40';
+// Replaced at build time: guest builds drop the account code entirely.
+const AccountCard = import.meta.env.VITE_SUPABASE_URL
+  ? lazy(() => import('../settings/AccountCard'))
+  : null;
+
 const path = (id: string) => encodeURIComponent(id);
 
 /** The landing page reads the same saved characters as the HUD. */
@@ -101,6 +107,11 @@ export function CampaignsScreen() {
         </p>
       )}
       {importControls}
+      {AccountCard && syncConfig && (
+        <Suspense fallback={null}>
+          <AccountCard config={syncConfig} />
+        </Suspense>
+      )}
       {state.managementEvents.length > 0 && (
         <p aria-label="Recent management change" className="text-xs text-text-muted">
           {state.managementEvents.at(-1)?.text}

@@ -8,7 +8,7 @@ test.describe('first visit', () => {
     await page.goto('/');
     const card = page.getByRole('dialog', { name: 'Welcome to OmniDnD' });
     await expect(card).toBeVisible();
-    await expect(card.getByText('1 of 7')).toBeVisible();
+    await expect(card.getByText('1 of 8')).toBeVisible();
     await card.getByRole('button', { name: 'Skip tutorial' }).click();
     await expect(card).toBeHidden();
     await page.reload();
@@ -22,8 +22,8 @@ test.describe('first visit', () => {
     await page.goto('/');
     const card = page.getByTestId('tour').getByRole('dialog');
     await expect(card).toBeVisible();
-    for (let step = 1; step <= 7; step += 1) {
-      await expect(card.getByText(`${step} of 7`)).toBeVisible();
+    for (let step = 1; step <= 8; step += 1) {
+      await expect(card.getByText(`${step} of 8`)).toBeVisible();
       const box = await card.boundingBox();
       const viewport = page.viewportSize()!;
       expect(box!.x).toBeGreaterThanOrEqual(0);
@@ -125,8 +125,8 @@ test.describe('screen tips', () => {
 });
 
 test.describe('targets', () => {
-  // These appear only when there is something to show; the card centers without them.
-  const OPTIONAL = new Set(['todo', 'combat-economy']);
+  // These appear only when there is something to show (account-card: sync builds, signed out); the card centers without them.
+  const OPTIONAL = new Set(['todo', 'combat-economy', 'account-card']);
   const ROUTES: Record<string, string> = {
     welcome: '/',
     character: '/characters/the-fool',

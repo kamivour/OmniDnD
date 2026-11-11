@@ -33,6 +33,8 @@ interface Saved {
   askRoles: boolean;
   /** When a whole-workspace backup file was last saved from this device. */
   lastBackupAt: string | undefined;
+  /** The sign-in card on the Campaigns page was dismissed. */
+  accountCardHidden: boolean;
 }
 
 interface DeviceState extends Saved {
@@ -43,6 +45,7 @@ interface DeviceState extends Saved {
   setCreationMode: (mode: CreationMode) => void;
   setBeginnerHints: (on: boolean) => void;
   markBackedUp: (at: string) => void;
+  setAccountCardHidden: (hidden: boolean) => void;
   addRoll: (entry: Omit<RollEntry, 'id'>) => void;
   clearHistory: () => void;
 }
@@ -58,6 +61,7 @@ function read(): Saved {
       theme: THEME_CHOICES.find((choice) => choice === parsed?.theme) ?? 'system',
       askRoles: parsed?.askRoles !== false,
       lastBackupAt: typeof at === 'string' && !Number.isNaN(Date.parse(at)) ? at : undefined,
+      accountCardHidden: parsed?.accountCardHidden === true,
     };
   } catch {
     return {
@@ -67,15 +71,33 @@ function read(): Saved {
       theme: 'system',
       askRoles: true,
       lastBackupAt: undefined,
+      accountCardHidden: false,
     };
   }
 }
 
-function write({ creationMode, beginnerHints, diceRoller, theme, askRoles, lastBackupAt }: Saved) {
+function write(saved: Saved) {
+  const {
+    creationMode,
+    beginnerHints,
+    diceRoller,
+    theme,
+    askRoles,
+    lastBackupAt,
+    accountCardHidden,
+  } = saved;
   try {
     localStorage.setItem(
       KEY,
-      JSON.stringify({ creationMode, beginnerHints, diceRoller, theme, askRoles, lastBackupAt }),
+      JSON.stringify({
+        creationMode,
+        beginnerHints,
+        diceRoller,
+        theme,
+        askRoles,
+        lastBackupAt,
+        accountCardHidden,
+      }),
     );
   } catch {
     // Storage can be blocked; the choice then lasts until reload.
@@ -86,11 +108,24 @@ let nextId = 1;
 
 export const deviceStore = createStore<DeviceState>((set) => {
   const change = (patch: Partial<Saved>) => {
-    const { creationMode, beginnerHints, diceRoller, theme, askRoles, lastBackupAt } = {
-      ...deviceStore.getState(),
-      ...patch,
-    };
-    write({ creationMode, beginnerHints, diceRoller, theme, askRoles, lastBackupAt });
+    const {
+      creationMode,
+      beginnerHints,
+      diceRoller,
+      theme,
+      askRoles,
+      lastBackupAt,
+      accountCardHidden,
+    } = { ...deviceStore.getState(), ...patch };
+    write({
+      creationMode,
+      beginnerHints,
+      diceRoller,
+      theme,
+      askRoles,
+      lastBackupAt,
+      accountCardHidden,
+    });
     set(patch);
   };
   return {
@@ -102,6 +137,7 @@ export const deviceStore = createStore<DeviceState>((set) => {
     setCreationMode: (creationMode) => change({ creationMode }),
     setBeginnerHints: (beginnerHints) => change({ beginnerHints }),
     markBackedUp: (lastBackupAt) => change({ lastBackupAt }),
+    setAccountCardHidden: (accountCardHidden) => change({ accountCardHidden }),
     addRoll: (entry) =>
       set((state) => ({
         history: [{ ...entry, id: nextId++ }, ...state.history].slice(0, HISTORY_LIMIT),

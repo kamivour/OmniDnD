@@ -37,6 +37,14 @@ describe('device settings', () => {
     });
   });
 
+  it('remembers a hidden sign-in card', async () => {
+    const { deviceStore, store } = await load();
+    expect(deviceStore.getState().accountCardHidden).toBe(false);
+    deviceStore.getState().setAccountCardHidden(true);
+    const again = await load(JSON.parse(store.get(KEY)!));
+    expect(again.deviceStore.getState().accountCardHidden).toBe(true);
+  });
+
   it('ignores unknown saved values', async () => {
     const { deviceStore } = await load({ creationMode: 'wizard', beginnerHints: 'no' });
     expect(deviceStore.getState()).toMatchObject({ creationMode: 'steps', beginnerHints: true });

@@ -37,6 +37,12 @@ export const CHAPTERS: readonly Chapter[] = [
         body: 'Search for a screen, rule, spell or tool. Shortcut: Ctrl+K or the / key.',
       },
       {
+        id: 'account',
+        target: 'account-card',
+        title: 'Sign in or create an account',
+        body: 'Optional. Where this app offers accounts, the card on this page keeps your campaigns in step across devices. You can also use Settings later.',
+      },
+      {
         id: 'settings',
         target: 'settings',
         title: 'Settings',
