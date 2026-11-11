@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 00:40 — Xanathar’s subclasses, part 1
+
+- Added 13 Xanathar’s subclasses: three barbarian paths, three bard colleges, Forge and Grave clerics, Arcane Archer, Samurai and three monk ways.
+- Each has features and a guidance card. Shared pools like ki and Channel Divinity are linked.
+- Next: the other 13 Xanathar’s subclasses.
+Checks pass.
+
 ## 2026-11-12 00:38 — Xanathar’s spells
 
 - Added 89 Xanathar’s spells, from cantrips like Frostbite and Thunderclap to 9th-level Psychic Scream, with classes, damage and upcast.

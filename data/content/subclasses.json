@@ -2202,5 +2202,444 @@
         "featureId": "feature.wizard.order-of-scribes-one-with-the-word"
       }
     ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.barbarian.ancestral-guardian",
+    "name": "Path of the Ancestral Guardian",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Barbarian whose raging draws ancestor spirits that shield allies and punish foes."
+    },
+    "classId": "class.barbarian",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.barbarian.ancestral-guardian-ancestral-protectors"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.barbarian.ancestral-guardian-spirit-shield"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.barbarian.ancestral-guardian-consult-the-spirits"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.barbarian.ancestral-guardian-vengeful-ancestors"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.barbarian.storm-herald",
+    "name": "Path of the Storm Herald",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Barbarian who rages in a storm aura of desert, sea or tundra."
+    },
+    "classId": "class.barbarian",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.barbarian.storm-herald-storm-aura"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.barbarian.storm-herald-storm-soul"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.barbarian.storm-herald-shielding-storm"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.barbarian.storm-herald-raging-storm"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.barbarian.zealot",
+    "name": "Path of the Zealot",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Barbarian fuelled by divine fury, hard to kill and easy to raise."
+    },
+    "classId": "class.barbarian",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.barbarian.zealot-divine-fury"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.barbarian.zealot-warrior-of-the-gods"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.barbarian.zealot-fanatical-focus"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.barbarian.zealot-zealous-presence"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.barbarian.zealot-rage-beyond-death"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.bard.glamour",
+    "name": "College of Glamour",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bard with fey allure who charms crowds and shields allies."
+    },
+    "classId": "class.bard",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.bard.glamour-mantle-of-inspiration"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.bard.glamour-enthralling-performance"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.bard.glamour-mantle-of-majesty"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.bard.glamour-unbreakable-majesty"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.bard.swords",
+    "name": "College of Swords",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bard duelist who fights with flair and blade tricks."
+    },
+    "classId": "class.bard",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.bard.swords-fighting-style"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.bard.swords-blade-flourish"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.bard.swords-extra-attack"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.bard.swords-masters-flourish"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.bard.whispers",
+    "name": "College of Whispers",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bard spy who steals secrets and strikes with psychic fear."
+    },
+    "classId": "class.bard",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.bard.whispers-psychic-blades"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.bard.whispers-words-of-terror"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.bard.whispers-mantle-of-whispers"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.bard.whispers-shadow-lore"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.cleric.forge",
+    "name": "Forge Domain",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cleric of fire and smithing with heavy armour and fire resistance."
+    },
+    "classId": "class.cleric",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.forge-bonus-proficiencies"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.forge-blessing-of-the-forge"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.forge-artisans-blessing"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.forge-soul-of-the-forge"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.forge-divine-strike"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.forge-saint-of-forge-and-fire"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.cleric.grave",
+    "name": "Grave Domain",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cleric who guards the line between life and death and denies undeath."
+    },
+    "classId": "class.cleric",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.grave-circle-of-mortality"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.grave-eyes-of-the-grave"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.grave-path-to-the-grave"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.grave-sentinel-at-deaths-door"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.grave-potent-spellcasting"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.grave-keeper-of-souls"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.fighter.arcane-archer",
+    "name": "Arcane Archer",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Fighter archer who loads arrows with magic, shooting effects as well as damage."
+    },
+    "classId": "class.fighter",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.fighter.arcane-archer-arcane-archer-lore"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.arcane-archer-arcane-shot"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.fighter.arcane-archer-magic-arrow"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.fighter.arcane-archer-curving-shot"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.fighter.arcane-archer-ever-ready-shot"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.fighter.samurai",
+    "name": "Samurai",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Fighter with iron resolve who pushes through blows and finds focus in battle."
+    },
+    "classId": "class.fighter",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.fighter.samurai-fighting-spirit"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.samurai-bonus-proficiency"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.fighter.samurai-elegant-courtier"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.fighter.samurai-tireless-spirit"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.fighter.samurai-rapid-strike"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.fighter.samurai-strength-before-death"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.monk.drunken-master",
+    "name": "Way of the Drunken Master",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Monk with a stumbling, unpredictable style that is hard to pin down."
+    },
+    "classId": "class.monk",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.monk.drunken-master-bonus-proficiencies"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.monk.drunken-master-drunken-technique"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.monk.drunken-master-tipsy-sway"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.monk.drunken-master-drunkards-luck"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.monk.drunken-master-intoxicated-frenzy"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.monk.kensei",
+    "name": "Way of the Kensei",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Monk who treats chosen weapons as an extension of the body."
+    },
+    "classId": "class.monk",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.monk.kensei-path-of-the-kensei"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.monk.kensei-one-with-the-blade"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.monk.kensei-sharpen-the-blade"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.monk.kensei-unerring-accuracy"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.monk.sun-soul",
+    "name": "Way of the Sun Soul",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Monk who throws radiant light as a ranged attack."
+    },
+    "classId": "class.monk",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.monk.sun-soul-radiant-sun-bolt"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.monk.sun-soul-searing-arc-strike"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.monk.sun-soul-searing-sunburst"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.monk.sun-soul-sun-shield"
+      }
+    ]
   }
 ]

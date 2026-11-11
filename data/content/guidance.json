@@ -2202,5 +2202,130 @@
     "mainAbilities": ["INT"],
     "strengths": ["Cheaper copying", "Swap damage types of spells", "Book teleports to you"],
     "weaknesses": ["Book can be lost", "Fewer flashy abilities"]
+  },
+  {
+    "id": "subclass.barbarian.ancestral-guardian",
+    "kind": "subclass",
+    "pitch": "Barbarian whose raging draws ancestor spirits that shield allies and punish foes.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "CON"],
+    "strengths": [
+      "Strong tank for allies",
+      "Forces enemies to attack you",
+      "Late-game damage reduction"
+    ],
+    "weaknesses": ["Needs enemies to obey the mark", "Weaker alone"]
+  },
+  {
+    "id": "subclass.barbarian.storm-herald",
+    "kind": "subclass",
+    "pitch": "Barbarian who rages in a storm aura of desert, sea or tundra.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "CON"],
+    "strengths": [
+      "Area damage or help each rage",
+      "Change aura on each rage",
+      "Strong at range 10 feet"
+    ],
+    "weaknesses": ["Aura works only while raging", "Choice adds bookkeeping"]
+  },
+  {
+    "id": "subclass.barbarian.zealot",
+    "kind": "subclass",
+    "pitch": "Barbarian fuelled by divine fury, hard to kill and easy to raise.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "CON"],
+    "strengths": ["Extra radiant or necrotic damage", "Hard to keep down", "Cheap resurrection"],
+    "weaknesses": ["Few defensive tricks", "Relies on rage uptime"]
+  },
+  {
+    "id": "subclass.bard.glamour",
+    "kind": "subclass",
+    "pitch": "Bard with fey allure who charms crowds and shields allies.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA", "DEX"],
+    "strengths": ["Strong charm and temp HP", "Great social presence", "Good battlefield control"],
+    "weaknesses": ["Relies on charm", "Few damage options"]
+  },
+  {
+    "id": "subclass.bard.swords",
+    "kind": "subclass",
+    "pitch": "Bard duelist who fights with flair and blade tricks.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "CHA"],
+    "strengths": ["Strong melee damage", "Good AC option", "Two-weapon fighting style"],
+    "weaknesses": ["Eats inspiration dice", "Needs to be close"]
+  },
+  {
+    "id": "subclass.bard.whispers",
+    "kind": "subclass",
+    "pitch": "Bard spy who steals secrets and strikes with psychic fear.",
+    "difficulty": "hard",
+    "mainAbilities": ["CHA", "DEX"],
+    "strengths": ["Extra psychic damage", "Strong infiltration", "Fear and mimicry"],
+    "weaknesses": ["Needs social scenes", "Less reliable in plain fights"]
+  },
+  {
+    "id": "subclass.cleric.forge",
+    "kind": "subclass",
+    "pitch": "Cleric of fire and smithing with heavy armour and fire resistance.",
+    "difficulty": "easy",
+    "mainAbilities": ["WIS", "STR"],
+    "strengths": ["High AC", "Fire damage", "Fire resistance"],
+    "weaknesses": ["Slower speed in plate", "Few healing options"]
+  },
+  {
+    "id": "subclass.cleric.grave",
+    "kind": "subclass",
+    "pitch": "Cleric who guards the line between life and death and denies undeath.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS", "CON"],
+    "strengths": ["Strong anti-undead", "Finishing damage", "Keeps allies alive"],
+    "weaknesses": ["Less armour", "Narrower theme"]
+  },
+  {
+    "id": "subclass.fighter.arcane-archer",
+    "kind": "subclass",
+    "pitch": "Fighter archer who loads arrows with magic, shooting effects as well as damage.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "INT"],
+    "strengths": ["Ranged utility", "Many trick shots", "Recharges on rest"],
+    "weaknesses": ["Limited uses", "Needs a bow"]
+  },
+  {
+    "id": "subclass.fighter.samurai",
+    "kind": "subclass",
+    "pitch": "Fighter with iron resolve who pushes through blows and finds focus in battle.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "WIS"],
+    "strengths": ["Strong bursts of attacks", "Resilient", "Easy to play"],
+    "weaknesses": ["Fighting Spirit has limited uses", "Few ranged options"]
+  },
+  {
+    "id": "subclass.monk.drunken-master",
+    "kind": "subclass",
+    "pitch": "Monk with a stumbling, unpredictable style that is hard to pin down.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": ["Great mobility", "Hard to hit", "Flexible movement"],
+    "weaknesses": ["Ki hungry", "Damage lags"]
+  },
+  {
+    "id": "subclass.monk.kensei",
+    "kind": "subclass",
+    "pitch": "Monk who treats chosen weapons as an extension of the body.",
+    "difficulty": "easy",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": ["Weapons count as monk weapons", "Ranged option", "Good damage"],
+    "weaknesses": ["Few trick options", "Relies on ki"]
+  },
+  {
+    "id": "subclass.monk.sun-soul",
+    "kind": "subclass",
+    "pitch": "Monk who throws radiant light as a ranged attack.",
+    "difficulty": "easy",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": ["Ranged radiant damage", "Area burst", "Light sources"],
+    "weaknesses": ["Ki hungry", "Damage types vary"]
   }
 ]

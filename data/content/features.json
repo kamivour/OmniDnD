@@ -8543,5 +8543,933 @@
       "max": 1,
       "recharge": "long"
     }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.ancestral-guardian-ancestral-protectors",
+    "name": "Ancestral Protectors",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While raging, the first creature you hit each turn has disadvantage on attacks against others, and those others resist its damage until your next turn."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.ancestral-guardian-spirit-shield",
+    "name": "Spirit Shield",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While raging, when an ally within 30 feet takes damage, reduce it by 2d6. The die grows at levels 10 and 14."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.ancestral-guardian-consult-the-spirits",
+    "name": "Consult the Spirits",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cast augury or clairvoyance without a slot, using Wisdom. Once per short or long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.ancestral-guardian-vengeful-ancestors",
+    "name": "Vengeful Ancestors",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When Spirit Shield reduces damage, the attacker takes force damage equal to the amount prevented."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.storm-herald-storm-aura",
+    "name": "Storm Aura",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you rage, pick desert, sea or tundra. A 10-foot aura deals damage, shocks foes or grants temp HP to allies, and renews each turn you rage."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.storm-herald-storm-soul",
+    "name": "Storm Soul",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain a lasting boon from your chosen environment, such as fire resistance, cold resistance or free water breathing and movement."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.storm-herald-shielding-storm",
+    "name": "Shielding Storm",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Allies in your aura share your resistance from Storm Soul."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.storm-herald-raging-storm",
+    "name": "Raging Storm",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your aura gains a strong effect: lightning on a hit, a tidal slam that knocks prone, or frozen ground. It uses your STR for the save."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.zealot-divine-fury",
+    "name": "Divine Fury",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "On your first hit each turn while raging, deal extra radiant or necrotic damage of 1d6 plus half your barbarian level."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.zealot-warrior-of-the-gods",
+    "name": "Warrior of the Gods",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A spell that raises you from the dead needs no material component."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.zealot-fanatical-focus",
+    "name": "Fanatical Focus",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per rage, reroll a failed saving throw and take the new result."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.zealot-zealous-presence",
+    "name": "Zealous Presence",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Up to ten allies within 60 feet gain advantage on attacks and saves until your next turn. Once per long rest, or by spending a slot."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.zealot-rage-beyond-death",
+    "name": "Rage Beyond Death",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While raging, you stay conscious at 0 hit points and die only when the rage ends with you still at 0."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.glamour-mantle-of-inspiration",
+    "name": "Mantle of Inspiration",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a Bardic Inspiration die to give allies temp HP and let them move without opportunity attacks."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.bard.bardic-inspiration"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.glamour-enthralling-performance",
+    "name": "Enthralling Performance",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a minute performing, charm creatures that watch. They stay friendly for an hour or so."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.glamour-mantle-of-majesty",
+    "name": "Mantle of Majesty",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "For a minute, you can cast command each turn at no cost and appear in a beautiful fey guise."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.glamour-unbreakable-majesty",
+    "name": "Unbreakable Majesty",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Take a regal form for a minute. Creatures that target you with an attack or harmful spell must save or lose that action."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.swords-fighting-style",
+    "name": "Fighting Style",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain Dueling or Two-Weapon Fighting. You can use a melee weapon as a spell focus."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.swords-blade-flourish",
+    "name": "Blade Flourish",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your Attack action grants you speed, and once per turn you can spend an inspiration die for a flourish that adds damage or other effects."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.bard.bardic-inspiration"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.swords-extra-attack",
+    "name": "Extra Attack",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can attack twice when you take the Attack action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.swords-masters-flourish",
+    "name": "Master’s Flourish",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you use a flourish, roll a d6 instead of spending an inspiration die."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.whispers-psychic-blades",
+    "name": "Psychic Blades",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you hit with a weapon, spend a Bardic Inspiration die for extra psychic damage, once per turn."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "usesFrom": "feature.bard.bardic-inspiration"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.whispers-words-of-terror",
+    "name": "Words of Terror",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After talking one minute with a creature, it makes a WIS save or is frightened of a chosen creature for an hour."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.whispers-mantle-of-whispers",
+    "name": "Mantle of Whispers",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a humanoid dies near you, capture its shadow and take on its appearance for an hour."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.whispers-shadow-lore",
+    "name": "Shadow Lore",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Whisper to a creature that fails a WIS save. It acts as your friend and obeys unless in danger."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.forge-bonus-proficiencies",
+    "name": "Bonus Proficiencies",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain heavy armour and smith’s tools proficiency."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.forge-blessing-of-the-forge",
+    "name": "Blessing of the Forge",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "At the end of a long rest, make a weapon or armour +1 for that day."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.forge-artisans-blessing",
+    "name": "Channel Divinity: Artisan’s Blessing",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend an hour working to create a simple metal item worth up to 100 gp in value."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.forge-soul-of-the-forge",
+    "name": "Soul of the Forge",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain +1 AC in heavy armour and resistance to fire."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.forge-divine-strike",
+    "name": "Divine Strike",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per turn, a weapon hit deals extra fire damage: 1d8, then 2d8 at level 14."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.forge-saint-of-forge-and-fire",
+    "name": "Saint of Forge and Fire",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain immunity to fire and resistance to nonmagical physical damage while wearing heavy armour."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.grave-circle-of-mortality",
+    "name": "Circle of Mortality",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Healing spells always roll maximum on a creature at 0 hit points, and you learn spare the dying as a bonus action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.grave-eyes-of-the-grave",
+    "name": "Eyes of the Grave",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sense undead within 60 feet for a turn. Uses equal your WIS modifier per long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.grave-path-to-the-grave",
+    "name": "Channel Divinity: Path to the Grave",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A creature you see is cursed until your next turn and takes double damage from the next attack against it."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.grave-sentinel-at-deaths-door",
+    "name": "Sentinel at Death’s Door",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a critical hit is made near you, turn it into a normal hit. Uses equal your WIS modifier per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.grave-potent-spellcasting",
+    "name": "Potent Spellcasting",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add your Wisdom modifier to cleric cantrip damage."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.grave-keeper-of-souls",
+    "name": "Keeper of Souls",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When an enemy dies within 60 feet, you or an ally nearby regains hit points equal to its hit dice, once per turn."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-arcane-archer-lore",
+    "name": "Arcane Archer Lore",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain proficiency in Arcana or Nature, and learn prestidigitation or druidcraft."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-arcane-shot",
+    "name": "Arcane Shot",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Choose two magical shot options. Once per turn on a hit, use one to add damage and a rider effect. Twice per short rest."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 2,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-magic-arrow",
+    "name": "Magic Arrow",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Arrows from your bow count as magical."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-curving-shot",
+    "name": "Curving Shot",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Redirect a missed magic shot at a different target within 60 feet."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-ever-ready-shot",
+    "name": "Ever-Ready Shot",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "If you start initiative with no Arcane Shot uses, regain one."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.samurai-fighting-spirit",
+    "name": "Fighting Spirit",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain advantage on weapon attacks until the end of your turn and temp HP. Three uses per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 3,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.samurai-bonus-proficiency",
+    "name": "Bonus Proficiency",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain proficiency in one skill, or in a language of your choice."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.samurai-elegant-courtier",
+    "name": "Elegant Courtier",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add your WIS to Persuasion checks and gain WIS save proficiency."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.samurai-tireless-spirit",
+    "name": "Tireless Spirit",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you roll initiative with no uses left, regain one Fighting Spirit use."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.samurai-rapid-strike",
+    "name": "Rapid Strike",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Give up advantage on an attack to make one extra attack as part of the same action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.samurai-strength-before-death",
+    "name": "Strength Before Death",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you drop to 0, take an extra turn before falling unconscious. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.drunken-master-bonus-proficiencies",
+    "name": "Bonus Proficiencies",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain Performance proficiency and brewer’s supplies."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.drunken-master-drunken-technique",
+    "name": "Drunken Technique",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you use Flurry of Blows, you also take the Disengage action and gain extra speed."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.drunken-master-tipsy-sway",
+    "name": "Tipsy Sway",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Stand from prone for little movement, and redirect a missed melee attack to another creature, spending ki."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.drunken-master-drunkards-luck",
+    "name": "Drunkard’s Luck",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend ki to cancel disadvantage on a roll."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.drunken-master-intoxicated-frenzy",
+    "name": "Intoxicated Frenzy",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Flurry of Blows can make up to five attacks against different targets."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.kensei-path-of-the-kensei",
+    "name": "Path of the Kensei",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Pick two kinds of weapon to count as monk weapons. You gain an agile parry and weapon-based abilities with them."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.kensei-one-with-the-blade",
+    "name": "One with the Blade",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your chosen weapons count as magical, and you can add damage by spending ki."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.kensei-sharpen-the-blade",
+    "name": "Sharpen the Blade",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend up to 3 ki to give a weapon a bonus to attack and damage for a minute."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.kensei-unerring-accuracy",
+    "name": "Unerring Accuracy",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per turn, reroll a missed monk weapon attack."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.sun-soul-radiant-sun-bolt",
+    "name": "Radiant Sun Bolt",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Make a ranged spell attack within 30 feet for radiant damage, using a monk weapon rolls. Spend ki to make extra bolts."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.sun-soul-searing-arc-strike",
+    "name": "Searing Arc Strike",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After the Attack action, spend ki to cast burning hands as a bonus action."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.sun-soul-searing-sunburst",
+    "name": "Searing Sunburst",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Create a burst of radiant light, 20 feet in radius, within 150 feet. Spend ki to increase damage."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.sun-soul-sun-shield",
+    "name": "Sun Shield",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Shed bright light and deal radiant damage in reaction to melee hits against you."
+    },
+    "origin": "subclass",
+    "activation": "passive"
   }
 ]

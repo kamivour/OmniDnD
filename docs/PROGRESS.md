@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M36 Xanathar’s spells done; M37 next (see PLAN.md).
+**Current milestone:** M37 Xanathar’s subclasses part 1 done; M38 next (see PLAN.md).
 **Next up:** Manual QA for M26 by the user; Q40–Q43 wait for the user, defaults apply.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -61,7 +61,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M34 | Tasha's subclasses, part 2 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M35 | Xanathar's options | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M36 | Xanathar's spells | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
-| M37 | Xanathar's subclasses, part 1 | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M37 | Xanathar's subclasses, part 1 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M38 | Xanathar's subclasses, part 2 | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
@@ -314,6 +314,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-12 — M34: 11 more Tasha’s subclasses (Glory to Order of Scribes) with Channel Divinity and sorcery-point links.
 - 2026-11-12 — M35: 12 Xanathar’s racial feats and 14 warlock invocations; picker finds invocations by prefix.
 - 2026-11-12 — M36: 89 Xanathar’s spells (cantrips to 9th level) in own words with classes, damage and upcast.
+- 2026-11-12 — M37: 13 Xanathar’s subclasses (barbarian, bard, cleric, fighter, monk) with features and guidance.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.
