@@ -51,6 +51,19 @@ Build for multiple campaigns and characters, including friends' future character
 | M25 | DM party overview | 7 | done | Read-only overview of the whole party for the DM; see [PLAN.md](PLAN.md) |
 | M26 | Friend-testing fixes | 5 | done | New players on a phone create a character without confusion and find sign-up; see [PLAN.md](PLAN.md) |
 
+| M27 | PHB races and Beast Master | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M28 | PHB martial subclasses | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M29 | PHB caster subclasses | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M30 | PHB non-SRD spells | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M31 | Tasha's options | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M32 | Tasha's spells | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M33 | Tasha's subclasses, part 1 | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M34 | Tasha's subclasses, part 2 | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M35 | Xanathar's options | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M36 | Xanathar's spells | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M37 | Xanathar's subclasses, part 1 | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M38 | Xanathar's subclasses, part 2 | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
 ## Checklists

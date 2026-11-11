@@ -156,6 +156,25 @@ From friends testing the live site on 2026-11-10. Small fixes first, the larger 
 
 ---
 
+## M27–M38 — Missing content (PHB, then Tasha's, then Xanathar's)
+
+Own-words data in `data/content/`, tagged with its book so Campaign Setup can switch it off. Anything that changes a number goes through the engine, with tests. One milestone per commit; each ends with a check at 375 px and 1440 px.
+
+- **M27 — PHB races and Beast Master.** Wood Elf, Drow, Mountain Dwarf, Stout Halfling, Forest Gnome, Variant Human. Ranger Beast Master with a companion picked from SRD beasts, with a Stats button.
+- **M28 — PHB martial subclasses.** Totem Warrior, Battle Master (maneuvers, dice, DC), Eldritch Knight, Shadow, Four Elements, Ancients, Vengeance, Assassin, Arcane Trickster.
+- **M29 — PHB caster subclasses.** Valor, six Cleric domains, Moon, Wild Magic, Archfey, Great Old One, seven Wizard schools.
+- **M30 — PHB non-SRD spells.** Hex and Hunter's Mark get damage riders.
+- **M31 — Tasha's options.** Custom Lineage, 7 feats, Primal Companion, extra maneuvers, metamagic and invocations, Pact of the Talisman.
+- **M32 — Tasha's spells.** Nine Summon spells with stat templates (Q43).
+- **M33–M34 — Tasha's subclasses.** Two halves.
+- **M35 — Xanathar's options.** Racial feats whose race exists, invocations.
+- **M36 — Xanathar's spells.** Cantrips to 3rd, then 4th to 9th.
+- **M37–M38 — Xanathar's subclasses.** Two halves.
+
+Left out: downtime, encounter building, other books' races.
+
+---
+
 ## Risks
 - **Free hosting limits:** Supabase allows 200 live connections and 500 MB of storage; records are capped at 5 MB (our limit). Long event logs grow records; a later fix is a snapshot plus trimmed history.
 - **Security:** shared access depends entirely on row-level security, so every rule gets a test. Invite codes are random, hashed and expire. Emails are never shown to other members.
