@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-11 14:13 — Stats button for summons
+- Steel Defender, Eldritch Cannon, Find Familiar, Find Steed and Conjure spells now show a small Stats button beside Use or Cast.
+- It opens that creature on Companions, or the add form pre-filled if you have none yet.
+- Check it on a Conjure spell: the form opens so you pick a creature.
+- Checks pass.
+
 ## 2026-11-11 14:07 — All PHB backgrounds
 - New character offers every PHB background, the five variants (Spy, Gladiator, Guild Merchant, Knight, Pirate) and Custom.
 - Backgrounds with open choices show pickers for languages, tools and skills; leave them blank to fill in on the sheet later.

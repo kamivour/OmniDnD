@@ -291,6 +291,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.
 - 2026-11-11 — M26 task 8: All PHB backgrounds, variants and Custom; creation asks for their skills, languages and tools.
 - 2026-11-11 — M26 task 7: M26-7: bolder field labels and headings; subclass choice is icon cards with pitch and difficulty; DESIGN.md updated.
 - 2026-11-11 — M26 task 6: M26-6: cautions use warn colour, a triangle icon and bolder text; blocking level-up errors use danger.

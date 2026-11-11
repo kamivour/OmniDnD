@@ -32,11 +32,14 @@ export function CompanionEditor({
   open,
   onOpenChange,
   editing,
+  initialTemplate,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   /** Absent: add a new companion. */
   editing?: Companion;
+  /** Template label the add form starts from. */
+  initialTemplate?: string;
 }) {
   return (
     <Sheet
@@ -50,6 +53,7 @@ export function CompanionEditor({
         <EditorForm
           key={editing?.id ?? 'new'}
           editing={editing}
+          initialTemplate={initialTemplate}
           onDone={() => onOpenChange(false)}
         />
       )}
@@ -57,11 +61,24 @@ export function CompanionEditor({
   );
 }
 
-function EditorForm({ editing, onDone }: { editing?: Companion; onDone: () => void }) {
+function EditorForm({
+  editing,
+  initialTemplate,
+  onDone,
+}: {
+  editing?: Companion;
+  initialTemplate?: string;
+  onDone: () => void;
+}) {
   const { run } = useCommand();
-  const [form, setForm] = useState<CompanionForm>(() => (editing ? toForm(editing) : emptyForm()));
-  const [template, setTemplate] = useState('');
-  const [base, setBase] = useState<Omit<Companion, 'id'>>();
+  const start = editing
+    ? undefined
+    : COMPANION_TEMPLATES.find((entry) => entry.label === initialTemplate)?.companion;
+  const [form, setForm] = useState<CompanionForm>(() =>
+    editing ? toForm(editing) : start ? toForm(start) : emptyForm(),
+  );
+  const [template, setTemplate] = useState(start ? (initialTemplate ?? '') : '');
+  const [base, setBase] = useState<Omit<Companion, 'id'> | undefined>(start);
   const [error, setError] = useState<string | null>(null);
   const prefix = editing ? `edit-${editing.id}` : 'comp';
   const set = (patch: Partial<CompanionForm>) => {

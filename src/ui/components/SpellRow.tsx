@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react';
+import { StatsLink } from '../companions/StatsLink';
 import { cx } from '../cx';
 import type { SpellView } from '../fixtures/the-fool';
 import { schoolIconId, signed } from '../format';
@@ -76,20 +77,23 @@ export function SpellRow({
       }
       meta={meta}
       auxiliaryAction={
-        onFavorite && (
-          <button
-            type="button"
-            aria-label={`Favorite ${spell.name}`}
-            aria-pressed={!!favorite}
-            onClick={onFavorite}
-            className={cx(
-              'hover-lift grid size-11 shrink-0 place-items-center rounded-btn border border-transparent hover:text-accent',
-              favorite ? 'text-accent' : 'text-text-muted',
-            )}
-          >
-            <Star aria-hidden className="size-5" fill={favorite ? 'currentColor' : 'none'} />
-          </button>
-        )
+        <>
+          <StatsLink refId={spell.id} name={spell.name} />
+          {onFavorite && (
+            <button
+              type="button"
+              aria-label={`Favorite ${spell.name}`}
+              aria-pressed={!!favorite}
+              onClick={onFavorite}
+              className={cx(
+                'hover-lift grid size-11 shrink-0 place-items-center rounded-btn border border-transparent hover:text-accent',
+                favorite ? 'text-accent' : 'text-text-muted',
+              )}
+            >
+              <Star aria-hidden className="size-5" fill={favorite ? 'currentColor' : 'none'} />
+            </button>
+          )}
+        </>
       }
       actionLabel="Cast"
       onAction={(event) => onCast(spell, spell.level, event.currentTarget)}

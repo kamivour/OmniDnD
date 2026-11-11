@@ -25,6 +25,7 @@ import {
 import { useCommand } from '../commands/command-context';
 import { EncounterTracker } from '../combat/EncounterTracker';
 import { LiveFeatureDetail, LiveWeaponDetail } from '../combat/LiveCombatDetails';
+import { StatsLink } from '../companions/StatsLink';
 import { ActionRow } from '../components/ActionRow';
 import { AttackCard, FeatureCard, RuleCard } from '../components/cards';
 import { OverrideMarker } from '../components/StatChip';
@@ -223,6 +224,7 @@ export function CombatScreen() {
           <OverrideMarker override={feature.dieOverride} />
         </span>
       }
+      auxiliaryAction={<StatsLink refId={feature.id} name={feature.name} />}
       actionLabel="Use"
       disabled={!!unavailableReason}
       onAction={(event) => {

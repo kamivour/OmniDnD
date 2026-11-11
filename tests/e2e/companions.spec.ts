@@ -102,3 +102,17 @@ test('companions: add from template, damage, heal, condition, undo, reload', asy
     main(page).getByRole('region', { name: 'Companion: Riding horse', exact: true }),
   ).toContainText('8/13');
 });
+
+test('a Stats link opens the add form from its template, then the existing companion', async ({
+  page,
+}) => {
+  await page.goto(`/characters/${ID}/companions?from=steel-defender`);
+  const sheet = page.getByRole('dialog', { name: 'Add companion' });
+  await expect(sheet.getByLabel('Template', { exact: true })).toHaveValue('Steel Defender');
+  await expect(page).toHaveURL(`/characters/${ID}/companions`);
+  await sheet.getByRole('button', { name: /^Add/ }).last().click();
+  await expect(page.getByRole('region', { name: 'Companion: Steel Defender' })).toBeVisible();
+  await page.goto(`/characters/${ID}/companions?from=steel-defender`);
+  await expect(page.getByRole('dialog', { name: 'Add companion' })).toHaveCount(0);
+  await expect(page.getByRole('region', { name: 'Companion: Steel Defender' })).toBeFocused();
+});

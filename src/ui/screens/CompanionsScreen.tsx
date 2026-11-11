@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { Pencil, Plus } from 'lucide-react';
 import { companionStats } from '../../engine/calc/companions';
 import {
@@ -16,6 +17,7 @@ import {
 } from '../../engine/commands';
 import { CONDITIONS, type Condition } from '../../engine/rules2014';
 import type { Companion } from '../../engine/schema';
+import { existingCompanion, linkByKey } from '../companions/companion-links';
 import { CompanionEditor } from '../companions/CompanionEditor';
 import { parseWhole } from '../companions/companion-form';
 import { useCommand } from '../commands/command-context';
@@ -31,10 +33,28 @@ const buttonClass =
 export function CompanionsScreen() {
   const { state, sheet } = useCharacter();
   const { run } = useCommand();
-  const [adding, setAdding] = useState(false);
+  const [params, setParams] = useSearchParams();
+  // A Stats button elsewhere sends us here: show the creature it names, or open the add form.
+  const [arrival] = useState(() => {
+    const link = linkByKey(params.get('from'));
+    const existing = link && existingCompanion(link, state.build.companions ?? []);
+    return { link, existingId: existing ? existing.id : undefined };
+  });
+  const [adding, setAdding] = useState(Boolean(arrival.link && !arrival.existingId));
   const [editingId, setEditingId] = useState<string | null>(null);
+  const startTemplate = arrival.link?.template;
 
   const companions = state.build.companions ?? [];
+  useEffect(() => {
+    if (!arrival.link) return;
+    setParams({}, { replace: true });
+    if (!arrival.existingId) return;
+    requestAnimationFrame(() => {
+      const card = document.getElementById(`companion-${arrival.existingId}`);
+      card?.scrollIntoView({ block: 'start' });
+      card?.focus();
+    });
+  }, [arrival, setParams]);
   const editing = companions.find((companion) => companion.id === editingId);
   const combat = state.live.combat;
   const movement = combatMovement({ live: state.live, sheet });
@@ -88,7 +108,7 @@ export function CompanionsScreen() {
         />
       ))}
 
-      <CompanionEditor open={adding} onOpenChange={setAdding} />
+      <CompanionEditor open={adding} onOpenChange={setAdding} initialTemplate={startTemplate} />
       <CompanionEditor
         open={editing !== undefined}
         onOpenChange={(open) => !open && setEditingId(null)}
@@ -124,8 +144,10 @@ function CompanionCard({
 
   return (
     <section
+      id={`companion-${companion.id}`}
+      tabIndex={-1}
       aria-label={`Companion: ${name}`}
-      className="flex flex-col gap-3 rounded-card bg-surface p-4"
+      className="flex flex-col gap-3 rounded-card bg-surface p-4 outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="font-display text-lg text-text">{name}</h2>

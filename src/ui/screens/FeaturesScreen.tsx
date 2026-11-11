@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react';
+import { StatsLink } from '../companions/StatsLink';
 import { useRef, useState } from 'react';
 import { registry } from '../../data/registry';
 import { overridePath } from '../../engine/calc/value-overrides';
@@ -150,6 +151,7 @@ function FeatureCardRow({ entry }: { entry: FeatureEntry }) {
           >
             Use {entry.name}
           </button>
+          <StatsLink refId={entry.id} name={entry.name} />
           {entry.unavailableReason && (
             <span className="text-xs text-warn">{entry.unavailableReason}</span>
           )}
