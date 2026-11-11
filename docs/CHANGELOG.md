@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 00:29 — Tasha’s subclasses, part 2
+
+- Added the other 11 Tasha’s subclasses: Glory and Watchers Paladin, Fey Wanderer and Swarmkeeper Ranger, Phantom and Soulknife Rogue, Aberrant Mind and Clockwork Soul Sorcerer, Fathomless and Genie Warlock, Order of Scribes Wizard.
+- Channel Divinity and sorcery-point features draw from their shared pools. Psionic dice and soul trinkets are tracked by hand.
+- Next: Xanathar’s options.
+Checks pass.
+
 ## 2026-11-12 00:28 — Tasha’s subclasses, part 1
 
 - Added 12 Tasha’s subclasses: Beast and Wild Magic Barbarian, Creation and Eloquence Bard, Order and Peace Cleric, Spores, Stars and Wildfire Druid, Rune Knight, Mercy and Astral Self Monk.

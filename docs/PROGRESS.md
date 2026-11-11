@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M33 Tasha’s subclasses part 1 done; M34 next (see PLAN.md).
+**Current milestone:** M34 Tasha’s subclasses part 2 done; M35 next (see PLAN.md).
 **Next up:** Manual QA for M26 by the user; Q40–Q43 wait for the user, defaults apply.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -58,7 +58,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M31 | Tasha's options | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M32 | Tasha's spells | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M33 | Tasha's subclasses, part 1 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
-| M34 | Tasha's subclasses, part 2 | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M34 | Tasha's subclasses, part 2 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M35 | Xanathar's options | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M36 | Xanathar's spells | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M37 | Xanathar's subclasses, part 1 | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
@@ -311,6 +311,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-12 — M31: Custom Lineage, 7 feats, 7 maneuvers, 2 metamagic, 8 invocations, Pact of the Talisman, Primal Companion with three beasts.
 - 2026-11-12 — M32: 20 Tasha’s spells incl. ten Summon spells with stat templates, Stats link and spell-attack-based companion attacks.
 - 2026-11-12 — M33: 12 Tasha’s subclasses (Beast to Astral Self) with shared Ki, Channel Divinity, Wild Shape and Bardic Inspiration pools.
+- 2026-11-12 — M34: 11 more Tasha’s subclasses (Glory to Order of Scribes) with Channel Divinity and sorcery-point links.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.

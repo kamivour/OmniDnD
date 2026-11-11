@@ -2071,5 +2071,136 @@
       "Body adds power"
     ],
     "weaknesses": ["Ki heavy", "Many forms to track"]
+  },
+  {
+    "id": "subclass.paladin.glory",
+    "kind": "subclass",
+    "pitch": "A paladin who chases legend through feats of speed and strength.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "CHA"],
+    "strengths": [
+      "Athletic boosts",
+      "Speed and temp HP for the party",
+      "Strong defense against hits"
+    ],
+    "weaknesses": ["Few ranged options", "Aura needs allies close"]
+  },
+  {
+    "id": "subclass.paladin.watchers",
+    "kind": "subclass",
+    "pitch": "A vigilant paladin who stands guard against aberrations, fiends and worse.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "CHA"],
+    "strengths": [
+      "Great initiative",
+      "Protects allies from mind effects",
+      "Strong against extraplanar foes"
+    ],
+    "weaknesses": ["Niche foe types", "Cooldown on key abilities"]
+  },
+  {
+    "id": "subclass.ranger.fey-wanderer",
+    "kind": "subclass",
+    "pitch": "A ranger with fey grace who sways minds and teleports short distances.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": [
+      "Adds WIS to social checks",
+      "Extra psychic damage",
+      "Beguiling spells and teleport"
+    ],
+    "weaknesses": ["Less pure combat power than others", "Several small features to track"]
+  },
+  {
+    "id": "subclass.ranger.swarmkeeper",
+    "kind": "subclass",
+    "pitch": "A ranger whose spirit swarm shoves, lifts and bites on command.",
+    "difficulty": "easy",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": ["Free extra damage and forced movement", "Fly briefly", "Strong area defense"],
+    "weaknesses": ["The swarm is flavor-heavy", "Some effects need DM judgment"]
+  },
+  {
+    "id": "subclass.rogue.phantom",
+    "kind": "subclass",
+    "pitch": "A rogue who speaks with ghosts and carries a trinket of the dead.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX"],
+    "strengths": ["Proficiency swaps", "Extra necrotic damage", "Ghost step avoids death"],
+    "weaknesses": ["Soul trinkets need tracking", "Dark themes"]
+  },
+  {
+    "id": "subclass.rogue.soulknife",
+    "kind": "subclass",
+    "pitch": "A rogue who conjures psychic blades and telepathy.",
+    "difficulty": "easy",
+    "mainAbilities": ["DEX"],
+    "strengths": [
+      "No weapon to carry",
+      "Psychic teleport and invisibility",
+      "Telepathy with allies"
+    ],
+    "weaknesses": ["Psionic dice track extra bookkeeping", "Limited dice at low levels"]
+  },
+  {
+    "id": "subclass.sorcerer.aberrant-mind",
+    "kind": "subclass",
+    "pitch": "A sorcerer who whispers into minds and shapes psychic spells.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA"],
+    "strengths": [
+      "Telepathy and psionic spells",
+      "Free spell swaps",
+      "Revelation in Flesh transforms"
+    ],
+    "weaknesses": ["Eerie theme", "Needs sorcery points for top features"]
+  },
+  {
+    "id": "subclass.sorcerer.clockwork-soul",
+    "kind": "subclass",
+    "pitch": "A sorcerer who bends fate and resists chaos.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA"],
+    "strengths": [
+      "Turns bad rolls into middling ones",
+      "Gains defensive spells",
+      "Trance of order boosts rolls"
+    ],
+    "weaknesses": ["Quiet, reactive style", "Limited uses of core features"]
+  },
+  {
+    "id": "subclass.warlock.fathomless",
+    "kind": "subclass",
+    "pitch": "A warlock who calls forth a spectral tentacle from the deep.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA"],
+    "strengths": [
+      "Tentacle adds damage and slows",
+      "Cold resistance and swim speed",
+      "Pulls foes away from allies"
+    ],
+    "weaknesses": ["Water-focused theme", "Tentacle is another thing to place"]
+  },
+  {
+    "id": "subclass.warlock.genie",
+    "kind": "subclass",
+    "pitch": "A warlock tied to a genie’s vessel with elemental flavor.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA"],
+    "strengths": [
+      "Bottle as a safe rest space",
+      "Flexible elemental bonus damage",
+      "Wish at the top end"
+    ],
+    "weaknesses": ["Choice of genie kind each time", "Vessel must be guarded"]
+  },
+  {
+    "id": "subclass.wizard.order-of-scribes",
+    "kind": "subclass",
+    "pitch": "A wizard whose awakened spellbook casts and swaps damage types.",
+    "difficulty": "easy",
+    "mainAbilities": ["INT"],
+    "strengths": ["Cheaper copying", "Swap damage types of spells", "Book teleports to you"],
+    "weaknesses": ["Book can be lost", "Fewer flashy abilities"]
   }
 ]

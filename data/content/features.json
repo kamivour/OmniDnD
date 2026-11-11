@@ -7212,5 +7212,924 @@
     "origin": "subclass",
     "activation": "bonus",
     "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.glory-peerless-athlete",
+    "name": "Channel Divinity: Peerless Athlete",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "For 10 minutes, gain advantage on Athletics and Acrobatics checks and add 10 feet to jumps."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.glory-inspiring-smite",
+    "name": "Channel Divinity: Inspiring Smite",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a divine smite, share temp HP among nearby creatures equal to 2d8 plus your paladin level."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.glory-aura-of-alacrity",
+    "name": "Aura of Alacrity",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your walking speed rises by 10 feet. Allies in your aura gain 10 feet of speed until the end of their next turn after starting there."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.glory-glorious-defense",
+    "name": "Glorious Defense",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you or a nearby creature is hit, add your CHA modifier to AC against that attack and counterattack if it misses. Uses equal your CHA modifier per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "abilityMod": "CHA",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.glory-living-legend",
+    "name": "Living Legend",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "For 1 minute, gain advantage on CHA checks, turn a missed attack into a hit, and reroll a failed save once per turn. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.watchers-watchers-will",
+    "name": "Channel Divinity: Watcher’s Will",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Up to your CHA modifier creatures within 30 feet gain advantage on INT, WIS and CHA saves for a minute."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.watchers-abjure-the-extraplanar",
+    "name": "Channel Divinity: Abjure the Extraplanar",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Aberrations, celestials, elementals, fey and fiends in 30 feet make a WIS save or become turned for a minute."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.watchers-aura-of-the-sentinel",
+    "name": "Aura of the Sentinel",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You and allies in your aura add your proficiency bonus to initiative rolls."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.watchers-vigilant-rebuke",
+    "name": "Vigilant Rebuke",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you or a nearby ally succeeds on an INT, WIS or CHA save, deal 2d8 plus your CHA modifier force damage to the source. Uses equal your CHA modifier per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "abilityMod": "CHA",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.watchers-mortal-bulwark",
+    "name": "Mortal Bulwark",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "For 1 minute, gain truesight, advantage on attacks against extraplanar creatures, and banish a creature you hit. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.fey-wanderer-dreadful-strikes",
+    "name": "Dreadful Strikes",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per turn on a weapon hit, add 1d4 psychic damage (1d6 at level 11)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.fey-wanderer-fey-wanderer-magic",
+    "name": "Fey Wanderer Magic",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You always have charm person prepared at 3rd level, misty step at 5, summon fey at 9, dimension door at 13 and mislead at 17."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.fey-wanderer-otherworldly-glamour",
+    "name": "Otherworldly Glamour",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add your WIS modifier to Charisma checks, and gain proficiency in Deception, Performance or Persuasion."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.fey-wanderer-beguiling-twist",
+    "name": "Beguiling Twist",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Advantage on saves against charm and fright. When a creature in 120 feet saves against either, you can redirect the effect as a reaction."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.fey-wanderer-fey-reinforcements",
+    "name": "Fey Reinforcements",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cast summon fey without a slot or material once per long rest. It lasts without concentration for 1 minute."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.fey-wanderer-misty-wanderer",
+    "name": "Misty Wanderer",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cast misty step without a slot a number of times equal to your WIS modifier per long rest. You can bring one willing creature."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.swarmkeeper-gathered-swarm",
+    "name": "Gathered Swarm",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per turn, when you hit, the swarm deals 1d6 extra damage, moves the target up to 15 feet, or moves you 5 feet."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.swarmkeeper-swarmkeeper-magic",
+    "name": "Swarmkeeper Magic",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You always know mage hand. The swarm also grants faerie fire at 3, web at 5, gaseous form at 9, arcane eye at 13 and insect plague at 17."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.swarmkeeper-writhing-tide",
+    "name": "Writhing Tide",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "For 1 minute, gain a fly speed of 10 feet and can hover. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.swarmkeeper-mighty-swarm",
+    "name": "Mighty Swarm",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gathered Swarm damage becomes 1d8. A forced move knocks the target prone, and the swarm can give half cover when you move."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.swarmkeeper-swarming-dispersal",
+    "name": "Swarming Dispersal",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you take damage, use a reaction to gain resistance to it and vanish into the swarm to reappear within 30 feet. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.phantom-whispers-of-the-dead",
+    "name": "Whispers of the Dead",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a rest, gain proficiency in one skill or tool of your choice until your next rest."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.phantom-wails-from-the-grave",
+    "name": "Wails from the Grave",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a Sneak Attack, deal half the Sneak Attack dice as necrotic damage to a second creature within 30 feet. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.phantom-tokens-of-the-departed",
+    "name": "Tokens of the Departed",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a creature dies near you, gather a soul trinket (max equal your proficiency bonus). Spend one to gain advantage on a death save or CON save and to ask the spirit a question."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.phantom-ghost-walk",
+    "name": "Ghost Walk",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "As a bonus action, become spectral for 10 minutes: fly 10 feet, move through creatures and objects, and attacks against you have disadvantage. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.phantom-deaths-friend",
+    "name": "Death’s Friend",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Wails from the Grave no longer uses a limited resource on a Sneak Attack, and you regain trinkets at the end of a long rest if you have none."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.soulknife-psionic-power",
+    "name": "Psionic Power",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain psionic energy dice: 2 at level 3, rising as you grow. Spend one to boost a skill check, send a message telepathically, or reroll a failed save at higher level."
+    },
+    "origin": "subclass",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.soulknife-psychic-blades",
+    "name": "Psychic Blades",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Conjure a psychic blade as a bonus action or free action: 1d6 psychic damage, finesse, and thrown for 60 feet. A second blade fits an offhand."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.soulknife-soul-blades",
+    "name": "Soul Blades",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Homing Strikes adds a psionic die to a missed attack roll. Psychic Teleportation sends a thrown blade away with you."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.soulknife-psychic-veil",
+    "name": "Psychic Veil",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Become invisible for 1 hour or until you attack. Once per long rest, or spend a psionic die to use it again."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.soulknife-rend-mind",
+    "name": "Rend Mind",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you hit with a psychic blade, force a WIS save or stun the target for 1 minute. Once per long rest, or spend 3 psionic dice."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.aberrant-mind-psionic-spells",
+    "name": "Psionic Spells",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain extra spells as you level, such as arms of hadar, dissonant whispers, calm emotions and detect thoughts. They count as sorcerer spells."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.aberrant-mind-telepathic-speech",
+    "name": "Telepathic Speech",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "As a bonus action, bond with a creature within 30 feet for sorcerer-level minutes to speak telepathically."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.aberrant-mind-psionic-sorcery",
+    "name": "Psionic Sorcery",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cast a psionic spell by spending sorcery points equal to its level instead of a slot, and without verbal or somatic parts."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.sorcerer.font-of-magic"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.aberrant-mind-psychic-defenses",
+    "name": "Psychic Defenses",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You have resistance to psychic damage and advantage on saves against charm and fright."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.aberrant-mind-revelation-in-flesh",
+    "name": "Revelation in Flesh",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend sorcery points to alter your body for 10 minutes: see invisible, fly, swim or squeeze through tiny gaps."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.sorcerer.font-of-magic"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.aberrant-mind-warping-implosion",
+    "name": "Warping Implosion",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Teleport up to 120 feet. Creatures in 30 feet of where you left take force damage and are pulled in. Once per long rest or spend 5 sorcery points."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.clockwork-soul-clockwork-magic",
+    "name": "Clockwork Magic",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain extra spells such as alarm, protection from evil and good, aid, lesser restoration, and later dispel magic and freedom of movement."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.clockwork-soul-restore-balance",
+    "name": "Restore Balance",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a creature within 60 feet is about to roll with advantage or disadvantage, cancel that effect as a reaction. Uses equal your CHA modifier per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "abilityMod": "CHA",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.clockwork-soul-bastion-of-law",
+    "name": "Bastion of Law",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 1 to 5 sorcery points to create a ward of d8 dice (one per point) on a creature that absorbs damage."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.sorcerer.font-of-magic"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.clockwork-soul-trance-of-order",
+    "name": "Trance of Order",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "For 1 minute, attack rolls, saves and checks you make treat a d20 roll of 9 or lower as a 10, and enemies lose advantage against you. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.clockwork-soul-clockwork-cavalcade",
+    "name": "Clockwork Cavalcade",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Summon spirits in a 30-foot cube that heal up to 100 HP, repair objects and end spells of level 6 or lower. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.fathomless-tentacle-of-the-deeps",
+    "name": "Tentacle of the Deeps",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Summon a spectral tentacle as a bonus action for 1 minute. It attacks for 1d8 cold damage and cuts the target’s speed by 10 feet. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.fathomless-gift-of-the-sea",
+    "name": "Gift of the Sea",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You gain a swim speed of 40 feet and can breathe water."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.fathomless-oceanic-soul",
+    "name": "Oceanic Soul",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You resist cold damage and can talk to creatures that breathe water."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.fathomless-guardian-coil",
+    "name": "Guardian Coil",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you or a creature you can see within 10 feet of the tentacle takes damage, reduce it by 1d8 (2d8 at level 10)."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.fathomless-grasping-tentacles",
+    "name": "Grasping Tentacles",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cast Evard’s black tentacles once per long rest without a slot or concentration. You gain temp HP when you cast it."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.fathomless-fathomless-plunge",
+    "name": "Fathomless Plunge",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Teleport yourself and up to five willing creatures up to 1 mile to water you have seen. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.genie-genies-vessel",
+    "name": "Genie’s Vessel",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain a magical vessel that can serve as a rest space. Use it to deal extra damage equal to your proficiency bonus of a type tied to your patron once per turn."
+    },
+    "origin": "subclass",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.genie-elemental-gift",
+    "name": "Elemental Gift",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You gain resistance to a damage type tied to your genie, and can fly for 10 minutes. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.genie-sanctuary-vessel",
+    "name": "Sanctuary Vessel",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Pull up to five creatures into your vessel for hours. They gain extra healing on a long rest and temp HP."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.genie-limited-wish",
+    "name": "Limited Wish",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cast a spell of 6th level or lower using the genie’s power, without needing its material parts. Once per long rest after 1d4 days."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.order-of-scribes-wizardly-quill",
+    "name": "Wizardly Quill",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your magical quill copies spells faster and cheaper, and makes ink in seconds. It can write nonmagical text instantly."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.order-of-scribes-awakened-spellbook",
+    "name": "Awakened Spellbook",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can cast ritual spells quickly as an action. When you cast a spell from your spellbook, swap its damage type to another it knows and treat it as a different spell for one cast."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.order-of-scribes-manifest-mind",
+    "name": "Manifest Mind",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Conjure a spectral mind within 60 feet as a bonus action. Cast spells from its position and sense through it for 1 hour. Once per long rest or spend a slot."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.order-of-scribes-master-scrivener",
+    "name": "Master Scrivener",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "At the end of a long rest, make a scroll of a spell you know of level 1 or 2 using a slot. You can cast it as a bonus action later."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.order-of-scribes-one-with-the-word",
+    "name": "One with the Word",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you take damage, you can instead lose spell knowledge in your book to prevent it. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
   }
 ]

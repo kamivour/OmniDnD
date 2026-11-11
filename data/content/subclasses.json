@@ -1809,5 +1809,398 @@
         "featureId": "feature.monk.astral-self-awakened-astral-self"
       }
     ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.paladin.glory",
+    "name": "Oath of Glory",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Paladin who strives for heroic deeds and athletic greatness."
+    },
+    "classId": "class.paladin",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.paladin.glory-peerless-athlete"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.glory-inspiring-smite"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.paladin.glory-aura-of-alacrity"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.paladin.glory-glorious-defense"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.paladin.glory-living-legend"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.paladin.watchers",
+    "name": "Oath of the Watchers",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Paladin who guards the world against extraplanar threats."
+    },
+    "classId": "class.paladin",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.paladin.watchers-watchers-will"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.watchers-abjure-the-extraplanar"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.paladin.watchers-aura-of-the-sentinel"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.paladin.watchers-vigilant-rebuke"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.paladin.watchers-mortal-bulwark"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.ranger.fey-wanderer",
+    "name": "Fey Wanderer",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Ranger touched by the Feywild, charming and hard to ruffle."
+    },
+    "classId": "class.ranger",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.ranger.fey-wanderer-dreadful-strikes"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.ranger.fey-wanderer-fey-wanderer-magic"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.ranger.fey-wanderer-otherworldly-glamour"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.ranger.fey-wanderer-beguiling-twist"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.ranger.fey-wanderer-fey-reinforcements"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.ranger.fey-wanderer-misty-wanderer"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.ranger.swarmkeeper",
+    "name": "Swarmkeeper",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Ranger accompanied by a swarm of nature spirits."
+    },
+    "classId": "class.ranger",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.ranger.swarmkeeper-gathered-swarm"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.ranger.swarmkeeper-swarmkeeper-magic"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.ranger.swarmkeeper-writhing-tide"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.ranger.swarmkeeper-mighty-swarm"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.ranger.swarmkeeper-swarming-dispersal"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.rogue.phantom",
+    "name": "Phantom",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Rogue who draws power from the dead and their trinkets."
+    },
+    "classId": "class.rogue",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.rogue.phantom-whispers-of-the-dead"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.phantom-wails-from-the-grave"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.rogue.phantom-tokens-of-the-departed"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.rogue.phantom-ghost-walk"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.rogue.phantom-deaths-friend"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.rogue.soulknife",
+    "name": "Soulknife",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Rogue who strikes with blades of psychic energy."
+    },
+    "classId": "class.rogue",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.rogue.soulknife-psionic-power"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.soulknife-psychic-blades"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.rogue.soulknife-soul-blades"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.rogue.soulknife-psychic-veil"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.rogue.soulknife-rend-mind"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.sorcerer.aberrant-mind",
+    "name": "Aberrant Mind",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sorcerer whose power comes from alien psychic influence."
+    },
+    "classId": "class.sorcerer",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.aberrant-mind-psionic-spells"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.aberrant-mind-telepathic-speech"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.sorcerer.aberrant-mind-psionic-sorcery"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.sorcerer.aberrant-mind-psychic-defenses"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.sorcerer.aberrant-mind-revelation-in-flesh"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.sorcerer.aberrant-mind-warping-implosion"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.sorcerer.clockwork-soul",
+    "name": "Clockwork Soul",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sorcerer tied to cosmic order and the gears of Mechanus."
+    },
+    "classId": "class.sorcerer",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.clockwork-soul-clockwork-magic"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.clockwork-soul-restore-balance"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.sorcerer.clockwork-soul-bastion-of-law"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.sorcerer.clockwork-soul-trance-of-order"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.sorcerer.clockwork-soul-clockwork-cavalcade"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.warlock.fathomless",
+    "name": "The Fathomless",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Warlock bound to an ocean entity of tentacles and tides."
+    },
+    "classId": "class.warlock",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.warlock.fathomless-tentacle-of-the-deeps"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.warlock.fathomless-gift-of-the-sea"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.warlock.fathomless-oceanic-soul"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.warlock.fathomless-guardian-coil"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.warlock.fathomless-grasping-tentacles"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.warlock.fathomless-fathomless-plunge"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.warlock.genie",
+    "name": "The Genie",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Warlock bound to a genie and its vessel."
+    },
+    "classId": "class.warlock",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.warlock.genie-genies-vessel"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.warlock.genie-elemental-gift"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.warlock.genie-sanctuary-vessel"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.warlock.genie-limited-wish"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.wizard.order-of-scribes",
+    "name": "Order of Scribes",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Wizard who bonds with a sentient spellbook."
+    },
+    "classId": "class.wizard",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.wizard.order-of-scribes-wizardly-quill"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.wizard.order-of-scribes-awakened-spellbook"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.wizard.order-of-scribes-manifest-mind"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.wizard.order-of-scribes-master-scrivener"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.wizard.order-of-scribes-one-with-the-word"
+      }
+    ]
   }
 ]
