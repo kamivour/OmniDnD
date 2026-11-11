@@ -241,6 +241,8 @@ test('offline deep links preserve commands, reference data and exact durable Und
   for (const record of [...initial.builds, ...initial.live, ...initial.campaigns])
     expect(record.schemaVersion).toBe(1);
 
+  // The optional loopback forwarder fetches from Node, which ignores browser offline mode.
+  if (process.env.OMNI_E2E_FORWARD_HTTP === '1') await context.unrouteAll({ behavior: 'wait' });
   await context.setOffline(true);
   const probe = await page.evaluate(async () => {
     const url = new URL(`/offline-network-probe-${crypto.randomUUID()}.txt`, location.href).href;
