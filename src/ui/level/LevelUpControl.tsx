@@ -11,6 +11,7 @@ import { SectionLabel } from '../components/SectionLabel';
 import { OverrideMarker } from '../components/StatChip';
 import { useCharacter } from '../hooks/useCharacter';
 import { levelChoiceNeeds } from '../../engine/calc/level-choices';
+import { Caution } from '../components/Caution';
 import { AsiPick, NewClassPicks, SpellPicks, SubclassPick } from './LevelUpChoices';
 import {
   emptyPicks,
@@ -340,11 +341,13 @@ function LevelUpForm({
         </p>
       )}
       {errors.length > 0 && (
-        <ul role="alert" className="list-disc pl-5 text-sm text-warn">
-          {errors.map((error) => (
-            <li key={error}>{error}</li>
-          ))}
-        </ul>
+        <Caution role="alert" tone="danger">
+          <ul className="list-disc pl-4">
+            {errors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
+          </ul>
+        </Caution>
       )}
       <section
         ref={previewContainer}
@@ -356,23 +359,25 @@ function LevelUpForm({
           <SectionLabel>Level-up preview</SectionLabel>
         </div>
         {preview.warnings.length > 0 && (
-          <div role="note" className="text-sm text-warn">
+          <Caution role="note">
             {preview.warnings.map((warning) => (
               <p key={warning}>{warning}</p>
             ))}
             <p>Apply will ask you to confirm this exception.</p>
-          </div>
+          </Caution>
         )}
         {mode === 'rolled' && !validRoll ? (
-          <p role="alert" className="text-sm text-warn">
+          <Caution role="alert" tone="danger">
             Enter a whole Hit Die roll from 1 to {faces || 'the die maximum'}.
-          </p>
+          </Caution>
         ) : preview.result !== 'ok' ? (
-          <ul role="alert" className="list-disc pl-5 text-sm text-warn">
-            {preview.reasons.map((reason) => (
-              <li key={reason}>{reason}</li>
-            ))}
-          </ul>
+          <Caution role="alert" tone="danger">
+            <ul className="list-disc pl-4">
+              {preview.reasons.map((reason) => (
+                <li key={reason}>{reason}</li>
+              ))}
+            </ul>
+          </Caution>
         ) : (
           <dl className="flex min-w-0 flex-col gap-3">
             {changes.map((change) => (

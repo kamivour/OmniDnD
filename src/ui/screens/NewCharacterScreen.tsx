@@ -33,6 +33,7 @@ import { LevelChoicesSection } from './LevelChoicesSection';
 import { PlayedByDialog } from '../roles/RoleDialogs';
 import { useAskRoles } from '../roles/useAskRoles';
 import { PLAYED_BY_OPTIONS } from '../campaignOptions';
+import { Caution } from '../components/Caution';
 import { focusNextOnEnter } from '../components/focus-next';
 import { levelPickRows, STEPS, stepProblems, type StepId } from './new-character-steps';
 import { emptyPicks, picksToPayload, type LevelPicks } from '../level/level-up-model';
@@ -433,30 +434,28 @@ function NewCharacterForm({
       )}
 
       {stepErrors.length > 0 && (
-        <div
-          role="alert"
-          className="rounded-card border border-border bg-surface p-4 text-sm text-text"
-        >
-          <p className="font-semibold">Finish this step first:</p>
-          <ul className="mt-2 list-disc pl-5">
-            {stepErrors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
+        <div role="alert" className="rounded-card border border-warn bg-surface p-4">
+          <Caution>
+            <p className="font-semibold">Finish this step first:</p>
+            <ul className="mt-2 list-disc pl-5">
+              {stepErrors.map((error) => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          </Caution>
         </div>
       )}
 
       {errors.length > 0 && (
-        <div
-          role="alert"
-          className="rounded-card border border-border bg-surface p-4 text-sm text-text"
-        >
-          <p className="font-semibold">Check these choices before creating your character:</p>
-          <ul className="mt-2 list-disc pl-5">
-            {errors.map((error, index) => (
-              <li key={index}>{error}</li>
-            ))}
-          </ul>
+        <div role="alert" className="rounded-card border border-warn bg-surface p-4">
+          <Caution>
+            <p className="font-semibold">Check these choices before creating your character:</p>
+            <ul className="mt-2 list-disc pl-5">
+              {errors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </Caution>
         </div>
       )}
 
@@ -804,10 +803,12 @@ function NewCharacterForm({
           Guided build: pick class skills, starting equipment and spells
         </label>
         {!guided && (
-          <p className="text-xs text-text-muted">
-            Quick create makes a blank character with your race and background's fixed grants. Class
-            skills, spells and equipment stay empty; add them on the sheet.
-          </p>
+          <Caution className="text-xs">
+            <p>
+              Quick create makes a blank character with your race and background's fixed grants.
+              Class skills, spells and equipment stay empty; add them on the sheet.
+            </p>
+          </Caution>
         )}
       </section>
 

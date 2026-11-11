@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-11 13:52 — Cautions stand out
+- Guide weaknesses, unfinished-step lists and level-up exceptions now show in orange with a warning icon.
+- Blocking level-up errors are red.
+- Check the colours in both themes.
+- Checks pass.
+
 ## 2026-11-11 13:49 — Sign in from the Campaigns page
 - A sign-in and Create account card now sits on the Campaigns page while you are signed out.
 - Hide it with the X; Settings still has the account controls.

@@ -1,5 +1,6 @@
 import { guidanceFor } from '../../data/guidance';
 import type { Difficulty, Guidance } from '../../engine/schema';
+import { Caution } from './Caution';
 
 const DIFFICULTY: Record<Difficulty, string> = {
   easy: 'Easy to play',
@@ -37,11 +38,13 @@ export function GuidanceCard({ name, guidance }: { name: string; guidance: Guida
         </section>
         <section aria-label="Weaknesses">
           <p className="text-xs font-semibold text-text-muted">Weaknesses</p>
-          <ul className="list-disc pl-5 text-text">
-            {guidance.weaknesses.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
+          <Caution>
+            <ul className="list-disc pl-4">
+              {guidance.weaknesses.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          </Caution>
         </section>
       </div>
     </article>
