@@ -3,8 +3,13 @@ import { useStore } from 'zustand';
 import { Link } from 'react-router';
 import { Copy, Download, Plus, Settings2, Trash2, Undo2, Upload, Users } from 'lucide-react';
 import { registry } from '../../data/registry';
+import { seedFile } from '../../data/seed';
 import { computeSheet } from '../../engine/calc/sheet';
-import { deleteCharacter, duplicateCharacter } from '../../engine/commands/management';
+import {
+  deleteCharacter,
+  duplicateCharacter,
+  importCharacter,
+} from '../../engine/commands/management';
 import type { Campaign } from '../../engine/schema';
 import { characterState, characterStore, type CharacterRecord } from '../../state/character-store';
 import { HpBar } from '../components/HpBar';
@@ -102,9 +107,19 @@ export function CampaignsScreen() {
         </p>
       )}
       {Object.values(state.campaigns).length === 0 && (
-        <p className="text-text-muted">
-          No campaigns yet. Create a campaign or import a character.
-        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <p className="text-text-muted">
+            No campaigns yet. Create a campaign or import a character.
+          </p>
+          <button
+            type="button"
+            disabled={pending}
+            className={button}
+            onClick={() => run(importCharacter, { file: seedFile })}
+          >
+            Try the sample character
+          </button>
+        </div>
       )}
       {Object.values(state.campaigns).map((campaign) => (
         <CampaignCard

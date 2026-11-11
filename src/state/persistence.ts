@@ -11,6 +11,7 @@ import {
   type WorkspaceRows,
 } from '../db/database';
 import { characterStore, createCharacterStore } from './character-store';
+import { starterFiles } from '../data/seed';
 import { ManagementEventSchema } from '../engine/commands/management';
 import { BookmarkSchema, PreferencesSchema } from '../engine/schema';
 import { ActivityOrderSchema } from './activity-order';
@@ -192,7 +193,7 @@ async function loadOrSeedWorkspace(): Promise<{ workspace: Workspace; revision: 
         throw new Error('Saved workspace is missing its initialization marker');
       }
       const initial = {
-        ...createCharacterStore().getState(),
+        ...createCharacterStore(starterFiles()).getState(),
         automation: mode,
         reducedMotion: motion,
       };

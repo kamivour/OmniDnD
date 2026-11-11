@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-11 13:41 — New devices start empty
+- A fresh install no longer shows The Fool.
+- The Campaigns page has a Try the sample character button to add it.
+- Devices that already have the Fool keep it.
+- Checks pass.
+
 ## 2026-11-11 13:35 — Pending spells show the right list
 
 - Pending on a spell row opens Manage spells showing only that kind of pick (cantrips, or spells above cantrips).

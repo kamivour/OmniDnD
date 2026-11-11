@@ -47,8 +47,23 @@ export const test = base.extend<{
   showTutorial: boolean;
   showRoles: boolean;
   tutorialDone: void;
+  sampleCharacter: void;
 }>({
   showTutorial: [false, { option: true }],
+  // New devices start empty; most specs rely on the sample Fool, so they opt in through this key.
+  sampleCharacter: [
+    async ({ context }, runTest) => {
+      await context.addInitScript(() => {
+        try {
+          if (!localStorage.getItem('omnidnd.sample')) localStorage.setItem('omnidnd.sample', '1');
+        } catch {
+          // Storage unavailable: the device starts empty.
+        }
+      });
+      await runTest();
+    },
+    { auto: true },
+  ],
   // The role questions block the New campaign and New character forms, so only the roles spec sees them.
   showRoles: [false, { option: true }],
   // The tour covers the page and blocks clicks, so other specs start with it finished.

@@ -291,6 +291,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-11 — M26 task 4: M26-4: new devices start empty; Campaigns offers a Try the sample character button.
 - 2026-11-11 — M26 task 3: Pending spell picks open Manage spells on just that pick; Show all brings back the rest.
 - 2026-11-11 — M26 task 2: Alignment list says True Neutral; old Neutral shows as True Neutral.
 - 2026-11-11 — M26 task 1: Backspace clears Level while typing; Enter moves between ability scores and HP rolls.

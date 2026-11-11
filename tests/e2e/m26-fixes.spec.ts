@@ -63,3 +63,15 @@ test('Pending at level 1 lists first-level spells, not cantrips, until Show all'
   await sheet.getByRole('button', { name: 'Show all', exact: true }).click();
   await expect(sheet.getByText('Cantrips to know')).toBeVisible();
 });
+
+test.describe('fresh device', () => {
+  test('starts empty and offers the sample character', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('omnidnd.sample', '0'));
+    await page.goto('/');
+    await expect(page.getByText('No campaigns yet', { exact: false })).toBeVisible();
+    await expect(page.getByText('The Fool')).toHaveCount(0);
+    await page.getByRole('button', { name: 'Try the sample character' }).click();
+    await expect(page.getByText('The Fool').first()).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Try the sample character' })).toHaveCount(0);
+  });
+});
