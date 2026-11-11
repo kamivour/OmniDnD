@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 00:22 — Tasha’s spells
+
+- Added 20 Tasha’s spells: two cantrips, Mind Whip, Spirit Shroud, Intellect Fortress, Wrath of Nature, Blade of Disaster and more.
+- The ten Summon spells open a ready-made creature on Companions. Its attack follows your spell attack; stats are for the base slot level, so raise HP and damage yourself when upcast.
+- Next: Tasha’s subclasses.
+Checks pass.
+
 ## 2026-11-12 00:17 — Tasha’s options
 
 - Added Custom Lineage, seven Tasha’s feats, seven maneuvers, two metamagic options, eight invocations and Pact of the Talisman.

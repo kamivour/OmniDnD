@@ -1,4 +1,5 @@
 import type { Companion } from '../../engine/schema';
+import { SUMMON_SPELL_TEMPLATES } from './summon-templates';
 
 /**
  * Features and spells that bring a creature into play. Their cards get a Stats button that opens
@@ -36,6 +37,12 @@ const LINKS: Record<string, CompanionLink> = {
   },
   'spell.find-familiar': { key: 'familiar', limitKey: 'familiar' },
   'spell.find-steed': { key: 'steed' },
+  ...Object.fromEntries(
+    SUMMON_SPELL_TEMPLATES.map(({ spellId, template }) => [
+      spellId,
+      { key: spellId, template: template.label, limitKey: spellId },
+    ]),
+  ),
 };
 
 /** Conjure spells and Tasha's Summon spells offer a creature to pick (Q43). */

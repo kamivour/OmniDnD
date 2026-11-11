@@ -1682,5 +1682,659 @@
     "ritual": false,
     "classes": ["class.bard", "class.cleric"],
     "tags": ["healing"]
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Lightning Lure",
+    "summary": {
+      "effect": "A creature within 15 feet makes a STR save.",
+      "fail": "Pulled up to 10 feet toward you and takes 1d8 lightning if it ends within 5 feet. Damage grows at higher character levels."
+    },
+    "level": 0,
+    "school": "evocation",
+    "range": "Self (15-ft radius)",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "STR",
+    "classes": ["class.artificer", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage", "control"],
+    "damage": {
+      "dice": "1d8",
+      "cantripScaling": true,
+      "type": "lightning"
+    },
+    "id": "spell.lightning-lure"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Sword Burst",
+    "summary": {
+      "effect": "Spectral blades whirl around you. Every creature within 5 feet makes a DEX save.",
+      "fail": "1d6 force damage. Damage grows at higher character levels."
+    },
+    "level": 0,
+    "school": "conjuration",
+    "range": "Self (5-ft radius)",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "DEX",
+    "classes": ["class.artificer", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d6",
+      "cantripScaling": true,
+      "type": "force"
+    },
+    "id": "spell.sword-burst"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Tasha's Mind Whip",
+    "summary": {
+      "effect": "A creature within range makes an INT save.",
+      "fail": "3d6 psychic damage; until the end of your next turn it cannot take reactions and uses either an action or a bonus action and movement, not both.",
+      "success": "Half damage and no other effect.",
+      "upcast": "+1 creature per slot level above 2."
+    },
+    "level": 2,
+    "school": "enchantment",
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 round",
+      "seconds": 6,
+      "concentration": false
+    },
+    "save": "INT",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage", "debuff"],
+    "damage": {
+      "dice": "3d6",
+      "type": "psychic"
+    },
+    "id": "spell.tashas-mind-whip"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Intellect Fortress",
+    "summary": {
+      "effect": "You or a willing creature in range gains resistance to psychic damage and advantage on INT, WIS and CHA saves while the spell lasts.",
+      "upcast": "+1 creature per slot level above 3."
+    },
+    "level": 3,
+    "school": "abjuration",
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "classes": ["class.artificer", "class.bard", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["buff"],
+    "id": "spell.intellect-fortress"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "bonus"
+    },
+    "name": "Spirit Shroud",
+    "summary": {
+      "effect": "Spirits wreath you. Chosen creatures within 10 feet cannot regain HP; your attacks within 10 feet deal extra damage of your chosen type.",
+      "hit": "Extra 1d8 radiant, necrotic or cold on hits against creatures within 10 feet; the target’s speed drops by 10 until your next turn.",
+      "upcast": "Extra damage +1d8 per two slot levels above 3."
+    },
+    "level": 3,
+    "school": "necromancy",
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "classes": ["class.cleric", "class.paladin", "class.warlock", "class.wizard"],
+    "tags": ["buff", "damage"],
+    "id": "spell.spirit-shroud"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Wrath of Nature",
+    "summary": {
+      "effect": "Nearby plants and stone come alive in a 60-foot cube: grasping grass, whipping trees, hurling rocks and clawing roots, one effect per turn.",
+      "fail": "Rocks, trees or roots hit or restrain creatures; others save to avoid the effect."
+    },
+    "level": 5,
+    "school": "evocation",
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "classes": ["class.druid", "class.ranger"],
+    "tags": ["control", "damage"],
+    "id": "spell.wrath-of-nature"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "bonus"
+    },
+    "name": "Tasha's Otherworldly Guise",
+    "summary": {
+      "effect": "Take on the guise of a celestial or fiend. You gain a 40-foot flying speed, immunities, +2 AC, magic attacks, and use your casting ability for weapon attacks."
+    },
+    "level": 6,
+    "school": "transmutation",
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "an object engraved with a symbol of the Outer Planes worth at least 500 gp"
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["buff"],
+    "id": "spell.tashas-otherworldly-guise"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Tasha's Bubbling Cauldron",
+    "summary": {
+      "effect": "A magical cauldron appears and brews potions you pick from a random table. Creatures can draw a potion from it as a bonus action; each brew expires after a time."
+    },
+    "level": 6,
+    "school": "conjuration",
+    "range": "5 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a golden ladle worth at least 500 gp"
+    },
+    "duration": {
+      "text": "10 min",
+      "seconds": 600,
+      "concentration": false
+    },
+    "classes": ["class.artificer", "class.warlock", "class.wizard"],
+    "tags": ["utility", "buff"],
+    "id": "spell.tashas-bubbling-cauldron"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "minutes",
+      "amount": 10
+    },
+    "name": "Dream of the Blue Veil",
+    "summary": {
+      "effect": "Creatures you pick travel in a dream to another world. They return after the spell ends, unless they are changed by what they met there."
+    },
+    "level": 7,
+    "school": "conjuration",
+    "range": "20 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a magic item or willing creature from the destination world"
+    },
+    "duration": {
+      "text": "6 h",
+      "seconds": 21600,
+      "concentration": false
+    },
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["utility"],
+    "id": "spell.dream-of-the-blue-veil"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "bonus"
+    },
+    "name": "Blade of Disaster",
+    "summary": {
+      "effect": "Create a planar rift in the shape of a blade. You can move it and make it attack with a bonus action each turn.",
+      "hit": "4d12 force on a spell attack; a roll of 18 or higher is a critical hit. The blade can attack twice per turn."
+    },
+    "level": 9,
+    "school": "conjuration",
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "attack": "ranged",
+    "tags": ["damage"],
+    "damage": {
+      "dice": "4d12",
+      "type": "force"
+    },
+    "id": "spell.blade-of-disaster"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Summon Beast",
+    "summary": {
+      "effect": "Call a spirit in beast form to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 20 HP.",
+      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+    },
+    "level": 2,
+    "school": "conjuration",
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a feather, tuft of fur and a fish tail"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "classes": ["class.druid", "class.ranger"],
+    "tags": ["utility"],
+    "id": "spell.summon-beast"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Summon Fey",
+    "summary": {
+      "effect": "Call a fey spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 30 HP.",
+      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+    },
+    "level": 3,
+    "school": "conjuration",
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a gilded flower worth at least 300 gp"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "classes": ["class.druid", "class.ranger", "class.warlock", "class.wizard"],
+    "tags": ["utility"],
+    "id": "spell.summon-fey"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Summon Shadowspawn",
+    "summary": {
+      "effect": "Call a shadowy spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 35 HP.",
+      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+    },
+    "level": 3,
+    "school": "conjuration",
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "tears in a gem worth at least 300 gp"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "classes": ["class.warlock", "class.wizard"],
+    "tags": ["utility"],
+    "id": "spell.summon-shadowspawn"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Summon Undead",
+    "summary": {
+      "effect": "Call an undead spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 30 HP.",
+      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+    },
+    "level": 3,
+    "school": "necromancy",
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a gem worth at least 300 gp, a grave-dirt pinch and a bone"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "classes": ["class.warlock", "class.wizard"],
+    "tags": ["utility"],
+    "id": "spell.summon-undead"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Summon Aberration",
+    "summary": {
+      "effect": "Call an aberrant spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 40 HP.",
+      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+    },
+    "level": 4,
+    "school": "conjuration",
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a pickled tentacle and an eyeball in a gem worth at least 400 gp"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "classes": ["class.warlock", "class.wizard"],
+    "tags": ["utility"],
+    "id": "spell.summon-aberration"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Summon Construct",
+    "summary": {
+      "effect": "Call a constructed spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 40 HP.",
+      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+    },
+    "level": 4,
+    "school": "conjuration",
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "an ornate stone and metal lock worth at least 400 gp"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "classes": ["class.artificer", "class.wizard"],
+    "tags": ["utility"],
+    "id": "spell.summon-construct"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Summon Elemental",
+    "summary": {
+      "effect": "Call an elemental spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 50 HP.",
+      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+    },
+    "level": 4,
+    "school": "conjuration",
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "air, a pebble, ash and water in a gem worth at least 400 gp"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "classes": ["class.druid", "class.wizard"],
+    "tags": ["utility"],
+    "id": "spell.summon-elemental"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Summon Celestial",
+    "summary": {
+      "effect": "Call a celestial spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 40 HP.",
+      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+    },
+    "level": 5,
+    "school": "conjuration",
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a golden reliquary worth at least 500 gp"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "classes": ["class.cleric", "class.paladin"],
+    "tags": ["utility"],
+    "id": "spell.summon-celestial"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Summon Draconic Spirit",
+    "summary": {
+      "effect": "Call a draconic spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 50 HP.",
+      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+    },
+    "level": 5,
+    "school": "conjuration",
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "an object with the image of a dragon engraved on it worth at least 500 gp"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["utility"],
+    "id": "spell.summon-draconic-spirit"
+  },
+  {
+    "kind": "spell",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "casting": {
+      "cost": "action"
+    },
+    "name": "Summon Fiend",
+    "summary": {
+      "effect": "Call a fiendish spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 50 HP.",
+      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+    },
+    "level": 6,
+    "school": "conjuration",
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a bloodstained gem worth at least 600 gp"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "classes": ["class.warlock", "class.wizard"],
+    "tags": ["utility"],
+    "id": "spell.summon-fiend"
   }
 ]

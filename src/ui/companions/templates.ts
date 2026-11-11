@@ -1,6 +1,7 @@
 import { creatureCompanion } from '../../engine/calc/companion-templates';
 import { registry } from '../../data/registry';
 import type { Companion } from '../../engine/schema';
+import { SUMMON_SPELL_TEMPLATES } from './summon-templates';
 
 /** Starting points for the add form. Own-words notes; the player can change every field. */
 export interface CompanionTemplate {
@@ -239,6 +240,7 @@ const familiars: CompanionTemplate[] = FAMILIARS.map((name) => {
 COMPANION_TEMPLATES.push(
   ...rangerCompanions,
   ...primalCompanions,
+  ...SUMMON_SPELL_TEMPLATES.map((entry) => entry.template),
   steelDefender,
   eldritchCannon,
   ...familiars,

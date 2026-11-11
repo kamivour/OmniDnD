@@ -5,7 +5,7 @@ import { abilityModifier } from './abilities';
 /** Owner values a companion's numbers can follow. */
 export interface CompanionOwner {
   build: Pick<CharacterBuild, 'classes'>;
-  sheet: Pick<Sheet, 'level' | 'proficiency' | 'abilities'>;
+  sheet: Pick<Sheet, 'level' | 'proficiency' | 'abilities' | 'spellcasting'>;
 }
 
 /** Resolves a fixed or owner-derived number. */
@@ -19,7 +19,10 @@ export function resolveOwnerNumber(value: OwnerNumber, owner: CompanionOwner): n
     (value.base ?? 0) +
     (value.ownerLevel ?? 0) * level +
     (value.ownerAbilityMod ? owner.sheet.abilities[value.ownerAbilityMod].mod : 0) +
-    (value.ownerProficiency ?? 0) * owner.sheet.proficiency;
+    (value.ownerProficiency ?? 0) * owner.sheet.proficiency +
+    (value.ownerSpellAttack
+      ? Math.max(0, ...owner.sheet.spellcasting.map((entry) => entry.attack.value))
+      : 0);
   return value.atLeastOwnerLevel === undefined
     ? computed
     : Math.max(computed, value.atLeastOwnerLevel * level);
