@@ -245,5 +245,13 @@
       "effect": "Incapacitated and unaware; you drop what you hold and fall prone. STR and DEX saves fail. Attacks against you have advantage, and a hit from within 5 ft is a critical hit."
     },
     "summaryReviewed": false
+  },
+  {
+    "id": "spell.hunters-mark",
+    "summary": {
+      "effect": "Mark a creature you can see as your quarry. Your weapon hits against it deal an extra 1d6 damage, and you track it with advantage. If it drops to 0 HP, move the mark as a bonus action.",
+      "upcast": "Concentration lasts 8 hours at slot 3-4, 24 hours at slot 5+."
+    },
+    "summaryReviewed": false
   }
 ]

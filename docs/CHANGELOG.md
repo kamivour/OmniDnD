@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 00:10 — PHB spells
+
+- Added 39 Player’s Handbook spells the SRD lacks (smites, Hex, Hunger of Hadar, auras, Tsunami, Power Word Heal and more), on the right class lists.
+- Hex shows its extra 1d6 necrotic when you cast it. Hunter’s Mark now says it adds 1d6 on weapon hits.
+- Check that rider damage is applied by you when you hit. Next: Tasha’s options.
+Checks pass.
+
 ## 2026-11-12 00:06 — PHB caster subclasses
 
 - Added College of Valor, six cleric domains, Circle of the Moon, Wild Magic, Archfey, Great Old One and the seven wizard schools.

@@ -336,5 +336,9 @@
   {
     "id": "spell.web",
     "classes": ["class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.hunters-mark",
+    "tags": ["buff", "damage"]
   }
 ]

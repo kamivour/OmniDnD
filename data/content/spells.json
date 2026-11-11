@@ -316,5 +316,1371 @@
       "addCastingMod": false,
       "upcastPerLevel": "1d6"
     }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.blade-ward",
+    "name": "Blade Ward",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Until the end of your next turn, you resist bludgeoning, piercing and slashing damage from weapon attacks."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/blade-ward",
+    "level": 0,
+    "school": "abjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 round",
+      "seconds": 6,
+      "concentration": false
+    },
+    "ritual": false,
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["buff"],
+    "effect": {
+      "target": "self",
+      "note": "Resist weapon bludgeoning, piercing and slashing until your next turn ends"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.friends",
+    "name": "Friends",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Gain advantage on Charisma checks against one non-hostile creature. When the spell ends, it knows you used magic on it and may turn hostile."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/friends",
+    "level": 0,
+    "school": "enchantment",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": false,
+      "s": true,
+      "m": "a little makeup"
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.armor-of-agathys",
+    "name": "Armor of Agathys",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Gain 5 temporary HP. While you keep any of them, a creature that hits you in melee takes 5 cold damage.",
+      "upcast": "Temporary HP and cold damage each +5 per slot level above 1."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/armor-of-agathys",
+    "level": 1,
+    "school": "abjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a cup of water"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": false
+    },
+    "ritual": false,
+    "classes": ["class.warlock"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.arms-of-hadar",
+    "name": "Arms of Hadar",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Dark tentacles lash creatures within 10 feet of you.",
+      "fail": "2d6 necrotic, and it cannot take reactions until its next turn.",
+      "success": "Half damage and no reaction loss.",
+      "upcast": "+1d6 per slot level above 1."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/arms-of-hadar",
+    "level": 1,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (10-ft radius)",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "ritual": false,
+    "save": "STR",
+    "classes": ["class.warlock"],
+    "tags": ["damage", "control"],
+    "damage": {
+      "dice": "2d6",
+      "type": "necrotic",
+      "upcastPerLevel": "1d6"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.chromatic-orb",
+    "name": "Chromatic Orb",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Make a ranged spell attack. On a hit, deal 3d8 damage of a type you choose: acid, cold, fire, lightning, poison or thunder.",
+      "hit": "3d8 damage of the chosen type.",
+      "upcast": "+1d8 per slot level above 1."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/chromatic-orb",
+    "level": 1,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a diamond worth 50+ gp"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "ritual": false,
+    "attack": "ranged",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "3d8",
+      "type": "fire",
+      "upcastPerLevel": "1d8"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.compelled-duel",
+    "name": "Compelled Duel",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "A creature you can see makes a Wisdom save or has disadvantage on attacks against anyone but you, and cannot willingly move far from you. Ends if you attack another or cast a harmful spell on one."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/compelled-duel",
+    "level": 1,
+    "school": "enchantment",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "WIS",
+    "classes": ["class.paladin"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.ensnaring-strike",
+    "name": "Ensnaring Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your next weapon hit also snares the target in thorny vines. A Large or bigger target has advantage on its Strength save. Restrained, it takes piercing damage each turn until it escapes.",
+      "upcast": "+1d6 per slot level above 1."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/ensnaring-strike",
+    "level": 1,
+    "school": "conjuration",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "STR",
+    "classes": ["class.ranger"],
+    "tags": ["damage", "control"],
+    "damage": {
+      "dice": "1d6",
+      "type": "piercing",
+      "upcastPerLevel": "1d6"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.hail-of-thorns",
+    "name": "Hail of Thorns",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your next ranged weapon hit also bursts into thorns. The target and creatures within 5 feet of it make a Dexterity save.",
+      "fail": "1d10 piercing.",
+      "success": "Half damage.",
+      "upcast": "+1d10 per slot level above 1 (max 6d10)."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/hail-of-thorns",
+    "level": 1,
+    "school": "conjuration",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "DEX",
+    "classes": ["class.ranger"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d10",
+      "type": "piercing",
+      "upcastPerLevel": "1d10"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.hex",
+    "name": "Hex",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Curse a creature. You deal an extra 1d6 necrotic damage when you hit it with an attack. Choose one ability: its checks with that ability have disadvantage. If it drops to 0 HP, move the curse as a bonus action.",
+      "hit": "Extra 1d6 necrotic on each of your attack hits against it.",
+      "upcast": "Concentration lasts 8 hours at slot 3-4, 24 hours at slot 5+."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/hex",
+    "level": 1,
+    "school": "enchantment",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "the eye of a newt"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.warlock"],
+    "tags": ["damage", "debuff"],
+    "damage": {
+      "dice": "1d6",
+      "type": "necrotic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.ray-of-sickness",
+    "name": "Ray of Sickness",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Make a ranged spell attack. On a hit the target takes 2d8 poison damage and makes a Constitution save or is poisoned until the end of your next turn.",
+      "hit": "2d8 poison; poisoned on a failed save.",
+      "upcast": "+1d8 per slot level above 1."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/ray-of-sickness",
+    "level": 1,
+    "school": "necromancy",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "ritual": false,
+    "save": "CON",
+    "attack": "ranged",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage", "debuff"],
+    "damage": {
+      "dice": "2d8",
+      "type": "poison",
+      "upcastPerLevel": "1d8"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.searing-smite",
+    "name": "Searing Smite",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your next melee weapon hit adds 1d6 fire damage and sets the target ablaze. It takes 1d6 fire at each turn start until a Constitution save puts the fire out.",
+      "upcast": "+1d6 initial damage per slot level above 1."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/searing-smite",
+    "level": 1,
+    "school": "evocation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "CON",
+    "classes": ["class.paladin"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d6",
+      "type": "fire",
+      "upcastPerLevel": "1d6"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.thunderous-smite",
+    "name": "Thunderous Smite",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your next melee weapon hit adds 2d6 thunder damage and booms. The target makes a Strength save or is pushed 10 feet and knocked prone."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/thunderous-smite",
+    "level": 1,
+    "school": "evocation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "STR",
+    "classes": ["class.paladin"],
+    "tags": ["damage", "control"],
+    "damage": {
+      "dice": "2d6",
+      "type": "thunder"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.witch-bolt",
+    "name": "Witch Bolt",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Make a ranged spell attack. On a hit, a beam deals 1d12 lightning and then holds. Each turn, use your action to deal 1d12 more. Ends if the target leaves range or you act otherwise.",
+      "hit": "1d12 lightning, and again each turn as an action.",
+      "upcast": "+1d12 initial damage per slot level above 1."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/witch-bolt",
+    "level": 1,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a twig from a lightning-struck tree"
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "attack": "ranged",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d12",
+      "type": "lightning",
+      "upcastPerLevel": "1d12"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.wrathful-smite",
+    "name": "Wrathful Smite",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your next melee weapon hit adds 1d6 psychic damage. The target makes a Wisdom save or is frightened. It can repeat the save each turn using an action."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/wrathful-smite",
+    "level": 1,
+    "school": "evocation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "WIS",
+    "classes": ["class.paladin"],
+    "tags": ["damage", "debuff"],
+    "damage": {
+      "dice": "1d6",
+      "type": "psychic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.beast-sense",
+    "name": "Beast Sense",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Touch a willing beast. You can use your action to see and hear through its senses until you end it. You are blind and deaf to your own surroundings meanwhile."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/beast-sense",
+    "level": 2,
+    "school": "divination",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Touch",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "ritual": true,
+    "classes": ["class.druid", "class.ranger"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.cloud-of-daggers",
+    "name": "Cloud of Daggers",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Fill a 5-foot cube with spinning blades. A creature takes 4d4 slashing when it enters or starts its turn there.",
+      "upcast": "+2d4 per slot level above 2."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/cloud-of-daggers",
+    "level": 2,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a sliver of glass"
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage", "control"],
+    "damage": {
+      "dice": "4d4",
+      "type": "slashing",
+      "upcastPerLevel": "2d4"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.crown-of-madness",
+    "name": "Crown of Madness",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "A humanoid makes a Wisdom save or is charmed and must use its movement and action to attack a creature you choose. You must spend your action each turn to keep control."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/crown-of-madness",
+    "level": 2,
+    "school": "enchantment",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "WIS",
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.phantasmal-force",
+    "name": "Phantasmal Force",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "A creature makes an Intelligence save or believes in an illusion you craft, which it treats as real. It may take 1d6 psychic damage each turn from it. Checking the illusion can end it."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/phantasmal-force",
+    "level": 2,
+    "school": "illusion",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a bit of fleece"
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "INT",
+    "classes": ["class.bard", "class.sorcerer", "class.wizard"],
+    "tags": ["control", "damage"],
+    "damage": {
+      "dice": "1d6",
+      "type": "psychic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.aura-of-vitality",
+    "name": "Aura of Vitality",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "A healing aura surrounds you. Each turn as a bonus action, heal one creature in the aura for 2d6 HP."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/aura-of-vitality",
+    "level": 3,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (30-ft radius)",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.cleric", "class.druid", "class.paladin"],
+    "tags": ["healing"],
+    "heal": {
+      "dice": "2d6"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.blinding-smite",
+    "name": "Blinding Smite",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your next melee weapon hit adds 3d8 radiant damage. The target makes a Constitution save or is blinded until the spell ends, repeating the save each turn."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/blinding-smite",
+    "level": 3,
+    "school": "evocation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "CON",
+    "classes": ["class.paladin"],
+    "tags": ["damage", "debuff"],
+    "damage": {
+      "dice": "3d8",
+      "type": "radiant"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.conjure-barrage",
+    "name": "Conjure Barrage",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Throw a weapon or ammunition and it multiplies into a hail. Creatures in a 60-foot cone make a Dexterity save.",
+      "fail": "3d8 damage of the weapon’s type.",
+      "success": "Half damage."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/conjure-barrage",
+    "level": 3,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (60-ft cone)",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "one piece of ammunition or a thrown weapon"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "ritual": false,
+    "save": "DEX",
+    "classes": ["class.ranger"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "3d8",
+      "type": "piercing"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.crusaders-mantle",
+    "name": "Crusader’s Mantle",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Allies in a 30-foot aura, including you, add 1d4 radiant damage to weapon attacks."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/crusaders-mantle",
+    "level": 3,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (30-ft radius)",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.paladin"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.elemental-weapon",
+    "name": "Elemental Weapon",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "A nonmagical weapon becomes magical, gains +1 to attack rolls, and deals an extra 1d4 acid, cold, fire, lightning or thunder damage.",
+      "upcast": "Bonus becomes +2 at slot 5-6 and +3 at slot 7+."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/elemental-weapon",
+    "level": 3,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.artificer", "class.paladin"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.feign-death",
+    "name": "Feign Death",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "A willing creature looks dead. It is blinded and incapacitated, speed 0, resists all damage except psychic, and is immune to poison and disease effects."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/feign-death",
+    "level": 3,
+    "school": "necromancy",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a pinch of graveyard dirt"
+    },
+    "duration": {
+      "text": "1 h",
+      "seconds": 3600,
+      "concentration": false
+    },
+    "ritual": true,
+    "classes": ["class.bard", "class.cleric", "class.druid", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.hunger-of-hadar",
+    "name": "Hunger of Hadar",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Make a 20-foot sphere of darkness. It blocks sight and all light, is difficult terrain, and a creature takes 2d6 cold at its turn start inside and 2d6 acid at its turn end inside."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/hunger-of-hadar",
+    "level": 3,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "150 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a pickled octopus tentacle"
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "DEX",
+    "classes": ["class.warlock"],
+    "tags": ["damage", "control"],
+    "damage": {
+      "dice": "2d6",
+      "type": "cold"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.lightning-arrow",
+    "name": "Lightning Arrow",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your next ranged weapon attack deals 4d8 lightning damage instead of normal. The target and creatures within 10 feet make a Dexterity save for half.",
+      "upcast": "+1d8 per slot level above 3."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/lightning-arrow",
+    "level": 3,
+    "school": "transmutation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "DEX",
+    "classes": ["class.ranger"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "4d8",
+      "type": "lightning",
+      "upcastPerLevel": "1d8"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.aura-of-life",
+    "name": "Aura of Life",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Allies in a 30-foot aura resist necrotic damage and their HP maximum cannot be reduced. An ally at 0 HP in the aura regains 1 HP at its turn start."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/aura-of-life",
+    "level": 4,
+    "school": "abjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (30-ft radius)",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "10 min",
+      "seconds": 600,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.cleric", "class.paladin"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.aura-of-purity",
+    "name": "Aura of Purity",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Allies in a 30-foot aura resist poison damage, have advantage on saves against being blinded, charmed, deafened, frightened, paralyzed, poisoned or stunned, and cannot be diseased."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/aura-of-purity",
+    "level": 4,
+    "school": "abjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (30-ft radius)",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "10 min",
+      "seconds": 600,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.cleric", "class.paladin"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.grasping-vine",
+    "name": "Grasping Vine",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Conjure a vine that pulls a creature within 30 feet to it, or later moves it again. The target makes a Strength save or is dragged 20 feet and may be grappled."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/grasping-vine",
+    "level": 4,
+    "school": "conjuration",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "STR",
+    "classes": ["class.druid", "class.ranger"],
+    "tags": ["control", "damage"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.staggering-smite",
+    "name": "Staggering Smite",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your next melee weapon hit adds 4d6 psychic damage. The target makes a Wisdom save or has disadvantage on attacks and ability checks, and cannot take reactions, until the end of its next turn."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/staggering-smite",
+    "level": 4,
+    "school": "evocation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "WIS",
+    "classes": ["class.paladin"],
+    "tags": ["damage", "debuff"],
+    "damage": {
+      "dice": "4d6",
+      "type": "psychic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.banishing-smite",
+    "name": "Banishing Smite",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your next weapon hit adds 5d10 force damage. If this leaves the target at 50 HP or less, it is banished, returning if it was native."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/banishing-smite",
+    "level": 5,
+    "school": "abjuration",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.paladin"],
+    "tags": ["damage", "control"],
+    "damage": {
+      "dice": "5d10",
+      "type": "force"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.circle-of-power",
+    "name": "Circle of Power",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "A 30-foot aura grants allies advantage on saves against spells and magic. Passed saves that deal half damage take none instead."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/circle-of-power",
+    "level": 5,
+    "school": "abjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (30-ft radius)",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "10 min",
+      "seconds": 600,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.paladin"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.conjure-volley",
+    "name": "Conjure Volley",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Fire a piece of ammunition or throw a weapon. Every creature in a 40-foot-radius, 20-foot-high cylinder at the point makes a Dexterity save.",
+      "fail": "8d8 damage of the weapon’s type.",
+      "success": "Half damage."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/conjure-volley",
+    "level": 5,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "150 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "one piece of ammunition or a thrown weapon"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "ritual": false,
+    "save": "DEX",
+    "classes": ["class.ranger"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "8d8",
+      "type": "piercing"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.destructive-wave",
+    "name": "Destructive Wave",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Thunder and radiant or necrotic force bursts out in a 30-foot radius. Creatures of your choice make a Constitution save.",
+      "fail": "5d6 thunder plus 5d6 radiant or necrotic (your choice), and knocked prone.",
+      "success": "Half damage, not prone."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/destructive-wave",
+    "level": 5,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (30-ft radius)",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "ritual": false,
+    "save": "CON",
+    "classes": ["class.cleric", "class.paladin"],
+    "tags": ["damage", "control"],
+    "damage": {
+      "dice": "5d6",
+      "type": "thunder"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.swift-quiver",
+    "name": "Swift Quiver",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "A quiver provides endless ammunition. Each turn, make two extra attacks with ranged weapon ammunition from it as a bonus action."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/swift-quiver",
+    "level": 5,
+    "school": "transmutation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a quiver worth 1+ gp"
+    },
+    "duration": {
+      "text": "1 min",
+      "seconds": 60,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.ranger"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.arcane-gate",
+    "name": "Arcane Gate",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Open two linked portals within range, each a 10-foot-diameter circle on the ground or in the air. A creature entering one comes out of the other."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/arcane-gate",
+    "level": 6,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "500 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "10 min",
+      "seconds": 600,
+      "concentration": true
+    },
+    "ritual": false,
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.telepathy",
+    "name": "Telepathy",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Create a telepathic link with a willing creature you know on the same plane. You and it can share words, and you can use the link across other planes with some limits."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/telepathy",
+    "level": 8,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Unlimited",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a pair of linked silver rings"
+    },
+    "duration": {
+      "text": "24 h",
+      "seconds": 86400,
+      "concentration": false
+    },
+    "ritual": false,
+    "classes": ["class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.tsunami",
+    "name": "Tsunami",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Raise a wall of water up to 300 feet long that advances each turn. Creatures it crosses make a Strength save, and Huge or smaller creatures may be swept along.",
+      "fail": "6d10 bludgeoning, and carried along.",
+      "success": "Half damage."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/tsunami",
+    "level": 8,
+    "school": "conjuration",
+    "casting": {
+      "cost": "minutes",
+      "amount": 1
+    },
+    "range": "Sight",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "6 rounds",
+      "seconds": 36,
+      "concentration": true
+    },
+    "ritual": false,
+    "save": "STR",
+    "classes": ["class.druid"],
+    "tags": ["damage", "control"],
+    "damage": {
+      "dice": "6d10",
+      "type": "bludgeoning"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.power-word-heal",
+    "name": "Power Word Heal",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "A creature you touch regains all its HP, and ends being charmed, frightened, paralyzed and stunned. If it is prone it can stand without using movement."
+    },
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/power-word-heal",
+    "level": 9,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "ritual": false,
+    "classes": ["class.bard", "class.cleric"],
+    "tags": ["healing"]
   }
 ]
