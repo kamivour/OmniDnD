@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M26 Friend-testing fixes done (see PLAN.md). 10 of 10 tasks done.
+**Current milestone:** M27 PHB races and Beast Master done; M28 next (see PLAN.md).
 **Next up:** Manual QA for M26 by the user; Q40–Q43 wait for the user, defaults apply.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -51,7 +51,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M25 | DM party overview | 7 | done | Read-only overview of the whole party for the DM; see [PLAN.md](PLAN.md) |
 | M26 | Friend-testing fixes | 5 | done | New players on a phone create a character without confusion and find sign-up; see [PLAN.md](PLAN.md) |
 
-| M27 | PHB races and Beast Master | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M27 | PHB races and Beast Master | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M28 | PHB martial subclasses | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M29 | PHB caster subclasses | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M30 | PHB non-SRD spells | 9 | todo | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
@@ -304,6 +304,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-11 — M27: six PHB subraces, Beast Master with Ranger companion Stats link, guidance and tests.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.

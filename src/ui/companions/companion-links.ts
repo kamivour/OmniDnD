@@ -26,6 +26,10 @@ const LINKS: Record<string, CompanionLink> = {
     template: 'Eldritch Cannon',
     limitKey: 'eldritch-cannon',
   },
+  'feature.ranger.beast-master-rangers-companion': {
+    key: 'rangers-companion',
+    limitKey: 'ranger-companion',
+  },
   'spell.find-familiar': { key: 'familiar', limitKey: 'familiar' },
   'spell.find-steed': { key: 'steed' },
 };

@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-11 23:52 — PHB races and Beast Master
+
+- New races: Wood Elf, Drow, Mountain Dwarf, Stout Halfling, Forest Gnome and Variant Human, each with guide cards.
+- Rangers can pick Beast Master at level 3. Its Ranger's Companion feature has a Stats button that opens the companion form.
+- Variant Human's skill and feat, and racial spells like Drow Magic, are added by hand in the sheet editor for now.
+- Checks pass.
+
 ## 2026-11-11 23:09 — Stats button fixes
 
 - Steel Defender now has its Stats button on the Features page and a row on the Combat bonus tab.

@@ -1,0 +1,200 @@
+[
+  {
+    "kind": "race",
+    "id": "race.wood-elf",
+    "name": "Wood Elf",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "subraceOf": "race.elf",
+    "summary": {
+      "effect": "Elf with +DEX and +WIS, 35 ft speed, and an easy time hiding in the wild."
+    },
+    "size": "medium",
+    "speed": 35,
+    "darkvision": 60,
+    "abilityBonuses": [
+      {
+        "ability": "DEX",
+        "value": 2
+      },
+      {
+        "ability": "WIS",
+        "value": 1
+      }
+    ],
+    "languages": ["Common", "Elvish"],
+    "featureIds": [
+      "feature.darkvision",
+      "feature.fey-ancestry",
+      "feature.trance",
+      "feature.keen-senses",
+      "feature.elf-weapon-training",
+      "feature.fleet-of-foot",
+      "feature.mask-of-the-wild"
+    ]
+  },
+  {
+    "kind": "race",
+    "id": "race.drow",
+    "name": "Drow",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "subraceOf": "race.elf",
+    "summary": {
+      "effect": "Elf with +DEX and +CHA, 120 ft darkvision and innate magic, but weak in sunlight."
+    },
+    "size": "medium",
+    "speed": 30,
+    "darkvision": 120,
+    "abilityBonuses": [
+      {
+        "ability": "DEX",
+        "value": 2
+      },
+      {
+        "ability": "CHA",
+        "value": 1
+      }
+    ],
+    "languages": ["Common", "Elvish"],
+    "featureIds": [
+      "feature.superior-darkvision",
+      "feature.fey-ancestry",
+      "feature.trance",
+      "feature.keen-senses",
+      "feature.sunlight-sensitivity",
+      "feature.drow-magic",
+      "feature.drow-weapon-training"
+    ]
+  },
+  {
+    "kind": "race",
+    "id": "race.mountain-dwarf",
+    "name": "Mountain Dwarf",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "subraceOf": "race.dwarf",
+    "summary": {
+      "effect": "Dwarf with +STR and +CON and training in light and medium armor."
+    },
+    "size": "medium",
+    "speed": 25,
+    "darkvision": 60,
+    "abilityBonuses": [
+      {
+        "ability": "STR",
+        "value": 2
+      },
+      {
+        "ability": "CON",
+        "value": 2
+      }
+    ],
+    "languages": ["Common", "Dwarvish"],
+    "featureIds": [
+      "feature.darkvision",
+      "feature.dwarven-resilience",
+      "feature.stonecunning",
+      "feature.dwarven-combat-training",
+      "feature.tool-proficiency",
+      "feature.dwarven-armor-training"
+    ]
+  },
+  {
+    "kind": "race",
+    "id": "race.stout-halfling",
+    "name": "Stout Halfling",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "subraceOf": "race.halfling",
+    "summary": {
+      "effect": "Halfling with +DEX and +CON and a hardy resistance to poison."
+    },
+    "size": "small",
+    "speed": 25,
+    "abilityBonuses": [
+      {
+        "ability": "DEX",
+        "value": 2
+      },
+      {
+        "ability": "CON",
+        "value": 1
+      }
+    ],
+    "languages": ["Common", "Halfling"],
+    "featureIds": [
+      "feature.brave",
+      "feature.halfling-nimbleness",
+      "feature.lucky",
+      "feature.stout-resilience"
+    ]
+  },
+  {
+    "kind": "race",
+    "id": "race.forest-gnome",
+    "name": "Forest Gnome",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "subraceOf": "race.gnome",
+    "summary": {
+      "effect": "Gnome with +INT and +DEX, minor illusion, and a way to talk with small beasts."
+    },
+    "size": "small",
+    "speed": 25,
+    "darkvision": 60,
+    "abilityBonuses": [
+      {
+        "ability": "INT",
+        "value": 2
+      },
+      {
+        "ability": "DEX",
+        "value": 1
+      }
+    ],
+    "languages": ["Common", "Gnomish"],
+    "featureIds": [
+      "feature.darkvision",
+      "feature.gnome-cunning",
+      "feature.natural-illusionist",
+      "feature.speak-with-small-beasts"
+    ]
+  },
+  {
+    "kind": "race",
+    "id": "race.variant-human",
+    "name": "Variant Human",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "subraceOf": "race.human",
+    "summary": {
+      "effect": "Human with two +1 scores of your choice, one skill, and one feat."
+    },
+    "size": "medium",
+    "speed": 30,
+    "abilityBonuses": [],
+    "abilityChoices": {
+      "count": 2,
+      "value": 1
+    },
+    "languages": ["Common"],
+    "featureIds": [
+      "feature.extra-language",
+      "feature.variant-human-skill",
+      "feature.variant-human-feat"
+    ]
+  }
+]

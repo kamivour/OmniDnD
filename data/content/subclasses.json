@@ -373,5 +373,36 @@
         "featureId": "feature.fighter.psi-warrior-telekinetic-master"
       }
     ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.ranger.beast-master",
+    "name": "Beast Master",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Ranger who fights beside a loyal animal companion."
+    },
+    "classId": "class.ranger",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.ranger.beast-master-rangers-companion"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.ranger.beast-master-exceptional-training"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.ranger.beast-master-bestial-fury"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.ranger.beast-master-share-spells"
+      }
+    ]
   }
 ]

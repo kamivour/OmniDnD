@@ -2,6 +2,7 @@ import contentBackgrounds from '../../data/content/backgrounds.json';
 import contentClasses from '../../data/content/classes.json';
 import contentFeatures from '../../data/content/features.json';
 import contentItems from '../../data/content/items.json';
+import contentRaces from '../../data/content/races.json';
 import contentSpells from '../../data/content/spells.json';
 import contentSubclasses from '../../data/content/subclasses.json';
 import summaries from '../../data/content/summaries.json';
@@ -46,6 +47,7 @@ export const contentPacks = {
   classes: contentClasses,
   features: contentFeatures,
   items: contentItems,
+  races: contentRaces,
   spells: contentSpells,
   subclasses: contentSubclasses,
 };

@@ -1453,5 +1453,134 @@
         "why": "Take whatever skills your build needs"
       }
     ]
+  },
+  {
+    "id": "race.wood-elf",
+    "kind": "race",
+    "pitch": "A fast, stealthy elf who thrives outdoors.",
+    "difficulty": "easy",
+    "strengths": ["DEX and WIS boost", "35 ft speed", "Hides in natural cover"],
+    "weaknesses": ["Fewer hit points", "No STR boost"],
+    "goodWith": [
+      {
+        "id": "class.ranger",
+        "why": "DEX and WIS suit hunting and tracking"
+      },
+      {
+        "id": "class.monk",
+        "why": "DEX, WIS and speed all help"
+      }
+    ]
+  },
+  {
+    "id": "race.drow",
+    "kind": "race",
+    "pitch": "An elf of the deep dark with strong vision and innate spells.",
+    "difficulty": "medium",
+    "strengths": ["DEX and CHA boost", "120 ft darkvision", "Free spells"],
+    "weaknesses": ["Sunlight disadvantage", "Fewer hit points"],
+    "goodWith": [
+      {
+        "id": "class.warlock",
+        "why": "CHA boost and extra spells"
+      },
+      {
+        "id": "class.rogue",
+        "why": "Darkness and darkvision help sneaking"
+      }
+    ]
+  },
+  {
+    "id": "race.mountain-dwarf",
+    "kind": "race",
+    "pitch": "A sturdy dwarf trained in armor.",
+    "difficulty": "easy",
+    "strengths": ["STR and CON boost", "Light and medium armor", "Resists poison"],
+    "weaknesses": ["Slow walking speed", "No DEX boost"],
+    "goodWith": [
+      {
+        "id": "class.fighter",
+        "why": "STR boost and armor ready from level 1"
+      },
+      {
+        "id": "class.paladin",
+        "why": "STR and armor for the front line"
+      },
+      {
+        "id": "class.cleric",
+        "why": "Medium armor and CON"
+      }
+    ]
+  },
+  {
+    "id": "race.stout-halfling",
+    "kind": "race",
+    "pitch": "A tough halfling with a strong stomach.",
+    "difficulty": "easy",
+    "strengths": ["DEX and CON boost", "Resists poison", "Lucky rerolls"],
+    "weaknesses": ["Small size", "Slow walking speed"],
+    "goodWith": [
+      {
+        "id": "class.rogue",
+        "why": "DEX boost and luck"
+      },
+      {
+        "id": "class.monk",
+        "why": "DEX and CON help a light fighter"
+      }
+    ]
+  },
+  {
+    "id": "race.forest-gnome",
+    "kind": "race",
+    "pitch": "A sly gnome with an illusion cantrip and a way with small animals.",
+    "difficulty": "easy",
+    "strengths": ["INT and DEX boost", "Minor illusion", "Gnome Cunning saves"],
+    "weaknesses": ["Small size", "Slow walking speed"],
+    "goodWith": [
+      {
+        "id": "class.wizard",
+        "why": "INT boost and a free cantrip"
+      },
+      {
+        "id": "class.ranger",
+        "why": "DEX boost and beast talk"
+      }
+    ]
+  },
+  {
+    "id": "race.variant-human",
+    "kind": "race",
+    "pitch": "A flexible human who starts with a feat.",
+    "difficulty": "medium",
+    "strengths": ["Pick your own two +1 scores", "Free skill", "Starts with a feat"],
+    "weaknesses": ["Needs a feat choice up front", "No darkvision"],
+    "goodWith": [
+      {
+        "id": "class.fighter",
+        "why": "Early feat powers up a build"
+      },
+      {
+        "id": "class.wizard",
+        "why": "Feat plus INT bonus"
+      }
+    ]
+  },
+  {
+    "id": "subclass.ranger.beast-master",
+    "kind": "subclass",
+    "pitch": "A ranger who fights alongside a loyal animal friend.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": [
+      "A second body in the fight",
+      "Companion grows with you",
+      "Great for scouting and flanking"
+    ],
+    "weaknesses": [
+      "Companion has low HP early",
+      "You track two sets of actions",
+      "Companion can be a target"
+    ]
   }
 ]

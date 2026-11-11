@@ -2889,5 +2889,229 @@
     },
     "origin": "background",
     "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fleet-of-foot",
+    "name": "Fleet of Foot",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your walking speed is 35 feet, 5 more than most elves."
+    },
+    "origin": "race",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.mask-of-the-wild",
+    "name": "Mask of the Wild",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can try to hide in light natural cover such as rain, fog, foliage or snow, even when only lightly obscured."
+    },
+    "origin": "race",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.superior-darkvision",
+    "name": "Superior Darkvision",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "See in dim light within 120 feet as if bright, and in darkness as if dim. No colour in darkness."
+    },
+    "origin": "race",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sunlight-sensitivity",
+    "name": "Sunlight Sensitivity",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "In direct sunlight you have disadvantage on attack rolls and on sight-based Perception checks, for you or your target in sunlight."
+    },
+    "origin": "race",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.drow-magic",
+    "name": "Drow Magic",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Know dancing lights. At 3rd level cast faerie fire and at 5th level darkness once each per long rest. Charisma is the casting ability."
+    },
+    "origin": "race",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.drow-weapon-training",
+    "name": "Drow Weapon Training",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Proficient with rapiers, shortswords and hand crossbows."
+    },
+    "origin": "race",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.dwarven-armor-training",
+    "name": "Dwarven Armor Training",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Proficient with light and medium armor."
+    },
+    "origin": "race",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.stout-resilience",
+    "name": "Stout Resilience",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Advantage on saves against poison, and resistance to poison damage."
+    },
+    "origin": "race",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.natural-illusionist",
+    "name": "Natural Illusionist",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Know the minor illusion cantrip. Intelligence is the casting ability."
+    },
+    "origin": "race",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.speak-with-small-beasts",
+    "name": "Speak with Small Beasts",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Through sounds and gestures you can pass simple ideas to Small or smaller beasts."
+    },
+    "origin": "race",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.variant-human-skill",
+    "name": "Skill",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain proficiency in one skill of your choice. Add it in the sheet editor."
+    },
+    "origin": "race",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.variant-human-feat",
+    "name": "Feat",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Take one feat of your choice at level 1, if your campaign allows feats. Add it in the sheet editor."
+    },
+    "origin": "race",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.beast-master-rangers-companion",
+    "name": "Ranger's Companion",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain a beast of CR 1/4 or lower as a companion. It acts on your initiative, uses your proficiency bonus, and has 4 HP per ranger level if that beats its own. Its stats are on Companions."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.beast-master-exceptional-training",
+    "name": "Exceptional Training",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bonus action: command your companion to Dash, Disengage, Dodge or Help. Its attacks now count as magical."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.beast-master-bestial-fury",
+    "name": "Bestial Fury",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your companion makes two attacks when it takes the Attack action, or one attack plus a multiattack it already has."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.beast-master-share-spells",
+    "name": "Share Spells",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you cast a spell on yourself, it also affects your companion if it is within 30 feet."
+    },
+    "origin": "subclass",
+    "activation": "passive"
   }
 ]

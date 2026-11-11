@@ -863,5 +863,28 @@
       },
       "recharge": "long"
     }
+  },
+  {
+    "id": "feature.stout-resilience",
+    "defenses": {
+      "resistances": ["poison"],
+      "saveAdvantages": ["poison"]
+    }
+  },
+  {
+    "id": "feature.ranger.beast-master-rangers-companion",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.beast-master-exceptional-training",
+    "activation": "bonus"
+  },
+  {
+    "id": "feature.ranger.beast-master-bestial-fury",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.ranger.beast-master-share-spells",
+    "activation": "passive"
   }
 ]
