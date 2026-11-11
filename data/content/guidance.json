@@ -1927,5 +1927,149 @@
         "why": "Start with a combat feat and a strong main ability"
       }
     ]
+  },
+  {
+    "id": "subclass.barbarian.beast",
+    "kind": "subclass",
+    "pitch": "A rager who sprouts natural weapons and hunts with the pack.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "CON"],
+    "strengths": [
+      "Extra attack options while raging",
+      "Heal on kills with the bite",
+      "Spreads the fury to allies"
+    ],
+    "weaknesses": ["Choose a form each rage", "Weapons stay in the way if you also hold gear"]
+  },
+  {
+    "id": "subclass.barbarian.wild-magic",
+    "kind": "subclass",
+    "pitch": "A raging barbarian who sparks a random magic surge each time.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "CON"],
+    "strengths": ["Fun random effects", "Rage lets you boost allies", "Backlash punishes spells"],
+    "weaknesses": ["Needs a surge table roll", "Effects can be awkward"]
+  },
+  {
+    "id": "subclass.bard.creation",
+    "kind": "subclass",
+    "pitch": "A bard who sings objects and little animated helpers into being.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA"],
+    "strengths": [
+      "Create useful items",
+      "Animated helpers fight for you",
+      "Inspiration motes help allies"
+    ],
+    "weaknesses": ["Needs creativity", "Fewer direct combat boosts"]
+  },
+  {
+    "id": "subclass.bard.eloquence",
+    "kind": "subclass",
+    "pitch": "A silver-tongued face who makes sure nothing slips.",
+    "difficulty": "easy",
+    "mainAbilities": ["CHA"],
+    "strengths": ["Reliable social checks", "Weakens enemy saves", "Share inspiration widely"],
+    "weaknesses": ["Less direct damage", "Strong mostly in talk-heavy play"]
+  },
+  {
+    "id": "subclass.cleric.order",
+    "kind": "subclass",
+    "pitch": "A commanding cleric who forces enemies and allies to follow orders.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS"],
+    "strengths": [
+      "Heavy armor from level 1",
+      "Voice of Authority gives allies free attacks",
+      "Strong Divine Strike"
+    ],
+    "weaknesses": ["Lawful-feel themes", "Fewer healing options"]
+  },
+  {
+    "id": "subclass.cleric.peace",
+    "kind": "subclass",
+    "pitch": "A gentle cleric who ties the party together with shared strength.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS"],
+    "strengths": ["Bond buffs everyone nearby", "Share damage with allies", "Boost to cantrips"],
+    "weaknesses": ["Less direct offense", "Works best with allies close by"]
+  },
+  {
+    "id": "subclass.druid.spores",
+    "kind": "subclass",
+    "pitch": "A druid of rot and fungus who wards allies with spores.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS"],
+    "strengths": [
+      "Halo of Spores deals steady damage",
+      "Fungal entities fight for you",
+      "Fungal Body shrugs off crits"
+    ],
+    "weaknesses": ["Close-range damage", "Spore Halo needs reactions"]
+  },
+  {
+    "id": "subclass.druid.stars",
+    "kind": "subclass",
+    "pitch": "A druid who draws power from the night sky and star shapes.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS"],
+    "strengths": [
+      "Starry Form gives archer, chalice or dragon",
+      "Reliable concentration",
+      "Free Guidance and Guiding Bolt"
+    ],
+    "weaknesses": ["Needs Wild Shape for the form", "Best at night or in the dark in some tables"]
+  },
+  {
+    "id": "subclass.druid.wildfire",
+    "kind": "subclass",
+    "pitch": "A druid of burning and rebirth who commands a wildfire spirit.",
+    "difficulty": "hard",
+    "mainAbilities": ["WIS"],
+    "strengths": [
+      "A companion that blasts and teleports",
+      "Healing from flames",
+      "Revive from death once a day"
+    ],
+    "weaknesses": ["The spirit is extra bookkeeping", "Fire-based damage"]
+  },
+  {
+    "id": "subclass.fighter.rune-knight",
+    "kind": "subclass",
+    "pitch": "A fighter who uses carved runes and grows to giant size.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "CON"],
+    "strengths": [
+      "Giant’s Might grows you",
+      "Runic Shield protects allies",
+      "Runes add utility and defense"
+    ],
+    "weaknesses": ["Choose runes carefully", "Bookkeeping for each rune"]
+  },
+  {
+    "id": "subclass.monk.mercy",
+    "kind": "subclass",
+    "pitch": "A plague-doctor monk who mends allies and wounds foes.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": [
+      "Heals as a bonus action",
+      "Hand of Harm adds damage",
+      "Medicine and Insight proficiencies"
+    ],
+    "weaknesses": ["Ki heavy", "Mask and role feel specialized"]
+  },
+  {
+    "id": "subclass.monk.astral-self",
+    "kind": "subclass",
+    "pitch": "A monk who summons a glowing astral form to fight beside them.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": [
+      "Astral arms add reach and WIS to hits",
+      "Visage improves senses and social checks",
+      "Body adds power"
+    ],
+    "weaknesses": ["Ki heavy", "Many forms to track"]
   }
 ]

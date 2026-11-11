@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 00:28 — Tasha’s subclasses, part 1
+
+- Added 12 Tasha’s subclasses: Beast and Wild Magic Barbarian, Creation and Eloquence Bard, Order and Peace Cleric, Spores, Stars and Wildfire Druid, Rune Knight, Mercy and Astral Self Monk.
+- Features that spend Ki, Channel Divinity, Wild Shape or Bardic Inspiration draw from those pools. Wildfire Spirit and rune choices are text only; track them by hand.
+- Next: the remaining Tasha’s subclasses.
+Checks pass.
+
 ## 2026-11-12 00:22 — Tasha’s spells
 
 - Added 20 Tasha’s spells: two cantrips, Mind Whip, Spirit Shroud, Intellect Fortress, Wrath of Nature, Blade of Disaster and more.

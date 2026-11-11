@@ -6241,5 +6241,976 @@
       "level": 3,
       "replaces": "feature.ranger.beast-master-rangers-companion"
     }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.beast-form-of-the-beast",
+    "name": "Form of the Beast",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you rage, pick bite, claws or tail. Bite heals you on a bloodied hit; claws add an extra attack; tail adds a reaction AC bonus and reach."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.beast-bestial-soul",
+    "name": "Bestial Soul",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your natural weapons count as magical. After each rest, gain a swimming, climbing or jumping boost for the day."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.beast-infectious-fury",
+    "name": "Infectious Fury",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you hit with natural weapons, the target makes a WIS save or takes psychic damage or attacks another creature. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.beast-call-the-hunt",
+    "name": "Call the Hunt",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you rage, you and nearby allies gain temp HP and one extra hit with a damage die. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.wild-magic-magic-awareness",
+    "name": "Magic Awareness",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "As an action, sense magic nearby for a minute. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.wild-magic-wild-surge",
+    "name": "Wild Surge",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you rage, roll a d8 on the Wild Surge table; the effect lasts for the rage. Enter the result yourself."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.wild-magic-bolstering-magic",
+    "name": "Bolstering Magic",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bonus action: touch a creature to give it a d3 on checks and attacks for 10 minutes, or to restore a spent spell slot. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.wild-magic-unstable-backlash",
+    "name": "Unstable Backlash",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When hit or failing a save while raging, use a reaction to roll a new Wild Surge result."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.wild-magic-controlled-surge",
+    "name": "Controlled Surge",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you roll on the Wild Surge table, roll twice and choose which result to use."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.creation-mote-of-potential",
+    "name": "Mote of Potential",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you give Bardic Inspiration, a mote also appears. It boosts the ability check, attack or save when used, with an extra effect."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.bard.bardic-inspiration"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.creation-performance-of-creation",
+    "name": "Performance of Creation",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Create a nonmagical item worth up to 20 times your bard level, as an action. It lasts a number of hours based on level. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.creation-animating-performance",
+    "name": "Animating Performance",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Animate a Large or smaller object as a dancing item. It acts on your turn and uses your proficiency bonus. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.creation-creative-crescendo",
+    "name": "Creative Crescendo",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Performance of Creation can make many items at once, equal to your CHA modifier. Using a Bardic Inspiration die ends the wait to create more."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.eloquence-silver-tongue",
+    "name": "Silver Tongue",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "On a Persuasion or Deception check, treat a d20 roll of 9 or lower as a 10."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.eloquence-unsettling-words",
+    "name": "Unsettling Words",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bonus action: spend a Bardic Inspiration die to subtract it from a creature’s next saving throw before your next turn."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.bard.bardic-inspiration"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.eloquence-unfailing-inspiration",
+    "name": "Unfailing Inspiration",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A creature that adds your Bardic Inspiration die and still fails keeps the die."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.eloquence-universal-speech",
+    "name": "Universal Speech",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "As an action, creatures you choose understand you for an hour. Targets up to your CHA modifier. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.eloquence-infectious-inspiration",
+    "name": "Infectious Inspiration",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When an ally uses your Bardic Inspiration and succeeds, you can give it to another creature as a reaction. Uses equal your CHA modifier per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "abilityMod": "CHA",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.order-bonus-proficiencies",
+    "name": "Bonus Proficiencies",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Proficiency with heavy armor, and either Intimidation or Persuasion."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.order-voice-of-authority",
+    "name": "Voice of Authority",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you cast a spell of 1st level or higher on an ally, that ally can use a reaction to make one attack against a creature of your choice."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.order-orders-demand",
+    "name": "Channel Divinity: Order’s Demand",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Creatures within 30 feet that see or hear you make a WIS save or become charmed until the end of your next turn, and drop what they hold."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.order-embodiment-of-the-law",
+    "name": "Embodiment of the Law",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cast an enchantment spell with a casting time of an action as a bonus action instead. Uses equal your WIS modifier per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.order-divine-strike",
+    "name": "Divine Strike",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per turn, add 1d8 psychic damage to a weapon hit (2d8 at level 14)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.order-orders-wrath",
+    "name": "Order’s Wrath",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you use Divine Strike, curse the target. The next ally hit extra psychic damage on it."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.peace-implement-of-peace",
+    "name": "Implement of Peace",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Proficiency in Insight, Performance or Persuasion (your choice)."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.peace-emboldening-bond",
+    "name": "Emboldening Bond",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bond up to your proficiency bonus creatures for 10 minutes. Each adds 1d4 to attacks, checks or saves while within 30 feet of another bonded creature. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.peace-balm-of-peace",
+    "name": "Channel Divinity: Balm of Peace",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Move up to your speed without provoking attacks; heal each creature you pass for 2d6 plus WIS modifier."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.peace-protective-bond",
+    "name": "Protective Bond",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a bonded creature within 30 feet takes damage, you can teleport next to it and take the damage instead."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.peace-potent-spellcasting",
+    "name": "Potent Spellcasting",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add your WIS modifier to the damage of cleric cantrips."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.cleric.peace-expansive-bond",
+    "name": "Expansive Bond",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bond range doubles to 60 feet and bonded creatures resist damage when you take the damage for them."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.spores-halo-of-spores",
+    "name": "Halo of Spores",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a creature moves next to you or starts a turn there, use a reaction for 1d4 necrotic (CON save). The die grows at higher levels."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.spores-symbiotic-entity",
+    "name": "Symbiotic Entity",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a use of Wild Shape to gain temp HP and boost Halo of Spores damage and melee damage for 10 minutes."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.druid.wild-shape"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.spores-fungal-infestation",
+    "name": "Fungal Infestation",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a Small or Medium beast or humanoid dies near you, raise it as a zombie for an hour. Uses equal your WIS modifier per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.spores-spreading-spores",
+    "name": "Spreading Spores",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "As a bonus action, fling spores into a 10-foot cube within 30 feet to affect those who enter; lasts a minute."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.spores-fungal-body",
+    "name": "Fungal Body",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You cannot be blinded, deafened, frightened or poisoned, and critical hits against you count as normal hits."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.stars-star-map",
+    "name": "Star Map",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain a star map for guidance and guiding bolt. Cast guiding bolt without a slot, uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.stars-starry-form",
+    "name": "Starry Form",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a use of Wild Shape to take a constellation form for 10 minutes: Archer, Chalice or Dragon, each with its own bonus."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.druid.wild-shape"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.stars-cosmic-omen",
+    "name": "Cosmic Omen",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After each long rest, roll for weal or woe. Use your reaction to add or subtract 1d6 to a nearby roll. Uses equal your proficiency bonus."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.stars-twinkling-constellations",
+    "name": "Twinkling Constellations",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Archer and Chalice forms improve. Dragon form gains a fly speed. You can shift your constellation at the start of each turn."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.stars-full-of-stars",
+    "name": "Full of Stars",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "In Starry Form you resist bludgeoning, piercing and slashing damage."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.wildfire-summon-wildfire-spirit",
+    "name": "Summon Wildfire Spirit",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a use of Wild Shape to call a wildfire spirit for an hour. Track its stats by hand; it shares your initiative."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.druid.wild-shape"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.wildfire-enhanced-bond",
+    "name": "Enhanced Bond",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While your spirit is near, your fire and healing spells deal bonus d8 damage or healing, and can be cast from the spirit."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.wildfire-cauterizing-flames",
+    "name": "Cauterizing Flames",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a creature dies near you, a flame appears for a minute; touching it heals or burns. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.wildfire-blazing-revival",
+    "name": "Blazing Revival",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "If you drop to 0 HP while your spirit lives, it dies and you rise with half your HP. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-bonus-proficiencies",
+    "name": "Bonus Proficiencies",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Proficiency with smith’s tools and the Giant language."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-rune-carver",
+    "name": "Rune Carver",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn two runes at level 3 and more later. Each gives a passive boost and an active effect. Pick them in the sheet editor."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-giants-might",
+    "name": "Giant’s Might",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bonus action: for a minute become Large, gain advantage on STR checks and saves, and deal extra 1d6 damage once per turn. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-runic-shield",
+    "name": "Runic Shield",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When an ally you see within 60 feet is hit, use a reaction to force the attacker to reroll. Uses equal your proficiency bonus per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-great-stature",
+    "name": "Great Stature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You grow 3d4 inches. Giant’s Might extra damage becomes 1d8."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-master-of-runes",
+    "name": "Master of Runes",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can invoke each rune twice per short or long rest."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-runic-juggernaut",
+    "name": "Runic Juggernaut",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Giant’s Might makes you Huge, gives reach of 10 feet and extra damage 1d10."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.mercy-implements-of-mercy",
+    "name": "Implements of Mercy",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain Insight and Medicine proficiency, and herbalism kit proficiency, and a special mask."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.mercy-hand-of-healing",
+    "name": "Hand of Healing",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 1 ki to heal a creature you touch for your martial arts die plus WIS modifier. You can use this in place of one flurry attack."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.mercy-hand-of-harm",
+    "name": "Hand of Harm",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once per turn on a hit, spend 1 ki to add your martial arts die plus WIS modifier as necrotic damage."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.mercy-physicians-touch",
+    "name": "Physician’s Touch",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Hand of Healing also ends a disease or condition. Hand of Harm can poison the target until the end of your next turn."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.mercy-flurry-of-healing-and-harm",
+    "name": "Flurry of Healing and Harm",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Each of your Flurry of Blows strikes can instead be Hand of Healing for free, up to WIS modifier uses. Hand of Harm applies once per flurry for free."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.mercy-hand-of-ultimate-mercy",
+    "name": "Hand of Ultimate Mercy",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 5 ki to revive a creature dead for less than 24 hours. Once per long rest; track the limit by hand."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.astral-self-arms-of-the-astral-self",
+    "name": "Arms of the Astral Self",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 1 ki to summon astral arms for 10 minutes. Use WIS for attacks with them, gain reach, and a Dexterity save pulse."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.astral-self-visage-of-the-astral-self",
+    "name": "Visage of the Astral Self",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While your arms are active, summon an astral visage: darkvision, advantage on Intimidation, and see through darkness. Uses your arms’ ki spend."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.astral-self-body-of-the-astral-self",
+    "name": "Body of the Astral Self",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your astral form gains a body that adds Deflect Energy (reaction) and Empowered Arms (extra damage once per turn)."
+    },
+    "origin": "subclass",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.astral-self-awakened-astral-self",
+    "name": "Awakened Astral Self",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 5 ki to awaken your astral self for 10 minutes: +2 AC, an extra arm attack, and your arms can use your martial arts die."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.monk.ki"
   }
 ]

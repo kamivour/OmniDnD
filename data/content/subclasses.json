@@ -1385,5 +1385,429 @@
         "featureId": "feature.wizard.transmutation-master-transmuter"
       }
     ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.barbarian.beast",
+    "name": "Beast",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Barbarian who grows a bite, claws or tail while raging."
+    },
+    "classId": "class.barbarian",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.barbarian.beast-form-of-the-beast"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.barbarian.beast-bestial-soul"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.barbarian.beast-infectious-fury"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.barbarian.beast-call-the-hunt"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.barbarian.wild-magic",
+    "name": "Wild Magic",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Barbarian whose rage triggers random magical effects."
+    },
+    "classId": "class.barbarian",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.barbarian.wild-magic-magic-awareness"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.barbarian.wild-magic-wild-surge"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.barbarian.wild-magic-bolstering-magic"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.barbarian.wild-magic-unstable-backlash"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.barbarian.wild-magic-controlled-surge"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.bard.creation",
+    "name": "Creation",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bard who brings objects to life through performance."
+    },
+    "classId": "class.bard",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.bard.creation-mote-of-potential"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.bard.creation-performance-of-creation"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.bard.creation-animating-performance"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.bard.creation-creative-crescendo"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.bard.eloquence",
+    "name": "Eloquence",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bard whose words sway minds and keep allies steady."
+    },
+    "classId": "class.bard",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.bard.eloquence-silver-tongue"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.bard.eloquence-unsettling-words"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.bard.eloquence-unfailing-inspiration"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.bard.eloquence-universal-speech"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.bard.eloquence-infectious-inspiration"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.cleric.order",
+    "name": "Order Domain",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cleric who commands obedience and punishes defiance."
+    },
+    "classId": "class.cleric",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.order-bonus-proficiencies"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.order-voice-of-authority"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.order-orders-demand"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.order-embodiment-of-the-law"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.order-divine-strike"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.order-orders-wrath"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.cleric.peace",
+    "name": "Peace Domain",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cleric who bonds allies together and soothes conflict."
+    },
+    "classId": "class.cleric",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.cleric.peace-implement-of-peace"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.cleric.peace-emboldening-bond"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.cleric.peace-balm-of-peace"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.cleric.peace-protective-bond"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.cleric.peace-potent-spellcasting"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.cleric.peace-expansive-bond"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.druid.spores",
+    "name": "Spores",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Druid who surrounds themselves with decay and fungal growth."
+    },
+    "classId": "class.druid",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.druid.spores-halo-of-spores"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.druid.spores-symbiotic-entity"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.druid.spores-fungal-infestation"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.druid.spores-spreading-spores"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.druid.spores-fungal-body"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.druid.stars",
+    "name": "Stars",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Druid who channels constellations into a starry form."
+    },
+    "classId": "class.druid",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.druid.stars-star-map"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.druid.stars-starry-form"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.druid.stars-cosmic-omen"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.druid.stars-twinkling-constellations"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.druid.stars-full-of-stars"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.druid.wildfire",
+    "name": "Wildfire",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Druid who works with a spirit of flame and renewal."
+    },
+    "classId": "class.druid",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.druid.wildfire-summon-wildfire-spirit"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.druid.wildfire-enhanced-bond"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.druid.wildfire-cauterizing-flames"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.druid.wildfire-blazing-revival"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.fighter.rune-knight",
+    "name": "Rune Knight",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Fighter who carves giant runes for varied magical effects."
+    },
+    "classId": "class.fighter",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.fighter.rune-knight-bonus-proficiencies"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.rune-knight-rune-carver"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.rune-knight-giants-might"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.fighter.rune-knight-runic-shield"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.fighter.rune-knight-great-stature"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.fighter.rune-knight-master-of-runes"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.fighter.rune-knight-runic-juggernaut"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.monk.mercy",
+    "name": "Mercy",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Monk who heals with a touch and harms with a touch."
+    },
+    "classId": "class.monk",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.monk.mercy-implements-of-mercy"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.monk.mercy-hand-of-healing"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.monk.mercy-hand-of-harm"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.monk.mercy-physicians-touch"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.monk.mercy-flurry-of-healing-and-harm"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.monk.mercy-hand-of-ultimate-mercy"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.monk.astral-self",
+    "name": "Astral Self",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Monk who manifests spectral arms, face and body of the self."
+    },
+    "classId": "class.monk",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.monk.astral-self-arms-of-the-astral-self"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.monk.astral-self-visage-of-the-astral-self"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.monk.astral-self-body-of-the-astral-self"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.monk.astral-self-awakened-astral-self"
+      }
+    ]
   }
 ]
