@@ -2336,5 +2336,3007 @@
     "classes": ["class.warlock", "class.wizard"],
     "tags": ["utility"],
     "id": "spell.summon-fiend"
+  },
+  {
+    "kind": "spell",
+    "id": "spell.control-flames",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Control Flames",
+    "summary": {
+      "effect": "Pick a nonmagical flame in a 5-foot cube. Expand it, snuff it, change its colour or light, or make it form simple shapes for up to an hour."
+    },
+    "level": 0,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant or 1 h",
+      "concentration": false
+    },
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.create-bonfire",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Create Bonfire",
+    "summary": {
+      "effect": "Conjure a bonfire in a 5-foot square. Creatures in it when it appears, or that enter or end a turn there, make a DEX save.",
+      "fail": "1d8 fire. Damage grows at higher character levels."
+    },
+    "level": 0,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "DEX",
+    "classes": [
+      "class.artificer",
+      "class.druid",
+      "class.sorcerer",
+      "class.warlock",
+      "class.wizard"
+    ],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d8",
+      "type": "fire",
+      "cantripScaling": true
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.frostbite",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Frostbite",
+    "summary": {
+      "effect": "Numbing cold hits a creature you can see within range. It makes a CON save.",
+      "fail": "1d6 cold, and disadvantage on its next weapon attack before the end of its next turn."
+    },
+    "level": 0,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "CON",
+    "classes": [
+      "class.artificer",
+      "class.druid",
+      "class.sorcerer",
+      "class.warlock",
+      "class.wizard"
+    ],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d6",
+      "type": "cold",
+      "cantripScaling": true
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.gust",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Gust",
+    "summary": {
+      "effect": "Send a blast of air. Push a Medium or smaller creature 5 feet (STR save), shove an unattended object, or make a harmless breeze."
+    },
+    "level": 0,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "STR",
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.infestation",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Infestation",
+    "summary": {
+      "effect": "Mites swarm one creature within range. It makes a CON save.",
+      "fail": "1d6 poison, and it moves 5 feet in a random direction if it can. Damage grows at higher character levels."
+    },
+    "level": 0,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a living flea"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "CON",
+    "classes": ["class.druid", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d6",
+      "type": "poison",
+      "cantripScaling": true
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.magic-stone",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Magic Stone",
+    "summary": {
+      "effect": "Enchant up to three pebbles. You or another creature can hurl or sling one as a ranged spell attack for 1d6 plus your spellcasting modifier bludgeoning."
+    },
+    "level": 0,
+    "school": "transmutation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": false,
+      "seconds": 60
+    },
+    "attack": "ranged",
+    "classes": ["class.artificer", "class.druid", "class.warlock"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d6",
+      "type": "bludgeoning",
+      "cantripScaling": true
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.mold-earth",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Mold Earth",
+    "summary": {
+      "effect": "Shape loose earth in a 5-foot cube: dig it out, move it, make difficult terrain, or form simple shapes for up to an hour."
+    },
+    "level": 0,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant or 1 h",
+      "concentration": false
+    },
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.primal-savagery",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Primal Savagery",
+    "summary": {
+      "effect": "Your teeth or nails turn into a weapon. Make a melee spell attack for 1d10 acid damage. Damage grows at higher character levels."
+    },
+    "level": 0,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "attack": "melee",
+    "classes": ["class.druid"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d10",
+      "type": "acid",
+      "cantripScaling": true
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.shape-water",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Shape Water",
+    "summary": {
+      "effect": "Move, reshape, recolour or freeze a 5-foot cube of water. Frozen water thaws when the spell ends."
+    },
+    "level": 0,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant or 1 h",
+      "concentration": false
+    },
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.thunderclap",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Thunderclap",
+    "summary": {
+      "effect": "A burst of sound that can be heard up to 100 feet away. Creatures other than you within 5 feet make a CON save.",
+      "fail": "1d6 thunder. Damage grows at higher character levels."
+    },
+    "level": 0,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (5-ft radius)",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "CON",
+    "classes": [
+      "class.artificer",
+      "class.bard",
+      "class.druid",
+      "class.sorcerer",
+      "class.warlock",
+      "class.wizard"
+    ],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d6",
+      "type": "thunder",
+      "cantripScaling": true
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.word-of-radiance",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Word of Radiance",
+    "summary": {
+      "effect": "Choose creatures you can see within 5 feet. Each makes a CON save as divine light flashes.",
+      "fail": "1d6 radiant. Damage grows at higher character levels."
+    },
+    "level": 0,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (5-ft radius)",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "CON",
+    "classes": ["class.cleric"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d6",
+      "type": "radiant",
+      "cantripScaling": true
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.beast-bond",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Beast Bond",
+    "summary": {
+      "effect": "Form a telepathic link with a willing beast of Intelligence 3 or lower. You gain advantage on attacks against creatures within 5 feet of it while you can see it."
+    },
+    "level": 1,
+    "school": "divination",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a bit of fur wrapped in a cloth"
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "classes": ["class.druid", "class.ranger"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.cause-fear",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Cause Fear",
+    "summary": {
+      "effect": "Choose a creature you can see. It makes a WIS save or is frightened. It repeats the save at the end of each of its turns. Constructs and undead are immune.",
+      "upcast": "One extra target per slot level above 1."
+    },
+    "level": 1,
+    "school": "necromancy",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "WIS",
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["debuff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.ceremony",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Ceremony",
+    "summary": {
+      "effect": "Perform one of several rites on a nearby target: atonement, bless water, coming of age, dedication, funeral rite or wedding. Each rite has its own effect."
+    },
+    "level": 1,
+    "school": "abjuration",
+    "casting": {
+      "cost": "hours",
+      "amount": 1
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "25 gp of powdered silver, consumed"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "classes": ["class.cleric", "class.paladin"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.chaos-bolt",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Chaos Bolt",
+    "summary": {
+      "effect": "Make a ranged spell attack for 2d8 plus 1d6 damage. The d8s set the damage type. If both d8s match, the bolt leaps to a new target.",
+      "upcast": "+1d6 per slot level above 1."
+    },
+    "level": 1,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "attack": "ranged",
+    "classes": ["class.sorcerer"],
+    "tags": ["damage"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.earth-tremor",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Earth Tremor",
+    "summary": {
+      "effect": "The ground shakes. Creatures other than you within 10 feet make a DEX save, and loose ground turns into difficult terrain.",
+      "fail": "1d6 bludgeoning and knocked prone.",
+      "success": "No damage and not knocked prone.",
+      "upcast": "+1d6 per slot level above 1."
+    },
+    "level": 1,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self (10-ft radius)",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "DEX",
+    "classes": ["class.bard", "class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d6",
+      "type": "bludgeoning",
+      "upcastPerLevel": "1d6"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.ice-knife",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Ice Knife",
+    "summary": {
+      "effect": "Hurl a shard of ice. On a ranged spell attack hit it deals 1d10 piercing. Hit or miss, the shard bursts and creatures within 5 feet make a DEX save.",
+      "fail": "2d6 cold.",
+      "upcast": "Burst deals +1d6 per slot level above 1."
+    },
+    "level": 1,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": false,
+      "s": true,
+      "m": "a drop of water or a piece of ice"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "DEX",
+    "attack": "ranged",
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d10",
+      "type": "piercing"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.snare",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Snare",
+    "summary": {
+      "effect": "Lay a magical trap on a 5-foot circle. A creature that steps on it is hoisted off the ground, restrained and takes damage. A DEX check frees it."
+    },
+    "level": 1,
+    "school": "abjuration",
+    "casting": {
+      "cost": "minutes",
+      "amount": 1
+    },
+    "range": "Touch",
+    "components": {
+      "v": false,
+      "s": true,
+      "m": "25 feet of rope, consumed"
+    },
+    "duration": {
+      "text": "8 h",
+      "concentration": false,
+      "seconds": 28800
+    },
+    "classes": ["class.artificer", "class.druid", "class.ranger", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.zephyr-strike",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Zephyr Strike",
+    "summary": {
+      "effect": "Move like the wind. Your movement does not provoke opportunity attacks. Once before the spell ends, gain advantage on a weapon attack and add 1d8 force damage, and speed rises by 30 feet."
+    },
+    "level": 1,
+    "school": "transmutation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "classes": ["class.ranger"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.aganazzars-scorcher",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Aganazzar’s Scorcher",
+    "summary": {
+      "effect": "A line of flame 5 feet wide and up to 30 feet long streaks from you. Creatures in the line make a DEX save.",
+      "fail": "3d8 fire.",
+      "success": "Half damage.",
+      "upcast": "+1d8 per slot level above 2."
+    },
+    "level": 2,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a red dragon’s scale"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "DEX",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "3d8",
+      "type": "fire",
+      "upcastPerLevel": "1d8"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.cordon-of-arrows",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Cordon of Arrows",
+    "summary": {
+      "effect": "Plant four pieces of ammunition. A creature you did not name that comes within 30 feet triggers one to fire, dealing 1d6 piercing on a failed DEX save.",
+      "upcast": "Two more pieces of ammunition per slot level above 2."
+    },
+    "level": 2,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "5 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "four or more arrows or bolts"
+    },
+    "duration": {
+      "text": "8 h",
+      "concentration": false,
+      "seconds": 28800
+    },
+    "classes": ["class.ranger"],
+    "tags": ["damage"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.dragons-breath",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Dragon’s Breath",
+    "summary": {
+      "effect": "A willing creature can breathe a 15-foot cone once as an action. Pick acid, cold, fire, lightning or poison. Targets make a DEX save against your spell save DC.",
+      "fail": "3d6 damage of the chosen type.",
+      "success": "Half damage.",
+      "upcast": "+1d6 per slot level above 2."
+    },
+    "level": 2,
+    "school": "transmutation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a hot pepper"
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "DEX",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage", "buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.dust-devil",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Dust Devil",
+    "summary": {
+      "effect": "Conjure a 5-foot whirlwind. When it appears, and when you use a bonus action to move it 30 feet, creatures within 5 feet make a STR save.",
+      "fail": "1d8 bludgeoning and pushed 10 feet.",
+      "success": "Half damage and not pushed.",
+      "upcast": "+1d8 per slot level above 2."
+    },
+    "level": 2,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a pinch of dust"
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "STR",
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "1d8",
+      "type": "bludgeoning",
+      "upcastPerLevel": "1d8"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.earthbind",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Earthbind",
+    "summary": {
+      "effect": "A flying creature you can see makes a STR save.",
+      "fail": "Its flying speed drops to 0 and it floats down at 60 feet per round, taking no fall damage if it was held in the air by the spell."
+    },
+    "level": 2,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "300 ft",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "STR",
+    "classes": ["class.druid", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.maximilians-earthen-grasp",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Maximilian’s Earthen Grasp",
+    "summary": {
+      "effect": "A Medium hand of earth grips a creature. It makes a STR save when targeted and the hand restrains it on a fail. Use an action to crush or move it.",
+      "fail": "2d6 bludgeoning and restrained."
+    },
+    "level": 2,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a miniature hand sculpted from clay"
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "STR",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "2d6",
+      "type": "bludgeoning"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.mind-spike",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Mind Spike",
+    "summary": {
+      "effect": "Psychic spike hits a creature you can see. It makes a WIS save. You know where it is while the spell lasts and you can see it, even through barriers.",
+      "fail": "3d8 psychic.",
+      "success": "Half damage.",
+      "upcast": "+1d8 per slot level above 2."
+    },
+    "level": 2,
+    "school": "divination",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": true,
+      "seconds": 3600
+    },
+    "save": "WIS",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "3d8",
+      "type": "psychic",
+      "upcastPerLevel": "1d8"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.pyrotechnics",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Pyrotechnics",
+    "summary": {
+      "effect": "Use a nonmagical flame within 5 feet. Choose fireworks, which blind nearby creatures on a failed CON save, or smoke, which fills a 20-foot area."
+    },
+    "level": 2,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "CON",
+    "classes": ["class.artificer", "class.bard", "class.sorcerer", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.shadow-blade",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Shadow Blade",
+    "summary": {
+      "effect": "Weave a sword of dim light. It deals 2d8 psychic damage, is finesse and light, can be thrown, and gives advantage on attacks if you are in dim light or darkness.",
+      "upcast": "Damage rises to 3d8 at 3rd and 4th, 4d8 at 5th and 6th, 5d8 at 7th."
+    },
+    "level": 2,
+    "school": "illusion",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "attack": "melee",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "2d8",
+      "type": "psychic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.skywrite",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": true,
+    "name": "Skywrite",
+    "summary": {
+      "effect": "Write up to ten words across the sky. They can be seen by anyone under open sky who can see that part of the sky. Wind scatters them."
+    },
+    "level": 2,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Sight",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": true,
+      "seconds": 3600
+    },
+    "classes": ["class.bard", "class.druid", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.snillocs-snowball-swarm",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Snilloc’s Snowball Swarm",
+    "summary": {
+      "effect": "Flurry of snow bursts in a 5-foot radius. Creatures in it make a DEX save.",
+      "fail": "3d6 cold.",
+      "success": "Half damage.",
+      "upcast": "+1d6 per slot level above 2."
+    },
+    "level": 2,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a piece of ice or a small white rock chip"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "DEX",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "3d6",
+      "type": "cold",
+      "upcastPerLevel": "1d6"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.warding-wind",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Warding Wind",
+    "summary": {
+      "effect": "A strong wind surrounds you in a 10-foot radius. It deafens you, snuffs open flames, disperses gas and vapour, and makes ranged attacks against you and nearby creatures harder."
+    },
+    "level": 2,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.catnap",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Catnap",
+    "summary": {
+      "effect": "Up to three willing creatures fall unconscious for 10 minutes. Each gains the benefit of a short rest and wakes early if hurt or shaken.",
+      "upcast": "One extra target per slot level above 3."
+    },
+    "level": 3,
+    "school": "enchantment",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": false,
+      "s": true,
+      "m": "a pinch of sand, rose petals or a cricket"
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": false,
+      "seconds": 600
+    },
+    "classes": ["class.artificer", "class.bard", "class.sorcerer", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.enemies-abound",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Enemies Abound",
+    "summary": {
+      "effect": "A creature you can see makes an INT save or sees everyone as an enemy. It attacks the nearest creature each turn and can use reactions. It repeats the save when it takes damage."
+    },
+    "level": 3,
+    "school": "enchantment",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "INT",
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["debuff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.erupting-earth",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Erupting Earth",
+    "summary": {
+      "effect": "Earth erupts in a 20-foot cube. Creatures in it make a DEX save. The ground becomes difficult terrain for 1 minute.",
+      "fail": "3d12 bludgeoning.",
+      "success": "Half damage.",
+      "upcast": "+1d12 per slot level above 3."
+    },
+    "level": 3,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a piece of obsidian"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "DEX",
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "3d12",
+      "type": "bludgeoning",
+      "upcastPerLevel": "1d12"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.flame-arrows",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Flame Arrows",
+    "summary": {
+      "effect": "Touch a quiver. Up to 12 pieces of ammunition in it each deal an extra 1d6 fire damage when they hit. The spell ends once 12 are used.",
+      "upcast": "Two more pieces of ammunition per slot level above 3."
+    },
+    "level": 3,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": true,
+      "seconds": 3600
+    },
+    "classes": ["class.artificer", "class.druid", "class.ranger", "class.sorcerer", "class.wizard"],
+    "tags": ["buff", "damage"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.life-transference",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Life Transference",
+    "summary": {
+      "effect": "You take 4d8 necrotic damage that cannot be reduced, and a creature you can see within range regains twice that many hit points.",
+      "upcast": "+1d8 per slot level above 3."
+    },
+    "level": 3,
+    "school": "necromancy",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "classes": ["class.cleric", "class.wizard"],
+    "tags": ["healing"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.melfs-minute-meteors",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Melf’s Minute Meteors",
+    "summary": {
+      "effect": "Six glowing meteors orbit you. Spend an action or bonus action to launch two at points within 120 feet, each bursting in a 5-foot radius.",
+      "fail": "2d6 fire per meteor.",
+      "success": "Half damage.",
+      "upcast": "Two more meteors per slot level above 3."
+    },
+    "level": 3,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "niter, sulfur and pine tar formed into a bead"
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "save": "DEX",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "2d6",
+      "type": "fire"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.summon-lesser-demons",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Summon Lesser Demons",
+    "summary": {
+      "effect": "Call demons of a challenge rating based on a die roll. They are hostile to everyone and the DM controls them; a circle of safety can hold them off.",
+      "upcast": "More demons or higher-rated demons with higher slots."
+    },
+    "level": 3,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a vial of blood from a humanoid killed within the past 24 hours"
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": true,
+      "seconds": 3600
+    },
+    "classes": ["class.warlock", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.thunder-step",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Thunder Step",
+    "summary": {
+      "effect": "Teleport up to 90 feet to an unoccupied space you can see, and bring one willing creature. Creatures within 10 feet of where you started make a CON save.",
+      "fail": "3d10 thunder.",
+      "success": "Half damage.",
+      "upcast": "+1d10 per slot level above 3."
+    },
+    "level": 3,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "CON",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "3d10",
+      "type": "thunder",
+      "upcastPerLevel": "1d10"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.tidal-wave",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Tidal Wave",
+    "summary": {
+      "effect": "A wave of water, up to 30 feet long, 10 feet wide and 10 feet tall, crashes forward. Creatures in the area make a DEX save.",
+      "fail": "4d8 bludgeoning and knocked prone.",
+      "success": "Half damage and not prone."
+    },
+    "level": 3,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a drop of water"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "DEX",
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "4d8",
+      "type": "bludgeoning"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.tiny-servant",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Tiny Servant",
+    "summary": {
+      "effect": "Animate a Tiny object as a servant. It follows your commands, can carry up to 10 pounds and has 10 hit points. It attacks for 1d4 plus your spellcasting modifier.",
+      "upcast": "Animate one more object per slot level above 3."
+    },
+    "level": 3,
+    "school": "transmutation",
+    "casting": {
+      "cost": "minutes",
+      "amount": 1
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "8 h",
+      "concentration": false,
+      "seconds": 28800
+    },
+    "classes": ["class.artificer", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.wall-of-sand",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Wall of Sand",
+    "summary": {
+      "effect": "Raise a wall of swirling sand up to 30 feet long, 10 feet high and 10 feet thick. It blocks line of sight, slows creatures that enter and can be moved by you."
+    },
+    "level": 3,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a handful of sand"
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "classes": ["class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.wall-of-water",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Wall of Water",
+    "summary": {
+      "effect": "Create a wall of water up to 30 feet long, 10 feet high and 1 foot thick. Ranged attacks through it have disadvantage, and it resists fire. A freeze turns it to ice."
+    },
+    "level": 3,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a drop of water"
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.charm-monster",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Charm Monster",
+    "summary": {
+      "effect": "A creature you can see makes a WIS save, with advantage if you or allies are fighting it. On a fail it is charmed and treats you as a friendly acquaintance. It knows when it ends.",
+      "upcast": "One extra target per slot level above 4."
+    },
+    "level": 4,
+    "school": "enchantment",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": false,
+      "seconds": 3600
+    },
+    "save": "WIS",
+    "classes": ["class.bard", "class.druid", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["debuff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.elemental-bane",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Elemental Bane",
+    "summary": {
+      "effect": "Pick acid, cold, fire, lightning or thunder. A creature you can see makes a CON save. On a fail, it takes 2d6 of that type once per turn from the first hit, and loses resistance to it.",
+      "upcast": "One extra target per slot level above 4."
+    },
+    "level": 4,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "CON",
+    "classes": ["class.artificer", "class.druid", "class.warlock", "class.wizard"],
+    "tags": ["debuff", "damage"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.guardian-of-nature",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Guardian of Nature",
+    "summary": {
+      "effect": "Take the form of a Primal Beast (more speed, darkvision, advantage on STR attacks and extra damage) or a Great Tree (temp HP, advantage on CON and DEX attacks and difficult terrain around you)."
+    },
+    "level": 4,
+    "school": "transmutation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "classes": ["class.druid", "class.ranger"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.shadow-of-moil",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Shadow of Moil",
+    "summary": {
+      "effect": "Shadow wraps you: nearby light is dim, creatures that see you have disadvantage, you resist radiant damage, and attackers within 10 feet take 2d8 necrotic as a reaction-free pulse."
+    },
+    "level": 4,
+    "school": "necromancy",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "an undead eyeball encased in a gem worth at least 150 gp"
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "classes": ["class.warlock"],
+    "tags": ["buff", "damage"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.sickening-radiance",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Sickening Radiance",
+    "summary": {
+      "effect": "Dim green light fills a 30-foot sphere. Creatures that enter or start a turn there make a CON save, and each failure adds a level of exhaustion.",
+      "fail": "4d10 radiant and one level of exhaustion."
+    },
+    "level": 4,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "save": "CON",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "4d10",
+      "type": "radiant"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.storm-sphere",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Storm Sphere",
+    "summary": {
+      "effect": "A 20-foot sphere of roiling air forms. Creatures in it make a STR save when it appears, and you can send a bolt as a bonus action each turn.",
+      "fail": "2d6 bludgeoning. Bolt: ranged spell attack for 4d6 lightning.",
+      "upcast": "Both +1d6 per slot level above 4."
+    },
+    "level": 4,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "150 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "STR",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "2d6",
+      "type": "bludgeoning",
+      "upcastPerLevel": "1d6"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.summon-greater-demon",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Summon Greater Demon",
+    "summary": {
+      "effect": "Call a demon of challenge rating 5 or lower. It starts friendly to you but turns hostile if you lose concentration or it breaks free. Control it only while the spell lasts.",
+      "upcast": "Higher challenge rating with higher slots."
+    },
+    "level": 4,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a vial of blood from a humanoid killed within the past 24 hours"
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": true,
+      "seconds": 3600
+    },
+    "classes": ["class.warlock", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.vitriolic-sphere",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Vitriolic Sphere",
+    "summary": {
+      "effect": "A glowing 20-foot sphere of acid explodes where you aim. Creatures in it make a DEX save.",
+      "fail": "10d4 acid now and 5d4 more at the end of its next turn.",
+      "success": "Half initial damage and no later damage.",
+      "upcast": "Initial damage +2d4 per slot level above 4."
+    },
+    "level": 4,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "150 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a drop of giant slug bile"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "DEX",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "10d4",
+      "type": "acid",
+      "upcastPerLevel": "2d4"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.watery-sphere",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Watery Sphere",
+    "summary": {
+      "effect": "Conjure a 5-foot sphere of water. Creatures in its space make a STR save and are restrained inside on a fail. You can roll the sphere along the ground each turn."
+    },
+    "level": 4,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a droplet of water"
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "STR",
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.control-winds",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Control Winds",
+    "summary": {
+      "effect": "Command the wind in a 100-foot cube. Set it to gusts, downdraft or updraft. Gusts impede movement and ranged attacks, downdraft pins flyers and updraft lifts creatures."
+    },
+    "level": 5,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "300 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": true,
+      "seconds": 3600
+    },
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.danse-macabre",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Danse Macabre",
+    "summary": {
+      "effect": "Animate up to five Small or Medium corpses as skeletons or zombies under your command. They act on a bonus action and gain bonuses to attack and damage.",
+      "upcast": "Two more corpses per slot level above 5."
+    },
+    "level": 5,
+    "school": "necromancy",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": true,
+      "seconds": 3600
+    },
+    "classes": ["class.warlock", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.dawn",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Dawn",
+    "summary": {
+      "effect": "A 30-foot-radius column of light lasts. Creatures in it when it appears or when you move it make a CON save. You can shift it 60 feet as an action.",
+      "fail": "4d10 radiant.",
+      "success": "Half damage."
+    },
+    "level": 5,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a sunburst pendant worth at least 100 gp"
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "CON",
+    "classes": ["class.cleric", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "4d10",
+      "type": "radiant"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.enervation",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Enervation",
+    "summary": {
+      "effect": "A tendril of life-draining energy hits a creature. It makes a DEX save and you can use an action each turn to deal damage again. You heal half of what you deal.",
+      "fail": "4d8 necrotic.",
+      "success": "Half damage and no further draining.",
+      "upcast": "+1d8 per slot level above 5."
+    },
+    "level": 5,
+    "school": "necromancy",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "DEX",
+    "classes": ["class.warlock", "class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "4d8",
+      "type": "necrotic",
+      "upcastPerLevel": "1d8"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.far-step",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Far Step",
+    "summary": {
+      "effect": "Teleport up to 60 feet to a space you can see. For the duration, you can use a bonus action on each turn to teleport again."
+    },
+    "level": 5,
+    "school": "conjuration",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.holy-weapon",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Holy Weapon",
+    "summary": {
+      "effect": "A weapon you touch becomes magical, deals an extra 2d8 radiant damage on hits and sheds light. You can end the spell to burst it for 4d8 radiant to nearby creatures (CON save)."
+    },
+    "level": 5,
+    "school": "evocation",
+    "casting": {
+      "cost": "bonus"
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": true,
+      "seconds": 3600
+    },
+    "classes": ["class.cleric", "class.paladin"],
+    "tags": ["buff", "damage"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.immolation",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Immolation",
+    "summary": {
+      "effect": "Flames wreathe a creature you can see. It makes a DEX save, and takes damage again at the end of each of its turns until it saves or the spell ends. If it dies, it explodes into light.",
+      "fail": "8d6 fire.",
+      "success": "Half damage and the spell ends early."
+    },
+    "level": 5,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "DEX",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "8d6",
+      "type": "fire"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.infernal-calling",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Infernal Calling",
+    "summary": {
+      "effect": "Call a devil of challenge rating 6 or lower. It obeys you while you concentrate, and it turns hostile if the spell ends. You may bargain with it over a service.",
+      "upcast": "Higher challenge rating with higher slots."
+    },
+    "level": 5,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a ruby worth at least 999 gp"
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": true,
+      "seconds": 3600
+    },
+    "classes": ["class.warlock", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.maelstrom",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Maelstrom",
+    "summary": {
+      "effect": "Water whirls in a 30-foot radius. Creatures in it make a STR save when it appears, and again when they start their turn there.",
+      "fail": "6d6 bludgeoning and pulled toward the centre.",
+      "success": "Half damage and not pulled."
+    },
+    "level": 5,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a piece of paper or leaf in the shape of a funnel"
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "STR",
+    "classes": ["class.druid"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "6d6",
+      "type": "bludgeoning"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.negative-energy-flood",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Negative Energy Flood",
+    "summary": {
+      "effect": "Deathly energy hits a creature. Undead instead gain temp HP. A target that fails the save and is reduced to 0 hit points by this rises as a zombie under your command.",
+      "fail": "5d12 necrotic.",
+      "success": "Half damage."
+    },
+    "level": 5,
+    "school": "necromancy",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a broken bone and a square of black silk"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "CON",
+    "classes": ["class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "5d12",
+      "type": "necrotic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.skill-empowerment",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Skill Empowerment",
+    "summary": {
+      "effect": "A willing creature gains expertise in one skill it is proficient in, doubling its proficiency bonus for checks with that skill."
+    },
+    "level": 5,
+    "school": "divination",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": true,
+      "seconds": 3600
+    },
+    "classes": ["class.artificer", "class.bard", "class.sorcerer", "class.wizard"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.steel-wind-strike",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Steel Wind Strike",
+    "summary": {
+      "effect": "Flash through up to five creatures, making a melee spell attack on each for 6d10 force damage. You then teleport next to one of them."
+    },
+    "level": 5,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": false,
+      "s": true,
+      "m": "a melee weapon worth at least 1 sp"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "attack": "melee",
+    "classes": ["class.ranger", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "6d10",
+      "type": "force"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.synaptic-static",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Synaptic Static",
+    "summary": {
+      "effect": "A 20-foot-radius burst of mind-numbing energy. Creatures in it make an INT save, and a failure also sharpens a lingering confusion on their rolls for a minute.",
+      "fail": "8d6 psychic and a penalty of 1d6 on attack rolls and checks.",
+      "success": "Half damage and no penalty."
+    },
+    "level": 5,
+    "school": "enchantment",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "INT",
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "8d6",
+      "type": "psychic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.transmute-rock",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Transmute Rock",
+    "summary": {
+      "effect": "Turn up to a 40-foot cube of rock into mud (difficult terrain, creatures sink), or mud into rock. Mud under a creature may deal damage and restrain it."
+    },
+    "level": 5,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "clay and water"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "classes": ["class.artificer", "class.druid", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.wall-of-light",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Wall of Light",
+    "summary": {
+      "effect": "Raise a luminous wall up to 60 feet long, 10 feet high and 5 feet thick. It blinds creatures that look at it. As an action you can shoot a lance of light from it.",
+      "fail": "Blinded for a minute (repeat save each turn).",
+      "upcast": "Lance damage +1d8 per slot level above 5."
+    },
+    "level": 5,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a hand mirror"
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "save": "CON",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.bones-of-the-earth",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Bones of the Earth",
+    "summary": {
+      "effect": "Raise up to six stone pillars from the ground. A creature under one makes a DEX save and is lifted if it fails. A pillar can also be a ceiling-like shelf or a support.",
+      "fail": "6d6 bludgeoning.",
+      "success": "Half damage.",
+      "upcast": "Two more pillars per slot level above 6."
+    },
+    "level": 6,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "DEX",
+    "classes": ["class.druid"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "6d6",
+      "type": "bludgeoning"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.create-homunculus",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Create Homunculus",
+    "summary": {
+      "effect": "Make a Tiny construct bound to you. It can speak telepathically, has its own stats and uses your blood. It dies when you lose its link or when you cast this again."
+    },
+    "level": 6,
+    "school": "transmutation",
+    "casting": {
+      "cost": "minutes",
+      "amount": 1
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a clay crock, ash and mandrake root, with a drop of your blood"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "classes": ["class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.investiture-of-flame",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Investiture of Flame",
+    "summary": {
+      "effect": "Flames cloak you. You resist cold and are immune to fire, shed light, and burn creatures that touch you. Use an action to hurl a line of fire 15 feet long for 4d8 fire (DEX save)."
+    },
+    "level": 6,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "classes": ["class.druid", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["buff", "damage"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.investiture-of-ice",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Investiture of Ice",
+    "summary": {
+      "effect": "Ice cloaks you. You resist fire and are immune to cold, freeze nearby water, and ignore ice-based difficult terrain. Use an action for a 15-foot cone of 4d6 cold (CON save)."
+    },
+    "level": 6,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "classes": ["class.druid", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["buff", "damage"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.investiture-of-stone",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Investiture of Stone",
+    "summary": {
+      "effect": "Stone clads you. You resist bludgeoning, piercing and slashing from nonmagical weapons, can move through earth, and can shake the ground within 15 feet as an action (DEX save or prone)."
+    },
+    "level": 6,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "classes": ["class.druid", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.investiture-of-wind",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Investiture of Wind",
+    "summary": {
+      "effect": "Wind cloaks you. Ranged attacks against you have disadvantage, you gain a fly speed of 60 feet, and you can send a cube of air to push creatures 10 feet (STR save, 2d10 bludgeoning)."
+    },
+    "level": 6,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "classes": ["class.druid", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.mental-prison",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Mental Prison",
+    "summary": {
+      "effect": "Trap a creature in an illusory cell. It makes an INT save and takes damage if it moves away. If it leaves the cell, it takes more damage.",
+      "fail": "5d10 psychic and restrained in the illusion. It takes more damage if it breaks free.",
+      "success": "No damage and the spell ends."
+    },
+    "level": 6,
+    "school": "illusion",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "INT",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "5d10",
+      "type": "psychic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.primordial-ward",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Primordial Ward",
+    "summary": {
+      "effect": "You gain resistance to acid, cold, fire, lightning and thunder damage. As a reaction when you take one of those types, gain immunity until the end of your next turn and the spell ends."
+    },
+    "level": 6,
+    "school": "abjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "classes": ["class.druid"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.scatter",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Scatter",
+    "summary": {
+      "effect": "Teleport up to five willing or unwilling creatures within range to random spaces within 120 feet. Unwilling creatures make a WIS save to resist."
+    },
+    "level": 6,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "WIS",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.soul-cage",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Soul Cage",
+    "summary": {
+      "effect": "When a humanoid dies within range, trap its soul in a cage. For 8 hours you can use it to heal, to learn secrets from it, to see through its eyes, or to bolster necromancy damage."
+    },
+    "level": 6,
+    "school": "necromancy",
+    "casting": {
+      "cost": "reaction"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a tiny silver cage worth at least 100 gp"
+    },
+    "duration": {
+      "text": "8 h",
+      "concentration": false,
+      "seconds": 28800
+    },
+    "classes": ["class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.tensers-transformation",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Tenser’s Transformation",
+    "summary": {
+      "effect": "You become a mighty warrior. Gain 50 temp HP, advantage on weapon attacks, extra 2d12 force damage, all weapon and shield proficiency, and two attacks. You cannot cast spells; you are tired afterward."
+    },
+    "level": 6,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a few hairs from a bull"
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "classes": ["class.wizard"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.crown-of-stars",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Crown of Stars",
+    "summary": {
+      "effect": "Seven motes of light orbit you. Use a bonus action to launch one at a creature within 120 feet as a ranged spell attack for 4d12 radiant. Each mote also sheds dim light.",
+      "upcast": "Two more motes per slot level above 7."
+    },
+    "level": 7,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "1 h",
+      "concentration": false,
+      "seconds": 3600
+    },
+    "attack": "ranged",
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "4d12",
+      "type": "radiant"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.power-word-pain",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Power Word Pain",
+    "summary": {
+      "effect": "A creature you can see with 100 hit points or fewer is wracked with pain, with no save. Its speed halves, it has disadvantage on attacks, checks and saves, and it can repeat a CON save to end it."
+    },
+    "level": 7,
+    "school": "enchantment",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "60 ft",
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["debuff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.temple-of-the-gods",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Temple of the Gods",
+    "summary": {
+      "effect": "Raise a temple on solid ground. It has several walls and an altar room, and its celestial guardians can heal and fight for you. Hostile creatures take damage in it."
+    },
+    "level": 7,
+    "school": "conjuration",
+    "casting": {
+      "cost": "hours",
+      "amount": 1
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a holy symbol worth at least 5 gp"
+    },
+    "duration": {
+      "text": "24 h",
+      "concentration": false,
+      "seconds": 86400
+    },
+    "classes": ["class.cleric"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.whirlwind",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Whirlwind",
+    "summary": {
+      "effect": "A 10-foot-radius, 30-foot-high cyclone forms. Creatures in it make a DEX save and are flung up on a failure. You can shift it 30 feet as an action.",
+      "fail": "10d6 bludgeoning and carried up.",
+      "success": "Half damage."
+    },
+    "level": 7,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "300 ft",
+    "components": {
+      "v": true,
+      "s": false,
+      "m": "a piece of straw"
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "DEX",
+    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "10d6",
+      "type": "bludgeoning"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.abi-dalzims-horrid-wilting",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Abi-Dalzim’s Horrid Wilting",
+    "summary": {
+      "effect": "Draw moisture out of a 30-foot cube. Creatures in it make a CON save, plants and water elementals take double damage and nonmagical plants die.",
+      "fail": "12d8 necrotic.",
+      "success": "Half damage."
+    },
+    "level": 8,
+    "school": "necromancy",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "150 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a bit of sponge"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "CON",
+    "classes": ["class.sorcerer", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "12d8",
+      "type": "necrotic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.illusory-dragon",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Illusory Dragon",
+    "summary": {
+      "effect": "Raise a Huge illusory dragon in a space you can see. Creatures that see it make a WIS save or are frightened. As a bonus action, you can have it breathe on a 60-foot cone.",
+      "fail": "Breath: 7d6 damage of the type you choose (CON/DEX save varies by type)."
+    },
+    "level": 8,
+    "school": "illusion",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "WIS",
+    "classes": ["class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.maddening-darkness",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Maddening Darkness",
+    "summary": {
+      "effect": "Magical darkness fills a 60-foot radius. Light cannot lighten it. Creatures that start a turn in it make a WIS save and take psychic damage on a fail.",
+      "fail": "8d8 psychic.",
+      "success": "Half damage."
+    },
+    "level": 8,
+    "school": "evocation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "150 ft",
+    "components": {
+      "v": true,
+      "s": false,
+      "m": "a drop of pitch mixed with a bit of mushroom"
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "save": "WIS",
+    "classes": ["class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "8d8",
+      "type": "psychic"
+    }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.mighty-fortress",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Mighty Fortress",
+    "summary": {
+      "effect": "Conjure a 120-foot-square castle with towers, walls and servants. It lasts for 7 days. Lesser creatures of your choice move in, and the castle can only be broken by high-level magic."
+    },
+    "level": 8,
+    "school": "conjuration",
+    "casting": {
+      "cost": "minutes",
+      "amount": 1
+    },
+    "range": "1 mile",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a diamond worth at least 500 gp, consumed, and a miniature castle"
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "classes": ["class.wizard"],
+    "tags": ["utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.invulnerability",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Invulnerability",
+    "summary": {
+      "effect": "You become immune to all damage until the spell ends."
+    },
+    "level": 9,
+    "school": "abjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "Self",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a small piece of adamantine worth at least 500 gp, consumed"
+    },
+    "duration": {
+      "text": "10 min",
+      "concentration": true,
+      "seconds": 600
+    },
+    "classes": ["class.wizard"],
+    "tags": ["buff"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.mass-polymorph",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Mass Polymorph",
+    "summary": {
+      "effect": "Transform up to ten creatures you can see into beasts of challenge rating up to their level or CR. Unwilling creatures make a WIS save. Each new form has its own stats."
+    },
+    "level": 9,
+    "school": "transmutation",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "120 ft",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "a caterpillar cocoon"
+    },
+    "duration": {
+      "text": "1 min",
+      "concentration": true,
+      "seconds": 60
+    },
+    "save": "WIS",
+    "classes": ["class.bard", "class.sorcerer", "class.wizard"],
+    "tags": ["control"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.psychic-scream",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "ritual": false,
+    "name": "Psychic Scream",
+    "summary": {
+      "effect": "Choose up to ten creatures you can see. Each makes an INT save as its mind is blasted. A creature with Intelligence 2 or lower is unaffected.",
+      "fail": "14d6 psychic and stunned until the end of your next turn if it fails.",
+      "success": "Half damage."
+    },
+    "level": 9,
+    "school": "enchantment",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "90 ft",
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "save": "INT",
+    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard"],
+    "tags": ["damage"],
+    "damage": {
+      "dice": "14d6",
+      "type": "psychic"
+    }
   }
 ]

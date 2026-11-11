@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 00:38 — Xanathar’s spells
+
+- Added 89 Xanathar’s spells, from cantrips like Frostbite and Thunderclap to 9th-level Psychic Scream, with classes, damage and upcast.
+- Spells with a choice of damage type (Chaos Bolt, Dragon’s Breath) describe it in the text.
+- Next: Xanathar’s subclasses.
+Checks pass.
+
 ## 2026-11-12 00:31 — Xanathar’s options
 
 - Added 12 Xanathar’s racial feats (Dragon Fear, Fey Teleportation, Orcish Fury, Prodigy and more) and 14 warlock invocations (Eldritch Smite, Grasp of Hadar, Tomb of Levistus and more).
