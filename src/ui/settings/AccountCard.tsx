@@ -30,7 +30,7 @@ export default function AccountCard({ config }: { config: SyncConfig }) {
       >
         <X size={16} aria-hidden />
       </button>
-      <AccountSection config={config} />
+      <AccountSection config={config} embedded />
       <p className="mt-2 text-xs text-text-muted">
         Hide this card any time. You can still sign in from Settings.
       </p>

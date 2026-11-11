@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-11 23:09 — Stats button fixes
+
+- Steel Defender now has its Stats button on the Features page and a row on the Combat bonus tab.
+- On phones, summon spells keep their full name in the list; tap the spell to find Creature stats at the top of its preview.
+- The sign-in card on Campaigns has a single frame now.
+- Checks pass.
+
 ## 2026-11-11 14:48 — M26 gate
 
 - Ten manual checks for this round of fixes are in MANUAL_QA.md. Please try them at phone and desktop width.

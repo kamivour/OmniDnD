@@ -12,6 +12,7 @@ import {
   useAutoSyncState,
 } from '../../sync/service';
 import { Field, inputClass } from '../components/fields';
+import { cx } from '../cx';
 
 const button =
   'inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-border px-3 text-sm hover:bg-surface-2 disabled:opacity-40';
@@ -36,8 +37,15 @@ function reportText(report: SyncReport): string {
 /**
  * Optional account sign-in and sync. Only rendered when this build has a sync provider;
  * the provider library loads on first render so guests never download it.
+ * `embedded` drops the outer frame when a parent card already draws one.
  */
-export default function AccountSection({ config }: { config: SyncConfig }) {
+export default function AccountSection({
+  config,
+  embedded = false,
+}: {
+  config: SyncConfig;
+  embedded?: boolean;
+}) {
   const session = useAccountSession();
   const { provider, account, status } = session;
   const syncState = useAutoSyncState();
@@ -165,7 +173,10 @@ export default function AccountSection({ config }: { config: SyncConfig }) {
     <section
       aria-labelledby="settings-account"
       aria-busy={busy || status === 'loading'}
-      className="flex flex-col gap-3 rounded-card border border-border bg-surface p-4"
+      className={cx(
+        'flex flex-col gap-3',
+        !embedded && 'rounded-card border border-border bg-surface p-4',
+      )}
     >
       <h2 id="settings-account" className="text-base font-semibold">
         Account

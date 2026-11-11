@@ -93,3 +93,37 @@ test('a background with open choices asks for them and the sheet keeps them', as
   await expect(page.getByText('Dwarvish').first()).toBeVisible();
   await expect(page.getByText('Dice Set').first()).toBeVisible();
 });
+
+test('Steel Defender shows Stats on Features and on the Combat bonus tab', async ({ page }) => {
+  await openNewCharacter(page);
+  await page.getByLabel('Level', { exact: true }).fill('3');
+  await page.getByLabel('Name', { exact: true }).fill('Defender Smith');
+  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await page.getByLabel('Class', { exact: true }).selectOption('class.artificer');
+  await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
+  for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
+    await page.getByLabel(`${ability} base`, { exact: true }).fill('13');
+  }
+  await page.getByLabel(/Level 2 roll/).fill('5');
+  await page.getByLabel(/Level 3 roll/).fill('5');
+  await page.getByRole('radio', { name: /Battle Smith/ }).check();
+  await page.getByRole('button', { name: 'Create character', exact: true }).click();
+  await expect(page).toHaveURL(/\/characters\/(?!new$)[^/]+$/);
+  const base = new URL(page.url()).pathname;
+
+  await page.goto(`${base}/features`);
+  await page.getByRole('link', { name: 'Steel Defender stats' }).click();
+  await expect(
+    page.getByRole('dialog', { name: 'Add companion' }).getByLabel('Template', { exact: true }),
+  ).toHaveValue('Steel Defender');
+
+  await page.goto(`${base}/combat`);
+  await page.getByRole('tab', { name: 'Bonus' }).click();
+  await expect(page.getByRole('link', { name: 'Steel Defender stats' })).toBeVisible();
+});
+
+test('an unknown from= link is dropped from the address', async ({ page }) => {
+  await page.goto('/characters/the-fool/companions?from=bogus');
+  await expect(page).toHaveURL('/characters/the-fool/companions');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+});

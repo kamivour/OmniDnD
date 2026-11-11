@@ -36,9 +36,10 @@ export function CompanionsScreen() {
   const [params, setParams] = useSearchParams();
   // A Stats button elsewhere sends us here: show the creature it names, or open the add form.
   const [arrival] = useState(() => {
-    const link = linkByKey(params.get('from'));
+    const from = params.get('from');
+    const link = linkByKey(from);
     const existing = link && existingCompanion(link, state.build.companions ?? []);
-    return { link, existingId: existing ? existing.id : undefined };
+    return { from, link, existingId: existing ? existing.id : undefined };
   });
   const [adding, setAdding] = useState(Boolean(arrival.link && !arrival.existingId));
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -46,8 +47,9 @@ export function CompanionsScreen() {
 
   const companions = state.build.companions ?? [];
   useEffect(() => {
-    if (!arrival.link) return;
+    if (!arrival.from) return;
     setParams({}, { replace: true });
+    if (!arrival.link) return;
     if (!arrival.existingId) return;
     requestAnimationFrame(() => {
       const card = document.getElementById(`companion-${arrival.existingId}`);

@@ -25,6 +25,7 @@ import {
 import { useCommand } from '../commands/command-context';
 import { EncounterTracker } from '../combat/EncounterTracker';
 import { LiveFeatureDetail, LiveWeaponDetail } from '../combat/LiveCombatDetails';
+import { companionLink } from '../companions/companion-links';
 import { StatsLink } from '../companions/StatsLink';
 import { ActionRow } from '../components/ActionRow';
 import { AttackCard, FeatureCard, RuleCard } from '../components/cards';
@@ -84,6 +85,10 @@ export function CombatScreen() {
   } | null>(null);
   const liveCombat = state.live.combat;
   const model = combatModel(state, sheet, registry);
+  // Passive features whose creature you command with a bonus action (Steel Defender).
+  const commanded = sheet.features
+    .map(({ def }) => def)
+    .filter((def) => def.activation === 'passive' && companionLink(def.id)?.commandCost === 'BA');
   const visibleSpells = showAllSpells
     ? model.spells.entries
     : combatSpellsForEconomy(model.spells.entries, state.live, registry);
@@ -561,9 +566,24 @@ export function CombatScreen() {
             <ul className="flex flex-col gap-2">
               {model.spells.entries.filter(({ spell }) => spell.cost === 'BA').map(spellRow)}
               {model.features.filter(({ feature }) => feature.cost === 'BA').map(featureRow)}
+              {commanded.map((def) => (
+                <li
+                  key={def.id}
+                  className="flex min-h-14 items-center gap-2 rounded-card border border-border bg-surface py-2 pr-2 pl-3"
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-medium text-text wrap-anywhere">{def.name}</span>
+                    <span className="block text-xs text-text-muted">
+                      Command it with your bonus action from its card.
+                    </span>
+                  </span>
+                  <StatsLink refId={def.id} name={def.name} />
+                </li>
+              ))}
             </ul>
             {!model.spells.entries.some(({ spell }) => spell.cost === 'BA') &&
-              !model.features.some(({ feature }) => feature.cost === 'BA') && (
+              !model.features.some(({ feature }) => feature.cost === 'BA') &&
+              commanded.length === 0 && (
                 <p className="text-sm text-text-muted">
                   No bonus-action spells or features selected.
                 </p>

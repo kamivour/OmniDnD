@@ -78,7 +78,8 @@ export function SpellRow({
       meta={meta}
       auxiliaryAction={
         <>
-          <StatsLink refId={spell.id} name={spell.name} />
+          {/* Phones keep the name readable: the link moves into the spell's preview there. */}
+          <StatsLink refId={spell.id} name={spell.name} className="hidden sm:flex" />
           {onFavorite && (
             <button
               type="button"
@@ -104,7 +105,17 @@ export function SpellRow({
       onPin={onPin && (() => onPin(spell))}
       preview={{
         title: spell.name,
-        content: <SpellCard spell={spell} dc={dc} attack={attack} />,
+        content: (
+          <>
+            <StatsLink
+              refId={spell.id}
+              name={spell.name}
+              label="Creature stats"
+              className="mb-3 w-fit sm:hidden"
+            />
+            <SpellCard spell={spell} dc={dc} attack={attack} />
+          </>
+        ),
         sheetFooter: sheetFooter ?? (
           <CastFooter spell={spell} slots={slots} onCast={(level) => onCast(spell, level)} />
         ),

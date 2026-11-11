@@ -10,6 +10,8 @@ export interface CompanionLink {
   template?: string;
   /** Matches an existing companion by its limit key. Summons that pick a creature never match. */
   limitKey?: string;
+  /** A passive feature whose creature you command with this action; Combat lists it there. */
+  commandCost?: 'BA';
 }
 
 const LINKS: Record<string, CompanionLink> = {
@@ -17,6 +19,7 @@ const LINKS: Record<string, CompanionLink> = {
     key: 'steel-defender',
     template: 'Steel Defender',
     limitKey: 'steel-defender',
+    commandCost: 'BA',
   },
   'feature.artificer.artillerist-eldritch-cannon': {
     key: 'eldritch-cannon',

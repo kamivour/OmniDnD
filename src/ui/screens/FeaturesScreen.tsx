@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react';
+import { companionLink } from '../companions/companion-links';
 import { StatsLink } from '../companions/StatsLink';
 import { useRef, useState } from 'react';
 import { registry } from '../../data/registry';
@@ -156,6 +157,10 @@ function FeatureCardRow({ entry }: { entry: FeatureEntry }) {
             <span className="text-xs text-warn">{entry.unavailableReason}</span>
           )}
         </div>
+      )}
+      {/* Passive features can still bring a creature (Steel Defender): Stats stands alone. */}
+      {!entry.usable && companionLink(entry.id) && (
+        <StatsLink refId={entry.id} name={entry.name} className="w-fit" />
       )}
     </article>
   );
