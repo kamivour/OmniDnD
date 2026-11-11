@@ -2641,5 +2641,468 @@
         "featureId": "feature.monk.sun-soul-sun-shield"
       }
     ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.paladin.conquest",
+    "name": "Oath of Conquest",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Paladin who rules through fear and crushes resistance."
+    },
+    "classId": "class.paladin",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.paladin.conquest-conquering-presence"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.conquest-guided-strike"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.paladin.conquest-aura-of-conquest"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.paladin.conquest-scornful-rebuke"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.paladin.conquest-invincible-conqueror"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.paladin.redemption",
+    "name": "Oath of Redemption",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Paladin who seeks peace and shields others by taking harm on themselves."
+    },
+    "classId": "class.paladin",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.paladin.redemption-emissary-of-peace"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.redemption-rebuke-the-violent"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.paladin.redemption-aura-of-the-guardian"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.paladin.redemption-protective-spirit"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.paladin.redemption-emissary-of-redemption"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.ranger.horizon-walker",
+    "name": "Horizon Walker",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Ranger who guards the planes and teleports through battle."
+    },
+    "classId": "class.ranger",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.ranger.horizon-walker-detect-portal"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.ranger.horizon-walker-planar-warrior"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.ranger.horizon-walker-ethereal-step"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.ranger.horizon-walker-distant-strike"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.ranger.horizon-walker-spectral-defense"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.ranger.monster-slayer",
+    "name": "Monster Slayer",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Ranger who hunts dangerous monsters and counters their magic."
+    },
+    "classId": "class.ranger",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.ranger.monster-slayer-hunters-sense"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.ranger.monster-slayer-slayers-prey"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.ranger.monster-slayer-supernatural-defense"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.ranger.monster-slayer-magic-users-nemesis"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.ranger.monster-slayer-slayers-counter"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.rogue.inquisitive",
+    "name": "Inquisitive",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Rogue investigator who reads lies and finds weak spots."
+    },
+    "classId": "class.rogue",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.rogue.inquisitive-ear-for-deceit"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.inquisitive-eye-for-detail"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.inquisitive-insightful-fighting"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.rogue.inquisitive-steady-eye"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.rogue.inquisitive-unerring-eye"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.rogue.inquisitive-eye-for-weakness"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.rogue.mastermind",
+    "name": "Mastermind",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Rogue schemer who helps allies from a distance."
+    },
+    "classId": "class.rogue",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.rogue.mastermind-master-of-intrigue"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.mastermind-master-of-tactics"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.rogue.mastermind-insightful-manipulator"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.rogue.mastermind-misdirection"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.rogue.mastermind-soul-of-deceit"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.rogue.scout",
+    "name": "Scout",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Rogue skirmisher who moves quickly and excels at survival."
+    },
+    "classId": "class.rogue",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.rogue.scout-skirmisher"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.scout-survivalist"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.rogue.scout-superior-mobility"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.rogue.scout-ambush-master"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.rogue.scout-sudden-strike"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.rogue.swashbuckler",
+    "name": "Swashbuckler",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Rogue duelist with charm and fast footwork."
+    },
+    "classId": "class.rogue",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.rogue.swashbuckler-fancy-footwork"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.swashbuckler-rakish-audacity"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.rogue.swashbuckler-panache"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.rogue.swashbuckler-elegant-maneuver"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.rogue.swashbuckler-master-duelist"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.sorcerer.divine-soul",
+    "name": "Divine Soul",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sorcerer with divine blood who casts from the cleric list as well."
+    },
+    "classId": "class.sorcerer",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.divine-soul-divine-magic"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.divine-soul-favored-by-the-gods"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.sorcerer.divine-soul-empowered-healing"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.sorcerer.divine-soul-otherworldly-wings"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.sorcerer.divine-soul-unearthly-recovery"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.sorcerer.shadow-magic",
+    "name": "Shadow Magic",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sorcerer touched by the Shadowfell with a hound and a dark form."
+    },
+    "classId": "class.sorcerer",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.shadow-magic-eyes-of-the-dark"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.shadow-magic-strength-of-the-grave"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.sorcerer.shadow-magic-hound-of-ill-omen"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.sorcerer.shadow-magic-shadow-walk"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.sorcerer.shadow-magic-umbral-form"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.sorcerer.storm-sorcery",
+    "name": "Storm Sorcery",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sorcerer who rides the wind and throws lightning."
+    },
+    "classId": "class.sorcerer",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.storm-sorcery-wind-speaker"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.sorcerer.storm-sorcery-tempestuous-magic"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.sorcerer.storm-sorcery-heart-of-the-storm"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.sorcerer.storm-sorcery-storm-guide"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.sorcerer.storm-sorcery-storms-fury"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.sorcerer.storm-sorcery-wind-soul"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.warlock.celestial",
+    "name": "The Celestial",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Warlock pact with a celestial who grants healing and radiant fire."
+    },
+    "classId": "class.warlock",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.warlock.celestial-bonus-cantrips"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.warlock.celestial-healing-light"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.warlock.celestial-radiant-soul"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.warlock.celestial-celestial-resilience"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.warlock.celestial-searing-vengeance"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.warlock.hexblade",
+    "name": "The Hexblade",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Warlock bound to a sentient weapon, fighting in melee with curses."
+    },
+    "classId": "class.warlock",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.warlock.hexblade-hexblades-curse"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.warlock.hexblade-hex-warrior"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.warlock.hexblade-accursed-specter"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.warlock.hexblade-armor-of-hexes"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.warlock.hexblade-master-of-hexes"
+      }
+    ]
   }
 ]

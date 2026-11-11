@@ -9471,5 +9471,1007 @@
     },
     "origin": "subclass",
     "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.conquest-conquering-presence",
+    "name": "Channel Divinity: Conquering Presence",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Creatures of your choice within 30 feet make a WIS save or are frightened of you for a minute."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.conquest-guided-strike",
+    "name": "Channel Divinity: Guided Strike",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add +10 to an attack roll you make, after seeing the die."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.conquest-aura-of-conquest",
+    "name": "Aura of Conquest",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Frightened creatures within your aura have speed 0 and take psychic damage equal to half your paladin level at turn start."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.conquest-scornful-rebuke",
+    "name": "Scornful Rebuke",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Creatures that hit you take psychic damage equal to your CHA modifier."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.conquest-invincible-conqueror",
+    "name": "Invincible Conqueror",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "For a minute, resist all damage, add an extra attack, and crit on 19 or 20. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.redemption-emissary-of-peace",
+    "name": "Channel Divinity: Emissary of Peace",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain +5 to Persuasion checks for ten minutes."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.redemption-rebuke-the-violent",
+    "name": "Channel Divinity: Rebuke the Violent",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a creature deals damage to another within 30 feet, it takes radiant damage equal to what it dealt, with a WIS save for half."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.redemption-aura-of-the-guardian",
+    "name": "Aura of the Guardian",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a creature within 10 feet takes damage, you take it instead. Damage cannot be reduced in any way."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.redemption-protective-spirit",
+    "name": "Protective Spirit",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "At the end of each turn with half HP or less, regain 1d6 plus half your paladin level in HP."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.redemption-emissary-of-redemption",
+    "name": "Emissary of Redemption",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Resist all damage from other creatures, and reflect half of it back. It ends if you attack or harm."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.horizon-walker-detect-portal",
+    "name": "Detect Portal",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sense the direction of the nearest planar portal within a mile. Once per short or long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.horizon-walker-planar-warrior",
+    "name": "Planar Warrior",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Choose a creature within 30 feet. The next hit this turn deals extra force damage and counts as force."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.horizon-walker-ethereal-step",
+    "name": "Ethereal Step",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Step into the Ethereal Plane until the end of your turn, as the etherealness spell does, with no slot. Once per short or long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.horizon-walker-distant-strike",
+    "name": "Distant Strike",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you take the Attack action, teleport 10 feet before each attack. If you hit two targets, gain a bonus attack."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.horizon-walker-spectral-defense",
+    "name": "Spectral Defense",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you take damage, gain resistance to it."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.monster-slayer-hunters-sense",
+    "name": "Hunter’s Sense",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn if a creature has immunities, resistances or vulnerabilities. Uses equal your WIS modifier per long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.monster-slayer-slayers-prey",
+    "name": "Slayer’s Prey",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Mark a creature. The first hit each turn on it deals an extra 1d6 damage."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.monster-slayer-supernatural-defense",
+    "name": "Supernatural Defense",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add 1d6 to saves against the prey’s effects and grapple escapes."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.monster-slayer-magic-users-nemesis",
+    "name": "Magic-User’s Nemesis",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a creature casts a spell or teleports, force a WIS save or it fails."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ranger.monster-slayer-slayers-counter",
+    "name": "Slayer’s Counter",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When your prey forces a save, make a weapon attack before the save. If it hits, you succeed."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.inquisitive-ear-for-deceit",
+    "name": "Ear for Deceit",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Treat any Insight roll under 8 as 8 when someone is lying."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.inquisitive-eye-for-detail",
+    "name": "Eye for Detail",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use a bonus action to make a Perception check or Investigation check."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.inquisitive-insightful-fighting",
+    "name": "Insightful Fighting",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Contest Insight against a creature’s Deception. If you win, use Sneak Attack on it without advantage for a minute."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.inquisitive-steady-eye",
+    "name": "Steady Eye",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Have advantage on Perception or Investigation if you move no more than half your speed."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.inquisitive-unerring-eye",
+    "name": "Unerring Eye",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sense illusions, shapechangers and other deceptions within 30 feet. Uses equal your WIS modifier per long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.inquisitive-eye-for-weakness",
+    "name": "Eye for Weakness",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While Insightful Fighting is active, Sneak Attack damage increases by 3d6."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.mastermind-master-of-intrigue",
+    "name": "Master of Intrigue",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain disguise and forgery kits, one game set, two languages, and mimic speech after hearing it."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.mastermind-master-of-tactics",
+    "name": "Master of Tactics",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Take the Help action as a bonus action, from 30 feet away."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.mastermind-insightful-manipulator",
+    "name": "Insightful Manipulator",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After observing a creature for a minute, learn if it is stronger or weaker than you in certain stats."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.mastermind-misdirection",
+    "name": "Misdirection",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When a creature attacks you with an ally in the way, redirect the attack to that ally."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.mastermind-soul-of-deceit",
+    "name": "Soul of Deceit",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your thoughts cannot be read, and you can lie without magic exposing it."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.scout-skirmisher",
+    "name": "Skirmisher",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When an enemy ends its turn within 5 feet, move half your speed without provoking."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.scout-survivalist",
+    "name": "Survivalist",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain Nature and Survival proficiency and double your bonus in both."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.scout-superior-mobility",
+    "name": "Superior Mobility",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your walking speed rises by 10 feet, and your climb and swim speeds also rise."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.scout-ambush-master",
+    "name": "Ambush Master",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain advantage on initiative, and the first creature you hit in round one is easier to hit for your allies."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.scout-sudden-strike",
+    "name": "Sudden Strike",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Make an extra attack as a bonus action, and apply Sneak Attack to it even if you already used it."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.swashbuckler-fancy-footwork",
+    "name": "Fancy Footwork",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A creature you attack in melee cannot make opportunity attacks against you that turn."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.swashbuckler-rakish-audacity",
+    "name": "Rakish Audacity",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add your CHA modifier to initiative, and use Sneak Attack when alone with a foe, without advantage."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.swashbuckler-panache",
+    "name": "Panache",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Make a Persuasion check against a creature’s Insight. Charm a hostile or taunt a foe into attacking only you."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.swashbuckler-elegant-maneuver",
+    "name": "Elegant Maneuver",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain advantage on your next Acrobatics or Athletics check."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.swashbuckler-master-duelist",
+    "name": "Master Duelist",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you miss with an attack roll, reroll with advantage once per short rest."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.divine-soul-divine-magic",
+    "name": "Divine Magic",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can learn cleric spells as sorcerer spells, and gain a bonus spell based on your alignment."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.divine-soul-favored-by-the-gods",
+    "name": "Favored by the Gods",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you fail a save or miss an attack, add 2d4. Once per short or long rest."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.divine-soul-empowered-healing",
+    "name": "Empowered Healing",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you or an ally rolls healing dice from your spell, spend a sorcery point to reroll them."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.divine-soul-otherworldly-wings",
+    "name": "Otherworldly Wings",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sprout wings and gain a fly speed of 30 feet."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.divine-soul-unearthly-recovery",
+    "name": "Unearthly Recovery",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When below half HP, regain half your maximum hit points. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.shadow-magic-eyes-of-the-dark",
+    "name": "Eyes of the Dark",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain darkvision to 120 feet, and learn darkness for 2 sorcery points, which you can see through."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.shadow-magic-strength-of-the-grave",
+    "name": "Strength of the Grave",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When damage would drop you to 0, make a CHA save to stay at 1 hit point. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.shadow-magic-hound-of-ill-omen",
+    "name": "Hound of Ill Omen",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 3 sorcery points to call a shadow hound that hunts a target within 120 feet."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.sorcerer.font-of-magic"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.shadow-magic-shadow-walk",
+    "name": "Shadow Walk",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "In dim light or darkness, teleport up to 120 feet to another dim space."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.shadow-magic-umbral-form",
+    "name": "Umbral Form",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 6 sorcery points to become a shadow for a minute, resisting most damage."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.sorcerer.font-of-magic"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.storm-sorcery-wind-speaker",
+    "name": "Wind Speaker",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can speak, read and write Primordial and its dialects."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.storm-sorcery-tempestuous-magic",
+    "name": "Tempestuous Magic",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After casting a spell of level 1+, fly 10 feet without opportunity attacks."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.storm-sorcery-heart-of-the-storm",
+    "name": "Heart of the Storm",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain lightning and thunder resistance. Damage spells of those types hurt nearby creatures with half your level."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.storm-sorcery-storm-guide",
+    "name": "Storm Guide",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Stop rain around you or redirect the wind for a minute, as you choose."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.storm-sorcery-storms-fury",
+    "name": "Storm’s Fury",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When hit by a melee attack, deal lightning damage equal to your sorcerer level, and push it."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.storm-sorcery-wind-soul",
+    "name": "Wind Soul",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain a fly speed of 60 feet and immunity to lightning and thunder. You can share it with allies."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.celestial-bonus-cantrips",
+    "name": "Bonus Cantrips",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn light and sacred flame."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.celestial-healing-light",
+    "name": "Healing Light",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Keep a pool of d6s equal to 1 + your warlock level, refilled on a long rest. Spend them to heal a creature within 60 feet. Track the pool by hand."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.celestial-radiant-soul",
+    "name": "Radiant Soul",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain radiant resistance. When a spell deals radiant or fire damage, add your CHA modifier to one target."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.celestial-celestial-resilience",
+    "name": "Celestial Resilience",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain temp HP after a rest, for you and allies equal to your level plus CHA."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.celestial-searing-vengeance",
+    "name": "Searing Vengeance",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you make a death save, release a burst of radiant light, healing you and blinding foes. Once per long rest."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.hexblade-hexblades-curse",
+    "name": "Hexblade’s Curse",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Curse a creature for a minute: extra damage equal to your proficiency, crit on 19–20, and healing on kill. Once per short or long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.hexblade-hex-warrior",
+    "name": "Hex Warrior",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain medium armour, shields and martial weapon proficiency, and use CHA for one weapon’s attack and damage."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.hexblade-accursed-specter",
+    "name": "Accursed Specter",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you slay a humanoid, raise its spirit as a specter that serves you until the end of your next long rest."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.hexblade-armor-of-hexes",
+    "name": "Armor of Hexes",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When the cursed target hits you, roll a d6. On a 4 or higher, the attack misses."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.hexblade-master-of-hexes",
+    "name": "Master of Hexes",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When your cursed target dies, move the curse to a new creature within 30 feet without using a rest."
+    },
+    "origin": "subclass",
+    "activation": "passive"
   }
 ]

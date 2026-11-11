@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 00:42 — Xanathar’s subclasses, part 2
+
+- Added the last 13 Xanathar’s subclasses: Conquest and Redemption paladins, Horizon Walker, Monster Slayer, four rogue archetypes, three sorcerer origins, Celestial and Hexblade.
+- Hard-to-model pools (Healing Light) are described in text and tracked by hand.
+- Next: full browser check.
+Checks pass.
+
 ## 2026-11-12 00:40 — Xanathar’s subclasses, part 1
 
 - Added 13 Xanathar’s subclasses: three barbarian paths, three bard colleges, Forge and Grave clerics, Arcane Archer, Samurai and three monk ways.

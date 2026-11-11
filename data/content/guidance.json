@@ -2327,5 +2327,122 @@
     "mainAbilities": ["DEX", "WIS"],
     "strengths": ["Ranged radiant damage", "Area burst", "Light sources"],
     "weaknesses": ["Ki hungry", "Damage types vary"]
+  },
+  {
+    "id": "subclass.paladin.conquest",
+    "kind": "subclass",
+    "pitch": "Paladin who rules through fear and crushes resistance.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "CHA"],
+    "strengths": ["Strong fear control", "Slows foes near you", "Heavy damage late"],
+    "weaknesses": ["Needs to stay near enemies", "Less support for allies"]
+  },
+  {
+    "id": "subclass.paladin.redemption",
+    "kind": "subclass",
+    "pitch": "Paladin who seeks peace and shields others by taking harm on themselves.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "CHA"],
+    "strengths": ["Strong protector", "Calms or deters enemies", "Reflects damage"],
+    "weaknesses": ["Wants non-violent play", "Fewer offensive tools"]
+  },
+  {
+    "id": "subclass.ranger.horizon-walker",
+    "kind": "subclass",
+    "pitch": "Ranger who guards the planes and teleports through battle.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": ["Force damage", "Teleporting mobility", "Plane-themed spells"],
+    "weaknesses": ["Uses are limited", "Niche on some campaigns"]
+  },
+  {
+    "id": "subclass.ranger.monster-slayer",
+    "kind": "subclass",
+    "pitch": "Ranger who hunts dangerous monsters and counters their magic.",
+    "difficulty": "easy",
+    "mainAbilities": ["WIS", "DEX"],
+    "strengths": ["Strong single-target damage", "Counters spellcasters", "Easy to play"],
+    "weaknesses": ["Narrower theme", "Focused on one foe"]
+  },
+  {
+    "id": "subclass.rogue.inquisitive",
+    "kind": "subclass",
+    "pitch": "Rogue investigator who reads lies and finds weak spots.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": ["Excellent insight", "Reliable Sneak Attack", "Strong detective"],
+    "weaknesses": ["Less combat flair", "Needs investigation scenes"]
+  },
+  {
+    "id": "subclass.rogue.mastermind",
+    "kind": "subclass",
+    "pitch": "Rogue schemer who helps allies from a distance.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "INT"],
+    "strengths": ["Great support", "Strong social skills", "Flexible reach"],
+    "weaknesses": ["Less personal damage", "Rely on allies"]
+  },
+  {
+    "id": "subclass.rogue.scout",
+    "kind": "subclass",
+    "pitch": "Rogue skirmisher who moves quickly and excels at survival.",
+    "difficulty": "easy",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": ["High mobility", "Strong ambush", "Good skills"],
+    "weaknesses": ["Fragile", "Needs room to move"]
+  },
+  {
+    "id": "subclass.rogue.swashbuckler",
+    "kind": "subclass",
+    "pitch": "Rogue duelist with charm and fast footwork.",
+    "difficulty": "easy",
+    "mainAbilities": ["DEX", "CHA"],
+    "strengths": ["Great melee mobility", "Reliable Sneak Attack", "Strong initiative"],
+    "weaknesses": ["Fragile", "Works best alone"]
+  },
+  {
+    "id": "subclass.sorcerer.divine-soul",
+    "kind": "subclass",
+    "pitch": "Sorcerer with divine blood who casts from the cleric list as well.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA"],
+    "strengths": ["Access to cleric spells", "Healing and support", "Strong defense"],
+    "weaknesses": ["Spell choice is broad", "Few damage boosts"]
+  },
+  {
+    "id": "subclass.sorcerer.shadow-magic",
+    "kind": "subclass",
+    "pitch": "Sorcerer touched by the Shadowfell with a hound and a dark form.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA"],
+    "strengths": ["Strong darkness play", "Resilient with undead resistance", "Hound for help"],
+    "weaknesses": ["Few offensive buffs", "Needs dim light"]
+  },
+  {
+    "id": "subclass.sorcerer.storm-sorcery",
+    "kind": "subclass",
+    "pitch": "Sorcerer who rides the wind and throws lightning.",
+    "difficulty": "easy",
+    "mainAbilities": ["CHA"],
+    "strengths": ["Fast flight", "Free movement after spells", "Lightning and thunder resistance"],
+    "weaknesses": ["Fewer defences", "Limited to storm spells"]
+  },
+  {
+    "id": "subclass.warlock.celestial",
+    "kind": "subclass",
+    "pitch": "Warlock pact with a celestial who grants healing and radiant fire.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA"],
+    "strengths": ["Healing for a warlock", "Radiant damage", "Strong survival"],
+    "weaknesses": ["Healing pool is small", "Few control spells"]
+  },
+  {
+    "id": "subclass.warlock.hexblade",
+    "kind": "subclass",
+    "pitch": "Warlock bound to a sentient weapon, fighting in melee with curses.",
+    "difficulty": "medium",
+    "mainAbilities": ["CHA", "STR"],
+    "strengths": ["Strong melee for a warlock", "Medium armour and shields", "Powerful curse"],
+    "weaknesses": ["Short rest dependent", "Competes with spell slots"]
   }
 ]
