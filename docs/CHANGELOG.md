@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 00:31 — Xanathar’s options
+
+- Added 12 Xanathar’s racial feats (Dragon Fear, Fey Teleportation, Orcish Fury, Prodigy and more) and 14 warlock invocations (Eldritch Smite, Grasp of Hadar, Tomb of Levistus and more).
+- Race and level requirements are in the text; the app does not block a pick.
+- Next: Xanathar’s spells.
+Checks pass.
+
 ## 2026-11-12 00:29 — Tasha’s subclasses, part 2
 
 - Added the other 11 Tasha’s subclasses: Glory and Watchers Paladin, Fey Wanderer and Swarmkeeper Ranger, Phantom and Soulknife Rogue, Aberrant Mind and Clockwork Soul Sorcerer, Fathomless and Genie Warlock, Order of Scribes Wizard.

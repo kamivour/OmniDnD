@@ -8131,5 +8131,417 @@
       "max": 1,
       "recharge": "long"
     }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.bountiful-luck",
+    "name": "Bountiful Luck",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs halfling. When an ally you see within 30 feet rolls a 1 on an attack, check or save, you can use your reaction to let them reroll it."
+    },
+    "origin": "feat",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.dragon-fear",
+    "name": "Dragon Fear",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs dragonborn. +1 STR, CON or CHA. Replace your breath weapon with a roar: creatures within 30 feet make a WIS save or become frightened for a minute."
+    },
+    "origin": "feat",
+    "activation": "action",
+    "grants": {
+      "ability": ["STR", "CON", "CHA"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.dragon-hide",
+    "name": "Dragon Hide",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs dragonborn. +1 STR, CON or CHA. You grow retractable claws that deal 1d4 slashing, and your unarmored AC becomes 13 plus your DEX modifier."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "CON", "CHA"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.drow-high-magic",
+    "name": "Drow High Magic",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs drow. Cast detect magic at will. Cast levitate and dispel magic once each per long rest. Charisma is your spellcasting ability for these."
+    },
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.fey-teleportation",
+    "name": "Fey Teleportation",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs high elf. +1 INT or CHA. Learn Sylvan and cast misty step once per short or long rest."
+    },
+    "origin": "feat",
+    "activation": "bonus",
+    "grants": {
+      "ability": ["INT", "CHA"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.flames-of-phlegethos",
+    "name": "Flames of Phlegethos",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs tiefling. +1 INT or CHA. Reroll 1s on fire damage dice, and when you cast a fire spell, flames wreathe you and deal 1d4 fire damage to attackers."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["INT", "CHA"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.infernal-constitution",
+    "name": "Infernal Constitution",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs tiefling. +1 CON. You resist cold and poison damage and have advantage on saves against being poisoned."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["CON"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.orcish-fury",
+    "name": "Orcish Fury",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs half-orc. +1 STR or CON. Once per short or long rest, add one extra weapon damage die on a hit, and use your reaction to strike after Relentless Endurance triggers."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "CON"]
+    },
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.prodigy",
+    "name": "Prodigy",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs half-elf, half-orc or human. Gain one skill proficiency, one tool proficiency and one language of your choice, plus expertise in one skill you are proficient in."
+    },
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.second-chance",
+    "name": "Second Chance",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs halfling. +1 DEX, CON or CHA. When a creature hits you, use your reaction to force a reroll of the attack. Once per short or long rest."
+    },
+    "origin": "feat",
+    "activation": "reaction",
+    "grants": {
+      "ability": ["DEX", "CON", "CHA"]
+    },
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.squat-nimbleness",
+    "name": "Squat Nimbleness",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs dwarf or Small race. +1 STR or DEX. Speed rises by 5 feet, you gain a skill proficiency in Acrobatics or Athletics, and have advantage on grapple escapes."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["STR", "DEX"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.wood-elf-magic",
+    "name": "Wood Elf Magic",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs elf or half-elf. Learn one druid cantrip, and cast longstrider and pass without trace once each per long rest without slots. Wisdom is your spellcasting ability."
+    },
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-aspect-of-the-moon",
+    "name": "Eldritch Invocation: Aspect of the Moon",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs Pact of the Tome. You no longer need to sleep and cannot be forced to sleep by magic. You can use the time of a long rest to read or do light activity."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-cloak-of-flies",
+    "name": "Eldritch Invocation: Cloak of Flies",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs level 5 and Pact of the Chain. A bonus action wraps you in buzzing flies for a minute. Nearby foes take poison damage each turn."
+    },
+    "origin": "class",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-eldritch-smite",
+    "name": "Eldritch Invocation: Eldritch Smite",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs level 5 and Pact of the Blade. When you hit with your pact weapon, spend a pact slot to add force damage and knock the target prone."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-ghostly-gaze",
+    "name": "Eldritch Invocation: Ghostly Gaze",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs level 7. As an action, gain the ability to see through solid objects within 30 feet until the end of your next turn."
+    },
+    "origin": "class",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-gift-of-the-depths",
+    "name": "Eldritch Invocation: Gift of the Depths",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs level 5. You breathe water and gain a swim speed equal to your walk speed. Cast water breathing once per long rest without a slot."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-gift-of-the-everliving-ones",
+    "name": "Eldritch Invocation: Gift of the Everliving Ones",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs Pact of the Chain. While your familiar is within 100 feet, healing you receive from dice uses the maximum roll."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-grasp-of-hadar",
+    "name": "Eldritch Invocation: Grasp of Hadar",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs eldritch blast. Once per turn when your eldritch blast hits, pull the creature up to 10 feet straight toward you."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-improved-pact-weapon",
+    "name": "Eldritch Invocation: Improved Pact Weapon",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs Pact of the Blade. Your pact weapon can be a shortbow, longbow, light or heavy crossbow, adds to your attack and damage rolls, and doubles as a spellcasting focus."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-lance-of-lethargy",
+    "name": "Eldritch Invocation: Lance of Lethargy",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs eldritch blast. Once per turn when your eldritch blast hits, cut the creature’s speed by 10 feet until the end of your next turn."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-maddening-hex",
+    "name": "Eldritch Invocation: Maddening Hex",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs level 5 and the hex spell. As a bonus action, deal psychic damage equal to your CHA modifier to creatures within 5 feet of your hexed target."
+    },
+    "origin": "class",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-relentless-hex",
+    "name": "Eldritch Invocation: Relentless Hex",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs level 7. As a bonus action, teleport next to a creature you cursed, up to 30 feet away, as long as you can see it."
+    },
+    "origin": "class",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-shroud-of-shadow",
+    "name": "Eldritch Invocation: Shroud of Shadow",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs level 15. You can cast invisibility at will without a slot."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-tomb-of-levistus",
+    "name": "Eldritch Invocation: Tomb of Levistus",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs level 5. Reaction after taking damage: gain 10 temp HP per warlock level, vulnerability to fire, and freeze with speed 0 until your next turn ends. Once per short rest."
+    },
+    "origin": "class",
+    "activation": "reaction",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.eldritch-invocation-tricksters-escape",
+    "name": "Eldritch Invocation: Trickster’s Escape",
+    "ruleset": "5e-2014",
+    "srd": false,
+    "summaryReviewed": false,
+    "source": "XGE",
+    "summary": {
+      "effect": "Needs level 7. Cast freedom of movement once per long rest without a slot."
+    },
+    "origin": "class",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
   }
 ]
