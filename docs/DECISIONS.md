@@ -230,6 +230,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q40 | Deleting a shared campaign on this device comes back at the next party sync. Should delete leave the party first? | M24 | Leave first; Delete is not blocked yet | User |
 | Q41 | A tester missed "neutral". Is that True Neutral, or something else such as Unaligned? | M26 | Rename "Neutral" to "True Neutral"; no Unaligned for player characters | User |
 | Q42 | Backgrounds: the 13 PHB ones only, or also the PHB variants and a Custom background? | M26 | All 13, the 5 PHB variants and Custom (2 skills, 2 tools or languages, any background feature) | User |
+| Q43 | Conjure spells (Conjure Animals and others) and Tasha's summon spells (Summon Beast and others): should they also create companion tabs? | M26 | Conjure: pick the creature the DM allows from the creature list, added as a timed summon. Tasha's summon spells: added to the Tasha's pack in our own words, with stats that scale with the spell level | User |
 
 ## How to add an entry
 

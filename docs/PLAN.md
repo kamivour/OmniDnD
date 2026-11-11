@@ -151,7 +151,8 @@ From friends testing the live site on 2026-11-10. Small fixes first, the larger 
 6. **Cautions stand out.** One caution style (warn colour, warning icon, slightly bolder) for weaknesses in the class, race and background guides, unmet requirements, and hints that warn of a consequence ("locks once saved", "can't be undone"). Errors that block saving use the danger colour.
 7. **Clearer headings and subclass cards.** Field labels and section headings get bigger and bolder so each block has a clear title. The subclass choice becomes separate cards, each with an icon, name, one-line pitch and difficulty, in creation and level-up. Icons come from game-icons.net (already credited). DESIGN.md gets the new heading sizes.
 8. **All PHB backgrounds.** Schema: backgrounds gain language choices, tool choices and variants. Data in our own words for the 11 missing PHB backgrounds (Criminal, Entertainer, Folk Hero, Guild Artisan, Hermit, Noble, Outlander, Sage, Sailor, Soldier, Urchin), their features and guidance; the PHB variants (Spy, Gladiator, Guild Merchant, Knight, Pirate) and a Custom background (Q42). Creation asks for the background's languages and tools.
-9. **Gate.** At 375 px and 1440 px a new visitor sees no sample character, finds Create account, picks True Neutral and any PHB background, types scores with Enter, clears Level with Backspace, sees subclass cards and orange or red cautions, and Pending at Level 1 shows only 1st-level spells. Manual QA list added.
+9. **Summons get their own tab.** Features and spells that create a creature (Steel Defender, Eldritch Cannon, Find Familiar, Find Steed, Ranger's companion) get a Create button on their card; casting such a spell offers it too. The creature is added from its companion template, with HP, AC and attack numbers worked out from your level, INT and proficiency. Each active companion gets its own tab on the Combat screen (You, Eldritch Cannon, …) with its stat block, HP controls, attacks and uses; it closes when dismissed, destroyed or its time runs out. Conjure spells and Tasha's summon spells follow Q43.
+10. **Gate.** At 375 px and 1440 px a new visitor sees no sample character, finds Create account, picks True Neutral and any PHB background, types scores with Enter, clears Level with Backspace, sees subclass cards and orange or red cautions, Pending at Level 1 shows only 1st-level spells, and an Artillerist creates an Eldritch Cannon from its feature card and sees its stats in its own Combat tab. Manual QA list added.
 
 ---
 
@@ -160,4 +161,4 @@ From friends testing the live site on 2026-11-10. Small fixes first, the larger 
 - **Security:** shared access depends entirely on row-level security, so every rule gets a test. Invite codes are random, hashed and expire. Emails are never shown to other members.
 
 ## Open questions
-M26: Q41 (alignment label) and Q42 (background scope) in DECISIONS.md. Earlier answers are D168–D175.
+M26: Q41 (alignment label), Q42 (background scope) and Q43 (conjure and summon spells) in DECISIONS.md. Earlier answers are D168–D175.
