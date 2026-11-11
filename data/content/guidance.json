@@ -1909,5 +1909,23 @@
     "mainAbilities": ["INT"],
     "strengths": ["Flexible stone boosts", "Turn into a beast", "Powerful capstone options"],
     "weaknesses": ["Few combat tricks early", "Stone needs an hour to make"]
+  },
+  {
+    "id": "race.custom-lineage",
+    "kind": "race",
+    "pitch": "A flexible origin that trades fixed traits for a +2 of your choice and a feat.",
+    "difficulty": "medium",
+    "strengths": ["+2 to any ability", "A feat at 1st level", "Fits any class"],
+    "weaknesses": ["No racial features beyond one choice", "Needs a feat choice up front"],
+    "goodWith": [
+      {
+        "id": "class.wizard",
+        "why": "A +2 to INT and an early feat like Alert"
+      },
+      {
+        "id": "class.fighter",
+        "why": "Start with a combat feat and a strong main ability"
+      }
+    ]
   }
 ]

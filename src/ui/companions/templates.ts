@@ -99,6 +99,60 @@ const rangerCompanions: CompanionTemplate[] = RANGER_BEASTS.map((name) => {
   };
 });
 
+const primal = (
+  kind: 'Land' | 'Sea' | 'Sky',
+  stats: Pick<Companion, 'speed' | 'abilities' | 'attacks' | 'traits'>,
+): CompanionTemplate => ({
+  label: `Beast of the ${kind}`,
+  group: 'Primal companion',
+  companion: {
+    name: `Beast of the ${kind}`,
+    type: 'pet',
+    kind: 'Medium beast',
+    ac: { base: 13, ownerProficiency: 1 },
+    maxHp: { base: 5, ownerLevel: 5, classId: 'class.ranger' },
+    ...stats,
+    uses: [],
+    limit: { key: 'ranger-companion', max: 1 },
+    sourceId: 'feature.tce.ranger-primal-companion',
+    notes:
+      'Acts on your initiative. AC, attacks and damage follow your proficiency bonus; max HP is 5 plus 5 per ranger level.',
+  },
+});
+
+const primalAttack = (name: string, dice: string, type: 'slashing' | 'piercing') => ({
+  name,
+  bonus: { ownerAbilityMod: 'WIS' as const, ownerProficiency: 1 },
+  damage: { dice, bonus: { base: 2, ownerProficiency: 1 }, type },
+  range: '5 ft.',
+});
+
+const primalCompanions: CompanionTemplate[] = [
+  primal('Land', {
+    speed: { walk: 40, climb: 40 },
+    abilities: { STR: 14, DEX: 14, CON: 15, INT: 8, WIS: 14, CHA: 11 },
+    attacks: [primalAttack('Maul', '1d8', 'slashing')],
+    traits: [
+      'Charge: after moving 20 ft straight at a target, its maul hit knocks the target prone on a failed Strength save.',
+    ],
+  }),
+  primal('Sea', {
+    speed: { walk: 5, swim: 60 },
+    abilities: { STR: 14, DEX: 14, CON: 15, INT: 5, WIS: 12, CHA: 8 },
+    attacks: [primalAttack('Binding strike', '1d6', 'piercing')],
+    traits: [
+      'Amphibious.',
+      'A hit grapples the target (escape DC is your spell save DC); one grapple at a time.',
+    ],
+  }),
+  primal('Sky', {
+    speed: { walk: 10, fly: 60 },
+    abilities: { STR: 6, DEX: 16, CON: 13, INT: 8, WIS: 14, CHA: 11 },
+    attacks: [primalAttack('Rend', '1d4', 'slashing')],
+    traits: ['Flyby: does not provoke opportunity attacks when it flies out of reach.'],
+  }),
+];
+
 const steelDefender: CompanionTemplate = {
   label: 'Steel Defender',
   group: 'Artificer',
@@ -182,4 +236,10 @@ const familiars: CompanionTemplate[] = FAMILIARS.map((name) => {
   };
 });
 
-COMPANION_TEMPLATES.push(...rangerCompanions, steelDefender, eldritchCannon, ...familiars);
+COMPANION_TEMPLATES.push(
+  ...rangerCompanions,
+  ...primalCompanions,
+  steelDefender,
+  eldritchCannon,
+  ...familiars,
+);

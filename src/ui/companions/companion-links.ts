@@ -30,6 +30,10 @@ const LINKS: Record<string, CompanionLink> = {
     key: 'rangers-companion',
     limitKey: 'ranger-companion',
   },
+  'feature.tce.ranger-primal-companion': {
+    key: 'primal-companion',
+    limitKey: 'ranger-companion',
+  },
   'spell.find-familiar': { key: 'familiar', limitKey: 'familiar' },
   'spell.find-steed': { key: 'steed' },
 };

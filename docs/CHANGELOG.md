@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 00:17 — Tasha’s options
+
+- Added Custom Lineage, seven Tasha’s feats, seven maneuvers, two metamagic options, eight invocations and Pact of the Talisman.
+- Rangers can take Primal Companion (Land, Sea or Sky) in place of Ranger’s Companion; its stats scale on the Companions screen. Warlocks now pick their pact boon from a list.
+- Check the companion numbers against your book. Next: Tasha’s spells.
+Checks pass.
+
 ## 2026-11-12 00:10 — PHB spells
 
 - Added 39 Player’s Handbook spells the SRD lacks (smites, Hex, Hunger of Hadar, auras, Tsunami, Power Word Heal and more), on the right class lists.

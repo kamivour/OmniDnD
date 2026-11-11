@@ -87,6 +87,12 @@ export const OPTION_FAMILIES: OptionFamily[] = [
     ],
   },
   {
+    classId: 'class.warlock',
+    label: 'Pact Boon',
+    prefix: 'feature.warlock.pact-of-the-',
+    totals: [[3, 1]],
+  },
+  {
     classId: 'class.artificer',
     label: 'Infusions',
     prefix: 'feature.artificer.infusion-',

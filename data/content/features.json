@@ -5821,5 +5821,425 @@
     },
     "origin": "subclass",
     "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.custom-lineage",
+    "name": "Custom Lineage",
+    "summary": {
+      "effect": "Take one feat at 1st level. Choose darkvision 60 ft or one skill proficiency. Your +2 ability score goes where you choose."
+    },
+    "origin": "race",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.feat.artificer-initiate",
+    "name": "Artificer Initiate",
+    "summary": {
+      "effect": "Learn one artificer cantrip and one 1st-level artificer spell, cast with INT, WIS or CHA. Cast that spell once per long rest without a slot. Gain one artisan tool proficiency."
+    },
+    "origin": "feat",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.feat.chef",
+    "name": "Chef",
+    "summary": {
+      "effect": "+1 CON or WIS. Cook’s utensils proficiency. Meals on a short rest heal extra 1d8 per hit die spent; after a long rest, make treats that give temp HP as a bonus action."
+    },
+    "origin": "feat",
+    "activation": "special",
+    "grants": {
+      "ability": ["CON", "WIS"]
+    },
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.feat.eldritch-adept",
+    "name": "Eldritch Adept",
+    "summary": {
+      "effect": "Needs Spellcasting or Pact Magic. Learn one eldritch invocation you qualify for, and swap it for another when you gain a level."
+    },
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.feat.fighting-initiate",
+    "name": "Fighting Initiate",
+    "summary": {
+      "effect": "Needs proficiency with a martial weapon. Learn one Fighting Style from the fighter list, and swap it when you gain a level."
+    },
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.feat.gunner",
+    "name": "Gunner",
+    "summary": {
+      "effect": "+1 DEX. Proficiency with firearms. Ignore the loading property. Ranged attacks within 5 ft of a hostile creature no longer have disadvantage."
+    },
+    "origin": "feat",
+    "activation": "passive",
+    "grants": {
+      "ability": ["DEX"]
+    }
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.feat.metamagic-adept",
+    "name": "Metamagic Adept",
+    "summary": {
+      "effect": "Needs Spellcasting or Pact Magic. Learn two metamagic options and gain 2 sorcery points, spendable only on metamagic. They refill on a long rest."
+    },
+    "origin": "feat",
+    "activation": "special",
+    "uses": {
+      "max": 2,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.feat.poisoner",
+    "name": "Poisoner",
+    "summary": {
+      "effect": "Your poison damage ignores resistance, and you can poison creatures that are immune to it. Gain poisoner’s kit proficiency; brew potent doses with the kit."
+    },
+    "origin": "feat",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.fighter.maneuver-ambush",
+    "name": "Maneuver: Ambush",
+    "summary": {
+      "effect": "Add the die to an initiative roll or a Stealth check as you make it."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.fighter.maneuver-bait-and-switch",
+    "name": "Maneuver: Bait and Switch",
+    "summary": {
+      "effect": "Swap places with a willing ally within 5 ft by spending movement. You or the ally gains the die as an AC bonus until your next turn."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.fighter.maneuver-brace",
+    "name": "Maneuver: Brace",
+    "summary": {
+      "effect": "When a creature moves into your reach, use a reaction to make one weapon attack against it, adding the die to damage."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.fighter.maneuver-commanding-presence",
+    "name": "Maneuver: Commanding Presence",
+    "summary": {
+      "effect": "Add the die to an Intimidation, Performance or Persuasion check as you make it."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.fighter.maneuver-grappling-strike",
+    "name": "Maneuver: Grappling Strike",
+    "summary": {
+      "effect": "After hitting with a melee weapon attack, grapple the target as a bonus action. Add the die to the Athletics check."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.fighter.maneuver-quick-toss",
+    "name": "Maneuver: Quick Toss",
+    "summary": {
+      "effect": "As a bonus action, throw a light weapon with an attack and add the die to its damage."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.fighter.maneuver-tactical-assessment",
+    "name": "Maneuver: Tactical Assessment",
+    "summary": {
+      "effect": "Add the die to a History, Insight or Investigation check as you make it."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.sorcerer.metamagic-seeking-spell",
+    "name": "Metamagic: Seeking Spell",
+    "summary": {
+      "effect": "Costs 2 sorcery points. When a spell attack roll misses, reroll the d20 and use the new result."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.sorcerer.metamagic-transmuted-spell",
+    "name": "Metamagic: Transmuted Spell",
+    "summary": {
+      "effect": "Costs 1 sorcery point. Change a spell’s damage type from acid, cold, fire, lightning, poison or thunder to another from that list."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.warlock.pact-of-the-talisman",
+    "name": "Pact of the Talisman",
+    "summary": {
+      "effect": "Your patron gives a talisman. The wearer adds 1d4 to a failed ability check. Uses equal to your proficiency bonus per long rest."
+    },
+    "origin": "class",
+    "activation": "special",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.warlock.eldritch-invocation-bond-of-the-talisman",
+    "name": "Eldritch Invocation: Bond of the Talisman",
+    "summary": {
+      "effect": "Needs level 12 and Pact of the Talisman. Teleport to whoever wears your talisman, or swap places with them."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.warlock.eldritch-invocation-eldritch-mind",
+    "name": "Eldritch Invocation: Eldritch Mind",
+    "summary": {
+      "effect": "You have advantage on Constitution saves to keep concentration on a spell."
+    },
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.warlock.eldritch-invocation-far-scribe",
+    "name": "Eldritch Invocation: Far Scribe",
+    "summary": {
+      "effect": "Needs level 5 and Pact of the Tome. Write willing creatures’ names in your book, up to your proficiency bonus. You can cast sending to a named creature without a slot."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.warlock.eldritch-invocation-gift-of-the-protectors",
+    "name": "Eldritch Invocation: Gift of the Protectors",
+    "summary": {
+      "effect": "Needs level 9 and Pact of the Tome. Allies named in your book can drop to 1 HP instead of 0 once per long rest."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.warlock.eldritch-invocation-investment-of-the-chain-master",
+    "name": "Eldritch Invocation: Investment of the Chain Master",
+    "summary": {
+      "effect": "Needs Pact of the Chain. Your familiar gains a fly or swim speed of 40 ft, hits as magic, and uses your spell save DC."
+    },
+    "origin": "class",
+    "activation": "special"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.warlock.eldritch-invocation-protection-of-the-talisman",
+    "name": "Eldritch Invocation: Protection of the Talisman",
+    "summary": {
+      "effect": "Needs level 7 and Pact of the Talisman. The wearer adds 1d4 to a failed saving throw."
+    },
+    "origin": "class",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.warlock.eldritch-invocation-rebuke-of-the-talisman",
+    "name": "Eldritch Invocation: Rebuke of the Talisman",
+    "summary": {
+      "effect": "Needs Pact of the Talisman. When an attacker hits the wearer, use a reaction to deal psychic damage and push it."
+    },
+    "origin": "class",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.warlock.eldritch-invocation-undying-servitude",
+    "name": "Eldritch Invocation: Undying Servitude",
+    "summary": {
+      "effect": "Needs level 5. Cast animate dead once per long rest without a slot."
+    },
+    "origin": "class",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "id": "feature.tce.ranger-primal-companion",
+    "name": "Primal Companion",
+    "summary": {
+      "effect": "Call a Beast of the Land, Sea or Sky. It uses your proficiency bonus and has 5 HP plus 5 per ranger level. Its stats are on Companions."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.ranger",
+      "level": 3,
+      "replaces": "feature.ranger.beast-master-rangers-companion"
+    }
   }
 ]

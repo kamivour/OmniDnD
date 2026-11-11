@@ -196,5 +196,26 @@
       "feature.variant-human-skill",
       "feature.variant-human-feat"
     ]
+  },
+  {
+    "kind": "race",
+    "id": "race.custom-lineage",
+    "name": "Custom Lineage",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A blank-slate heritage: +2 to one ability, a feat, and either darkvision or a skill."
+    },
+    "size": "medium",
+    "speed": 30,
+    "abilityChoices": {
+      "count": 1,
+      "value": 2
+    },
+    "languages": ["Common"],
+    "featureIds": ["feature.custom-lineage"],
+    "abilityBonuses": []
   }
 ]
