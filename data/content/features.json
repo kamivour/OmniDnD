@@ -3113,5 +3113,1230 @@
     },
     "origin": "subclass",
     "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.totem-warrior-spirit-seeker",
+    "name": "Spirit Seeker",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can cast beast sense and speak with animals as rituals."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.totem-spirit-bear",
+    "name": "Totem Spirit: Bear",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While raging, you resist every damage type except psychic."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.totem-spirit-eagle",
+    "name": "Totem Spirit: Eagle",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While raging and not in heavy armor, enemies have disadvantage on opportunity attacks against you, and you can Dash as a bonus action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.totem-spirit-wolf",
+    "name": "Totem Spirit: Wolf",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While raging, allies have advantage on melee attacks against any enemy within 5 ft of you."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.totem-aspect-bear",
+    "name": "Aspect of the Beast: Bear",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your carrying capacity doubles, and you have advantage on Strength checks to push, pull, lift or break things."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.totem-aspect-eagle",
+    "name": "Aspect of the Beast: Eagle",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You see up to 1 mile away with no penalty, and dim light does not give you disadvantage on Perception checks."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.totem-aspect-wolf",
+    "name": "Aspect of the Beast: Wolf",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can track at a fast pace, and you move stealthily at a normal pace while traveling."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.totem-attunement-bear",
+    "name": "Totemic Attunement: Bear",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While raging, enemies within 5 ft that are not you have disadvantage on attacks against anyone but you or another bear-totem barbarian."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.totem-attunement-eagle",
+    "name": "Totemic Attunement: Eagle",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While raging, you have a flying speed equal to your walking speed. You fall if you end your turn in the air with nothing to hold you up."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.totem-attunement-wolf",
+    "name": "Totemic Attunement: Wolf",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While raging, a melee hit lets you use a bonus action to knock a Large or smaller target prone."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.barbarian.totem-warrior-spirit-walker",
+    "name": "Spirit Walker",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can cast commune with nature as a ritual. A spirit copy of a beast scouts for you."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.battle-master-combat-superiority",
+    "name": "Combat Superiority",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn maneuvers and use superiority dice to power them. Dice are d8 (d10 at 10, d12 at 18) and return on a short or long rest. Maneuver save DC is 8 + proficiency + Strength or Dexterity modifier."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": {
+        "byLevel": {
+          "3": 4,
+          "7": 5,
+          "15": 6
+        }
+      },
+      "recharge": "short"
+    },
+    "die": {
+      "3": "d8",
+      "10": "d10",
+      "18": "d12"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.battle-master-student-of-war",
+    "name": "Student of War",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You gain proficiency with one artisan tool of your choice."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.battle-master-know-your-enemy",
+    "name": "Know Your Enemy",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After watching or fighting a creature for 1 minute, the DM tells you how it compares with you in Strength, Dexterity, Constitution, AC, current HP, total class levels and Fighter levels."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.battle-master-improved-combat-superiority",
+    "name": "Improved Combat Superiority",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your superiority dice become d10 at level 10 and d12 at level 18."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.battle-master-relentless",
+    "name": "Relentless",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you roll initiative and have no superiority dice left, you regain one."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-commanders-strike",
+    "name": "Maneuver: Commander's Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Give up one attack; as a bonus action an ally who can hear you uses a reaction to attack, adding the die to damage."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-disarming-attack",
+    "name": "Maneuver: Disarming Attack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add the die to damage. Target makes a Strength save or drops a held item of your choice."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-distracting-strike",
+    "name": "Maneuver: Distracting Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add the die to damage. The next attack on the target by someone else before your next turn has advantage."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-evasive-footwork",
+    "name": "Maneuver: Evasive Footwork",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you move, add the die to your AC until you stop moving."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-feinting-attack",
+    "name": "Maneuver: Feinting Attack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bonus action: gain advantage on your next attack this turn against a creature within 5 ft. On a hit, add the die to damage."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-goading-attack",
+    "name": "Maneuver: Goading Attack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add the die to damage. Target makes a Wisdom save or has disadvantage on attacks against others until the end of your next turn."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-lunging-attack",
+    "name": "Maneuver: Lunging Attack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain 5 extra feet of reach for one melee attack and add the die to its damage."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-maneuvering-attack",
+    "name": "Maneuver: Maneuvering Attack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add the die to damage. An ally can use a reaction to move half speed without provoking attacks from the target."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-menacing-attack",
+    "name": "Maneuver: Menacing Attack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add the die to damage. Target makes a Wisdom save or is frightened of you until the end of your next turn."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-parry",
+    "name": "Maneuver: Parry",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction when a creature hits you in melee: reduce the damage by the die plus your Dexterity modifier."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature hits you with a melee attack",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-precision-attack",
+    "name": "Maneuver: Precision Attack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add the die to one of your attack rolls, before or after rolling but before the result is known."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-pushing-attack",
+    "name": "Maneuver: Pushing Attack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add the die to damage. A Large or smaller target makes a Strength save or is pushed up to 15 ft away."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-rally",
+    "name": "Maneuver: Rally",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bonus action: an ally who can see or hear you gains temporary HP equal to the die plus your Charisma modifier."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-riposte",
+    "name": "Maneuver: Riposte",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction when a creature misses you in melee: make a melee attack against it, adding the die to damage on a hit."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature misses you with a melee attack",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-sweeping-attack",
+    "name": "Maneuver: Sweeping Attack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After you hit, pick another creature within 5 ft of the target and in reach. If the roll would hit it, it takes damage equal to the die."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.maneuver-trip-attack",
+    "name": "Maneuver: Trip Attack",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add the die to damage. A Large or smaller target makes a Strength save or is knocked prone."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "usesFrom": "feature.fighter.battle-master-combat-superiority"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.eldritch-knight-spellcasting",
+    "name": "Spellcasting",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You cast wizard spells using Intelligence. Most spells you learn must be abjuration or evocation; one-third of your spells may come from any school."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.eldritch-knight-weapon-bond",
+    "name": "Weapon Bond",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a 1-hour ritual, bond with up to two weapons. A bonded weapon cannot be disarmed, and you can summon it to your hand as a bonus action."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.eldritch-knight-war-magic",
+    "name": "War Magic",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you cast a cantrip as your action, you can make one weapon attack as a bonus action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.eldritch-knight-eldritch-strike",
+    "name": "Eldritch Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A creature you hit with a weapon has disadvantage on its next saving throw against a spell you cast before the end of your next turn."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.eldritch-knight-arcane-charge",
+    "name": "Arcane Charge",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you use Action Surge, you can teleport up to 30 ft to an unoccupied space you can see, before or after the extra action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.eldritch-knight-improved-war-magic",
+    "name": "Improved War Magic",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you cast any spell with your action, you can make one weapon attack as a bonus action."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.shadow-shadow-arts",
+    "name": "Shadow Arts",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 2 ki to cast darkness, darkvision, pass without trace or silence without components. You also know the minor illusion cantrip."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.shadow-shadow-step",
+    "name": "Shadow Step",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bonus action: teleport up to 60 ft between two spaces in dim light or darkness. Your first melee attack this turn has advantage."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.shadow-cloak-of-shadows",
+    "name": "Cloak of Shadows",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "In dim light or darkness, use your action to become invisible until you attack, cast a spell or enter bright light."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.shadow-opportunist",
+    "name": "Opportunist",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction: when another creature hits a creature within 5 ft of you, you can make a melee attack against the hit creature."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature within 5 ft of you is hit by someone else"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.four-elements-disciple-of-the-elements",
+    "name": "Disciple of the Elements",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You know the Elemental Attunement discipline and one more. You learn another at levels 6, 11 and 17. Spells from disciplines cost extra ki to upcast, up to a limit that grows with level."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.four-elements-elemental-attunement",
+    "name": "Elemental Attunement",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: briefly control a nonmagical element within 30 ft: sense it, light or snuff a small flame, chill or warm things, or shape a harmless 1-ft cube of it."
+    },
+    "origin": "subclass",
+    "activation": "action"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-fangs-of-the-fire-snake",
+    "name": "Discipline: Fangs of the Fire Snake",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Unarmed strikes gain 10 ft of reach and deal fire damage. Spend 1 ki on a hit to add 1d10 fire damage."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-fist-of-four-thunders",
+    "name": "Discipline: Fist of Four Thunders",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 2 ki to cast thunderwave."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-fist-of-unbroken-air",
+    "name": "Discipline: Fist of Unbroken Air",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 2 ki or more: a creature within 30 ft makes a Strength save or takes 3d10 bludgeoning, is pushed 20 ft and falls prone. 1d10 more per extra ki."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-flames-of-the-phoenix",
+    "name": "Discipline: Flames of the Phoenix",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Level 11. Spend 4 ki to cast fireball."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-gong-of-the-summit",
+    "name": "Discipline: Gong of the Summit",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Level 6. Spend 3 ki to cast shatter."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-mist-stance",
+    "name": "Discipline: Mist Stance",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Level 11. Spend 4 ki to cast gaseous form on yourself without needing components."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-ride-the-wind",
+    "name": "Discipline: Ride the Wind",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Level 11. Spend 4 ki to cast fly on yourself."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-eternal-mountain-defense",
+    "name": "Discipline: Eternal Mountain Defense",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Level 17. Spend 5 ki to cast stoneskin on yourself."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-river-of-hungry-flame",
+    "name": "Discipline: River of Hungry Flame",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Level 17. Spend 5 ki to cast wall of fire."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-rush-of-the-gale-spirits",
+    "name": "Discipline: Rush of the Gale Spirits",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 2 ki to cast gust of wind."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-shape-the-flowing-river",
+    "name": "Discipline: Shape the Flowing River",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action, 1 ki: freeze, thaw or reshape water in a 30-ft cube within 120 ft."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-sweeping-cinder-strike",
+    "name": "Discipline: Sweeping Cinder Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 2 ki to cast burning hands."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-water-whip",
+    "name": "Discipline: Water Whip",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 2 ki or more: a creature within 30 ft makes a Dexterity save or takes 3d10 bludgeoning and is pulled 25 ft or knocked prone. 1d10 more per extra ki."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-clench-of-the-north-wind",
+    "name": "Discipline: Clench of the North Wind",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Level 6. Spend 3 ki to cast hold person."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-breath-of-winter",
+    "name": "Discipline: Breath of Winter",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Level 17. Spend 6 ki to cast cone of cold."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.discipline-wave-of-rolling-earth",
+    "name": "Discipline: Wave of Rolling Earth",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Level 17. Spend 6 ki to cast wall of stone."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.ancients-oath-spells",
+    "name": "Oath Spells",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always-prepared spells by level: 3 ensnaring strike, speak with animals; 5 moonbeam, misty step; 9 plant growth, protection from energy; 13 ice storm, stoneskin; 17 commune with nature, tree stride."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.ancients-natures-wrath",
+    "name": "Channel Divinity: Nature's Wrath",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: spectral vines try to hold a creature within 10 ft. It makes a Strength or Dexterity save or is restrained, repeating the save each turn."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.ancients-turn-the-faithless",
+    "name": "Channel Divinity: Turn the Faithless",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: fey and fiends within 30 ft that can hear you make a Wisdom save or are turned for 1 minute. Their true forms are revealed."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.ancients-aura-of-warding",
+    "name": "Aura of Warding",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You and friendly creatures within 10 ft (30 ft at level 18) resist damage from spells."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.ancients-undying-sentinel",
+    "name": "Undying Sentinel",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When damage would drop you to 0 HP, you instead drop to 1 HP. Once per long rest. You also stop suffering the effects of old age."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.ancients-elder-champion",
+    "name": "Elder Champion",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action, 1 minute: regain 10 HP at the start of each turn, cast paladin spells as bonus actions, and enemies within 10 ft have disadvantage on saves against your spells and Channel Divinity."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.vengeance-oath-spells",
+    "name": "Oath Spells",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always-prepared spells by level: 3 bane, hunter’s mark; 5 hold person, misty step; 9 haste, protection from energy; 13 banishment, dimension door; 17 hold monster, scrying."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.vengeance-abjure-enemy",
+    "name": "Channel Divinity: Abjure Enemy",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: one creature within 60 ft makes a Wisdom save or is frightened and nearly immobile for 1 minute. Fiends and undead have disadvantage on the save."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.vengeance-vow-of-enmity",
+    "name": "Channel Divinity: Vow of Enmity",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bonus action: pick a creature within 10 ft. You have advantage on attack rolls against it for 1 minute or until it drops to 0 HP or falls unconscious."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.vengeance-relentless-avenger",
+    "name": "Relentless Avenger",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you hit with an opportunity attack, you can move up to half your speed right after, without provoking attacks."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.vengeance-soul-of-vengeance",
+    "name": "Soul of Vengeance",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Reaction: when the creature under your Vow of Enmity attacks, you can make a melee attack against it."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "Your Vow of Enmity target makes an attack"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.vengeance-avenging-angel",
+    "name": "Avenging Angel",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action, 1 hour: you sprout wings and fly 60 ft, and enemies within 30 ft are frightened if they fail a Wisdom save."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.assassin-bonus-proficiencies",
+    "name": "Bonus Proficiencies",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You gain proficiency with the disguise kit and the poisoner’s kit."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.assassin-assassinate",
+    "name": "Assassinate",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You have advantage on attack rolls against creatures that have not taken a turn in combat. Any hit against a surprised creature is a critical hit."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.assassin-infiltration-expertise",
+    "name": "Infiltration Expertise",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend 7 days and 25 gp to build a false identity with documents, contacts and a disguise."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.assassin-impostor",
+    "name": "Impostor",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After studying someone for 3 hours, you can mimic their speech, writing and habits. You have advantage on checks to avoid being seen through."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.assassin-death-strike",
+    "name": "Death Strike",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you hit a surprised creature on the first turn of combat, it makes a Constitution save (DC 8 + Dexterity modifier + proficiency) or takes double damage."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.arcane-trickster-spellcasting",
+    "name": "Spellcasting",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You cast wizard spells using Intelligence. You know mage hand plus other cantrips. Most spells must be enchantment or illusion; one-third may come from any school."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.arcane-trickster-mage-hand-legerdemain",
+    "name": "Mage Hand Legerdemain",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your mage hand is invisible. It can stow or retrieve objects on creatures, pick locks and disarm traps, and you can use it as a bonus action."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.arcane-trickster-magical-ambush",
+    "name": "Magical Ambush",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "If you are hidden from a creature when you cast a spell on it, it has disadvantage on its saving throw against that spell."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.arcane-trickster-versatile-trickster",
+    "name": "Versatile Trickster",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Bonus action: use your mage hand to distract a creature within 5 ft of it, giving you advantage on attacks against that creature this turn."
+    },
+    "origin": "subclass",
+    "activation": "bonus"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.arcane-trickster-spell-thief",
+    "name": "Spell Thief",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Right after a creature casts a spell that targets you, you can force it to make a save. On a fail you negate the spell and steal it to cast for 8 hours."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "trigger": "A creature casts a spell that targets you",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
   }
 ]

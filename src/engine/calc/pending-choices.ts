@@ -33,6 +33,8 @@ export interface PendingChoice {
 
 interface OptionFamily {
   classId: string;
+  /** Only characters of this subclass pick from the family. */
+  subclassId?: string;
   label: string;
   /** Option features share this id prefix. */
   prefix: string;
@@ -96,6 +98,51 @@ export const OPTION_FAMILIES: OptionFamily[] = [
       [18, 12],
     ],
   },
+  {
+    classId: 'class.fighter',
+    subclassId: 'subclass.fighter.battle-master',
+    label: 'Maneuvers',
+    prefix: 'feature.fighter.maneuver-',
+    totals: [
+      [3, 3],
+      [7, 5],
+      [10, 7],
+      [15, 9],
+    ],
+  },
+  {
+    classId: 'class.monk',
+    subclassId: 'subclass.monk.four-elements',
+    label: 'Elemental Disciplines',
+    prefix: 'feature.monk.discipline-',
+    totals: [
+      [3, 1],
+      [6, 2],
+      [11, 3],
+      [17, 4],
+    ],
+  },
+  {
+    classId: 'class.barbarian',
+    subclassId: 'subclass.barbarian.totem-warrior',
+    label: 'Totem Spirit',
+    prefix: 'feature.barbarian.totem-spirit-',
+    totals: [[3, 1]],
+  },
+  {
+    classId: 'class.barbarian',
+    subclassId: 'subclass.barbarian.totem-warrior',
+    label: 'Aspect of the Beast',
+    prefix: 'feature.barbarian.totem-aspect-',
+    totals: [[6, 1]],
+  },
+  {
+    classId: 'class.barbarian',
+    subclassId: 'subclass.barbarian.totem-warrior',
+    label: 'Totemic Attunement',
+    prefix: 'feature.barbarian.totem-attunement-',
+    totals: [[14, 1]],
+  },
 ];
 
 /** Skills (or tools) with double proficiency: Rogue 1 and 6, Bard 3 and 10. */
@@ -142,7 +189,11 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
         area: 'choices',
       });
 
-    for (const family of OPTION_FAMILIES.filter((row) => row.classId === entry.classId)) {
+    for (const family of OPTION_FAMILIES.filter(
+      (row) =>
+        row.classId === entry.classId &&
+        (row.subclassId === undefined || row.subclassId === entry.subclassId),
+    )) {
       const options = [...registry.entries.values()].filter(
         (row) => row.kind === 'feature' && row.id.startsWith(family.prefix) && enabled(row.source),
       );

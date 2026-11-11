@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { registry } from '../../data/registry';
+import { entryCasting } from '../../engine/calc/casting';
 import { changeSpellSelection, setSpellTags, spellSelectionDetails } from '../../engine/commands';
 import type { SpellDef } from '../../engine/schema';
 import { useCommand } from '../commands/command-context';
@@ -77,10 +78,7 @@ export function SpellManage({
   const classIds = [
     ...new Set([
       ...state.build.classes
-        .filter(({ classId }) => {
-          const definition = registry.entries.get(classId);
-          return definition?.kind === 'class' && definition.spellcasting;
-        })
+        .filter((entry) => entryCasting(registry, entry))
         .map(({ classId }) => classId),
       ...state.build.spells
         .filter(({ known, prepared }) => known.length > 0 || (prepared?.length ?? 0) > 0)

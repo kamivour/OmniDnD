@@ -1582,5 +1582,122 @@
       "You track two sets of actions",
       "Companion can be a target"
     ]
+  },
+  {
+    "id": "subclass.barbarian.totem-warrior",
+    "kind": "subclass",
+    "pitch": "A rager who borrows an animal spirit to match the fight.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "CON"],
+    "strengths": [
+      "Bear totem is very tanky",
+      "Spirit choices fit different roles",
+      "Useful ritual magic"
+    ],
+    "weaknesses": ["Rage is still limited", "Eagle and wolf totems suit fewer plans"]
+  },
+  {
+    "id": "subclass.fighter.battle-master",
+    "kind": "subclass",
+    "pitch": "A tactician with a toolbox of attack tricks.",
+    "difficulty": "hard",
+    "mainAbilities": ["STR", "DEX"],
+    "strengths": [
+      "Many options each fight",
+      "Controls enemies and helps allies",
+      "Dice return on a short rest"
+    ],
+    "weaknesses": [
+      "Many rules to track",
+      "Limited dice per rest",
+      "Choosing maneuvers takes thought"
+    ]
+  },
+  {
+    "id": "subclass.fighter.eldritch-knight",
+    "kind": "subclass",
+    "pitch": "A fighter with a little wizard magic on the side.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "INT"],
+    "strengths": [
+      "Shield and Absorb Elements keep you alive",
+      "Spells add range and utility",
+      "Strong armor and weapons"
+    ],
+    "weaknesses": ["Few spell slots", "Needs both Strength and Intelligence", "Spell school limits"]
+  },
+  {
+    "id": "subclass.monk.shadow",
+    "kind": "subclass",
+    "pitch": "A ninja-style monk who fights from the dark.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": [
+      "Great scouting and ambush",
+      "Teleport adds mobility",
+      "Strong when you pick the lighting"
+    ],
+    "weaknesses": ["Weaker in bright, open fights", "Ki heavy", "Darkness may hurt your allies"]
+  },
+  {
+    "id": "subclass.monk.four-elements",
+    "kind": "subclass",
+    "pitch": "A monk who bends fire, water, earth and air.",
+    "difficulty": "hard",
+    "mainAbilities": ["DEX", "WIS"],
+    "strengths": ["Flexible elemental attacks", "Strong area effects at high level", "Fun flavor"],
+    "weaknesses": [
+      "Ki runs out fast",
+      "Some disciplines cost a lot",
+      "Weak early compared to other monks"
+    ]
+  },
+  {
+    "id": "subclass.paladin.ancients",
+    "kind": "subclass",
+    "pitch": "A green knight who protects life and shrugs off magic.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "CHA"],
+    "strengths": [
+      "Aura halves spell damage for the party",
+      "Hard to kill at high level",
+      "Good control spells"
+    ],
+    "weaknesses": ["Less burst damage than other paladins", "Fey-and-fiend turning is niche"]
+  },
+  {
+    "id": "subclass.paladin.vengeance",
+    "kind": "subclass",
+    "pitch": "A relentless hunter who focuses a single foe.",
+    "difficulty": "easy",
+    "mainAbilities": ["STR", "CHA"],
+    "strengths": [
+      "Advantage against your target",
+      "Strong single-target damage",
+      "Good at chasing down enemies"
+    ],
+    "weaknesses": ["Less help for the party", "Vow works on one creature at a time"]
+  },
+  {
+    "id": "subclass.rogue.assassin",
+    "kind": "subclass",
+    "pitch": "A killer who wins fights in the first round.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX"],
+    "strengths": ["Huge opening damage", "Great at infiltration", "Strong with a stealthy party"],
+    "weaknesses": ["Weak if you lose surprise", "Damage drops off after round one"]
+  },
+  {
+    "id": "subclass.rogue.arcane-trickster",
+    "kind": "subclass",
+    "pitch": "A sneaky rogue with illusions and a magic hand.",
+    "difficulty": "medium",
+    "mainAbilities": ["DEX", "INT"],
+    "strengths": [
+      "Mage hand opens many tricks",
+      "Sleep and illusions help early",
+      "Utility out of combat"
+    ],
+    "weaknesses": ["Few spell slots", "Needs Dexterity and Intelligence", "Spell school limits"]
   }
 ]

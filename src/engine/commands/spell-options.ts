@@ -1,4 +1,5 @@
 import type { SpellcastingStats } from '../calc/sheet';
+import { entryCasting } from '../calc/casting';
 import { isPreparedCaster2014 } from '../calc/spell-selections';
 import type { DamageType } from '../rules2014';
 import type { SpellDef } from '../schema';
@@ -95,7 +96,9 @@ export function spellCastDetails(
     spell.level > 0 && classDef !== undefined && isPreparedCaster2014(classDef.id);
   const preparedForCasting =
     !needsPreparation || selections.some((list) => list.prepared?.includes(spell.id));
-  const ritual = classDef?.spellcasting?.ritual;
+  const ritual = classEntry
+    ? entryCasting(ctx.registry, classEntry, classDef)?.ritual
+    : classDef?.spellcasting?.ritual;
   const ritualSelected =
     ritual === 'known'
       ? selections.some((list) => list.known.includes(spell.id))

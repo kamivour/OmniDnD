@@ -200,6 +200,19 @@ export const FeatureDefSchema = z
 
 const ByClassLevelSchema = z.array(z.int().min(0)).length(20);
 
+/** Class-level casting; spellcasting subclasses (Eldritch Knight, Arcane Trickster) reuse it. */
+const SpellcastingSchema = z.strictObject({
+  ability: AbilitySchema,
+  progression: z.enum(['full', 'half', 'third', 'artificer', 'pact']),
+  /** Index = class level − 1. */
+  cantripsKnown: ByClassLevelSchema.optional(),
+  /** Known casters only (Bard, Sorcerer, ...). Index = class level − 1. */
+  spellsKnown: ByClassLevelSchema.optional(),
+  ritual: z.enum(['known', 'prepared', 'none']),
+  /** Subclass casters: the class whose spell list supplies the choices. */
+  spellList: refId('class').optional(),
+});
+
 export const ClassDefSchema = z
   .strictObject({
     kind: z.literal('class'),
@@ -207,17 +220,7 @@ export const ClassDefSchema = z
     ...refBase,
     hitDie: HitDieSchema,
     saves: z.array(AbilitySchema).length(2),
-    spellcasting: z
-      .strictObject({
-        ability: AbilitySchema,
-        progression: z.enum(['full', 'half', 'third', 'artificer', 'pact']),
-        /** Index = class level − 1. */
-        cantripsKnown: ByClassLevelSchema.optional(),
-        /** Known casters only (Bard, Sorcerer, ...). Index = class level − 1. */
-        spellsKnown: ByClassLevelSchema.optional(),
-        ritual: z.enum(['known', 'prepared', 'none']),
-      })
-      .optional(),
+    spellcasting: SpellcastingSchema.optional(),
     subclassLevel: z.int().min(1).max(20),
     features: z.array(
       z.strictObject({ level: z.int().min(1).max(20), featureId: refId('feature') }),
@@ -234,6 +237,7 @@ export const SubclassDefSchema = z
     features: z.array(
       z.strictObject({ level: z.int().min(1).max(20), featureId: refId('feature') }),
     ),
+    spellcasting: SpellcastingSchema.optional(),
   })
   .refine(srdTextOnly, SRD_TEXT_ONLY);
 

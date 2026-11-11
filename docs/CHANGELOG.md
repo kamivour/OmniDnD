@@ -4,6 +4,14 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 00:00 — PHB martial subclasses
+
+- Added Totem Warrior, Battle Master, Eldritch Knight, Way of Shadow, Way of the Four Elements, Oath of the Ancients, Oath of Vengeance, Assassin and Arcane Trickster.
+- Eldritch Knight and Arcane Trickster now get spell slots and a spell list at level 3. Battle Master maneuvers, elemental disciplines and totem animals are picks at level-up.
+- Check that school limits (abjuration/evocation, enchantment/illusion) are your call; the app does not block other spells. Next: PHB caster subclasses.
+
+Checks pass.
+
 ## 2026-11-11 23:52 — PHB races and Beast Master
 
 - New races: Wood Elf, Drow, Mountain Dwarf, Stout Halfling, Forest Gnome and Variant Human, each with guide cards.

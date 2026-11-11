@@ -1,3 +1,4 @@
+import { entryCasting } from './casting';
 import type { Registry } from '../registry';
 import type { SpellDef } from '../schema';
 import type { CharacterState, Sheet } from './sheet';
@@ -120,7 +121,10 @@ export function spellSelectionDetails(
   const classLevel = ctx.build.classes
     .filter((entry) => entry.classId === classId)
     .reduce((sum, entry) => sum + entry.level, 0);
-  const casting = def?.spellcasting;
+  const casterEntry = ctx.build.classes.find((entry) => entry.classId === classId);
+  const casting = casterEntry
+    ? entryCasting(ctx.registry, { ...casterEntry, level: classLevel }, def)
+    : undefined;
   const effective = ctx.sheet.spellcasting.find((entry) => entry.classId === classId);
   const mode: SpellSelectionMode =
     !casting || classLevel === 0
@@ -174,7 +178,7 @@ export function spellSelectionDetails(
         entry.kind === 'spell' &&
         entry.ruleset === ctx.campaign.ruleset &&
         ctx.campaign.sources.includes(entry.source) &&
-        entry.classes.includes(classId),
+        entry.classes.includes(casting?.spellList ?? classId),
     )
     .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
   const leveled = eligible.filter((entry) => entry.level > 0 && entry.level <= maximum);

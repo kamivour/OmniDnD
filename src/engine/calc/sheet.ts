@@ -1,4 +1,5 @@
 import { characterRegistry, type Registry } from '../registry';
+import { entryCasting } from './casting';
 import { recordedLevel, xpForLevel } from './advancement';
 import { encumbrance, type Encumbrance } from './encumbrance';
 import {
@@ -340,6 +341,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
   const classDefs = build.classes.map((entry) => ({
     entry,
     def: registry.get('class', entry.classId),
+    casting: entryCasting(registry, entry, registry.get('class', entry.classId)),
   }));
 
   const hitDice = classDefs
@@ -359,8 +361,8 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       ),
     }));
   const slots = spellSlots(
-    classDefs.flatMap(({ entry, def }) =>
-      def.spellcasting ? [{ progression: def.spellcasting.progression, level: entry.level }] : [],
+    classDefs.flatMap(({ entry, casting }) =>
+      casting ? [{ progression: casting.progression, level: entry.level }] : [],
     ),
   );
   slots.max = slots.max.map((max, slotLevel) =>
@@ -440,9 +442,9 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     darkvision: scalar('/darkvision', 'Darkvision', race.darkvision ?? 0, { min: 0 }),
     maxHp: value('/maxHp', 'Maximum HP', maxHpStat, { min: 1 }),
     hitDice,
-    spellcasting: classDefs.flatMap(({ entry, def }) => {
-      if (!def.spellcasting) return [];
-      const { ability, cantripsKnown, spellsKnown } = def.spellcasting;
+    spellcasting: classDefs.flatMap(({ entry, def, casting }) => {
+      if (!casting) return [];
+      const { ability, cantripsKnown, spellsKnown } = casting;
       const known = (table: readonly number[] | undefined) => table?.[entry.level - 1];
       const stats: SpellcastingStats = {
         classId: entry.classId,
@@ -474,9 +476,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
           spells,
           { min: 0 },
         );
-      const ownSlots = spellSlots([
-        { progression: def.spellcasting.progression, level: entry.level },
-      ]);
+      const ownSlots = spellSlots([{ progression: casting.progression, level: entry.level }]);
       const maximum = Math.max(
         0,
         ownSlots.pact?.level ?? ownSlots.max.findLastIndex((max) => max > 0),

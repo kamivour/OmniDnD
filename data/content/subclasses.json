@@ -404,5 +404,320 @@
         "featureId": "feature.ranger.beast-master-share-spells"
       }
     ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.barbarian.totem-warrior",
+    "name": "Path of the Totem Warrior",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Barbarian who draws on a bear, eagle or wolf spirit for resilience, mobility or pack tactics."
+    },
+    "classId": "class.barbarian",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.barbarian.totem-warrior-spirit-seeker"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.barbarian.totem-warrior-spirit-walker"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.fighter.battle-master",
+    "name": "Battle Master",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Fighter who learns tactical maneuvers fueled by superiority dice."
+    },
+    "classId": "class.fighter",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.fighter.battle-master-combat-superiority"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.battle-master-student-of-war"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.fighter.battle-master-know-your-enemy"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.fighter.battle-master-improved-combat-superiority"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.fighter.battle-master-relentless"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.fighter.eldritch-knight",
+    "name": "Eldritch Knight",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Fighter who learns wizard spells and blends them into weapon attacks."
+    },
+    "classId": "class.fighter",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.fighter.eldritch-knight-spellcasting"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.fighter.eldritch-knight-weapon-bond"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.fighter.eldritch-knight-war-magic"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.fighter.eldritch-knight-eldritch-strike"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.fighter.eldritch-knight-arcane-charge"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.fighter.eldritch-knight-improved-war-magic"
+      }
+    ],
+    "spellcasting": {
+      "ability": "INT",
+      "progression": "third",
+      "cantripsKnown": [0, 0, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+      "spellsKnown": [0, 0, 3, 4, 4, 4, 5, 6, 6, 7, 8, 8, 9, 10, 10, 11, 11, 11, 12, 13],
+      "ritual": "none",
+      "spellList": "class.wizard"
+    }
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.monk.shadow",
+    "name": "Way of Shadow",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Monk who uses stealth, darkness and teleporting steps."
+    },
+    "classId": "class.monk",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.monk.shadow-shadow-arts"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.monk.shadow-shadow-step"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.monk.shadow-cloak-of-shadows"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.monk.shadow-opportunist"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.monk.four-elements",
+    "name": "Way of the Four Elements",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Monk who channels ki into elemental disciplines that act like spells."
+    },
+    "classId": "class.monk",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.monk.four-elements-disciple-of-the-elements"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.monk.four-elements-elemental-attunement"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.paladin.ancients",
+    "name": "Oath of the Ancients",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Paladin sworn to light, life and the natural world."
+    },
+    "classId": "class.paladin",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.paladin.ancients-oath-spells"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.ancients-natures-wrath"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.ancients-turn-the-faithless"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.paladin.ancients-aura-of-warding"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.paladin.ancients-undying-sentinel"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.paladin.ancients-elder-champion"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.paladin.vengeance",
+    "name": "Oath of Vengeance",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Paladin who hunts down evildoers at any cost."
+    },
+    "classId": "class.paladin",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.paladin.vengeance-oath-spells"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.vengeance-abjure-enemy"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.vengeance-vow-of-enmity"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.paladin.vengeance-relentless-avenger"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.paladin.vengeance-soul-of-vengeance"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.paladin.vengeance-avenging-angel"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.rogue.assassin",
+    "name": "Assassin",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Rogue who strikes first with deadly ambushes and disguises."
+    },
+    "classId": "class.rogue",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.rogue.assassin-bonus-proficiencies"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.assassin-assassinate"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.rogue.assassin-infiltration-expertise"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.rogue.assassin-impostor"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.rogue.assassin-death-strike"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.rogue.arcane-trickster",
+    "name": "Arcane Trickster",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Rogue who adds enchantment and illusion magic to stealth and trickery."
+    },
+    "classId": "class.rogue",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.rogue.arcane-trickster-spellcasting"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.arcane-trickster-mage-hand-legerdemain"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.rogue.arcane-trickster-magical-ambush"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.rogue.arcane-trickster-versatile-trickster"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.rogue.arcane-trickster-spell-thief"
+      }
+    ],
+    "spellcasting": {
+      "ability": "INT",
+      "progression": "third",
+      "cantripsKnown": [0, 0, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+      "spellsKnown": [0, 0, 3, 4, 4, 4, 5, 6, 6, 7, 8, 8, 9, 10, 10, 11, 11, 11, 12, 13],
+      "ritual": "none",
+      "spellList": "class.wizard"
+    }
   }
 ]
