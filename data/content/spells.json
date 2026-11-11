@@ -804,7 +804,7 @@
     "source": "PHB",
     "srd": false,
     "summary": {
-      "effect": "Your next melee weapon hit adds 1d6 psychic damage. The target makes a Wisdom save or is frightened. It can repeat the save each turn using an action."
+      "effect": "Your next melee weapon hit adds 1d6 psychic damage. The target makes a WIS save or is frightened. It can use an action to make a WIS check against your DC to end it."
     },
     "summaryReviewed": false,
     "url": "https://www.dndbeyond.com/spells/wrathful-smite",
@@ -1181,7 +1181,7 @@
     "source": "PHB",
     "srd": false,
     "summary": {
-      "effect": "Make a 20-foot sphere of darkness. It blocks sight and all light, is difficult terrain, and a creature takes 2d6 cold at its turn start inside and 2d6 acid at its turn end inside."
+      "effect": "A 20-foot sphere of blackness and cold: blinds, difficult terrain. A creature starting its turn inside takes 2d6 cold. One ending its turn inside makes a DEX save or takes 2d6 acid."
     },
     "summaryReviewed": false,
     "url": "https://www.dndbeyond.com/spells/hunger-of-hadar",
@@ -1218,8 +1218,8 @@
     "source": "PHB",
     "srd": false,
     "summary": {
-      "effect": "Your next ranged weapon attack deals 4d8 lightning damage instead of normal. The target and creatures within 10 feet make a Dexterity save for half.",
-      "upcast": "+1d8 per slot level above 3."
+      "effect": "Your next ranged weapon attack deals 4d8 lightning on a hit, or half on a miss. Then each creature within 10 feet of the target makes a DEX save: 2d8 lightning, half on a success.",
+      "upcast": "+1d8 to both parts per slot level above 3."
     },
     "summaryReviewed": false,
     "url": "https://www.dndbeyond.com/spells/lightning-arrow",
@@ -1318,7 +1318,7 @@
     "source": "PHB",
     "srd": false,
     "summary": {
-      "effect": "Conjure a vine that pulls a creature within 30 feet to it, or later moves it again. The target makes a Strength save or is dragged 20 feet and may be grappled."
+      "effect": "A vine sprouts from the ground. It lashes a creature within 30 feet when cast, and again as a bonus action on later turns. On a failed DEX save the creature is pulled 20 feet toward the vine."
     },
     "summaryReviewed": false,
     "url": "https://www.dndbeyond.com/spells/grasping-vine",
@@ -1338,7 +1338,7 @@
       "concentration": true
     },
     "ritual": false,
-    "save": "STR",
+    "save": "DEX",
     "classes": ["class.druid", "class.ranger"],
     "tags": ["control", "damage"]
   },
@@ -1386,7 +1386,7 @@
     "source": "PHB",
     "srd": false,
     "summary": {
-      "effect": "Your next weapon hit adds 5d10 force damage. If this leaves the target at 50 HP or less, it is banished, returning if it was native."
+      "effect": "Your next weapon hit adds 5d10 force damage. If the target is left at 50 HP or less, it is banished: home if it came from another plane, otherwise to a demiplane until the spell ends."
     },
     "summaryReviewed": false,
     "url": "https://www.dndbeyond.com/spells/banishing-smite",
@@ -1768,7 +1768,7 @@
     "name": "Tasha's Mind Whip",
     "summary": {
       "effect": "A creature within range makes an INT save.",
-      "fail": "3d6 psychic damage; until the end of your next turn it cannot take reactions and uses either an action or a bonus action and movement, not both.",
+      "fail": "3d6 psychic. It can’t take reactions until its next turn ends, and on that turn it gets only one of: move, action or bonus action.",
       "success": "Half damage and no other effect.",
       "upcast": "+1 creature per slot level above 2."
     },
@@ -1836,8 +1836,8 @@
     },
     "name": "Spirit Shroud",
     "summary": {
-      "effect": "Spirits wreath you. Chosen creatures within 10 feet cannot regain HP; your attacks within 10 feet deal extra damage of your chosen type.",
-      "hit": "Extra 1d8 radiant, necrotic or cold on hits against creatures within 10 feet; the target’s speed drops by 10 until your next turn.",
+      "effect": "Spirits surround you. Your hits on creatures within 10 feet deal extra damage, and chosen creatures starting a turn within 10 feet lose 10 feet of speed.",
+      "hit": "Extra 1d8 radiant, necrotic or cold. The creature can’t regain HP until your next turn starts.",
       "upcast": "Extra damage +1d8 per two slot levels above 3."
     },
     "level": 3,
@@ -1930,7 +1930,7 @@
     },
     "name": "Tasha's Bubbling Cauldron",
     "summary": {
-      "effect": "A magical cauldron appears and brews potions you pick from a random table. Creatures can draw a potion from it as a bonus action; each brew expires after a time."
+      "effect": "A cauldron fills with copies of one common or uncommon potion you choose, as many as your spellcasting modifier. A creature draws one as a bonus action. Drawn potions vanish if you cast this again."
     },
     "level": 6,
     "school": "conjuration",
@@ -1962,7 +1962,7 @@
     },
     "name": "Dream of the Blue Veil",
     "summary": {
-      "effect": "Creatures you pick travel in a dream to another world. They return after the spell ends, unless they are changed by what they met there."
+      "effect": "You and up to eight willing creatures fall unconscious for 6 hours, dreaming of another world you know of. When the spell ends, all of you are physically transported there."
     },
     "level": 7,
     "school": "conjuration",
@@ -2029,7 +2029,7 @@
     },
     "name": "Summon Beast",
     "summary": {
-      "effect": "Call a spirit in beast form to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 20 HP.",
+      "effect": "Call a spirit in beast form to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 30 HP (20 in Air form).",
       "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
     },
     "level": 2,
@@ -3885,7 +3885,7 @@
     "ritual": false,
     "name": "Guardian of Nature",
     "summary": {
-      "effect": "Take the form of a Primal Beast (more speed, darkvision, advantage on STR attacks and extra damage) or a Great Tree (temp HP, advantage on CON and DEX attacks and difficult terrain around you)."
+      "effect": "Primal Beast: +10 speed, 120-ft darkvision, advantage on STR attacks, +1d6 force on weapon hits. Great Tree: 10 temp HP, advantage on CON saves and DEX/WIS attacks, nearby ground difficult for enemies."
     },
     "level": 4,
     "school": "transmutation",
@@ -3915,7 +3915,7 @@
     "ritual": false,
     "name": "Shadow of Moil",
     "summary": {
-      "effect": "Shadow wraps you: nearby light is dim, creatures that see you have disadvantage, you resist radiant damage, and attackers within 10 feet take 2d8 necrotic as a reaction-free pulse."
+      "effect": "Shadows wreathe you: you are heavily obscured to others, light within 10 feet dims, and you resist radiant damage. A creature within 10 feet that hits you takes 2d8 necrotic."
     },
     "level": 4,
     "school": "necromancy",
@@ -4020,7 +4020,7 @@
     "ritual": false,
     "name": "Summon Greater Demon",
     "summary": {
-      "effect": "Call a demon of challenge rating 5 or lower. It starts friendly to you but turns hostile if you lose concentration or it breaks free. Control it only while the spell lasts.",
+      "effect": "Call a demon of CR 5 or lower. It is hostile to all non-demons and follows your spoken commands. At the end of each of its turns it makes a CHA save; on a success it breaks free.",
       "upcast": "Higher challenge rating with higher slots."
     },
     "level": 4,
@@ -4184,7 +4184,7 @@
     "ritual": false,
     "name": "Dawn",
     "summary": {
-      "effect": "A 30-foot-radius column of light lasts. Creatures in it when it appears or when you move it make a CON save. You can shift it 60 feet as an action.",
+      "effect": "A 30-foot-radius cylinder of light. Creatures in it when it appears, or ending a turn in it, make a CON save. As a bonus action you can move it up to 60 feet.",
       "fail": "4d10 radiant.",
       "success": "Half damage."
     },
@@ -4222,9 +4222,9 @@
     "ritual": false,
     "name": "Enervation",
     "summary": {
-      "effect": "A tendril of life-draining energy hits a creature. It makes a DEX save and you can use an action each turn to deal damage again. You heal half of what you deal.",
+      "effect": "A tendril drains a creature. On later turns your action deals 4d8 necrotic to it automatically. You regain HP equal to half the necrotic damage dealt.",
       "fail": "4d8 necrotic.",
-      "success": "Half damage and no further draining.",
+      "success": "2d8 necrotic and the spell ends.",
       "upcast": "+1d8 per slot level above 5."
     },
     "level": 5,
@@ -4321,7 +4321,7 @@
     "ritual": false,
     "name": "Immolation",
     "summary": {
-      "effect": "Flames wreathe a creature you can see. It makes a DEX save, and takes damage again at the end of each of its turns until it saves or the spell ends. If it dies, it explodes into light.",
+      "effect": "Flames wreathe a creature. On a fail, it saves again at the end of each of its turns: 4d6 fire on a fail, the spell ends on a success. If it dies, it turns to ash.",
       "fail": "8d6 fire.",
       "success": "Half damage and the spell ends early."
     },
@@ -4358,7 +4358,7 @@
     "ritual": false,
     "name": "Infernal Calling",
     "summary": {
-      "effect": "Call a devil of challenge rating 6 or lower. It obeys you while you concentrate, and it turns hostile if the spell ends. You may bargain with it over a service.",
+      "effect": "Call a devil of CR 6 or lower. It is unfriendly and may refuse orders or try to bargain. It obeys you only if you hold its talisman.",
       "upcast": "Higher challenge rating with higher slots."
     },
     "level": 5,
@@ -4390,9 +4390,9 @@
     "ritual": false,
     "name": "Maelstrom",
     "summary": {
-      "effect": "Water whirls in a 30-foot radius. Creatures in it make a STR save when it appears, and again when they start their turn there.",
-      "fail": "6d6 bludgeoning and pulled toward the centre.",
-      "success": "Half damage and not pulled."
+      "effect": "Water whirls in a 30-foot radius, making difficult terrain. A creature starting its turn there makes a STR save.",
+      "fail": "6d6 bludgeoning and pulled 10 feet toward the centre.",
+      "success": "No effect."
     },
     "level": 5,
     "school": "evocation",
@@ -4428,7 +4428,7 @@
     "ritual": false,
     "name": "Negative Energy Flood",
     "summary": {
-      "effect": "Deathly energy hits a creature. Undead instead gain temp HP. A target that fails the save and is reduced to 0 hit points by this rises as a zombie under your command.",
+      "effect": "Deathly energy hits a creature. Undead skip the save and gain temp HP equal to half the roll. A humanoid killed by this rises as a zombie that attacks the nearest creature; you don’t control it.",
       "fail": "5d12 necrotic.",
       "success": "Half damage."
     },
@@ -4596,9 +4596,10 @@
     "ritual": false,
     "name": "Wall of Light",
     "summary": {
-      "effect": "Raise a luminous wall up to 60 feet long, 10 feet high and 5 feet thick. It blinds creatures that look at it. As an action you can shoot a lance of light from it.",
-      "fail": "Blinded for a minute (repeat save each turn).",
-      "upcast": "Lance damage +1d8 per slot level above 5."
+      "effect": "A wall of light up to 60 ft long. Creatures in it when it appears make a CON save. Action: a beam (ranged spell attack, 4d8 radiant); each beam shrinks the wall by 10 feet.",
+      "fail": "4d8 radiant and blinded (save at the end of each turn).",
+      "upcast": "+1d8 to both per slot level above 5.",
+      "success": "Half damage, not blinded."
     },
     "level": 5,
     "school": "evocation",
@@ -4618,7 +4619,12 @@
     },
     "save": "CON",
     "classes": ["class.sorcerer", "class.warlock", "class.wizard"],
-    "tags": ["utility"]
+    "tags": ["utility"],
+    "damage": {
+      "dice": "4d8",
+      "type": "radiant",
+      "upcastPerLevel": "1d8"
+    }
   },
   {
     "kind": "spell",
@@ -4630,9 +4636,9 @@
     "ritual": false,
     "name": "Bones of the Earth",
     "summary": {
-      "effect": "Raise up to six stone pillars from the ground. A creature under one makes a DEX save and is lifted if it fails. A pillar can also be a ceiling-like shelf or a support.",
-      "fail": "6d6 bludgeoning.",
-      "success": "Half damage.",
+      "effect": "Up to six stone pillars burst up. A creature on one makes a DEX save or is lifted. If a ceiling stops the pillar, the creature takes 6d6 bludgeoning and is restrained.",
+      "fail": "Lifted with the pillar.",
+      "success": "Moves off to an adjacent space.",
       "upcast": "Two more pillars per slot level above 6."
     },
     "level": 6,
@@ -4667,12 +4673,12 @@
     "ritual": false,
     "name": "Create Homunculus",
     "summary": {
-      "effect": "Make a Tiny construct bound to you. It can speak telepathically, has its own stats and uses your blood. It dies when you lose its link or when you cast this again."
+      "effect": "Cut yourself (2d4 piercing) to make a homunculus bound to you. Your HP maximum drops while it lives; it shares a telepathic link with you. Only one at a time."
     },
     "level": 6,
     "school": "transmutation",
     "casting": {
-      "cost": "minutes",
+      "cost": "hours",
       "amount": 1
     },
     "range": "Touch",
@@ -4698,7 +4704,7 @@
     "ritual": false,
     "name": "Investiture of Flame",
     "summary": {
-      "effect": "Flames cloak you. You resist cold and are immune to fire, shed light, and burn creatures that touch you. Use an action to hurl a line of fire 15 feet long for 4d8 fire (DEX save)."
+      "effect": "Immune to fire, resist cold, shed light. A creature that moves within 5 feet or ends its turn there takes 1d10 fire. Action: a 15-ft by 5-ft line, DEX save, 4d8 fire (half on success)."
     },
     "level": 6,
     "school": "transmutation",
@@ -4728,7 +4734,7 @@
     "ritual": false,
     "name": "Investiture of Ice",
     "summary": {
-      "effect": "Ice cloaks you. You resist fire and are immune to cold, freeze nearby water, and ignore ice-based difficult terrain. Use an action for a 15-foot cone of 4d6 cold (CON save)."
+      "effect": "Immune to cold, resist fire. Ground within 10 feet is difficult terrain for others. Action: a 15-foot cone, CON save, 4d6 cold and speed halved; half damage on success."
     },
     "level": 6,
     "school": "transmutation",
@@ -4788,7 +4794,7 @@
     "ritual": false,
     "name": "Investiture of Wind",
     "summary": {
-      "effect": "Wind cloaks you. Ranged attacks against you have disadvantage, you gain a fly speed of 60 feet, and you can send a cube of air to push creatures 10 feet (STR save, 2d10 bludgeoning)."
+      "effect": "Ranged weapon attacks against you have disadvantage; fly speed 60 feet. Action: a 15-foot cube, CON save, 2d10 bludgeoning and pushed 10 feet; half damage and no push on success."
     },
     "level": 6,
     "school": "transmutation",
@@ -4818,9 +4824,9 @@
     "ritual": false,
     "name": "Mental Prison",
     "summary": {
-      "effect": "Trap a creature in an illusory cell. It makes an INT save and takes damage if it moves away. If it leaves the cell, it takes more damage.",
-      "fail": "5d10 psychic and restrained in the illusion. It takes more damage if it breaks free.",
-      "success": "No damage and the spell ends."
+      "effect": "Trap a creature in an illusory cell. It takes 5d10 psychic either way. If it leaves the cell, it takes 10d10 psychic and the spell ends.",
+      "fail": "Restrained in the illusion and can’t see or hear past it.",
+      "success": "The spell ends."
     },
     "level": 6,
     "school": "illusion",
@@ -4885,7 +4891,7 @@
     "ritual": false,
     "name": "Scatter",
     "summary": {
-      "effect": "Teleport up to five willing or unwilling creatures within range to random spaces within 120 feet. Unwilling creatures make a WIS save to resist."
+      "effect": "Teleport up to five creatures within range to spaces you choose within 120 feet. Unwilling creatures make a WIS save to resist."
     },
     "level": 6,
     "school": "conjuration",
@@ -4915,7 +4921,7 @@
     "ritual": false,
     "name": "Soul Cage",
     "summary": {
-      "effect": "When a humanoid dies within range, trap its soul in a cage. For 8 hours you can use it to heal, to learn secrets from it, to see through its eyes, or to bolster necromancy damage."
+      "effect": "Reaction when a humanoid dies within 60 feet: trap its soul for 8 hours. Up to six times, use it to regain 2d8 HP, ask it a question, gain advantage on a roll, or see a place it saw."
     },
     "level": 6,
     "school": "necromancy",
@@ -4946,7 +4952,7 @@
     "ritual": false,
     "name": "Tenser’s Transformation",
     "summary": {
-      "effect": "You become a mighty warrior. Gain 50 temp HP, advantage on weapon attacks, extra 2d12 force damage, all weapon and shield proficiency, and two attacks. You cannot cast spells; you are tired afterward."
+      "effect": "50 temp HP, advantage on weapon attacks, +2d12 force on hits, armor, shield and weapon proficiency, STR and CON save proficiency, attack twice. No spellcasting. Afterward, DC 15 CON save or gain 1 exhaustion."
     },
     "level": 6,
     "school": "transmutation",
@@ -5013,7 +5019,7 @@
     "ritual": false,
     "name": "Power Word Pain",
     "summary": {
-      "effect": "A creature you can see with 100 hit points or fewer is wracked with pain, with no save. Its speed halves, it has disadvantage on attacks, checks and saves, and it can repeat a CON save to end it."
+      "effect": "A creature with 100 HP or fewer, no save. Speed max 10 ft, disadvantage on attacks, checks and non-CON saves, and casting needs a CON save. It makes a CON save at the end of each turn to end it."
     },
     "level": 7,
     "school": "enchantment",
@@ -5042,7 +5048,7 @@
     "ritual": false,
     "name": "Temple of the Gods",
     "summary": {
-      "effect": "Raise a temple on solid ground. It has several walls and an altar room, and its celestial guardians can heal and fight for you. Hostile creatures take damage in it."
+      "effect": "Raise a temple for 24 hours. Creatures of chosen types make a CHA save to enter, and subtract 1d4 from their rolls inside. Divination from outside is blocked. Healing spells inside add your WIS modifier."
     },
     "level": 7,
     "school": "conjuration",
@@ -5112,7 +5118,7 @@
     "ritual": false,
     "name": "Abi-Dalzim’s Horrid Wilting",
     "summary": {
-      "effect": "Draw moisture out of a 30-foot cube. Creatures in it make a CON save, plants and water elementals take double damage and nonmagical plants die.",
+      "effect": "Draw moisture out of a 30-foot cube. Creatures in it make a CON save. Plant creatures and water elementals save with disadvantage and take maximum damage; nonmagical plants wither.",
       "fail": "12d8 necrotic.",
       "success": "Half damage."
     },
@@ -5149,8 +5155,8 @@
     "ritual": false,
     "name": "Illusory Dragon",
     "summary": {
-      "effect": "Raise a Huge illusory dragon in a space you can see. Creatures that see it make a WIS save or are frightened. As a bonus action, you can have it breathe on a 60-foot cone.",
-      "fail": "Breath: 7d6 damage of the type you choose (CON/DEX save varies by type)."
+      "effect": "A Huge shadowy dragon appears. Creatures that see it make a WIS save or are frightened. Bonus action: move it 60 feet and breathe a 60-foot cone (INT save, 7d6 of a chosen type, half on success).",
+      "fail": "Frightened for the duration."
     },
     "level": 8,
     "school": "illusion",
@@ -5219,7 +5225,7 @@
     "ritual": false,
     "name": "Mighty Fortress",
     "summary": {
-      "effect": "Conjure a 120-foot-square castle with towers, walls and servants. It lasts for 7 days. Lesser creatures of your choice move in, and the castle can only be broken by high-level magic."
+      "effect": "Raise a stone fortress for 7 days, staffed by 100 invisible servants. Cast it on the same spot every 7 days for a year and it becomes permanent."
     },
     "level": 8,
     "school": "conjuration",
@@ -5314,7 +5320,7 @@
     "name": "Psychic Scream",
     "summary": {
       "effect": "Choose up to ten creatures you can see. Each makes an INT save as its mind is blasted. A creature with Intelligence 2 or lower is unaffected.",
-      "fail": "14d6 psychic and stunned until the end of your next turn if it fails.",
+      "fail": "14d6 psychic and stunned; it makes an INT save at the end of each turn to end it.",
       "success": "Half damage."
     },
     "level": 9,

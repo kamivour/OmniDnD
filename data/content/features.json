@@ -5013,7 +5013,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Wild Shape beast limit is CR 1 at level 2, then your druid level divided by 3, rounded down, from level 6. Flying and swimming limits are ignored."
+      "effect": "Wild Shape beast limit is CR 1 at level 2, then your druid level divided by 3, rounded down, from level 6. The usual fly and swim limits still apply."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -5551,7 +5551,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Action: a creature within 5 ft that sees or hears you makes a Wisdom save or is charmed and incapacitated until the end of your next turn. You can keep this up each turn. Once per long rest per target."
+      "effect": "Action: a creature within 5 ft that sees or hears you makes a WIS save or is charmed, incapacitated and speed 0. Your action extends it each turn, up to 1 minute. Afterward, not on it until a long rest."
     },
     "origin": "subclass",
     "activation": "action"
@@ -5565,15 +5565,11 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Reaction when a creature you can see within 30 ft attacks you: it makes a Wisdom save or must target another creature within range. Once per long rest per attacker."
+      "effect": "Reaction when a creature within 30 ft attacks you: it makes a WIS save or must target the creature closest to it, not you or itself. If it succeeds, not again on it until a long rest."
     },
     "origin": "subclass",
     "activation": "reaction",
-    "trigger": "A creature within 30 ft attacks you",
-    "uses": {
-      "max": 1,
-      "recharge": "long"
-    }
+    "trigger": "A creature within 30 ft attacks you"
   },
   {
     "kind": "feature",
@@ -5845,7 +5841,7 @@
     "id": "feature.feat.artificer-initiate",
     "name": "Artificer Initiate",
     "summary": {
-      "effect": "Learn one artificer cantrip and one 1st-level artificer spell, cast with INT, WIS or CHA. Cast that spell once per long rest without a slot. Gain one artisan tool proficiency."
+      "effect": "Learn one artificer cantrip and one 1st-level artificer spell, cast with INT. Cast that spell once per long rest without a slot. Gain one artisan tool proficiency."
     },
     "origin": "feat",
     "activation": "special",
@@ -5949,7 +5945,7 @@
     "id": "feature.feat.poisoner",
     "name": "Poisoner",
     "summary": {
-      "effect": "Your poison damage ignores resistance, and you can poison creatures that are immune to it. Gain poisoner’s kit proficiency; brew potent doses with the kit."
+      "effect": "Your poison damage ignores resistance. Coat a weapon or ammunition with poison as a bonus action. Gain poisoner’s kit proficiency; spend 1 hour and 50 gp to brew proficiency-bonus doses (DC 14 CON: 2d8 poison and poisoned)."
     },
     "origin": "feat",
     "activation": "passive"
@@ -6116,10 +6112,16 @@
     "id": "feature.warlock.eldritch-invocation-bond-of-the-talisman",
     "name": "Eldritch Invocation: Bond of the Talisman",
     "summary": {
-      "effect": "Needs level 12 and Pact of the Talisman. Teleport to whoever wears your talisman, or swap places with them."
+      "effect": "Needs level 12 and Pact of the Talisman. Action: teleport next to whoever wears your talisman, on the same plane. The wearer can do the same to reach you. Uses equal your proficiency bonus per long rest."
     },
     "origin": "class",
-    "activation": "special"
+    "activation": "action",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
   },
   {
     "kind": "feature",
@@ -6158,10 +6160,14 @@
     "id": "feature.warlock.eldritch-invocation-gift-of-the-protectors",
     "name": "Eldritch Invocation: Gift of the Protectors",
     "summary": {
-      "effect": "Needs level 9 and Pact of the Tome. Allies named in your book can drop to 1 HP instead of 0 once per long rest."
+      "effect": "Needs level 9 and Pact of the Tome. When a creature named in your book drops to 0 HP, it drops to 1 instead. Once it triggers, it can’t work again until you finish a long rest."
     },
     "origin": "class",
-    "activation": "special"
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
   },
   {
     "kind": "feature",
@@ -6186,10 +6192,16 @@
     "id": "feature.warlock.eldritch-invocation-protection-of-the-talisman",
     "name": "Eldritch Invocation: Protection of the Talisman",
     "summary": {
-      "effect": "Needs level 7 and Pact of the Talisman. The wearer adds 1d4 to a failed saving throw."
+      "effect": "Needs level 7 and Pact of the Talisman. When the wearer fails a saving throw, they add 1d4 to the roll. Uses equal your proficiency bonus per long rest."
     },
     "origin": "class",
-    "activation": "reaction"
+    "activation": "special",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
   },
   {
     "kind": "feature",
@@ -6299,7 +6311,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When you rage, you and nearby allies gain temp HP and one extra hit with a damage die. Uses equal your proficiency bonus per long rest."
+      "effect": "When you rage, choose up to your CON modifier (min 1) in willing creatures within 30 ft. Gain 5 temp HP each. During the rage, each adds 1d6 damage to one hit per turn. Proficiency bonus uses per long rest."
     },
     "origin": "subclass",
     "activation": "special",
@@ -6319,7 +6331,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "As an action, sense magic nearby for a minute. Uses equal your proficiency bonus per long rest."
+      "effect": "Action: until the end of your next turn, sense every spell and magic item within 60 ft not behind total cover, and learn a sensed spell’s school. Uses equal your proficiency bonus per long rest."
     },
     "origin": "subclass",
     "activation": "action",
@@ -6452,7 +6464,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Performance of Creation can make many items at once, equal to your CHA modifier. Using a Bardic Inspiration die ends the wait to create more."
+      "effect": "Performance of Creation makes several items at once, up to your CHA modifier (min 2). Only one can be the largest size; the rest are Small or Tiny. The gold value limit no longer applies."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -6626,7 +6638,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When you use Divine Strike, curse the target. The next ally hit extra psychic damage on it."
+      "effect": "When you deal Divine Strike damage on your turn, curse the target until your next turn starts. The next ally hit on it deals an extra 2d8 psychic and ends the curse. Once per turn."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -7178,10 +7190,10 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "While your arms are active, summon an astral visage: darkvision, advantage on Intimidation, and see through darkness. Uses your arms’ ki spend."
+      "effect": "Bonus action (or with your arms), spend 1 ki: a visage for 10 minutes. See 120 ft through any darkness, gain advantage on Insight and Intimidation, and whisper to one creature within 60 ft or boom to 600 ft."
     },
     "origin": "subclass",
-    "activation": "special",
+    "activation": "bonus",
     "usesFrom": "feature.monk.ki"
   },
   {
@@ -7207,7 +7219,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Spend 5 ki to awaken your astral self for 10 minutes: +2 AC, an extra arm attack, and your arms can use your martial arts die."
+      "effect": "Bonus action, spend 5 ki: summon your arms, visage and body together for 10 minutes. Gain +2 AC, and when you use Extra Attack you can attack three times with your astral arms."
     },
     "origin": "subclass",
     "activation": "bonus",
@@ -7252,7 +7264,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Your walking speed rises by 10 feet. Allies in your aura gain 10 feet of speed until the end of their next turn after starting there."
+      "effect": "Your walking speed rises by 10 feet. An ally who starts their turn within 5 feet of you gains 10 feet of speed until that turn ends (10-foot range at level 18). Not while you are incapacitated."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -7599,7 +7611,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When a creature dies near you, gather a soul trinket (max equal your proficiency bonus). Spend one to gain advantage on a death save or CON save and to ask the spirit a question."
+      "effect": "Reaction when a creature dies within 30 ft: make a soul trinket (max = proficiency bonus). Carrying one: advantage on death and CON saves. Destroy one for a free Wails from the Grave, or (action) to question its spirit."
     },
     "origin": "subclass",
     "activation": "reaction"
@@ -7631,7 +7643,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Wails from the Grave no longer uses a limited resource on a Sneak Attack, and you regain trinkets at the end of a long rest if you have none."
+      "effect": "Wails from the Grave can deal its necrotic damage to both the first and the second creature. At the end of a long rest, a soul trinket appears in your hand if you have none."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -7645,7 +7657,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Gain psionic energy dice: 2 at level 3, rising as you grow. Spend one to boost a skill check, send a message telepathically, or reroll a failed save at higher level."
+      "effect": "Psionic dice equal twice your proficiency bonus: d6, rising to d8, d10, d12 at levels 5, 11, 17. Add one to a failed proficient check (spent only on success), or use telepathy. Bonus action: regain one die per short rest."
     },
     "origin": "subclass",
     "activation": "special"
@@ -7659,10 +7671,10 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Conjure a psychic blade as a bonus action or free action: 1d6 psychic damage, finesse, and thrown for 60 feet. A second blade fits an offhand."
+      "effect": "When you take the Attack action, attack with a psychic blade: 1d6 psychic, finesse, thrown 60/120 ft. Then, with the other hand free, a bonus-action attack with a second blade deals 1d4."
     },
     "origin": "subclass",
-    "activation": "bonus"
+    "activation": "special"
   },
   {
     "kind": "feature",
@@ -7687,7 +7699,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Become invisible for 1 hour or until you attack. Once per long rest, or spend a psionic die to use it again."
+      "effect": "Action: become invisible for 1 hour. It ends right after you deal damage to a creature or force one to make a save. Once per long rest, or spend a psionic die to use it again."
     },
     "origin": "subclass",
     "activation": "action",
@@ -7961,7 +7973,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Cast Evard’s black tentacles once per long rest without a slot or concentration. You gain temp HP when you cast it."
+      "effect": "Cast Evard’s black tentacles once per long rest without a slot. It still needs concentration, but damage can’t break it. You gain temp HP equal to your warlock level when you cast it."
     },
     "origin": "subclass",
     "activation": "action",
@@ -7979,13 +7991,13 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Teleport yourself and up to five willing creatures up to 1 mile to water you have seen. Once per long rest."
+      "effect": "Action: teleport yourself and up to five willing creatures within 30 ft to a body of water you have seen, up to 1 mile away. Once per short or long rest."
     },
     "origin": "subclass",
     "activation": "action",
     "uses": {
       "max": 1,
-      "recharge": "long"
+      "recharge": "short"
     }
   },
   {
@@ -8031,7 +8043,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Pull up to five creatures into your vessel for hours. They gain extra healing on a long rest and temp HP."
+      "effect": "Entering your vessel can pull in up to five willing creatures within 30 ft. Ten minutes inside counts as a short rest, and anyone spending Hit Dice there adds your proficiency bonus to the HP regained."
     },
     "origin": "subclass",
     "activation": "action"
@@ -8045,7 +8057,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Cast a spell of 6th level or lower using the genie’s power, without needing its material parts. Once per long rest after 1d4 days."
+      "effect": "Action: get the effect of any spell of 6th level or lower with a casting time of 1 action, ignoring its requirements and costly components. Afterward it returns only after 1d4 long rests; track that by hand."
     },
     "origin": "subclass",
     "activation": "action",
@@ -8063,10 +8075,10 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Your magical quill copies spells faster and cheaper, and makes ink in seconds. It can write nonmagical text instantly."
+      "effect": "Bonus action: create a magic quill. It writes in any ink color, copies a spell into your spellbook in 2 minutes per spell level, and erases its own writing within 5 ft as a bonus action."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "bonus"
   },
   {
     "kind": "feature",
@@ -8077,7 +8089,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "You can cast ritual spells quickly as an action. When you cast a spell from your spellbook, swap its damage type to another it knows and treat it as a different spell for one cast."
+      "effect": "When you cast a wizard spell with a slot, swap its damage type for one from another spell of that level in your book. Once per long rest, cast a ritual in its normal casting time."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -8109,7 +8121,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "At the end of a long rest, make a scroll of a spell you know of level 1 or 2 using a slot. You can cast it as a bonus action later."
+      "effect": "After a long rest, copy a 1st- or 2nd-level, 1-action spell from your book onto a scroll; no slot used. It casts one level higher, only you can read it, and it fades at your next long rest."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -8355,13 +8367,13 @@
     "summaryReviewed": false,
     "source": "XGE",
     "summary": {
-      "effect": "Needs level 5 and Pact of the Chain. A bonus action wraps you in buzzing flies for a minute. Nearby foes take poison damage each turn."
+      "effect": "Needs level 5. Bonus action: a 5-ft aura of flies. You gain advantage on Intimidation but disadvantage on other CHA checks. Creatures starting a turn in it take poison equal to your CHA modifier. Once per short rest."
     },
     "origin": "class",
     "activation": "bonus",
     "uses": {
       "max": 1,
-      "recharge": "long"
+      "recharge": "short"
     }
   },
   {
@@ -8387,7 +8399,7 @@
     "summaryReviewed": false,
     "source": "XGE",
     "summary": {
-      "effect": "Needs level 7. As an action, gain the ability to see through solid objects within 30 feet until the end of your next turn."
+      "effect": "Needs level 7. Action: see through solid objects within 30 ft, with darkvision there, for up to 1 minute (concentration). Once per short rest."
     },
     "origin": "class",
     "activation": "action",
@@ -8517,7 +8529,7 @@
     "summaryReviewed": false,
     "source": "XGE",
     "summary": {
-      "effect": "Needs level 5. Reaction after taking damage: gain 10 temp HP per warlock level, vulnerability to fire, and freeze with speed 0 until your next turn ends. Once per short rest."
+      "effect": "Needs level 5. Reaction when you take damage: gain 10 temp HP per warlock level against it. Until your next turn ends you are encased: fire vulnerable, speed 0 and incapacitated. Once per short rest."
     },
     "origin": "class",
     "activation": "reaction",
@@ -8613,7 +8625,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When you rage, pick desert, sea or tundra. A 10-foot aura deals damage, shocks foes or grants temp HP to allies, and renews each turn you rage."
+      "effect": "Rage starts a 10-ft aura (bonus action to renew). Desert: other creatures take 2 fire. Sea: one creature, DEX save or 1d6 lightning. Tundra: chosen creatures gain 2 temp HP. Amounts grow with level."
     },
     "origin": "subclass",
     "activation": "bonus"
@@ -8655,7 +8667,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Your aura gains a strong effect: lightning on a hit, a tidal slam that knocks prone, or frozen ground. It uses your STR for the save."
+      "effect": "Desert: reaction when hit by a creature in your aura, DEX save or fire equal to half your level. Sea: reaction after you hit, STR save or prone. Tundra: one creature, STR save or speed 0."
     },
     "origin": "subclass",
     "activation": "reaction"
@@ -8711,7 +8723,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Up to ten allies within 60 feet gain advantage on attacks and saves until your next turn. Once per long rest, or by spending a slot."
+      "effect": "Up to ten creatures within 60 feet gain advantage on attacks and saves until your next turn starts. Once per long rest."
     },
     "origin": "subclass",
     "activation": "bonus",
@@ -8743,7 +8755,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Spend a Bardic Inspiration die to give allies temp HP and let them move without opportunity attacks."
+      "effect": "Spend a Bardic Inspiration die: up to your CHA modifier in creatures within 60 ft gain 5 temp HP (more at higher levels). Each can use its reaction to move its speed without opportunity attacks."
     },
     "origin": "subclass",
     "activation": "bonus",
@@ -8758,7 +8770,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "After a minute performing, charm creatures that watch. They stay friendly for an hour or so."
+      "effect": "After performing for 1 minute, up to your CHA modifier in humanoids within 60 ft who watched make a WIS save or are charmed for 1 hour. It ends if they are harmed."
     },
     "origin": "subclass",
     "activation": "special",
@@ -8794,7 +8806,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Take a regal form for a minute. Creatures that target you with an attack or harmful spell must save or lose that action."
+      "effect": "Regal form for 1 minute. The first creature each turn that attacks you makes a CHA save or picks a new target. On a success, it has disadvantage on saves against your spells on your next turn."
     },
     "origin": "subclass",
     "activation": "bonus",
@@ -8812,7 +8824,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Gain Dueling or Two-Weapon Fighting. You can use a melee weapon as a spell focus."
+      "effect": "Gain medium armor and scimitar proficiency. Choose Dueling or Two-Weapon Fighting. You can use a melee weapon you are proficient with as a spellcasting focus."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -8920,7 +8932,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Whisper to a creature that fails a WIS save. It acts as your friend and obeys unless in danger."
+      "effect": "Whisper to a creature: it makes a WIS save or is charmed for 8 hours, obeying you unless in danger. It ends if you or your allies harm it."
     },
     "origin": "subclass",
     "activation": "action",
@@ -9172,7 +9184,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Redirect a missed magic shot at a different target within 60 feet."
+      "effect": "When you miss with a magic arrow, reroll the attack as a bonus action against a different target within 60 feet of the first."
     },
     "origin": "subclass",
     "activation": "bonus"
@@ -9200,7 +9212,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Gain advantage on weapon attacks until the end of your turn and temp HP. Three uses per long rest."
+      "effect": "Gain advantage on weapon attacks until the end of your turn and 5 temp HP (10 at level 10, 15 at level 15). Three uses per long rest."
     },
     "origin": "subclass",
     "activation": "bonus",
@@ -9320,7 +9332,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Stand from prone for little movement, and redirect a missed melee attack to another creature, spending ki."
+      "effect": "Standing from prone costs only 5 feet. Reaction, 1 ki: when a creature misses you with a melee attack, it hits another creature of your choice within 5 feet of you instead."
     },
     "origin": "subclass",
     "activation": "reaction",
@@ -9335,7 +9347,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Spend ki to cancel disadvantage on a roll."
+      "effect": "Spend 2 ki to cancel disadvantage on an ability check, attack roll or saving throw."
     },
     "origin": "subclass",
     "activation": "special",
@@ -9467,10 +9479,10 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Shed bright light and deal radiant damage in reaction to melee hits against you."
+      "effect": "Shed bright light in 30 ft (bonus action to toggle). While lit, reaction when a creature hits you in melee: it takes radiant damage equal to 5 + your WIS modifier."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "reaction"
   },
   {
     "kind": "feature",
@@ -9542,7 +9554,7 @@
       "effect": "For a minute, resist all damage, add an extra attack, and crit on 19 or 20. Once per long rest."
     },
     "origin": "subclass",
-    "activation": "bonus",
+    "activation": "action",
     "uses": {
       "max": 1,
       "recharge": "long"
@@ -9647,7 +9659,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Choose a creature within 30 feet. The next hit this turn deals extra force damage and counts as force."
+      "effect": "Choose a creature within 30 feet. Your next hit on it this turn deals force damage and an extra 1d8 force (2d8 at level 11)."
     },
     "origin": "subclass",
     "activation": "bonus"
@@ -9679,7 +9691,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When you take the Attack action, teleport 10 feet before each attack. If you hit two targets, gain a bonus attack."
+      "effect": "When you take the Attack action, teleport up to 10 feet before each attack. If you attack two different creatures, make one extra attack against a third."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -9728,7 +9740,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Mark a creature. The first hit each turn on it deals an extra 1d6 damage."
+      "effect": "Mark a creature within 60 feet. The first weapon hit each turn on it deals an extra 1d6. Lasts until a short or long rest, or until you mark another."
     },
     "origin": "subclass",
     "activation": "bonus"
@@ -10005,7 +10017,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Make an extra attack as a bonus action, and apply Sneak Attack to it even if you already used it."
+      "effect": "After the Attack action, make one extra attack as a bonus action. It can use Sneak Attack even if you already did, but not against the same target."
     },
     "origin": "subclass",
     "activation": "bonus"
@@ -10125,10 +10137,11 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When you or an ally rolls healing dice from your spell, spend a sorcery point to reroll them."
+      "effect": "When you or an ally within 5 feet rolls healing dice for a spell, spend 1 sorcery point to reroll any of them once. Once per turn."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "usesFrom": "feature.sorcerer.font-of-magic"
   },
   {
     "kind": "feature",
@@ -10185,7 +10198,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When damage would drop you to 0, make a CHA save to stay at 1 hit point. Once per long rest."
+      "effect": "When damage drops you to 0 HP, make a CHA save (DC 5 + damage taken) to drop to 1 instead. Not against radiant damage or a critical hit. After it works, wait for a long rest."
     },
     "origin": "subclass",
     "activation": "passive",
@@ -10275,7 +10288,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Gain lightning and thunder resistance. Damage spells of those types hurt nearby creatures with half your level."
+      "effect": "Resist lightning and thunder. When you cast a 1st-level or higher lightning or thunder spell, chosen creatures within 10 feet take lightning or thunder damage equal to half your sorcerer level."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -10303,7 +10316,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When hit by a melee attack, deal lightning damage equal to your sorcerer level, and push it."
+      "effect": "Reaction when hit in melee: the attacker takes lightning damage equal to your sorcerer level and makes a STR save or is pushed up to 20 feet away."
     },
     "origin": "subclass",
     "activation": "reaction"
@@ -10317,10 +10330,14 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Gain a fly speed of 60 feet and immunity to lightning and thunder. You can share it with allies."
+      "effect": "Immune to lightning and thunder; fly speed 60 feet. Action: drop your fly speed to 30 feet for 1 hour to give 3 + CHA modifier creatures within 30 feet a 30-foot fly speed. Once per short rest."
     },
     "origin": "subclass",
-    "activation": "action"
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
   },
   {
     "kind": "feature",
@@ -10345,7 +10362,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Keep a pool of d6s equal to 1 + your warlock level, refilled on a long rest. Spend them to heal a creature within 60 feet. Track the pool by hand."
+      "effect": "Keep a pool of d6s equal to 1 + your warlock level, refilled on a long rest. Bonus action: heal a creature within 60 feet, spending up to your CHA modifier in dice. Track the pool by hand."
     },
     "origin": "subclass",
     "activation": "bonus"
@@ -10373,7 +10390,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Gain temp HP after a rest, for you and allies equal to your level plus CHA."
+      "effect": "After a short or long rest, gain temp HP equal to your warlock level + CHA modifier. Up to five creatures you can see gain half your level + CHA modifier."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -10387,10 +10404,10 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When you make a death save, release a burst of radiant light, healing you and blinding foes. Once per long rest."
+      "effect": "Instead of a death save, regain half your HP maximum and stand. Chosen creatures within 30 feet take 2d8 + CHA modifier radiant and are blinded until the end of your turn. Once per long rest."
     },
     "origin": "subclass",
-    "activation": "reaction",
+    "activation": "special",
     "uses": {
       "max": 1,
       "recharge": "long"
@@ -10405,7 +10422,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Curse a creature for a minute: extra damage equal to your proficiency, crit on 19–20, and healing on kill. Once per short or long rest."
+      "effect": "Curse a creature for a minute: add your proficiency bonus to damage against it and crit on 19–20. If it dies, regain HP equal to your warlock level + CHA modifier. Once per short rest."
     },
     "origin": "subclass",
     "activation": "bonus",

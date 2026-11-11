@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 02:40 — Rules corrections for added subclasses and spells
+
+- Checked the added PHB, Tasha’s and Xanathar’s features and spells against the 2014 books and fixed about 80 summaries (for example Soulknife dice, Storm Herald auras, Wall of Light, Tenser’s Transformation).
+- Some limits changed: Fathomless Plunge and Cloak of Flies now recharge on a short rest; Talisman invocations use proficiency-bonus uses; Create Homunculus takes 1 hour to cast; Grasping Vine uses a DEX save.
+- Worth a look: the Enchantment wizard, Soulknife and Celestial warlock cards.
+Checks pass.
+
 ## 2026-11-12 00:42 — Xanathar’s subclasses, part 2
 
 - Added the last 13 Xanathar’s subclasses: Conquest and Redemption paladins, Horizon Walker, Monster Slayer, four rogue archetypes, three sorcerer origins, Celestial and Hexblade.

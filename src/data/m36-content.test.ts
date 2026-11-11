@@ -26,7 +26,7 @@ describe('M36 Xanathar’s spells', () => {
     expect(spell('invulnerability').duration.concentration).toBe(true);
     expect(spell('vitriolic-sphere').damage).toMatchObject({ dice: '10d4', type: 'acid' });
     expect(spell('steel-wind-strike').attack).toBe('melee');
-    expect(spell('create-homunculus').casting).toEqual({ cost: 'minutes', amount: 1 });
+    expect(spell('create-homunculus').casting).toEqual({ cost: 'hours', amount: 1 });
     expect(spell('power-word-pain').source).toBe('XGE');
   });
 
