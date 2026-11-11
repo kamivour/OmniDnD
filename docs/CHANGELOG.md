@@ -4,6 +4,23 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-11 13:35 — Pending spells show the right list
+
+- Pending on a spell row opens Manage spells showing only that kind of pick (cantrips, or spells above cantrips).
+- A Show all button brings back the full list.
+- Checks pass.
+
+## 2026-11-11 13:35 — True Neutral
+
+- The alignment list now says True Neutral. Older characters saved as Neutral show the new name.
+- Checks pass.
+
+## 2026-11-11 13:35 — Easier typing in New character
+
+- You can clear the Level box with Backspace and type a new number; it is checked when you leave the field.
+- Enter in an ability score or HP roll moves to the next box instead of doing nothing.
+- Checks pass.
+
 ## 2026-11-10 01:05 — Faster start and smaller updates
 
 - The app's main file shrank from about 3 MB to under 300 kB. Each screen now loads the first time you open it, so first start is quicker.

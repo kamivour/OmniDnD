@@ -21,7 +21,7 @@ import { suggestAbilityBases, synergyNotes } from '../../engine/calc/suggestions
 import { OptionGuide } from '../components/OptionGuide';
 import { AbilityBaseInput } from '../components/AbilityBaseInput';
 import { SectionLabel } from '../components/SectionLabel';
-import { ALIGNMENTS } from '../fixtures/new-character';
+import { ALIGNMENTS, alignmentLabel } from '../fixtures/new-character';
 import { signed } from '../format';
 import { computeSheet } from '../../engine/calc/sheet';
 import { GuidedChoicesSection } from './GuidedChoicesSection';
@@ -33,6 +33,7 @@ import { LevelChoicesSection } from './LevelChoicesSection';
 import { PlayedByDialog } from '../roles/RoleDialogs';
 import { useAskRoles } from '../roles/useAskRoles';
 import { PLAYED_BY_OPTIONS } from '../campaignOptions';
+import { focusNextOnEnter } from '../components/focus-next';
 import { levelPickRows, STEPS, stepProblems, type StepId } from './new-character-steps';
 import { emptyPicks, picksToPayload, type LevelPicks } from '../level/level-up-model';
 
@@ -93,11 +94,13 @@ function NewCharacterForm({
       (classes.some((entry) => entry.id === 'class.bard') ? 'class.bard' : ''),
   );
   const [backgroundId, setBackgroundId] = useState(offered(backgrounds, draft?.backgroundId) ?? '');
-  const [alignment, setAlignment] = useState(draft?.alignment ?? '');
+  const [alignment, setAlignment] = useState(alignmentLabel(draft?.alignment ?? ''));
   const [racialChoices, setRacialChoices] = useState<Ability[]>(
     (draft?.racialChoices as Ability[] | undefined) ?? [],
   );
   const [level, setLevel] = useState(draft?.level ?? 1);
+  // What is typed in the Level box; it may be empty while the player retypes it.
+  const [levelText, setLevelText] = useState<string | null>(null);
   const [bases, setBases] = useState<PerAbility<string>>(
     (draft?.bases as PerAbility<string> | undefined) ?? perAbility(''),
   );
@@ -494,8 +497,16 @@ function NewCharacterForm({
                 type="number"
                 min={1}
                 max={20}
-                value={level}
-                onChange={(e) => setLevel(Math.min(20, Math.max(1, Number(e.target.value) || 1)))}
+                inputMode="numeric"
+                value={levelText ?? level}
+                onKeyDown={focusNextOnEnter}
+                onBlur={() => setLevelText(null)}
+                onChange={(e) => {
+                  const text = e.target.value;
+                  setLevelText(text);
+                  const n = Math.trunc(Number(text));
+                  if (text !== '' && Number.isFinite(n)) setLevel(Math.min(20, Math.max(1, n)));
+                }}
                 className={inputClass}
               />
             </Field>
@@ -739,6 +750,7 @@ function NewCharacterForm({
                         aria-label={`Level ${i + 1} roll (d${die})`}
                         value={rolls[i - 1] ?? ''}
                         required
+                        onKeyDown={focusNextOnEnter}
                         onChange={(e) =>
                           setRolls((r) => {
                             const next = [...r];

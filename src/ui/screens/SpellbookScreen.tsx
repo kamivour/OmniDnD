@@ -99,6 +99,7 @@ export function SpellbookScreen() {
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
   const [manageOpen, setManageOpen] = useState(false);
   const [manageClass, setManageClass] = useState<string | undefined>(undefined);
+  const [manageFocus, setManageFocus] = useState<'cantrips' | 'spells' | undefined>(undefined);
   const manageOpener = useRef<HTMLButtonElement>(null);
   const [casting, setCasting] = useState<{
     spellId: string;
@@ -144,8 +145,9 @@ export function SpellbookScreen() {
       ...(pendingAt(leveledHome).length > 0 ? [leveledHome] : []),
     ]),
   ].sort((a, b) => a - b);
-  const openManage = (classId?: string) => {
+  const openManage = (classId?: string, focus?: 'cantrips' | 'spells') => {
     setManageClass(classId);
+    setManageFocus(focus);
     setManageOpen(true);
   };
 
@@ -402,7 +404,9 @@ export function SpellbookScreen() {
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => openManage(item.classId)}
+                  onClick={() =>
+                    openManage(item.classId, item.kind === 'cantrips' ? 'cantrips' : 'spells')
+                  }
                   className="flex min-h-11 items-center gap-2 rounded-card border border-dashed border-accent px-3 py-2 text-left text-sm text-text hover:bg-surface-2"
                 >
                   <span className="font-semibold text-accent">Pending</span>
@@ -467,8 +471,9 @@ export function SpellbookScreen() {
         }}
       >
         <SpellManage
-          key={manageClass ?? ''}
+          key={`${manageClass ?? ''}:${manageFocus ?? ''}`}
           initialClassId={manageClass}
+          focus={manageFocus}
           onClose={() => setManageOpen(false)}
         />
       </Sheet>

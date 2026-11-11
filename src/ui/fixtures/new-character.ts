@@ -52,11 +52,16 @@ export const ALIGNMENTS = [
   'Neutral Good',
   'Chaotic Good',
   'Lawful Neutral',
-  'Neutral',
+  'True Neutral',
   'Chaotic Neutral',
   'Lawful Evil',
   'Neutral Evil',
   'Chaotic Evil',
 ];
+
+/** Characters saved before the list said True Neutral still read "Neutral". */
+export function alignmentLabel(alignment: string): string {
+  return alignment === 'Neutral' ? 'True Neutral' : alignment;
+}
 
 export const STANDARD_ARRAY = [15, 14, 13, 12, 10, 8];

@@ -1,4 +1,5 @@
 import type { Ability } from '../../engine/calc/abilities';
+import { focusNextOnEnter } from './focus-next';
 import { STANDARD_ARRAY, type AbilityMethod } from '../../engine/calc/ability-methods';
 
 interface AbilityBaseInputProps {
@@ -35,7 +36,11 @@ export function AbilityBaseInput({
   if (method === 'standard-array') {
     const retained = value !== '' && !STANDARD_ARRAY.some((score) => String(score) === value);
     return (
-      <select {...common} onChange={(event) => onChange(event.target.value)}>
+      <select
+        {...common}
+        onKeyDown={focusNextOnEnter}
+        onChange={(event) => onChange(event.target.value)}
+      >
         <option value="">—</option>
         {retained && <option value={value}>{value} (retained)</option>}
         {STANDARD_ARRAY.map((score) => (
@@ -55,6 +60,7 @@ export function AbilityBaseInput({
       min={min}
       max={max}
       step={1}
+      onKeyDown={focusNextOnEnter}
       onChange={(event) => onChange(event.target.value)}
     />
   );

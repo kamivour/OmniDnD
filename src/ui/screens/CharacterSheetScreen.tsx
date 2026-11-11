@@ -1,3 +1,4 @@
+import { alignmentLabel } from '../fixtures/new-character';
 import { Link } from 'react-router';
 import { useRef, useState, type ReactNode } from 'react';
 import { registry, registryFor } from '../../data/registry';
@@ -158,7 +159,7 @@ export function CharacterSheetScreen() {
               label="Background"
               entries={[registry.get('background', build.backgroundId).name]}
             />
-            <ReferenceList label="Alignment" entries={build.alignment ? [build.alignment] : []} />
+            <ReferenceList label="Alignment" entries={build.alignment ? [alignmentLabel(build.alignment)] : []} />
             {campaign.leveling === 'xp' && (
               <div className="min-w-0 text-sm text-text">
                 <dt className="text-xs text-text-muted">XP</dt>

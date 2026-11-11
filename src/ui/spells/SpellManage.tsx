@@ -57,9 +57,12 @@ function matchesSearch(id: string, query: string): boolean {
 export function SpellManage({
   onClose,
   initialClassId,
+  focus,
 }: {
   onClose: () => void;
   initialClassId?: string;
+  /** Opened from a Pending pick: list only that kind of spell until the player asks for all. */
+  focus?: 'cantrips' | 'spells';
 }) {
   const { state, sheet, events } = useCharacter();
   const { run } = useCommand();
@@ -95,6 +98,8 @@ export function SpellManage({
   const [replacement, setReplacement] = useState<Replacement | null>(null);
   const [tagSpellId, setTagSpellId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
+  const narrowed = focus !== undefined && !showAll;
   const selectedTagIds = sortSpells([
     ...new Set(
       state.build.spells.flatMap(({ known, prepared }) => [...known, ...(prepared ?? [])]),
@@ -416,13 +421,35 @@ export function SpellManage({
                 </section>
                 <section aria-label="Available spells" className="flex flex-col gap-3">
                   <h2 className="text-base font-semibold text-text">Available spells</h2>
-                  {renderCandidates('Cantrips to know', 'known', details.candidates.cantrips)}
+                  {focus && (
+                    <p className="text-sm text-text-muted">
+                      {narrowed
+                        ? `Showing ${focus === 'cantrips' ? 'cantrips' : 'spells above cantrips'} only, for your pending pick.`
+                        : 'Showing every kind of spell.'}{' '}
+                      <button
+                        type="button"
+                        className="min-h-11 text-accent underline"
+                        onClick={() => setShowAll((value) => !value)}
+                      >
+                        {narrowed ? 'Show all' : 'Show only the pending pick'}
+                      </button>
+                    </p>
+                  )}
+                  {renderCandidates(
+                    'Cantrips to know',
+                    'known',
+                    narrowed && focus !== 'cantrips' ? [] : details.candidates.cantrips,
+                  )}
                   {renderCandidates(
                     details.mode === 'spellbook' ? 'Add to spellbook' : 'Spells to know',
                     'known',
-                    details.candidates.known,
+                    narrowed && focus !== 'spells' ? [] : details.candidates.known,
                   )}
-                  {renderCandidates('Spells to prepare', 'prepared', details.candidates.prepared)}
+                  {renderCandidates(
+                    'Spells to prepare',
+                    'prepared',
+                    narrowed && focus !== 'spells' ? [] : details.candidates.prepared,
+                  )}
                   {Object.values(details.candidates).every((ids) => ids.length === 0) && (
                     <p className="text-sm text-text-muted">
                       No available choices. Existing selections remain saved and can be removed.

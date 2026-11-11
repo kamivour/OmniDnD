@@ -267,6 +267,19 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 - [x] UI, Related links: small "Related" row on key panels (Jump next to Athletics, Falling next to Jump, Focus next to spell components). Suggest only; never redirect on its own
 - [x] Gate: from the Dashboard, reach Jump, Print, Shatter, Long rest and a map tool in two steps or fewer, by keyboard and by touch; manual QA documented
 
+### M26 — Friend-testing fixes
+Details in [PLAN.md](PLAN.md).
+- [ ] 1. Number fields
+- [ ] 2. True Neutral
+- [ ] 3. Spell Pending
+- [ ] 4. No sample character
+- [ ] 5. Accounts easy to find
+- [ ] 6. Cautions stand out
+- [ ] 7. Headings and subclass cards
+- [ ] 8. PHB backgrounds
+- [ ] 9. Stats button for summons
+- [ ] 10. Gate
+
 ## Backlog (not scheduled)
 
 - Done 2026-11-09: site live on Netlify with Supabase accounts (HOSTING.md)
@@ -278,6 +291,9 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-11 — M26 task 3: Pending spell picks open Manage spells on just that pick; Show all brings back the rest.
+- 2026-11-11 — M26 task 2: Alignment list says True Neutral; old Neutral shows as True Neutral.
+- 2026-11-11 — M26 task 1: Backspace clears Level while typing; Enter moves between ability scores and HP rolls.
 - 2026-11-11 — Plan: M26 friend-testing fixes (inputs, True Neutral, spell Pending, no sample character, sign-up card, cautions, headings, PHB backgrounds, summon Stats button); Q41–Q43.
 - 2026-11-10 — Performance: screens load on first visit; app, library and reference data ship as separate cached files. Main file 3 MB to 285 kB.
 - 2026-11-09 — M25 done: DM overview table with sort and column picker, DM tutorial tips, Find synonym, e2e at 375 and 1440 px; QA list added.
