@@ -268,6 +268,19 @@ export const BackgroundDefSchema = z
     ...refBase,
     skills: z.array(SkillSchema),
     tools: z.array(refId('item')),
+    /** Extra skills the player picks from any skill. */
+    skillChoices: z.int().positive().optional(),
+    /** Extra languages the player picks. */
+    languageChoices: z.int().positive().optional(),
+    /** Tools the player picks, from the named group. */
+    toolChoices: z
+      .array(
+        z.strictObject({
+          count: z.int().positive(),
+          group: z.enum(['gaming', 'artisan', 'instrument', 'any']),
+        }),
+      )
+      .optional(),
     featureIds: z.array(refId('feature')),
   })
   .refine(srdTextOnly, SRD_TEXT_ONLY);

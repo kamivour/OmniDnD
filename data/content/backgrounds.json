@@ -13,5 +13,335 @@
     "skills": ["deception", "sleight-of-hand"],
     "tools": ["item.disguise-kit", "item.forgery-kit"],
     "featureIds": ["feature.false-identity"]
+  },
+  {
+    "kind": "background",
+    "id": "background.criminal",
+    "name": "Criminal",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Skills: Deception, Stealth. Tools: thieves’ tools and one gaming set. Feature: Criminal Contact."
+    },
+    "skills": ["deception", "stealth"],
+    "tools": ["item.thieves-tools"],
+    "toolChoices": [
+      {
+        "count": 1,
+        "group": "gaming"
+      }
+    ],
+    "featureIds": ["feature.criminal-contact"]
+  },
+  {
+    "kind": "background",
+    "id": "background.spy",
+    "name": "Spy",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Criminal variant. Same skills, tools and contact, with a spy’s story. Skills: Deception, Stealth. Tools: thieves’ tools and one gaming set."
+    },
+    "skills": ["deception", "stealth"],
+    "tools": ["item.thieves-tools"],
+    "toolChoices": [
+      {
+        "count": 1,
+        "group": "gaming"
+      }
+    ],
+    "featureIds": ["feature.criminal-contact"]
+  },
+  {
+    "kind": "background",
+    "id": "background.entertainer",
+    "name": "Entertainer",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Skills: Acrobatics, Performance. Tools: disguise kit and one instrument. Feature: By Popular Demand."
+    },
+    "skills": ["acrobatics", "performance"],
+    "tools": ["item.disguise-kit"],
+    "toolChoices": [
+      {
+        "count": 1,
+        "group": "instrument"
+      }
+    ],
+    "featureIds": ["feature.by-popular-demand"]
+  },
+  {
+    "kind": "background",
+    "id": "background.gladiator",
+    "name": "Gladiator",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Entertainer variant for arena fighters. Skills: Acrobatics, Performance. Tools: disguise kit and one instrument."
+    },
+    "skills": ["acrobatics", "performance"],
+    "tools": ["item.disguise-kit"],
+    "toolChoices": [
+      {
+        "count": 1,
+        "group": "instrument"
+      }
+    ],
+    "featureIds": ["feature.by-popular-demand"]
+  },
+  {
+    "kind": "background",
+    "id": "background.folk-hero",
+    "name": "Folk Hero",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Skills: Animal Handling, Survival. Tools: one artisan tool and land vehicles. Feature: Rustic Hospitality."
+    },
+    "skills": ["animal-handling", "survival"],
+    "tools": ["item.land-vehicles"],
+    "toolChoices": [
+      {
+        "count": 1,
+        "group": "artisan"
+      }
+    ],
+    "featureIds": ["feature.rustic-hospitality"]
+  },
+  {
+    "kind": "background",
+    "id": "background.guild-artisan",
+    "name": "Guild Artisan",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Skills: Insight, Persuasion. Tools: one artisan tool. Languages: one of your choice. Feature: Guild Membership."
+    },
+    "skills": ["insight", "persuasion"],
+    "tools": [],
+    "toolChoices": [
+      {
+        "count": 1,
+        "group": "artisan"
+      }
+    ],
+    "languageChoices": 1,
+    "featureIds": ["feature.guild-membership"]
+  },
+  {
+    "kind": "background",
+    "id": "background.guild-merchant",
+    "name": "Guild Merchant",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Guild Artisan variant for traders. Skills: Insight, Persuasion. Tools: navigator’s tools. Languages: one of your choice."
+    },
+    "skills": ["insight", "persuasion"],
+    "tools": ["item.navigators-tools"],
+    "languageChoices": 1,
+    "featureIds": ["feature.guild-membership"]
+  },
+  {
+    "kind": "background",
+    "id": "background.hermit",
+    "name": "Hermit",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Skills: Medicine, Religion. Tools: herbalism kit. Languages: one of your choice. Feature: Discovery."
+    },
+    "skills": ["medicine", "religion"],
+    "tools": ["item.herbalism-kit"],
+    "languageChoices": 1,
+    "featureIds": ["feature.discovery"]
+  },
+  {
+    "kind": "background",
+    "id": "background.noble",
+    "name": "Noble",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Skills: History, Persuasion. Tools: one gaming set. Languages: one of your choice. Feature: Position of Privilege."
+    },
+    "skills": ["history", "persuasion"],
+    "tools": [],
+    "toolChoices": [
+      {
+        "count": 1,
+        "group": "gaming"
+      }
+    ],
+    "languageChoices": 1,
+    "featureIds": ["feature.position-of-privilege"]
+  },
+  {
+    "kind": "background",
+    "id": "background.knight",
+    "name": "Knight",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Noble variant with sworn servants. Skills: History, Persuasion. Tools: one gaming set. Languages: one of your choice."
+    },
+    "skills": ["history", "persuasion"],
+    "tools": [],
+    "toolChoices": [
+      {
+        "count": 1,
+        "group": "gaming"
+      }
+    ],
+    "languageChoices": 1,
+    "featureIds": ["feature.retainers"]
+  },
+  {
+    "kind": "background",
+    "id": "background.outlander",
+    "name": "Outlander",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Skills: Athletics, Survival. Tools: one instrument. Languages: one of your choice. Feature: Wanderer."
+    },
+    "skills": ["athletics", "survival"],
+    "tools": [],
+    "toolChoices": [
+      {
+        "count": 1,
+        "group": "instrument"
+      }
+    ],
+    "languageChoices": 1,
+    "featureIds": ["feature.wanderer"]
+  },
+  {
+    "kind": "background",
+    "id": "background.sage",
+    "name": "Sage",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Skills: Arcana, History. Languages: two of your choice. Feature: Researcher."
+    },
+    "skills": ["arcana", "history"],
+    "tools": [],
+    "languageChoices": 2,
+    "featureIds": ["feature.researcher"]
+  },
+  {
+    "kind": "background",
+    "id": "background.sailor",
+    "name": "Sailor",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Skills: Athletics, Perception. Tools: navigator’s tools and water vehicles. Feature: Ship’s Passage."
+    },
+    "skills": ["athletics", "perception"],
+    "tools": ["item.navigators-tools", "item.water-vehicles"],
+    "featureIds": ["feature.ships-passage"]
+  },
+  {
+    "kind": "background",
+    "id": "background.pirate",
+    "name": "Pirate",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sailor variant. Skills: Athletics, Perception. Tools: navigator’s tools and water vehicles. Feature: Bad Reputation instead of Ship’s Passage."
+    },
+    "skills": ["athletics", "perception"],
+    "tools": ["item.navigators-tools", "item.water-vehicles"],
+    "featureIds": ["feature.bad-reputation"]
+  },
+  {
+    "kind": "background",
+    "id": "background.soldier",
+    "name": "Soldier",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Skills: Athletics, Intimidation. Tools: one gaming set and land vehicles. Feature: Military Rank."
+    },
+    "skills": ["athletics", "intimidation"],
+    "tools": ["item.land-vehicles"],
+    "toolChoices": [
+      {
+        "count": 1,
+        "group": "gaming"
+      }
+    ],
+    "featureIds": ["feature.military-rank"]
+  },
+  {
+    "kind": "background",
+    "id": "background.urchin",
+    "name": "Urchin",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Skills: Sleight of Hand, Stealth. Tools: disguise kit, thieves’ tools. Feature: City Secrets."
+    },
+    "skills": ["sleight-of-hand", "stealth"],
+    "tools": ["item.disguise-kit", "item.thieves-tools"],
+    "featureIds": ["feature.city-secrets"]
+  },
+  {
+    "kind": "background",
+    "id": "background.custom",
+    "name": "Custom",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Build your own: any two skills, one language and one tool. Pair them with a feature your DM approves."
+    },
+    "skills": [],
+    "tools": [],
+    "skillChoices": 2,
+    "languageChoices": 1,
+    "toolChoices": [
+      {
+        "count": 1,
+        "group": "any"
+      }
+    ],
+    "featureIds": ["feature.custom-background"]
   }
 ]

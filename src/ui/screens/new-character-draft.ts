@@ -4,6 +4,7 @@ export interface Draft {
   raceId?: string;
   classId?: string;
   backgroundId?: string;
+  backgroundPicks?: unknown;
   alignment?: string;
   racialChoices?: string[];
   level?: number;

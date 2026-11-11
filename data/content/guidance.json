@@ -13,8 +13,14 @@
     ],
     "skills": ["athletics", "perception", "survival", "intimidation"],
     "goodWith": [
-      { "id": "race.half-orc", "why": "Extra STR and CON, plus a second chance at 0 HP" },
-      { "id": "race.hill-dwarf", "why": "Extra CON and HP stack with a big hit die" }
+      {
+        "id": "race.half-orc",
+        "why": "Extra STR and CON, plus a second chance at 0 HP"
+      },
+      {
+        "id": "race.hill-dwarf",
+        "why": "Extra CON and HP stack with a big hit die"
+      }
     ]
   },
   {
@@ -31,14 +37,32 @@
     "weaknesses": ["Fragile in a straight fight", "Many choices to track", "Spell slots run out"],
     "skills": ["persuasion", "performance", "deception", "insight", "perception"],
     "starterSpells": [
-      { "id": "spell.vicious-mockery", "why": "Reliable cantrip that weakens an enemy's next hit" },
-      { "id": "spell.healing-word", "why": "Heal an ally from range as a bonus action" },
-      { "id": "spell.dissonant-whispers", "why": "Strong damage that can force an enemy to run" },
-      { "id": "spell.faerie-fire", "why": "Gives your whole party advantage on hits" }
+      {
+        "id": "spell.vicious-mockery",
+        "why": "Reliable cantrip that weakens an enemy's next hit"
+      },
+      {
+        "id": "spell.healing-word",
+        "why": "Heal an ally from range as a bonus action"
+      },
+      {
+        "id": "spell.dissonant-whispers",
+        "why": "Strong damage that can force an enemy to run"
+      },
+      {
+        "id": "spell.faerie-fire",
+        "why": "Gives your whole party advantage on hits"
+      }
     ],
     "goodWith": [
-      { "id": "race.half-elf", "why": "Extra CHA and two free skills" },
-      { "id": "race.lightfoot-halfling", "why": "Extra DEX and CHA suit a light-armour caster" }
+      {
+        "id": "race.half-elf",
+        "why": "Extra CHA and two free skills"
+      },
+      {
+        "id": "race.lightfoot-halfling",
+        "why": "Extra DEX and CHA suit a light-armour caster"
+      }
     ]
   },
   {
@@ -59,14 +83,32 @@
     ],
     "skills": ["insight", "medicine", "religion", "persuasion"],
     "starterSpells": [
-      { "id": "spell.sacred-flame", "why": "Ranged damage that ignores armour" },
-      { "id": "spell.guidance", "why": "Small boost to any ability check" },
-      { "id": "spell.bless", "why": "Adds to hits and saves for three allies" },
-      { "id": "spell.cure-wounds", "why": "Dependable healing when you are close" }
+      {
+        "id": "spell.sacred-flame",
+        "why": "Ranged damage that ignores armour"
+      },
+      {
+        "id": "spell.guidance",
+        "why": "Small boost to any ability check"
+      },
+      {
+        "id": "spell.bless",
+        "why": "Adds to hits and saves for three allies"
+      },
+      {
+        "id": "spell.cure-wounds",
+        "why": "Dependable healing when you are close"
+      }
     ],
     "goodWith": [
-      { "id": "race.hill-dwarf", "why": "Extra WIS and HP help a durable healer" },
-      { "id": "race.human", "why": "Extra points everywhere help a three-score class" }
+      {
+        "id": "race.hill-dwarf",
+        "why": "Extra WIS and HP help a durable healer"
+      },
+      {
+        "id": "race.human",
+        "why": "Extra points everywhere help a three-score class"
+      }
     ]
   },
   {
@@ -87,15 +129,36 @@
     ],
     "skills": ["perception", "nature", "survival", "animal-handling"],
     "starterSpells": [
-      { "id": "spell.produce-flame", "why": "Light and a simple ranged attack" },
-      { "id": "spell.guidance", "why": "Small boost to any ability check" },
-      { "id": "spell.entangle", "why": "Pins several enemies in place" },
-      { "id": "spell.goodberry", "why": "Cheap healing and food for the party" },
-      { "id": "spell.healing-word", "why": "Heal an ally from range as a bonus action" }
+      {
+        "id": "spell.produce-flame",
+        "why": "Light and a simple ranged attack"
+      },
+      {
+        "id": "spell.guidance",
+        "why": "Small boost to any ability check"
+      },
+      {
+        "id": "spell.entangle",
+        "why": "Pins several enemies in place"
+      },
+      {
+        "id": "spell.goodberry",
+        "why": "Cheap healing and food for the party"
+      },
+      {
+        "id": "spell.healing-word",
+        "why": "Heal an ally from range as a bonus action"
+      }
     ],
     "goodWith": [
-      { "id": "race.hill-dwarf", "why": "Extra WIS and HP make up for medium armour limits" },
-      { "id": "race.high-elf", "why": "Extra DEX and a free wizard cantrip" }
+      {
+        "id": "race.hill-dwarf",
+        "why": "Extra WIS and HP make up for medium armour limits"
+      },
+      {
+        "id": "race.high-elf",
+        "why": "Extra DEX and a free wizard cantrip"
+      }
     ]
   },
   {
@@ -116,8 +179,14 @@
     ],
     "skills": ["athletics", "perception", "acrobatics", "intimidation"],
     "goodWith": [
-      { "id": "race.human", "why": "Every score goes up, which suits a flexible fighter" },
-      { "id": "race.dragonborn", "why": "Extra STR plus a breath weapon" }
+      {
+        "id": "race.human",
+        "why": "Every score goes up, which suits a flexible fighter"
+      },
+      {
+        "id": "race.dragonborn",
+        "why": "Extra STR plus a breath weapon"
+      }
     ]
   },
   {
@@ -130,8 +199,14 @@
     "weaknesses": ["Needs three good scores", "Resource points run out", "Low damage per hit"],
     "skills": ["acrobatics", "stealth", "perception", "insight"],
     "goodWith": [
-      { "id": "race.high-elf", "why": "Extra DEX and keen senses" },
-      { "id": "race.lightfoot-halfling", "why": "Extra DEX and a good stealth boost" }
+      {
+        "id": "race.high-elf",
+        "why": "Extra DEX and keen senses"
+      },
+      {
+        "id": "race.lightfoot-halfling",
+        "why": "Extra DEX and a good stealth boost"
+      }
     ]
   },
   {
@@ -152,8 +227,14 @@
     ],
     "skills": ["persuasion", "athletics", "insight", "intimidation"],
     "goodWith": [
-      { "id": "race.dragonborn", "why": "Extra STR and CHA hit both main scores" },
-      { "id": "race.half-elf", "why": "Extra CHA plus two free skills" }
+      {
+        "id": "race.dragonborn",
+        "why": "Extra STR and CHA hit both main scores"
+      },
+      {
+        "id": "race.half-elf",
+        "why": "Extra CHA plus two free skills"
+      }
     ]
   },
   {
@@ -174,13 +255,28 @@
     ],
     "skills": ["stealth", "perception", "survival", "nature", "athletics"],
     "starterSpells": [
-      { "id": "spell.hunters-mark", "why": "Extra damage on one target you are chasing" },
-      { "id": "spell.goodberry", "why": "Healing and food on a budget" },
-      { "id": "spell.cure-wounds", "why": "Basic healing when you are close" }
+      {
+        "id": "spell.hunters-mark",
+        "why": "Extra damage on one target you are chasing"
+      },
+      {
+        "id": "spell.goodberry",
+        "why": "Healing and food on a budget"
+      },
+      {
+        "id": "spell.cure-wounds",
+        "why": "Basic healing when you are close"
+      }
     ],
     "goodWith": [
-      { "id": "race.high-elf", "why": "Extra DEX and keen senses" },
-      { "id": "race.lightfoot-halfling", "why": "Extra DEX and natural stealth" }
+      {
+        "id": "race.high-elf",
+        "why": "Extra DEX and keen senses"
+      },
+      {
+        "id": "race.lightfoot-halfling",
+        "why": "Extra DEX and natural stealth"
+      }
     ]
   },
   {
@@ -204,8 +300,14 @@
       "deception"
     ],
     "goodWith": [
-      { "id": "race.lightfoot-halfling", "why": "Extra DEX and hiding behind larger allies" },
-      { "id": "race.high-elf", "why": "Extra DEX and a free cantrip" }
+      {
+        "id": "race.lightfoot-halfling",
+        "why": "Extra DEX and hiding behind larger allies"
+      },
+      {
+        "id": "race.high-elf",
+        "why": "Extra DEX and a free cantrip"
+      }
     ]
   },
   {
@@ -218,15 +320,36 @@
     "weaknesses": ["Few hit points", "Knows only a few spells", "Slots and points both run out"],
     "skills": ["persuasion", "intimidation", "arcana", "insight"],
     "starterSpells": [
-      { "id": "spell.fire-bolt", "why": "Strong ranged damage cantrip" },
-      { "id": "spell.mage-hand", "why": "Handy for small tasks from a distance" },
-      { "id": "spell.shield", "why": "Blocks an incoming hit as a reaction" },
-      { "id": "spell.magic-missile", "why": "Never misses" },
-      { "id": "spell.sleep", "why": "Puts weak enemies down at low levels" }
+      {
+        "id": "spell.fire-bolt",
+        "why": "Strong ranged damage cantrip"
+      },
+      {
+        "id": "spell.mage-hand",
+        "why": "Handy for small tasks from a distance"
+      },
+      {
+        "id": "spell.shield",
+        "why": "Blocks an incoming hit as a reaction"
+      },
+      {
+        "id": "spell.magic-missile",
+        "why": "Never misses"
+      },
+      {
+        "id": "spell.sleep",
+        "why": "Puts weak enemies down at low levels"
+      }
     ],
     "goodWith": [
-      { "id": "race.tiefling", "why": "Extra CHA and fire resistance" },
-      { "id": "race.half-elf", "why": "Extra CHA plus two free skills" }
+      {
+        "id": "race.tiefling",
+        "why": "Extra CHA and fire resistance"
+      },
+      {
+        "id": "race.half-elf",
+        "why": "Extra CHA plus two free skills"
+      }
     ]
   },
   {
@@ -247,14 +370,32 @@
     ],
     "skills": ["intimidation", "arcana", "deception", "investigation"],
     "starterSpells": [
-      { "id": "spell.eldritch-blast", "why": "Best damage cantrip, and it grows with level" },
-      { "id": "spell.minor-illusion", "why": "Cheap trick that solves many problems" },
-      { "id": "spell.hellish-rebuke", "why": "Burns an enemy that just hit you" },
-      { "id": "spell.protection-from-evil-and-good", "why": "Guards against several kinds of foes" }
+      {
+        "id": "spell.eldritch-blast",
+        "why": "Best damage cantrip, and it grows with level"
+      },
+      {
+        "id": "spell.minor-illusion",
+        "why": "Cheap trick that solves many problems"
+      },
+      {
+        "id": "spell.hellish-rebuke",
+        "why": "Burns an enemy that just hit you"
+      },
+      {
+        "id": "spell.protection-from-evil-and-good",
+        "why": "Guards against several kinds of foes"
+      }
     ],
     "goodWith": [
-      { "id": "race.tiefling", "why": "Extra CHA and a thematic fit with a fiend patron" },
-      { "id": "race.half-elf", "why": "Extra CHA plus two free skills" }
+      {
+        "id": "race.tiefling",
+        "why": "Extra CHA and a thematic fit with a fiend patron"
+      },
+      {
+        "id": "race.half-elf",
+        "why": "Extra CHA plus two free skills"
+      }
     ]
   },
   {
@@ -271,16 +412,40 @@
     "weaknesses": ["Fewest hit points", "A lot of choices every day", "Easy to run dry"],
     "skills": ["arcana", "investigation", "history", "insight"],
     "starterSpells": [
-      { "id": "spell.fire-bolt", "why": "Strong ranged damage cantrip" },
-      { "id": "spell.mage-hand", "why": "Handy for small tasks from a distance" },
-      { "id": "spell.shield", "why": "Blocks an incoming hit as a reaction" },
-      { "id": "spell.magic-missile", "why": "Never misses" },
-      { "id": "spell.sleep", "why": "Puts weak enemies down at low levels" },
-      { "id": "spell.find-familiar", "why": "A helper that scouts and delivers touch spells" }
+      {
+        "id": "spell.fire-bolt",
+        "why": "Strong ranged damage cantrip"
+      },
+      {
+        "id": "spell.mage-hand",
+        "why": "Handy for small tasks from a distance"
+      },
+      {
+        "id": "spell.shield",
+        "why": "Blocks an incoming hit as a reaction"
+      },
+      {
+        "id": "spell.magic-missile",
+        "why": "Never misses"
+      },
+      {
+        "id": "spell.sleep",
+        "why": "Puts weak enemies down at low levels"
+      },
+      {
+        "id": "spell.find-familiar",
+        "why": "A helper that scouts and delivers touch spells"
+      }
     ],
     "goodWith": [
-      { "id": "race.high-elf", "why": "Extra INT, an extra cantrip and a DEX boost" },
-      { "id": "race.rock-gnome", "why": "Extra INT and CON, and advantage on mental saves" }
+      {
+        "id": "race.high-elf",
+        "why": "Extra INT, an extra cantrip and a DEX boost"
+      },
+      {
+        "id": "race.rock-gnome",
+        "why": "Extra INT and CON, and advantage on mental saves"
+      }
     ]
   },
   {
@@ -297,17 +462,34 @@
     ],
     "skills": ["arcana", "investigation", "perception", "history"],
     "starterSpells": [
-      { "id": "spell.mending", "why": "Fixes broken gear for free" },
-      { "id": "spell.guidance", "why": "Small boost to any ability check" },
-      { "id": "spell.cure-wounds", "why": "Dependable healing when you are close" },
-      { "id": "spell.faerie-fire", "why": "Gives your whole party advantage on hits" }
+      {
+        "id": "spell.mending",
+        "why": "Fixes broken gear for free"
+      },
+      {
+        "id": "spell.guidance",
+        "why": "Small boost to any ability check"
+      },
+      {
+        "id": "spell.cure-wounds",
+        "why": "Dependable healing when you are close"
+      },
+      {
+        "id": "spell.faerie-fire",
+        "why": "Gives your whole party advantage on hits"
+      }
     ],
     "goodWith": [
-      { "id": "race.rock-gnome", "why": "Extra INT and CON, and a bonus for tinkering" },
-      { "id": "race.hill-dwarf", "why": "Extra CON and HP for a front-line crafter" }
+      {
+        "id": "race.rock-gnome",
+        "why": "Extra INT and CON, and a bonus for tinkering"
+      },
+      {
+        "id": "race.hill-dwarf",
+        "why": "Extra CON and HP for a front-line crafter"
+      }
     ]
   },
-
   {
     "id": "subclass.barbarian.berserker",
     "kind": "subclass",
@@ -597,7 +779,6 @@
       "INT helps more than expected"
     ]
   },
-
   {
     "id": "race.dragonborn",
     "kind": "race",
@@ -610,8 +791,14 @@
     ],
     "weaknesses": ["No darkvision", "Breath weapon uses up your action", "Fewer skill perks"],
     "goodWith": [
-      { "id": "class.paladin", "why": "STR and CHA both go up" },
-      { "id": "class.fighter", "why": "STR boost and a ranged option" }
+      {
+        "id": "class.paladin",
+        "why": "STR and CHA both go up"
+      },
+      {
+        "id": "class.fighter",
+        "why": "STR boost and a ranged option"
+      }
     ]
   },
   {
@@ -622,8 +809,14 @@
     "strengths": ["High CON and tough hit points", "Resists poison", "Darkvision"],
     "weaknesses": ["Slow walking speed", "Few mental perks", "No DEX or CHA boost"],
     "goodWith": [
-      { "id": "class.fighter", "why": "CON and heavy armour suit a sturdy front-liner" },
-      { "id": "class.cleric", "why": "CON helps a close-range healer" }
+      {
+        "id": "class.fighter",
+        "why": "CON and heavy armour suit a sturdy front-liner"
+      },
+      {
+        "id": "class.cleric",
+        "why": "CON helps a close-range healer"
+      }
     ]
   },
   {
@@ -638,8 +831,14 @@
       "No bonus to toughness or spellcasting"
     ],
     "goodWith": [
-      { "id": "class.rogue", "why": "DEX boost and stealthy senses" },
-      { "id": "class.ranger", "why": "DEX boost and sharp perception" }
+      {
+        "id": "class.rogue",
+        "why": "DEX boost and stealthy senses"
+      },
+      {
+        "id": "class.ranger",
+        "why": "DEX boost and sharp perception"
+      }
     ]
   },
   {
@@ -650,8 +849,14 @@
     "strengths": ["INT boost", "Advantage on saves against magic of the mind", "Darkvision"],
     "weaknesses": ["Small and slow", "Few physical perks", "Weak against heavy weapons"],
     "goodWith": [
-      { "id": "class.wizard", "why": "INT boost and magic-resistant saves" },
-      { "id": "class.artificer", "why": "INT boost and a tinkering theme" }
+      {
+        "id": "class.wizard",
+        "why": "INT boost and magic-resistant saves"
+      },
+      {
+        "id": "class.artificer",
+        "why": "INT boost and a tinkering theme"
+      }
     ]
   },
   {
@@ -662,9 +867,18 @@
     "strengths": ["CHA boost plus two free +1s", "Two free skills", "Darkvision and Fey Ancestry"],
     "weaknesses": ["No standout combat perk", "Average speed", "Spread-out bonuses"],
     "goodWith": [
-      { "id": "class.bard", "why": "CHA boost and two extra skills" },
-      { "id": "class.sorcerer", "why": "CHA boost and extra versatility" },
-      { "id": "class.warlock", "why": "CHA boost and extra skills" }
+      {
+        "id": "class.bard",
+        "why": "CHA boost and two extra skills"
+      },
+      {
+        "id": "class.sorcerer",
+        "why": "CHA boost and extra versatility"
+      },
+      {
+        "id": "class.warlock",
+        "why": "CHA boost and extra skills"
+      }
     ]
   },
   {
@@ -679,8 +893,14 @@
     ],
     "weaknesses": ["No mental boost", "Little spell help", "Few skill options"],
     "goodWith": [
-      { "id": "class.barbarian", "why": "STR and CON plus a second chance at 0 HP" },
-      { "id": "class.fighter", "why": "STR and CON suit a front-liner" }
+      {
+        "id": "class.barbarian",
+        "why": "STR and CON plus a second chance at 0 HP"
+      },
+      {
+        "id": "class.fighter",
+        "why": "STR and CON suit a front-liner"
+      }
     ]
   },
   {
@@ -690,7 +910,12 @@
     "difficulty": "easy",
     "strengths": ["DEX boost", "Lucky rerolls of 1s", "Resists fear"],
     "weaknesses": ["Small and slow", "No darkvision", "Little raw strength"],
-    "goodWith": [{ "id": "class.rogue", "why": "DEX boost and lucky rolls" }]
+    "goodWith": [
+      {
+        "id": "class.rogue",
+        "why": "DEX boost and lucky rolls"
+      }
+    ]
   },
   {
     "id": "race.high-elf",
@@ -700,8 +925,14 @@
     "strengths": ["DEX and INT boost", "Free wizard cantrip", "Sharp senses"],
     "weaknesses": ["Fewer hit points", "No extra STR", "Not tough in melee"],
     "goodWith": [
-      { "id": "class.wizard", "why": "INT boost and an extra cantrip" },
-      { "id": "class.rogue", "why": "DEX boost and a handy free cantrip" }
+      {
+        "id": "class.wizard",
+        "why": "INT boost and an extra cantrip"
+      },
+      {
+        "id": "class.rogue",
+        "why": "DEX boost and a handy free cantrip"
+      }
     ]
   },
   {
@@ -712,9 +943,18 @@
     "strengths": ["CON and WIS boost", "Extra HP every level", "Resists poison"],
     "weaknesses": ["Slow walking speed", "No DEX boost", "Few skill perks"],
     "goodWith": [
-      { "id": "class.cleric", "why": "WIS boost and tough HP" },
-      { "id": "class.druid", "why": "WIS boost and extra HP help in wild shape" },
-      { "id": "class.barbarian", "why": "CON and HP stack with a big hit die" }
+      {
+        "id": "class.cleric",
+        "why": "WIS boost and tough HP"
+      },
+      {
+        "id": "class.druid",
+        "why": "WIS boost and extra HP help in wild shape"
+      },
+      {
+        "id": "class.barbarian",
+        "why": "CON and HP stack with a big hit die"
+      }
     ]
   },
   {
@@ -725,8 +965,14 @@
     "strengths": ["+1 to every score", "Fits any class", "Simple choices"],
     "weaknesses": ["No special perks", "No darkvision", "Small bonuses only"],
     "goodWith": [
-      { "id": "class.fighter", "why": "Small boosts everywhere help a flexible build" },
-      { "id": "class.cleric", "why": "Helps a class that needs several scores" }
+      {
+        "id": "class.fighter",
+        "why": "Small boosts everywhere help a flexible build"
+      },
+      {
+        "id": "class.cleric",
+        "why": "Helps a class that needs several scores"
+      }
     ]
   },
   {
@@ -737,8 +983,14 @@
     "strengths": ["DEX and CHA boost", "Can hide behind larger allies", "Lucky rerolls of 1s"],
     "weaknesses": ["Small and slow", "No darkvision", "Little raw strength"],
     "goodWith": [
-      { "id": "class.rogue", "why": "DEX boost and easy hiding" },
-      { "id": "class.bard", "why": "DEX and CHA both help" }
+      {
+        "id": "class.rogue",
+        "why": "DEX boost and easy hiding"
+      },
+      {
+        "id": "class.bard",
+        "why": "DEX and CHA both help"
+      }
     ]
   },
   {
@@ -749,8 +1001,14 @@
     "strengths": ["INT and CON boost", "Can build tiny gadgets", "Advantage on mental saves"],
     "weaknesses": ["Small and slow", "Few combat perks", "Weak in a straight fight"],
     "goodWith": [
-      { "id": "class.wizard", "why": "INT and CON help a fragile caster" },
-      { "id": "class.artificer", "why": "INT and a tinkering theme" }
+      {
+        "id": "class.wizard",
+        "why": "INT and CON help a fragile caster"
+      },
+      {
+        "id": "class.artificer",
+        "why": "INT and a tinkering theme"
+      }
     ]
   },
   {
@@ -761,11 +1019,16 @@
     "strengths": ["CHA boost", "Fire resistance", "Free innate spells"],
     "weaknesses": ["Other people may be wary of you", "No STR or CON boost", "Few perks in melee"],
     "goodWith": [
-      { "id": "class.warlock", "why": "CHA boost and a fiendish theme" },
-      { "id": "class.sorcerer", "why": "CHA boost and innate spells" }
+      {
+        "id": "class.warlock",
+        "why": "CHA boost and a fiendish theme"
+      },
+      {
+        "id": "class.sorcerer",
+        "why": "CHA boost and innate spells"
+      }
     ]
   },
-
   {
     "id": "background.acolyte",
     "kind": "background",
@@ -775,8 +1038,14 @@
     "weaknesses": ["Few combat benefits", "Little gold", "Narrow social reach"],
     "skills": ["insight", "religion"],
     "goodWith": [
-      { "id": "class.cleric", "why": "The skills match a Cleric's best scores" },
-      { "id": "class.paladin", "why": "A natural fit for a holy warrior" }
+      {
+        "id": "class.cleric",
+        "why": "The skills match a Cleric's best scores"
+      },
+      {
+        "id": "class.paladin",
+        "why": "A natural fit for a holy warrior"
+      }
     ]
   },
   {
@@ -792,8 +1061,397 @@
     "weaknesses": ["Few combat benefits", "Your lies can catch up with you", "No extra languages"],
     "skills": ["deception", "sleight-of-hand"],
     "goodWith": [
-      { "id": "class.rogue", "why": "Both skills fit a Rogue's best scores" },
-      { "id": "class.bard", "why": "Deception pairs well with Bard charm" }
+      {
+        "id": "class.rogue",
+        "why": "Both skills fit a Rogue's best scores"
+      },
+      {
+        "id": "class.bard",
+        "why": "Deception pairs well with Bard charm"
+      }
+    ]
+  },
+  {
+    "id": "background.criminal",
+    "kind": "background",
+    "pitch": "You made your living outside the law and know the people who still do.",
+    "difficulty": "easy",
+    "strengths": ["Deception and Stealth skills", "Thieves’ tools", "An underworld contact"],
+    "weaknesses": ["Few combat benefits", "The law may remember you", "No extra languages"],
+    "skills": ["deception", "stealth"],
+    "goodWith": [
+      {
+        "id": "class.rogue",
+        "why": "Both skills and the tools suit a Rogue"
+      },
+      {
+        "id": "class.bard",
+        "why": "Deception supports Bard charm"
+      }
+    ]
+  },
+  {
+    "id": "background.spy",
+    "kind": "background",
+    "pitch": "You gathered secrets for a patron, using the same skills as a criminal.",
+    "difficulty": "easy",
+    "strengths": [
+      "Deception and Stealth skills",
+      "Thieves’ tools",
+      "A contact who passes messages"
+    ],
+    "weaknesses": ["Few combat benefits", "Your patron may call on you", "No extra languages"],
+    "skills": ["deception", "stealth"],
+    "goodWith": [
+      {
+        "id": "class.rogue",
+        "why": "The skills and tools fit a Rogue well"
+      },
+      {
+        "id": "class.ranger",
+        "why": "Stealth helps a scouting Ranger"
+      }
+    ]
+  },
+  {
+    "id": "background.entertainer",
+    "kind": "background",
+    "pitch": "You performed for crowds and know how to win them over.",
+    "difficulty": "easy",
+    "strengths": [
+      "Acrobatics and Performance skills",
+      "Disguise kit and an instrument",
+      "Free lodging where you perform"
+    ],
+    "weaknesses": ["Few combat benefits", "Little gold", "No extra languages"],
+    "skills": ["acrobatics", "performance"],
+    "goodWith": [
+      {
+        "id": "class.bard",
+        "why": "Performance is a Bard’s core skill"
+      },
+      {
+        "id": "class.rogue",
+        "why": "Acrobatics suits a nimble Rogue"
+      }
+    ]
+  },
+  {
+    "id": "background.gladiator",
+    "kind": "background",
+    "pitch": "You fought for the crowd in an arena, using the entertainer package.",
+    "difficulty": "easy",
+    "strengths": [
+      "Acrobatics and Performance skills",
+      "Disguise kit and an instrument",
+      "Free lodging where you perform"
+    ],
+    "weaknesses": ["Few combat benefits", "Fame can draw attention", "No extra languages"],
+    "skills": ["acrobatics", "performance"],
+    "goodWith": [
+      {
+        "id": "class.fighter",
+        "why": "A showy fighter with a crowd-pleasing past"
+      },
+      {
+        "id": "class.barbarian",
+        "why": "Arena rage fits a Barbarian"
+      }
+    ]
+  },
+  {
+    "id": "background.folk-hero",
+    "kind": "background",
+    "pitch": "You rose from common folk to become a hero to ordinary people.",
+    "difficulty": "easy",
+    "strengths": [
+      "Animal Handling and Survival skills",
+      "An artisan tool and land vehicles",
+      "Shelter among ordinary folk"
+    ],
+    "weaknesses": ["Few social benefits among nobles", "Little gold", "No extra languages"],
+    "skills": ["animal-handling", "survival"],
+    "goodWith": [
+      {
+        "id": "class.ranger",
+        "why": "Both skills suit a Ranger"
+      },
+      {
+        "id": "class.druid",
+        "why": "Animal Handling and Survival fit a Druid"
+      }
+    ]
+  },
+  {
+    "id": "background.guild-artisan",
+    "kind": "background",
+    "pitch": "You belong to a guild of crafters and merchants.",
+    "difficulty": "easy",
+    "strengths": [
+      "Insight and Persuasion skills",
+      "An artisan tool and a language",
+      "Guild lodging and backing"
+    ],
+    "weaknesses": ["Few combat benefits", "Guild dues", "Obligations to the guild"],
+    "skills": ["insight", "persuasion"],
+    "goodWith": [
+      {
+        "id": "class.artificer",
+        "why": "The tool proficiency fits an Artificer"
+      },
+      {
+        "id": "class.cleric",
+        "why": "Insight is a Cleric’s skill"
+      }
+    ]
+  },
+  {
+    "id": "background.guild-merchant",
+    "kind": "background",
+    "pitch": "You trade for a guild, with a language and navigation skill over a craft.",
+    "difficulty": "easy",
+    "strengths": [
+      "Insight and Persuasion skills",
+      "Navigator’s tools and a language",
+      "Guild lodging and backing"
+    ],
+    "weaknesses": ["Few combat benefits", "Guild dues", "Obligations to the guild"],
+    "skills": ["insight", "persuasion"],
+    "goodWith": [
+      {
+        "id": "class.bard",
+        "why": "Persuasion supports a Bard"
+      },
+      {
+        "id": "class.warlock",
+        "why": "Persuasion helps with deals and patrons"
+      }
+    ]
+  },
+  {
+    "id": "background.hermit",
+    "kind": "background",
+    "pitch": "You lived alone for years and came back with something to share.",
+    "difficulty": "easy",
+    "strengths": [
+      "Medicine and Religion skills",
+      "Herbalism kit and a language",
+      "A hidden discovery to build with your DM"
+    ],
+    "weaknesses": ["Few combat benefits", "Little social reach", "The discovery needs DM input"],
+    "skills": ["medicine", "religion"],
+    "goodWith": [
+      {
+        "id": "class.cleric",
+        "why": "Both skills help a Cleric"
+      },
+      {
+        "id": "class.druid",
+        "why": "Medicine and herbs fit a Druid"
+      }
+    ]
+  },
+  {
+    "id": "background.noble",
+    "kind": "background",
+    "pitch": "You were born to wealth and high society.",
+    "difficulty": "easy",
+    "strengths": [
+      "History and Persuasion skills",
+      "A gaming set and a language",
+      "High society welcomes you"
+    ],
+    "weaknesses": ["Few combat benefits", "Others expect much of you", "Obligations to family"],
+    "skills": ["history", "persuasion"],
+    "goodWith": [
+      {
+        "id": "class.paladin",
+        "why": "Persuasion fits a Paladin’s presence"
+      },
+      {
+        "id": "class.bard",
+        "why": "Both skills suit a Bard"
+      }
+    ]
+  },
+  {
+    "id": "background.knight",
+    "kind": "background",
+    "pitch": "You hold a knightly title with servants, as a noble variant.",
+    "difficulty": "easy",
+    "strengths": [
+      "History and Persuasion skills",
+      "A gaming set and a language",
+      "Three loyal retainers"
+    ],
+    "weaknesses": ["Few combat benefits", "Your title brings duties", "Retainers will not fight"],
+    "skills": ["history", "persuasion"],
+    "goodWith": [
+      {
+        "id": "class.paladin",
+        "why": "A knight fits a Paladin story"
+      },
+      {
+        "id": "class.fighter",
+        "why": "A knightly Fighter feels natural"
+      }
+    ]
+  },
+  {
+    "id": "background.outlander",
+    "kind": "background",
+    "pitch": "You grew up far from cities and know the wild.",
+    "difficulty": "easy",
+    "strengths": [
+      "Athletics and Survival skills",
+      "An instrument and a language",
+      "You can find food and water"
+    ],
+    "weaknesses": ["Few city benefits", "Little gold", "Rough with high society"],
+    "skills": ["athletics", "survival"],
+    "goodWith": [
+      {
+        "id": "class.barbarian",
+        "why": "Both skills match a Barbarian"
+      },
+      {
+        "id": "class.ranger",
+        "why": "Survival is a Ranger’s core skill"
+      }
+    ]
+  },
+  {
+    "id": "background.sage",
+    "kind": "background",
+    "pitch": "You spent years studying lore in libraries and schools.",
+    "difficulty": "easy",
+    "strengths": ["Arcana and History skills", "Two languages", "You know where to find answers"],
+    "weaknesses": ["Few combat benefits", "No tool proficiency", "Little gold"],
+    "skills": ["arcana", "history"],
+    "goodWith": [
+      {
+        "id": "class.wizard",
+        "why": "Both skills match a Wizard’s best scores"
+      },
+      {
+        "id": "class.sorcerer",
+        "why": "Arcana helps a Sorcerer"
+      }
+    ]
+  },
+  {
+    "id": "background.sailor",
+    "kind": "background",
+    "pitch": "You served on ships and know the sea.",
+    "difficulty": "easy",
+    "strengths": [
+      "Athletics and Perception skills",
+      "Navigator’s tools and water vehicles",
+      "Free passage on ships"
+    ],
+    "weaknesses": ["Few land benefits", "Little gold", "No extra languages"],
+    "skills": ["athletics", "perception"],
+    "goodWith": [
+      {
+        "id": "class.fighter",
+        "why": "Athletics suits a Fighter"
+      },
+      {
+        "id": "class.rogue",
+        "why": "Perception helps a Rogue"
+      }
+    ]
+  },
+  {
+    "id": "background.pirate",
+    "kind": "background",
+    "pitch": "You sailed outside the law, as a sailor variant with a fearsome name.",
+    "difficulty": "easy",
+    "strengths": [
+      "Athletics and Perception skills",
+      "Navigator’s tools and water vehicles",
+      "Common folk fear you"
+    ],
+    "weaknesses": ["The law is against you", "Few land benefits", "No extra languages"],
+    "skills": ["athletics", "perception"],
+    "goodWith": [
+      {
+        "id": "class.rogue",
+        "why": "Fits a swashbuckling Rogue"
+      },
+      {
+        "id": "class.fighter",
+        "why": "Athletics suits a Fighter"
+      }
+    ]
+  },
+  {
+    "id": "background.soldier",
+    "kind": "background",
+    "pitch": "You trained and fought as part of an army.",
+    "difficulty": "easy",
+    "strengths": [
+      "Athletics and Intimidation skills",
+      "A gaming set and land vehicles",
+      "Soldiers respect your rank"
+    ],
+    "weaknesses": ["Few social benefits", "Orders from old commanders", "No extra languages"],
+    "skills": ["athletics", "intimidation"],
+    "goodWith": [
+      {
+        "id": "class.fighter",
+        "why": "Both skills suit a Fighter"
+      },
+      {
+        "id": "class.barbarian",
+        "why": "Athletics and Intimidation fit a Barbarian"
+      }
+    ]
+  },
+  {
+    "id": "background.urchin",
+    "kind": "background",
+    "pitch": "You grew up poor on city streets and learned to survive.",
+    "difficulty": "easy",
+    "strengths": [
+      "Sleight of Hand and Stealth skills",
+      "Disguise kit and thieves’ tools",
+      "Fast travel through cities"
+    ],
+    "weaknesses": ["Few combat benefits", "Little gold", "No extra languages"],
+    "skills": ["sleight-of-hand", "stealth"],
+    "goodWith": [
+      {
+        "id": "class.rogue",
+        "why": "Both skills and the tools suit a Rogue"
+      },
+      {
+        "id": "class.monk",
+        "why": "Stealth helps a quick Monk"
+      }
+    ]
+  },
+  {
+    "id": "background.custom",
+    "kind": "background",
+    "pitch": "You pick your own skills, language and tool to match your story.",
+    "difficulty": "easy",
+    "strengths": ["Any two skills", "A language and a tool of your choice", "Fits any concept"],
+    "weaknesses": [
+      "Your DM must approve the feature",
+      "More choices to make",
+      "No built-in story hooks"
+    ],
+    "skills": [],
+    "goodWith": [
+      {
+        "id": "class.fighter",
+        "why": "Take whatever skills your build needs"
+      },
+      {
+        "id": "class.wizard",
+        "why": "Take whatever skills your build needs"
+      }
     ]
   }
 ]

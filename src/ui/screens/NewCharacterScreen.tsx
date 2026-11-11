@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useStore } from 'zustand';
 import { Link, useNavigate } from 'react-router';
 import { ZodError } from 'zod';
+import type { Skill as SkillId } from '../../engine/rules2014';
 import { registry } from '../../data/registry';
 import { ABILITIES, abilityModifier, type Ability } from '../../engine/calc/abilities';
 import { averageHpRoll, levelHp, maxHp, type HitDie } from '../../engine/calc/hp';
@@ -29,6 +30,13 @@ import { emptyGuided, toGuidedChoices, type GuidedState } from './guided-state';
 import { PlaceholderScreen } from './PlaceholderScreen';
 import { deviceStore, type CreationMode } from '../../state/device-settings';
 import { clearDraft, loadDraft, saveDraft } from './new-character-draft';
+import { BackgroundChoicesSection } from './BackgroundChoicesSection';
+import {
+  emptyBackgroundPicks,
+  openSlots,
+  picksPayload,
+  type BackgroundPicks,
+} from './background-picks';
 import { LevelChoicesSection } from './LevelChoicesSection';
 import { PlayedByDialog } from '../roles/RoleDialogs';
 import { useAskRoles } from '../roles/useAskRoles';
@@ -95,6 +103,9 @@ function NewCharacterForm({
       (classes.some((entry) => entry.id === 'class.bard') ? 'class.bard' : ''),
   );
   const [backgroundId, setBackgroundId] = useState(offered(backgrounds, draft?.backgroundId) ?? '');
+  const [backgroundPicks, setBackgroundPicks] = useState<BackgroundPicks>(
+    (draft?.backgroundPicks as BackgroundPicks | undefined) ?? emptyBackgroundPicks(),
+  );
   const [alignment, setAlignment] = useState(alignmentLabel(draft?.alignment ?? ''));
   const [racialChoices, setRacialChoices] = useState<Ability[]>(
     (draft?.racialChoices as Ability[] | undefined) ?? [],
@@ -125,6 +136,7 @@ function NewCharacterForm({
       raceId,
       classId,
       backgroundId,
+      backgroundPicks,
       alignment,
       racialChoices,
       level,
@@ -148,6 +160,11 @@ function NewCharacterForm({
   const stepped = mode === 'steps';
 
   const race = races.find((entry) => entry.id === raceId);
+  const backgroundDef =
+    registry.entries.get(backgroundId)?.kind === 'background'
+      ? registry.get('background', backgroundId)
+      : undefined;
+  const backgroundChoices = picksPayload(backgroundDef, backgroundPicks);
   const classDef = classes.find((entry) => entry.id === classId);
   const die = classDef ? (Number(classDef.hitDie.slice(1)) as HitDie) : undefined;
   const average = die === undefined ? undefined : averageHpRoll(die);
@@ -196,6 +213,7 @@ function NewCharacterForm({
             ABILITIES.map((ability) => [ability, Number(bases[ability])]),
           ) as PerAbility<number>,
           racialChoices,
+          ...(backgroundChoices ? { backgroundChoices } : {}),
           hpRolls: campaign.hpMethod === 'rolled' ? Array.from({ length: level - 1 }, () => 1) : [],
         },
         registry,
@@ -223,6 +241,7 @@ function NewCharacterForm({
             ABILITIES.map((ability) => [ability, Number(bases[ability])]),
           ) as PerAbility<number>,
           racialChoices,
+          ...(backgroundChoices ? { backgroundChoices } : {}),
           hpRolls: campaign.hpMethod === 'rolled' ? rolls.slice(0, level - 1).map(Number) : [],
           ...(levelChoices.length > 0 ? { levelChoices } : {}),
           ...(guided ? { guided: toGuidedChoices(guidedState) } : {}),
@@ -271,6 +290,10 @@ function NewCharacterForm({
     setStepErrors([]);
     setStepIndex(Math.max(0, Math.min(steps.length - 1, index)));
   };
+  const pickBackground = (id: string) => {
+    setBackgroundId(id);
+    setBackgroundPicks(emptyBackgroundPicks());
+  };
   const next = () => {
     if (problems.length > 0) setStepErrors(problems);
     else goTo(at + 1);
@@ -279,6 +302,7 @@ function NewCharacterForm({
     ...(registry.entries.get(backgroundId)?.kind === 'background'
       ? registry.get('background', backgroundId).skills
       : []),
+    ...((backgroundChoices?.skills ?? []) as SkillId[]),
   ];
 
   return (
@@ -308,6 +332,7 @@ function NewCharacterForm({
                 ABILITIES.map((ability) => [ability, Number(bases[ability])]),
               ) as PerAbility<number>,
               racialChoices,
+              ...(backgroundChoices ? { backgroundChoices } : {}),
               hpRolls: campaign.hpMethod === 'rolled' ? rolls.slice(0, level - 1).map(Number) : [],
               ...(levelChoices.length > 0 ? { levelChoices } : {}),
               ...(guided ? { guided: toGuidedChoices(guidedState) } : {}),
@@ -556,8 +581,16 @@ function NewCharacterForm({
               label="Background"
               options={backgrounds}
               value={backgroundId}
-              onChange={setBackgroundId}
+              onChange={pickBackground}
               required
+            />
+          )}
+          {show('background') && backgroundDef && openSlots(backgroundDef) > 0 && (
+            <BackgroundChoicesSection
+              background={backgroundDef}
+              picks={backgroundPicks}
+              taken={{ skills: backgroundDef.skills, languages: race?.languages ?? [] }}
+              onChange={setBackgroundPicks}
             />
           )}
           {hints && show('background') && (
@@ -565,7 +598,7 @@ function NewCharacterForm({
               noun="backgrounds"
               options={backgrounds}
               value={backgroundId}
-              onChange={setBackgroundId}
+              onChange={pickBackground}
             />
           )}
           {show('name') && (

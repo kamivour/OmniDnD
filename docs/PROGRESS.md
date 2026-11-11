@@ -291,6 +291,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-11 — M26 task 8: All PHB backgrounds, variants and Custom; creation asks for their skills, languages and tools.
 - 2026-11-11 — M26 task 7: M26-7: bolder field labels and headings; subclass choice is icon cards with pitch and difficulty; DESIGN.md updated.
 - 2026-11-11 — M26 task 6: M26-6: cautions use warn colour, a triangle icon and bolder text; blocking level-up errors use danger.
 - 2026-11-11 — M26 task 5: M26-5: sign-in card on Campaigns when signed out (sync builds only), hideable; welcome tour points at it.

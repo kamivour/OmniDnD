@@ -27,6 +27,60 @@ function withAbilityMethod(method: CreateCharacterInput['campaign']['abilityMeth
   return { ...seedFile.campaign, abilityMethod: method };
 }
 
+describe('background choices', () => {
+  it('adds picked languages and tools to the build', () => {
+    const created = createCharacter(
+      input({
+        backgroundId: 'background.noble',
+        backgroundChoices: { languages: ['Dwarvish'], tools: ['item.dice-set'] },
+      }),
+      registry,
+    );
+    expect(created.build.proficiencies.languages).toEqual(['Common', 'Elvish', 'Dwarvish']);
+    expect(created.build.proficiencies.tools).toEqual(['item.dice-set']);
+    expect(created.build.proficiencies.skills).toEqual(['history', 'persuasion']);
+  });
+
+  it('adds picked skills for the custom background', () => {
+    const created = createCharacter(
+      input({
+        backgroundId: 'background.custom',
+        backgroundChoices: {
+          skills: ['arcana', 'stealth'],
+          languages: ['Orc'],
+          tools: ['item.lute'],
+        },
+      }),
+      registry,
+    );
+    expect(created.build.proficiencies.skills).toEqual(['arcana', 'stealth']);
+  });
+
+  it('allows leaving choices blank, and rejects a wrong count or an off-list tool', () => {
+    expect(() =>
+      createCharacter(input({ backgroundId: 'background.sage' }), registry),
+    ).not.toThrow();
+    const bad = (backgroundChoices: CreateCharacterInput['backgroundChoices']) =>
+      createCharacter(input({ backgroundId: 'background.sage', backgroundChoices }), registry);
+    expect(() => bad({ languages: ['Orc'] })).toThrow(ZodError);
+    const noble = (tools: string[]) =>
+      createCharacter(
+        input({ backgroundId: 'background.noble', backgroundChoices: { tools } }),
+        registry,
+      );
+    expect(() => noble(['item.lute'])).toThrow(ZodError);
+  });
+
+  it('every background resolves its features and tools', () => {
+    const ids = [...registry.entries.values()].filter((e) => e.kind === 'background');
+    expect(ids.length).toBeGreaterThanOrEqual(18);
+    for (const entry of ids) {
+      const created = createCharacter(input({ backgroundId: entry.id }), registry);
+      expect(created.build.backgroundId).toBe(entry.id);
+    }
+  });
+});
+
 describe('createCharacter', () => {
   it('derives Fool-like HP, racial bonuses, fixed grants and full resource pools', () => {
     const choices = input({ alignment: 'Chaotic Neutral' });

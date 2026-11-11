@@ -75,3 +75,21 @@ test.describe('fresh device', () => {
     await expect(page.getByRole('button', { name: 'Try the sample character' })).toHaveCount(0);
   });
 });
+
+test('a background with open choices asks for them and the sheet keeps them', async ({ page }) => {
+  await openNewCharacter(page);
+  await page.getByLabel('Name', { exact: true }).fill('Noble Sage');
+  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await page.getByLabel('Class', { exact: true }).selectOption('class.wizard');
+  await page.getByLabel('Background', { exact: true }).selectOption('background.noble');
+  await page.getByLabel('Language', { exact: true }).selectOption('Dwarvish');
+  await page.getByLabel('Tool', { exact: true }).selectOption('item.dice-set');
+  for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
+    await page.getByLabel(`${ability} base`, { exact: true }).fill('13');
+  }
+  await page.getByRole('button', { name: 'Create character', exact: true }).click();
+  await expect(page).toHaveURL(/\/characters\/(?!new$)[^/]+$/);
+  await page.goto(`${new URL(page.url()).pathname}/sheet`);
+  await expect(page.getByText('Dwarvish').first()).toBeVisible();
+  await expect(page.getByText('Dice Set').first()).toBeVisible();
+});

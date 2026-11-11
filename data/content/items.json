@@ -11,5 +11,33 @@
     },
     "summaryReviewed": false,
     "category": "gear"
+  },
+  {
+    "kind": "item",
+    "id": "item.land-vehicles",
+    "name": "Land Vehicles",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Proficiency only: you add your bonus when driving or riding carts, wagons and similar land transport."
+    },
+    "category": "tool",
+    "weight": 0
+  },
+  {
+    "kind": "item",
+    "id": "item.water-vehicles",
+    "name": "Water Vehicles",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Proficiency only: you add your bonus when sailing or rowing boats and ships."
+    },
+    "category": "tool",
+    "weight": 0
   }
 ]

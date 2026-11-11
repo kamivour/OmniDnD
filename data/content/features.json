@@ -2693,5 +2693,201 @@
     "grants": {
       "ability": ["DEX", "INT"]
     }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.criminal-contact",
+    "name": "Criminal Contact",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You know a reliable go-between who passes messages and rumours from the underworld. You can reach other criminals through them over long distances."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.by-popular-demand",
+    "name": "By Popular Demand",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Venues put you up and feed you for free while you perform there. Locals tend to recognise you and treat you kindly."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rustic-hospitality",
+    "name": "Rustic Hospitality",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Ordinary folk shelter and hide you if you are not in obvious danger, and will help you without sending you away. You find a place to rest among them."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.guild-membership",
+    "name": "Guild Membership",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your guild gives you lodging, legal backing, and contacts. You pay dues, and fellow members may help you or open doors with local rulers."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.discovery",
+    "name": "Discovery",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your time alone revealed a unique and powerful truth. Work out with your DM what it is and how it can change your story."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.position-of-privilege",
+    "name": "Position of Privilege",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "People assume you belong in high society and welcome you. Local nobles want to speak with you, and you can get an audience with a local figure."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.retainers",
+    "name": "Retainers",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Three loyal servants attend you: commoners who handle chores and errands. They will not fight for you and leave if you put them in danger."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wanderer",
+    "name": "Wanderer",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You recall maps and the lay of the land well. You can find food and fresh water each day for yourself and up to five others."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.researcher",
+    "name": "Researcher",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When you do not know a piece of lore, you often know where to find it: a library, a scholar, or another source. The DM decides how hard it is to reach."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.ships-passage",
+    "name": "Ship’s Passage",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You can arrange free passage on a sailing ship for yourself and companions. You help crew the ship, and the captain decides how and when it sails."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bad-reputation",
+    "name": "Bad Reputation",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Common folk fear you, so you get away with minor crimes in settled places. They will not report or confront you over them."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.military-rank",
+    "name": "Military Rank",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Soldiers of your former force still respect your rank. You can command lower-ranked soldiers and borrow simple gear or horses for short missions."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.custom-background",
+    "name": "Background Feature",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your DM approves a feature from another background to fill this slot. Note it in your journal."
+    },
+    "origin": "background",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.city-secrets",
+    "name": "City Secrets",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You know hidden routes through cities. Outside of combat, you and companions travel between two city spots at twice the normal speed."
+    },
+    "origin": "background",
+    "activation": "passive"
   }
 ]

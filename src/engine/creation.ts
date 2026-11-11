@@ -7,6 +7,7 @@ import { CLASS_START, slotChoices } from './calc/class-start';
 import { applyLevelChoices, LevelChoicesSchema } from './calc/level-choices';
 import { applyLevelSpells, LevelSpellsSchema, levelSpellGains } from './calc/level-spells';
 export { xpForLevel } from './calc/advancement';
+import { toolGroupOptions, toolSlots } from './calc/background-choices';
 import { computeSheet } from './calc/sheet';
 import type { Registry } from './registry';
 import { SECONDS_PER_HOUR } from './rules2014';
@@ -18,8 +19,10 @@ import {
   SCHEMA_VERSION,
   refId,
   SkillSchema,
+  type BackgroundDef,
   type Campaign,
   type CharacterBuild,
+  type ItemDef,
   type LiveState,
   type LogEvent,
   type RefKind,
@@ -42,6 +45,14 @@ export const GuidedChoicesSchema = z.strictObject({
 });
 export type GuidedChoices = z.infer<typeof GuidedChoicesSchema>;
 
+/** What the player picked from the background's open choices. */
+export const BackgroundChoicesSchema = z.strictObject({
+  skills: z.array(SkillSchema).optional(),
+  languages: z.array(z.string().trim().min(1)).optional(),
+  tools: z.array(refId('item')).optional(),
+});
+export type BackgroundChoices = z.infer<typeof BackgroundChoicesSchema>;
+
 export const CreateCharacterInputSchema = z
   .strictObject({
     id: z.string().trim().min(1),
@@ -55,6 +66,8 @@ export const CreateCharacterInputSchema = z
     abilityBases: AbilityBasesSchema,
     /** Pick the abilities only; the race supplies their bonus amounts. */
     racialChoices: z.array(AbilitySchema).optional(),
+    /** Open choices of the background: extra skills, languages and tools. */
+    backgroundChoices: BackgroundChoicesSchema.optional(),
     /** Entries are for levels 2 through N. Level 1 always uses the die maximum. */
     hpRolls: z.array(z.int().positive()).optional(),
     /** Subclass, ability score improvement or feat, expertise and option features picked for levels 1 through N. */
@@ -124,6 +137,8 @@ export function createCharacter(input: CreateCharacterInput, registry: Registry)
     });
   }
 
+  const picked = backgroundPicks(background, choices.backgroundChoices, registry, campaign);
+
   // Validate all fixed grants used by the new build before computing its sheet.
   background.tools.forEach((id) =>
     enabledReference('item', id, campaign, registry, ['backgroundId']),
@@ -165,12 +180,12 @@ export function createCharacter(input: CreateCharacterInput, registry: Registry)
     })),
     proficiencies: {
       saves: classDef.saves,
-      skills: background.skills,
+      skills: [...new Set([...background.skills, ...picked.skills])],
       expertise: [],
       armor: [],
       weapons: [],
-      tools: background.tools,
-      languages: race.languages,
+      tools: [...new Set([...background.tools, ...picked.tools])],
+      languages: [...new Set([...race.languages, ...picked.languages])],
     },
     spells: [],
     favorites: [],
@@ -385,6 +400,38 @@ function enabledReference<K extends RefKind>(
     invalid(path, `${id} is not enabled by this campaign's rules and sources`);
   }
   return registry.get(kind, id);
+}
+
+/** Check the picks against what the background offers; blank means none picked yet. */
+function backgroundPicks(
+  background: BackgroundDef,
+  picks: BackgroundChoices | undefined,
+  registry: Registry,
+  campaign: Campaign,
+): { skills: z.infer<typeof SkillSchema>[]; languages: string[]; tools: string[] } {
+  const skills = picks?.skills ?? [];
+  const languages = picks?.languages ?? [];
+  const tools = picks?.tools ?? [];
+  const path = ['backgroundChoices'];
+  const need = (n: number | undefined, got: unknown[], key: string) => {
+    if (got.length !== 0 && got.length !== (n ?? 0))
+      invalid([...path, key], `Choose ${n ?? 0} ${key} for this background`);
+    if (new Set(got).size !== got.length) invalid([...path, key], `Pick each ${key} entry once`);
+  };
+  need(background.skillChoices, skills, 'skills');
+  need(background.languageChoices, languages, 'languages');
+  const slots = toolSlots(background);
+  need(slots.length, tools, 'tools');
+  const items = [...registry.entries.values()].filter(
+    (entry): entry is ItemDef => entry.kind === 'item',
+  );
+  const allowed = new Set(slots.flatMap((group) => toolGroupOptions(group, items)));
+  tools.forEach((id, index) => {
+    if (!allowed.has(id))
+      invalid([...path, 'tools', index], `${id} is not one of the offered tools`);
+    enabledReference('item', id, campaign, registry, [...path, 'tools', index]);
+  });
+  return { skills, languages, tools };
 }
 
 function invalid(path: (string | number)[], message: string): never {

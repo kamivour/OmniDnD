@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-11 14:07 — All PHB backgrounds
+- New character offers every PHB background, the five variants (Spy, Gladiator, Guild Merchant, Knight, Pirate) and Custom.
+- Backgrounds with open choices show pickers for languages, tools and skills; leave them blank to fill in on the sheet later.
+- Check the wording of the new features in Features. Guild Merchant takes a second language instead of the navigator's-tools option.
+- Checks pass.
+
 ## 2026-11-11 13:57 — Clearer labels and subclass cards
 - Field labels and section headings are bigger and bolder.
 - Subclass is now a list of cards with an icon, short pitch and difficulty, in creation, level-up and To do.
