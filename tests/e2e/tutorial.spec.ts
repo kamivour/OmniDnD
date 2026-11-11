@@ -29,7 +29,7 @@ test.describe('first visit', () => {
       expect(box!.x).toBeGreaterThanOrEqual(0);
       expect(box!.x + box!.width).toBeLessThanOrEqual(viewport.width);
       expect(box!.y + box!.height).toBeLessThanOrEqual(viewport.height + 1);
-      await card.getByRole('button', { name: step === 7 ? 'Done' : 'Next' }).click();
+      await card.getByRole('button', { name: step === 8 ? 'Done' : 'Next' }).click();
     }
     await expect(page.getByTestId('tour')).toHaveCount(0);
 

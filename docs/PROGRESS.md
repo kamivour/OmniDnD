@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M26 Friend-testing fixes (see PLAN.md). 0 of 10 tasks done.
-**Next up:** M26 task 1, number fields. Q40–Q43 wait for the user; defaults apply meanwhile.
+**Current milestone:** M26 Friend-testing fixes done (see PLAN.md). 10 of 10 tasks done.
+**Next up:** Manual QA for M26 by the user; Q40–Q43 wait for the user, defaults apply.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -49,7 +49,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M23 | Tutorial | 5 | done | First visit on each device: guide with Skip and Replay; see [PLAN.md](PLAN.md) |
 | M24 | Roles and shared campaigns | 7 | done | DM or player role; party sees every character live, each player changes only their own; see [PLAN.md](PLAN.md) |
 | M25 | DM party overview | 7 | done | Read-only overview of the whole party for the DM; see [PLAN.md](PLAN.md) |
-| M26 | Friend-testing fixes | 5 | planned | New players on a phone create a character without confusion and find sign-up; see [PLAN.md](PLAN.md) |
+| M26 | Friend-testing fixes | 5 | done | New players on a phone create a character without confusion and find sign-up; see [PLAN.md](PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -269,16 +269,16 @@ Sources: [awesome-dnd](https://github.com/flamableconcrete/awesome-dnd) (CC0) pl
 
 ### M26 — Friend-testing fixes
 Details in [PLAN.md](PLAN.md).
-- [ ] 1. Number fields
-- [ ] 2. True Neutral
-- [ ] 3. Spell Pending
-- [ ] 4. No sample character
-- [ ] 5. Accounts easy to find
-- [ ] 6. Cautions stand out
-- [ ] 7. Headings and subclass cards
-- [ ] 8. PHB backgrounds
-- [ ] 9. Stats button for summons
-- [ ] 10. Gate
+- [x] 1. Number fields
+- [x] 2. True Neutral
+- [x] 3. Spell Pending
+- [x] 4. No sample character
+- [x] 5. Accounts easy to find
+- [x] 6. Cautions stand out
+- [x] 7. Headings and subclass cards
+- [x] 8. PHB backgrounds
+- [x] 9. Stats button for summons
+- [x] 10. Gate
 
 ## Backlog (not scheduled)
 
@@ -291,6 +291,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.
 - 2026-11-11 — M26 task 8: All PHB backgrounds, variants and Custom; creation asks for their skills, languages and tools.
 - 2026-11-11 — M26 task 7: M26-7: bolder field labels and headings; subclass choice is icon cards with pitch and difficulty; DESIGN.md updated.

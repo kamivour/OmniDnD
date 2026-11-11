@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-11 14:48 — M26 gate
+
+- Ten manual checks for this round of fixes are in MANUAL_QA.md. Please try them at phone and desktop width.
+- The welcome tour test now matches the new sign-in step.
+- Checks pass.
+
 ## 2026-11-11 14:13 — Stats button for summons
 - Steel Defender, Eldritch Cannon, Find Familiar, Find Steed and Conjure spells now show a small Stats button beside Use or Cast.
 - It opens that creature on Companions, or the add form pre-filled if you have none yet.

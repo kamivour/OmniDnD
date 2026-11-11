@@ -247,6 +247,21 @@ Run the migration `supabase/migrations/20261109170000_party.sql` in Supabase fir
 - [ ] Turn off Show screen tips, then visit a new screen. Judge whether no tip appears.
 - [ ] Use Replay in Settings → Tutorial. Judge whether it starts at once.
 
+## Phase 7 — M26: Friend-testing fixes
+
+Check each at 375 px and at desktop width.
+
+- [ ] New character: clear Level and Starting scores with Backspace, retype, press Enter in a score. Judge whether it feels natural.
+- [ ] Open the app in a fresh profile. Judge whether the empty start and Try the sample character button are clear.
+- [ ] Signed out on Campaigns, judge whether the sign-in card is easy to find and easy to hide.
+- [ ] Trigger a caution in a few screens. Judge whether the warn colour and icon stand out without alarming.
+- [ ] Judge whether field labels and headings read clearly and subclass cards show pitch and difficulty well.
+- [ ] Pick Noble, Sage and Custom backgrounds. Judge whether the skill, language and tool choices are clear.
+- [ ] Open Pending spells for a level 1 Wizard. Judge whether the first-level list is the right one.
+- [ ] With a Battle Smith, add Steel Defender through its Stats button. Judge whether it feels quick.
+- [ ] Cast Find Familiar and Conjure Animals, then tap Stats. Judge whether the add form helps.
+- [ ] Judge whether True Neutral reads as expected in the alignment list.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).
