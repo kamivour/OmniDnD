@@ -1,0 +1,104 @@
+/* Underdark: deep cave violet, lit by faerzress and glowing fungus. */
+:root[data-theme='underdark'],
+[data-theme='underdark'] {
+  color-scheme: dark;
+
+  --omni-bg: #0d0a16;
+  --omni-surface: #161126;
+  --omni-surface-2: #1e1833;
+  --omni-border: #352b52;
+  --omni-text: #efeafc;
+  --omni-text-muted: #b0a6cc;
+  --omni-accent: #5ff2d8;
+  --omni-magic: #c79eff;
+  --omni-danger: #ff6f8a;
+  --omni-heal: #a2e67c;
+  --omni-temp: #9cc4ff;
+  --omni-warn: #ffd36b;
+
+  --omni-type-damage: #ff7d92;
+  --omni-type-control: #c79eff;
+  --omni-type-healing: #a2e67c;
+  --omni-type-buff: #7fd4ff;
+  --omni-type-debuff: #ffd36b;
+  --omni-type-utility: #b6add0;
+
+  --omni-bg-image:
+    radial-gradient(60% 40% at 0% 100%, rgb(80 240 210 / 0.12), transparent 70%),
+    radial-gradient(70% 45% at 100% 0%, rgb(160 100 255 / 0.16), transparent 70%);
+}
+
+/* Title: letters fade from faerzress violet to fungus cyan, with a violet glow behind them. */
+[data-theme='underdark'] .omni-title {
+  background-image: linear-gradient(180deg, #e3cfff 0%, #b98cff 45%, #5ff2d8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme='underdark'] .omni-title-fx::before {
+  content: attr(data-text);
+  color: #a46bff;
+  filter: blur(8px);
+  opacity: 0.4;
+  mix-blend-mode: screen;
+}
+
+/* Full: the glow breathes like faerzress in the rock. */
+:root[data-theme='underdark'][data-fx='full'] .omni-title-fx::before {
+  will-change: opacity;
+  animation: omni-faerzress-pulse 5.5s ease-in-out infinite;
+}
+
+@keyframes omni-faerzress-pulse {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Background: glowing spores rising slowly from the cave floor. */
+[data-ambient='spores'] > span {
+  bottom: -10px;
+  left: calc(mod(var(--i) * 53, 97) * 1%);
+  width: calc(2px + mod(var(--i), 3) * 1.5px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #8ffff0;
+  box-shadow: 0 0 7px 2px rgb(80 240 210 / 0.55);
+  opacity: 0;
+}
+
+[data-ambient='spores'] > span:nth-child(2n) {
+  background: #d9bbff;
+  box-shadow: 0 0 7px 2px rgb(170 110 255 / 0.55);
+}
+
+:root[data-fx='full'] [data-ambient='spores'] > span {
+  animation: omni-spore-rise calc(20s + mod(var(--i) * 3, 12) * 1s) linear infinite;
+  animation-delay: calc(var(--i) * -2.3s);
+}
+
+@keyframes omni-spore-rise {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  40% {
+    transform: translate3d(2vw, -42vh, 0);
+    opacity: 0.35;
+  }
+  60% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(-2vw, -106vh, 0);
+    opacity: 0;
+  }
+}

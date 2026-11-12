@@ -1,0 +1,137 @@
+/* Feywild: endless twilight in violet, with blossom pink and bright mint. */
+:root[data-theme='feywild'],
+[data-theme='feywild'] {
+  color-scheme: dark;
+
+  --omni-bg: #1a1024;
+  --omni-surface: #251733;
+  --omni-surface-2: #301e40;
+  --omni-border: #4b3260;
+  --omni-text: #fbf0ff;
+  --omni-text-muted: #c9b4d8;
+  --omni-accent: #ff9ad5;
+  --omni-magic: #7fe8e0;
+  --omni-danger: #ff7262;
+  --omni-heal: #a8e86f;
+  --omni-temp: #a9c8ff;
+  --omni-warn: #ffd66b;
+
+  --omni-type-damage: #ff8070;
+  --omni-type-control: #d7a6ff;
+  --omni-type-healing: #a8e86f;
+  --omni-type-buff: #8fd2ff;
+  --omni-type-debuff: #ffd66b;
+  --omni-type-utility: #cbbad6;
+
+  --omni-radius-card: 14px;
+  --omni-radius-btn: 10px;
+  --omni-bg-image:
+    radial-gradient(70% 45% at 10% 0%, rgb(255 140 210 / 0.16), transparent 70%),
+    radial-gradient(70% 45% at 95% 100%, rgb(110 240 210 / 0.12), transparent 70%);
+}
+
+/* Title: petal-coloured letters that shift hue like a beetle wing, with sparkles on top. */
+[data-theme='feywild'] .omni-title {
+  background-image: linear-gradient(
+    100deg,
+    #ffb3e0 0%,
+    #d9b0ff 25%,
+    #9ff3e4 50%,
+    #ffe39a 75%,
+    #ffb3e0 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme='feywild'] .omni-title-fx::before {
+  content: '';
+  inset: -0.15em -0.1em;
+  background-image:
+    radial-gradient(circle at 8% 22%, #fff 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 31% 80%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 52% 12%, #fff 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 74% 70%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 93% 28%, #fff 0 1.5px, transparent 2.5px);
+  opacity: 0.55;
+}
+
+/* Full: the colours drift through the letters and the sparkles twinkle. */
+:root[data-theme='feywild'][data-fx='full'] .omni-title {
+  animation: omni-fey-shift 7s linear infinite;
+}
+
+:root[data-theme='feywild'][data-fx='full'] .omni-title-fx::before {
+  will-change: opacity;
+  animation: omni-fey-twinkle 2.4s ease-in-out infinite;
+}
+
+@keyframes omni-fey-shift {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes omni-fey-twinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+/* Background: glowing motes that float and wander. */
+[data-ambient='motes'] > span {
+  bottom: -12px;
+  left: calc(mod(var(--i) * 47, 97) * 1%);
+  width: calc(3px + mod(var(--i), 3) * 1.5px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ffc2e6;
+  box-shadow: 0 0 8px 2px rgb(255 150 210 / 0.55);
+  opacity: 0;
+}
+
+[data-ambient='motes'] > span:nth-child(3n) {
+  background: #b5fff0;
+  box-shadow: 0 0 8px 2px rgb(110 240 210 / 0.55);
+}
+
+[data-ambient='motes'] > span:nth-child(3n + 1) {
+  background: #fff0b8;
+  box-shadow: 0 0 8px 2px rgb(255 220 120 / 0.5);
+}
+
+:root[data-fx='full'] [data-ambient='motes'] > span {
+  animation: omni-mote-float calc(14s + mod(var(--i) * 5, 9) * 1s) ease-in-out infinite;
+  animation-delay: calc(var(--i) * -1.9s);
+}
+
+@keyframes omni-mote-float {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  30% {
+    transform: translate3d(4vw, -30vh, 0);
+  }
+  55% {
+    transform: translate3d(-3vw, -55vh, 0);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate3d(3vw, -78vh, 0);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(-1vw, -106vh, 0);
+    opacity: 0;
+  }
+}

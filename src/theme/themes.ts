@@ -121,6 +121,36 @@ export const THEMES = [
     ambient: 'snow',
     synonyms: ['ice', 'snow', 'frost', 'winter', 'cold', 'rime', 'ten towns', 'frozen'],
   },
+  {
+    id: 'feywild',
+    name: 'Feywild',
+    hint: 'Twilight violet with blossom pink; the title shimmers.',
+    group: 'planes',
+    scheme: 'dark',
+    title: true,
+    ambient: 'motes',
+    synonyms: ['fey', 'fairy', 'faerie', 'twilight', 'pink', 'whimsy', 'enchanted', 'forest'],
+  },
+  {
+    id: 'shadowfell',
+    name: 'Shadowfell',
+    hint: 'Drained greys; shadow passes over the title.',
+    group: 'planes',
+    scheme: 'dark',
+    title: true,
+    ambient: 'wisps',
+    synonyms: ['shadow', 'grey', 'gray', 'gloom', 'raven queen', 'despair', 'muted', 'monochrome'],
+  },
+  {
+    id: 'underdark',
+    name: 'Underdark',
+    hint: 'Cave violet lit by faerzress and glowing fungus.',
+    group: 'places',
+    scheme: 'dark',
+    title: true,
+    ambient: 'spores',
+    synonyms: ['cave', 'caverns', 'drow', 'fungus', 'mushroom', 'faerzress', 'menzoberranzan'],
+  },
 ] as const satisfies readonly ThemeInfo[];
 
 export type ThemeId = (typeof THEMES)[number]['id'];

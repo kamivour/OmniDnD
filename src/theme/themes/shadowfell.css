@@ -1,0 +1,98 @@
+/* Shadowfell: a drained, grey echo of the world, where colour is scarce. */
+:root[data-theme='shadowfell'],
+[data-theme='shadowfell'] {
+  color-scheme: dark;
+
+  --omni-bg: #0e0f10;
+  --omni-surface: #17191b;
+  --omni-surface-2: #1f2225;
+  --omni-border: #34383c;
+  --omni-text: #e6e9eb;
+  --omni-text-muted: #a2a8ad;
+  --omni-accent: #b9c6cf;
+  --omni-magic: #b5a6e6;
+  --omni-danger: #ff7a7a;
+  --omni-heal: #8fd6a8;
+  --omni-temp: #a7c2e4;
+  --omni-warn: #e6cd7a;
+
+  --omni-type-damage: #ef8686;
+  --omni-type-control: #bba9e0;
+  --omni-type-healing: #8fd6a8;
+  --omni-type-buff: #9cc0dc;
+  --omni-type-debuff: #e6cd7a;
+  --omni-type-utility: #aeb4b9;
+
+  --omni-bg-image:
+    radial-gradient(120% 70% at 50% 50%, transparent 40%, rgb(0 0 0 / 0.55) 100%),
+    linear-gradient(180deg, rgb(150 160 170 / 0.06), transparent 50%);
+}
+
+/* Title: pale grey letters with a band of shadow across them. At full the shadow passes slowly
+   from side to side, so the letters fade in and out of it. */
+[data-theme='shadowfell'] .omni-title {
+  background-image: linear-gradient(
+    90deg,
+    #e6e9eb 0%,
+    #e6e9eb 30%,
+    #4a5056 50%,
+    #e6e9eb 70%,
+    #e6e9eb 100%
+  );
+  background-size: 300% 100%;
+  background-position: 40% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+:root[data-theme='shadowfell'][data-fx='full'] .omni-title {
+  animation: omni-shadow-pass 11s ease-in-out infinite alternate;
+}
+
+@keyframes omni-shadow-pass {
+  from {
+    background-position: 75% 0;
+  }
+  to {
+    background-position: 20% 0;
+  }
+}
+
+/* Background: grey wisps drifting sideways through the gloom. */
+[data-ambient='wisps'] > span {
+  top: calc(mod(var(--i) * 23, 85) * 1%);
+  left: -40vw;
+  width: calc(30vw + mod(var(--i), 3) * 8vw);
+  height: calc(60px + mod(var(--i), 4) * 25px);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(170 180 190 / 0.24), transparent);
+  filter: blur(12px);
+  opacity: 0;
+}
+
+[data-ambient='wisps'] > span:nth-child(n + 7) {
+  display: none;
+}
+
+:root[data-fx='full'] [data-ambient='wisps'] > span {
+  animation: omni-wisp-drift calc(40s + mod(var(--i) * 7, 20) * 1s) linear infinite;
+  animation-delay: calc(var(--i) * -9s);
+}
+
+@keyframes omni-wisp-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(180vw, -6vh, 0);
+    opacity: 0;
+  }
+}

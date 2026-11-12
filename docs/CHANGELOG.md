@@ -4,6 +4,14 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 03:43 — Feywild, Shadowfell and Underdark themes
+
+- Three more themes in Settings: Feywild, Shadowfell and Underdark.
+- On a computer the Feywild title shimmers with sparkles, a shadow drifts across the Shadowfell title, and the Underdark title glows violet.
+- Glowing motes, grey wisps or rising spores float behind the page on computers; phones stay still.
+- Checks pass.
+- Checks pass.
+
 ## 2026-11-13 03:37 — Fire, Nine Hells and Icewind Dale themes
 
 - Three new themes in Settings: Elemental Plane of Fire, Nine Hells and Icewind Dale.
