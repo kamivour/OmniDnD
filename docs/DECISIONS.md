@@ -194,6 +194,10 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D188 | 2026-11-12 | Custom Lineage has no fixed bonuses; the +2, feat and darkvision-or-skill choice are set in the sheet editor. Primal Companion is a Tasha’s option that replaces Ranger’s Companion; its three beasts scale with your proficiency bonus and ranger level. Pact boon is now picked from a list | Matches Variant Human and other option picks | Engine-enforced lineage choices |
 | D189 | 2026-11-12 | Tasha’s Summon spells have stat templates at their base slot level; attacks follow your best spell attack. Upcast bonuses to HP, AC and damage are added by hand. Q43 answered | Slot level is not tracked on companions | Per-cast scaling |
 | D190 | 2026-11-13 | Deleting a campaign also deletes every character in it. A shared campaign can't be deleted until you leave the party or stop sharing | A character can't exist without its campaign; deleting shared data would affect other players | Move characters to another campaign first |
+| D191 | 2026-11-13 | Themes other than Dark and Parchment may animate the title, the page background and press feedback, never data. Auto gives full effects on computers and still ones on phones; reduced motion turns them off | Phones stay fast and calm; the app stays readable | Effects everywhere, or no effects |
+| D192 | 2026-11-13 | Themes may use D&D place names as labels only, with no art or text from the books. Q44 answered | User approved | Invented names |
+| D193 | 2026-11-13 | The Tidewater tap ripple also runs on phones; Theme effects Off removes it. Q45 answered | It is short tap feedback, not a loop | Desktop only |
+| D194 | 2026-11-13 | One theme per device; campaigns don't set a theme. Q46 answered | Simple, and themes stay a personal choice | Theme per campaign |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 
@@ -239,9 +243,9 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q41 | A tester missed "neutral". Is that True Neutral, or something else such as Unaligned? | M26 | Rename "Neutral" to "True Neutral"; no Unaligned for player characters | User |
 | Q42 | Backgrounds: the 13 PHB ones only, or also the PHB variants and a Custom background? | M26 | All 13, the 5 PHB variants and Custom (2 skills, 2 tools or languages, any background feature) | User |
 | Q43 | Conjure spells (Conjure Animals and others) and Tasha's summon spells (Summon Beast and others): should they also get the Stats button? | M26 | Conjure: the button opens the add form to pick the creature the DM allows from the creature list. Tasha's summon spells: added to the Tasha's pack in our own words, with stats that scale with the spell level | User |
-| Q44 | Themes named after D&D places (Icewind Dale, Nine Hells, Barovia and others): fine as labels in a public app? | M39 | Use the names as labels only, with no art, logos or text from the books; rename if asked | User |
-| Q45 | Water ripple on tap: also on phones, or desktop only? | M39 | Phones too, because it is tap feedback and is short; Off removes it | User |
-| Q46 | Should a campaign be able to set its own theme (for example, Icewind Dale for a Rime of the Frostmaiden game)? | M39 | No; one theme per device for now | User |
+| Q44 | ~~Are D&D place names fine as theme labels?~~ Answered → D192 | — | — | — |
+| Q45 | ~~Water ripple on phones too?~~ Answered → D193 | — | — | — |
+| Q46 | ~~Theme per campaign?~~ Answered → D194 | — | — | — |
 
 ## How to add an entry
 

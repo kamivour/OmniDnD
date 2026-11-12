@@ -1,0 +1,28 @@
+/* Parchment: the light theme. Set by the theme picker (data-theme on <html>). */
+:root[data-theme='parchment'],
+[data-theme='parchment'] {
+  color-scheme: light;
+
+  /* Muted paper, not white: less glare, and muted text stays readable (feedback 2026-11-09). */
+  --omni-bg: #d9cbad;
+  --omni-surface: #e4d7bb;
+  --omni-surface-2: #d2c19e;
+  --omni-border: #a9926a;
+  --omni-text: #21180f;
+  --omni-text-muted: #4f4130;
+  --omni-accent: #663d0a;
+  --omni-magic: #11515a;
+  --omni-danger: #8a1d2e;
+  --omni-heal: #1d522d;
+  --omni-temp: #2c4583;
+  --omni-warn: #723f04;
+
+  --omni-type-damage: #8a1d2e;
+  --omni-type-control: #543389;
+  --omni-type-healing: #1d522d;
+  --omni-type-buff: #234b80;
+  --omni-type-debuff: #723f04;
+  --omni-type-utility: #464a55;
+
+  --omni-shadow-pop: 0 8px 24px rgb(60 40 10 / 0.25);
+}

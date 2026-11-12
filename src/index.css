@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './theme/tokens.css';
+@import './theme/themes/parchment.css';
 
 /* Only token colors exist, so raw palette classes (bg-red-500) fail to build. */
 @theme {
@@ -7,7 +8,6 @@
   --text-*: initial;
 
   --font-sans: 'Inter Variable', system-ui, sans-serif;
-  --font-display: 'Cinzel Variable', Georgia, serif;
 
   /* Type scale: 12 / 14 / 16 / 20 / 28, plus 40 for the Combat HP number. */
   --text-xs: 12px;
@@ -25,6 +25,7 @@
 }
 
 @theme inline {
+  --font-display: var(--omni-font-display);
   --color-bg: var(--omni-bg);
   --color-surface: var(--omni-surface);
   --color-surface-2: var(--omni-surface-2);
@@ -54,6 +55,15 @@
   body {
     background-color: var(--omni-bg);
     color: var(--omni-text);
+  }
+
+  /* Themes may paint a still background image; it stays fixed while the page scrolls. */
+  body {
+    background-image: var(--omni-bg-image);
+    background-attachment: fixed;
+    background-size: cover;
+    /* Own stacking layer, so the theme's moving background (z-index -1) paints above it. */
+    isolation: isolate;
   }
 
   body {

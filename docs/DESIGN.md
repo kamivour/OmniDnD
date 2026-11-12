@@ -5,10 +5,18 @@
 - Flat dark surfaces. Color carries meaning only (accent, magic, danger, heal).
 - Small monochrome icons for spells, items, features, conditions.
 - Game feel comes from crisp hover states and tight previews, **not** effects.
-- No glows, textures, particles, parallax, or page transitions.
+- Dark and Parchment have no glows, textures, particles, parallax, or page transitions.
 - Information first: no decorative art that hides data.
 
-Secondary themes later (Phase 4): Classic Parchment, Light. All colors are CSS variables, so a theme is one variable set.
+**Themes (M39, D191).** All colours are CSS variables, so a theme is one variable set: Dark in `src/theme/tokens.css`, every other theme in `src/theme/themes/<id>.css`, listed in `src/theme/themes.ts`. Each theme sets every colour token, and all text colours reach 4.5:1 on bg, surface and surface-2 (tested). Expressive themes may add effects only to the title, the page background and press feedback, never to data, at three levels on `<html data-fx>`:
+
+| Level | When | What may move |
+|---|---|---|
+| `off` | Reduced motion, or Theme effects Off | Nothing. The title keeps its still look |
+| `lite` | Auto on phones and small windows | Nothing loops. Still title and background; short tap ripple |
+| `full` | Auto on computers (hover, fine pointer, 1024 px+), or Full | Animated title, one background layer, glass sheen |
+
+Effects are CSS only and animate only `transform` and `opacity`, except the title, which may animate a background position.
 
 ## 2. Tokens
 
@@ -76,7 +84,7 @@ Only these animations exist. Anything else needs a DECISIONS.md entry.
 | HP bar | width change | 200 ms |
 | Used action / depleted item marker | dim to 40 % opacity | 120 ms |
 
-`prefers-reduced-motion` or the Settings toggle sets all durations to 0.
+`prefers-reduced-motion` or the Settings toggle sets all durations to 0. Theme effects (§1) follow their own levels and are off whenever motion is reduced.
 
 ## 6. Interaction patterns
 

@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 02:53 — Theme groundwork
+
+- Settings has a new Theme effects choice: Auto (moving effects on computers, still on phones), Full or Off. Nothing moves yet; the new themes come next.
+- The phone's browser bar now takes the theme's background colour.
+- Every theme is now checked automatically for readable text.
+- Checks pass.
+
 ## 2026-11-13 02:32 — Themes plan
 
 - Planned new themes: Midnight (true black), Prism (glass), Tidewater (water) and 10 themes for D&D places such as Icewind Dale, the Nine Hells and the Feywild.

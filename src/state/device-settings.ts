@@ -1,4 +1,5 @@
 import { createStore } from 'zustand/vanilla';
+import { THEME_IDS, type ThemeId } from '../theme/themes';
 
 /**
  * Device-only conveniences (not character or workspace state, never synced or backed up):
@@ -8,8 +9,12 @@ import { createStore } from 'zustand/vanilla';
 const KEY = 'omnidnd.device';
 const HISTORY_LIMIT = 30;
 
-export type ThemeChoice = 'system' | 'dark' | 'parchment';
-export const THEME_CHOICES: readonly ThemeChoice[] = ['system', 'dark', 'parchment'];
+export type ThemeChoice = 'system' | ThemeId;
+export const THEME_CHOICES: readonly ThemeChoice[] = ['system', ...THEME_IDS];
+
+/** Theme effects: Auto is full on computers and calm on phones (docs/PLAN.md M39). */
+export type FxChoice = 'auto' | 'full' | 'off';
+export const FX_CHOICES: readonly FxChoice[] = ['auto', 'full', 'off'];
 
 export interface RollEntry {
   id: number;
@@ -29,6 +34,7 @@ interface Saved {
   beginnerHints: boolean;
   diceRoller: boolean;
   theme: ThemeChoice;
+  fx: FxChoice;
   /** Ask who is playing when a campaign or character is created (M24). */
   askRoles: boolean;
   /** When a whole-workspace backup file was last saved from this device. */
@@ -41,6 +47,7 @@ interface DeviceState extends Saved {
   history: RollEntry[];
   setDiceRoller: (on: boolean) => void;
   setTheme: (theme: ThemeChoice) => void;
+  setFx: (fx: FxChoice) => void;
   setAskRoles: (on: boolean) => void;
   setCreationMode: (mode: CreationMode) => void;
   setBeginnerHints: (on: boolean) => void;
@@ -59,6 +66,7 @@ function read(): Saved {
       beginnerHints: parsed?.beginnerHints !== false,
       diceRoller: parsed?.diceRoller === true,
       theme: THEME_CHOICES.find((choice) => choice === parsed?.theme) ?? 'system',
+      fx: FX_CHOICES.find((choice) => choice === parsed?.fx) ?? 'auto',
       askRoles: parsed?.askRoles !== false,
       lastBackupAt: typeof at === 'string' && !Number.isNaN(Date.parse(at)) ? at : undefined,
       accountCardHidden: parsed?.accountCardHidden === true,
@@ -69,6 +77,7 @@ function read(): Saved {
       beginnerHints: true,
       diceRoller: false,
       theme: 'system',
+      fx: 'auto',
       askRoles: true,
       lastBackupAt: undefined,
       accountCardHidden: false,
@@ -82,6 +91,7 @@ function write(saved: Saved) {
     beginnerHints,
     diceRoller,
     theme,
+    fx,
     askRoles,
     lastBackupAt,
     accountCardHidden,
@@ -94,6 +104,7 @@ function write(saved: Saved) {
         beginnerHints,
         diceRoller,
         theme,
+        fx,
         askRoles,
         lastBackupAt,
         accountCardHidden,
@@ -113,6 +124,7 @@ export const deviceStore = createStore<DeviceState>((set) => {
       beginnerHints,
       diceRoller,
       theme,
+      fx,
       askRoles,
       lastBackupAt,
       accountCardHidden,
@@ -122,6 +134,7 @@ export const deviceStore = createStore<DeviceState>((set) => {
       beginnerHints,
       diceRoller,
       theme,
+      fx,
       askRoles,
       lastBackupAt,
       accountCardHidden,
@@ -133,6 +146,7 @@ export const deviceStore = createStore<DeviceState>((set) => {
     history: [],
     setDiceRoller: (diceRoller) => change({ diceRoller }),
     setTheme: (theme) => change({ theme }),
+    setFx: (fx) => change({ fx }),
     setAskRoles: (askRoles) => change({ askRoles }),
     setCreationMode: (creationMode) => change({ creationMode }),
     setBeginnerHints: (beginnerHints) => change({ beginnerHints }),

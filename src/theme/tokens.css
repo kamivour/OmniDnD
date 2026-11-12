@@ -1,8 +1,11 @@
 /*
  * Design tokens (docs/DESIGN.md §2, §3, §5).
  * Components never use raw hex. A theme is one set of these variables.
+ * Dark is the default. Other themes live in ./themes/ and set every colour token, so a
+ * theme picker preview (an element with data-theme) shows the real colours.
  */
-:root {
+:root,
+[data-theme='dark'] {
   color-scheme: dark;
 
   /* Color */
@@ -27,6 +30,10 @@
   --omni-type-debuff: #e0a458;
   --omni-type-utility: #a3adbf;
 
+  /* Type and page (themes may change these) */
+  --omni-font-display: 'Cinzel Variable', Georgia, serif;
+  --omni-bg-image: none;
+
   /* Shape */
   --omni-radius-card: 8px;
   --omni-radius-btn: 6px;
@@ -40,34 +47,6 @@
   --omni-motion-bar: 200ms;
   --omni-motion-dim: 120ms;
   --omni-preview-delay: 250ms;
-}
-
-/* Parchment: the light theme. Set by the theme picker (data-theme on <html>). */
-:root[data-theme='parchment'] {
-  color-scheme: light;
-
-  /* Muted paper, not white: less glare, and muted text stays readable (feedback 2026-11-09). */
-  --omni-bg: #d9cbad;
-  --omni-surface: #e4d7bb;
-  --omni-surface-2: #d2c19e;
-  --omni-border: #a9926a;
-  --omni-text: #21180f;
-  --omni-text-muted: #4f4130;
-  --omni-accent: #663d0a;
-  --omni-magic: #11515a;
-  --omni-danger: #8a1d2e;
-  --omni-heal: #1d522d;
-  --omni-temp: #2c4583;
-  --omni-warn: #723f04;
-
-  --omni-type-damage: #8a1d2e;
-  --omni-type-control: #543389;
-  --omni-type-healing: #1d522d;
-  --omni-type-buff: #234b80;
-  --omni-type-debuff: #723f04;
-  --omni-type-utility: #464a55;
-
-  --omni-shadow-pop: 0 8px 24px rgb(60 40 10 / 0.25);
 }
 
 /* Reduced motion: OS setting, or the Settings toggle (sets data-reduced-motion on <html>). */

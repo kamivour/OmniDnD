@@ -5,7 +5,12 @@ import { Download, Monitor, Moon, Sun, Undo2, Upload } from 'lucide-react';
 import { updatePreferences } from '../../engine/commands/preferences';
 import type { Preferences } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
-import { type CreationMode, deviceStore, type ThemeChoice } from '../../state/device-settings';
+import {
+  type CreationMode,
+  deviceStore,
+  type FxChoice,
+  type ThemeChoice,
+} from '../../state/device-settings';
 import { useManagement } from '../commands/useManagement';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { ChoiceGroup, Field, inputClass } from '../components/fields';
@@ -29,6 +34,7 @@ export function SettingsScreen() {
   const { automation, reducedMotion, characters, managementEvents } = useStore(characterStore);
   const diceRoller = useStore(deviceStore, (state) => state.diceRoller);
   const theme = useStore(deviceStore, (state) => state.theme);
+  const fx = useStore(deviceStore, (state) => state.fx);
   const creationMode = useStore(deviceStore, (state) => state.creationMode);
   const beginnerHints = useStore(deviceStore, (state) => state.beginnerHints);
   const management = useManagement();
@@ -161,6 +167,25 @@ export function SettingsScreen() {
           },
         ]}
         onChange={(value) => deviceStore.getState().setTheme(value)}
+      />
+      <ChoiceGroup<FxChoice>
+        legend="Theme effects"
+        name="theme-effects"
+        value={fx}
+        options={[
+          {
+            value: 'auto',
+            label: 'Auto',
+            hint: 'Moving effects on computers, calm and still on phones.',
+          },
+          { value: 'full', label: 'Full', hint: 'Moving title and background on every device.' },
+          {
+            value: 'off',
+            label: 'Off',
+            hint: 'Nothing moves. Reduced motion also turns this off.',
+          },
+        ]}
+        onChange={(value) => deviceStore.getState().setFx(value)}
       />
       <ChoiceGroup<CreationMode>
         legend="New characters"
