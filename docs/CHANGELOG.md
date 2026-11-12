@@ -4,6 +4,14 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 04:22 — Themes milestone complete
+
+- All 15 themes were checked on the Sheet, Spells and Combat screens on a phone and a computer. Moving effects stay off on phones and run smoothly on computers.
+- A new Themes section in the manual QA list covers what needs a person's eye: readability, bright light, and how the effects feel.
+- Next: try the themes on your own phone and computer and tick the QA list.
+- Checks pass.
+- Checks pass.
+
 ## 2026-11-13 03:51 — Astral Sea, Mechanus, Barovia and Mount Celestia themes
 
 - Four more themes: Astral Sea, Mechanus, Barovia and Mount Celestia, a warm white and gold light theme.

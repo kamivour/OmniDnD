@@ -262,6 +262,21 @@ Check each at 375 px and at desktop width.
 - [ ] Cast Find Familiar and Conjure Animals, then tap Stats. Judge whether the add form helps.
 - [ ] Judge whether True Neutral reads as expected in the alignment list.
 
+## M39: Themes
+
+Check on a real phone and on a computer.
+
+- [ ] Open Settings → Theme. Judge whether the cards and group names make each theme easy to pick.
+- [ ] Try Midnight on a phone. Judge whether it feels like a modern phone dark mode.
+- [ ] On a computer, try each theme. Judge whether each title effect fits its place and is not distracting.
+- [ ] On a computer, judge whether the moving backgrounds stay calm behind long reading (Spells, a sheet).
+- [ ] With Prism and Tidewater, judge whether text on glass stays easy to read over the moving light.
+- [ ] Tap buttons with Tidewater on a phone. Judge whether the ripple feels good and not slow.
+- [ ] On a phone, use the app for a few minutes with a place theme. Judge whether it stays cool and smooth.
+- [ ] In combat, judge whether damage, healing and warnings stay easy to tell apart in every theme.
+- [ ] Try Mount Celestia and Parchment in bright light. Judge whether text is easy to read.
+- [ ] Set Theme effects to Off. Judge whether everything is still and still looks finished.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

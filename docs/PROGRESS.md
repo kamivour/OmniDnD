@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M38 Xanathar’s subclasses part 2 done; M27–M38 plan complete (see PLAN.md).
-**Next up:** M39 Themes, once the user confirms the theme list (Q44–Q46). Manual QA for M26 by the user.
+**Current milestone:** M39 Themes done; all planned milestones complete (see PLAN.md).
+**Next up:** Manual QA for M26 and M39 by the user.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -63,7 +63,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M36 | Xanathar's spells | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M37 | Xanathar's subclasses, part 1 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M38 | Xanathar's subclasses, part 2 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
-| M39 | Themes | 10 | todo | Midnight, glass, water and D&D place themes with title effects; see [PLAN.md](PLAN.md) |
+| M39 | Themes | 10 | done | Midnight, glass, water and D&D place themes with title effects; see [PLAN.md](PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -305,7 +305,7 @@ Details in [PLAN.md](PLAN.md).
 - [x] 7. Fire, Nine Hells, Icewind Dale
 - [x] 8. Feywild, Shadowfell, Underdark
 - [x] 9. Astral Sea, Mechanus, Barovia, Mount Celestia
-- [ ] 10. Gate
+- [x] 10. Gate
 
 ## Backlog (not scheduled)
 
@@ -343,6 +343,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-13 — Fire, Nine Hells and Icewind Dale themes: burning, hellfire and frost titles; embers, ash and snow on computers.
 - 2026-11-13 — Feywild, Shadowfell and Underdark themes: shimmering, shadowed and faerzress-lit titles; motes, wisps and spores on computers.
 - 2026-11-13 — Astral Sea, Mechanus, Barovia and Mount Celestia themes; Mount Celestia is the second light theme.
+- 2026-11-13 — Gate: all 15 themes checked on Sheet, Spells and Combat at 375 and 1440 px; phones still, computers 60 fps; manual QA list added.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.
