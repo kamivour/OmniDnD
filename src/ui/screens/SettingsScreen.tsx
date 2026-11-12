@@ -1,16 +1,11 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { useStore } from 'zustand';
-import { Download, Monitor, Moon, Sun, Undo2, Upload } from 'lucide-react';
+import { Download, Undo2, Upload } from 'lucide-react';
 import { updatePreferences } from '../../engine/commands/preferences';
 import type { Preferences } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
-import {
-  type CreationMode,
-  deviceStore,
-  type FxChoice,
-  type ThemeChoice,
-} from '../../state/device-settings';
+import { type CreationMode, deviceStore, type FxChoice } from '../../state/device-settings';
 import { useManagement } from '../commands/useManagement';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { ChoiceGroup, Field, inputClass } from '../components/fields';
@@ -18,6 +13,7 @@ import { syncConfig } from '../../sync/config';
 import { TutorialSection } from '../settings/TutorialSection';
 import { BackupsSection } from '../settings/BackupsSection';
 import { ResetCharacterControl } from '../settings/ResetCharacterControl';
+import { ThemePicker } from '../settings/ThemePicker';
 import { cx } from '../cx';
 
 // Replaced at build time: guest builds (no provider configured) drop the account code entirely.
@@ -142,32 +138,7 @@ export function SettingsScreen() {
           </p>
         </section>
       </fieldset>
-      <ChoiceGroup<ThemeChoice>
-        legend="Theme"
-        name="theme"
-        value={theme}
-        options={[
-          {
-            value: 'system',
-            label: 'System',
-            hint: 'Dark, or Parchment when your device is light.',
-            icon: <Monitor className="size-4" />,
-          },
-          {
-            value: 'dark',
-            label: 'Dark',
-            hint: 'Deep blue with gold.',
-            icon: <Moon className="size-4" />,
-          },
-          {
-            value: 'parchment',
-            label: 'Parchment',
-            hint: 'Soft light paper for bright rooms.',
-            icon: <Sun className="size-4" />,
-          },
-        ]}
-        onChange={(value) => deviceStore.getState().setTheme(value)}
-      />
+      <ThemePicker value={theme} onChange={(value) => deviceStore.getState().setTheme(value)} />
       <ChoiceGroup<FxChoice>
         legend="Theme effects"
         name="theme-effects"

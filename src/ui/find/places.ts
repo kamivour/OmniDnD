@@ -1,4 +1,5 @@
 import type { FindEntry } from '../../engine/calc/find';
+import { THEMES } from '../../theme/themes';
 
 /**
  * Every screen, panel and action Find can reach. Add a line here when you add a screen or a
@@ -147,6 +148,23 @@ export const PLACES: readonly FindEntry[] = [
       'forgot password',
     ],
     target: { kind: 'go', path: 'settings' },
+  },
+  {
+    id: 'go.theme',
+    group: 'go',
+    title: 'Theme',
+    detail: 'Settings: colours and theme effects',
+    synonyms: [
+      'themes',
+      'colours',
+      'colors',
+      'dark mode',
+      'light mode',
+      'theme effects',
+      'animation',
+      ...THEMES.flatMap((theme) => [theme.name.toLowerCase(), ...theme.synonyms]),
+    ],
+    target: { kind: 'go', path: 'settings', anchor: 'settings-theme' },
   },
   {
     id: 'go.tutorial',

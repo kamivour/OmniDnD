@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 03:05 — Theme picker
+
+- Settings now shows each theme as a small preview card in its own colours, grouped by kind.
+- Typing a theme name or "dark mode" in Find jumps to the picker.
+- Only Dark and Parchment exist so far; the new themes arrive in the next steps.
+- Checks pass.
+
 ## 2026-11-13 02:53 — Theme groundwork
 
 - Settings has a new Theme effects choice: Auto (moving effects on computers, still on phones), Full or Off. Nothing moves yet; the new themes come next.
