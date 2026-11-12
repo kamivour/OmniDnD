@@ -175,9 +175,77 @@ Left out: downtime, encounter building, other books' races.
 
 ---
 
+## M39 — Themes
+
+Asked for on 2026-11-13: a modern dark theme for a friend, a glass theme, a water theme, and themes for D&D places. Each theme gives the "OmniDnD" title its own effect. Phones stay fast and calm; desktops get the full effects.
+
+### Principles
+- **Data never moves.** Effects only touch the title, the page background, and press feedback. HP, slots, dice and text stay flat and readable in every theme. This changes DESIGN.md §1: Dark and Parchment stay flat, and other themes may add effects inside these limits.
+- **Three effect levels** on `<html data-fx>`:
+  - **Off:** no animation at all, and the title is static. Forced by reduced motion (the system setting or ours).
+  - **Lite:** the phone default (touch screen or narrower than 1024 px). The title gets a static gradient and the background a static image. Tap ripples are allowed. Glass blur is used only on the top bar, bottom bar and sheets. Nothing loops.
+  - **Full:** the desktop default (mouse and at least 1024 px wide). The title is animated, and there is one background layer of particles or waves. Glass gets a sheen that follows the pointer.
+- **Settings** gets "Theme effects: Auto / Full / Off". It is a per-device setting, like the theme.
+- **Cheap effects only.** Use CSS only. Animate only `transform` and `opacity`, on one fixed layer behind the content. Pause when the tab is hidden. Use no canvas, no WebGL and no JS animation loop. The one exception is a small pointer handler for the glass sheen and the water ripple.
+- **Readable first.** Every theme passes WCAG AA: text and muted text reach 4.5:1 on bg, surface and surface-2, and accent reaches 3:1. A unit test checks every theme automatically. Danger, heal and warn must stay easy to tell apart.
+- **Own names.** Nothing is named after a company's product: the friend's theme is "Midnight", not iOS, and the glass theme is "Prism", not Liquid Glass. D&D place names are used only as theme labels (Q44).
+
+### Themes (15 plus System)
+Palettes are starting points; contrast tests decide the final values.
+
+| Group | Theme | Look | Title effect (full) | Background (full) | Phone (lite) |
+|---|---|---|---|---|---|
+| Basic | Dark (current) | Deep blue with gold | none | flat | same |
+| Basic | Parchment (current) | Soft light paper | none | flat | same |
+| Basic | Midnight | True black, grey layered cards, blue accent, system font, rounder corners | none (clean) | flat | same |
+| Glass | Prism | Frosted see-through cards over soft colour blobs, bright edge highlights | slow light sweep across the letters | drifting colour blobs; pointer sheen on cards | static blobs, blur on bars and sheets only |
+| Glass | Tidewater | Clear aqua glass, sea-blue accent | gentle wave in the letters | moving light patterns (caustics) | static caustic image; ripple on tap |
+| Planes | Elemental Plane of Fire | Charcoal and ember orange; danger moves to crimson so it differs from the accent | slight burning flicker with a heat shimmer | rising embers | static ember gradient |
+| Planes | Nine Hells | Blood red and brass, Avernus dust | slow hellfire pulse | drifting ash | static |
+| Planes | Feywild | Twilight violet, pink accent, mint magic | iridescent shimmer, small sparkles | floating motes | static iridescent gradient |
+| Planes | Shadowfell | Desaturated grey, muted accent | letters fade in and out of shadow | slow shadow wisps | static |
+| Planes | Astral Sea | Silver on deep indigo | twinkling stars in the letters | slow star field | static |
+| Planes | Mechanus | Brass and steel | small ticking gear beside the title | faint rotating gear lines | static |
+| Places | Icewind Dale | Pale ice blue on dark slate | frost creeping over the letters | falling snow | static frosted gradient |
+| Places | Underdark | Deep violet with faerzress glow, fungus cyan | soft glow that pulses | faint glowing spores | static |
+| Places | Barovia | Gothic crimson and grey mist | flickering candlelight | low rolling mist | static |
+| Light | Mount Celestia | Warm white and gold (light theme) | radiant shine across the letters | soft light rays | static |
+
+Later, if wanted: Elemental Planes of Water, Air and Earth, Sigil, Chult, Eberron.
+
+### Architecture
+- **Theme registry** `src/theme/themes.ts`: id, name, one-line hint, group, light or dark scheme, swatch colours, `theme-color`, and the effects it has. The picker, Find, the `<meta name="theme-color">` update and the tests all read this list.
+- **One CSS file per theme** under `src/theme/themes/`, each a `:root[data-theme='id']` block with the same tokens as now. New tokens: `--omni-font-display`, `--omni-radius-*`, `--omni-glass-alpha`, `--omni-glass-blur`, `--omni-bg-image` and `--omni-title-*`. Themes without effects set only colours.
+- **`ThemeTitle` component** replaces the title text in HubFrame and SideNav. Its accessible name stays "OmniDnD", and decorative layers are `aria-hidden`.
+- **`AmbientLayer`**: one fixed, `pointer-events: none` element behind the app. It renders only at the full level, and only for themes with a background effect.
+- **Ripple and sheen**: one delegated pointer listener on the root that adds a short-lived span on buttons. It is on only for Tidewater (ripple) and Prism (sheen).
+- **Theme choice** stays per device. Saved values that no longer exist fall back to System.
+- **Print** always uses the plain print sheet, whatever the theme.
+
+### Tasks
+1. **Foundation.** Theme registry, per-theme CSS files, the new tokens, `theme-color` updates, an automatic contrast test over every theme, effect levels with the "Theme effects" setting, and fallback for unknown saved themes. Update DESIGN.md §1, §2 and §5, and add the D191 decision.
+2. **Theme picker.** A grid of swatch cards grouped as Basic, Glass, Planes, Places and Light. Each card shows a mini preview (bg, surface, accent and the title font) and a check mark on the current theme. It works at 375 px and has Find entries ("theme", "dark mode", "colours").
+3. **Midnight.** The friend's theme: true black, system font and rounder corners. It has no effects.
+4. **Title and background framework.** `ThemeTitle`, `AmbientLayer`, pausing on hidden tabs, and the off, lite and full switches. An e2e test checks that no animations run at lite and off.
+5. **Prism.** Glass surfaces, colour blobs and the pointer sheen. Text stays readable on the blurred background, with a solid fallback when the browser has no `backdrop-filter`.
+6. **Tidewater.** Water glass, caustics and the tap ripple.
+7. **Places and planes, part 1.** Fire, Nine Hells and Icewind Dale.
+8. **Places and planes, part 2.** Feywild, Shadowfell and Underdark.
+9. **Places and planes, part 3.** Astral Sea, Mechanus, Barovia and Mount Celestia.
+10. **Gate.** Screenshots of every theme at 375 px and 1440 px (Dashboard, Spellbook, Combat and a sheet). The contrast test passes. A desktop run keeps about 60 fps with full effects, and a phone run shows no running animations. Manual QA list added.
+
+### Effort and risks
+- About 10 tasks. Each new theme costs about one palette, one title effect and one background, plus screenshots.
+- **Contrast** is the main risk on glass and on bright themes; the automatic test catches it.
+- **Battery and heat:** looping effects on phones are the cost the lite level avoids.
+- **Upkeep:** every new screen must look right in all 15 themes. Token-only styling keeps this cheap, and the screenshot gate catches breaks.
+
+---
+
 ## Risks
 - **Free hosting limits:** Supabase allows 200 live connections and 500 MB of storage; records are capped at 5 MB (our limit). Long event logs grow records; a later fix is a snapshot plus trimmed history.
 - **Security:** shared access depends entirely on row-level security, so every rule gets a test. Invite codes are random, hashed and expire. Emails are never shown to other members.
 
 ## Open questions
 M26: Q41 (alignment label), Q42 (background scope) and Q43 (conjure and summon spells) in DECISIONS.md. Earlier answers are D168–D175.
+M39: Q44 (D&D place names as theme labels), Q45 (ripple on phones) and Q46 (theme per campaign) in DECISIONS.md.

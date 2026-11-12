@@ -239,6 +239,9 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q41 | A tester missed "neutral". Is that True Neutral, or something else such as Unaligned? | M26 | Rename "Neutral" to "True Neutral"; no Unaligned for player characters | User |
 | Q42 | Backgrounds: the 13 PHB ones only, or also the PHB variants and a Custom background? | M26 | All 13, the 5 PHB variants and Custom (2 skills, 2 tools or languages, any background feature) | User |
 | Q43 | Conjure spells (Conjure Animals and others) and Tasha's summon spells (Summon Beast and others): should they also get the Stats button? | M26 | Conjure: the button opens the add form to pick the creature the DM allows from the creature list. Tasha's summon spells: added to the Tasha's pack in our own words, with stats that scale with the spell level | User |
+| Q44 | Themes named after D&D places (Icewind Dale, Nine Hells, Barovia and others): fine as labels in a public app? | M39 | Use the names as labels only, with no art, logos or text from the books; rename if asked | User |
+| Q45 | Water ripple on tap: also on phones, or desktop only? | M39 | Phones too, because it is tap feedback and is short; Off removes it | User |
+| Q46 | Should a campaign be able to set its own theme (for example, Icewind Dale for a Rime of the Frostmaiden game)? | M39 | No; one theme per device for now | User |
 
 ## How to add an entry
 

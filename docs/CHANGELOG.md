@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 02:32 — Themes plan
+
+- Planned new themes: Midnight (true black), Prism (glass), Tidewater (water) and 10 themes for D&D places such as Icewind Dale, the Nine Hells and the Feywild.
+- Each theme gives the OmniDnD title its own effect. Desktops get the full animation; phones get a calm, still version, and a setting can turn effects off.
+- Please check the theme list and names in PLAN.md (M39) before building starts.
+- Checks pass.
+
 ## 2026-11-13 00:40 — Delete campaign
 
 - Each campaign card now has a Delete button next to Campaign settings. It asks first, then removes the campaign and all its characters from this browser.

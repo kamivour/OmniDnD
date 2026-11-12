@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M38 Xanathar’s subclasses part 2 done; M27–M38 plan complete (see PLAN.md).
-**Next up:** Manual QA for M26 by the user; Q40–Q43 wait for the user, defaults apply.
+**Next up:** M39 Themes, once the user confirms the theme list (Q44–Q46). Manual QA for M26 by the user.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -63,6 +63,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M36 | Xanathar's spells | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M37 | Xanathar's subclasses, part 1 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M38 | Xanathar's subclasses, part 2 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
+| M39 | Themes | 10 | todo | Midnight, glass, water and D&D place themes with title effects; see [PLAN.md](PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -293,6 +294,19 @@ Details in [PLAN.md](PLAN.md).
 - [x] 9. Stats button for summons
 - [x] 10. Gate
 
+### M39 — Themes
+Details in [PLAN.md](PLAN.md).
+- [ ] 1. Foundation: registry, tokens, contrast test, effect levels
+- [ ] 2. Theme picker
+- [ ] 3. Midnight
+- [ ] 4. Title and background framework
+- [ ] 5. Prism
+- [ ] 6. Tidewater
+- [ ] 7. Fire, Nine Hells, Icewind Dale
+- [ ] 8. Feywild, Shadowfell, Underdark
+- [ ] 9. Astral Sea, Mechanus, Barovia, Mount Celestia
+- [ ] 10. Gate
+
 ## Backlog (not scheduled)
 
 - Done 2026-11-09: site live on Netlify with Supabase accounts (HOSTING.md)
@@ -319,6 +333,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-12 — Rules audit: corrected about 80 PHB, Tasha’s and Xanathar’s summaries, uses and saves against the 2014 books.
 - 2026-11-12 — Companion icons: name-based picture on companion cards and encounter rows, paw print fallback.
 - 2026-11-13 — Delete campaign: button on each campaign card removes it with its characters; blocked while shared; undoable.
+- 2026-11-13 — Planned M39 Themes: Midnight, Prism, Tidewater and 10 D&D place themes; effects full on desktop, lite on phones.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.
