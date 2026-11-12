@@ -80,6 +80,17 @@ export const THEMES = [
     press: 'sheen',
     synonyms: ['glass', 'liquid glass', 'frosted', 'translucent', 'shiny', 'blur'],
   },
+  {
+    id: 'tidewater',
+    name: 'Tidewater',
+    hint: 'Clear sea glass with a ripple on every tap.',
+    group: 'glass',
+    scheme: 'dark',
+    title: true,
+    ambient: 'caustics',
+    press: 'ripple',
+    synonyms: ['water', 'sea', 'ocean', 'wave', 'ripple', 'aqua', 'transparent'],
+  },
 ] as const satisfies readonly ThemeInfo[];
 
 export type ThemeId = (typeof THEMES)[number]['id'];

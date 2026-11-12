@@ -301,7 +301,7 @@ Details in [PLAN.md](PLAN.md).
 - [x] 3. Midnight
 - [x] 4. Title and background framework
 - [x] 5. Prism
-- [ ] 6. Tidewater
+- [x] 6. Tidewater
 - [ ] 7. Fire, Nine Hells, Icewind Dale
 - [ ] 8. Feywild, Shadowfell, Underdark
 - [ ] 9. Astral Sea, Mechanus, Barovia, Mount Celestia
@@ -339,6 +339,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-13 — Midnight theme: true black, system colours and fonts, rounder corners, no effects.
 - 2026-11-13 — Title and background framework: ThemeTitle, AmbientLayer at full level only, pause on hidden tab, still-page e2e check.
 - 2026-11-13 — M39 task 5: Prism glass theme with frosted bars, colour light background, sweeping title and mouse sheen on computers.
+- 2026-11-13 — M39 task 6: Tidewater sea-glass theme, rolling wave in the title, drifting pool light, tap ripple on phones and computers.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.

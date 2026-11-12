@@ -87,3 +87,24 @@ test('theme effects: still on phones and when Off, moving on computers', async (
       await expect.poll(() => running(page), theme.id).toBeGreaterThan(0);
   }
 });
+
+test('Tidewater: a tap ripples on phones and computers, and Off removes it', async ({ page }) => {
+  await page.goto(`/characters/${ID}/settings`);
+  await page.getByRole('radio', { name: /^Tidewater/ }).check();
+  const button = page.getByRole('button', { name: 'Export JSON' });
+  const ripples = page.locator('.omni-ripple');
+  const press = async () => {
+    await button.scrollIntoViewIfNeeded();
+    await button.dispatchEvent('pointerdown', { button: 0, clientX: 10, clientY: 10 });
+  };
+
+  await press();
+  await expect(ripples).toHaveCount(1);
+  // The ring cleans itself up and leaves the button where it was.
+  await expect(ripples).toHaveCount(0);
+
+  await page.getByRole('radio', { name: /^Off/ }).check();
+  await expect.poll(() => page.evaluate(() => document.documentElement.dataset.fx)).toBe('off');
+  await press();
+  await expect(ripples).toHaveCount(0);
+});

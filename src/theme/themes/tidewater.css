@@ -1,0 +1,166 @@
+/* Tidewater: clear sea glass over deep water, with light patterns and a tap ripple. */
+:root[data-theme='tidewater'],
+[data-theme='tidewater'] {
+  color-scheme: dark;
+
+  --omni-bg: #04202b;
+  --omni-surface: rgb(16 64 80 / 0.55);
+  --omni-surface-2: rgb(24 84 102 / 0.62);
+  --omni-border: rgb(170 240 255 / 0.16);
+  --omni-text: #eafcff;
+  --omni-text-muted: #9fc6cf;
+  --omni-accent: #5ee0ff;
+  --omni-magic: #b4bcff;
+  --omni-danger: #ff8a80;
+  --omni-heal: #7cf0a8;
+  --omni-temp: #a8d4ff;
+  --omni-warn: #ffd166;
+
+  --omni-type-damage: #ff8f86;
+  --omni-type-control: #d6a8ff;
+  --omni-type-healing: #7cf0a8;
+  --omni-type-buff: #7fd0ff;
+  --omni-type-debuff: #ffd166;
+  --omni-type-utility: #b3cdd3;
+
+  --omni-font-display: 'Inter Variable', system-ui, sans-serif;
+  --omni-radius-card: 16px;
+  --omni-radius-btn: 12px;
+  --omni-shadow-pop: 0 12px 32px rgb(0 10 16 / 0.6);
+  --omni-ripple: rgb(190 248 255 / 0.55);
+
+  /* A tile of soft light lines, like sunlight on a pool floor. */
+  --tide-net: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' fill='none' stroke='%2390ecff' stroke-opacity='.1' stroke-width='3' stroke-linecap='round'%3E%3Cfilter id='b'%3E%3CfeGaussianBlur stdDeviation='1.6'/%3E%3C/filter%3E%3Cg filter='url(%23b)'%3E%3Cpath d='M0 60C40 30 80 90 130 55S200 40 240 60M0 170C50 140 90 200 150 165S210 150 240 170M40 0C60 50 20 100 50 150S30 210 40 240M170 0C150 60 200 110 170 160S190 220 170 240'/%3E%3C/g%3E%3C/svg%3E");
+  --omni-bg-image:
+    linear-gradient(180deg, rgb(30 140 170 / 0.35), transparent 55%), var(--tide-net);
+
+  --tide-surface-solid: #0b323f;
+  --tide-surface-2-solid: #10404f;
+}
+
+/* The light-line tile repeats at its own size instead of stretching to cover the page. */
+:root[data-theme='tidewater'] body {
+  background-size:
+    100% 100%,
+    240px 240px;
+}
+
+[data-theme='tidewater'] .font-display {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+/* Sheets, popovers, toasts and sticky rows sit over text, so they stay solid. */
+[data-theme='tidewater']
+  :is(
+    .fixed,
+    .sticky,
+    .absolute,
+    .shadow-pop,
+    dialog,
+    [role='dialog'],
+    [role='tooltip'],
+    [role='listbox'],
+    [role='menu'],
+    [data-radix-popper-content-wrapper]
+  ) {
+  --omni-surface: var(--tide-surface-solid);
+  --omni-surface-2: var(--tide-surface-2-solid);
+}
+
+[data-theme='tidewater'] .rounded-card:is(.bg-surface, .bg-surface-2) {
+  box-shadow: inset 0 1px 0 rgb(200 250 255 / 0.08);
+}
+
+/* Glass bars on every level; cards skip blur to keep scrolling smooth. */
+[data-theme='tidewater'] .omni-bar {
+  background-color: rgb(4 32 43 / 0.62);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+}
+
+[data-theme='tidewater'] .omni-bar .omni-bar {
+  background-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  [data-theme='tidewater'] .omni-bar {
+    background-color: var(--omni-bg);
+  }
+}
+
+/* Title: the letters hold water, light above and sea below a wavy line. At full the wave rolls. */
+[data-theme='tidewater'] .omni-title {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' preserveAspectRatio='none'%3E%3Cpath d='M0 21Q10 15 20 21T40 21V40H0Z' fill='%235ee0ff'/%3E%3C/svg%3E"),
+    linear-gradient(#e6fcff, #e6fcff);
+  background-size:
+    1.6em 100%,
+    100% 100%;
+  background-repeat: repeat-x, no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+:root[data-theme='tidewater'][data-fx='full'] .omni-title {
+  animation: omni-tide-wave 2.8s linear infinite;
+}
+
+@keyframes omni-tide-wave {
+  from {
+    background-position:
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      -1.6em 0,
+      0 0;
+  }
+}
+
+/* Background: at full, two drifting layers of light lines cross and shimmer. */
+:root[data-theme='tidewater'][data-fx='full'] {
+  --omni-bg-image: linear-gradient(180deg, rgb(30 140 170 / 0.35), transparent 55%);
+}
+
+[data-ambient='caustics'] > span {
+  inset: -360px;
+  background-image: var(--tide-net);
+}
+
+[data-ambient='caustics'] > span:nth-child(n + 3) {
+  display: none;
+}
+
+[data-ambient='caustics'] > span:nth-child(2) {
+  background-size: 340px 340px;
+  opacity: 0.7;
+  transform: scaleX(-1);
+}
+
+:root[data-fx='full'] [data-ambient='caustics'] > span:nth-child(1) {
+  animation: omni-tide-drift-a 22s linear infinite;
+}
+
+:root[data-fx='full'] [data-ambient='caustics'] > span:nth-child(2) {
+  animation: omni-tide-drift-b 31s linear infinite;
+}
+
+@keyframes omni-tide-drift-a {
+  to {
+    transform: translate3d(240px, 240px, 0);
+  }
+}
+
+@keyframes omni-tide-drift-b {
+  from {
+    transform: scaleX(-1) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scaleX(-1) translate3d(340px, -340px, 0);
+  }
+}

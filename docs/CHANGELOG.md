@@ -4,6 +4,14 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 03:29 — Tidewater water theme
+
+- New Tidewater theme: clear sea-glass cards over deep water with soft pool-light lines, and a wave rolling through the OmniDnD title.
+- Every tap on a button or card sends a quick ripple, on phones too. Theme effects Off removes it.
+- On a computer the pool light drifts slowly. Check the ripple feels quick and not distracting.
+- Checks pass.
+- Checks pass.
+
 ## 2026-11-13 03:20 — Prism glass theme
 
 - New Prism theme in Settings: frosted see-through cards and top bars over soft pink, indigo and cyan light.
