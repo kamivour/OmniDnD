@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 03:08 — Midnight theme
+
+- New Midnight theme in Settings: true black with bright system colours, like a phone's own dark mode.
+- It uses your device's own font and rounder corners. On OLED phones the black background saves battery.
+- Checks pass.
+
 ## 2026-11-13 03:05 — Theme picker
 
 - Settings now shows each theme as a small preview card in its own colours, grouped by kind.

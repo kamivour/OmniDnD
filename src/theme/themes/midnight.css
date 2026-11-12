@@ -1,0 +1,43 @@
+/* Midnight: true black with system colours, like a phone's own dark mode. No effects. */
+:root[data-theme='midnight'],
+[data-theme='midnight'] {
+  color-scheme: dark;
+
+  /* Pure black saves battery on OLED screens. Bright colours are lifted to pass contrast. */
+  --omni-bg: #000000;
+  --omni-surface: #1c1c1e;
+  --omni-surface-2: #2c2c2e;
+  --omni-border: #3a3a3c;
+  --omni-text: #ffffff;
+  --omni-text-muted: #98989f;
+  --omni-accent: #409cff;
+  --omni-magic: #64d2ff;
+  --omni-danger: #ff6961;
+  --omni-heal: #30d158;
+  --omni-temp: #9d9bff;
+  --omni-warn: #ff9f0a;
+
+  --omni-type-damage: #ff6961;
+  --omni-type-control: #da8fff;
+  --omni-type-healing: #30d158;
+  --omni-type-buff: #409cff;
+  --omni-type-debuff: #ff9f0a;
+  --omni-type-utility: #aeaeb2;
+
+  --omni-font-display:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI Variable Display', 'Segoe UI',
+    system-ui, sans-serif;
+  /* Body text in the device's own font too (Tailwind's font-sans variable). */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI Variable Text', 'Segoe UI',
+    system-ui, sans-serif;
+  --omni-radius-card: 12px;
+  --omni-radius-btn: 10px;
+  --omni-shadow-pop: 0 8px 28px rgb(0 0 0 / 0.7);
+}
+
+/* System fonts read thin at heading size; phones use heavier headings. */
+[data-theme='midnight'] .font-display {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}

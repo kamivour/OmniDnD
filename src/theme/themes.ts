@@ -61,6 +61,14 @@ export const THEMES = [
     scheme: 'light',
     synonyms: ['light mode', 'paper', 'day'],
   },
+  {
+    id: 'midnight',
+    name: 'Midnight',
+    hint: 'True black with bright system colours.',
+    group: 'basic',
+    scheme: 'dark',
+    synonyms: ['ios', 'iphone', 'oled', 'black', 'amoled', 'modern'],
+  },
 ] as const satisfies readonly ThemeInfo[];
 
 export type ThemeId = (typeof THEMES)[number]['id'];
