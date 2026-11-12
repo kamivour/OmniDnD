@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-12 11:09 — Companion icons
+
+- Each companion now shows a small picture next to its name, such as a dog for a Mastiff, a bird for an Owl and sparkles for a Fey Spirit. You see it on the Companions screen and in the encounter tracker.
+- The picture is chosen from the companion's name and kind. Anything without a match, a horse for example, gets a paw print.
+- Checks pass.
+
 ## 2026-11-12 02:40 — Rules corrections for added subclasses and spells
 
 - Checked the added PHB, Tasha’s and Xanathar’s features and spells against the 2014 books and fixed about 80 summaries (for example Soulknife dice, Storm Herald auras, Wall of Light, Tenser’s Transformation).

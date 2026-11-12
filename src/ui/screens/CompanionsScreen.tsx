@@ -17,6 +17,7 @@ import {
 } from '../../engine/commands';
 import { CONDITIONS, type Condition } from '../../engine/rules2014';
 import type { Companion } from '../../engine/schema';
+import { CompanionGlyph } from '../companions/CompanionGlyph';
 import { existingCompanion, linkByKey } from '../companions/companion-links';
 import { CompanionEditor } from '../companions/CompanionEditor';
 import { parseWhole } from '../companions/companion-form';
@@ -152,7 +153,10 @@ function CompanionCard({
       className="flex flex-col gap-3 rounded-card bg-surface p-4 outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="font-display text-lg text-text">{name}</h2>
+        <h2 className="flex items-center gap-2 font-display text-lg text-text">
+          <CompanionGlyph companion={companion} size={20} className="shrink-0 text-accent" />
+          {name}
+        </h2>
         <p className="text-xs text-text-muted">
           {companion.type}
           {companion.kind ? ` · ${companion.kind}` : ''} · {live.status}

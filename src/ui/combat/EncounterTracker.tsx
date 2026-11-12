@@ -21,6 +21,7 @@ import {
 import { CONDITIONS } from '../../engine/rules2014';
 import type { Combatant } from '../../engine/schema';
 import { parseWhole } from '../companions/companion-form';
+import { CompanionGlyph } from '../companions/CompanionGlyph';
 import { useCommand } from '../commands/command-context';
 import { Field, inputClass } from '../components/fields';
 import { HpBar } from '../components/HpBar';
@@ -145,6 +146,10 @@ export function EncounterTracker() {
       <ol className="flex flex-col gap-2">
         {rows.map((entry) => {
           const s = stats(entry);
+          const companion =
+            entry.side === 'companion'
+              ? state.build.companions?.find((item) => item.id === entry.companionId)
+              : undefined;
           const current = entry.id === encounter.currentId;
           const expanded = open === entry.id;
           const atZero =
@@ -179,6 +184,13 @@ export function EncounterTracker() {
                   className="flex min-h-11 min-w-0 flex-1 flex-col text-left"
                 >
                   <span className="flex items-center gap-2">
+                    {companion && (
+                      <CompanionGlyph
+                        companion={companion}
+                        size={16}
+                        className="shrink-0 text-accent"
+                      />
+                    )}
                     <span className="truncate font-semibold text-text">{entry.name}</span>
                     <span className={cx('text-xs', SIDE_TONE[entry.side])}>
                       {SIDE_LABEL[entry.side]}
@@ -234,7 +246,7 @@ export function EncounterTracker() {
             className={buttonClass}
             onClick={() => run(addCombatant, { kind: 'companion', companionId: companion.id })}
           >
-            Add {companion.name}
+            <CompanionGlyph companion={companion} size={16} /> Add {companion.name}
           </button>
         ))}
         <button
