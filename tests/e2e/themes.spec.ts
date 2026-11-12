@@ -1,4 +1,5 @@
 import { expect, test, type Page } from './fixtures';
+import { THEMES, type ThemeInfo } from '../../src/theme/themes';
 
 const ID = 'the-fool';
 
@@ -48,4 +49,41 @@ test('themes: System follows the device, Parchment and Dark are chosen and remem
   await page.getByRole('radio', { name: /^Dark/ }).check();
   await expect.poll(() => theme(page)).toBe('dark');
   expect(await background(page)).toBe(darkBackground);
+});
+
+const running = (page: Page) =>
+  page.evaluate(
+    () =>
+      document
+        .getAnimations()
+        .filter(
+          (animation) => animation.playState === 'running' && !(animation instanceof CSSTransition),
+        ).length,
+  );
+
+test('theme effects: still on phones and when Off, moving on computers', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto(`/characters/${ID}/settings`);
+  // Phones default to lite; on a computer, choose Off to get the same still page.
+  if (!isMobile) await page.getByRole('radio', { name: /^Off/ }).check();
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.dataset.fx))
+    .toBe(isMobile ? 'lite' : 'off');
+  for (const { name } of THEMES) {
+    await page.getByRole('radio', { name: new RegExp(`^${name}`) }).check();
+    await expect.poll(() => running(page), name).toBe(0);
+    await expect(page.locator('.omni-ambient')).toHaveCount(0);
+  }
+  if (isMobile) return;
+
+  await page.getByRole('radio', { name: /^Auto/ }).check();
+  await expect.poll(() => page.evaluate(() => document.documentElement.dataset.fx)).toBe('full');
+  for (const theme of THEMES as readonly ThemeInfo[]) {
+    await page.getByRole('radio', { name: new RegExp(`^${theme.name}`) }).check();
+    await expect(page.locator('.omni-ambient'), theme.id).toHaveCount(theme.ambient ? 1 : 0);
+    if (theme.title || theme.ambient)
+      await expect.poll(() => running(page), theme.id).toBeGreaterThan(0);
+  }
 });

@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 03:14 — Theme effects groundwork
+
+- The OmniDnD title is ready for per-theme effects; nothing looks different yet.
+- Moving backgrounds will only show with full effects, and pause when the tab is hidden.
+- Checks pass.
+
 ## 2026-11-13 03:08 — Midnight theme
 
 - New Midnight theme in Settings: true black with bright system colours, like a phone's own dark mode.

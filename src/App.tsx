@@ -9,6 +9,7 @@ import { CampaignsScreen } from './ui/screens/CampaignsScreen';
 import { DashboardScreen } from './ui/screens/DashboardScreen';
 import { PlaceholderScreen } from './ui/screens/PlaceholderScreen';
 import { MotionPreference } from './ui/components/MotionPreference';
+import { AmbientLayer } from './ui/theme/AmbientLayer';
 import { TourHost } from './ui/tutorial/TourHost';
 import { StorageGate } from './ui/storage/StorageGate';
 
@@ -82,6 +83,7 @@ export function App() {
       <ToastProvider>
         <StorageGate>
           <MotionPreference />
+          <AmbientLayer />
           {SyncHost && syncConfig && (
             <Suspense fallback={null}>
               <SyncHost config={syncConfig} />

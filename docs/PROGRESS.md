@@ -299,7 +299,7 @@ Details in [PLAN.md](PLAN.md).
 - [x] 1. Foundation: registry, tokens, contrast test, effect levels
 - [x] 2. Theme picker
 - [x] 3. Midnight
-- [ ] 4. Title and background framework
+- [x] 4. Title and background framework
 - [ ] 5. Prism
 - [ ] 6. Tidewater
 - [ ] 7. Fire, Nine Hells, Icewind Dale
@@ -337,6 +337,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-13 — M39.1 Theme foundation: theme registry, per-theme CSS files, contrast test, browser bar colour, Theme effects setting (Auto/Full/Off).
 - 2026-11-13 — Theme picker: preview cards grouped by kind, each painted in its own colours; Find entry for themes.
 - 2026-11-13 — Midnight theme: true black, system colours and fonts, rounder corners, no effects.
+- 2026-11-13 — Title and background framework: ThemeTitle, AmbientLayer at full level only, pause on hidden tab, still-page e2e check.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.

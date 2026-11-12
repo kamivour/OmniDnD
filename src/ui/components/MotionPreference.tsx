@@ -1,25 +1,29 @@
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { useStore } from 'zustand';
 import { characterStore } from '../../state/character-store';
-import { deviceStore } from '../../state/device-settings';
-import { DESKTOP_FX_QUERY, resolveFx } from '../../state/theme';
-import { useMediaQuery, useReducedMotion } from '../hooks/useMediaQuery';
+import { useFxLevel } from '../hooks/useTheme';
 
 /**
  * Keep CSS motion tokens and the theme effect level (data-fx) in step with the device before
- * painting. Until this runs, data-fx is missing, which CSS treats as off.
+ * painting. Until this runs, data-fx is missing, which CSS treats as off. Theme effects also
+ * pause while the tab is hidden (data-paused).
  */
 export function MotionPreference() {
   const reducedPreference = useStore(characterStore, (state) => state.reducedMotion);
-  const reducedMotion = useReducedMotion();
-  const desktop = useMediaQuery(DESKTOP_FX_QUERY);
-  const fxChoice = useStore(deviceStore, (state) => state.fx);
-  const fx = resolveFx(fxChoice, { reducedMotion, desktop });
+  const fx = useFxLevel();
   useLayoutEffect(() => {
     document.documentElement.dataset.reducedMotion = String(reducedPreference);
   }, [reducedPreference]);
   useLayoutEffect(() => {
     document.documentElement.dataset.fx = fx;
   }, [fx]);
+  useEffect(() => {
+    const sync = () => {
+      document.documentElement.dataset.paused = String(document.hidden);
+    };
+    sync();
+    document.addEventListener('visibilitychange', sync);
+    return () => document.removeEventListener('visibilitychange', sync);
+  }, []);
   return null;
 }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, NavLink } from 'react-router';
 import { ChevronLeft, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { cx } from '../cx';
+import { ThemeTitle } from '../theme/ThemeTitle';
 import { useCharacterBase } from '../hooks/useCharacterBase';
 import { NAV, NAV_DIVIDER_BEFORE, navPath } from './nav';
 
@@ -23,7 +24,9 @@ export function SideNav() {
       )}
     >
       {!collapsed && (
-        <p className="mb-1 hidden px-2 py-1 font-display text-lg text-accent lg:block">OmniDnD</p>
+        <p className="mb-1 hidden px-2 py-1 text-lg lg:block">
+          <ThemeTitle />
+        </p>
       )}
       <p
         aria-hidden

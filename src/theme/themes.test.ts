@@ -7,6 +7,7 @@ import { THEMES, type ThemeInfo } from './themes';
 const read = (path: string) => readFileSync(new URL(path, import.meta.url), 'utf8');
 const indexCss = read('../index.css');
 const tokensCss = read('./tokens.css');
+const effectsCss = read('./effects.css');
 const themeFiles: Record<string, string> = Object.fromEntries(
   readdirSync(new URL('./themes/', import.meta.url))
     .filter((name) => name.endsWith('.css'))
@@ -145,6 +146,33 @@ describe('theme registry', () => {
       expect(themeCss(theme.id), theme.id).toMatch(
         new RegExp(`\\[data-theme='${theme.id}'\\][^{]*\\{\\s*color-scheme: ${theme.scheme};`),
       );
+  });
+});
+
+/** Plain rules (selector and body); nested at-rules give their inner rules. */
+function rules(css: string): { selector: string; body: string }[] {
+  const plain = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  return [...plain.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({
+    selector: m[1]!.trim(),
+    body: m[2]!,
+  }));
+}
+
+describe('theme effects', () => {
+  const allCss = [effectsCss, ...Object.values(themeFiles)].join('\n');
+
+  it('animates only at the full effect level (tap feedback excepted)', () => {
+    for (const { selector, body } of rules(allCss))
+      if (/(^|[;\s])animation(-name)?\s*:/.test(body) && !/animation:\s*none/.test(body))
+        expect(selector).toMatch(/\[data-fx='full'\]|omni-ripple|omni-sheen/);
+  });
+
+  it('gives every theme with a title or background effect its CSS', () => {
+    for (const theme of THEMES as readonly ThemeInfo[]) {
+      const css = themeCss(theme.id);
+      if (theme.title) expect(css, theme.id).toMatch(/\.omni-title/);
+      if (theme.ambient) expect(css, theme.id).toContain(`[data-ambient='${theme.ambient}']`);
+    }
   });
 });
 

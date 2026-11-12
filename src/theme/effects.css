@@ -1,0 +1,54 @@
+/*
+ * Theme effects framework (docs/DESIGN.md §1, docs/PLAN.md M39).
+ * <html data-fx>: off (or missing) = nothing moves; lite = still title and background;
+ * full = animated title and one ambient layer. Themes animate only transform and opacity
+ * (the title may also move a background), and only inside :root[data-fx='full'] rules.
+ */
+
+.omni-title {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Decorative layer over the letters (frost, sparkles, glow). Themes fill it. */
+.omni-title-fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* One fixed layer behind the content; body isolation keeps it above the page colour. */
+.omni-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+
+.omni-ambient > span {
+  position: absolute;
+  display: block;
+  will-change: transform, opacity;
+}
+
+/* Hidden tab: stop every loop until the page is seen again. */
+:root[data-paused='true'] *,
+:root[data-paused='true'] *::before,
+:root[data-paused='true'] *::after {
+  animation-play-state: paused !important;
+}
+
+/* Windows high contrast and similar: drop decoration, keep plain text. */
+@media (forced-colors: active) {
+  .omni-title {
+    background: none !important;
+    color: CanvasText !important;
+  }
+  .omni-title-fx,
+  .omni-ambient {
+    display: none;
+  }
+}

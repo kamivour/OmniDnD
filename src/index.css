@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './theme/tokens.css';
+@import './theme/effects.css';
 @import './theme/themes/parchment.css';
 @import './theme/themes/midnight.css';
 

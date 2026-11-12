@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { Link, NavLink, Outlet } from 'react-router';
 import { Library, Settings } from 'lucide-react';
 import { cx } from '../cx';
+import { ThemeTitle } from '../theme/ThemeTitle';
 import { FindLauncher } from '../find/FindLauncher';
 import { SyncChipSlot } from '../settings/SyncChipSlot';
 import { StorageStatus } from '../storage/StorageStatus';
@@ -17,8 +18,8 @@ export function HubFrame() {
     <div className="min-h-dvh">
       <header className="border-b border-border bg-bg px-4">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-2">
-          <Link to="/" className="rounded-btn font-display text-lg text-accent">
-            OmniDnD
+          <Link to="/" className="rounded-btn text-lg">
+            <ThemeTitle />
           </Link>
           <nav aria-label="Main" className="ml-auto flex items-center gap-1">
             <SyncChipSlot to="/settings" />
