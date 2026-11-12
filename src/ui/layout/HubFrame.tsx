@@ -16,7 +16,7 @@ const LINKS = [
 export function HubFrame() {
   return (
     <div className="min-h-dvh">
-      <header className="border-b border-border bg-bg px-4">
+      <header className="omni-bar border-b border-border bg-bg px-4">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-2">
           <Link to="/" className="rounded-btn text-lg">
             <ThemeTitle />

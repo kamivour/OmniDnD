@@ -4,6 +4,14 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 03:20 — Prism glass theme
+
+- New Prism theme in Settings: frosted see-through cards and top bars over soft pink, indigo and cyan light.
+- On a computer at full effects the light drifts slowly, the title shimmers and cards catch a soft shine under the mouse. Phones get the still version.
+- Pop-ups and menus stay solid so text over them stays easy to read. Check the bars look frosted, not muddy, on your screen.
+- Checks pass.
+- Checks pass.
+
 ## 2026-11-13 03:14 — Theme effects groundwork
 
 - The OmniDnD title is ready for per-theme effects; nothing looks different yet.

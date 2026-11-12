@@ -64,7 +64,7 @@ export function AppFrame() {
           <div className="flex min-h-dvh">
             <SideNav />
             <div ref={frame} className="flex min-w-0 flex-1 flex-col">
-              <div ref={header} className="sticky top-0 z-20 bg-bg">
+              <div ref={header} className="omni-bar sticky top-0 z-20 bg-bg">
                 <HudBar />
                 <ConcentrationSaveBanner />
                 <CharacterToolbar />

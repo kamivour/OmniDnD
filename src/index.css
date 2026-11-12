@@ -3,6 +3,7 @@
 @import './theme/effects.css';
 @import './theme/themes/parchment.css';
 @import './theme/themes/midnight.css';
+@import './theme/themes/prism.css';
 
 /* Only token colors exist, so raw palette classes (bg-red-500) fail to build. */
 @theme {

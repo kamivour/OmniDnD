@@ -27,7 +27,7 @@ export function BottomNav() {
     <nav
       aria-label="Main"
       data-tour="nav"
-      className="fixed inset-x-0 bottom-0 z-30 flex border-t border-border bg-bg pb-[env(safe-area-inset-bottom)] sm:hidden"
+      className="omni-bar fixed inset-x-0 bottom-0 z-30 flex border-t border-border bg-bg pb-[env(safe-area-inset-bottom)] sm:hidden"
     >
       {direct.map(({ to, short, icon: Glyph }) => (
         <NavLink

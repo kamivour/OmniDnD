@@ -1,0 +1,180 @@
+/* Prism: frosted see-through cards over soft colour blobs. */
+:root[data-theme='prism'],
+[data-theme='prism'] {
+  color-scheme: dark;
+
+  /* Surfaces are see-through but dark enough to pass contrast without any blur. */
+  --omni-bg: #0d0e1c;
+  --omni-surface: rgb(36 38 68 / 0.62);
+  --omni-surface-2: rgb(52 55 92 / 0.7);
+  --omni-border: rgb(255 255 255 / 0.14);
+  --omni-text: #f5f5ff;
+  --omni-text-muted: #aeb0cc;
+  --omni-accent: #c9b8ff;
+  --omni-magic: #7fd8ff;
+  --omni-danger: #ff8095;
+  --omni-heal: #6fe3a8;
+  --omni-temp: #a3b6ff;
+  --omni-warn: #ffc46b;
+
+  --omni-type-damage: #ff8a9b;
+  --omni-type-control: #d3a6ff;
+  --omni-type-healing: #6fe3a8;
+  --omni-type-buff: #8fc1ff;
+  --omni-type-debuff: #ffc46b;
+  --omni-type-utility: #b8bccf;
+
+  --omni-font-display: 'Inter Variable', system-ui, sans-serif;
+  --omni-radius-card: 14px;
+  --omni-radius-btn: 10px;
+  --omni-shadow-pop: 0 12px 32px rgb(0 0 0 / 0.55);
+  --omni-bg-image:
+    radial-gradient(38vmax 38vmax at 12% 18%, rgb(236 72 153 / 0.3), transparent 70%),
+    radial-gradient(42vmax 42vmax at 88% 30%, rgb(99 102 241 / 0.34), transparent 70%),
+    radial-gradient(40vmax 40vmax at 50% 95%, rgb(34 211 238 / 0.2), transparent 70%);
+
+  /* The same surfaces made solid, for anything that floats over other content. */
+  --prism-surface-solid: #1b1d35;
+  --prism-surface-2-solid: #282b49;
+}
+
+[data-theme='prism'] .font-display {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+/* Sheets, popovers, toasts and sticky rows sit over text, so they stay solid. */
+[data-theme='prism']
+  :is(
+    .fixed,
+    .sticky,
+    .absolute,
+    .shadow-pop,
+    dialog,
+    [role='dialog'],
+    [role='tooltip'],
+    [role='listbox'],
+    [role='menu'],
+    [data-radix-popper-content-wrapper]
+  ) {
+  --omni-surface: var(--prism-surface-solid);
+  --omni-surface-2: var(--prism-surface-2-solid);
+}
+
+/* A thin bright top edge on cards, like light catching glass. */
+[data-theme='prism'] .rounded-card:is(.bg-surface, .bg-surface-2) {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.07);
+}
+
+/* Glass bars, on every level. Cards skip blur: blurring many cards over a moving background
+   costs too much. */
+[data-theme='prism'] .omni-bar {
+  background-color: rgb(13 14 28 / 0.6);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+}
+
+[data-theme='prism'] .omni-bar .omni-bar {
+  background-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  [data-theme='prism'] .omni-bar {
+    background-color: var(--omni-bg);
+  }
+}
+
+/* Pointer sheen (full level; PressEffects sets the position). */
+:root[data-theme='prism'][data-fx='full'] [data-sheen] {
+  background-image: radial-gradient(
+    260px circle at var(--sheen-x) var(--sheen-y),
+    rgb(255 255 255 / 0.07),
+    transparent 70%
+  );
+}
+
+/* Title: still light gradient; at full it sweeps slowly across the letters. */
+[data-theme='prism'] .omni-title {
+  background-image: linear-gradient(
+    100deg,
+    #c9b8ff 0%,
+    #ffd6f2 30%,
+    #9fe8ff 55%,
+    #c9b8ff 80%,
+    #c9b8ff 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+:root[data-theme='prism'][data-fx='full'] .omni-title {
+  animation: omni-prism-sweep 9s linear infinite;
+}
+
+@keyframes omni-prism-sweep {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Background: at full the blobs drift instead of sitting still. */
+:root[data-theme='prism'][data-fx='full'] {
+  --omni-bg-image: none;
+}
+
+[data-ambient='blobs'] > span {
+  width: 64vmax;
+  height: 64vmax;
+  border-radius: 50%;
+  opacity: 0.9;
+}
+
+[data-ambient='blobs'] > span:nth-child(n + 5) {
+  display: none;
+}
+
+[data-ambient='blobs'] > span:nth-child(1) {
+  left: -20vmax;
+  top: -24vmax;
+  background: radial-gradient(closest-side, rgb(236 72 153 / 0.34), transparent);
+}
+
+[data-ambient='blobs'] > span:nth-child(2) {
+  right: -22vmax;
+  top: -10vmax;
+  background: radial-gradient(closest-side, rgb(99 102 241 / 0.4), transparent);
+}
+
+[data-ambient='blobs'] > span:nth-child(3) {
+  left: 10vmax;
+  bottom: -34vmax;
+  background: radial-gradient(closest-side, rgb(34 211 238 / 0.24), transparent);
+}
+
+[data-ambient='blobs'] > span:nth-child(4) {
+  right: 0;
+  bottom: -20vmax;
+  background: radial-gradient(closest-side, rgb(168 85 247 / 0.24), transparent);
+}
+
+:root[data-fx='full'] [data-ambient='blobs'] > span {
+  animation: omni-blob-drift 38s ease-in-out infinite alternate;
+}
+
+:root[data-fx='full'] [data-ambient='blobs'] > span:nth-child(even) {
+  animation-duration: 46s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes omni-blob-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(12vmax, 9vmax, 0) scale(1.18);
+  }
+}

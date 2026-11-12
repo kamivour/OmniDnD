@@ -69,6 +69,17 @@ export const THEMES = [
     scheme: 'dark',
     synonyms: ['ios', 'iphone', 'oled', 'black', 'amoled', 'modern'],
   },
+  {
+    id: 'prism',
+    name: 'Prism',
+    hint: 'Frosted glass over soft colour light.',
+    group: 'glass',
+    scheme: 'dark',
+    title: true,
+    ambient: 'blobs',
+    press: 'sheen',
+    synonyms: ['glass', 'liquid glass', 'frosted', 'translucent', 'shiny', 'blur'],
+  },
 ] as const satisfies readonly ThemeInfo[];
 
 export type ThemeId = (typeof THEMES)[number]['id'];

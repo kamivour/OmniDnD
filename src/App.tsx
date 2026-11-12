@@ -10,6 +10,7 @@ import { DashboardScreen } from './ui/screens/DashboardScreen';
 import { PlaceholderScreen } from './ui/screens/PlaceholderScreen';
 import { MotionPreference } from './ui/components/MotionPreference';
 import { AmbientLayer } from './ui/theme/AmbientLayer';
+import { PressEffects } from './ui/theme/PressEffects';
 import { TourHost } from './ui/tutorial/TourHost';
 import { StorageGate } from './ui/storage/StorageGate';
 
@@ -84,6 +85,7 @@ export function App() {
         <StorageGate>
           <MotionPreference />
           <AmbientLayer />
+          <PressEffects />
           {SyncHost && syncConfig && (
             <Suspense fallback={null}>
               <SyncHost config={syncConfig} />
