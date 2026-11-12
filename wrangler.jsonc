@@ -1,0 +1,10 @@
+// Cloudflare Workers static hosting. Netlify's free plan forces a badge that covers the phone menu.
+{
+  "name": "omnidnd",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    // Single-page app: every unknown path serves the app shell.
+    "not_found_handling": "single-page-application",
+  },
+}
