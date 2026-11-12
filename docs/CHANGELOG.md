@@ -4,6 +4,14 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 03:37 — Fire, Nine Hells and Icewind Dale themes
+
+- Three new themes in Settings: Elemental Plane of Fire, Nine Hells and Icewind Dale.
+- On a computer the title burns, glows red or frosts over, and embers, ash or snow drift behind the page.
+- On a phone the title and background stay still to save battery.
+- Checks pass.
+- Checks pass.
+
 ## 2026-11-13 03:29 — Tidewater water theme
 
 - New Tidewater theme: clear sea-glass cards over deep water with soft pool-light lines, and a wave rolling through the OmniDnD title.

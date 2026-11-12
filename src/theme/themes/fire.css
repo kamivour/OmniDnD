@@ -1,0 +1,125 @@
+/* Elemental Plane of Fire: charcoal and ember orange. Danger is crimson so it differs from the
+   orange accent. */
+:root[data-theme='fire'],
+[data-theme='fire'] {
+  color-scheme: dark;
+
+  --omni-bg: #140b08;
+  --omni-surface: #22140f;
+  --omni-surface-2: #2e1b14;
+  --omni-border: #4a2c1f;
+  --omni-text: #fbeee4;
+  --omni-text-muted: #c9a998;
+  --omni-accent: #ff9a3c;
+  --omni-magic: #a9b6ff;
+  --omni-danger: #ff5a6e;
+  --omni-heal: #7ee08a;
+  --omni-temp: #9fd0ff;
+  --omni-warn: #ffd75e;
+
+  --omni-type-damage: #ff6f61;
+  --omni-type-control: #d9a0ff;
+  --omni-type-healing: #7ee08a;
+  --omni-type-buff: #8cc8ff;
+  --omni-type-debuff: #ffd75e;
+  --omni-type-utility: #cdb5a8;
+
+  --omni-bg-image:
+    radial-gradient(120% 55% at 50% 112%, rgb(255 96 24 / 0.26), transparent 70%),
+    radial-gradient(70% 40% at 15% 105%, rgb(255 40 40 / 0.14), transparent 70%);
+}
+
+/* Title: letters burn from yellow at the top to deep orange at the base, with a soft glow. */
+[data-theme='fire'] .omni-title {
+  background-image: linear-gradient(180deg, #ffe08a 0%, #ffa23f 45%, #ff5a2a 75%, #ffe08a 100%);
+  background-size: 100% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme='fire'] .omni-title-fx::before {
+  content: attr(data-text);
+  color: #ff7a1a;
+  filter: blur(6px);
+  opacity: 0.4;
+  mix-blend-mode: screen;
+}
+
+/* Full: colour licks upward and the glow flickers and wavers like heat. */
+:root[data-theme='fire'][data-fx='full'] .omni-title {
+  animation: omni-fire-lick 2.6s linear infinite;
+}
+
+:root[data-theme='fire'][data-fx='full'] .omni-title-fx::before {
+  will-change: opacity, transform;
+  animation: omni-fire-flicker 1.9s ease-in-out infinite;
+}
+
+@keyframes omni-fire-lick {
+  to {
+    background-position: 0 -200%;
+  }
+}
+
+@keyframes omni-fire-flicker {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translateY(0) scaleY(1);
+  }
+  18% {
+    opacity: 0.62;
+    transform: translateY(-1px) scaleY(1.05);
+  }
+  34% {
+    opacity: 0.32;
+  }
+  52% {
+    opacity: 0.7;
+    transform: translateY(-2px) scaleY(1.08);
+  }
+  71% {
+    opacity: 0.45;
+    transform: translateY(-1px) scaleY(1.03);
+  }
+}
+
+/* Background: embers rising from below. */
+[data-ambient='embers'] > span {
+  bottom: -12px;
+  left: calc(mod(var(--i) * 41, 97) * 1%);
+  width: calc(3px + mod(var(--i), 3) * 1.5px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ffb347;
+  box-shadow:
+    0 0 6px 2px rgb(255 120 30 / 0.7),
+    0 0 14px 4px rgb(255 60 20 / 0.3);
+  opacity: 0;
+}
+
+:root[data-fx='full'] [data-ambient='embers'] > span {
+  animation: omni-ember-rise calc(9s + mod(var(--i) * 3, 8) * 1s) linear infinite;
+  animation-delay: calc(var(--i) * -1.3s);
+}
+
+@keyframes omni-ember-rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate3d(3vw, -55vh, 0) scale(0.85);
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate3d(-2vw, -108vh, 0) scale(0.4);
+    opacity: 0;
+  }
+}

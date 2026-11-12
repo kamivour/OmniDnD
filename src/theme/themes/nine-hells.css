@@ -1,0 +1,104 @@
+/* Nine Hells: blood red and brass, under the dust of Avernus. */
+:root[data-theme='nine-hells'],
+[data-theme='nine-hells'] {
+  color-scheme: dark;
+
+  --omni-bg: #150708;
+  --omni-surface: #241012;
+  --omni-surface-2: #311619;
+  --omni-border: #57262a;
+  --omni-text: #f6e9e2;
+  --omni-text-muted: #c4a39d;
+  --omni-accent: #d9a95b;
+  --omni-magic: #b9a2ff;
+  --omni-danger: #ff5f5f;
+  --omni-heal: #79d98e;
+  --omni-temp: #9ec5ff;
+  --omni-warn: #f7c948;
+
+  --omni-type-damage: #ff6b6b;
+  --omni-type-control: #c9a2ff;
+  --omni-type-healing: #79d98e;
+  --omni-type-buff: #8ec5ff;
+  --omni-type-debuff: #f7c948;
+  --omni-type-utility: #c7b3ad;
+
+  --omni-radius-card: 6px;
+  --omni-radius-btn: 4px;
+  --omni-bg-image:
+    radial-gradient(130% 60% at 50% 115%, rgb(200 30 20 / 0.3), transparent 70%),
+    linear-gradient(180deg, rgb(120 60 30 / 0.12), transparent 40%);
+}
+
+/* Title: brass letters with a red heat glow underneath. */
+[data-theme='nine-hells'] .omni-title {
+  background-image: linear-gradient(180deg, #f4d58d 0%, #d9a95b 55%, #a8662f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme='nine-hells'] .omni-title-fx::before {
+  content: attr(data-text);
+  color: #ff2a1a;
+  filter: blur(7px);
+  opacity: 0.35;
+  mix-blend-mode: screen;
+}
+
+/* Full: the hellfire glow swells and fades, slowly. */
+:root[data-theme='nine-hells'][data-fx='full'] .omni-title-fx::before {
+  will-change: opacity;
+  animation: omni-hells-pulse 4.5s ease-in-out infinite;
+}
+
+@keyframes omni-hells-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+/* Background: ash drifting down and sideways. */
+[data-ambient='ash'] > span {
+  top: -12px;
+  left: calc(mod(var(--i) * 37, 97) * 1%);
+  width: calc(3px + mod(var(--i), 4) * 1px);
+  height: calc(2px + mod(var(--i), 3) * 1px);
+  border-radius: 1px;
+  background: rgb(190 170 160 / 0.55);
+  opacity: 0;
+}
+
+[data-ambient='ash'] > span:nth-child(3n) {
+  background: rgb(255 110 60 / 0.6);
+  box-shadow: 0 0 4px rgb(255 80 30 / 0.6);
+}
+
+:root[data-fx='full'] [data-ambient='ash'] > span {
+  animation: omni-ash-fall calc(16s + mod(var(--i) * 5, 9) * 1s) linear infinite;
+  animation-delay: calc(var(--i) * -2.1s);
+}
+
+@keyframes omni-ash-fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate3d(-6vw, 52vh, 0) rotate(160deg);
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate3d(4vw, 106vh, 0) rotate(320deg);
+    opacity: 0;
+  }
+}

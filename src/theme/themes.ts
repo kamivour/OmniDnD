@@ -91,6 +91,36 @@ export const THEMES = [
     press: 'ripple',
     synonyms: ['water', 'sea', 'ocean', 'wave', 'ripple', 'aqua', 'transparent'],
   },
+  {
+    id: 'fire',
+    name: 'Elemental Plane of Fire',
+    hint: 'Charcoal and ember orange; the title burns.',
+    group: 'planes',
+    scheme: 'dark',
+    title: true,
+    ambient: 'embers',
+    synonyms: ['fire', 'flame', 'ember', 'lava', 'efreeti', 'city of brass', 'red', 'orange'],
+  },
+  {
+    id: 'nine-hells',
+    name: 'Nine Hells',
+    hint: 'Blood red and brass under falling ash.',
+    group: 'planes',
+    scheme: 'dark',
+    title: true,
+    ambient: 'ash',
+    synonyms: ['hell', 'hells', 'avernus', 'baator', 'devil', 'infernal', 'ash', 'brass'],
+  },
+  {
+    id: 'icewind-dale',
+    name: 'Icewind Dale',
+    hint: 'Pale ice on dark slate; frost on the title.',
+    group: 'places',
+    scheme: 'dark',
+    title: true,
+    ambient: 'snow',
+    synonyms: ['ice', 'snow', 'frost', 'winter', 'cold', 'rime', 'ten towns', 'frozen'],
+  },
 ] as const satisfies readonly ThemeInfo[];
 
 export type ThemeId = (typeof THEMES)[number]['id'];

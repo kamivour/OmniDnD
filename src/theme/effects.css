@@ -11,11 +11,18 @@
   white-space: nowrap;
 }
 
-/* Decorative layer over the letters (frost, sparkles, glow). Themes fill it. */
+/* Decorative layer over the letters (frost, sparkles, glow). Themes fill it. Its ::before
+   repeats the letters (content: attr(data-text)) when a theme sets that content. */
 .omni-title-fx {
   position: absolute;
   inset: 0;
   pointer-events: none;
+}
+
+.omni-title-fx::before {
+  position: absolute;
+  inset: 0;
+  white-space: nowrap;
 }
 
 /* One fixed layer behind the content; body isolation keeps it above the page colour. */

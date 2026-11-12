@@ -1,0 +1,121 @@
+/* Icewind Dale: pale ice blue on dark slate, under endless snow. */
+:root[data-theme='icewind-dale'],
+[data-theme='icewind-dale'] {
+  color-scheme: dark;
+
+  --omni-bg: #0b1218;
+  --omni-surface: #131e27;
+  --omni-surface-2: #1a2833;
+  --omni-border: #2c3f4d;
+  --omni-text: #eef7fc;
+  --omni-text-muted: #a3b8c6;
+  --omni-accent: #9fdcff;
+  --omni-magic: #c3b2ff;
+  --omni-danger: #ff7b7b;
+  --omni-heal: #7be0b0;
+  --omni-temp: #b8d0ff;
+  --omni-warn: #ffd27a;
+
+  --omni-type-damage: #ff8080;
+  --omni-type-control: #c9a8ff;
+  --omni-type-healing: #7be0b0;
+  --omni-type-buff: #8fd0ff;
+  --omni-type-debuff: #ffd27a;
+  --omni-type-utility: #b0c2cf;
+
+  --omni-bg-image:
+    linear-gradient(180deg, rgb(160 210 240 / 0.12), transparent 45%),
+    radial-gradient(60% 40% at 0% 0%, rgb(230 245 255 / 0.07), transparent 70%),
+    radial-gradient(60% 40% at 100% 0%, rgb(230 245 255 / 0.07), transparent 70%);
+}
+
+/* Title: ice-blue letters with frost settled on their left side. */
+[data-theme='icewind-dale'] .omni-title {
+  background-image: linear-gradient(180deg, #f2fbff 0%, #9fdcff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme='icewind-dale'] .omni-title-fx::before {
+  content: attr(data-text);
+  color: transparent;
+  background-image:
+    radial-gradient(circle at 30% 40%, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 75%, #fff 0 1px, transparent 1.5px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.95) 0%, rgb(235 248 255 / 0.7) 30%, transparent 55%);
+  background-size:
+    5px 5px,
+    7px 7px,
+    260% 100%;
+  background-position:
+    0 0,
+    0 0,
+    65% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Full: frost creeps across the letters, holds, then thaws back. */
+:root[data-theme='icewind-dale'][data-fx='full'] .omni-title-fx::before {
+  animation: omni-frost-creep 9s ease-in-out infinite;
+}
+
+@keyframes omni-frost-creep {
+  0%,
+  100% {
+    background-position:
+      0 0,
+      0 0,
+      100% 0;
+  }
+  45%,
+  70% {
+    background-position:
+      0 0,
+      0 0,
+      18% 0;
+  }
+}
+
+/* Background: snow falling with a gentle sway. */
+[data-ambient='snow'] > span {
+  top: -10px;
+  left: calc(mod(var(--i) * 43, 97) * 1%);
+  width: calc(3px + mod(var(--i), 3) * 2px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgb(240 250 255 / 0.85);
+  opacity: 0;
+}
+
+:root[data-fx='full'] [data-ambient='snow'] > span {
+  animation: omni-snow-fall calc(12s + mod(var(--i) * 3, 10) * 1s) linear infinite;
+  animation-delay: calc(var(--i) * -1.7s);
+}
+
+@keyframes omni-snow-fall {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.9;
+  }
+  25% {
+    transform: translate3d(2vw, 26vh, 0);
+  }
+  50% {
+    transform: translate3d(-1.5vw, 52vh, 0);
+  }
+  75% {
+    transform: translate3d(2.5vw, 78vh, 0);
+  }
+  92% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate3d(0, 106vh, 0);
+    opacity: 0;
+  }
+}
