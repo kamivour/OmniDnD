@@ -1,0 +1,96 @@
+/* Mount Celestia: a light theme in warm white and gold, the radiant mountain of law and good. */
+:root[data-theme='mount-celestia'],
+[data-theme='mount-celestia'] {
+  color-scheme: light;
+
+  --omni-bg: #f4eddc;
+  --omni-surface: #fbf6ea;
+  --omni-surface-2: #ece2ca;
+  --omni-border: #cbb98f;
+  --omni-text: #1f1a10;
+  --omni-text-muted: #54472f;
+  --omni-accent: #6b4e00;
+  --omni-magic: #3b3f9a;
+  --omni-danger: #a3162e;
+  --omni-heal: #1f6a35;
+  --omni-temp: #26508f;
+  --omni-warn: #8a3f00;
+
+  --omni-type-damage: #a3162e;
+  --omni-type-control: #5a338f;
+  --omni-type-healing: #1f6a35;
+  --omni-type-buff: #234f86;
+  --omni-type-debuff: #8a3f00;
+  --omni-type-utility: #4a4a52;
+
+  --omni-shadow-pop: 0 8px 24px rgb(110 80 20 / 0.22);
+  --omni-bg-image:
+    radial-gradient(90% 55% at 50% -5%, rgb(255 222 140 / 0.55), transparent 70%),
+    radial-gradient(60% 40% at 50% 110%, rgb(255 240 200 / 0.6), transparent 70%);
+}
+
+/* Title: deep gold letters with a band of bright light across them. */
+[data-theme='mount-celestia'] .omni-title {
+  background-image: linear-gradient(
+    105deg,
+    #7a5200 0%,
+    #a8760a 38%,
+    #f0c650 48%,
+    #fff1c0 50%,
+    #f0c650 52%,
+    #a8760a 62%,
+    #7a5200 100%
+  );
+  background-size: 300% 100%;
+  background-position: 35% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Full: the shine sweeps across, then rests. */
+:root[data-theme='mount-celestia'][data-fx='full'] .omni-title {
+  animation: omni-celestia-shine 6s ease-in-out infinite;
+}
+
+@keyframes omni-celestia-shine {
+  0% {
+    background-position: 100% 0;
+  }
+  45%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+/* Background: soft rays of light fanning down from above. */
+[data-ambient='rays'] > span {
+  top: -10vh;
+  left: calc(50% - 6vw);
+  width: 12vw;
+  height: 140vh;
+  background: linear-gradient(180deg, rgb(255 210 110 / 0.32), transparent 75%);
+  transform-origin: 50% 0;
+  transform: rotate(calc((var(--i) - 2.5) * 13deg));
+  filter: blur(10px);
+  opacity: 0.6;
+}
+
+[data-ambient='rays'] > span:nth-child(n + 7) {
+  display: none;
+}
+
+:root[data-fx='full'] [data-ambient='rays'] > span {
+  animation: omni-ray-glow calc(7s + mod(var(--i) * 3, 5) * 1s) ease-in-out infinite;
+  animation-delay: calc(var(--i) * -1.6s);
+}
+
+@keyframes omni-ray-glow {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}

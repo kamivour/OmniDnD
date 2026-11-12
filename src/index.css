@@ -11,6 +11,10 @@
 @import './theme/themes/feywild.css';
 @import './theme/themes/shadowfell.css';
 @import './theme/themes/underdark.css';
+@import './theme/themes/astral-sea.css';
+@import './theme/themes/mechanus.css';
+@import './theme/themes/barovia.css';
+@import './theme/themes/mount-celestia.css';
 
 /* Only token colors exist, so raw palette classes (bg-red-500) fail to build. */
 @theme {

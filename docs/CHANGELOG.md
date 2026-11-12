@@ -4,6 +4,14 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 03:51 — Astral Sea, Mechanus, Barovia and Mount Celestia themes
+
+- Four more themes: Astral Sea, Mechanus, Barovia and Mount Celestia, a warm white and gold light theme.
+- On a computer: stars twinkle in the Astral Sea title, a gear ticks beside Mechanus, candlelight flickers on Barovia and light sweeps across Mount Celestia.
+- Behind the page drift stars, slow gears, low mist or soft rays; phones stay still.
+- Checks pass.
+- Checks pass.
+
 ## 2026-11-13 03:43 — Feywild, Shadowfell and Underdark themes
 
 - Three more themes in Settings: Feywild, Shadowfell and Underdark.

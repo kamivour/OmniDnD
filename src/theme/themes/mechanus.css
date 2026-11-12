@@ -1,0 +1,123 @@
+/* Mechanus: brass and steel, the plane of perfect order and turning gears. */
+:root[data-theme='mechanus'],
+[data-theme='mechanus'] {
+  color-scheme: dark;
+
+  --omni-bg: #101214;
+  --omni-surface: #191c1f;
+  --omni-surface-2: #22262a;
+  --omni-border: #3a4046;
+  --omni-text: #eef0f2;
+  --omni-text-muted: #a9b0b7;
+  --omni-accent: #d9b26a;
+  --omni-magic: #a9b4ff;
+  --omni-danger: #ff6b6b;
+  --omni-heal: #7fd99a;
+  --omni-temp: #9cc8f0;
+  --omni-warn: #f4e07a;
+
+  --omni-type-damage: #ff7b7b;
+  --omni-type-control: #b9a6ff;
+  --omni-type-healing: #7fd99a;
+  --omni-type-buff: #8cc4ef;
+  --omni-type-debuff: #f4e07a;
+  --omni-type-utility: #b3b9bf;
+
+  --omni-radius-card: 3px;
+  --omni-radius-btn: 2px;
+
+  /* A brass gear: a dashed ring makes the teeth. */
+  --mech-gear: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23d9b26a'%3E%3Ccircle cx='50' cy='50' r='40' stroke-width='12' stroke-dasharray='7.85 7.85'/%3E%3Ccircle cx='50' cy='50' r='31' stroke-width='6'/%3E%3Ccircle cx='50' cy='50' r='9' stroke-width='6'/%3E%3Cpath d='M50 22v19M50 59v19M22 50h19M59 50h19' stroke-width='5'/%3E%3C/svg%3E");
+  --omni-bg-image:
+    linear-gradient(rgb(200 210 220 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(200 210 220 / 0.035) 1px, transparent 1px),
+    radial-gradient(70% 45% at 50% 0%, rgb(217 178 106 / 0.1), transparent 70%);
+}
+
+:root[data-theme='mechanus'] body {
+  background-size:
+    32px 32px,
+    32px 32px,
+    100% 100%;
+}
+
+/* Title: steel letters edged in brass, with a small gear beside them. */
+[data-theme='mechanus'] .omni-title {
+  margin-right: 0.85em;
+  background-image: linear-gradient(180deg, #f6f7f8 0%, #b9c0c7 50%, #d9b26a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme='mechanus'] .omni-title-fx::before {
+  content: '';
+  inset: auto;
+  top: 0.12em;
+  right: -0.85em;
+  width: 0.65em;
+  height: 0.65em;
+  background: var(--mech-gear) center / contain no-repeat;
+  opacity: 0.85;
+}
+
+/* Full: the gear ticks round one tooth at a time. */
+:root[data-theme='mechanus'][data-fx='full'] .omni-title-fx::before {
+  will-change: transform;
+  animation: omni-gear-tick 8s steps(16) infinite;
+}
+
+@keyframes omni-gear-tick {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Background: three large, faint gears turning slowly in step. */
+[data-ambient='gears'] > span {
+  width: 46vmax;
+  aspect-ratio: 1;
+  background: var(--mech-gear) center / contain no-repeat;
+  opacity: 0.05;
+}
+
+[data-ambient='gears'] > span:nth-child(n + 4) {
+  display: none;
+}
+
+[data-ambient='gears'] > span:nth-child(1) {
+  top: -18vmax;
+  right: -14vmax;
+}
+
+[data-ambient='gears'] > span:nth-child(2) {
+  bottom: -20vmax;
+  left: -16vmax;
+  width: 56vmax;
+}
+
+[data-ambient='gears'] > span:nth-child(3) {
+  bottom: -12vmax;
+  right: 18vw;
+  width: 28vmax;
+}
+
+:root[data-fx='full'] [data-ambient='gears'] > span {
+  animation: omni-gear-turn 120s linear infinite;
+}
+
+:root[data-fx='full'] [data-ambient='gears'] > span:nth-child(2) {
+  animation-direction: reverse;
+  animation-duration: 146s;
+}
+
+:root[data-fx='full'] [data-ambient='gears'] > span:nth-child(3) {
+  animation-direction: reverse;
+  animation-duration: 73s;
+}
+
+@keyframes omni-gear-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}

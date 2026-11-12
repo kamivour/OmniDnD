@@ -1,0 +1,120 @@
+/* Astral Sea: silver light on deep indigo, the silent void between the planes. */
+:root[data-theme='astral-sea'],
+[data-theme='astral-sea'] {
+  color-scheme: dark;
+
+  --omni-bg: #0b0d24;
+  --omni-surface: #141737;
+  --omni-surface-2: #1b1f45;
+  --omni-border: #2f3566;
+  --omni-text: #eef0ff;
+  --omni-text-muted: #aab0d6;
+  --omni-accent: #c3cdff;
+  --omni-magic: #d0a8ff;
+  --omni-danger: #ff7a8a;
+  --omni-heal: #8be3b0;
+  --omni-temp: #9fd0ff;
+  --omni-warn: #ffd77a;
+
+  --omni-type-damage: #ff8592;
+  --omni-type-control: #d0a8ff;
+  --omni-type-healing: #8be3b0;
+  --omni-type-buff: #8fc8ff;
+  --omni-type-debuff: #ffd77a;
+  --omni-type-utility: #b3b8d8;
+
+  /* A small tile of faint stars. */
+  --astral-stars:
+    radial-gradient(circle at 12% 18%, rgb(255 255 255 / 0.5) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 67% 9%, rgb(255 255 255 / 0.35) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 41% 57%, rgb(220 225 255 / 0.4) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 88% 71%, rgb(255 255 255 / 0.3) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 23% 86%, rgb(220 225 255 / 0.35) 0 1px, transparent 1.5px);
+  --omni-bg-image:
+    radial-gradient(80% 50% at 50% 0%, rgb(120 130 255 / 0.14), transparent 70%),
+    var(--astral-stars);
+}
+
+:root[data-theme='astral-sea'] body {
+  /* One size for the glow, then one per star layer. */
+  background-size:
+    100% 100%,
+    170px 170px,
+    170px 170px,
+    170px 170px,
+    170px 170px,
+    170px 170px;
+}
+
+/* Title: silver-blue letters with tiny stars inside them. */
+[data-theme='astral-sea'] .omni-title {
+  background-image: linear-gradient(180deg, #e4e8ff 0%, #98a4ff 55%, #6f7aeb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme='astral-sea'] .omni-title-fx::before {
+  content: attr(data-text);
+  color: transparent;
+  background-image:
+    radial-gradient(circle at 20% 30%, #fff 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 70% 70%, #fff 0 1px, transparent 1.6px);
+  background-size:
+    9px 9px,
+    13px 13px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: 0.7;
+}
+
+/* Full: the stars in the letters twinkle. */
+:root[data-theme='astral-sea'][data-fx='full'] .omni-title-fx::before {
+  will-change: opacity;
+  animation: omni-astral-twinkle 3.2s ease-in-out infinite;
+}
+
+@keyframes omni-astral-twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Background: brighter stars that twinkle and drift very slowly. */
+[data-ambient='stars'] > span {
+  top: calc(mod(var(--i) * 29, 93) * 1%);
+  left: calc(mod(var(--i) * 61, 97) * 1%);
+  width: calc(2px + mod(var(--i), 3) * 1px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px 1px rgb(200 210 255 / 0.7);
+  opacity: 0.2;
+}
+
+:root[data-fx='full'] [data-ambient='stars'] > span {
+  animation:
+    omni-star-twinkle calc(3s + mod(var(--i) * 7, 5) * 1s) ease-in-out infinite,
+    omni-star-drift 90s linear infinite alternate;
+  animation-delay: calc(var(--i) * -0.7s), calc(var(--i) * -6s);
+}
+
+@keyframes omni-star-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes omni-star-drift {
+  to {
+    transform: translate3d(-6vw, 3vh, 0);
+  }
+}

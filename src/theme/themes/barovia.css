@@ -1,0 +1,118 @@
+/* Barovia: gothic crimson under grey mist, lit by candles. Accent is candle gold so danger can
+   stay crimson. */
+:root[data-theme='barovia'],
+[data-theme='barovia'] {
+  color-scheme: dark;
+
+  --omni-bg: #120d0f;
+  --omni-surface: #1c1518;
+  --omni-surface-2: #261c20;
+  --omni-border: #43333a;
+  --omni-text: #f1e7e9;
+  --omni-text-muted: #b9a6ab;
+  --omni-accent: #e9c27a;
+  --omni-magic: #b7a6ff;
+  --omni-danger: #ff5d73;
+  --omni-heal: #8fd6a0;
+  --omni-temp: #a0c4ef;
+  --omni-warn: #ffab5c;
+
+  --omni-type-damage: #ff6d80;
+  --omni-type-control: #c2a6ff;
+  --omni-type-healing: #8fd6a0;
+  --omni-type-buff: #92c2ef;
+  --omni-type-debuff: #ffab5c;
+  --omni-type-utility: #bfb0b4;
+
+  --omni-radius-card: 4px;
+  --omni-radius-btn: 3px;
+  --omni-bg-image:
+    linear-gradient(0deg, rgb(170 160 170 / 0.12), transparent 35%),
+    radial-gradient(90% 50% at 50% 0%, rgb(140 20 40 / 0.22), transparent 70%);
+}
+
+/* Title: blood-red letters warmed by candlelight from behind. */
+[data-theme='barovia'] .omni-title {
+  background-image: linear-gradient(180deg, #ffc7c7 0%, #ff6f82 50%, #c72c45 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme='barovia'] .omni-title-fx::before {
+  content: attr(data-text);
+  color: #ffb052;
+  filter: blur(7px);
+  opacity: 0.3;
+  mix-blend-mode: screen;
+}
+
+/* Full: the candlelight gutters, unevenly. */
+:root[data-theme='barovia'][data-fx='full'] .omni-title-fx::before {
+  will-change: opacity;
+  animation: omni-candle 3.7s linear infinite;
+}
+
+@keyframes omni-candle {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  8% {
+    opacity: 0.42;
+  }
+  11% {
+    opacity: 0.22;
+  }
+  27% {
+    opacity: 0.38;
+  }
+  44% {
+    opacity: 0.3;
+  }
+  47% {
+    opacity: 0.12;
+  }
+  51% {
+    opacity: 0.4;
+  }
+  73% {
+    opacity: 0.34;
+  }
+  86% {
+    opacity: 0.45;
+  }
+}
+
+/* Background: low grey mist rolling along the bottom of the page. */
+[data-ambient='mist'] > span {
+  bottom: calc(-12vh + mod(var(--i) * 7, 18) * 1vh);
+  left: -50vw;
+  width: 120vw;
+  height: calc(22vh + mod(var(--i), 3) * 8vh);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(190 180 190 / 0.13), transparent);
+  filter: blur(14px);
+}
+
+[data-ambient='mist'] > span:nth-child(n + 6) {
+  display: none;
+}
+
+:root[data-fx='full'] [data-ambient='mist'] > span {
+  animation: omni-mist-roll calc(50s + mod(var(--i) * 11, 30) * 1s) ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -13s);
+}
+
+:root[data-fx='full'] [data-ambient='mist'] > span:nth-child(2n) {
+  animation-direction: alternate-reverse;
+}
+
+@keyframes omni-mist-roll {
+  from {
+    transform: translate3d(-10vw, 0, 0);
+  }
+  to {
+    transform: translate3d(40vw, -2vh, 0);
+  }
+}
