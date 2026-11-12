@@ -370,6 +370,24 @@ export const deleteCharacter: ManagementCommand<{ characterId: string }> = {
   },
 };
 
+/** Removes a campaign and every character in it; undo restores them all. */
+export const deleteCampaign: ManagementCommand<{ campaignId: string }> = {
+  name: 'deleteCampaign',
+  check: (ctx, { campaignId }) =>
+    !Object.hasOwn(ctx.campaigns, campaignId)
+      ? [{ level: 'block', reason: 'Campaign does not exist' }]
+      : ctx.campaigns[campaignId]?.shared
+        ? [{ level: 'block', reason: 'Leave the party or stop sharing before deleting.' }]
+        : [],
+  apply: (draft, { campaignId }) => {
+    const name = draft.campaigns[campaignId]!.name;
+    for (const [id, record] of Object.entries(draft.characters))
+      if (record.build.campaignId === campaignId) delete draft.characters[id];
+    delete draft.campaigns[campaignId];
+    return `Delete campaign: ${name}`;
+  },
+};
+
 export const createCampaign: ManagementCommand<{ campaign: Campaign }> = {
   name: 'createCampaign',
   check: (ctx, { campaign }) => {

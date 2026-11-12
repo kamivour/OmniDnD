@@ -170,6 +170,34 @@ test('delete requires confirmation and management Undo restores the character an
   await expectSaved(page);
 });
 
+test('delete campaign removes it with its characters and management Undo restores both', async ({
+  page,
+}) => {
+  await takeFiveDamage(page);
+  const before = await readDatabase(page);
+  const name = before.campaigns[0]!.data.name;
+  await page.getByRole('button', { name: `Delete campaign ${name}`, exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'Delete campaign?', exact: true });
+  await expect(dialog).toContainText(`Delete ${name} and its 1 character from this browser?`);
+  await dialog.getByRole('button', { name: 'Delete campaign', exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  await expectSaved(page);
+  await expect(page.getByRole('article', { name, exact: true })).toHaveCount(0);
+  await page.reload();
+  await expectSaved(page);
+  const removed = await readDatabase(page);
+  expect(removed.campaigns).toEqual([]);
+  expect(removed.builds).toEqual([]);
+  expect(removed.events).toEqual([]);
+
+  await page.getByRole('button', { name: 'Undo management', exact: true }).click();
+  await expect(character(page, 'The Fool')).toContainText('6/19');
+  await expectSaved(page);
+  await page.reload();
+  await expectSaved(page);
+  expect(await readDatabase(page)).toEqual(before);
+});
+
 test('export downloads a valid JSON file containing the live character, campaign and history', async ({
   page,
 }) => {

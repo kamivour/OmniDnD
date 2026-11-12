@@ -6,6 +6,7 @@ import { registry } from '../../data/registry';
 import { seedFile } from '../../data/seed';
 import { computeSheet } from '../../engine/calc/sheet';
 import {
+  deleteCampaign,
   deleteCharacter,
   duplicateCharacter,
   importCharacter,
@@ -55,6 +56,11 @@ export function CampaignsScreen() {
   const [duplicateId, setDuplicateId] = useState('');
   const [name, setName] = useState('');
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [deletingCampaign, setDeletingCampaign] = useState<string | null>(null);
+  const doomed = deletingCampaign ? state.campaigns[deletingCampaign] : undefined;
+  const doomedCount = Object.values(state.characters).filter(
+    (record) => record.build.campaignId === deletingCampaign,
+  ).length;
   const last = state.managementEvents.findLast(
     (event) => event.command !== 'undo' && !event.undoneBy,
   );
@@ -151,6 +157,10 @@ export function CampaignsScreen() {
             setDeleting(id);
           }}
           onExport={exportCharacter}
+          onDeleteCampaign={() => {
+            opener.current = document.activeElement as HTMLElement;
+            setDeletingCampaign(campaign.id);
+          }}
         />
       ))}
 
@@ -215,6 +225,48 @@ export function CampaignsScreen() {
           </button>
         </div>
       </Sheet>
+      <Sheet
+        open={deletingCampaign !== null}
+        onOpenChange={(open) => !open && setDeletingCampaign(null)}
+        title="Delete campaign?"
+        onCloseAutoFocus={restoreFocus}
+      >
+        {doomed?.shared ? (
+          <p className="mb-4 text-sm">
+            {doomed.name} is shared with a party. Leave the party or stop sharing in Party before
+            deleting it.
+          </p>
+        ) : (
+          <p className="mb-4 text-sm">
+            Delete {doomed?.name ?? 'this campaign'}
+            {doomedCount > 0
+              ? ` and its ${doomedCount} character${doomedCount === 1 ? '' : 's'}`
+              : ''}{' '}
+            from this browser? Export any character you want to keep. Undo management can restore
+            everything.
+          </p>
+        )}
+        <div className="grid grid-cols-2 gap-2">
+          <button type="button" onClick={() => setDeletingCampaign(null)} className={button}>
+            Cancel
+          </button>
+          {!doomed?.shared && (
+            <button
+              type="button"
+              disabled={pending}
+              onClick={() =>
+                deletingCampaign &&
+                run(deleteCampaign, { campaignId: deletingCampaign }, () =>
+                  setDeletingCampaign(null),
+                )
+              }
+              className={`${button} text-danger`}
+            >
+              Delete campaign
+            </button>
+          )}
+        </div>
+      </Sheet>
       {confirmation}
     </section>
   );
@@ -227,6 +279,7 @@ function CampaignCard({
   onDuplicate,
   onDelete,
   onExport,
+  onDeleteCampaign,
 }: {
   campaign: Campaign;
   characters: CharacterRecord[];
@@ -234,12 +287,13 @@ function CampaignCard({
   onDuplicate: (id: string) => void;
   onDelete: (id: string) => void;
   onExport: (id: string) => void;
+  onDeleteCampaign: () => void;
 }) {
   const headingId = `campaign-${path(campaign.id)}`;
   return (
     <article aria-labelledby={headingId} className="rounded-card border border-border bg-surface">
       <header className="flex flex-wrap items-start gap-x-3 gap-y-2 border-b border-border p-4">
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 grow basis-60">
           <h2 id={headingId} className="font-display text-lg">
             {campaign.name}
             {campaign.shared && (
@@ -266,6 +320,16 @@ function CampaignCard({
           <Settings2 size={16} aria-hidden />
           Campaign settings
         </Link>
+        <button
+          type="button"
+          aria-label={`Delete campaign ${campaign.name}`}
+          disabled={pending}
+          onClick={onDeleteCampaign}
+          className="inline-flex min-h-11 items-center gap-2 rounded-btn px-2 text-sm text-danger disabled:opacity-40"
+        >
+          <Trash2 size={16} aria-hidden />
+          Delete
+        </button>
       </header>
       <div className="flex flex-col gap-2 p-4">
         <SectionLabel as="h3">Characters</SectionLabel>

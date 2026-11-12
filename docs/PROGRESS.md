@@ -318,6 +318,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-12 — M38: 13 Xanathar’s subclasses (paladin, ranger, rogue, sorcerer, warlock) with features and guidance.
 - 2026-11-12 — Rules audit: corrected about 80 PHB, Tasha’s and Xanathar’s summaries, uses and saves against the 2014 books.
 - 2026-11-12 — Companion icons: name-based picture on companion cards and encounter rows, paw print fallback.
+- 2026-11-13 — Delete campaign: button on each campaign card removes it with its characters; blocked while shared; undoable.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.

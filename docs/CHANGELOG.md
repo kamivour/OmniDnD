@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 00:40 — Delete campaign
+
+- Each campaign card now has a Delete button next to Campaign settings. It asks first, then removes the campaign and all its characters from this browser.
+- Undo management brings everything back, including each character's history.
+- A campaign shared with a party can't be deleted until you leave the party or stop sharing.
+- Checks pass.
+
 ## 2026-11-12 11:09 — Companion icons
 
 - Each companion now shows a small picture next to its name, such as a dog for a Mastiff, a bird for an Owl and sparkles for a Fey Spirit. You see it on the Companions screen and in the encounter tracker.

@@ -6,6 +6,7 @@ import {
   addCharacter,
   appendManagementEvent,
   createCampaign,
+  deleteCampaign,
   deleteCharacter,
   duplicateCharacter,
   importCharacter,
@@ -120,6 +121,39 @@ describe('management commands', () => {
     expect(restored.next).toEqual(initial);
     expect(restored.next.characters['the-fool']!.events).toEqual(file.events);
     expect(initial.characters['the-fool']!.live.hp).toBe(8);
+  });
+
+  it('deletes a campaign with its characters, keeps other campaigns, and undo restores all', () => {
+    const file = playedFile();
+    const other = { ...seedFile.campaign, id: 'other', name: 'Other' };
+    const copy = run(duplicateCharacter, workspace(file), {
+      sourceId: 'the-fool',
+      id: 'fool-copy',
+      name: 'Copy',
+    }).next;
+    const initial = run(createCampaign, copy, { campaign: other }).next;
+    const { next, event } = run(deleteCampaign, initial, { campaignId: file.campaign.id });
+    expect(event.text).toBe(`Delete campaign: ${file.campaign.name}`);
+    expect(next.characters).toEqual({});
+    expect(next.campaigns).toEqual({ other });
+    const restored = undoManagement(next, [event], registry, metadata('u1'));
+    if (restored.result !== 'ok') throw new Error(restored.reasons.join());
+    expect(restored.next).toEqual(initial);
+    expect(restored.next.characters['the-fool']!.events).toEqual(file.events);
+  });
+
+  it('blocks deleting a missing or shared campaign', () => {
+    const state = workspace();
+    expect(
+      runManagement(deleteCampaign, state, { campaignId: 'missing' }, registry, metadata()).result,
+    ).toBe('blocked');
+    const shared = workspace({ ...seedFile, campaign: { ...seedFile.campaign, shared: true } });
+    expect(
+      runManagement(deleteCampaign, shared, { campaignId: seedFile.campaign.id }, registry, {
+        ...metadata(),
+        force: true,
+      }).result,
+    ).toBe('blocked');
   });
 
   it('creates a campaign and can undo it without touching existing characters', () => {
