@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 15:26 — Dark is the first theme on new devices
+
+- A device opening OmniDnD for the first time now starts on Dark, even if the device is set to light mode.
+- Devices that already picked a theme keep it. System is still in the picker for anyone who wants it.
+- Checks pass.
+
 ## 2026-11-13 15:22 — Auto theme effects move on every computer
 
 - Theme effects set to Auto now move on any computer, even when Windows animation effects are turned off. Phones stay still.

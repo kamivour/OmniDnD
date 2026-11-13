@@ -13,12 +13,15 @@ async function noOverflow(page: Page) {
     .toBeLessThanOrEqual(0);
 }
 
-test('themes: System follows the device, Parchment and Dark are chosen and remembered', async ({
+test('themes: new devices start on Dark, System follows the device, choices are remembered', async ({
   page,
   isMobile,
 }, info) => {
   await page.emulateMedia({ colorScheme: 'light' });
   await page.goto(`/characters/${ID}/settings`);
+  // A new device starts on Dark even when the device is light.
+  await expect.poll(() => theme(page)).toBe('dark');
+  await page.getByRole('radio', { name: /^System/ }).check();
   await expect.poll(() => theme(page)).toBe('parchment');
 
   await page.emulateMedia({ colorScheme: 'dark' });

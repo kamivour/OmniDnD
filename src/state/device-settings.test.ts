@@ -22,6 +22,12 @@ describe('device settings', () => {
     expect(deviceStore.getState()).toMatchObject({ creationMode: 'steps', beginnerHints: true });
   });
 
+  it('starts on the Dark theme, keeps System when chosen, and drops hidden themes', async () => {
+    expect((await load()).deviceStore.getState().theme).toBe('dark');
+    expect((await load({ theme: 'system' })).deviceStore.getState().theme).toBe('system');
+    expect((await load({ theme: 'feywild' })).deviceStore.getState().theme).toBe('dark');
+  });
+
   it('remembers the creation mode and hints choice', async () => {
     const { deviceStore, store } = await load();
     deviceStore.getState().setCreationMode('page');

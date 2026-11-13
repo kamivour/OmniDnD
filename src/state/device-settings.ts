@@ -10,7 +10,9 @@ const KEY = 'omnidnd.device';
 const HISTORY_LIMIT = 30;
 
 export type ThemeChoice = 'system' | ThemeId;
-/** A saved hidden theme falls back to System. */
+/** A new device starts on Dark; a saved hidden theme also falls back to it. */
+export const DEFAULT_THEME: ThemeChoice = 'dark';
+
 export const THEME_CHOICES: readonly ThemeChoice[] = [
   'system',
   ...VISIBLE_THEMES.map((theme) => theme.id as ThemeId),
@@ -69,7 +71,7 @@ function read(): Saved {
       creationMode: parsed?.creationMode === 'page' ? 'page' : 'steps',
       beginnerHints: parsed?.beginnerHints !== false,
       diceRoller: parsed?.diceRoller === true,
-      theme: THEME_CHOICES.find((choice) => choice === parsed?.theme) ?? 'system',
+      theme: THEME_CHOICES.find((choice) => choice === parsed?.theme) ?? DEFAULT_THEME,
       fx: FX_CHOICES.find((choice) => choice === parsed?.fx) ?? 'auto',
       askRoles: parsed?.askRoles !== false,
       lastBackupAt: typeof at === 'string' && !Number.isNaN(Date.parse(at)) ? at : undefined,
@@ -80,7 +82,7 @@ function read(): Saved {
       creationMode: 'steps',
       beginnerHints: true,
       diceRoller: false,
-      theme: 'system',
+      theme: DEFAULT_THEME,
       fx: 'auto',
       askRoles: true,
       lastBackupAt: undefined,
