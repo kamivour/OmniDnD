@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 11:51 — Living backgrounds for Tidewater and Prism
+
+- On a computer with effects at Auto or Full, Tidewater now shows real moving pool light on a sea floor. Your mouse carries a soft lamp, and clicks send rings across the water.
+- Prism now shows coloured light drifting behind ribbed glass, with rainbow edges and a glow that follows the mouse.
+- The Tidewater title now has two rolling waves, a white crest and a passing glint. Phones and Off still show the still versions.
+- Next: tell me if this is the right look before the other themes get the same treatment. Checks pass.
+
 ## 2026-11-13 04:22 — Themes milestone complete
 
 - All 15 themes were checked on the Sheet, Spells and Combat screens on a phone and a computer. Moving effects stay off on phones and run smoothly on computers.

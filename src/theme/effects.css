@@ -35,6 +35,13 @@
   contain: strict;
 }
 
+/* GPU background: drawn at reduced size and stretched to the window. */
+.omni-shader {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+
 .omni-ambient > span {
   position: absolute;
   display: block;
