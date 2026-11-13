@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 12:49 — Living backgrounds for the D&D place themes
+
+- Fire, Nine Hells, Icewind Dale, Feywild, Shadowfell, Underdark, Astral Sea, Mechanus, Barovia and Mount Celestia now have moving scenes on computers, like Tidewater. Each one reacts to the mouse and does something when you click.
+- If nothing moves, set Theme effects to Full in Settings (Windows animation settings can keep Auto still).
+- Dark, Parchment and Midnight stay plain on purpose, for easy reading.
+- Checks pass.
+
 ## 2026-11-13 12:23 — Theme effects Full now always moves
 
 - If Windows (or your phone) has animation effects turned off, themes used to stay completely still, even on Full. Choosing Full in Settings now shows the moving effects anyway.
