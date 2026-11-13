@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 15:22 — Auto theme effects move on every computer
+
+- Theme effects set to Auto now move on any computer, even when Windows animation effects are turned off. Phones stay still.
+- To keep themes still on a computer, choose Off, or turn on Always reduce motion.
+- Checks pass.
+
 ## 2026-11-13 12:58 — Fewer themes for now
 
 - The theme picker now shows only System, Dark, Parchment, Midnight and Tidewater. The other themes are hidden while they are reworked.

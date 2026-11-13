@@ -11,9 +11,8 @@ describe('resolveTheme', () => {
 });
 
 describe('resolveFx', () => {
-  const phone = { systemReducedMotion: false, alwaysReduce: false, desktop: false };
-  const computer = { systemReducedMotion: false, alwaysReduce: false, desktop: true };
-  const calmSystem = { ...computer, systemReducedMotion: true };
+  const phone = { alwaysReduce: false, desktop: false };
+  const computer = { alwaysReduce: false, desktop: true };
 
   it('Auto is full on computers and lite on phones', () => {
     expect(resolveFx('auto', computer)).toBe('full');
@@ -23,11 +22,6 @@ describe('resolveFx', () => {
   it('Full and Off apply on any device', () => {
     expect(resolveFx('full', phone)).toBe('full');
     expect(resolveFx('off', computer)).toBe('off');
-  });
-
-  it('system reduced motion turns Auto off, but a chosen Full wins', () => {
-    expect(resolveFx('auto', calmSystem)).toBe('off');
-    expect(resolveFx('full', calmSystem)).toBe('full');
   });
 
   it('the in-app Always reduce motion switch turns effects off even at Full', () => {

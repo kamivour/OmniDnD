@@ -17,20 +17,16 @@ export type FxLevel = 'off' | 'lite' | 'full';
 export const DESKTOP_FX_QUERY = '(hover: hover) and (pointer: fine) and (min-width: 1024px)';
 
 /**
- * The system's reduced motion setting turns Auto off, but choosing Full here is a deliberate
- * request on this device and wins over it. The in-app "Always reduce motion" switch always wins.
+ * Auto follows the kind of device only: the system reduced motion setting does not stop it,
+ * because Windows ties that setting to its own animations (D197). Off and the in-app "Always
+ * reduce motion" switch stop every effect.
  */
 export function resolveFx(
   choice: FxChoice,
-  {
-    systemReducedMotion,
-    alwaysReduce,
-    desktop,
-  }: { systemReducedMotion: boolean; alwaysReduce: boolean; desktop: boolean },
+  { alwaysReduce, desktop }: { alwaysReduce: boolean; desktop: boolean },
 ): FxLevel {
   if (alwaysReduce || choice === 'off') return 'off';
   if (choice === 'full') return 'full';
-  if (systemReducedMotion) return 'off';
   return desktop ? 'full' : 'lite';
 }
 

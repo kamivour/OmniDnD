@@ -348,6 +348,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-13 — Theme effects Full now overrides the system reduced motion setting; Settings explains why Auto effects are still.
 - 2026-11-13 — GPU backgrounds for the ten D&D place themes: moving scenes that follow the mouse and answer clicks; plain themes stay still.
 - 2026-11-13 — Hid Prism and the ten D&D place themes until reworked; picker offers System, Dark, Parchment, Midnight and Tidewater.
+- 2026-11-13 — Auto theme effects now move on every computer, even with Windows animations off; Off and Always reduce motion still stop them.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.

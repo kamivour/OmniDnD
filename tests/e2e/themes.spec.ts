@@ -80,6 +80,9 @@ test('theme effects: still on phones and when Off, moving on computers', async (
 
   await page.getByRole('radio', { name: /^Auto/ }).check();
   await expect.poll(() => page.evaluate(() => document.documentElement.dataset.fx)).toBe('full');
+  // Windows ties reduced motion to its own animations, so Auto still moves on computers (D197).
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(() => page.evaluate(() => document.documentElement.dataset.fx)).toBe('full');
   for (const theme of VISIBLE_THEMES) {
     await page.getByRole('radio', { name: new RegExp(`^${theme.name}`) }).check();
     await expect(page.locator('.omni-ambient'), theme.id).toHaveCount(theme.ambient ? 1 : 0);
