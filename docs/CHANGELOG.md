@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 12:58 — Fewer themes for now
+
+- The theme picker now shows only System, Dark, Parchment, Midnight and Tidewater. The other themes are hidden while they are reworked.
+- If a device was using a hidden theme, it goes back to System.
+- Checks pass.
+
 ## 2026-11-13 12:49 — Living backgrounds for the D&D place themes
 
 - Fire, Nine Hells, Icewind Dale, Feywild, Shadowfell, Underdark, Astral Sea, Mechanus, Barovia and Mount Celestia now have moving scenes on computers, like Tidewater. Each one reacts to the mouse and does something when you click.

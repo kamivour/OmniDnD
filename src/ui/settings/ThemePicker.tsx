@@ -1,7 +1,7 @@
 import { Check, Monitor } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { ThemeChoice } from '../../state/device-settings';
-import { THEME_GROUPS, THEMES, type ThemeId } from '../../theme/themes';
+import { THEME_GROUPS, VISIBLE_THEMES, type ThemeId } from '../../theme/themes';
 import { cx } from '../cx';
 
 /** A small sample painted with the theme's own colours (each theme's CSS also matches data-theme). */
@@ -104,7 +104,7 @@ export function ThemePicker({
         />
       </div>
       {THEME_GROUPS.map((group) => {
-        const themes = THEMES.filter((theme) => theme.group === group.id);
+        const themes = VISIBLE_THEMES.filter((theme) => theme.group === group.id);
         if (themes.length === 0) return null;
         return (
           <div key={group.id} className="flex flex-col gap-2">
@@ -113,11 +113,11 @@ export function ThemePicker({
               {themes.map((theme) => (
                 <Card
                   key={theme.id}
-                  value={theme.id}
+                  value={theme.id as ThemeId}
                   checked={value === theme.id}
                   label={theme.name}
                   hint={theme.hint}
-                  preview={<Swatch id={theme.id} />}
+                  preview={<Swatch id={theme.id as ThemeId} />}
                   onChange={onChange}
                 />
               ))}

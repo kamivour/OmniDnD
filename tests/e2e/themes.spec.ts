@@ -1,5 +1,5 @@
 import { expect, test, type Page } from './fixtures';
-import { THEMES, type ThemeInfo } from '../../src/theme/themes';
+import { VISIBLE_THEMES } from '../../src/theme/themes';
 
 const ID = 'the-fool';
 
@@ -71,7 +71,7 @@ test('theme effects: still on phones and when Off, moving on computers', async (
   await expect
     .poll(() => page.evaluate(() => document.documentElement.dataset.fx))
     .toBe(isMobile ? 'lite' : 'off');
-  for (const { name } of THEMES) {
+  for (const { name } of VISIBLE_THEMES) {
     await page.getByRole('radio', { name: new RegExp(`^${name}`) }).check();
     await expect.poll(() => running(page), name).toBe(0);
     await expect(page.locator('.omni-ambient')).toHaveCount(0);
@@ -80,7 +80,7 @@ test('theme effects: still on phones and when Off, moving on computers', async (
 
   await page.getByRole('radio', { name: /^Auto/ }).check();
   await expect.poll(() => page.evaluate(() => document.documentElement.dataset.fx)).toBe('full');
-  for (const theme of THEMES as readonly ThemeInfo[]) {
+  for (const theme of VISIBLE_THEMES) {
     await page.getByRole('radio', { name: new RegExp(`^${theme.name}`) }).check();
     await expect(page.locator('.omni-ambient'), theme.id).toHaveCount(theme.ambient ? 1 : 0);
     if (theme.title || theme.ambient)

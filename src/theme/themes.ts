@@ -42,6 +42,8 @@ export interface ThemeInfo {
   press?: 'ripple' | 'sheen';
   /** Extra words for Find. */
   synonyms: readonly string[];
+  /** Kept in code but left out of the picker and Find until it is reworked. */
+  hidden?: boolean;
 }
 
 export const THEMES = [
@@ -71,6 +73,7 @@ export const THEMES = [
   },
   {
     id: 'prism',
+    hidden: true,
     name: 'Prism',
     hint: 'Frosted glass over soft colour light.',
     group: 'glass',
@@ -93,6 +96,7 @@ export const THEMES = [
   },
   {
     id: 'fire',
+    hidden: true,
     name: 'Elemental Plane of Fire',
     hint: 'Charcoal and ember orange; the title burns.',
     group: 'planes',
@@ -103,6 +107,7 @@ export const THEMES = [
   },
   {
     id: 'nine-hells',
+    hidden: true,
     name: 'Nine Hells',
     hint: 'Blood red and brass under falling ash.',
     group: 'planes',
@@ -113,6 +118,7 @@ export const THEMES = [
   },
   {
     id: 'icewind-dale',
+    hidden: true,
     name: 'Icewind Dale',
     hint: 'Pale ice on dark slate; frost on the title.',
     group: 'places',
@@ -123,6 +129,7 @@ export const THEMES = [
   },
   {
     id: 'feywild',
+    hidden: true,
     name: 'Feywild',
     hint: 'Twilight violet with blossom pink; the title shimmers.',
     group: 'planes',
@@ -133,6 +140,7 @@ export const THEMES = [
   },
   {
     id: 'shadowfell',
+    hidden: true,
     name: 'Shadowfell',
     hint: 'Drained greys; shadow passes over the title.',
     group: 'planes',
@@ -143,6 +151,7 @@ export const THEMES = [
   },
   {
     id: 'underdark',
+    hidden: true,
     name: 'Underdark',
     hint: 'Cave violet lit by faerzress and glowing fungus.',
     group: 'places',
@@ -153,6 +162,7 @@ export const THEMES = [
   },
   {
     id: 'astral-sea',
+    hidden: true,
     name: 'Astral Sea',
     hint: 'Silver on deep indigo; stars in the title.',
     group: 'planes',
@@ -163,6 +173,7 @@ export const THEMES = [
   },
   {
     id: 'mechanus',
+    hidden: true,
     name: 'Mechanus',
     hint: 'Brass and steel; a gear ticks by the title.',
     group: 'planes',
@@ -173,6 +184,7 @@ export const THEMES = [
   },
   {
     id: 'barovia',
+    hidden: true,
     name: 'Barovia',
     hint: 'Gothic crimson in grey mist; candlelit title.',
     group: 'places',
@@ -183,6 +195,7 @@ export const THEMES = [
   },
   {
     id: 'mount-celestia',
+    hidden: true,
     name: 'Mount Celestia',
     hint: 'Warm white and gold; light shines across the title.',
     group: 'light',
@@ -196,6 +209,11 @@ export const THEMES = [
 export type ThemeId = (typeof THEMES)[number]['id'];
 
 export const THEME_IDS: readonly ThemeId[] = THEMES.map((theme) => theme.id);
+
+/** Themes people can pick now (hidden ones are being reworked). */
+export const VISIBLE_THEMES: readonly ThemeInfo[] = (THEMES as readonly ThemeInfo[]).filter(
+  (theme) => !theme.hidden,
+);
 
 export function themeInfo(id: ThemeId): ThemeInfo {
   return THEMES.find((theme) => theme.id === id)!;

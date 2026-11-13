@@ -1,7 +1,8 @@
 /// <reference types="node" />
 import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { THEMES, type ThemeInfo } from './themes';
+import { THEME_CHOICES } from '../state/device-settings';
+import { THEMES, VISIBLE_THEMES, type ThemeInfo } from './themes';
 
 // Vitest does not load CSS, so read the files directly.
 const read = (path: string) => readFileSync(new URL(path, import.meta.url), 'utf8');
@@ -202,5 +203,17 @@ describe.each(THEMES.map((t) => t.id))('%s theme colours', (id) => {
   it('keeps meaning colours apart', () => {
     for (const [a, b] of DISTINCT)
       expect(deltaE(parse(set[a]!), parse(set[b]!)), `${a} vs ${b}`).toBeGreaterThanOrEqual(20);
+  });
+});
+
+describe('hidden themes', () => {
+  it('offers only the basic themes and Tidewater while the rest are reworked', () => {
+    expect(VISIBLE_THEMES.map((theme) => theme.id)).toEqual([
+      'dark',
+      'parchment',
+      'midnight',
+      'tidewater',
+    ]);
+    expect(THEME_CHOICES).toEqual(['system', 'dark', 'parchment', 'midnight', 'tidewater']);
   });
 });

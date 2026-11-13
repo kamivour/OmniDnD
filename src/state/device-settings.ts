@@ -1,5 +1,5 @@
 import { createStore } from 'zustand/vanilla';
-import { THEME_IDS, type ThemeId } from '../theme/themes';
+import { VISIBLE_THEMES, type ThemeId } from '../theme/themes';
 
 /**
  * Device-only conveniences (not character or workspace state, never synced or backed up):
@@ -10,7 +10,11 @@ const KEY = 'omnidnd.device';
 const HISTORY_LIMIT = 30;
 
 export type ThemeChoice = 'system' | ThemeId;
-export const THEME_CHOICES: readonly ThemeChoice[] = ['system', ...THEME_IDS];
+/** A saved hidden theme falls back to System. */
+export const THEME_CHOICES: readonly ThemeChoice[] = [
+  'system',
+  ...VISIBLE_THEMES.map((theme) => theme.id as ThemeId),
+];
 
 /** Theme effects: Auto is full on computers and calm on phones (docs/PLAN.md M39). */
 export type FxChoice = 'auto' | 'full' | 'off';
