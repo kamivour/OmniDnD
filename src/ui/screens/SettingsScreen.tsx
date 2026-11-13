@@ -14,6 +14,7 @@ import { TutorialSection } from '../settings/TutorialSection';
 import { BackupsSection } from '../settings/BackupsSection';
 import { ResetCharacterControl } from '../settings/ResetCharacterControl';
 import { ThemePicker } from '../settings/ThemePicker';
+import { REDUCED_MOTION_QUERY, useMediaQuery } from '../hooks/useMediaQuery';
 import { cx } from '../cx';
 
 // Replaced at build time: guest builds (no provider configured) drop the account code entirely.
@@ -31,6 +32,7 @@ export function SettingsScreen() {
   const diceRoller = useStore(deviceStore, (state) => state.diceRoller);
   const theme = useStore(deviceStore, (state) => state.theme);
   const fx = useStore(deviceStore, (state) => state.fx);
+  const systemReducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
   const creationMode = useStore(deviceStore, (state) => state.creationMode);
   const beginnerHints = useStore(deviceStore, (state) => state.beginnerHints);
   const management = useManagement();
@@ -134,7 +136,7 @@ export function SettingsScreen() {
           </label>
           <p className="text-sm text-text-muted">
             Your system’s reduced motion preference is respected automatically, even when this
-            switch is off.
+            switch is off. Theme effects set to Full still move.
           </p>
         </section>
       </fieldset>
@@ -147,17 +149,27 @@ export function SettingsScreen() {
           {
             value: 'auto',
             label: 'Auto',
-            hint: 'Moving effects on computers, calm and still on phones.',
+            hint: 'Moving effects on computers, still on phones and when your system reduces motion.',
           },
-          { value: 'full', label: 'Full', hint: 'Moving title and background on every device.' },
+          {
+            value: 'full',
+            label: 'Full',
+            hint: 'Moving title and background on every device, even when your system reduces motion.',
+          },
           {
             value: 'off',
             label: 'Off',
-            hint: 'Nothing moves. Reduced motion also turns this off.',
+            hint: 'Nothing moves. Always reduce motion also turns effects off.',
           },
         ]}
         onChange={(value) => deviceStore.getState().setFx(value)}
       />
+      {fx === 'auto' && systemReducedMotion && !reducedMotion && (
+        <p className="-mt-2 text-sm text-text-muted">
+          Your system asks for reduced motion, so theme effects are still. Choose Full to see them
+          move.
+        </p>
+      )}
       <ChoiceGroup<CreationMode>
         legend="New characters"
         name="creation-mode"

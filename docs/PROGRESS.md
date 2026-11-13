@@ -345,6 +345,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-13 — Astral Sea, Mechanus, Barovia and Mount Celestia themes; Mount Celestia is the second light theme.
 - 2026-11-13 — Gate: all 15 themes checked on Sheet, Spells and Combat at 375 and 1440 px; phones still, computers 60 fps; manual QA list added.
 - 2026-11-13 — GPU backgrounds: Tidewater pool light with tap rings and Prism ribbed glass on computers; Tidewater title gets rolling waves.
+- 2026-11-13 — Theme effects Full now overrides the system reduced motion setting; Settings explains why Auto effects are still.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.

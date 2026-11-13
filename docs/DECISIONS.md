@@ -198,6 +198,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 | D192 | 2026-11-13 | Themes may use D&D place names as labels only, with no art or text from the books. Q44 answered | User approved | Invented names |
 | D193 | 2026-11-13 | The Tidewater tap ripple also runs on phones; Theme effects Off removes it. Q45 answered | It is short tap feedback, not a loop | Desktop only |
 | D194 | 2026-11-13 | One theme per device; campaigns don't set a theme. Q46 answered | Simple, and themes stay a personal choice | Theme per campaign |
+| D195 | 2026-11-13 | The system reduced motion setting turns theme effects off at Auto, but choosing Full in Settings overrides it. The in-app Always reduce motion switch still turns them off | Windows with Animation effects off hid every theme effect, even when the user picked Full | Reduced motion always wins |
 | D129 | 2026-11-06 | Journal text is saved exactly as typed, so Markdown stays intact, and is shown with its line breaks but without formatting. Formatted display can come later without changing saves. | Avoids a new dependency and any risk from rendering typed HTML |
 | D124 | 2026-11-06 | Accounts use email and password. Sync runs on sign-in and when you press Sync now; automatic background sync waits until friends have tried it. Signing out keeps everything on the device. | Simple to host; no surprise uploads |
 

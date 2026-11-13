@@ -16,12 +16,21 @@ export type FxLevel = 'off' | 'lite' | 'full';
 /** A computer: real hover, a fine pointer and a wide window. */
 export const DESKTOP_FX_QUERY = '(hover: hover) and (pointer: fine) and (min-width: 1024px)';
 
+/**
+ * The system's reduced motion setting turns Auto off, but choosing Full here is a deliberate
+ * request on this device and wins over it. The in-app "Always reduce motion" switch always wins.
+ */
 export function resolveFx(
   choice: FxChoice,
-  { reducedMotion, desktop }: { reducedMotion: boolean; desktop: boolean },
+  {
+    systemReducedMotion,
+    alwaysReduce,
+    desktop,
+  }: { systemReducedMotion: boolean; alwaysReduce: boolean; desktop: boolean },
 ): FxLevel {
-  if (reducedMotion || choice === 'off') return 'off';
+  if (alwaysReduce || choice === 'off') return 'off';
   if (choice === 'full') return 'full';
+  if (systemReducedMotion) return 'off';
   return desktop ? 'full' : 'lite';
 }
 

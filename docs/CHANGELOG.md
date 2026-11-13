@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-13 12:23 — Theme effects Full now always moves
+
+- If Windows (or your phone) has animation effects turned off, themes used to stay completely still, even on Full. Choosing Full in Settings now shows the moving effects anyway.
+- At Auto, Settings now says when your system is keeping theme effects still, and suggests Full.
+- Always reduce motion in Settings still turns every effect off.
+- Checks pass.
+
 ## 2026-11-13 11:51 — Living backgrounds for Tidewater and Prism
 
 - On a computer with effects at Auto or Full, Tidewater now shows real moving pool light on a sea floor. Your mouse carries a soft lamp, and clicks send rings across the water.

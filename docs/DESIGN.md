@@ -12,7 +12,7 @@
 
 | Level | When | What may move |
 |---|---|---|
-| `off` | Reduced motion, or Theme effects Off | Nothing. The title keeps its still look |
+| `off` | Theme effects Off, Always reduce motion, or Auto when the system reduces motion | Nothing. The title keeps its still look |
 | `lite` | Auto on phones and small windows | Nothing loops. Still title and background; short tap ripple |
 | `full` | Auto on computers (hover, fine pointer, 1024 px+), or Full | Animated title, one background layer, glass sheen |
 
