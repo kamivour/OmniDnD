@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-14 13:36 — Why there is no feat choice
+
+- When feats are off for a campaign, the Ability score improvement card now says so and links to Campaign settings.
+- Feats are an optional rule, so new campaigns still start with them off. Turn them on if your DM allows feats.
+- Checks pass.
+
 ## 2026-11-14 13:30 — Racial and class bonuses now count on the sheet
 
 - Hill Dwarf and Draconic Bloodline sorcerers now get +1 max HP per level. Draconic sorcerers also get AC 13 + DEX without armor.

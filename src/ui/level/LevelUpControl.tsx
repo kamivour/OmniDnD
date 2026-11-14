@@ -301,7 +301,9 @@ function LevelUpForm({
         <NewClassPicks option={newClass} picks={picks} set={setPick} registry={registry} />
       )}
       {subclasses.length > 0 && <SubclassPick options={subclasses} picks={picks} set={setPick} />}
-      {needs.asi && <AsiPick feats={feats} picks={picks} set={setPick} />}
+      {needs.asi && (
+        <AsiPick feats={feats} picks={picks} set={setPick} campaign={reviewed.state.campaign} />
+      )}
       {spellInfo &&
         (spellInfo.gains.cantrips > 0 || spellInfo.gains.spells > 0 || spellInfo.gains.canSwap) && (
           <SpellPicks info={spellInfo} picks={picks} set={setPick} registry={registry} />

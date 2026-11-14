@@ -164,7 +164,9 @@ function ChoiceForm({
           )}
         </>
       )}
-      {item.kind === 'asi' && <AsiPick feats={feats} picks={picks} set={set} />}
+      {item.kind === 'asi' && (
+        <AsiPick feats={feats} picks={picks} set={set} campaign={state.campaign} />
+      )}
       {options.length > 0 && (
         <fieldset className="flex flex-col">
           <legend className="mb-1 text-sm text-text">

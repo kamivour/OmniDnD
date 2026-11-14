@@ -1,7 +1,9 @@
 import { useId } from 'react';
+import { Link } from 'react-router';
 import { ABILITIES, type Ability } from '../../engine/calc/abilities';
 import type { Registry } from '../../engine/registry';
-import type { FeatureDef } from '../../engine/schema';
+import { optionalRules } from '../../engine/calc/campaign-rules';
+import type { Campaign, FeatureDef } from '../../engine/schema';
 import { SKILLS } from '../../engine/rules2014';
 import { guidanceFor } from '../../data/guidance';
 import { cx } from '../cx';
@@ -168,7 +170,12 @@ export function SubclassPick({
   );
 }
 
-export function AsiPick({ feats, picks, set }: PickProps & { feats: FeatOption[] }) {
+export function AsiPick({
+  feats,
+  picks,
+  set,
+  campaign,
+}: PickProps & { feats: FeatOption[]; campaign: Campaign }) {
   const id = useId();
   const feat = feats.find((entry) => entry.id === picks.featId);
   const abilitySelect = (label: string, key: 'ability1' | 'ability2') => (
@@ -202,6 +209,18 @@ export function AsiPick({ feats, picks, set }: PickProps & { feats: FeatOption[]
           {label}
         </label>
       ))}
+      {!optionalRules(campaign).feats && (
+        <p className="text-xs text-text-muted">
+          Feats are off for this campaign. If your DM allows them, turn on Feats in{' '}
+          <Link
+            to={`/campaigns/${encodeURIComponent(campaign.id)}/settings`}
+            className="text-accent underline"
+          >
+            Campaign settings
+          </Link>
+          .
+        </p>
+      )}
       {picks.asiMode === 'abilities' && (
         <>
           <label className={radio}>

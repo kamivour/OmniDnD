@@ -53,7 +53,7 @@ export function LevelChoicesSection({
                 )}
               </>
             )}
-            {row.asi && <AsiPick feats={feats} picks={current} set={set} />}
+            {row.asi && <AsiPick feats={feats} picks={current} set={set} campaign={campaign} />}
           </fieldset>
         );
       })}

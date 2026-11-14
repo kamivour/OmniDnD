@@ -641,6 +641,12 @@ test('The Fool takes an ability score improvement and new spells in one undoable
   await openLevelUp(page);
   await roll(page).fill('5');
   const asi = form(page).getByRole('group', { name: 'Ability score improvement' });
+  // Feats are off in this campaign: the card says so and links to its settings.
+  await expect(asi.getByRole('radio', { name: 'Take a feat' })).toHaveCount(0);
+  await expect(asi.getByRole('link', { name: 'Campaign settings' })).toHaveAttribute(
+    'href',
+    /\/campaigns\/.+\/settings$/,
+  );
   await asi.getByRole('radio', { name: 'Raise ability scores' }).check();
   await asi.getByRole('radio', { name: '+2 to one ability' }).check();
   await asi.getByLabel('Ability', { exact: true }).selectOption('DEX');
@@ -686,6 +692,7 @@ test('The Fool takes the Resilient feat with an ability pick instead of an impro
   await openLevelUp(page);
   await roll(page).fill('5');
   const asi = form(page).getByRole('group', { name: 'Ability score improvement' });
+  await expect(asi.getByText('Feats are off for this campaign')).toHaveCount(0);
   await asi.getByRole('radio', { name: 'Take a feat' }).check();
   await asi.getByLabel('Feat', { exact: true }).selectOption({ label: 'Resilient' });
   await asi.getByLabel('Ability Resilient raises by 1').selectOption('WIS');
