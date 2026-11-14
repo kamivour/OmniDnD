@@ -1,11 +1,12 @@
 import { z } from 'zod';
 import { optionalRules } from '../calc/campaign-rules';
+import { CUSTOM_ORIGIN_SOURCE, customOriginIssue } from '../calc/custom-origin';
 import { AbilitySchema } from '../schema';
 import { racialGrantIndexes } from './edit-build';
 import type { Check, Command, CommandContext } from './runner';
 import { block } from './shared';
 
-export const CUSTOM_ORIGIN_SOURCE = 'Custom origin';
+export { CUSTOM_ORIGIN_SOURCE };
 
 const CustomOriginPayloadSchema = z.strictObject({
   increases: z.array(
@@ -15,24 +16,14 @@ const CustomOriginPayloadSchema = z.strictObject({
 
 export type CustomOriginPayload = z.infer<typeof CustomOriginPayloadSchema>;
 
-/** Tasha: +2 and +1 to two different abilities, or +1 to three different abilities. */
-function shapeIssue(increases: CustomOriginPayload['increases']): string | undefined {
-  const values = increases.map(({ value }) => value).sort();
-  const distinct = new Set(increases.map(({ ability }) => ability)).size === increases.length;
-  const valid =
-    (values.length === 2 && values[0] === 1 && values[1] === 2) ||
-    (values.length === 3 && values.every((value) => value === 1));
-  if (!valid || !distinct)
-    return 'Raise two different abilities by +2 and +1, or three different abilities by +1';
-  return undefined;
-}
-
 function check(ctx: CommandContext, payload: CustomOriginPayload): Check[] {
   const parsed = CustomOriginPayloadSchema.safeParse(payload);
   if (!parsed.success) return [block('Custom origin details are invalid')];
   if (!optionalRules(ctx.campaign).customOrigin)
     return [block("This campaign does not use Tasha's custom origin")];
-  const issue = shapeIssue(parsed.data.increases);
+  const race = ctx.registry.entries.get(ctx.build.subraceId ?? ctx.build.raceId);
+  if (race?.kind !== 'race') return [block('Choose a race first')];
+  const issue = customOriginIssue(race, parsed.data.increases);
   if (issue) return [block(issue)];
   const mine = ctx.build.abilityScores.bonuses;
   const removed = new Set([...racialGrantIndexes(ctx.build, ctx.registry)]);
@@ -50,7 +41,7 @@ function check(ctx: CommandContext, payload: CustomOriginPayload): Check[] {
   return [];
 }
 
-/** Replaces the race's ability bonuses (and any earlier custom origin) with the chosen increases. */
+/** Moves the race's ability increases (replacing any earlier custom origin) to the chosen abilities. */
 export const setCustomOrigin: Command<CustomOriginPayload> = {
   name: 'setCustomOrigin',
   check,

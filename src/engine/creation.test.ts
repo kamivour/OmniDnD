@@ -277,6 +277,35 @@ describe('createCharacter', () => {
     );
   });
 
+  it('moves racial increases with Tasha custom origin when the campaign allows it', () => {
+    const origin = { ...seedFile.campaign, optionalRules: { customOrigin: true } };
+    const customOrigin = [
+      { ability: 'STR' as const, value: 2 },
+      { ability: 'INT' as const, value: 1 },
+    ];
+    const created = createCharacter(
+      input({ campaign: origin, raceId: 'race.hill-dwarf', racialChoices: [], customOrigin }),
+      registry,
+    );
+    expect(created.build.abilityScores.bonuses).toEqual([
+      { source: 'Custom origin', ability: 'STR', value: 2 },
+      { source: 'Custom origin', ability: 'INT', value: 1 },
+    ]);
+    expect(() =>
+      createCharacter(input({ raceId: 'race.hill-dwarf', customOrigin }), registry),
+    ).toThrow("does not use Tasha's custom origin");
+    expect(() =>
+      createCharacter(
+        input({
+          campaign: origin,
+          raceId: 'race.hill-dwarf',
+          customOrigin: customOrigin.slice(0, 1),
+        }),
+        registry,
+      ),
+    ).toThrow('Move each racial increase (+2, +1)');
+  });
+
   it('derives fixed bonuses without making any optional choice for a human', () => {
     const created = createCharacter(
       input({ raceId: 'race.human', racialChoices: undefined }),

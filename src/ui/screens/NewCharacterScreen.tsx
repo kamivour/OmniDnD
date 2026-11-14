@@ -42,6 +42,10 @@ import { PlayedByDialog } from '../roles/RoleDialogs';
 import { useAskRoles } from '../roles/useAskRoles';
 import { PLAYED_BY_OPTIONS } from '../campaignOptions';
 import { Caution } from '../components/Caution';
+import { OriginPicker } from '../components/OriginPicker';
+import { defaultOriginPicks, originPicksReady, type OriginPicks } from '../components/origin-picks';
+import { optionalRules } from '../../engine/calc/campaign-rules';
+import { racialIncreaseValues } from '../../engine/calc/custom-origin';
 import { focusNextOnEnter } from '../components/focus-next';
 import { levelPickRows, STEPS, stepProblems, type StepId } from './new-character-steps';
 import { emptyPicks, picksToPayload, type LevelPicks } from '../level/level-up-model';
@@ -110,6 +114,9 @@ function NewCharacterForm({
   const [racialChoices, setRacialChoices] = useState<Ability[]>(
     (draft?.racialChoices as Ability[] | undefined) ?? [],
   );
+  const [originPicks, setOriginPicks] = useState<OriginPicks | null>(
+    (draft?.originPicks as OriginPicks | null | undefined) ?? null,
+  );
   const [level, setLevel] = useState(draft?.level ?? 1);
   // What is typed in the Level box; it may be empty while the player retypes it.
   const [levelText, setLevelText] = useState<string | null>(null);
@@ -139,6 +146,7 @@ function NewCharacterForm({
       backgroundPicks,
       alignment,
       racialChoices,
+      originPicks,
       level,
       bases,
       rolls,
@@ -168,12 +176,29 @@ function NewCharacterForm({
   const classDef = classes.find((entry) => entry.id === classId);
   const die = classDef ? (Number(classDef.hitDie.slice(1)) as HitDie) : undefined;
   const average = die === undefined ? undefined : averageHpRoll(die);
+  const originAllowed = optionalRules(campaign).customOrigin;
+  const originValues = race ? racialIncreaseValues(race) : [];
+  const origin = originAllowed && race && originValues.length > 0 ? originPicks : null;
+  const originPayload = origin
+    ? {
+        racialChoices: [],
+        customOrigin: origin.flatMap((ability, index) =>
+          ability ? [{ ability, value: originValues[index]! }] : [],
+        ),
+      }
+    : { racialChoices };
   const bonuses = perAbility(0);
-  race?.abilityBonuses.forEach(({ ability, value }) => {
-    bonuses[ability] += value;
-  });
-  if (race?.abilityChoices) {
-    for (const ability of racialChoices) bonuses[ability] += race.abilityChoices.value;
+  if (origin) {
+    originPayload.customOrigin?.forEach(({ ability, value }) => {
+      bonuses[ability] += value;
+    });
+  } else {
+    race?.abilityBonuses.forEach(({ ability, value }) => {
+      bonuses[ability] += value;
+    });
+    if (race?.abilityChoices) {
+      for (const ability of racialChoices) bonuses[ability] += race.abilityChoices.value;
+    }
   }
   const score = (a: Ability) => (bases[a] === '' ? undefined : Number(bases[a]) + bonuses[a]);
   const con = score('CON');
@@ -212,7 +237,7 @@ function NewCharacterForm({
           abilityBases: Object.fromEntries(
             ABILITIES.map((ability) => [ability, Number(bases[ability])]),
           ) as PerAbility<number>,
-          racialChoices,
+          ...originPayload,
           ...(backgroundChoices ? { backgroundChoices } : {}),
           hpRolls: campaign.hpMethod === 'rolled' ? Array.from({ length: level - 1 }, () => 1) : [],
         },
@@ -240,7 +265,7 @@ function NewCharacterForm({
           abilityBases: Object.fromEntries(
             ABILITIES.map((ability) => [ability, Number(bases[ability])]),
           ) as PerAbility<number>,
-          racialChoices,
+          ...originPayload,
           ...(backgroundChoices ? { backgroundChoices } : {}),
           hpRolls: campaign.hpMethod === 'rolled' ? rolls.slice(0, level - 1).map(Number) : [],
           ...(levelChoices.length > 0 ? { levelChoices } : {}),
@@ -262,6 +287,7 @@ function NewCharacterForm({
     level,
     bases,
     racialChoices,
+    ...(origin ? { originReady: originPicksReady(race, origin) } : {}),
     race,
     campaign,
     complete,
@@ -278,6 +304,8 @@ function NewCharacterForm({
   const pickRace = (id: string) => {
     setRaceId(id);
     setRacialChoices([]);
+    if (originPicks !== null)
+      setOriginPicks(defaultOriginPicks(races.find((entry) => entry.id === id)));
   };
   const pickClass = (id: string) => {
     setClassId(id);
@@ -331,7 +359,7 @@ function NewCharacterForm({
               abilityBases: Object.fromEntries(
                 ABILITIES.map((ability) => [ability, Number(bases[ability])]),
               ) as PerAbility<number>,
-              racialChoices,
+              ...originPayload,
               ...(backgroundChoices ? { backgroundChoices } : {}),
               hpRolls: campaign.hpMethod === 'rolled' ? rolls.slice(0, level - 1).map(Number) : [],
               ...(levelChoices.length > 0 ? { levelChoices } : {}),
@@ -664,7 +692,44 @@ function NewCharacterForm({
             Points used: {pointCost} / 27
           </p>
         )}
-        {race?.abilityChoices && (
+        {race && originValues.length > 0 && originAllowed && (
+          <fieldset className="flex min-w-0 flex-col gap-3 rounded-card border border-border bg-surface p-3">
+            <legend className="px-1 text-sm text-text">Custom origin (Tasha&apos;s)</legend>
+            <label className="flex min-h-11 items-center gap-2 text-sm text-text">
+              <input
+                type="checkbox"
+                checked={origin !== null}
+                onChange={(event) =>
+                  setOriginPicks(event.target.checked ? defaultOriginPicks(race) : null)
+                }
+                className="size-4 accent-(--omni-accent)"
+              />
+              Move racial increases to other abilities
+            </label>
+            {origin && (
+              <>
+                <p className="text-xs text-text-muted">
+                  Each increase goes to a different ability.
+                </p>
+                <OriginPicker race={race} picks={origin} onChange={setOriginPicks} />
+              </>
+            )}
+          </fieldset>
+        )}
+        {race && originValues.length > 0 && !originAllowed && (
+          <p className="text-xs text-text-muted">
+            Tasha&apos;s custom origin lets you move racial increases to other abilities. If your DM
+            allows it, turn it on in{' '}
+            <Link
+              to={`/campaigns/${encodeURIComponent(campaign.id)}/settings`}
+              className="text-accent underline"
+            >
+              Campaign settings
+            </Link>
+            .
+          </p>
+        )}
+        {race?.abilityChoices && !origin && (
           <fieldset className="rounded-card border border-border bg-surface p-3">
             <legend className="px-1 text-sm text-text">
               Choose {race.abilityChoices.count} racial bonus abilities (+
@@ -1013,6 +1078,7 @@ function errorField(field: PropertyKey | undefined): string {
     level: 'Level',
     abilityBases: 'Ability scores',
     racialChoices: 'Racial bonuses',
+    customOrigin: 'Custom origin',
     hpRolls: 'HP rolls',
     guided: 'Class choices',
   };

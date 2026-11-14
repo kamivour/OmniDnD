@@ -166,6 +166,8 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
       ) as Record<Ability, string>,
   );
   const originalRace = registry.entries.get(baseline.subraceId ?? baseline.raceId);
+  const savedRaceId = state.build.subraceId ?? state.build.raceId;
+  const savedRace = registry.entries.get(savedRaceId);
   const [originalChoices] = useState(() =>
     initialRacialChoices(baseline, originalRace?.kind === 'race' ? originalRace : undefined),
   );
@@ -707,7 +709,13 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
           </>
         )}
       </section>
-      {optionalRules(campaign).customOrigin && <CustomOriginSection onDone={onDone} />}
+      {optionalRules(campaign).customOrigin && (
+        <CustomOriginSection
+          key={savedRaceId}
+          race={savedRace?.kind === 'race' ? savedRace : undefined}
+          onDone={onDone}
+        />
+      )}
       <section aria-label="Proficiency choices" className={card}>
         <SectionLabel>Proficiencies and languages</SectionLabel>
         <p className="text-xs text-text-muted">

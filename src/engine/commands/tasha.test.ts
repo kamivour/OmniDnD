@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { sourceConflicts } from '../calc/campaign-rules';
 import { computeSheet, type CharacterState } from '../calc/sheet';
+import { racialIncreaseValues } from '../calc/custom-origin';
 import { setCustomOrigin } from './custom-origin';
 import { levelUp } from './level';
 import { freshState, Session } from './test-utils';
@@ -73,6 +74,7 @@ describe('Tasha custom origin', () => {
   const increases = [
     { ability: 'STR' as const, value: 2 as const },
     { ability: 'CON' as const, value: 1 as const },
+    { ability: 'DEX' as const, value: 1 as const },
   ];
 
   it('replaces racial bonuses, can be redone, and undoes', () => {
@@ -88,10 +90,11 @@ describe('Tasha custom origin', () => {
     expect(session.state.build.abilityScores.bonuses).toEqual([
       { source: 'Custom origin', ability: 'STR', value: 2 },
       { source: 'Custom origin', ability: 'CON', value: 1 },
+      { source: 'Custom origin', ability: 'DEX', value: 1 },
     ]);
     session.run(setCustomOrigin, {
       increases: [
-        { ability: 'DEX', value: 1 },
+        { ability: 'DEX', value: 2 },
         { ability: 'WIS', value: 1 },
         { ability: 'CHA', value: 1 },
       ],
@@ -119,9 +122,50 @@ describe('Tasha custom origin', () => {
         increases: [
           { ability: 'STR', value: 2 },
           { ability: 'STR', value: 1 },
+          { ability: 'DEX', value: 1 },
         ],
       }).reasons,
-    ).toEqual(['Raise two different abilities by +2 and +1, or three different abilities by +1']);
+    ).toEqual(['Move each racial increase (+2, +1, +1) to a different ability']);
+    expect(
+      on.preview(setCustomOrigin, {
+        increases: [
+          { ability: 'STR', value: 2 },
+          { ability: 'DEX', value: 1 },
+        ],
+      }).reasons,
+    ).toEqual(['Move each racial increase (+2, +1, +1) to a different ability']);
+  });
+
+  it('keeps every racial increase, whatever the race', () => {
+    const shapes: [string, number[]][] = [
+      ['race.hill-dwarf', [2, 1]],
+      ['race.mountain-dwarf', [2, 2]],
+      ['race.human', [1, 1, 1, 1, 1, 1]],
+      ['race.half-elf', [2, 1, 1]],
+      ['race.variant-human', [1, 1]],
+    ];
+    for (const [id, values] of shapes) {
+      expect(racialIncreaseValues(registry.get('race', id))).toEqual(values);
+    }
+    const state = structuredClone(freshState);
+    state.campaign.optionalRules = { customOrigin: true };
+    state.build.raceId = 'race.dwarf';
+    state.build.subraceId = 'race.hill-dwarf';
+    state.build.abilityScores.bonuses = [
+      { source: 'race.hill-dwarf', ability: 'CON', value: 2 },
+      { source: 'race.hill-dwarf', ability: 'WIS', value: 1 },
+    ];
+    const session = new Session(state);
+    session.run(setCustomOrigin, {
+      increases: [
+        { ability: 'STR', value: 2 },
+        { ability: 'DEX', value: 1 },
+      ],
+    });
+    expect(session.state.build.abilityScores.bonuses).toEqual([
+      { source: 'Custom origin', ability: 'STR', value: 2 },
+      { source: 'Custom origin', ability: 'DEX', value: 1 },
+    ]);
   });
 
   it('lists custom origin bonuses when the rule is turned off', () => {

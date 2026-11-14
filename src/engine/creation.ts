@@ -8,6 +8,8 @@ import { applyLevelChoices, LevelChoicesSchema } from './calc/level-choices';
 import { applyLevelSpells, LevelSpellsSchema, levelSpellGains } from './calc/level-spells';
 export { xpForLevel } from './calc/advancement';
 import { toolGroupOptions, toolSlots } from './calc/background-choices';
+import { CUSTOM_ORIGIN_SOURCE, customOriginIssue } from './calc/custom-origin';
+import { optionalRules } from './calc/campaign-rules';
 import { computeSheet } from './calc/sheet';
 import type { Registry } from './registry';
 import { SECONDS_PER_HOUR } from './rules2014';
@@ -66,6 +68,10 @@ export const CreateCharacterInputSchema = z
     abilityBases: AbilityBasesSchema,
     /** Pick the abilities only; the race supplies their bonus amounts. */
     racialChoices: z.array(AbilitySchema).optional(),
+    /** Tasha custom origin: the race's increases moved to these abilities, used instead of racialChoices. */
+    customOrigin: z
+      .array(z.strictObject({ ability: AbilitySchema, value: z.int().min(1).max(2) }))
+      .optional(),
     /** Open choices of the background: extra skills, languages and tools. */
     backgroundChoices: BackgroundChoicesSchema.optional(),
     /** Entries are for levels 2 through N. Level 1 always uses the die maximum. */
@@ -112,7 +118,13 @@ export function createCharacter(input: CreateCharacterInput, registry: Registry)
 
   const racialChoices = choices.racialChoices ?? [];
   const racialRule = race.abilityChoices;
-  if (
+  const origin = choices.customOrigin;
+  if (origin) {
+    if (!optionalRules(campaign).customOrigin)
+      invalid(['customOrigin'], "This campaign does not use Tasha's custom origin");
+    const issue = customOriginIssue(race, origin);
+    if (issue) invalid(['customOrigin'], issue);
+  } else if (
     racialChoices.length !== (racialRule?.count ?? 0) ||
     new Set(racialChoices).size !== racialChoices.length ||
     racialChoices.some((ability) => racialRule?.exclude?.includes(ability))
@@ -165,10 +177,16 @@ export function createCharacter(input: CreateCharacterInput, registry: Registry)
     ...(campaign.leveling === 'xp' ? { xp: xpForLevel(level) } : {}),
     abilityScores: {
       base: choices.abilityBases,
-      bonuses: [
-        ...race.abilityBonuses.map((bonus) => ({ source: raceId, ...bonus })),
-        ...racialChoices.map((ability) => ({ source: raceId, ability, value: racialRule!.value })),
-      ],
+      bonuses: origin
+        ? origin.map((increase) => ({ source: CUSTOM_ORIGIN_SOURCE, ...increase }))
+        : [
+            ...race.abilityBonuses.map((bonus) => ({ source: raceId, ...bonus })),
+            ...racialChoices.map((ability) => ({
+              source: raceId,
+              ability,
+              value: racialRule!.value,
+            })),
+          ],
     },
     hpEntries: Array.from({ length: level }, (_, index) => ({
       level: index + 1,

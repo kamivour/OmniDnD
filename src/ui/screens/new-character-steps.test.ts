@@ -50,6 +50,11 @@ describe('stepProblems', () => {
     expect(stepProblems('abilities', input({ race: { abilityChoices: { count: 2 } } }))).toEqual([
       'Choose 2 racial bonus abilities.',
     ]);
+    const halfElf = { race: { abilityChoices: { count: 2 } } };
+    expect(stepProblems('abilities', input({ ...halfElf, originReady: true }))).toEqual([]);
+    expect(stepProblems('abilities', input({ ...halfElf, originReady: false }))).toEqual([
+      'Move each racial increase to a different ability.',
+    ]);
   });
 
   it('needs every HP roll before the choices step is done', () => {

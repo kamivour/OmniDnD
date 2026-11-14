@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-14 14:00 — Custom origin moves every racial increase
+
+- With Tasha's custom origin on, each of your race's increases can go to any ability, one per ability. A Hill Dwarf's +2 CON and +1 WIS can become, say, +2 INT and +1 DEX; a Human keeps all six +1s.
+- You can now do this while creating a character, not only on the sheet. When the rule is off, creation says where to turn it on.
+- Characters that already used the old +2/+1 spread keep it.
+- Checks pass.
+
 ## 2026-11-14 13:42 — Number fields take digits only
 
 - Ability scores, level and other number fields now ignore letters such as "e", so a stray key can no longer block saving.

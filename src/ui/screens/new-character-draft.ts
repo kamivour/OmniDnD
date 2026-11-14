@@ -7,6 +7,8 @@ export interface Draft {
   backgroundPicks?: unknown;
   alignment?: string;
   racialChoices?: string[];
+  /** Tasha custom origin picks; null when the race's usual increases are used. */
+  originPicks?: string[] | null;
   level?: number;
   bases?: Record<string, string>;
   rolls?: string[];

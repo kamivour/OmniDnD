@@ -27,6 +27,8 @@ export interface StepInput {
   level: number;
   bases: Record<Ability, string>;
   racialChoices: Ability[];
+  /** Set when Tasha custom origin is in use: whether every racial increase has its own ability. */
+  originReady?: boolean;
   race: { abilityChoices?: { count: number } } | undefined;
   campaign: Pick<Campaign, 'abilityMethod'>;
   /** Scores and every needed HP roll are filled in. */
@@ -58,7 +60,9 @@ export function stepProblems(step: StepId, input: StepInput): string[] {
       }
       const numbers = values.map(Number);
       const count = input.race?.abilityChoices?.count ?? 0;
-      if (input.racialChoices.length !== count) {
+      if (input.originReady === false) {
+        problems.push('Move each racial increase to a different ability.');
+      } else if (input.originReady === undefined && input.racialChoices.length !== count) {
         problems.push(`Choose ${count} racial bonus abilities.`);
       }
       if (input.campaign.abilityMethod === 'standard-array') {
