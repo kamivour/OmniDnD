@@ -488,7 +488,16 @@
   },
   {
     "id": "feature.paladin.aura-of-protection",
-    "activation": "passive"
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "saves",
+        "value": {
+          "abilityMod": "CHA",
+          "min": 1
+        }
+      }
+    ]
   },
   {
     "id": "feature.paladin.channel-divinity",
@@ -886,5 +895,29 @@
   {
     "id": "feature.ranger.beast-master-share-spells",
     "activation": "passive"
+  },
+  {
+    "id": "feature.dwarven-toughness",
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "hp",
+        "value": {
+          "perLevel": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "feature.sorcerer.draconic-resilience",
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "hp",
+        "value": {
+          "perLevel": 1
+        }
+      }
+    ]
   }
 ]

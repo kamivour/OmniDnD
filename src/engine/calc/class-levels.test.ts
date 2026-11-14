@@ -148,6 +148,84 @@ describe('Unarmored Defense', () => {
   });
 });
 
+describe('passive feature numbers', () => {
+  const withSubclass = (
+    classId: string,
+    subclassId: string,
+    level: number,
+    gear: string[] = [],
+  ) => {
+    const state = at(classId, level, gear);
+    state.build.classes = [{ classId, subclassId, level }];
+    return state;
+  };
+
+  it('Draconic Resilience adds 1 HP per sorcerer level and sets unarmored AC to 13 + DEX', () => {
+    const plain = computeSheet(at('class.sorcerer', 3), registry);
+    const dragon = computeSheet(
+      withSubclass('class.sorcerer', 'subclass.sorcerer.draconic', 3),
+      registry,
+    );
+    expect(dragon.maxHp.value - plain.maxHp.value).toBe(3);
+    expect(dragon.ac.value).toBe(15);
+    expect(dragon.ac.parts).toContainEqual({ label: 'Draconic Resilience', value: 13 });
+    const armored = computeSheet(
+      withSubclass('class.sorcerer', 'subclass.sorcerer.draconic', 3, ['item.leather-armor']),
+      registry,
+    );
+    expect(armored.ac.value).toBe(13);
+  });
+
+  it('Hill Dwarf adds 1 HP per character level', () => {
+    const state = at('class.fighter', 4);
+    state.build.raceId = 'race.dwarf';
+    state.build.subraceId = 'race.hill-dwarf';
+    const before = computeSheet(at('class.fighter', 4), registry).maxHp.value;
+    const sheet = computeSheet(state, registry);
+    expect(sheet.maxHp.parts).toContainEqual({ label: 'Dwarven Toughness', value: 4 });
+    expect(sheet.maxHp.value).toBe(before + 4);
+  });
+
+  it('Fast Movement needs no heavy armor; Unarmored Movement needs no armor or shield', () => {
+    const speed = (classId: string, level: number, gear: string[] = []) =>
+      sheetAt(classId, level, gear).speed.value;
+    const base = speed('class.fighter', 5);
+    expect(speed('class.barbarian', 5)).toBe(base + 10);
+    expect(speed('class.barbarian', 5, ['item.chain-mail'])).toBeLessThanOrEqual(base);
+    expect(speed('class.monk', 2)).toBe(base + 10);
+    expect(speed('class.monk', 2, ['item.shield'])).toBe(base);
+    expect(speed('class.monk', 5)).toBe(base + 15);
+  });
+
+  it('Diamond Soul gives proficiency in every save; Slippery Mind gives WIS', () => {
+    const monk = sheetAt('class.monk', 14).saves;
+    expect(Object.values(monk).every((save) => save.proficient)).toBe(true);
+    expect(sheetAt('class.rogue', 15).saves.WIS.proficient).toBe(true);
+    expect(sheetAt('class.rogue', 14).saves.WIS.proficient).toBe(false);
+  });
+
+  it('Aura of Protection adds CHA to every save', () => {
+    const before = sheetAt('class.paladin', 5).saves.STR.value;
+    const after = sheetAt('class.paladin', 6).saves.STR;
+    expect(after.parts).toContainEqual({ label: 'Aura of Protection', value: 5 });
+    expect(after.value).toBe(before + 5);
+  });
+
+  it('Defense style adds 1 AC in armor, and Medium Armor Master raises the DEX cap to 3', () => {
+    const state = at('class.fighter', 1, ['item.scale-mail']);
+    state.build.abilityScores = {
+      ...state.build.abilityScores,
+      base: { ...state.build.abilityScores.base, DEX: 16 },
+    };
+    const ac = () => computeSheet(state, registry).ac.value;
+    const plain = ac();
+    state.build.featureIds = ['feature.fighter.fighting-style-defense'];
+    expect(ac()).toBe(plain + 1);
+    state.build.featureIds = ['feature.feat.medium-armor-master'];
+    expect(ac()).toBe(plain + 1);
+  });
+});
+
 const FULL_CASTERS = ['bard', 'cleric', 'druid', 'sorcerer', 'warlock', 'wizard'];
 
 describe.each(FULL_CASTERS)('%s levels 1–20', (name) => {

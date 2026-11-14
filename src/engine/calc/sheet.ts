@@ -230,9 +230,13 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         .map((modifier) => ({ label, value: resolveFormula(modifier.value, ctx, level) })),
     );
 
+  const featureIds = new Set(features.map(({ def }) => def.id));
+  const featureSaves = new Set(
+    [...featureIds].flatMap((id) => FEATURE_SAVE_PROFICIENCIES[id] ?? []),
+  );
   const saves = Object.fromEntries(
     ABILITIES.map((ability) => {
-      const proficient = build.proficiencies.saves.includes(ability);
+      const proficient = build.proficiencies.saves.includes(ability) || featureSaves.has(ability);
       const parts = [modPart(ability), ...(proficient ? [proficiencyPart] : [])];
       return [
         ability,
@@ -420,7 +424,13 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     ac: value(
       '/ac',
       'Armor class',
-      armorClass(equipped, mods.DEX, modifierParts('ac'), unarmoredDefenses(features, mods)),
+      armorClass(
+        equipped,
+        mods.DEX,
+        modifierParts('ac'),
+        unarmoredDefenses(features, mods),
+        featureIds,
+      ),
       {
         min: 0,
       },
@@ -434,7 +444,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         abilities.STR.score.value,
         live.exhaustion,
         conditions,
-        modifierParts('speed'),
+        [...gearSpeedParts(features, equipped), ...modifierParts('speed')],
         load,
       ),
       { min: 0 },
@@ -533,17 +543,44 @@ function sourceLabel(source: string, registry: Registry): string {
 
 type Equipped = { instanceId: string; def: ItemDef }[];
 
-/** PHB 2014: armor base + DEX (light full, medium max +2, heavy none); 10 + DEX unarmored; a shield adds its bonus. */
-/** PHB 2014 Unarmored Defense: Barbarian adds CON (a shield is fine), Monk adds WIS (no shield). */
-const UNARMORED_DEFENSES: Record<string, { ability: Ability; shield: boolean }> = {
+/**
+ * PHB 2014 unarmored AC formulas: Barbarian adds CON (a shield is fine), Monk adds WIS (no
+ * shield), Draconic Resilience is 13 + DEX. They never stack; the best allowed one applies.
+ */
+const UNARMORED_DEFENSES: Record<
+  string,
+  { shield: boolean } & ({ ability: Ability } | { label: string; base: number })
+> = {
   'feature.barbarian.unarmored-defense': { ability: 'CON', shield: true },
   'feature.monk.unarmored-defense': { ability: 'WIS', shield: false },
+  'feature.sorcerer.draconic-resilience': { label: 'Draconic Resilience', base: 13, shield: true },
 };
 
+/** PHB 2014 class speed bonuses that depend on gear: Fast Movement and Unarmored Movement. */
+const GEAR_SPEED_BONUSES: Record<string, (gear: { body?: ItemDef; shield?: ItemDef }) => boolean> =
+  {
+    'feature.barbarian.fast-movement': ({ body }) => body?.armor?.category !== 'heavy',
+    'feature.monk.unarmored-movement': ({ body, shield }) => !body && !shield,
+  };
+
+/** Features that give saving throw proficiency. Iron Mind's INT/CHA swap (already WIS proficient) stays manual. */
+const FEATURE_SAVE_PROFICIENCIES: Record<string, readonly Ability[]> = {
+  'feature.monk.diamond-soul': ABILITIES,
+  'feature.rogue.slippery-mind': ['WIS'],
+  'feature.ranger.gloom-stalker-iron-mind': ['WIS'],
+};
+
+/** Fighting Style: Defense, +1 AC while wearing armor. */
+const DEFENSE_STYLES = [
+  'feature.fighter.fighting-style-defense',
+  'feature.paladin.fighting-style-defense',
+  'feature.ranger.fighting-style-defense',
+];
+const MEDIUM_ARMOR_MASTER = 'feature.feat.medium-armor-master';
+
 interface UnarmoredDefense {
-  ability: Ability;
   shield: boolean;
-  mod: number;
+  parts: Part[];
 }
 
 function unarmoredDefenses(
@@ -552,34 +589,70 @@ function unarmoredDefenses(
 ): UnarmoredDefense[] {
   return features.flatMap(({ def }) => {
     const rule = UNARMORED_DEFENSES[def.id];
-    return rule ? [{ ...rule, mod: mods[rule.ability] }] : [];
+    if (!rule) return [];
+    const parts: Part[] =
+      'ability' in rule
+        ? [
+            { label: 'Unarmored', value: 10 },
+            { label: 'DEX', value: mods.DEX },
+            { label: `Unarmored Defense (${rule.ability})`, value: mods[rule.ability] },
+          ]
+        : [
+            { label: rule.label, value: rule.base },
+            { label: 'DEX', value: mods.DEX },
+          ];
+    return [{ shield: rule.shield, parts }];
   });
 }
 
+function wornArmor(equipped: Equipped) {
+  return {
+    body: equipped.find(({ def }) => def.armor && def.armor.category !== 'shield')?.def,
+    shield: equipped.find(({ def }) => def.armor?.category === 'shield')?.def,
+  };
+}
+
+/** PHB 2014: armor base + DEX (light full, medium max +2, heavy none); 10 + DEX unarmored; a shield adds its bonus. */
 function armorClass(
   equipped: Equipped,
   dexMod: number,
   extra: Part[],
   unarmored: UnarmoredDefense[] = [],
+  featureIds: ReadonlySet<string> = new Set(),
 ): Stat {
-  const body = equipped.find(({ def }) => def.armor && def.armor.category !== 'shield')?.def;
-  const shield = equipped.find(({ def }) => def.armor?.category === 'shield')?.def;
-  const parts: Part[] = [];
+  const { body, shield } = wornArmor(equipped);
+  let parts: Part[] = [];
   if (body?.armor) {
     parts.push({ label: body.name, value: body.armor.baseAc });
     const { category } = body.armor;
-    const dex = category === 'heavy' ? 0 : category === 'medium' ? Math.min(dexMod, 2) : dexMod;
+    const mediumCap = featureIds.has(MEDIUM_ARMOR_MASTER) ? 3 : 2;
+    const dex =
+      category === 'heavy' ? 0 : category === 'medium' ? Math.min(dexMod, mediumCap) : dexMod;
     if (category !== 'heavy') parts.push({ label: 'DEX', value: dex });
+    if (DEFENSE_STYLES.some((id) => featureIds.has(id)))
+      parts.push({ label: 'Defense (fighting style)', value: 1 });
   } else {
-    parts.push({ label: 'Unarmored', value: 10 }, { label: 'DEX', value: dexMod });
-    // The best allowed source wins; a Monk with a shield gets no Unarmored Defense.
-    const best = unarmored
-      .filter((rule) => (rule.shield || !shield) && rule.mod > 0)
-      .sort((a, b) => b.mod - a.mod)[0];
-    if (best) parts.push({ label: `Unarmored Defense (${best.ability})`, value: best.mod });
+    parts = [
+      { label: 'Unarmored', value: 10 },
+      { label: 'DEX', value: dexMod },
+    ];
+    // The best allowed formula wins; a Monk with a shield gets no Unarmored Defense.
+    for (const rule of unarmored) {
+      if (shield && !rule.shield) continue;
+      if (sumParts(rule.parts).value > sumParts(parts).value) parts = rule.parts;
+    }
   }
   if (shield?.armor) parts.push({ label: shield.name, value: shield.armor.baseAc });
   return sumParts([...parts, ...extra]);
+}
+
+/** Class speed bonuses whose gear condition holds (feature `bonus` is the value at its level). */
+function gearSpeedParts(features: readonly CharacterFeature[], equipped: Equipped): Part[] {
+  const gear = wornArmor(equipped);
+  return features.flatMap(({ def, bonus }) => {
+    const allowed = GEAR_SPEED_BONUSES[def.id];
+    return allowed && bonus && allowed(gear) ? [{ label: def.name, value: bonus }] : [];
+  });
 }
 
 function speed(

@@ -2133,7 +2133,15 @@
       "effect": "Add your WIS modifier to initiative. On the first turn of combat your speed rises by 10 feet and a weapon attack you make with the Attack action adds one extra attack that deals an extra 1d8."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "initiative",
+        "value": {
+          "abilityMod": "WIS"
+        }
+      }
+    ]
   },
   {
     "kind": "feature",
@@ -7267,7 +7275,13 @@
       "effect": "Your walking speed rises by 10 feet. An ally who starts their turn within 5 feet of you gains 10 feet of speed until that turn ends (10-foot range at level 18). Not while you are incapacitated."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "speed",
+        "value": 10
+      }
+    ]
   },
   {
     "kind": "feature",
@@ -7350,7 +7364,15 @@
       "effect": "You and allies in your aura add your proficiency bonus to initiative rolls."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "initiative",
+        "value": {
+          "proficiency": "full"
+        }
+      }
+    ]
   },
   {
     "kind": "feature",
@@ -8328,7 +8350,13 @@
     "activation": "passive",
     "grants": {
       "ability": ["STR", "DEX"]
-    }
+    },
+    "modifiers": [
+      {
+        "target": "speed",
+        "value": 5
+      }
+    ]
   },
   {
     "kind": "feature",
@@ -9992,7 +10020,13 @@
       "effect": "Your walking speed rises by 10 feet, and your climb and swim speeds also rise."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "speed",
+        "value": 10
+      }
+    ]
   },
   {
     "kind": "feature",
@@ -10048,7 +10082,15 @@
       "effect": "Add your CHA modifier to initiative, and use Sneak Attack when alone with a foe, without advantage."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "modifiers": [
+      {
+        "target": "initiative",
+        "value": {
+          "abilityMod": "CHA"
+        }
+      }
+    ]
   },
   {
     "kind": "feature",

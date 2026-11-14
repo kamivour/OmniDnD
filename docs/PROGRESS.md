@@ -313,6 +313,7 @@ Details in [PLAN.md](PLAN.md).
 - Moved to PLAN.md: automatic sync (M22), shared campaign for a party or DM (M24), party view (M24)
 - Later DM ideas (after M25): map import, monsters and NPCs, rewards, DM level-ups, ambient sounds, party rests and clock, notes and handouts, shared encounter tracker
 - Later: spell import from user-pasted text
+- Later: Remarkable Athlete half proficiency on STR/DEX/CON checks, Observant +5 passives, Dual Wielder AC (apply by hand for now)
 - Later: session recap generated from the event log
 
 ## Session log
@@ -350,6 +351,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-13 — Hid Prism and the ten D&D place themes until reworked; picker offers System, Dark, Parchment, Midnight and Tidewater.
 - 2026-11-13 — Auto theme effects now move on every computer, even with Windows animations off; Off and Always reduce motion still stop them.
 - 2026-11-13 — New devices start on the Dark theme instead of System; saved hidden themes also fall back to Dark.
+- 2026-11-14 — Passive numbers: Dwarven Toughness and Draconic Resilience HP, Draconic AC, auras, initiative and speed features, Defense style, save proficiencies.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.

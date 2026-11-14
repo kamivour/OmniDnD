@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-14 13:30 — Racial and class bonuses now count on the sheet
+
+- Hill Dwarf and Draconic Bloodline sorcerers now get +1 max HP per level. Draconic sorcerers also get AC 13 + DEX without armor.
+- Fast Movement, Unarmored Movement, Aura of Protection, Defense style, Medium Armor Master, Diamond Soul, Slippery Mind and several subclass initiative and speed features now change the numbers by themselves.
+- If you added any of these by hand as an adjustment, remove it so it is not counted twice.
+- Checks pass.
+
 ## 2026-11-13 15:26 — Dark is the first theme on new devices
 
 - A device opening OmniDnD for the first time now starts on Dark, even if the device is set to light mode.
