@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-14 13:42 — Number fields take digits only
+
+- Ability scores, level and other number fields now ignore letters such as "e", so a stray key can no longer block saving.
+- Fields that can go negative still accept a minus sign; fields with decimals still accept a point.
+- Checks pass.
+
 ## 2026-11-14 13:36 — Why there is no feat choice
 
 - When feats are off for a campaign, the Ability score improvement card now says so and links to Campaign settings.

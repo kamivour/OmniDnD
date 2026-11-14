@@ -35,6 +35,19 @@ test('Enter in an ability score moves to the next score', async ({ page }) => {
   await expect(page).toHaveURL(/characters\/new$/);
 });
 
+test('number fields ignore letters and signs they cannot hold', async ({ page }) => {
+  await openNewCharacter(page);
+  const str = page.getByLabel('STR base', { exact: true });
+  await str.click();
+  await str.pressSequentially('1e-+.4');
+  await expect(str).toHaveValue('14');
+  const level = page.getByLabel('Level', { exact: true });
+  await level.click();
+  await level.press('Control+a');
+  await level.pressSequentially('x3');
+  await expect(level).toHaveValue('3');
+});
+
 test('alignment list says True Neutral', async ({ page }) => {
   await openNewCharacter(page);
   await expect(
