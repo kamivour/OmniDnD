@@ -6,6 +6,7 @@ import {
   type LiveState,
   type LogEvent,
 } from '../../src/engine/schema';
+import type { Locator } from '@playwright/test';
 import { expect, test, type Page } from './fixtures';
 
 interface Stored<T> {
@@ -24,6 +25,13 @@ interface DatabaseSnapshot {
 }
 
 type Coin = keyof LiveState['currency'];
+
+/** Types key by key, as a person would; whole-number fields keep only the digits. */
+async function typeDigits(field: Locator, typed: string, kept: string) {
+  await field.fill('');
+  await field.pressSequentially(typed);
+  await expect(field).toHaveValue(kept);
+}
 const main = (page: Page) => page.getByRole('main');
 const wallet = (page: Page) => main(page).getByRole('region', { name: 'Currency', exact: true });
 const weight = (page: Page) =>
@@ -184,14 +192,16 @@ test('spending requires the selected coins and never exchanges other denominatio
   expect(await readDatabase(page)).toEqual(before);
   await chooseCurrency(page, 'Spend', 'gp', 0);
   await expect(apply(page)).toBeDisabled();
-  await dialog(page).getByLabel('Amount', { exact: true }).fill('1.5');
+  // Whole-number fields drop a typed decimal point, so "1.5" becomes 15 coins, more than held.
+  await typeDigits(dialog(page).getByLabel('Amount', { exact: true }), '1.5', '15');
   await expect(apply(page)).toBeDisabled();
   expect(await readDatabase(page)).toEqual(before);
-  // Number() rounds this fractional decimal into a safe integer; the entered count must win.
+  // Without the point this count is past the safe integer limit, so it cannot be applied.
   await chooseCurrency(page, 'Add', 'cp', 1);
-  await dialog(page).getByLabel('Amount', { exact: true }).fill('9007199254740990.1');
-  await expect(dialog(page).getByLabel('Amount', { exact: true })).toHaveValue(
+  await typeDigits(
+    dialog(page).getByLabel('Amount', { exact: true }),
     '9007199254740990.1',
+    '90071992547409901',
   );
   await expect(apply(page)).toBeDisabled();
   expect(await readDatabase(page)).toEqual(before);
@@ -258,7 +268,7 @@ test('currency previews cancel without saving and one applied adjustment undoes 
   expect((await readDatabase(page)).backups).toEqual(initial.backups);
 });
 
-test('catalogue and item-edit quantities reject a fractional decimal near the safe integer limit', async ({
+test('catalogue and item-edit quantities drop a typed decimal point and reject unsafe counts', async ({
   page,
 }) => {
   await page.goto('/characters/the-fool/inventory');
@@ -268,8 +278,11 @@ test('catalogue and item-edit quantities reject a fractional decimal near the sa
   const adding = page.getByRole('dialog', { name: 'Add item', exact: true });
   await adding.getByRole('searchbox', { name: 'Search items', exact: true }).fill('torch');
   await adding.getByRole('button', { name: 'Select Torch', exact: true }).click();
-  await adding.getByLabel('Quantity', { exact: true }).fill('9007199254740990.1');
-  await expect(adding.getByLabel('Quantity', { exact: true })).toHaveValue('9007199254740990.1');
+  await typeDigits(
+    adding.getByLabel('Quantity', { exact: true }),
+    '9007199254740990.1',
+    '90071992547409901',
+  );
   await expect(adding.getByRole('button', { name: 'Add item', exact: true })).toBeDisabled();
   expect(await readDatabase(page)).toEqual(before);
   await adding.getByRole('button', { name: 'Cancel', exact: true }).click();
@@ -280,8 +293,11 @@ test('catalogue and item-edit quantities reject a fractional decimal near the sa
     .getByRole('button', { name: 'Edit: Candle', exact: true })
     .click();
   const editing = page.getByRole('dialog', { name: 'Edit item', exact: true });
-  await editing.getByLabel('Quantity', { exact: true }).fill('9007199254740990.1');
-  await expect(editing.getByLabel('Quantity', { exact: true })).toHaveValue('9007199254740990.1');
+  await typeDigits(
+    editing.getByLabel('Quantity', { exact: true }),
+    '9007199254740990.1',
+    '90071992547409901',
+  );
   await expect(editing.getByRole('button', { name: 'Save item', exact: true })).toBeDisabled();
   expect(await readDatabase(page)).toEqual(before);
   await editing.getByRole('button', { name: 'Cancel', exact: true }).click();

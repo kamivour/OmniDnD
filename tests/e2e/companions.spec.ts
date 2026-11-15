@@ -62,7 +62,7 @@ test('companions: add from template, damage, heal, condition, undo, reload', asy
   const editor = page.getByRole('dialog', { name: 'Edit Riding horse', exact: true });
   await editor.getByRole('button', { name: 'Add attack', exact: true }).click();
   await editor.getByLabel('Attack name', { exact: true }).last().fill('Kick');
-  await editor.getByLabel('To hit', { exact: true }).last().fill('4x');
+  await editor.getByLabel('To hit', { exact: true }).last().fill('4-');
   await editor.getByLabel('Notes', { exact: true }).fill('Answers to Clover.');
   await editor.getByRole('button', { name: 'Save companion', exact: true }).click();
   await expect(editor.getByRole('alert')).toHaveText('Kick: attack bonus must be a whole number.');
