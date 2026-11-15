@@ -1,11 +1,13 @@
 import type { HpLevelFloor } from '../engine/calc/hp';
 import {
+  bookParts,
   SOURCE_NAMES,
+  SOURCE_PARTS,
   type EncumbranceRule,
   type OptionalRules,
   type RestRule,
 } from '../engine/calc/campaign-rules';
-import type { Campaign, CharacterBuild, Source } from '../engine/schema';
+import type { Campaign, CharacterBuild, Source, SourcePart } from '../engine/schema';
 
 /** Campaign Setup choices (SPEC §5 Campaign Setup). Labels and one-line hints, own words. */
 
@@ -55,15 +57,41 @@ export function rulesSummary(c: Campaign): string {
     optionLabel(LEVELING_OPTIONS, c.leveling),
     `HP ${optionLabel(HP_OPTIONS, c.hpMethod).toLowerCase()}`,
     `Abilities ${optionLabel(ABILITY_OPTIONS, c.abilityMethod).toLowerCase()}`,
-    c.sources.join(', '),
+    sourcesSummary(c),
   ].join(' · ');
 }
+
+const SOURCE_PART_SHORT: Record<SourcePart, string> = {
+  options: 'classes and origins',
+  feats: 'feats',
+  spells: 'spells',
+  items: 'items',
+};
+
+/** Book codes, with the parts in use for limited books, e.g. "PHB, XGE (feats, spells), TCE". */
+export function sourcesSummary(c: Pick<Campaign, 'sources' | 'sourceParts'>): string {
+  return c.sources
+    .map((source) => {
+      const parts = bookParts(c, source);
+      return parts.length === SOURCE_PARTS.length
+        ? source
+        : `${source} (${parts.map((part) => SOURCE_PART_SHORT[part]).join(', ')})`;
+    })
+    .join(', ');
+}
+
+/** Books large enough that a table may use only some of their parts. */
+export const PARTED_SOURCES: readonly Source[] = ['XGE', 'TCE'];
 
 export const SOURCE_OPTIONS: { value: Source; label: string; hint: string }[] = [
   { value: 'PHB', label: SOURCE_NAMES.PHB, hint: 'Always on.' },
   { value: 'DMG', label: SOURCE_NAMES.DMG, hint: 'Magic items and variant rules.' },
   { value: 'XGE', label: SOURCE_NAMES.XGE, hint: 'Extra subclasses, spells and feats.' },
-  { value: 'TCE', label: SOURCE_NAMES.TCE, hint: 'Extra subclasses, spells and feats.' },
+  {
+    value: 'TCE',
+    label: SOURCE_NAMES.TCE,
+    hint: 'The artificer, extra subclasses, spells and feats.',
+  },
   { value: 'HB', label: SOURCE_NAMES.HB, hint: 'Items and features your table made.' },
 ];
 

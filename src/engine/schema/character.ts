@@ -10,6 +10,7 @@ import {
   RulesetSchema,
   SCHEMA_VERSION,
   SkillSchema,
+  SourcePartSchema,
   SourceSchema,
   SpellTypeSchema,
 } from './common';
@@ -38,6 +39,8 @@ export const CampaignSchema = z.strictObject({
   hpLevelFloor: HpLevelFloorSchema,
   abilityMethod: z.enum(['standard-array', 'point-buy', 'rolled']),
   sources: z.array(SourceSchema).min(1),
+  /** Books that use only some parts. A book not listed here uses every part. */
+  sourceParts: z.partialRecord(SourceSchema, z.array(SourcePartSchema).min(1)).optional(),
   /** Flags are off unless enabled; choice rules (encumbrance, rests) hold their option name. Read through optionalRules(). */
   optionalRules: z.record(z.string(), z.union([z.boolean(), z.string()])),
   role: CampaignRoleSchema.optional(),

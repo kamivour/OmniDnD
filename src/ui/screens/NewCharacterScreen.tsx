@@ -1,3 +1,4 @@
+import { sourceAllows } from '../../engine/calc/campaign-rules';
 import { useEffect, useState } from 'react';
 import { useStore } from 'zustand';
 import { Link, useNavigate } from 'react-router';
@@ -41,7 +42,7 @@ import { LevelChoicesSection } from './LevelChoicesSection';
 import { SampleCharacterOffer } from './SampleCharacterOffer';
 import { PlayedByDialog } from '../roles/RoleDialogs';
 import { useAskRoles } from '../roles/useAskRoles';
-import { PLAYED_BY_OPTIONS } from '../campaignOptions';
+import { PLAYED_BY_OPTIONS, sourcesSummary } from '../campaignOptions';
 import { Caution } from '../components/Caution';
 import { OriginPicker } from '../components/OriginPicker';
 import { defaultOriginPicks, originPicksReady, type OriginPicks } from '../components/origin-picks';
@@ -88,7 +89,7 @@ function NewCharacterForm({
   const navigate = useNavigate();
   const { run, confirmation, pending } = useManagement();
   const available = [...registry.entries.values()]
-    .filter((entry) => campaign.sources.includes(entry.source))
+    .filter((entry) => sourceAllows(campaign, entry))
     .sort((a, b) => a.name.localeCompare(b.name));
   const races = available.filter((entry) => entry.kind === 'race');
   const classes = available.filter((entry) => entry.kind === 'class');
@@ -1068,7 +1069,7 @@ function rulesSummary(campaign: Campaign): string {
     campaign.leveling === 'milestone' ? 'Milestone' : 'XP',
     `HP ${campaign.hpMethod}`,
     `Abilities ${campaign.abilityMethod.replace('-', ' ')}`,
-    campaign.sources.join(', '),
+    sourcesSummary(campaign),
   ].join(' · ');
 }
 

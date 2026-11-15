@@ -202,7 +202,8 @@ test('editing campaign methods preserves existing choices, current HP and histor
   await expect(existing).toContainText(/XP/);
   await expect(existing).toContainText(/not tracked|untracked/i);
   const sources = page.getByRole('group', { name: 'Sources', exact: true });
-  await expect(sources.getByRole('checkbox', { checked: true })).toHaveCount(3);
+  // PHB, XGE and TCE, plus the four parts of each expansion.
+  await expect(sources.getByRole('checkbox', { checked: true })).toHaveCount(11);
   expect(await readDatabase(page)).toEqual(before);
   await expectNoOverflow(page);
   await page.screenshot({ path: testInfo.outputPath('campaign-settings.png'), fullPage: true });

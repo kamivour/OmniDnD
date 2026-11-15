@@ -1,5 +1,5 @@
+import { sourceAllows } from './campaign-rules';
 import type { Registry } from '../registry';
-import type { Source } from '../schema';
 import { asiLevels } from './level-choices';
 import { computeSheet, type CharacterState } from './sheet';
 import { spellSelectionDetails } from './spell-selections';
@@ -173,7 +173,6 @@ const totalAt = (totals: [number, number][], level: number) =>
 export function pendingChoices(state: CharacterState, registry: Registry): PendingChoice[] {
   const { build, campaign } = state;
   const className = (id: string) => registry.entries.get(id)?.name ?? id;
-  const enabled = (source: Source) => campaign.sources.includes(source);
   const items: PendingChoice[] = [];
 
   for (const entry of build.classes) {
@@ -182,7 +181,8 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
     const name = def.name;
 
     const hasSubclasses = [...registry.entries.values()].some(
-      (row) => row.kind === 'subclass' && row.classId === entry.classId && enabled(row.source),
+      (row) =>
+        row.kind === 'subclass' && row.classId === entry.classId && sourceAllows(campaign, row),
     );
     if (hasSubclasses && entry.subclassId === undefined && entry.level >= def.subclassLevel)
       items.push({
@@ -201,7 +201,8 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
         (row.subclassId === undefined || row.subclassId === entry.subclassId),
     )) {
       const options = [...registry.entries.values()].filter(
-        (row) => row.kind === 'feature' && row.id.startsWith(family.prefix) && enabled(row.source),
+        (row) =>
+          row.kind === 'feature' && row.id.startsWith(family.prefix) && sourceAllows(campaign, row),
       );
       const taken = build.featureIds.filter((id) => id.startsWith(family.prefix)).length;
       const open = Math.min(totalAt(family.totals, entry.level) - taken, options.length - taken);

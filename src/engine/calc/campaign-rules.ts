@@ -1,5 +1,12 @@
 import { characterRegistry, type Registry } from '../registry';
-import type { Campaign, CharacterBuild, Source } from '../schema';
+import {
+  SourcePartSchema,
+  type Campaign,
+  type CharacterBuild,
+  type RefEntry,
+  type Source,
+  type SourcePart,
+} from '../schema';
 
 export type EncumbranceRule = 'off' | 'standard' | 'variant';
 export type RestRule = 'standard' | 'gritty' | 'epic';
@@ -60,9 +67,91 @@ export const SOURCE_NAMES: Record<Source, string> = {
   HB: 'Homebrew',
 };
 
+export const SOURCE_PARTS: readonly SourcePart[] = SourcePartSchema.options;
+
+export const SOURCE_PART_NAMES: Record<SourcePart, string> = {
+  options: 'Classes, subclasses and origins',
+  feats: 'Feats',
+  spells: 'Spells',
+  items: 'Magic items',
+};
+
+type SourceRules = Pick<Campaign, 'sources'> & Partial<Pick<Campaign, 'sourceParts'>>;
+
+/** Which part of its book an entry belongs to; conditions and creatures come with the book itself. */
+export function entryPart(
+  entry: Pick<RefEntry, 'kind'> & { origin?: string },
+): SourcePart | undefined {
+  switch (entry.kind) {
+    case 'spell':
+      return 'spells';
+    case 'item':
+      return 'items';
+    case 'feature':
+      return entry.origin === 'feat' ? 'feats' : entry.origin === 'item' ? 'items' : 'options';
+    case 'class':
+    case 'subclass':
+    case 'race':
+    case 'background':
+      return 'options';
+    default:
+      return undefined;
+  }
+}
+
+/** The parts a campaign uses from a book; empty when the book is off. */
+export function bookParts(campaign: SourceRules, source: Source): readonly SourcePart[] {
+  if (!campaign.sources.includes(source)) return [];
+  return campaign.sourceParts?.[source] ?? SOURCE_PARTS;
+}
+
+/** True when the campaign's books, and the parts it uses from them, include this entry. */
+export function sourceAllows(
+  campaign: SourceRules,
+  entry: Pick<RefEntry, 'kind' | 'source'> & { origin?: string },
+): boolean {
+  if (!campaign.sources.includes(entry.source)) return false;
+  const part = entryPart(entry);
+  return part === undefined || bookParts(campaign, entry.source).includes(part);
+}
+
+/** Books that use the given part. */
+export function booksWithPart(campaign: SourceRules, part: SourcePart): Source[] {
+  return campaign.sources.filter((source) => bookParts(campaign, source).includes(part));
+}
+
+/** Books and parts the next settings would turn off; campaigns may only add them. */
+export function sourcesRemoved(current: SourceRules, next: SourceRules): string[] {
+  return current.sources.flatMap((source) => {
+    if (!next.sources.includes(source)) return [SOURCE_NAMES[source]];
+    const after = bookParts(next, source);
+    return bookParts(current, source)
+      .filter((part) => !after.includes(part))
+      .map((part) => `${SOURCE_NAMES[source]}: ${SOURCE_PART_NAMES[part].toLowerCase()}`);
+  });
+}
+
+/** Drops part lists that name every part, so a full book is stored the same way as before. */
+export function normalizeSourceParts(campaign: SourceRules): Campaign['sourceParts'] {
+  const entries = Object.entries(campaign.sourceParts ?? {}).filter(
+    ([source, parts]) =>
+      campaign.sources.includes(source as Source) &&
+      parts &&
+      SOURCE_PARTS.some((part) => !parts.includes(part)),
+  );
+  return entries.length
+    ? Object.fromEntries(
+        entries.map(([source, parts]) => [
+          source,
+          SOURCE_PARTS.filter((part) => parts!.includes(part)),
+        ]),
+      )
+    : undefined;
+}
+
 /** Choices a character keeps from books the campaign no longer enables, by display name. */
 export function sourceConflicts(
-  campaign: Pick<Campaign, 'sources'> & Partial<Pick<Campaign, 'optionalRules'>>,
+  campaign: SourceRules & Partial<Pick<Campaign, 'optionalRules'>>,
   build: CharacterBuild,
   registry: Registry,
 ): string[] {
@@ -80,7 +169,7 @@ export function sourceConflicts(
   for (const id of ids) {
     if (!id) continue;
     const entry = refs.entries.get(id);
-    if (!entry || campaign.sources.includes(entry.source)) continue;
+    if (!entry || sourceAllows(campaign, entry)) continue;
     notes.add(`${entry.name} (${entry.source})`);
   }
   if (campaign.optionalRules) {

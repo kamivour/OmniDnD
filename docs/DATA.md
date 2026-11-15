@@ -111,7 +111,8 @@ interface Campaign {
   hpMethod: 'average' | 'rolled';
   hpLevelFloor: 'none' | 'one';                    // D44: 'none' (default) lets roll + CON go below 1
   abilityMethod: 'standard-array' | 'point-buy' | 'rolled';
-  sources: ('PHB' | 'XGE' | 'TCE' | 'HB')[];
+  sources: ('PHB' | 'DMG' | 'XGE' | 'TCE' | 'HB')[]; // add-only once saved (D202)
+  sourceParts?: Partial<Record<Source, ('options' | 'feats' | 'spells' | 'items')[]>>; // books using only some parts; missing = every part
   optionalRules: Record<string, boolean | string>; // flags off unless enabled; encumbrance and rests hold an option name
 }
 

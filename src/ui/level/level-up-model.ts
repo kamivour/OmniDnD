@@ -1,5 +1,5 @@
 import type { Ability } from '../../engine/calc/abilities';
-import { optionalRules } from '../../engine/calc/campaign-rules';
+import { optionalRules, sourceAllows } from '../../engine/calc/campaign-rules';
 import { levelSpellGains } from '../../engine/calc/level-spells';
 import { MULTICLASS_RULES, type MulticlassRule } from '../../engine/calc/multiclass';
 import { averageHpRoll, type HitDie } from '../../engine/calc/hp';
@@ -385,7 +385,7 @@ export function newClassOptions(state: CharacterState, registry: Registry): NewC
       (entry): entry is ClassDef =>
         entry.kind === 'class' &&
         !owned.has(entry.id) &&
-        state.campaign.sources.includes(entry.source) &&
+        sourceAllows(state.campaign, entry) &&
         MULTICLASS_RULES[entry.id] !== undefined,
     )
     .map((entry) => ({
@@ -410,7 +410,7 @@ export function subclassOptions(
       (entry): entry is SubclassDef =>
         entry.kind === 'subclass' &&
         entry.classId === classId &&
-        state.campaign.sources.includes(entry.source),
+        sourceAllows(state.campaign, entry),
     )
     .map((entry) => ({ id: entry.id, name: entry.name }))
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -429,7 +429,7 @@ export function featOptions(
         entry.kind === 'feature' &&
         entry.origin === 'feat' &&
         !owned.has(entry.id) &&
-        state.campaign.sources.includes(entry.source),
+        sourceAllows(state.campaign, entry),
     )
     .map((entry) => ({
       id: entry.id,

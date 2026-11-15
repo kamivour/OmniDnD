@@ -46,7 +46,13 @@ test('books and optional rules save, reload and undo', async ({ page }, testInfo
   await expect(rules.getByRole('checkbox', { checked: true })).toHaveCount(0);
 
   await sources.getByRole('checkbox', { name: /Dungeon Master's Guide/ }).check();
-  await sources.getByRole('checkbox', { name: /Tasha's Cauldron/ }).uncheck();
+  // Books already in use are locked on; the table can only add more.
+  await expect(sources.getByRole('checkbox', { name: /Tasha's Cauldron/ })).toBeDisabled();
+  await expect(
+    sources
+      .getByRole('group', { name: "Parts of Tasha's Cauldron of Everything", exact: true })
+      .getByRole('checkbox', { name: /^Spells/ }),
+  ).toBeDisabled();
   // Turning on a book never turns on its optional rules.
   await expect(rules.getByRole('checkbox', { checked: true })).toHaveCount(0);
   await rules.getByRole('checkbox', { name: /^Feats/ }).check();
@@ -67,10 +73,10 @@ test('books and optional rules save, reload and undo', async ({ page }, testInfo
 
   await page.reload();
   await expectSaved(page);
-  await expect(campaign(page, 'Campaign #273')).toContainText('PHB, DMG, XGE');
+  await expect(campaign(page, 'Campaign #273')).toContainText('PHB, DMG, XGE, TCE');
   await openSettings(page);
   await expect(sources.getByRole('checkbox', { name: /Dungeon Master's Guide/ })).toBeChecked();
-  await expect(sources.getByRole('checkbox', { name: /Tasha's Cauldron/ })).not.toBeChecked();
+  await expect(sources.getByRole('checkbox', { name: /Dungeon Master's Guide/ })).toBeDisabled();
   await expect(rules.getByRole('checkbox', { name: /^Feats/ })).toBeChecked();
   await expect(rules.getByRole('checkbox', { name: /^Multiclassing/ })).not.toBeChecked();
   await expect(page.getByRole('radio', { name: /^Variant/ })).toBeChecked();
@@ -82,4 +88,37 @@ test('books and optional rules save, reload and undo', async ({ page }, testInfo
   await page.reload();
   await expectSaved(page);
   expect(await storedCampaigns(page)).toEqual(before);
+});
+
+test('a new campaign can use only some parts of a book and add more later', async ({ page }) => {
+  await page.goto('/');
+  await expectSaved(page);
+  await page.getByRole('link', { name: 'New campaign', exact: true }).click();
+  await page.getByLabel('Name', { exact: true }).fill('Chapter One');
+  const sources = page.getByRole('group', { name: 'Sources', exact: true });
+  await sources.getByRole('checkbox', { name: /Xanathar's Guide/ }).check();
+  const parts = sources.getByRole('group', {
+    name: "Parts of Xanathar's Guide to Everything",
+    exact: true,
+  });
+  await expect(parts.getByRole('checkbox', { checked: true })).toHaveCount(4);
+  await parts.getByRole('checkbox', { name: 'Spells', exact: true }).uncheck();
+  await parts.getByRole('checkbox', { name: 'Magic items', exact: true }).uncheck();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.getByRole('button', { name: 'Create campaign', exact: true }).click();
+  await expect(page).toHaveURL('/');
+  await expectSaved(page);
+  const card = campaign(page, 'Chapter One');
+  await expect(card).toContainText('PHB, XGE (classes and origins, feats)');
+
+  await card.getByRole('link', { name: 'Campaign settings', exact: true }).click();
+  await expect(sources.getByRole('checkbox', { name: /Xanathar's Guide/ })).toBeDisabled();
+  await expect(parts.getByRole('checkbox', { name: /^Feats/ })).toBeDisabled();
+  const spells = parts.getByRole('checkbox', { name: 'Spells', exact: true });
+  await expect(spells).toBeEnabled();
+  await spells.check();
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(page).toHaveURL('/');
+  await expectSaved(page);
+  await expect(card).toContainText('PHB, XGE (classes and origins, feats, spells)');
 });

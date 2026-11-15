@@ -4,13 +4,17 @@ import { useStore } from 'zustand';
 import { Lock } from 'lucide-react';
 import { registry } from '../../data/registry';
 import {
+  bookParts,
+  normalizeSourceParts,
   optionalRules,
   sourceConflicts,
+  SOURCE_PARTS,
+  SOURCE_PART_NAMES,
   type OptionalRules,
 } from '../../engine/calc/campaign-rules';
 import { createCampaign } from '../../engine/commands/management';
 import { campaignMethodConflicts, updateCampaign } from '../../engine/commands/campaigns';
-import { SCHEMA_VERSION, type Campaign, type Source } from '../../engine/schema';
+import { SCHEMA_VERSION, type Campaign, type Source, type SourcePart } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
 import { useCampaign } from '../hooks/useCampaign';
 import { useManagement } from '../commands/useManagement';
@@ -29,6 +33,7 @@ import {
   LEVELING_OPTIONS,
   REST_OPTIONS,
   RULE_FLAG_OPTIONS,
+  PARTED_SOURCES,
   SOURCE_OPTIONS,
 } from '../campaignOptions';
 import { PlaceholderScreen } from './PlaceholderScreen';
@@ -70,12 +75,30 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
   const [abilityMethod, setAbilityMethod] = useState(base.abilityMethod);
   const [sources, setSources] = useState<Source[]>(base.sources);
   const [rules, setRules] = useState<OptionalRules>(() => optionalRules(base));
-  const toggleSource = (source: Source, on: boolean) =>
+  const [parts, setParts] = useState<NonNullable<Campaign['sourceParts']>>(
+    () => base.sourceParts ?? {},
+  );
+  // Books and parts are add-only (D202): whatever the saved campaign uses stays locked on.
+  const lockedBook = (source: Source) =>
+    source === 'PHB' || (existing?.sources.includes(source) ?? false);
+  const lockedPart = (source: Source, part: SourcePart) =>
+    existing ? bookParts(existing, source).includes(part) : false;
+  const toggleSource = (source: Source, on: boolean) => {
     setSources(
       SOURCE_OPTIONS.map(({ value }) => value).filter((value) =>
         value === source ? on : sources.includes(value),
       ),
     );
+    // A book turned on starts with every part.
+    setParts((all) => ({ ...all, [source]: undefined }));
+  };
+  const togglePart = (source: Source, part: SourcePart, on: boolean) => {
+    const current = bookParts({ sources, sourceParts: parts }, source);
+    const next = SOURCE_PARTS.filter((value) => (value === part ? on : current.includes(value)));
+    if (next.length === 0) toggleSource(source, false);
+    else setParts({ ...parts, [source]: next });
+  };
+  const sourceParts = normalizeSourceParts({ sources, sourceParts: parts });
   const changes = {
     name: name.trim(),
     leveling,
@@ -83,6 +106,7 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
     hpLevelFloor,
     abilityMethod,
     sources,
+    ...(sourceParts ? { sourceParts } : {}),
     ...(existing && role === (existing.role ?? 'player') ? {} : { role }),
     // Store only rules the player changed so an untouched save leaves the campaign as it was.
     optionalRules: {
@@ -94,7 +118,8 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
       ),
     },
   };
-  const proposal = { ...base, ...changes };
+  const proposal: Campaign = { ...base, ...changes };
+  if (!sourceParts) delete proposal.sourceParts;
   const characters = Object.values(records).filter((record) => record.build.campaignId === base.id);
   const conflicts = characters.flatMap((record) => {
     const notes = [
@@ -196,20 +221,56 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
         <fieldset className="flex flex-col gap-2">
           <legend className="mb-2 text-sm font-semibold text-text">Sources</legend>
           <div className="grid gap-2 sm:grid-cols-2">
-            {SOURCE_OPTIONS.map((option) => (
-              <Toggle
-                key={option.value}
-                label={option.label}
-                hint={option.hint}
-                checked={option.value === 'PHB' || sources.includes(option.value)}
-                disabled={option.value === 'PHB'}
-                onChange={(on) => toggleSource(option.value, on)}
-              />
-            ))}
+            {SOURCE_OPTIONS.map((option) => {
+              const on = option.value === 'PHB' || sources.includes(option.value);
+              const used = bookParts({ sources, sourceParts: parts }, option.value);
+              return (
+                <div key={option.value} className="flex min-w-0 flex-col gap-1">
+                  <Toggle
+                    label={option.label}
+                    hint={option.hint}
+                    checked={on}
+                    disabled={lockedBook(option.value)}
+                    onChange={(checked) => toggleSource(option.value, checked)}
+                  />
+                  {on && PARTED_SOURCES.includes(option.value) && (
+                    <fieldset className="ml-2 flex flex-col border-l border-border pl-3">
+                      <legend className="sr-only">Parts of {option.label}</legend>
+                      {SOURCE_PARTS.map((part) => {
+                        const locked = lockedPart(option.value, part);
+                        return (
+                          <label
+                            key={part}
+                            className={cx(
+                              'flex min-h-11 items-center gap-2 text-sm',
+                              locked ? 'cursor-default text-text-muted' : 'cursor-pointer',
+                            )}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={used.includes(part)}
+                              disabled={locked}
+                              onChange={(event) =>
+                                togglePart(option.value, part, event.target.checked)
+                              }
+                              className="size-4 shrink-0 accent-(--omni-accent)"
+                            />
+                            {SOURCE_PART_NAMES[part]}
+                            {locked && <Lock size={12} aria-label="Locked" className="shrink-0" />}
+                          </label>
+                        );
+                      })}
+                    </fieldset>
+                  )}
+                </div>
+              );
+            })}
           </div>
           <p className="text-xs text-text-muted">
-            Turning on a book never turns on its optional rules. Turning one off keeps every choice
-            already made from it.
+            {existing
+              ? 'Books and parts already in use stay on. You can add more, but not turn them off.'
+              : 'Choose carefully: books and parts can be added later but never turned off.'}{' '}
+            Turning on a book never turns on its optional rules.
           </p>
         </fieldset>
 

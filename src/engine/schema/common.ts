@@ -7,6 +7,8 @@ export const SCHEMA_VERSION = 1;
 
 export const RulesetSchema = z.literal('5e-2014');
 export const SourceSchema = z.enum(['PHB', 'DMG', 'XGE', 'TCE', 'HB']);
+/** Parts of a book a campaign can enable on their own: character options (classes, subclasses, origins and their features), feats, spells, magic items. */
+export const SourcePartSchema = z.enum(['options', 'feats', 'spells', 'items']);
 export const AbilitySchema = z.enum(ABILITIES);
 export const SkillSchema = z.enum(SKILLS);
 export const ConditionSchema = z.enum(CONDITIONS);
@@ -60,6 +62,7 @@ export const AnyRefIdSchema = z
 export const LevelKeySchema = z.string().regex(/^(?:[1-9]|1\d|20)$/, 'Expected a level 1–20');
 
 export type Source = z.infer<typeof SourceSchema>;
+export type SourcePart = z.infer<typeof SourcePartSchema>;
 export type Recharge = z.infer<typeof RechargeSchema>;
 export type Die = z.infer<typeof DieSchema>;
 export type HitDieName = z.infer<typeof HitDieSchema>;

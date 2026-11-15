@@ -1,3 +1,4 @@
+import { sourceAllows } from '../../engine/calc/campaign-rules';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { useStore } from 'zustand';
@@ -127,7 +128,7 @@ function ChoiceForm({
             (row) =>
               row.kind === 'feature' &&
               row.id.startsWith(prefix) &&
-              state.campaign.sources.includes(row.source) &&
+              sourceAllows(state.campaign, row) &&
               !owned.has(row.id),
           )
           .map((row) => ({ id: row.id, name: row.name }))

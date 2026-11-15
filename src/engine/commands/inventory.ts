@@ -1,3 +1,4 @@
+import { sourceAllows } from '../calc/campaign-rules';
 import type { Draft } from 'immer';
 import { z } from 'zod';
 import {
@@ -122,7 +123,7 @@ export const addInventoryItem: Command<AddInventoryItemPayload> = {
     if (
       def.source !== 'DMG' &&
       !def.id.startsWith(CUSTOM_ITEM_PREFIX) &&
-      !ctx.campaign.sources.includes(def.source)
+      !sourceAllows(ctx.campaign, def)
     )
       checks.push(warn(`${def.name} is outside this campaign's enabled sources`));
     return checks;

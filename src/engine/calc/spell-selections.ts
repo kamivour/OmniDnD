@@ -1,3 +1,4 @@
+import { sourceAllows } from './campaign-rules';
 import { entryCasting } from './casting';
 import type { Registry } from '../registry';
 import type { SpellDef } from '../schema';
@@ -68,7 +69,7 @@ export function spellSelectionRuleWarnings(
   const { classId, name, mode, selection } = details;
   const classDef = ctx.registry.entries.get(classId);
   if (mode === 'unsupported') warnings.push(`${name} spell selection is not supported.`);
-  if (classDef?.kind === 'class' && !ctx.campaign.sources.includes(classDef.source))
+  if (classDef?.kind === 'class' && !sourceAllows(ctx.campaign, classDef))
     warnings.push(`${name}'s source is not enabled in this campaign.`);
   for (const list of ['known', 'prepared'] as const) {
     for (const id of selection[list]) {
@@ -77,7 +78,7 @@ export function spellSelectionRuleWarnings(
         warnings.push(`Unknown spell reference: ${id}`);
         continue;
       }
-      if (!ctx.campaign.sources.includes(def.source) || def.ruleset !== ctx.campaign.ruleset)
+      if (!sourceAllows(ctx.campaign, def) || def.ruleset !== ctx.campaign.ruleset)
         warnings.push(`${def.name}'s source is not enabled in this campaign.`);
       if (!def.classes.includes(classId))
         warnings.push(`${def.name} is not on the ${name} spell list.`);
@@ -177,7 +178,7 @@ export function spellSelectionDetails(
       (entry): entry is SpellDef =>
         entry.kind === 'spell' &&
         entry.ruleset === ctx.campaign.ruleset &&
-        ctx.campaign.sources.includes(entry.source) &&
+        sourceAllows(ctx.campaign, entry) &&
         entry.classes.includes(casting?.spellList ?? classId),
     )
     .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));

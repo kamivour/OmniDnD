@@ -1,3 +1,4 @@
+import { sourceAllows } from '../../engine/calc/campaign-rules';
 import { useId, useRef, useState } from 'react';
 import { registry, registryFor } from '../../data/registry';
 import { ABILITIES, type Ability } from '../../engine/calc/abilities';
@@ -193,7 +194,7 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
   const references = [...registry.entries.values()].filter(
     (entry) => entry.ruleset === campaign.ruleset,
   );
-  const available = (entry: RefEntry) => campaign.sources.includes(entry.source);
+  const available = (entry: RefEntry) => sourceAllows(campaign, entry);
   const choicesFor = (entries: RefEntry[], retained: string[] = []): Choice[] => {
     const options = entries
       .filter((entry) => available(entry) || retained.includes(entry.id))

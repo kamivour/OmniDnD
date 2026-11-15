@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-16 03:03 — Use only part of an expansion book
+
+- When you turn on Xanathar's or Tasha's in campaign settings, you can pick which parts the table uses: classes, subclasses and origins; feats; spells; magic items.
+- Character choices (new character, level up, spells, items) only offer the parts you picked. The rules search still shows the whole book.
+- Books and parts are now add-only: once a campaign is saved you can turn more on, but not turn any off. Choose carefully when you create a campaign.
+- Checks pass.
+
 ## 2026-11-16 02:10 — Shorter skills list and sheet section buttons
 
 - Each skill on the sheet and Explore now takes one line: a small mark shows Proficient (●), Expertise (◆) or Jack of All Trades (◐), with a key above the list. On wide screens skills sit in two columns.

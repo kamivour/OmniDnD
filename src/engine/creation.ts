@@ -9,7 +9,7 @@ import { applyLevelSpells, LevelSpellsSchema, levelSpellGains } from './calc/lev
 export { xpForLevel } from './calc/advancement';
 import { toolGroupOptions, toolSlots } from './calc/background-choices';
 import { CUSTOM_ORIGIN_SOURCE, customOriginIssue } from './calc/custom-origin';
-import { optionalRules } from './calc/campaign-rules';
+import { optionalRules, sourceAllows } from './calc/campaign-rules';
 import { computeSheet } from './calc/sheet';
 import type { Registry } from './registry';
 import { SECONDS_PER_HOUR } from './rules2014';
@@ -414,7 +414,7 @@ function enabledReference<K extends RefKind>(
 ) {
   const entry = registry.entries.get(id);
   if (!entry || entry.kind !== kind) invalid(path, `Unknown ${kind} reference: ${id}`);
-  if (entry.ruleset !== campaign.ruleset || !campaign.sources.includes(entry.source)) {
+  if (entry.ruleset !== campaign.ruleset || !sourceAllows(campaign, entry)) {
     invalid(path, `${id} is not enabled by this campaign's rules and sources`);
   }
   return registry.get(kind, id);

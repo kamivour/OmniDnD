@@ -1,16 +1,16 @@
 import { z } from 'zod';
 import { ABILITIES } from '../calc/abilities';
-import { sourceConflicts } from '../calc/campaign-rules';
+import { sourceConflicts, sourcesRemoved } from '../calc/campaign-rules';
 import { POINT_BUY_COSTS, STANDARD_ARRAY } from '../creation';
 import { CampaignSchema, type Campaign, type CharacterBuild } from '../schema';
 import type { ManagementCommand } from './management';
 
-/** Campaign settings; sources and optional rules are optional so older callers keep them. */
+/** Campaign settings; sources, book parts and optional rules are optional so older callers keep them. */
 export type CampaignChanges = Pick<
   Campaign,
   'name' | 'leveling' | 'hpMethod' | 'hpLevelFloor' | 'abilityMethod'
 > &
-  Partial<Pick<Campaign, 'sources' | 'optionalRules' | 'role'>>;
+  Partial<Pick<Campaign, 'sources' | 'sourceParts' | 'optionalRules' | 'role'>>;
 
 const CampaignChangesSchema = CampaignSchema.pick({
   name: true,
@@ -23,6 +23,7 @@ const CampaignChangesSchema = CampaignSchema.pick({
   sources: CampaignSchema.shape.sources
     .refine((sources) => sources.includes('PHB'), "The Player's Handbook stays enabled")
     .optional(),
+  sourceParts: CampaignSchema.shape.sourceParts,
   optionalRules: CampaignSchema.shape.optionalRules.optional(),
   role: CampaignSchema.shape.role,
 });
@@ -44,13 +45,24 @@ export const updateCampaign: ManagementCommand<{
     if (!Object.hasOwn(ctx.campaigns, parsed.data.campaignId))
       return [{ level: 'block', reason: 'Campaign does not exist' }];
     const { campaignId, changes } = parsed.data;
-    if (!changes.sources && !changes.optionalRules) return [];
+    if (!changes.sources && !changes.sourceParts && !changes.optionalRules) return [];
     const current = ctx.campaigns[campaignId]!;
     const campaign = {
       sources: changes.sources ?? current.sources,
+      sourceParts:
+        changes.sources || changes.sourceParts ? changes.sourceParts : current.sourceParts,
       optionalRules: changes.optionalRules ?? current.optionalRules,
     };
-    // Choices from a removed book stay on the character; the player decides what to replace.
+    // Books and their parts are set up once; later the table can only add more (D202).
+    const removed = sourcesRemoved(current, campaign);
+    if (removed.length > 0)
+      return [
+        {
+          level: 'block',
+          reason: `Books and parts can only be added, not turned off: ${removed.join(', ')}`,
+        },
+      ];
+    // Choices an optional rule no longer allows stay on the character; the player decides what to replace.
     return Object.values(ctx.characters).flatMap(({ build }) => {
       if (build.campaignId !== campaignId) return [];
       const before = new Set(sourceConflicts(current, build, ctx.registry));
@@ -73,7 +85,11 @@ export const updateCampaign: ManagementCommand<{
         for (const entry of build.hpEntries) entry.floor ??= current.hpLevelFloor;
       }
     }
-    draft.campaigns[campaignId] = { ...current, ...changes };
+    const next = { ...current, ...changes };
+    // Sending sources without parts means every part of those books.
+    if (changes.sources && !changes.sourceParts) delete next.sourceParts;
+    if (!next.sourceParts) delete next.sourceParts;
+    draft.campaigns[campaignId] = next;
     return `Update campaign: ${changes.name}`;
   },
 };

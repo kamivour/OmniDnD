@@ -1,3 +1,4 @@
+import { booksWithPart } from '../../engine/calc/campaign-rules';
 import { useEffect, useId, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { registryFor } from '../../data/registry';
@@ -92,7 +93,7 @@ export function InventoryEditor({
   const catalogue = catalogueItems(registry, {
     search,
     ...(category ? { category } : {}),
-    ...(otherSources ? {} : { sources: state.campaign.sources }),
+    ...(otherSources ? {} : { sources: booksWithPart(state.campaign, 'items') }),
   });
   const edited = baseline
     ? {

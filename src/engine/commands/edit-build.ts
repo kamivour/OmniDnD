@@ -1,3 +1,4 @@
+import { sourceAllows } from '../calc/campaign-rules';
 import { z } from 'zod';
 import { computeSheet } from '../calc/sheet';
 import { AbilityBasesSchema, abilityBaseIssues } from '../calc/ability-methods';
@@ -57,7 +58,7 @@ const info = (reason: string): Check => ({ level: 'info', reason });
 function referenceCheck(ctx: CommandContext, kind: RefKind, id: string): Check[] {
   const entry = ctx.registry.entries.get(id);
   if (!entry || entry.kind !== kind) return [block(`Unknown ${kind} reference: ${id}`)];
-  return entry.ruleset !== ctx.campaign.ruleset || !ctx.campaign.sources.includes(entry.source)
+  return entry.ruleset !== ctx.campaign.ruleset || !sourceAllows(ctx.campaign, entry)
     ? [block(`${entry.name} is not enabled by this campaign's rules and sources`)]
     : [];
 }
