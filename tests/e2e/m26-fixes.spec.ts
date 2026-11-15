@@ -89,6 +89,20 @@ test.describe('fresh device', () => {
   });
 });
 
+test('new character offers the sample character in this campaign', async ({ page }) => {
+  await openNewCharacter(page);
+  const offer = page.getByRole('complementary', { name: 'Sample character' });
+  await expect(offer).toContainText('The Fool');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await offer.getByRole('button', { name: 'Try the sample character' }).click();
+  await expect(page).toHaveURL(/\/characters\/(?!new$|the-fool$)[^/]+$/);
+  await expect(page.getByRole('heading', { name: 'Home', level: 1 })).toBeVisible();
+  await page.goto('/');
+  await expect(
+    page.getByRole('article', { name: 'Campaign #273', exact: true }).getByText('The Fool'),
+  ).toHaveCount(2);
+});
+
 test('a background with open choices asks for them and the sheet keeps them', async ({ page }) => {
   await openNewCharacter(page);
   await page.getByLabel('Name', { exact: true }).fill('Noble Sage');

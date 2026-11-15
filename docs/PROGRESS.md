@@ -355,6 +355,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-14 — Ability score improvement says when feats are off for the campaign and links to Campaign settings.
 - 2026-11-14 — Number fields block letters and stray signs on input, so ability scores and level stay numeric.
 - 2026-11-14 — Tasha's custom origin moves each racial increase to a different ability, on the sheet and when creating a character.
+- 2026-11-16 — New character page offers Try the sample character: a fresh Fool copy in the current campaign; hidden in shared campaigns.
 - 2026-11-11 — M26 verify fixes: Steel Defender Stats on Features and Combat, phone spell rows keep names, sign-in card single frame.
 - 2026-11-11 — M26 task 10: Gate. Manual QA list added; full e2e rerun, tour step test fixed.
 - 2026-11-11 — M26 task 9: Stats button beside Use and Cast for summons; opens the companion or a pre-filled add form.

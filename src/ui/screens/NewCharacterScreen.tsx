@@ -38,6 +38,7 @@ import {
   type BackgroundPicks,
 } from './background-picks';
 import { LevelChoicesSection } from './LevelChoicesSection';
+import { SampleCharacterOffer } from './SampleCharacterOffer';
 import { PlayedByDialog } from '../roles/RoleDialogs';
 import { useAskRoles } from '../roles/useAskRoles';
 import { PLAYED_BY_OPTIONS } from '../campaignOptions';
@@ -436,6 +437,8 @@ function NewCharacterForm({
           </p>
         )}
       </header>
+
+      <SampleCharacterOffer campaign={campaign} run={run} pending={pending} />
 
       <div className="flex flex-wrap items-center gap-2 text-sm">
         <span className="text-text-muted">Mode:</span>

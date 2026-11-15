@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-16 01:57 — Try the sample character from New character
+
+- The New character page now offers "Try the sample character". It adds a fresh copy of The Fool to the campaign you are in and opens it.
+- You can add it more than once; each copy is separate. Shared party campaigns do not show the offer.
+- Checks pass.
+
 ## 2026-11-14 14:00 — Custom origin moves every racial increase
 
 - With Tasha's custom origin on, each of your race's increases can go to any ability, one per ability. A Hill Dwarf's +2 CON and +1 WIS can become, say, +2 INT and +1 DEX; a Human keeps all six +1s.

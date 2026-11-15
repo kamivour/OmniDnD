@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import seed from '../../data/characters/the-fool.json';
 import { ABILITIES } from '../engine/calc/abilities';
+import { addCharacter, runManagement } from '../engine/commands/management';
 import { ExportFileSchema } from '../engine/schema';
+import { registry } from './registry';
+import { sampleFileFor, seedFile } from './seed';
 
 /** The seed must match TEST_CHARACTER.md §1–3. */
 const fool = ExportFileSchema.parse(seed);
@@ -67,6 +70,37 @@ describe('The Fool seed', () => {
     expect(fool.live.effects).toEqual([]);
     expect(fool.live.conditions).toEqual([]);
     expect(fool.live.clock.seconds).toBe(8 * 3600);
+  });
+});
+
+describe('sampleFileFor', () => {
+  const campaign = {
+    ...fool.campaign,
+    id: 'campaign-home',
+    name: 'Home game',
+    sources: ['PHB' as const],
+    hpMethod: 'average' as const,
+    abilityMethod: 'point-buy' as const,
+  };
+
+  it('places a fresh copy of the Fool in the chosen campaign', () => {
+    const file = sampleFileFor(campaign, 'sample-1');
+    expect(file.campaign).toEqual(campaign);
+    expect(file.build).toMatchObject({ id: 'sample-1', campaignId: 'campaign-home' });
+    expect(file.build.name).toBe('The Fool');
+    expect(file.live.characterId).toBe('sample-1');
+    expect(seedFile.build.id).toBe('the-fool');
+  });
+
+  it('adds cleanly to a campaign with other rules', () => {
+    const result = runManagement(
+      addCharacter,
+      { campaigns: { [campaign.id]: campaign }, characters: {} },
+      { file: sampleFileFor(campaign, 'sample-1') },
+      registry,
+      { eventId: 'e1', realTime: '2026-11-16T00:00:00.000Z' },
+    );
+    expect(result.result).toBe('ok');
   });
 });
 

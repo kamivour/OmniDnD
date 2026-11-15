@@ -1,5 +1,5 @@
 import seed from '../../data/characters/the-fool.json';
-import { ExportFileSchema, type ExportFile } from '../engine/schema';
+import { ExportFileSchema, type Campaign, type ExportFile } from '../engine/schema';
 
 /** The shipped character follows the same validation path as an imported backup. */
 export const seedFile = ExportFileSchema.parse(seed);
@@ -14,4 +14,16 @@ export function starterFiles(): ExportFile[] {
   } catch {
     return [];
   }
+}
+
+/** The sample character as a fresh copy inside the given campaign, under a new id. */
+export function sampleFileFor(campaign: Campaign, id: string): ExportFile {
+  const file = structuredClone(seedFile);
+  return {
+    ...file,
+    exportedAt: new Date().toISOString(),
+    campaign: structuredClone(campaign),
+    build: { ...file.build, id, campaignId: campaign.id },
+    live: { ...file.live, characterId: id },
+  };
 }
