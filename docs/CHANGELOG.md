@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-16 02:10 — Shorter skills list and sheet section buttons
+
+- Each skill on the sheet and Explore now takes one line: a small mark shows Proficient (●), Expertise (◆) or Jack of All Trades (◐), with a key above the list. On wide screens skills sit in two columns.
+- The character sheet has buttons at the top (All, Basics, Skills, Proficiencies, Combat, Spells) to show only that part. Your choice is remembered on this device.
+- Please check the marks are easy to tell apart on your phone.
+- Checks pass.
+
 ## 2026-11-16 01:57 — Try the sample character from New character
 
 - The New character page now offers "Try the sample character". It adds a fresh copy of The Fool to the campaign you are in and opens it.

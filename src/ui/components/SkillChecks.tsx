@@ -4,42 +4,67 @@ import { signed, skillName } from '../format';
 import { RollButton } from '../dice/RollButton';
 import { StatChip } from './StatChip';
 
-/** Shared calculated checks; the optional roller never applies a result. */
+type Marker = 'Expertise' | 'Proficient' | 'Jack of All Trades';
+
+/** A short visible symbol per training level; the word stays in the row for screen readers. */
+const MARKERS: { marker: Marker; symbol: string }[] = [
+  { marker: 'Proficient', symbol: '●' },
+  { marker: 'Expertise', symbol: '◆' },
+  { marker: 'Jack of All Trades', symbol: '◐' },
+];
+
+function skillMarker(stat: Sheet['skills'][keyof Sheet['skills']]): Marker | undefined {
+  if (stat.proficiency === 'expertise') return 'Expertise';
+  if (stat.proficiency === 'proficient') return 'Proficient';
+  return stat.parts.some(({ label }) => label === 'Jack of All Trades')
+    ? 'Jack of All Trades'
+    : undefined;
+}
+
+/** Shared calculated checks, one compact row per skill; the optional roller never applies a result. */
 export function SkillList({ sheet }: { sheet: Sheet }) {
+  const rows = SKILLS.map((skill) => ({
+    skill,
+    stat: sheet.skills[skill],
+    marker: skillMarker(sheet.skills[skill]),
+  }));
+  const used = MARKERS.filter(({ marker }) => rows.some((row) => row.marker === marker));
   return (
-    <ul className="flex min-w-0 flex-col divide-y divide-border">
-      {SKILLS.map((skill) => {
-        const stat = sheet.skills[skill];
-        const marker =
-          stat.proficiency === 'expertise'
-            ? 'Expertise'
-            : stat.proficiency === 'proficient'
-              ? 'Proficient'
-              : stat.parts.some(({ label }) => label === 'Jack of All Trades')
-                ? 'Jack of All Trades'
-                : 'Untrained';
-        return (
-          <li key={skill} className="flex min-w-0 flex-col py-1">
-            <div className="flex items-center gap-2">
-              <StatChip
-                label={skillName(skill)}
-                value={signed(stat.value)}
-                stat={stat}
-                breakdownLabel={skillName(skill)}
-                className="w-full"
-              />
-              <RollButton
-                label={`${skillName(skill)} check`}
-                spec={{ kind: 'd20', bonus: stat.value }}
-              />
-            </div>
-            <span className="px-2 pb-1 text-xs text-text-muted">
-              {SKILL_ABILITY[skill]} · {marker}
+    <div className="@container flex min-w-0 flex-col gap-2">
+      {used.length > 0 && (
+        <p aria-hidden className="px-2 text-xs text-text-muted">
+          {used.map(({ marker, symbol }) => `${symbol} ${marker}`).join(' · ')}
+        </p>
+      )}
+      <ul className="grid min-w-0 grid-cols-1 gap-x-4 @min-[34rem]:grid-cols-2">
+        {rows.map(({ skill, stat, marker }) => (
+          <li
+            key={skill}
+            className="flex min-w-0 items-center gap-1 border-b border-border last:border-b-0 @min-[34rem]:[&:nth-last-child(2):nth-child(odd)]:border-b-0"
+          >
+            <span
+              title={marker ?? 'Untrained'}
+              aria-hidden
+              className="w-4 shrink-0 text-center text-xs text-accent"
+            >
+              {MARKERS.find((entry) => entry.marker === marker)?.symbol ?? ''}
             </span>
+            {marker && <span className="sr-only">{marker}</span>}
+            <StatChip
+              label={`${skillName(skill)} · ${SKILL_ABILITY[skill]}`}
+              value={signed(stat.value)}
+              stat={stat}
+              breakdownLabel={skillName(skill)}
+              className="min-w-0 flex-1"
+            />
+            <RollButton
+              label={`${skillName(skill)} check`}
+              spec={{ kind: 'd20', bonus: stat.value }}
+            />
           </li>
-        );
-      })}
-    </ul>
+        ))}
+      </ul>
+    </div>
   );
 }
 

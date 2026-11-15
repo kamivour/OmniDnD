@@ -154,3 +154,36 @@ test('an unknown from= link is dropped from the address', async ({ page }) => {
   await expect(page).toHaveURL('/characters/the-fool/companions');
   await expect(page.getByRole('dialog')).toHaveCount(0);
 });
+
+test('sheet section buttons show one part at a time and skills take one line each', async ({
+  page,
+}) => {
+  await page.goto('/characters/the-fool/sheet');
+  const filter = page.getByRole('group', { name: 'Show sections' });
+  await filter.getByRole('button', { name: 'Skills', exact: true }).click();
+  const skills = page.getByRole('region', { name: 'Skills', exact: true });
+  await expect(skills).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Passives', exact: true })).toBeVisible();
+  for (const hidden of [
+    'Identity',
+    'Abilities',
+    'Proficiencies',
+    'Combat statistics',
+    'Spellcasting',
+  ])
+    await expect(page.getByRole('region', { name: hidden, exact: true })).toHaveCount(0);
+  const row = skills
+    .getByRole('listitem')
+    .filter({ has: page.getByRole('button', { name: 'Show Deception breakdown' }) });
+  await expect(row).toContainText('Expertise');
+  expect((await row.boundingBox())!.height).toBeLessThan(56);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+
+  await page.reload();
+  await expect(filter.getByRole('button', { name: 'Skills', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await filter.getByRole('button', { name: 'All', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Identity', exact: true })).toBeVisible();
+});
