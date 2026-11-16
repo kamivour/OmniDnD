@@ -103,6 +103,8 @@ interface FeatureDef extends RefBase {
                     choose?: { count; kinds: ('skill'|'expertise'|'tool'|'language'|'darkvision')[];
                                skills?; tools?: string[] | group; expertise?: boolean }[] };
   attacks?: Record<level, 2 | 3 | 4>;   // attacks per Attack action (Extra Attack, D209)
+  smite?: { dice; die; maxDice?; type; bonusVs?; pactOnly?; note? };  // slot spent on a hit (D210)
+  meleeDamage?: { dice; type };          // added to every melee weapon hit (Improved Divine Smite)
 }
 ```
 

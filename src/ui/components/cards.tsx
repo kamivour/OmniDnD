@@ -124,6 +124,7 @@ export function AttackCard({
     damageOverride?: { note: string };
     damage?: string;
     damageType?: string;
+    extraDamage?: string;
   };
 }) {
   return (
@@ -140,7 +141,7 @@ export function AttackCard({
       lines={[
         attack.damage === undefined
           ? 'No direct damage.'
-          : `Hit: ${attack.damage} ${damageTypeName(attack.damageType ?? '')}.`,
+          : `Hit: ${attack.damage} ${damageTypeName(attack.damageType ?? '')}${attack.extraDamage ? ` + ${attack.extraDamage}` : ''}.`,
         attack.notes,
       ]}
     />

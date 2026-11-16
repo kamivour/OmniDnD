@@ -65,6 +65,8 @@ export interface WeaponAttack {
   toHit: Stat;
   /** Absent for the Net. `dice` is absent for a flat-damage weapon (Blowgun). */
   damage?: { dice?: string; bonus: number; type: DamageType };
+  /** Damage added on every hit by features (Improved Divine Smite on melee weapons). */
+  extraDamage?: { dice: string; type: DamageType; source: string }[];
   versatile?: string;
   range?: { normal: number; long: number };
   properties: WeaponProperty[];
@@ -408,6 +410,12 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         attack.damage.bonus,
         typeof def.weapon.damage === 'number' ? { min: 0 } : {},
       );
+    const extra = features.flatMap(({ def: feature }) =>
+      feature.meleeDamage && attack.type === 'melee'
+        ? [{ ...feature.meleeDamage, source: feature.name }]
+        : [],
+    );
+    if (extra.length > 0) attack.extraDamage = extra;
     return [attack];
   });
 

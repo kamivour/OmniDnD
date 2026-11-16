@@ -16,6 +16,8 @@ export interface CombatWeapon {
     toHit: number;
     damage?: string;
     damageType?: string;
+    /** Feature damage on every hit, e.g. "1d8 radiant (Improved Divine Smite)". */
+    extraDamage?: string;
     notes: string;
     toHitOverride?: { note: string };
     damageOverride?: { note: string };
@@ -75,6 +77,13 @@ export function combatModel(state: CharacterState, sheet: Sheet, registry: Regis
         ? {
             damage: damageText(attack.damage.dice, attack.damage.bonus),
             damageType: attack.damage.type,
+          }
+        : {}),
+      ...(attack.extraDamage
+        ? {
+            extraDamage: attack.extraDamage
+              .map((extra) => `${extra.dice} ${extra.type} (${extra.source})`)
+              .join(' + '),
           }
         : {}),
       notes: [

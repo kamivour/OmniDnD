@@ -22,6 +22,7 @@ import {
   type CombatFeature,
   type CombatWeapon,
 } from '../combat/combat-model';
+import { SmitePanel } from '../combat/SmitePanel';
 import { useCommand } from '../commands/command-context';
 import { EncounterTracker } from '../combat/EncounterTracker';
 import { LiveFeatureDetail, LiveWeaponDetail } from '../combat/LiveCombatDetails';
@@ -167,7 +168,7 @@ export function CombatScreen() {
             `${signed(attack.toHit)} to hit`,
             attack.damage === undefined
               ? 'No direct damage'
-              : `${attack.damage} ${attack.damageType}`,
+              : `${attack.damage} ${attack.damageType}${attack.extraDamage ? ` + ${attack.extraDamage}` : ''}`,
             attack.notes,
           ].join(' · ')}
           <OverrideMarker override={attack.toHitOverride} />
@@ -440,6 +441,7 @@ export function CombatScreen() {
             {model.weapons.length === 0 && (
               <p className="text-sm text-text-muted">No weapons equipped.</p>
             )}
+            <SmitePanel />
             <SectionLabel as="h3">Standard actions</SectionLabel>
             <ul className="flex flex-wrap gap-2">
               {STANDARD_ACTIONS.map((rule) => (

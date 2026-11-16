@@ -24,6 +24,7 @@ export * from './resolve-choices';
 export * from '../calc/pending-choices';
 export * from './rest';
 export * from './reset';
+export * from './smite';
 export * from './spells';
 export * from './spell-options';
 export * from './spell-selection';

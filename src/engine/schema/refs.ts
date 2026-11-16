@@ -252,6 +252,25 @@ export const FeatureDefSchema = z
     bonus: z.record(LevelKeySchema, z.int()).optional(),
     /** Attacks per Attack action at this level (Extra Attack: 2; fighter 3 at 11, 4 at 20). */
     attacks: z.record(LevelKeySchema, z.int().min(2).max(4)).optional(),
+    /** Spend a spell slot on a hit for extra damage (Divine Smite, Eldritch Smite). */
+    smite: z
+      .object({
+        /** Dice for a 1st-level slot; each slot level above adds one die. */
+        dice: z.int().min(1),
+        die: DieSchema,
+        /** Cap before the bonus die (Divine Smite: 5). */
+        maxDice: z.int().min(1).optional(),
+        type: DamageTypeSchema,
+        /** One more die against these targets (Divine Smite: "undead or fiend"). */
+        bonusVs: z.string().optional(),
+        /** Only Pact Magic slots may pay (Eldritch Smite). */
+        pactOnly: z.boolean().optional(),
+        /** Reminder added to the log line. */
+        note: z.string().optional(),
+      })
+      .optional(),
+    /** Extra damage on every hit with a melee weapon (Improved Divine Smite). */
+    meleeDamage: z.object({ dice: DiceSchema, type: DamageTypeSchema }).optional(),
     modifiers: z.array(ModifierSchema).optional(),
     /** Feats: what taking the feat adds to the build, applied once when it is picked. */
     grants: FeatGrantsSchema.optional(),

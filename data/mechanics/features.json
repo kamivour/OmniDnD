@@ -579,7 +579,11 @@
   },
   {
     "id": "feature.paladin.improved-divine-smite",
-    "activation": "passive"
+    "activation": "passive",
+    "meleeDamage": {
+      "dice": "1d8",
+      "type": "radiant"
+    }
   },
   {
     "id": "feature.paladin.lay-on-hands",
@@ -1639,6 +1643,26 @@
     "id": "feature.warlock.eldritch-invocation-thirsting-blade",
     "attacks": {
       "1": 2
+    }
+  },
+  {
+    "id": "feature.paladin.divine-smite",
+    "smite": {
+      "dice": 2,
+      "die": "d8",
+      "maxDice": 5,
+      "type": "radiant",
+      "bonusVs": "undead or fiend"
+    }
+  },
+  {
+    "id": "feature.warlock.eldritch-invocation-eldritch-smite",
+    "smite": {
+      "dice": 2,
+      "die": "d8",
+      "type": "force",
+      "pactOnly": true,
+      "note": "once per turn; you may knock a Huge or smaller target prone"
     }
   }
 ]

@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 00:23 — Divine Smite and Eldritch Smite
+
+- Paladins see a Divine Smite box under Weapons in Combat: pick a slot, tick "undead or fiend" if it applies, and the app spends the slot and tells you the dice to roll.
+- Warlocks with Eldritch Smite get the same box, using pact slots only.
+- At paladin level 11, melee weapons show the extra 1d8 radiant from Improved Divine Smite.
+- Please check the dice for each slot level (2d8 at level 1, up to 5d8, plus 1d8 against undead or fiends). Checks pass.
+
 ## 2026-11-17 00:13 — Extra Attack count in Combat
 
 - Characters with Extra Attack (fighter, barbarian, paladin, ranger, monk, Valor and Swords bards, Armorer and Battle Smith, Thirsting Blade) now see how many attacks their Attack action gives. Fighters get 3 at level 11 and 4 at level 20.

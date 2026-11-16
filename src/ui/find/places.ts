@@ -281,6 +281,15 @@ export const PLACES: readonly FindEntry[] = [
     needsCharacter: true,
   },
   {
+    id: 'go.smite',
+    group: 'go',
+    title: 'Smite',
+    detail: 'Combat',
+    synonyms: ['divine smite', 'eldritch smite', 'spend slot on hit'],
+    target: { kind: 'go', path: 'combat', anchor: 'smite' },
+    needsCharacter: true,
+  },
+  {
     id: 'go.quick-tables',
     group: 'go',
     title: 'Quick tables',
