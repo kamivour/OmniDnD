@@ -1685,5 +1685,231 @@
       "max": 1,
       "recharge": "long"
     }
+  },
+  {
+    "id": "feature.draconic-ancestry-black",
+    "activation": "passive",
+    "ancestry": {
+      "type": "acid",
+      "save": "DEX",
+      "area": "5 by 30 ft line"
+    },
+    "defenses": {
+      "resistances": ["acid"]
+    }
+  },
+  {
+    "id": "feature.sorcerer.dragon-ancestor-black-acid-damage",
+    "activation": "passive",
+    "ancestry": {
+      "type": "acid"
+    }
+  },
+  {
+    "id": "feature.draconic-ancestry-blue",
+    "activation": "passive",
+    "ancestry": {
+      "type": "lightning",
+      "save": "DEX",
+      "area": "5 by 30 ft line"
+    },
+    "defenses": {
+      "resistances": ["lightning"]
+    }
+  },
+  {
+    "id": "feature.sorcerer.dragon-ancestor-blue-lightning-damage",
+    "activation": "passive",
+    "ancestry": {
+      "type": "lightning"
+    }
+  },
+  {
+    "id": "feature.draconic-ancestry-brass",
+    "activation": "passive",
+    "ancestry": {
+      "type": "fire",
+      "save": "DEX",
+      "area": "5 by 30 ft line"
+    },
+    "defenses": {
+      "resistances": ["fire"]
+    }
+  },
+  {
+    "id": "feature.sorcerer.dragon-ancestor-brass-fire-damage",
+    "activation": "passive",
+    "ancestry": {
+      "type": "fire"
+    }
+  },
+  {
+    "id": "feature.draconic-ancestry-bronze",
+    "activation": "passive",
+    "ancestry": {
+      "type": "lightning",
+      "save": "DEX",
+      "area": "5 by 30 ft line"
+    },
+    "defenses": {
+      "resistances": ["lightning"]
+    }
+  },
+  {
+    "id": "feature.sorcerer.dragon-ancestor-bronze-lightning-damage",
+    "activation": "passive",
+    "ancestry": {
+      "type": "lightning"
+    }
+  },
+  {
+    "id": "feature.draconic-ancestry-copper",
+    "activation": "passive",
+    "ancestry": {
+      "type": "acid",
+      "save": "DEX",
+      "area": "5 by 30 ft line"
+    },
+    "defenses": {
+      "resistances": ["acid"]
+    }
+  },
+  {
+    "id": "feature.sorcerer.dragon-ancestor-copper-acid-damage",
+    "activation": "passive",
+    "ancestry": {
+      "type": "acid"
+    }
+  },
+  {
+    "id": "feature.draconic-ancestry-gold",
+    "activation": "passive",
+    "ancestry": {
+      "type": "fire",
+      "save": "DEX",
+      "area": "15 ft cone"
+    },
+    "defenses": {
+      "resistances": ["fire"]
+    }
+  },
+  {
+    "id": "feature.sorcerer.dragon-ancestor-gold-fire-damage",
+    "activation": "passive",
+    "ancestry": {
+      "type": "fire"
+    }
+  },
+  {
+    "id": "feature.draconic-ancestry-green",
+    "activation": "passive",
+    "ancestry": {
+      "type": "poison",
+      "save": "CON",
+      "area": "15 ft cone"
+    },
+    "defenses": {
+      "resistances": ["poison"]
+    }
+  },
+  {
+    "id": "feature.sorcerer.dragon-ancestor-green-poison-damage",
+    "activation": "passive",
+    "ancestry": {
+      "type": "poison"
+    }
+  },
+  {
+    "id": "feature.draconic-ancestry-red",
+    "activation": "passive",
+    "ancestry": {
+      "type": "fire",
+      "save": "DEX",
+      "area": "15 ft cone"
+    },
+    "defenses": {
+      "resistances": ["fire"]
+    }
+  },
+  {
+    "id": "feature.sorcerer.dragon-ancestor-red-fire-damage",
+    "activation": "passive",
+    "ancestry": {
+      "type": "fire"
+    }
+  },
+  {
+    "id": "feature.draconic-ancestry-silver",
+    "activation": "passive",
+    "ancestry": {
+      "type": "cold",
+      "save": "CON",
+      "area": "15 ft cone"
+    },
+    "defenses": {
+      "resistances": ["cold"]
+    }
+  },
+  {
+    "id": "feature.sorcerer.dragon-ancestor-silver-cold-damage",
+    "activation": "passive",
+    "ancestry": {
+      "type": "cold"
+    }
+  },
+  {
+    "id": "feature.draconic-ancestry-white",
+    "activation": "passive",
+    "ancestry": {
+      "type": "cold",
+      "save": "CON",
+      "area": "15 ft cone"
+    },
+    "defenses": {
+      "resistances": ["cold"]
+    }
+  },
+  {
+    "id": "feature.sorcerer.dragon-ancestor-white-cold-damage",
+    "activation": "passive",
+    "ancestry": {
+      "type": "cold"
+    }
+  },
+  {
+    "id": "feature.draconic-ancestry",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.damage-resistance",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.breath-weapon",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    },
+    "dice": {
+      "1": "2d6",
+      "6": "3d6",
+      "11": "4d6",
+      "16": "5d6"
+    },
+    "breath": {
+      "ability": "CON"
+    }
+  },
+  {
+    "id": "feature.sorcerer.dragon-ancestor",
+    "activation": "passive"
+  },
+  {
+    "id": "feature.sorcerer.elemental-affinity",
+    "usesFrom": "feature.sorcerer.font-of-magic",
+    "affinity": {
+      "ability": "CHA"
+    }
   }
 ]

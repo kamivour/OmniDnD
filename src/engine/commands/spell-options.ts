@@ -1,4 +1,6 @@
 import type { SpellcastingStats } from '../calc/sheet';
+import type { Ability } from '../calc/abilities';
+import { elementalAffinity } from '../calc/ancestry';
 import { entryCasting } from '../calc/casting';
 import {
   featSpellSources,
@@ -52,7 +54,11 @@ export interface SpellCastDetails {
   ritualEligible: boolean;
   ritualReason?: string;
   healing?: SpellRollDetails;
-  damage?: SpellRollDetails & { type: DamageType };
+  damage?: SpellRollDetails & {
+    type: DamageType;
+    /** Elemental Affinity: add this to one damage roll. */
+    affinity?: { name: string; bonus: number };
+  };
   upcastText?: string;
   feat?: FeatCastDetails;
 }
@@ -146,9 +152,22 @@ export function spellCastDetails(
     ritualEligible,
     ...(ritualReason === undefined ? {} : { ritualReason }),
     ...(spell.heal ? { healing: deriveRoll(spell.heal) } : {}),
-    ...(spell.damage ? { damage: { ...deriveRoll(spell.damage), type: spell.damage.type } } : {}),
+    ...(spell.damage ? { damage: spellDamage(ctx, spell.damage, deriveRoll) } : {}),
     ...(spell.summary?.upcast ? { upcastText: spell.summary.upcast } : {}),
   };
+}
+
+/** Damage dice plus Elemental Affinity's bonus when the spell's type matches the ancestry. */
+function spellDamage(
+  ctx: SpellOptionsContext,
+  damage: NonNullable<SpellDef['damage']>,
+  deriveRoll: (roll: NonNullable<SpellDef['heal']>) => SpellRollDetails,
+): SpellCastDetails['damage'] {
+  const mods = Object.fromEntries(
+    Object.entries(ctx.sheet.abilities).map(([ability, value]) => [ability, value.mod]),
+  ) as Record<Ability, number>;
+  const affinity = elementalAffinity(ctx.sheet.features, mods, damage.type);
+  return { ...deriveRoll(damage), type: damage.type, ...(affinity ? { affinity } : {}) };
 }
 
 /** Number of free castings left for one feat spell. */
@@ -187,7 +206,7 @@ function featCastDetails(
         }
       : {}),
     ...(spell.heal ? { healing: deriveRoll(spell.heal) } : {}),
-    ...(spell.damage ? { damage: { ...deriveRoll(spell.damage), type: spell.damage.type } } : {}),
+    ...(spell.damage ? { damage: spellDamage(ctx, spell.damage, deriveRoll) } : {}),
     ...(spell.summary?.upcast ? { upcastText: spell.summary.upcast } : {}),
   };
 }

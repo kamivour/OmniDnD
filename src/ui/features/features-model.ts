@@ -1,4 +1,5 @@
 import type { CharacterState, Sheet } from '../../engine/calc/sheet';
+import { ancestryPick } from '../../engine/calc/ancestry';
 import { featureUseDetails } from '../../engine/commands';
 import type { Registry } from '../../engine/registry';
 import type { FeatureDef, Recharge } from '../../engine/schema';
@@ -79,6 +80,47 @@ function grantLabels(build: CharacterState['build'], registry: Registry) {
   return labels;
 }
 
+const ABILITY_NAME = {
+  STR: 'Strength',
+  DEX: 'Dexterity',
+  CON: 'Constitution',
+  INT: 'Intelligence',
+  WIS: 'Wisdom',
+  CHA: 'Charisma',
+} as const;
+
+/** Computed lines for draconic ancestry picks, Breath Weapon and Elemental Affinity. */
+function ancestryLines(def: FeatureDef, sheet: Sheet): string[] {
+  if (def.ancestry)
+    return [
+      [
+        `Damage type: ${def.ancestry.type}`,
+        def.ancestry.area,
+        def.ancestry.save && `${ABILITY_NAME[def.ancestry.save]} save`,
+      ]
+        .filter(Boolean)
+        .join(' · ') + '.',
+    ];
+  if (def.breath) {
+    const breath = sheet.breathWeapon;
+    return [
+      breath
+        ? `DC ${breath.dc} ${ABILITY_NAME[breath.save]} save · ${breath.area} · ${breath.dice} ${breath.type}, half on a success.`
+        : 'Pick a Draconic Ancestry on the To do screen to set the area and damage type.',
+    ];
+  }
+  if (def.affinity) {
+    const type = ancestryPick(sheet.features, 'subclass')?.type;
+    const bonus = sheet.abilities[def.affinity.ability].mod;
+    return type
+      ? [
+          `${type[0]!.toUpperCase()}${type.slice(1)} spells: add ${bonus >= 0 ? '+' : ''}${bonus} to one damage roll. Use spends 1 sorcery point for an hour of ${type} resistance.`,
+        ]
+      : [];
+  }
+  return [];
+}
+
 export function featuresModel(
   state: CharacterState,
   sheet: Sheet,
@@ -91,9 +133,12 @@ export function featuresModel(
     const details = featureUseDetails({ live: state.live, sheet }, def.id);
     const { kind, label } = ACTIVATION[def.activation];
     const shared = details.poolId !== def.id;
-    const lines = def.summary
-      ? [def.summary.effect]
-      : (def.fullText?.split(/\n\s*\n/).filter(Boolean) ?? []);
+    const lines = [
+      ...ancestryLines(def, sheet),
+      ...(def.summary
+        ? [def.summary.effect]
+        : (def.fullText?.split(/\n\s*\n/).filter(Boolean) ?? [])),
+    ];
     const usable = kind === 'active' || kind === 'triggered' || !!details.uses;
     return {
       id: def.id,

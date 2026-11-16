@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 00:58 — Draconic ancestry
+
+- Dragonborn and Draconic Sorcerers now pick their dragon on the To do screen.
+- Dragonborn get the matching resistance, and Breath Weapon shows its save DC, area, save type and damage dice. It recharges on a short rest.
+- From sorcerer level 6, spells of your dragon's damage type show the Elemental Affinity bonus when you cast them. Using Elemental Affinity spends 1 sorcery point for the resistance.
+- Checks pass.
+
 ## 2026-11-17 00:43 — Critical dice and Relentless Endurance
 
 - Half-orcs and barbarians from level 9 see a "Critical hit: also roll…" line on melee weapon cards. Savage Attacks and Brutal Critical add up.

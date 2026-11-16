@@ -273,6 +273,18 @@ export const FeatureDefSchema = z
         note: z.string().optional(),
       })
       .optional(),
+    /** A draconic ancestry pick: its damage type, plus the breath weapon's save and area for Dragonborn. */
+    ancestry: z
+      .strictObject({
+        type: DamageTypeSchema,
+        save: AbilitySchema.optional(),
+        area: z.string().optional(),
+      })
+      .optional(),
+    /** Breath Weapon: save DC 8 + this ability + proficiency; save, area and type come from the ancestry pick. */
+    breath: z.strictObject({ ability: AbilitySchema }).optional(),
+    /** Elemental Affinity: add this ability's modifier to one damage roll of a spell of the ancestry's type. */
+    affinity: z.strictObject({ ability: AbilitySchema }).optional(),
     /** Extra damage on every hit with a melee weapon (Improved Divine Smite). */
     meleeDamage: z.object({ dice: DiceSchema, type: DamageTypeSchema }).optional(),
     modifiers: z.array(ModifierSchema).optional(),

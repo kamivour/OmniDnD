@@ -107,6 +107,9 @@ interface FeatureDef extends RefBase {
   meleeDamage?: { dice; type };          // added to every melee weapon hit (Improved Divine Smite)
   critDice?: { [level]: 1..3 };          // extra weapon dice on a melee crit (Savage Attacks, Brutal Critical)
   dropToOne?: true;                       // use at 0 HP to stand at 1 HP (Relentless Endurance, D212)
+  ancestry?: { type; save?; area? };     // draconic ancestry pick (D213)
+  breath?: { ability };                   // Breath Weapon save DC ability
+  affinity?: { ability };                 // Elemental Affinity spell damage bonus
 }
 ```
 

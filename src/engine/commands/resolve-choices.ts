@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import { asiLevels, applyLevelChoices, LevelChoicesSchema } from '../calc/level-choices';
-import { familyIncludes, OPTION_FAMILIES, pendingChoices } from '../calc/pending-choices';
+import {
+  familyIncludes,
+  OPTION_FAMILIES,
+  pendingChoices,
+  RACE_OPTION_FAMILIES,
+} from '../calc/pending-choices';
 import { CharacterBuildSchema, refId, type CharacterBuild } from '../schema';
 import type { Command, CommandContext } from './runner';
 import { block } from './shared';
@@ -53,9 +58,13 @@ function prepare(ctx: CommandContext, input: ResolveChoicesPayload) {
   if ((choices.expertise?.length ?? 0) > (expertise?.count ?? 0))
     return { checks: [block(`Only ${expertise?.count ?? 0} expertise picks are open`)] };
   for (const id of choices.features ?? []) {
-    const family = OPTION_FAMILIES.find(
-      (row) => row.classId === classId && familyIncludes(row, id),
-    );
+    const family =
+      OPTION_FAMILIES.find((row) => row.classId === classId && familyIncludes(row, id)) ??
+      RACE_OPTION_FAMILIES.find(
+        (row) =>
+          (row.raceId === ctx.build.raceId || row.raceId === ctx.build.subraceId) &&
+          familyIncludes(row, id),
+      );
     if (!family) return { checks: [block('That feature is not a pick for this class')] };
     const picked = (choices.features ?? []).filter((other) => familyIncludes(family, other));
     const pick = open.find((row) => row.prefix === family.prefix);

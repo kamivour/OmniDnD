@@ -92,6 +92,8 @@ export function SpellCastControls({
                 Damage dice: {details.damage.dice}
                 {details.damage.modifier ? ` ${signed(details.damage.modifier)}` : ''}{' '}
                 {details.damage.type}.
+                {details.damage.affinity &&
+                  ` ${details.damage.affinity.name}: ${signed(details.damage.affinity.bonus)} to one damage roll.`}
               </p>
             )}
             {entryFeat && (

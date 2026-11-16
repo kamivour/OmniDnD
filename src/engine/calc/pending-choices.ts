@@ -41,6 +41,8 @@ export interface PendingChoice {
 
 interface OptionFamily {
   classId: string;
+  /** Race pick lists (Draconic Ancestry) use the race instead of a class. */
+  raceId?: string;
   /** Only characters of this subclass pick from the family. */
   subclassId?: string;
   label: string;
@@ -156,6 +158,13 @@ export const OPTION_FAMILIES: OptionFamily[] = [
     ],
   },
   {
+    classId: 'class.sorcerer',
+    subclassId: 'subclass.sorcerer.draconic',
+    label: 'Dragon Ancestor',
+    prefix: 'feature.sorcerer.dragon-ancestor-',
+    totals: [[1, 1]],
+  },
+  {
     classId: 'class.barbarian',
     subclassId: 'subclass.barbarian.totem-warrior',
     label: 'Totem Spirit',
@@ -175,6 +184,17 @@ export const OPTION_FAMILIES: OptionFamily[] = [
     label: 'Totemic Attunement',
     prefix: 'feature.barbarian.totem-attunement-',
     totals: [[14, 1]],
+  },
+];
+
+/** Race traits that make the player pick an option feature; `classId` is unused here. */
+export const RACE_OPTION_FAMILIES: (OptionFamily & { raceId: string })[] = [
+  {
+    classId: '',
+    raceId: 'race.dragonborn',
+    label: 'Draconic Ancestry',
+    prefix: 'feature.draconic-ancestry-',
+    totals: [[1, 1]],
   },
 ];
 
@@ -283,6 +303,25 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
           area: 'choices',
         });
     }
+  }
+
+  for (const family of RACE_OPTION_FAMILIES) {
+    if (family.raceId !== build.raceId && family.raceId !== build.subraceId) continue;
+    const options = familyOptionIds(family, registry, campaign);
+    const taken = build.featureIds.filter((id) => familyIncludes(family, id)).length;
+    const open = Math.min(totalAt(family.totals, 1) - taken, options.length - taken);
+    if (open > 0)
+      items.push({
+        id: `option:${family.prefix}`,
+        kind: 'option',
+        classId: build.classes[0]?.classId ?? '',
+        label: `${family.label}: pick ${open}`,
+        count: open,
+        optional: false,
+        area: 'choices',
+        prefix: family.prefix,
+        optionIds: options,
+      });
   }
 
   // Ability score improvements: earned at class levels, spent by ASI or feat picks.

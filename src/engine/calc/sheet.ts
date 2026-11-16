@@ -27,6 +27,7 @@ import { characterFeatures, resolveFormula, type CharacterFeature } from './feat
 import { optionalRules } from './campaign-rules';
 import { levelHp, maxHp } from './hp';
 import { proficiencyBonus } from './proficiency';
+import { breathWeapon, type BreathWeapon } from './ancestry';
 import { featureProficiencies, type GrantedProficiency, type Proficiencies } from './proficiencies';
 import { spellSlots, type SpellSlots } from './slots';
 import { sumParts, type Part, type Stat } from './stat';
@@ -100,6 +101,8 @@ export interface Sheet {
   attacks: WeaponAttack[];
   /** Attacks per Attack action and the features that set it (Extra Attack). */
   attackAction: { count: number; sources: string[] };
+  /** Dragonborn Breath Weapon, once a Draconic Ancestry is picked. */
+  breathWeapon?: BreathWeapon;
   /** Applied conditions, from `live.conditions` and active effects. */
   conditions: Condition[];
   carryingCapacity: number;
@@ -550,6 +553,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     grantedProficiencies: owned.granted,
     attacks,
     attackAction: attackAction(features),
+    ...withBreath(breathWeapon(features, mods, proficiency)),
     conditions,
     encumbrance: load,
     carryingCapacity: scalar(
@@ -575,6 +579,8 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     delete result.darkvision;
   return result;
 }
+
+const withBreath = (breath: BreathWeapon | undefined) => (breath ? { breathWeapon: breath } : {});
 
 /** Label for an ability bonus source: the entry name when the source is a reference id. */
 function sourceLabel(source: string, registry: Registry): string {

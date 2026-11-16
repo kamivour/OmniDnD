@@ -355,6 +355,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-14 — Ability score improvement says when feats are off for the campaign and links to Campaign settings.
 - 2026-11-14 — Number fields block letters and stray signs on input, so ability scores and level stay numeric.
 - 2026-11-14 — Tasha's custom origin moves each racial increase to a different ability, on the sheet and when creating a character.
+- 2026-11-17 — Draconic ancestry pick for Dragonborn and Draconic Sorcerer: resistance, Breath Weapon DC and dice, Elemental Affinity bonus (D213).
 - 2026-11-17 — Savage Attacks and Brutal Critical show extra crit dice on melee weapons; Relentless Endurance button stands you up at 1 HP (D212).
 - 2026-11-17 — Sorcerer Flexible Casting: turn slots into sorcery points and back from Spells or the Combat bonus tab; created slots fade on a long rest (D211).
 - 2026-11-17 — Divine Smite and Eldritch Smite spend a slot from Combat; Improved Divine Smite adds 1d8 radiant to melee rows (D210).
