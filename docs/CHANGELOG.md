@@ -4,6 +4,14 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-16 22:59 — Spells from feats and racial traits
+
+- Magic Initiate, Fey Touched, Shadow Touched, Artificer Initiate, Spell Sniper and similar feats now ask for their spells on the To do list. Racial spells (High Elf cantrip, Tiefling, Drow, Forest Gnome and others) are added on their own.
+- These spells appear in the Spellbook and Combat marked with the feat or trait name, using its own save DC and attack bonus.
+- A new **Free** option casts the spell without a slot once per long rest (or short rest, or at will, as the feat says). Rests bring it back.
+- Check: Magic Initiate's spell can also use your slots. Ritual Caster is still text only.
+- Checks pass.
+
 ## 2026-11-16 15:07 — Tasha fighting styles and the Oathbreaker
 
 - Fighters, paladins and rangers now see Tasha's fighting styles (Blind Fighting, Interception, Blessed Warrior and others) on the To do list, but only when the campaign turns on Tasha's optional class features. Each class gets only the styles it may take.

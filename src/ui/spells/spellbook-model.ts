@@ -1,8 +1,10 @@
 import type { CharacterState, Sheet } from '../../engine/calc/sheet';
+import { featSpellSources } from '../../engine/calc/feat-spells';
 import { grantedSpells, spellListsWithGrants } from '../../engine/calc/granted-spells';
+import { featFreeLeft } from '../../engine/commands/spell-options';
 import { spellSelectionDetails, type SpellSelectionMode } from '../../engine/calc/spell-selections';
 import type { Registry } from '../../engine/registry';
-import type { SpellDef } from '../../engine/schema';
+import type { FreeCast, SpellDef } from '../../engine/schema';
 import type { Cost, SpellView } from '../fixtures/the-fool';
 
 export interface SpellbookEntry {
@@ -12,6 +14,21 @@ export interface SpellbookEntry {
   alwaysFrom?: string;
   dc?: number;
   attack?: number;
+  /** Learned from a feat or racial trait; `classId` then holds that feature's id. */
+  feat?: SpellbookFeat;
+}
+
+export interface SpellbookFeat {
+  name: string;
+  /** Class list the feat drew from (Magic Initiate), for focus rules. */
+  classId?: string;
+  free?: FreeCast;
+  /** Free castings left before the next rest; Infinity at will. */
+  freeLeft: number;
+  /** Spell level of the free casting, when it is higher than the spell's own. */
+  castLevel?: number;
+  /** The feat or trait also allows casting the spell with your spell slots. */
+  slots: boolean;
 }
 
 export interface SpellbookClass {
@@ -99,6 +116,25 @@ export function spellbookModel(
     }
   }
 
+  for (const source of featSpellSources({ registry, build: state.build, sheet })) {
+    for (const feat of source.spells) {
+      const def = registry.get('spell', feat.spellId);
+      entries.push({
+        spell: spellView(def, state.build.spellTags?.[def.id]),
+        classId: source.featureId,
+        ...(source.dc === undefined ? {} : { dc: source.dc, attack: source.attack! }),
+        feat: {
+          name: source.name,
+          ...(source.classId ? { classId: source.classId } : {}),
+          ...(feat.free ? { free: feat.free } : {}),
+          freeLeft: featFreeLeft(state.live, source.featureId, feat),
+          ...(feat.castLevel ? { castLevel: feat.castLevel } : {}),
+          slots: source.grant.slots,
+        },
+      });
+    }
+  }
+
   entries.sort(
     (a, b) =>
       a.spell.level - b.spell.level ||
@@ -178,4 +214,29 @@ function spellLines({ summary, fullText }: SpellDef): string[] {
     if (summary[key]) lines.push(`${label}: ${summary[key]}`);
   }
   return lines;
+}
+
+/** Label for where a row's spell comes from: the feat or trait, or the class when there are several. */
+export function castingLabel(
+  entry: Pick<SpellbookEntry, 'classId' | 'feat'>,
+  model: Pick<SpellbookModel, 'classes' | 'unsupportedClassIds'>,
+  registry: Registry,
+): string | undefined {
+  if (entry.feat) return entry.feat.name;
+  return model.classes.length + model.unsupportedClassIds.length > 1
+    ? (registry.entries.get(entry.classId)?.name ?? entry.classId)
+    : undefined;
+}
+
+/** No way to cast a leveled spell right now: no slot (or ritual) and no free casting left. */
+export function spellUnavailable(
+  entry: Pick<SpellbookEntry, 'spell' | 'feat'>,
+  slots: SpellbookModel['slots'],
+  ritualAvailable = false,
+): boolean {
+  const { spell, feat } = entry;
+  if (spell.level === 0) return false;
+  const slotLeft = slots.some((slot) => slot.level >= spell.level && slot.used < slot.max);
+  if (feat) return feat.freeLeft <= 0 && !(feat.slots && slotLeft);
+  return !slotLeft && !ritualAvailable;
 }

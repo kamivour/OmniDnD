@@ -1,5 +1,6 @@
 import { optionalRules, sourceAllows } from './campaign-rules';
 import type { Registry } from '../registry';
+import { featSpellSources } from './feat-spells';
 import { asiLevels } from './level-choices';
 import { computeSheet, type CharacterState } from './sheet';
 import { spellSelectionDetails } from './spell-selections';
@@ -12,7 +13,8 @@ export type PendingKind =
   | 'cantrips'
   | 'spells-known'
   | 'spellbook'
-  | 'prepared';
+  | 'prepared'
+  | 'feat-spells';
 
 /** One decision a character still has to make. */
 export interface PendingChoice {
@@ -31,6 +33,8 @@ export interface PendingChoice {
   prefix?: string;
   /** For `option`: every feature the campaign allows for this pick, owned ones included. */
   optionIds?: string[];
+  /** For `feat-spells`: the feat or racial trait whose spells are still open. */
+  featureId?: string;
 }
 
 interface OptionFamily {
@@ -333,6 +337,21 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
     }
     if (details.mode === 'prepared' || details.mode === 'spellbook')
       add('prepared', 'prepared spells', room(details.prepared), true);
+  }
+
+  // Spells taught by feats and racial traits (Magic Initiate, Fey Touched, High Elf cantrip).
+  for (const source of featSpellSources({ registry, build, sheet })) {
+    if (source.open === 0 && source.needs.length === 0) continue;
+    items.push({
+      id: `feat-spells:${source.featureId}`,
+      kind: 'feat-spells',
+      classId: '',
+      featureId: source.featureId,
+      label: `${source.name}: choose spells`,
+      count: source.open,
+      optional: false,
+      area: 'choices',
+    });
   }
   return items;
 }

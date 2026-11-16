@@ -1,5 +1,11 @@
 import type { SpellcastingStats } from '../calc/sheet';
 import { entryCasting } from '../calc/casting';
+import {
+  featSpellSources,
+  freeUseKey,
+  type FeatSpell,
+  type FeatSpellSource,
+} from '../calc/feat-spells';
 import { spellListsWithGrants } from '../calc/granted-spells';
 import { isPreparedCaster2014 } from '../calc/spell-selections';
 import type { DamageType } from '../rules2014';
@@ -14,6 +20,17 @@ export interface SpellCastOptions {
   classId?: string;
   slotLevel?: number;
   ritual?: boolean;
+  /** Cast through a feat or racial trait instead of a class. */
+  featureId?: string;
+}
+
+/** Casting through a feat or racial trait: its own ability, DC and free use. */
+export interface FeatCastDetails {
+  source: FeatSpellSource;
+  /** Undefined when the source does not teach this spell. */
+  spell?: FeatSpell;
+  /** Free castings left before the next rest; Infinity at will, 0 without a free use. */
+  freeLeft: number;
 }
 
 export interface SpellRollDetails {
@@ -37,6 +54,7 @@ export interface SpellCastDetails {
   healing?: SpellRollDetails;
   damage?: SpellRollDetails & { type: DamageType };
   upcastText?: string;
+  feat?: FeatCastDetails;
 }
 
 /** Derives dice from mechanics, never from reference prose. */
@@ -83,6 +101,7 @@ export function spellCastDetails(
   options: SpellCastOptions,
 ): SpellCastDetails {
   const spell = ctx.registry.get('spell', options.spellId);
+  if (options.featureId !== undefined) return featCastDetails(ctx, spell, options);
   const associations = spellListsWithGrants(ctx.registry, ctx.build).filter(
     (list) => list.known.includes(spell.id) || list.prepared?.includes(spell.id),
   );
@@ -126,6 +145,47 @@ export function spellCastDetails(
     preparedForCasting,
     ritualEligible,
     ...(ritualReason === undefined ? {} : { ritualReason }),
+    ...(spell.heal ? { healing: deriveRoll(spell.heal) } : {}),
+    ...(spell.damage ? { damage: { ...deriveRoll(spell.damage), type: spell.damage.type } } : {}),
+    ...(spell.summary?.upcast ? { upcastText: spell.summary.upcast } : {}),
+  };
+}
+
+/** Number of free castings left for one feat spell. */
+export function featFreeLeft(
+  live: SpellOptionsContext['live'],
+  featureId: string,
+  feat: FeatSpell | undefined,
+): number {
+  if (!feat?.free) return 0;
+  if (feat.free === 'will') return Infinity;
+  return (live.featSpellsUsed?.[freeUseKey(featureId, feat.spellId)] ?? 0) > 0 ? 0 : 1;
+}
+
+function featCastDetails(
+  ctx: SpellOptionsContext,
+  spell: SpellDef,
+  options: SpellCastOptions,
+): SpellCastDetails {
+  const source = featSpellSources(ctx).find((row) => row.featureId === options.featureId);
+  const feat = source?.spells.find((row) => row.spellId === spell.id);
+  const modifier = source?.ability ? ctx.sheet.abilities[source.ability].mod : undefined;
+  const deriveRoll = (roll: NonNullable<SpellDef['heal']>) =>
+    rollDetails(roll, spell, options, ctx.sheet.level, modifier);
+  return {
+    selected: feat !== undefined,
+    needsPreparation: false,
+    preparedForCasting: true,
+    ritualEligible: false,
+    ...(source
+      ? {
+          feat: {
+            source,
+            ...(feat ? { spell: feat } : {}),
+            freeLeft: featFreeLeft(ctx.live, source.featureId, feat),
+          },
+        }
+      : {}),
     ...(spell.heal ? { healing: deriveRoll(spell.heal) } : {}),
     ...(spell.damage ? { damage: { ...deriveRoll(spell.damage), type: spell.damage.type } } : {}),
     ...(spell.summary?.upcast ? { upcastText: spell.summary.upcast } : {}),

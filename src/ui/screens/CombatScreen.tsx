@@ -47,7 +47,7 @@ import { LiveEffects } from '../effects/LiveEffects';
 import { CombatItems } from '../inventory/InventoryUse';
 import { RecentCharacterLog } from '../log/CharacterLog';
 import { SpellCastControls } from '../spells/SpellCastControls';
-import type { SpellbookEntry } from '../spells/spellbook-model';
+import { castingLabel, spellUnavailable, type SpellbookEntry } from '../spells/spellbook-model';
 import { parseDice } from '../../engine/calc/dice';
 import { RollButton } from '../dice/RollButton';
 
@@ -118,39 +118,35 @@ export function CombatScreen() {
     return available[cost] ? undefined : ECONOMY_NAME[cost];
   };
 
-  const spellRow = ({ spell, classId, dc, attack }: SpellbookEntry) => (
-    <SpellRow
-      key={`${classId}:${spell.id}`}
-      spell={spell}
-      dc={dc}
-      attack={attack}
-      castingClass={
-        model.spells.classes.length + model.spells.unsupportedClassIds.length > 1
-          ? registry.get('class', classId).name
-          : undefined
-      }
-      slots={model.spells.slots}
-      spent={spentFor(spell.cost)}
-      unavailable={
-        spell.level > 0 &&
-        !model.spells.slots.some((slot) => slot.level >= spell.level && slot.used < slot.max)
-      }
-      concentrating={spell.id === state.live.concentration?.spellId}
-      onCast={(_selected, _level, opener) => {
-        castOpener.current = opener ?? (document.activeElement as HTMLElement);
-        setCasting({ spellId: spell.id, classId, opener: castOpener.current });
-      }}
-      sheetFooter={({ close, trigger }) => (
-        <SpellCastControls
-          spellId={spell.id}
-          classId={classId}
-          returnFocusTo={trigger}
-          onApplied={close}
-        />
-      )}
-      onPin={() => setDetail(<LiveSpellDetail spellId={spell.id} classId={classId} />)}
-    />
-  );
+  const spellRow = (entry: SpellbookEntry) => {
+    const { spell, classId, dc, attack } = entry;
+    return (
+      <SpellRow
+        key={`${classId}:${spell.id}`}
+        spell={spell}
+        dc={dc}
+        attack={attack}
+        castingClass={castingLabel(entry, model.spells, registry)}
+        slots={model.spells.slots}
+        spent={spentFor(spell.cost)}
+        unavailable={spellUnavailable(entry, model.spells.slots)}
+        concentrating={spell.id === state.live.concentration?.spellId}
+        onCast={(_selected, _level, opener) => {
+          castOpener.current = opener ?? (document.activeElement as HTMLElement);
+          setCasting({ spellId: spell.id, classId, opener: castOpener.current });
+        }}
+        sheetFooter={({ close, trigger }) => (
+          <SpellCastControls
+            spellId={spell.id}
+            classId={classId}
+            returnFocusTo={trigger}
+            onApplied={close}
+          />
+        )}
+        onPin={() => setDetail(<LiveSpellDetail spellId={spell.id} classId={classId} />)}
+      />
+    );
+  };
 
   const attackRow = ({ instanceId, attack }: CombatWeapon, reaction = false) => (
     <ActionRow

@@ -1,5 +1,6 @@
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from '../rules2014';
 import { wornArmor } from '../calc/equipment';
+import { featSpellSources, freeUseKey } from '../calc/feat-spells';
 import { spellListsWithGrants } from '../calc/granted-spells';
 import type { SpellDef } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
@@ -36,6 +37,10 @@ export interface CastSpellPayload {
   healRoll?: number;
   /** Class whose spellcasting ability applies. Default: the class that knows the spell. */
   classId?: string;
+  /** Cast through this feat or racial trait (its ability and DC) instead of a class. */
+  featureId?: string;
+  /** Use the feat's or trait's free casting instead of a slot. Needs `featureId`. */
+  free?: boolean;
 }
 
 /** Ritual casting takes 10 minutes longer than the spell's casting time (PHB 2014). */
@@ -62,11 +67,21 @@ function castingSeconds(spell: SpellDef, ritual: boolean): number {
 /** The slot level the spell is cast at, or undefined for a cantrip or ritual. */
 function castLevel(ctx: CommandContext, spell: SpellDef, payload: CastSpellPayload) {
   if (payload.ritual || spell.level === 0) return undefined;
+  if (payload.free) {
+    const source = featSpellSources(ctx).find((row) => row.featureId === payload.featureId);
+    const feat = source?.spells.find((row) => row.spellId === spell.id);
+    return feat?.castLevel ?? spell.level;
+  }
   return payload.pact ? ctx.sheet.slots.pact?.level : payload.slotLevel;
 }
 
 function slotChecks(ctx: CommandContext, spell: SpellDef, payload: CastSpellPayload): Check[] {
   const { sheet, live } = ctx;
+  if (payload.free) {
+    return payload.slotLevel !== undefined || payload.pact || payload.ritual
+      ? [block('A free casting uses no spell slot')]
+      : [];
+  }
   if (payload.ritual) {
     if (!spell.ritual) return [block(`${spell.name} is not a ritual`)];
     if (payload.slotLevel !== undefined || payload.pact) {
@@ -131,6 +146,35 @@ export function bonusActionSpellChecks(
   return [];
 }
 
+/** Casting through a feat or racial trait: the spell must come from it; free uses are limited. */
+function featChecks(
+  spell: SpellDef,
+  details: SpellCastDetails,
+  payload: CastSpellPayload,
+): Check[] {
+  const feat = details.feat;
+  if (!feat) return [block('That feat or trait is not on this character')];
+  const { source } = feat;
+  if (!feat.spell) return [block(`${source.name} does not teach ${spell.name}`)];
+  if (payload.free) {
+    if (!feat.spell.free) return [block(`${source.name} gives no free casting of ${spell.name}`)];
+    if (feat.freeLeft === 0)
+      return [
+        block(
+          `Free casting of ${spell.name} is used until your next ${feat.spell.free === 'short' ? 'short or long' : 'long'} rest`,
+        ),
+      ];
+    return [];
+  }
+  const checks: Check[] = [];
+  if (payload.ritual) checks.push(warn(`${source.name} does not grant ritual casting`));
+  else if (spell.level > 0 && !source.grant.slots)
+    checks.push(warn(`${source.name} does not let you cast ${spell.name} with a spell slot`));
+  if (source.ability === undefined)
+    checks.push(warn(`Choose the spellcasting ability for ${source.name} on the To do page`));
+  return checks;
+}
+
 function knowsSpell({ build, registry }: CommandContext, spellId: string): string | undefined {
   return spellListsWithGrants(registry, build).find(
     (list) => list.known.includes(spellId) || list.prepared?.includes(spellId),
@@ -153,10 +197,16 @@ export const castSpell: Command<CastSpellPayload> = {
           `Cannot cast spells while wearing armor without proficiency: ${armor.map(({ def }) => def.name).join(', ')}`,
         ),
       );
-    if (details.classId !== undefined && !details.selected)
+    if (payload.featureId !== undefined) checks.push(...featChecks(spell, details, payload));
+    else if (details.classId !== undefined && !details.selected)
       checks.push(warn(`${spell.name} is not selected for this casting class`));
     else if (!knowsSpell(ctx, spell.id)) checks.push(warn(`You don't know ${spell.name}`));
-    if (!payload.ritual && details.needsPreparation && !details.preparedForCasting)
+    if (
+      payload.featureId === undefined &&
+      !payload.ritual &&
+      details.needsPreparation &&
+      !details.preparedForCasting
+    )
       checks.push(warn(`${spell.name} is not prepared for this casting class`));
     if (payload.ritual && details.classId !== undefined && details.ritualReason)
       checks.push(warn(details.ritualReason));
@@ -192,7 +242,18 @@ export const castSpell: Command<CastSpellPayload> = {
     const level = castLevel(ctx, spell, payload);
     const notes: (string | undefined)[] = endSelfInvisibility(live, 'cast');
 
-    if (payload.pact) live.pactSlotsUsed = (live.pactSlotsUsed ?? 0) + 1;
+    const feat = payload.featureId
+      ? featSpellSources(ctx).find((row) => row.featureId === payload.featureId)
+      : undefined;
+    if (payload.free && feat) {
+      if (feat.spells.find((row) => row.spellId === spell.id)?.free !== 'will') {
+        const key = freeUseKey(feat.featureId, spell.id);
+        live.featSpellsUsed = {
+          ...live.featSpellsUsed,
+          [key]: (live.featSpellsUsed?.[key] ?? 0) + 1,
+        };
+      }
+    } else if (payload.pact) live.pactSlotsUsed = (live.pactSlotsUsed ?? 0) + 1;
     else if (level !== undefined) live.slotsUsed[level] = (live.slotsUsed[level] ?? 0) + 1;
 
     const slot = ECONOMY_BY_COST[spell.casting.cost];
@@ -247,13 +308,15 @@ export const castSpell: Command<CastSpellPayload> = {
       notes.push(`healed ${amount} (HP ${before} → ${after})`);
     }
 
-    const how = ritual
-      ? 'ritual'
-      : payload.pact
-        ? `L${level} pact slot`
-        : level === undefined
-          ? undefined
-          : `L${level} slot`;
+    const how = payload.free
+      ? `free, ${feat?.name ?? 'feat'}${level !== undefined && level > spell.level ? `, L${level}` : ''}`
+      : ritual
+        ? 'ritual'
+        : payload.pact
+          ? `L${level} pact slot`
+          : level === undefined
+            ? undefined
+            : `L${level} slot`;
     return withNotes(`Cast ${spell.name}${how ? ` (${how})` : ''}`, notes);
   },
 };

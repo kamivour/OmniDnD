@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
-import { resolveChoices } from '../../engine/commands';
+import { chooseFeatSpells, featSpellCandidates, resolveChoices } from '../../engine/commands';
+import type { Ability } from '../../engine/calc/abilities';
 import type { PendingChoice } from '../../engine/calc/pending-choices';
 import type { CharacterState } from '../../engine/calc/sheet';
 import type { Skill } from '../../engine/rules2014';
@@ -70,9 +71,16 @@ export function TodoScreen() {
                 </button>
               )}
             </div>
-            {editing === item.id && (
-              <ChoiceForm item={item} state={state} onDone={() => setEditing(null)} />
-            )}
+            {editing === item.id &&
+              (item.kind === 'feat-spells' && item.featureId ? (
+                <FeatSpellsForm
+                  featureId={item.featureId}
+                  state={state}
+                  onDone={() => setEditing(null)}
+                />
+              ) : (
+                <ChoiceForm item={item} state={state} onDone={() => setEditing(null)} />
+              ))}
           </li>
         ))}
       </ul>
@@ -191,6 +199,148 @@ function ChoiceForm({
           onClick={() => {
             if (choices) run(resolveChoices, { classId: item.classId, choices }, undefined, onDone);
           }}
+          className="min-h-11 rounded-btn bg-accent px-4 font-semibold text-bg disabled:opacity-40"
+        >
+          Save choice
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const ABILITY_NAMES: Record<Ability, string> = {
+  STR: 'Strength',
+  DEX: 'Dexterity',
+  CON: 'Constitution',
+  INT: 'Intelligence',
+  WIS: 'Wisdom',
+  CHA: 'Charisma',
+};
+
+/** Spells, class and casting ability for a feat or racial trait such as Magic Initiate. */
+function FeatSpellsForm({
+  featureId,
+  state,
+  onDone,
+}: {
+  featureId: string;
+  state: CharacterState;
+  onDone: () => void;
+}) {
+  const { run } = useCommand();
+  const def = registry.get('feature', featureId);
+  const grant = def.spells;
+  const stored = state.build.featSpells?.[featureId];
+  const [classId, setClassId] = useState(stored?.classId ?? grant?.classOptions?.[0]);
+  const raisedOptions = def.grants?.ability ?? [];
+  const raised = state.build.abilityScores.bonuses.find(
+    (bonus) => bonus.source === `Feat: ${def.name}`,
+  )?.ability;
+  const askAbility = grant?.ability === 'raised' && !raised && raisedOptions.length > 0;
+  const [ability, setAbility] = useState<Ability | undefined>(stored?.ability ?? raisedOptions[0]);
+  const [chosen, setChosen] = useState<string[]>(stored?.spellIds ?? []);
+  if (!grant) return null;
+
+  const picks = (grant.picks ?? []).map((pick) => ({
+    pick,
+    options: featSpellCandidates(registry, state.campaign, pick, classId),
+  }));
+  const inPick = (options: { id: string }[]) =>
+    chosen.filter((id) => options.some((option) => option.id === id));
+  const complete = picks.every(({ pick, options }) => inPick(options).length === pick.count);
+
+  return (
+    <div className="flex flex-col gap-3">
+      {grant.classOptions && (
+        <label className="flex flex-col gap-1 text-sm text-text">
+          Spell list
+          <select
+            value={classId}
+            onChange={(event) => {
+              setClassId(event.target.value);
+              setChosen([]);
+            }}
+            className="min-h-11 rounded-btn border border-border bg-surface px-2 text-sm text-text"
+          >
+            {grant.classOptions.map((id) => (
+              <option key={id} value={id}>
+                {nameOf(id)}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+      {askAbility && (
+        <label className="flex flex-col gap-1 text-sm text-text">
+          Spellcasting ability
+          <select
+            value={ability}
+            onChange={(event) => setAbility(event.target.value as Ability)}
+            className="min-h-11 rounded-btn border border-border bg-surface px-2 text-sm text-text"
+          >
+            {raisedOptions.map((id) => (
+              <option key={id} value={id}>
+                {ABILITY_NAMES[id]}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+      {picks.map(({ pick, options }) => {
+        const taken = inPick(options);
+        const noun = pick.level === 0 ? 'cantrip' : `level ${pick.level} spell`;
+        return (
+          <fieldset key={pick.level} className="flex flex-col">
+            <legend className="mb-1 text-sm text-text">
+              Pick {pick.count} {noun}
+              {pick.count > 1 ? 's' : ''} ({taken.length} chosen)
+            </legend>
+            <div className="grid max-h-72 gap-1 overflow-y-auto sm:grid-cols-2">
+              {options.map((option) => {
+                const checked = chosen.includes(option.id);
+                return (
+                  <label
+                    key={option.id}
+                    className="flex min-h-11 items-center gap-2 text-sm text-text"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      disabled={!checked && taken.length >= pick.count}
+                      onChange={() =>
+                        setChosen(
+                          checked
+                            ? chosen.filter((id) => id !== option.id)
+                            : [...chosen, option.id],
+                        )
+                      }
+                      className="size-4 accent-(--omni-accent)"
+                    />
+                    {option.name}
+                  </label>
+                );
+              })}
+            </div>
+          </fieldset>
+        );
+      })}
+      <div>
+        <button
+          type="button"
+          disabled={!complete}
+          onClick={() =>
+            run(
+              chooseFeatSpells,
+              {
+                featureId,
+                ...(grant.classOptions && classId ? { classId } : {}),
+                ...(askAbility && ability ? { ability } : {}),
+                spellIds: chosen,
+              },
+              undefined,
+              onDone,
+            )
+          }
           className="min-h-11 rounded-btn bg-accent px-4 font-semibold text-bg disabled:opacity-40"
         >
           Save choice

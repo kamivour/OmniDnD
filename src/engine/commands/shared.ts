@@ -198,6 +198,22 @@ export function restoreFeatures(live: Live, sheet: Sheet, recharges: readonly Re
     delete live.featureUsesSpent[def.id];
     names.push(def.name);
   }
+  // Free castings from feats and racial traits (Fey Touched, Infernal Legacy).
+  for (const { def } of sheet.features) {
+    const grant = def.spells;
+    if (!grant || !live.featSpellsUsed) continue;
+    const pickFree = grant.picks?.find((pick) => pick.free)?.free;
+    let restored = false;
+    for (const key of Object.keys(live.featSpellsUsed)) {
+      const [featureId, spellId] = key.split('|');
+      if (featureId !== def.id) continue;
+      const free = grant.fixed?.find((row) => row.spellId === spellId)?.free ?? pickFree;
+      if (!free || free === 'will' || !recharges.includes(free)) continue;
+      delete live.featSpellsUsed[key];
+      restored = true;
+    }
+    if (restored && !names.includes(def.name)) names.push(def.name);
+  }
   return names;
 }
 

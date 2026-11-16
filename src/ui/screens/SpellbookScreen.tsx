@@ -18,7 +18,7 @@ import { useCharacter } from '../hooks/useCharacter';
 import { signed } from '../format';
 import { useDetail } from '../layout/detail-context';
 import { SPELL_TYPE_ORDER, SPELL_TYPES, type SpellType } from '../spellTypes';
-import { spellbookModel } from '../spells/spellbook-model';
+import { castingLabel, spellbookModel, spellUnavailable } from '../spells/spellbook-model';
 import { SpellCastControls } from '../spells/SpellCastControls';
 import { SpellManage } from '../spells/SpellManage';
 import { LiveSpellDetail } from '../spells/LiveSpellDetail';
@@ -51,21 +51,7 @@ const NO_FILTERS: Filters = {
 
 const COSTS: Cost[] = ['A', 'BA', 'R'];
 
-function hasSlotFor(
-  spell: SpellView,
-  slots: readonly { level: number; max: number; used: number }[],
-): boolean {
-  if (spell.level === 0) return true;
-  return slots.some((s) => s.level >= spell.level && s.max - s.used > 0);
-}
-
-function matches(
-  spell: SpellView,
-  f: Filters,
-  slots: readonly { level: number; max: number; used: number }[],
-  ritualAvailable = false,
-  favorite = false,
-): boolean {
+function matches(spell: SpellView, f: Filters, unavailable: boolean, favorite = false): boolean {
   if (f.query && !spell.name.toLowerCase().includes(f.query.trim().toLowerCase())) return false;
   if (f.level !== 'all' && spell.level !== f.level) return false;
   if (f.costs.length > 0 && !f.costs.includes(spell.cost)) return false;
@@ -74,7 +60,7 @@ function matches(
   if (f.ritual && !spell.ritual) return false;
   if (f.school !== 'all' && spell.school.toLowerCase() !== f.school) return false;
   if (f.favorites && !favorite) return false;
-  if (f.castableNow && !hasSlotFor(spell, slots) && !ritualAvailable) return false;
+  if (f.castableNow && unavailable) return false;
   return true;
 }
 
@@ -90,12 +76,13 @@ export function SpellbookScreen() {
   const model = spellbookModel(state, sheet, registry);
   const { slots, levels } = model;
   const context = { ...state, sheet, registry: registryFor(state.build) };
-  const entries = model.entries.map((entry) => ({
-    ...entry,
-    ritualAvailable:
+  const entries = model.entries.map((entry) => {
+    const ritualAvailable =
+      !entry.feat &&
       !state.live.combat &&
-      spellCastDetails(context, { spellId: entry.spell.id, classId: entry.classId }).ritualEligible,
-  }));
+      spellCastDetails(context, { spellId: entry.spell.id, classId: entry.classId }).ritualEligible;
+    return { ...entry, unavailable: spellUnavailable(entry, slots, ritualAvailable) };
+  });
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
   const [manageOpen, setManageOpen] = useState(false);
   const [manageClass, setManageClass] = useState<string | undefined>(undefined);
@@ -125,8 +112,8 @@ export function SpellbookScreen() {
   const setPinned = (spell: SpellView, classId: string) =>
     pin(<LiveSpellDetail spellId={spell.id} classId={classId} />);
 
-  const visible = entries.filter(({ spell, ritualAvailable }) =>
-    matches(spell, filters, slots, ritualAvailable, state.build.favorites.includes(spell.id)),
+  const visible = entries.filter(({ spell, unavailable }) =>
+    matches(spell, filters, unavailable, state.build.favorites.includes(spell.id)),
   );
   const costs = [...new Set<Cost>([...COSTS, ...entries.map(({ spell }) => spell.cost)])];
   const filtered = JSON.stringify(filters) !== JSON.stringify(NO_FILTERS);
@@ -414,46 +401,45 @@ export function SpellbookScreen() {
                 </button>
               ))}
               <ul className="flex flex-col gap-2">
-                {group.map(({ spell, classId, dc, attack, ritualAvailable, alwaysFrom }) => (
-                  <SpellRow
-                    key={`${classId}:${spell.id}`}
-                    spell={spell}
-                    dc={dc}
-                    attack={attack}
-                    alwaysFrom={alwaysFrom}
-                    favorite={state.build.favorites.includes(spell.id)}
-                    onFavorite={() => {
-                      const favorite = state.build.favorites.includes(spell.id);
-                      restoreFavoritesFocus.current = filters.favorites && favorite;
-                      const result = run(setSpellFavorite, {
-                        spellId: spell.id,
-                        favorite: !favorite,
-                      });
-                      if (result.result !== 'ok') restoreFavoritesFocus.current = false;
-                    }}
-                    castingClass={
-                      model.classes.length + model.unsupportedClassIds.length > 1
-                        ? registry.get('class', classId).name
-                        : undefined
-                    }
-                    slots={slots}
-                    concentrating={spell.id === state.live.concentration?.spellId}
-                    unavailable={!hasSlotFor(spell, slots) && !ritualAvailable}
-                    onCast={(selected, _level, opener) => {
-                      castOpener.current = opener ?? (document.activeElement as HTMLElement);
-                      setCasting({ spellId: selected.id, classId, opener: castOpener.current });
-                    }}
-                    sheetFooter={({ close, trigger }) => (
-                      <SpellCastControls
-                        spellId={spell.id}
-                        classId={classId}
-                        returnFocusTo={trigger}
-                        onApplied={close}
-                      />
-                    )}
-                    onPin={(spell) => setPinned(spell, classId)}
-                  />
-                ))}
+                {group.map((entry) => {
+                  const { spell, classId, dc, attack, alwaysFrom, unavailable } = entry;
+                  return (
+                    <SpellRow
+                      key={`${classId}:${spell.id}`}
+                      spell={spell}
+                      dc={dc}
+                      attack={attack}
+                      alwaysFrom={alwaysFrom}
+                      favorite={state.build.favorites.includes(spell.id)}
+                      onFavorite={() => {
+                        const favorite = state.build.favorites.includes(spell.id);
+                        restoreFavoritesFocus.current = filters.favorites && favorite;
+                        const result = run(setSpellFavorite, {
+                          spellId: spell.id,
+                          favorite: !favorite,
+                        });
+                        if (result.result !== 'ok') restoreFavoritesFocus.current = false;
+                      }}
+                      castingClass={castingLabel(entry, model, registry)}
+                      slots={slots}
+                      concentrating={spell.id === state.live.concentration?.spellId}
+                      unavailable={unavailable}
+                      onCast={(selected, _level, opener) => {
+                        castOpener.current = opener ?? (document.activeElement as HTMLElement);
+                        setCasting({ spellId: selected.id, classId, opener: castOpener.current });
+                      }}
+                      sheetFooter={({ close, trigger }) => (
+                        <SpellCastControls
+                          spellId={spell.id}
+                          classId={classId}
+                          returnFocusTo={trigger}
+                          onApplied={close}
+                        />
+                      )}
+                      onPin={(spell) => setPinned(spell, classId)}
+                    />
+                  );
+                })}
               </ul>
             </section>
           );

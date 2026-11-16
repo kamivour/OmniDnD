@@ -41,6 +41,7 @@ function prepare(ctx: CommandContext, input: ResetCharacterPayload) {
     exhaustion: 0,
   };
   delete live.pactSlotsUsed;
+  delete live.featSpellsUsed;
   delete live.concentration;
   delete live.combat;
   try {

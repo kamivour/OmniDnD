@@ -33,11 +33,27 @@ export function SpellCastControls({
   const model = spellbookModel(state, sheet, registry);
   const entry = model.entries.find((item) => item.spell.id === spellId && item.classId === classId);
   const definition = registry.get('spell', spellId);
-  const base = spellCastDetails(context, { spellId, classId });
+  const entryFeat = entry?.feat;
+  // Feat and racial-trait spells carry the feature id in `classId`.
+  const via = entryFeat ? { featureId: classId } : { classId };
+  const base = spellCastDetails(context, { spellId, ...via });
   const carried = state.build.items
     .filter((item) => (state.live.items[item.instanceId]?.qty ?? 0) > 0)
     .map((item) => item.itemId);
-  const material = materialCover(definition, classId, carried, registry);
+  const material = materialCover(definition, entryFeat?.classId ?? classId, carried, registry);
+  const slots = entryFeat && !entryFeat.slots ? [] : model.slots;
+  const free = entryFeat?.free
+    ? {
+        label:
+          entryFeat.free === 'will'
+            ? 'At will'
+            : entryFeat.free === 'short'
+              ? '1/short rest'
+              : '1/long rest',
+        left: entryFeat.freeLeft,
+        level: entryFeat.castLevel ?? definition.level,
+      }
+    : undefined;
   const [applyToMe, setApplyToMe] = useState(false);
   const [roll, setRoll] = useState<{ context: string; value: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -51,18 +67,19 @@ export function SpellCastControls({
   return (
     <CastFooter
       spell={entry.spell}
-      slots={model.slots}
+      slots={slots}
+      free={free}
       allowRitual={base.ritualEligible && !state.live.combat}
       upcastText={base.upcastText}
-      renderChoices={({ level, ritual }) => {
+      renderChoices={({ level, ritual, free: freeCast }) => {
         const options = {
           spellId,
-          classId,
+          ...via,
           ...(level > 0 && !ritual ? { slotLevel: level } : {}),
           ...(ritual ? { ritual: true } : {}),
         };
         const details = spellCastDetails(context, options);
-        const rollContext = `${level}:${ritual}`;
+        const rollContext = `${level}:${ritual}:${freeCast}`;
         const value = roll?.context === rollContext ? roll.value : '';
         const healing =
           selfHealing && value.trim()
@@ -77,7 +94,16 @@ export function SpellCastControls({
                 {details.damage.type}.
               </p>
             )}
-            {definition.ritual && !base.ritualEligible && (
+            {entryFeat && (
+              <p className="text-xs text-text-muted">
+                From {entryFeat.name}
+                {entryFeat.slots || definition.level === 0
+                  ? ''
+                  : '. Spell slots cannot be used for this spell'}
+                .
+              </p>
+            )}
+            {!entryFeat && definition.ritual && !base.ritualEligible && (
               <p className="text-xs text-text-muted">{base.ritualReason}</p>
             )}
             {definition.ritual && base.ritualEligible && state.live.combat && (
@@ -168,18 +194,19 @@ export function SpellCastControls({
           </div>
         );
       }}
-      onCast={(level, ritual = false) => {
+      onCast={(level, ritual = false, freeCast = false) => {
         setError(null);
         const payload: CastSpellPayload = {
           spellId,
-          classId,
-          ...(entry.spell.level > 0 && !ritual ? { slotLevel: level } : {}),
+          ...via,
+          ...(freeCast ? { free: true } : {}),
+          ...(entry.spell.level > 0 && !ritual && !freeCast ? { slotLevel: level } : {}),
           ...(ritual ? { ritual: true } : {}),
           ...(applyToMe && definition.effect?.target === 'any' ? { onSelf: true } : {}),
           ...(selfHealing
             ? {
                 healRoll:
-                  roll?.context === `${level}:${ritual}` && roll.value.trim()
+                  roll?.context === `${level}:${ritual}:${freeCast}` && roll.value.trim()
                     ? Number(roll.value)
                     : Number.NaN,
               }

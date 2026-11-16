@@ -162,7 +162,7 @@ export function dashboardQuickAccess(
         kind: 'spell',
         key: `spell:${classId}:${id}`,
         id,
-        name: `${def.name}${entries.length > 1 ? ` (${registry.get('class', classId).name})` : ''}`,
+        name: `${def.name}${entries.length > 1 ? ` (${registry.entries.get(classId)?.name ?? classId})` : ''}`,
         classId,
       }));
     }

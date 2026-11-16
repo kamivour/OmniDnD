@@ -96,6 +96,9 @@ interface FeatureDef extends RefBase {
   die?: DieByLevel;
   modifiers?: Modifier[];               // passive math, e.g. JoAT
   hook?: string;                        // complex logic in src/engine/hooks/<id>.ts
+  spells?: { ability: Ability | 'raised' | 'class'; classOptions?: string[]; slots: boolean;
+             fixed?: { spellId; free?: 'long' | 'short' | 'will'; minLevel?; castLevel? }[];
+             picks?: { count; level; schools?; fromClass?; classes?; attack?; free? }[] };  // feat and racial spells (D207)
 }
 ```
 
@@ -133,6 +136,7 @@ interface CharacterBuild {
   spells: { classId: string; known: string[]; prepared?: string[] }[];
   spellTags?: Record<string, SpellType[]>;         // per-character tag override, edited in Manage (M4)
   favorites: string[];
+  featSpells?: Record<string, { classId?: string; ability?: Ability; spellIds: string[] }>;  // picks for feature spells (D207)
   featureIds: string[];                            // extras only (feats, DM grants, homebrew); granted features are derived (D48)
   choices: Record<string, unknown>;
   items: { instanceId: string; itemId: string; container?: string; notes?: string }[];
@@ -156,6 +160,7 @@ interface LiveState {
   slotsUsed: number[];                             // index = spell level
   pactSlotsUsed?: number;
   featureUsesSpent: Record<string, number>;
+  featSpellsUsed?: Record<string, number>;         // 'featureId|spellId' free castings spent (D207)
   concentration?: { spellId: string; slotLevel?: number; endsAt?: number;
                    effectId?: string;              // effectId only when the spell targets you
                    pendingSaves?: { id: string; dc: number }[] };

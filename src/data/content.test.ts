@@ -150,3 +150,25 @@ describe('registry', () => {
     expect(registry.get('feature', 'feature.feat.fey-touched').origin).toBe('feat');
   });
 });
+
+describe('feat and trait spells', () => {
+  it('name real spells, one pick per spell level, and cantrips that cost nothing', () => {
+    const rows = [...registry.entries.values()].filter(
+      (row) => row.kind === 'feature' && row.spells,
+    );
+    expect(rows.length).toBeGreaterThan(10);
+    for (const row of rows) {
+      if (row.kind !== 'feature' || !row.spells) continue;
+      const levels = (row.spells.picks ?? []).map((pick) => pick.level);
+      expect(new Set(levels).size, row.id).toBe(levels.length);
+      for (const fixed of row.spells.fixed ?? [])
+        expect(registry.entries.get(fixed.spellId)?.kind, `${row.id} ${fixed.spellId}`).toBe(
+          'spell',
+        );
+      for (const id of row.spells.classOptions ?? [])
+        expect(registry.entries.get(id)?.kind, `${row.id} ${id}`).toBe('class');
+      if (row.spells.ability === 'raised')
+        expect(row.grants?.ability?.length, row.id).toBeGreaterThan(0);
+    }
+  });
+});

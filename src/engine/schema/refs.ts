@@ -155,6 +155,51 @@ export const FeatGrantsSchema = z.strictObject({
   armor: z.array(z.enum(['light', 'medium', 'heavy', 'shield'])).optional(),
 });
 
+/** How often a feat or racial spell can be cast without a slot: per long rest, per short rest, or at will. */
+export const FreeCastSchema = z.enum(['long', 'short', 'will']);
+
+/**
+ * Spells a feat or racial trait teaches (Magic Initiate, Fey Touched, Infernal Legacy). The
+ * spells are cast with this ability, outside any class's lists and limits.
+ */
+export const FeatureSpellsSchema = z.strictObject({
+  /** A fixed ability, the ability the feat raised, or the spellcasting ability of the picked class. */
+  ability: z.union([AbilitySchema, z.enum(['raised', 'class'])]),
+  /** The player picks one of these classes; its spell list supplies `fromClass` picks. */
+  classOptions: z.array(refId('class')).optional(),
+  /** The spells can also be cast with spell slots of the right level. */
+  slots: z.boolean(),
+  fixed: z
+    .array(
+      z.strictObject({
+        spellId: refId('spell'),
+        free: FreeCastSchema.optional(),
+        /** Character level needed before the spell is available. */
+        minLevel: z.int().min(1).max(20).optional(),
+        /** The free casting is at this spell level (Infernal Legacy: hellish rebuke as 2nd level). */
+        castLevel: z.int().min(1).max(9).optional(),
+      }),
+    )
+    .optional(),
+  /** Spells the player picks. Each pick in one feature has its own spell level. */
+  picks: z
+    .array(
+      z.strictObject({
+        count: z.int().positive(),
+        level: z.int().min(0).max(9),
+        schools: z.array(SchoolSchema).optional(),
+        /** From the picked class's spell list. */
+        fromClass: z.boolean().optional(),
+        /** From one of these class lists. */
+        classes: z.array(refId('class')).optional(),
+        /** Only spells that make an attack roll (Spell Sniper). */
+        attack: z.boolean().optional(),
+        free: FreeCastSchema.optional(),
+      }),
+    )
+    .optional(),
+});
+
 export const FeatureDefSchema = z
   .strictObject({
     kind: z.literal('feature'),
@@ -180,6 +225,8 @@ export const FeatureDefSchema = z
     modifiers: z.array(ModifierSchema).optional(),
     /** Feats: what taking the feat adds to the build, applied once when it is picked. */
     grants: FeatGrantsSchema.optional(),
+    /** Spells the feature teaches, cast outside class lists. */
+    spells: FeatureSpellsSchema.optional(),
     /** Tasha optional class feature: granted at this class level when the campaign enables them. */
     optional: z
       .strictObject({
@@ -582,6 +629,8 @@ export type FeatureDefenses = z.infer<typeof FeatureDefensesSchema>;
 export type EffectTemplate = z.infer<typeof EffectTemplateSchema>;
 export type SpellDef = z.infer<typeof SpellDefSchema>;
 export type FeatureDef = z.infer<typeof FeatureDefSchema>;
+export type FeatureSpells = z.infer<typeof FeatureSpellsSchema>;
+export type FreeCast = z.infer<typeof FreeCastSchema>;
 export type ClassDef = z.infer<typeof ClassDefSchema>;
 export type SubclassDef = z.infer<typeof SubclassDefSchema>;
 export type RaceDef = z.infer<typeof RaceDefSchema>;

@@ -919,5 +919,272 @@
         }
       }
     ]
+  },
+  {
+    "id": "feature.feat.magic-initiate",
+    "spells": {
+      "ability": "class",
+      "classOptions": [
+        "class.bard",
+        "class.cleric",
+        "class.druid",
+        "class.sorcerer",
+        "class.warlock",
+        "class.wizard"
+      ],
+      "slots": true,
+      "picks": [
+        {
+          "count": 2,
+          "level": 0,
+          "fromClass": true
+        },
+        {
+          "count": 1,
+          "level": 1,
+          "fromClass": true,
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.feat.fey-touched",
+    "spells": {
+      "ability": "raised",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.misty-step",
+          "free": "long"
+        }
+      ],
+      "picks": [
+        {
+          "count": 1,
+          "level": 1,
+          "schools": ["divination", "enchantment"],
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.feat.shadow-touched",
+    "spells": {
+      "ability": "raised",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.invisibility",
+          "free": "long"
+        }
+      ],
+      "picks": [
+        {
+          "count": 1,
+          "level": 1,
+          "schools": ["illusion", "necromancy"],
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.feat.telekinetic",
+    "spells": {
+      "ability": "raised",
+      "slots": false,
+      "fixed": [
+        {
+          "spellId": "spell.mage-hand"
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.feat.telepathic",
+    "spells": {
+      "ability": "raised",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.detect-thoughts",
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.feat.artificer-initiate",
+    "spells": {
+      "ability": "INT",
+      "slots": true,
+      "picks": [
+        {
+          "count": 1,
+          "level": 0,
+          "classes": ["class.artificer"]
+        },
+        {
+          "count": 1,
+          "level": 1,
+          "classes": ["class.artificer"],
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.feat.spell-sniper",
+    "spells": {
+      "ability": "class",
+      "classOptions": [
+        "class.bard",
+        "class.cleric",
+        "class.druid",
+        "class.sorcerer",
+        "class.warlock",
+        "class.wizard"
+      ],
+      "slots": false,
+      "picks": [
+        {
+          "count": 1,
+          "level": 0,
+          "fromClass": true,
+          "attack": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.feat.drow-high-magic",
+    "spells": {
+      "ability": "CHA",
+      "slots": false,
+      "fixed": [
+        {
+          "spellId": "spell.detect-magic",
+          "free": "will"
+        },
+        {
+          "spellId": "spell.levitate",
+          "free": "long"
+        },
+        {
+          "spellId": "spell.dispel-magic",
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.feat.fey-teleportation",
+    "spells": {
+      "ability": "INT",
+      "slots": false,
+      "fixed": [
+        {
+          "spellId": "spell.misty-step",
+          "free": "short"
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.feat.wood-elf-magic",
+    "spells": {
+      "ability": "WIS",
+      "slots": false,
+      "fixed": [
+        {
+          "spellId": "spell.longstrider",
+          "free": "long"
+        },
+        {
+          "spellId": "spell.pass-without-trace",
+          "free": "long"
+        }
+      ],
+      "picks": [
+        {
+          "count": 1,
+          "level": 0,
+          "classes": ["class.druid"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.high-elf-cantrip",
+    "spells": {
+      "ability": "INT",
+      "slots": false,
+      "picks": [
+        {
+          "count": 1,
+          "level": 0,
+          "classes": ["class.wizard"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.infernal-legacy",
+    "spells": {
+      "ability": "CHA",
+      "slots": false,
+      "fixed": [
+        {
+          "spellId": "spell.thaumaturgy"
+        },
+        {
+          "spellId": "spell.hellish-rebuke",
+          "free": "long",
+          "minLevel": 3,
+          "castLevel": 2
+        },
+        {
+          "spellId": "spell.darkness",
+          "free": "long",
+          "minLevel": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.drow-magic",
+    "spells": {
+      "ability": "CHA",
+      "slots": false,
+      "fixed": [
+        {
+          "spellId": "spell.dancing-lights"
+        },
+        {
+          "spellId": "spell.faerie-fire",
+          "free": "long",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.darkness",
+          "free": "long",
+          "minLevel": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.natural-illusionist",
+    "spells": {
+      "ability": "INT",
+      "slots": false,
+      "fixed": [
+        {
+          "spellId": "spell.minor-illusion"
+        }
+      ]
+    }
   }
 ]

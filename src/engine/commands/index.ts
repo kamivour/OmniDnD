@@ -6,6 +6,8 @@ export * from '../calc/encounter';
 export * from './actions';
 export * from './effects';
 export * from './features';
+export * from './feat-spells';
+export * from '../calc/feat-spells';
 export * from './favorites';
 export * from './hp';
 export * from './inspiration';

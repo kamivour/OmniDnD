@@ -167,6 +167,17 @@ export const CharacterBuildSchema = z
     favorites: z.array(AnyRefIdSchema),
     /** Extra features only: feats, DM grants, homebrew. Race, class, subclass and background features are derived from refs (D48). */
     featureIds: z.array(refId('feature')),
+    /** Spells picked for feats and racial traits, by feature: the class picked (Magic Initiate), the ability when the build cannot show it, and the spells. */
+    featSpells: z
+      .record(
+        refId('feature'),
+        z.strictObject({
+          classId: refId('class').optional(),
+          ability: AbilitySchema.optional(),
+          spellIds: z.array(refId('spell')),
+        }),
+      )
+      .optional(),
     choices: z.record(z.string(), z.unknown()),
     items: z.array(
       z.strictObject({
@@ -336,6 +347,8 @@ export const LiveStateSchema = z
     slotsUsed: z.array(NonNegativeInt).length(10),
     pactSlotsUsed: NonNegativeInt.optional(),
     featureUsesSpent: z.record(refId('feature'), NonNegativeInt),
+    /** Free feat and racial castings used, keyed `featureId|spellId`. Absent in older saves. */
+    featSpellsUsed: z.record(z.string(), NonNegativeInt).optional(),
     /** Your own concentration (D41). effectId only when the spell put an effect on you. */
     concentration: z
       .strictObject({

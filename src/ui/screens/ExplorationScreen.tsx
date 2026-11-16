@@ -13,6 +13,7 @@ import { useCharacter } from '../hooks/useCharacter';
 import { useDetail } from '../layout/detail-context';
 import { LiveSpellDetail } from '../spells/LiveSpellDetail';
 import { SpellCastControls } from '../spells/SpellCastControls';
+import { castingLabel, spellUnavailable } from '../spells/spellbook-model';
 import { GameClockControl } from '../time/GameClockControl';
 
 const card = 'flex min-w-0 flex-col gap-3 rounded-card border border-border bg-surface p-3';
@@ -73,42 +74,41 @@ export function ExplorationScreen() {
               >
                 <SectionLabel as="h3">{level === 0 ? 'Cantrips' : `Level ${level}`}</SectionLabel>
                 <ul className="flex min-w-0 flex-col gap-2">
-                  {entries.map(({ spell, classId, dc, attack }) => (
-                    <SpellRow
-                      key={`${classId}:${spell.id}`}
-                      spell={spell}
-                      dc={dc}
-                      attack={attack}
-                      castingClass={
-                        model.classes.length + model.unsupportedClassIds.length > 1
-                          ? registry.get('class', classId).name
-                          : undefined
-                      }
-                      slots={model.slots}
-                      concentrating={spell.id === state.live.concentration?.spellId}
-                      unavailable={
-                        spell.level > 0 &&
-                        !model.slots.some(
-                          (slot) => slot.level >= spell.level && slot.used < slot.max,
-                        ) &&
-                        (state.live.combat !== undefined ||
-                          !spellCastDetails(context, { spellId: spell.id, classId }).ritualEligible)
-                      }
-                      onCast={(selected, _level, opener) => {
-                        castOpener.current = opener ?? (document.activeElement as HTMLElement);
-                        setCasting({ spellId: selected.id, classId, opener: castOpener.current });
-                      }}
-                      sheetFooter={({ close, trigger }) => (
-                        <SpellCastControls
-                          spellId={spell.id}
-                          classId={classId}
-                          returnFocusTo={trigger}
-                          onApplied={close}
-                        />
-                      )}
-                      onPin={() => pin(<LiveSpellDetail spellId={spell.id} classId={classId} />)}
-                    />
-                  ))}
+                  {entries.map((entry) => {
+                    const { spell, classId, dc, attack } = entry;
+                    return (
+                      <SpellRow
+                        key={`${classId}:${spell.id}`}
+                        spell={spell}
+                        dc={dc}
+                        attack={attack}
+                        castingClass={castingLabel(entry, model, registry)}
+                        slots={model.slots}
+                        concentrating={spell.id === state.live.concentration?.spellId}
+                        unavailable={spellUnavailable(
+                          entry,
+                          model.slots,
+                          !entry.feat &&
+                            state.live.combat === undefined &&
+                            spellCastDetails(context, { spellId: spell.id, classId })
+                              .ritualEligible,
+                        )}
+                        onCast={(selected, _level, opener) => {
+                          castOpener.current = opener ?? (document.activeElement as HTMLElement);
+                          setCasting({ spellId: selected.id, classId, opener: castOpener.current });
+                        }}
+                        sheetFooter={({ close, trigger }) => (
+                          <SpellCastControls
+                            spellId={spell.id}
+                            classId={classId}
+                            returnFocusTo={trigger}
+                            onApplied={close}
+                          />
+                        )}
+                        onPin={() => pin(<LiveSpellDetail spellId={spell.id} classId={classId} />)}
+                      />
+                    );
+                  })}
                 </ul>
               </section>
             );

@@ -357,11 +357,7 @@
     },
     "summaryReviewed": false,
     "origin": "feat",
-    "activation": "special",
-    "uses": {
-      "max": 1,
-      "recharge": "long"
-    }
+    "activation": "special"
   },
   {
     "kind": "feature",
@@ -5852,11 +5848,7 @@
       "effect": "Learn one artificer cantrip and one 1st-level artificer spell, cast with INT. Cast that spell once per long rest without a slot. Gain one artisan tool proficiency."
     },
     "origin": "feat",
-    "activation": "special",
-    "uses": {
-      "max": 1,
-      "recharge": "long"
-    }
+    "activation": "special"
   },
   {
     "kind": "feature",
