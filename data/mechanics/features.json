@@ -14,7 +14,13 @@
   },
   {
     "id": "feature.barbarian.danger-sense",
-    "activation": "passive"
+    "activation": "passive",
+    "rollNotes": [
+      {
+        "on": "DEX",
+        "text": "Advantage against effects you can see, unless blinded, deafened or incapacitated"
+      }
+    ]
   },
   {
     "id": "feature.barbarian.extra-attack",
@@ -32,7 +38,13 @@
   },
   {
     "id": "feature.barbarian.feral-instinct",
-    "activation": "passive"
+    "activation": "passive",
+    "rollNotes": [
+      {
+        "on": "initiative",
+        "text": "roll with advantage; if surprised, you may still act on your first turn if you rage before anything else"
+      }
+    ]
   },
   {
     "id": "feature.barbarian.indomitable-might",
@@ -395,7 +407,13 @@
   },
   {
     "id": "feature.monk.evasion",
-    "activation": "passive"
+    "activation": "passive",
+    "rollNotes": [
+      {
+        "on": "DEX",
+        "text": "Half-damage effects: no damage on a success, half on a failure"
+      }
+    ]
   },
   {
     "id": "feature.monk.extra-attack",
@@ -511,7 +529,10 @@
   },
   {
     "id": "feature.paladin.aura-of-courage",
-    "activation": "passive"
+    "activation": "passive",
+    "defenses": {
+      "conditionImmunities": ["frightened"]
+    }
   },
   {
     "id": "feature.paladin.aura-of-protection",
@@ -693,7 +714,13 @@
   },
   {
     "id": "feature.rogue.evasion",
-    "activation": "passive"
+    "activation": "passive",
+    "rollNotes": [
+      {
+        "on": "DEX",
+        "text": "Half-damage effects: no damage on a success, half on a failure"
+      }
+    ]
   },
   {
     "id": "feature.rogue.expertise",
@@ -701,7 +728,13 @@
   },
   {
     "id": "feature.rogue.reliable-talent",
-    "activation": "passive"
+    "activation": "passive",
+    "rollNotes": [
+      {
+        "on": "checks",
+        "text": "On a check that adds your proficiency, a d20 roll of 9 or lower counts as 10"
+      }
+    ]
   },
   {
     "id": "feature.rogue.roguish-archetype",
@@ -1926,14 +1959,18 @@
   },
   {
     "id": "feature.feat.healer",
-    "die": { "1": "d6" },
+    "die": {
+      "1": "d6"
+    },
     "dieBonus": 4,
     "needsItem": "item.healers-kit",
     "useNote": "plus the target's total Hit Dice; once per creature per rest; uses one kit charge"
   },
   {
     "id": "feature.feat.inspiring-leader",
-    "tempHp": { "abilityMod": "CHA" },
+    "tempHp": {
+      "abilityMod": "CHA"
+    },
     "useNote": "up to five allies within 30 ft gain the same; once per creature per rest"
   },
   {

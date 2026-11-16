@@ -143,6 +143,8 @@ export const FeatureDefensesSchema = z.strictObject({
   vulnerabilities: z.array(DamageTypeSchema).optional(),
   saveAdvantages: z.array(z.union([ConditionSchema, DamageTypeSchema])).optional(),
   magicalSleepImmunity: z.boolean().optional(),
+  /** Conditions you cannot gain (Aura of Courage: frightened, while conscious). */
+  conditionImmunities: z.array(ConditionSchema).optional(),
 });
 
 export const FeatGrantsSchema = z.strictObject({
@@ -316,6 +318,15 @@ export const FeatureDefSchema = z
     /** Optional -5 to hit for +10 damage with proficient weapons (Great Weapon Master, Sharpshooter). */
     powerAttack: z.enum(['heavy-melee', 'ranged']).optional(),
     modifiers: z.array(ModifierSchema).optional(),
+    /** Reminders shown beside a save, initiative or ability checks (Evasion, Reliable Talent). */
+    rollNotes: z
+      .array(
+        z.strictObject({
+          on: z.union([AbilitySchema, z.enum(['initiative', 'checks'])]),
+          text: z.string(),
+        }),
+      )
+      .optional(),
     /** Feats: what taking the feat adds to the build, applied once when it is picked. */
     grants: FeatGrantsSchema.optional(),
     /** Spells the feature teaches, cast outside class lists. */

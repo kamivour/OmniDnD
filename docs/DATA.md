@@ -95,6 +95,8 @@ interface FeatureDef extends RefBase {
   usesFrom?: string;                    // spends another feature's uses (Cutting Words → Bardic Inspiration)
   die?: DieByLevel;
   modifiers?: Modifier[];               // passive math, e.g. JoAT
+  rollNotes?: { on: Ability | "initiative" | "checks"; text }[];  // reminders beside a save, initiative or checks (Evasion)
+  defenses?: { resistances?; immunities?; vulnerabilities?; saveAdvantages?; magicalSleepImmunity?; conditionImmunities? };  // display; conditionImmunities warns on marking that condition
   hook?: string;                        // complex logic in src/engine/hooks/<id>.ts
   spells?: { ability: Ability | 'raised' | 'class'; classOptions?: string[]; slots: boolean; ritual?: true;
              fixed?: { spellId; free?: 'long' | 'short' | 'will'; minLevel?; castLevel? }[];

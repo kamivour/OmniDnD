@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 01:51 — Reminders for passive class features
+
+- The sheet now shows Danger Sense and Evasion under your DEX save, Feral Instinct beside initiative, and Reliable Talent under skills.
+- Aura of Courage lists you as immune to frightened, and marking yourself frightened warns you (unless you are unconscious).
+- These are reminders only; roll and apply results yourself.
+- Checks pass.
+
 ## 2026-11-17 01:45 — Healer and Inspiring Leader buttons
 
 - Healer now has a Use button that shows d6 + 4 plus the target's Hit Dice, and warns if you carry no healer's kit.

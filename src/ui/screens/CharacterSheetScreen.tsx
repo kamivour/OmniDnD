@@ -70,6 +70,12 @@ export function CharacterSheetScreen() {
       effect.defenses ? [{ name: effect.name, ...effect.defenses }] : [],
     ),
   ];
+  const rollNotes = (on: string) =>
+    sheet.features.flatMap(({ def }) =>
+      (def.rollNotes ?? [])
+        .filter((note) => note.on === on)
+        .map((note) => ({ key: `${def.id}-${on}`, text: `${note.text} (${def.name})` })),
+    );
   const racialTraits = sheet.features.filter(({ def }) => def.origin === 'race');
   const itemName = (id: string) => registryFor(build).get('item', id).name;
   const attackDamage = (dice: string | undefined, bonus: number) =>
@@ -249,6 +255,11 @@ export function CharacterSheetScreen() {
                     {sheet.saves[ability].proficient && (
                       <p className="px-2 text-xs text-text-muted">Proficient</p>
                     )}
+                    {rollNotes(ability).map((note) => (
+                      <p key={note.key} className="px-2 pt-1 text-xs text-text-muted">
+                        {note.text}
+                      </p>
+                    ))}
                   </li>
                 ))}
               </ul>
@@ -265,6 +276,11 @@ export function CharacterSheetScreen() {
             {shows('skills') && (
               <Section label="Skills">
                 <SkillList sheet={sheet} />
+                {rollNotes('checks').map((note) => (
+                  <p key={note.key} className="px-2 text-xs text-text-muted">
+                    {note.text}
+                  </p>
+                ))}
               </Section>
             )}
             <div className="flex min-w-0 flex-col gap-4">
@@ -343,9 +359,16 @@ export function CharacterSheetScreen() {
                       />
                       <ReferenceList
                         label="Other immunities"
-                        entries={defenses
-                          .filter((defense) => defense.magicalSleepImmunity)
-                          .map((defense) => `Magical sleep (${defense.name})`)}
+                        entries={[
+                          ...defenses
+                            .filter((defense) => defense.magicalSleepImmunity)
+                            .map((defense) => `Magical sleep (${defense.name})`),
+                          ...defenses.flatMap((defense) =>
+                            (defense.conditionImmunities ?? []).map(
+                              (condition) => `${titleCase(condition)} (${defense.name})`,
+                            ),
+                          ),
+                        ]}
                       />
                     </dl>
                     <p className="text-xs text-text-muted">
@@ -433,6 +456,11 @@ export function CharacterSheetScreen() {
                 </div>
               ))}
             </div>
+            {rollNotes('initiative').map((note) => (
+              <p key={note.key} className="px-2 text-sm text-text-muted">
+                Initiative: {note.text}
+              </p>
+            ))}
             <p className="px-2 text-sm text-text-muted">
               Death saves: {live.deathSaves.success} successes · {live.deathSaves.fail} failures
             </p>

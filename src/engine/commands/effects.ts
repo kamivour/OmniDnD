@@ -10,6 +10,7 @@ import {
   incapacitatedBy,
   info,
   maxHpAfter,
+  warn,
   minCheck,
   rangeCheck,
   removeCondition,
@@ -41,7 +42,16 @@ export const toggleCondition: Command<ToggleConditionPayload> = {
   check: (ctx, { condition }) => {
     const unknown = conditionChecks([condition]);
     if (unknown.length > 0) return unknown;
-    return ctx.live.conditions.includes(condition) ? [] : concentrationEndsCheck(ctx, [condition]);
+    if (ctx.live.conditions.includes(condition)) return [];
+    const immune = ctx.live.conditions.includes('unconscious')
+      ? undefined
+      : ctx.sheet.features.find(({ def }) =>
+          def.defenses?.conditionImmunities?.includes(condition),
+        );
+    return [
+      ...(immune ? [warn(`${immune.def.name} makes you immune to ${condition}`)] : []),
+      ...concentrationEndsCheck(ctx, [condition]),
+    ];
   },
   apply: ({ live }, { condition }, { registry }) => {
     if (live.conditions.includes(condition)) {
@@ -138,6 +148,9 @@ function cleanDefenses(defenses: FeatureDefenses | undefined): FeatureDefenses |
     clean.saveAdvantages = [...new Set(defenses.saveAdvantages)];
   }
   if (defenses.magicalSleepImmunity) clean.magicalSleepImmunity = true;
+  if (defenses.conditionImmunities?.length) {
+    clean.conditionImmunities = [...new Set(defenses.conditionImmunities)];
+  }
   return Object.keys(clean).length > 0 ? clean : undefined;
 }
 
