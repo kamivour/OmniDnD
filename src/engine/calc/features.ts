@@ -14,6 +14,7 @@ export interface CharacterFeature {
   bonus?: number;
   /** Attacks per Attack action this feature allows at its level. */
   attacks?: number;
+  critDice?: number;
   dieOverride?: { path: string; note: string; calculated: Die; value: Die };
 }
 
@@ -108,6 +109,8 @@ export function characterFeatures(
     if (bonus !== undefined) feature.bonus = bonus;
     const attacks = def.attacks && byLevel(def.attacks, level);
     if (attacks) feature.attacks = attacks;
+    const critDice = def.critDice && byLevel(def.critDice, level);
+    if (critDice) feature.critDice = critDice;
     return [feature];
   });
 }

@@ -2,11 +2,14 @@ import type { CharacterFeature } from '../calc/features';
 import type { Die, FeatureDef, Recharge } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
 import {
+  warn,
   block,
   economyChecks,
   featureName,
   isDead,
   rangeCheck,
+  removeCondition,
+  resetDeathSaves,
   spendEconomy,
   usesLeft,
   type EconomySlot,
@@ -61,6 +64,8 @@ export function featureUseDetails(
   else if (feature.def.usesFrom && !pool?.uses)
     unavailableReason = `${feature.def.name}'s required resource pool is unavailable`;
   else if (uses?.remaining === 0) unavailableReason = `No ${pool!.def.name} uses left`;
+  else if (feature.def.dropToOne && ctx.live.hp > 0)
+    unavailableReason = `${feature.def.name} works only when you drop to 0 HP`;
   return {
     ...(feature ? { feature } : {}),
     ...(pool ? { pool } : {}),
@@ -84,6 +89,11 @@ export const useFeature: Command<UseFeaturePayload> = {
     if (!feature) return [block(`You don't have ${featureName(ctx, featureId)}`)];
     if (unavailableReason) return [block(unavailableReason)];
     const checks: Check[] = [];
+    if (feature.def.dropToOne) {
+      const { success, fail } = ctx.live.deathSaves;
+      if (success + fail > 0)
+        checks.push(warn('Death saves already recorded; this applies as you drop to 0 HP'));
+    }
     const slot = ECONOMY_BY_ACTIVATION[feature.def.activation];
     if (slot) checks.push(...economyChecks(ctx, slot));
     return checks;
@@ -94,6 +104,12 @@ export const useFeature: Command<UseFeaturePayload> = {
     const slot = feature && ECONOMY_BY_ACTIVATION[feature.def.activation];
     if (slot) spendEconomy(live, slot);
     const notes: string[] = [];
+    if (feature?.def.dropToOne) {
+      live.hp = 1;
+      resetDeathSaves(live);
+      removeCondition(live, 'unconscious');
+      notes.push('back up at 1 HP');
+    }
     if (die) notes.push(die);
     // Action Surge grants one more action this turn, with a fresh Attack action.
     if (featureId === ACTION_SURGE && live.combat?.economy.actionUsed) {

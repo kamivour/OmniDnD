@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type RefObject } from 'react';
-import { healthDetails, rollDeathSave } from '../../engine/commands';
+import { featureUseDetails, healthDetails, rollDeathSave, useFeature } from '../../engine/commands';
 import { useCommand } from '../commands/command-context';
 import { Field, inputClass } from '../components/fields';
 import { useCharacter } from '../hooks/useCharacter';
@@ -41,6 +41,11 @@ export function DeathSaveTracker({
   }, [events, focusFallback]);
 
   if (health.hp > 0 && health.status !== 'dead') return null;
+  // Relentless Endurance and the like: stand back up at 1 HP instead of rolling.
+  const standUp = sheet.features.filter(
+    ({ def }) =>
+      def.dropToOne && !featureUseDetails({ live: state.live, sheet }, def.id).unavailableReason,
+  );
   const submit = (rolled: number, includeModifier = false) => {
     setError(null);
     const result = run(
@@ -81,6 +86,16 @@ export function DeathSaveTracker({
           tone="bg-danger border-danger"
         />
       </div>
+      {standUp.map(({ def }) => (
+        <button
+          key={def.id}
+          type="button"
+          onClick={() => run(useFeature, { featureId: def.id }, container.current ?? undefined)}
+          className="min-h-11 rounded-btn border border-accent px-3 text-sm font-semibold text-accent"
+        >
+          Use {def.name}: back to 1 HP
+        </button>
+      ))}
       {health.status === 'stable' && (
         <p className="text-xs text-text-muted">You are stable. No death-save roll is needed.</p>
       )}

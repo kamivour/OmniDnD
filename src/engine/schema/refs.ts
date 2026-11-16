@@ -252,6 +252,10 @@ export const FeatureDefSchema = z
     bonus: z.record(LevelKeySchema, z.int()).optional(),
     /** Attacks per Attack action at this level (Extra Attack: 2; fighter 3 at 11, 4 at 20). */
     attacks: z.record(LevelKeySchema, z.int().min(2).max(4)).optional(),
+    /** Extra weapon damage dice on a melee critical hit (Savage Attacks, Brutal Critical). */
+    critDice: z.record(LevelKeySchema, z.int().min(1).max(3)).optional(),
+    /** Use at 0 HP to stand back up at 1 HP instead (Relentless Endurance). */
+    dropToOne: z.literal(true).optional(),
     /** Spend a spell slot on a hit for extra damage (Divine Smite, Eldritch Smite). */
     smite: z
       .object({

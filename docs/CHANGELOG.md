@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 00:43 — Critical dice and Relentless Endurance
+
+- Half-orcs and barbarians from level 9 see a "Critical hit: also roll…" line on melee weapon cards. Savage Attacks and Brutal Critical add up.
+- At 0 HP, half-orcs get a "Use Relentless Endurance" button on the death-save card. It puts you back at 1 HP once per long rest.
+- Halfling Lucky and the Lucky feat already worked; nothing changed there.
+- Checks pass.
+
 ## 2026-11-17 00:31 — Sorcerer Flexible Casting
 
 - Sorcerers from level 2 get a Flexible Casting box on Spells and in the Combat Bonus tab. Turn a slot into sorcery points, or spend points to make a slot up to level 5.

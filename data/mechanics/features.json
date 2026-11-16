@@ -5,7 +5,12 @@
   },
   {
     "id": "feature.barbarian.brutal-critical",
-    "activation": "passive"
+    "activation": "passive",
+    "critDice": {
+      "9": 1,
+      "13": 2,
+      "17": 3
+    }
   },
   {
     "id": "feature.barbarian.danger-sense",
@@ -1663,6 +1668,22 @@
       "type": "force",
       "pactOnly": true,
       "note": "once per turn; you may knock a Huge or smaller target prone"
+    }
+  },
+  {
+    "id": "feature.savage-attacks",
+    "activation": "passive",
+    "critDice": {
+      "1": 1
+    }
+  },
+  {
+    "id": "feature.relentless-endurance",
+    "activation": "special",
+    "dropToOne": true,
+    "uses": {
+      "max": 1,
+      "recharge": "long"
     }
   }
 ]

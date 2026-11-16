@@ -67,6 +67,8 @@ export interface WeaponAttack {
   damage?: { dice?: string; bonus: number; type: DamageType };
   /** Damage added on every hit by features (Improved Divine Smite on melee weapons). */
   extraDamage?: { dice: string; type: DamageType; source: string }[];
+  /** Extra weapon dice on a critical hit from features, e.g. "1d12" (Savage Attacks). */
+  critExtra?: { dice: string; sources: string[] };
   versatile?: string;
   range?: { normal: number; long: number };
   properties: WeaponProperty[];
@@ -421,6 +423,13 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         : [],
     );
     if (extra.length > 0) attack.extraDamage = extra;
+    const die = attack.damage?.dice?.match(/d\d+$/)?.[0];
+    const crits = features.filter((feature) => feature.critDice && attack.type === 'melee');
+    if (die && crits.length > 0)
+      attack.critExtra = {
+        dice: `${crits.reduce((sum, feature) => sum + feature.critDice!, 0)}${die}`,
+        sources: crits.map(({ def: feature }) => feature.name),
+      };
     return [attack];
   });
 

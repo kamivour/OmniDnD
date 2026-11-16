@@ -18,6 +18,7 @@ export interface CombatWeapon {
     damageType?: string;
     /** Feature damage on every hit, e.g. "1d8 radiant (Improved Divine Smite)". */
     extraDamage?: string;
+    critExtra?: string;
     notes: string;
     toHitOverride?: { note: string };
     damageOverride?: { note: string };
@@ -85,6 +86,9 @@ export function combatModel(state: CharacterState, sheet: Sheet, registry: Regis
               .map((extra) => `${extra.dice} ${extra.type} (${extra.source})`)
               .join(' + '),
           }
+        : {}),
+      ...(attack.critExtra
+        ? { critExtra: `${attack.critExtra.dice} (${attack.critExtra.sources.join(', ')})` }
         : {}),
       notes: [
         attack.type === 'melee' ? 'Melee weapon' : 'Ranged weapon',
