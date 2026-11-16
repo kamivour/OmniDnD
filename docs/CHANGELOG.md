@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 01:26 — Prodigy and Skill Expert picks
+
+- Prodigy now asks in To do for one skill, one tool, one language and one expertise.
+- The expertise can be the skill you just picked in the same form.
+- Skill Expert also asks for its expertise pick, next to its skill and ability increase.
+- Checks pass.
+
 ## 2026-11-17 01:21 — Tasha class options you can use
 
 - Rangers can use Favored Foe from Features: it spends a use, shows the bonus die and ends concentration on a spell.

@@ -144,6 +144,38 @@ describe('race and feature proficiencies', () => {
     expect(session.sheet.skills.intimidation.proficiency).toBe('expertise');
   });
 
+  it('Prodigy picks a skill, a tool, a language and an expertise', () => {
+    const state = variant((draft) => {
+      draft.build.featureIds = [...draft.build.featureIds, 'feature.feat.prodigy'];
+    });
+    expect(
+      pendingChoices(state, registry).find((row) => row.featureId === 'feature.feat.prodigy')
+        ?.count,
+    ).toBe(4);
+    const session = new Session(state);
+    session.run(chooseProficiencies, {
+      featureId: 'feature.feat.prodigy',
+      skills: ['arcana'],
+      tools: ['item.thieves-tools'],
+      languages: ['Giant'],
+      expertise: ['arcana'],
+    });
+    expect(session.sheet.skills.arcana.proficiency).toBe('expertise');
+    expect(session.sheet.proficiencies.languages).toContain('Giant');
+  });
+
+  it('Skill Expert adds one expertise pick', () => {
+    const state = variant((draft) => {
+      draft.build.featureIds = [...draft.build.featureIds, 'feature.feat.skill-expert'];
+    });
+    const session = new Session(state);
+    session.run(chooseProficiencies, {
+      featureId: 'feature.feat.skill-expert',
+      expertise: ['intimidation'],
+    });
+    expect(session.sheet.skills.intimidation.proficiency).toBe('expertise');
+  });
+
   it('Custom Lineage can pick darkvision', () => {
     const session = new Session(
       variant((state) => {

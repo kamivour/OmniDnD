@@ -145,7 +145,10 @@ export function proficiencyPickProblem(
     }
   }
   if (left.length > 0) return `${def.name}: ${pickCount(choose)} picks needed`;
-  const unproficient = (picks.expertise ?? []).find((skill) => !proficient.has(skill));
+  // A skill picked by the same feature counts (Prodigy: a new skill, then expertise in it).
+  const unproficient = (picks.expertise ?? []).find(
+    (skill) => !proficient.has(skill) && !(picks.skills ?? []).includes(skill),
+  );
   if (unproficient)
     return `Expertise needs proficiency first: ${unproficient.replaceAll('-', ' ')}`;
   return undefined;

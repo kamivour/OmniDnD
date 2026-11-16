@@ -1997,5 +1997,40 @@
       "17": "d10"
     },
     "dieBonus": "proficiency"
+  },
+  {
+    "id": "feature.feat.prodigy",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill"]
+        },
+        {
+          "count": 1,
+          "kinds": ["tool"],
+          "tools": "any"
+        },
+        {
+          "count": 1,
+          "kinds": ["language"]
+        },
+        {
+          "count": 1,
+          "kinds": ["expertise"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.feat.skill-expert",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["expertise"]
+        }
+      ]
+    }
   }
 ]

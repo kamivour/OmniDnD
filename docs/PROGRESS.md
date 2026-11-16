@@ -355,6 +355,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-14 — Ability score improvement says when feats are off for the campaign and links to Campaign settings.
 - 2026-11-14 — Number fields block letters and stray signs on input, so ability scores and level stay numeric.
 - 2026-11-14 — Tasha's custom origin moves each racial increase to a different ability, on the sheet and when creating a character.
+- 2026-11-17 — Prodigy and Skill Expert ask for their skill, tool, language and expertise picks in To do.
 - 2026-11-17 — Favored Foe, Steady Aim, Harness Divine Power and Quickened Healing work from Use buttons when Tasha optional features are on (D215).
 - 2026-11-17 — Great Weapon Master and Sharpshooter show the -5/+10 to-hit and damage on eligible proficient weapons in Combat (D214).
 - 2026-11-17 — Artificer attunement limit rises to 4, 5 and 6 at levels 10, 14 and 18; Inventory and the attunement check use it.
