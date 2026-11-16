@@ -315,6 +315,22 @@ export const FeatureDefSchema = z
     elementalAdept: DamageTypeSchema.optional(),
     /** Extra damage on every hit with a melee weapon (Improved Divine Smite). */
     meleeDamage: z.object({ dice: DiceSchema, type: DamageTypeSchema }).optional(),
+    /** Once per turn extra weapon damage (Divine Strike); 'weapon' uses the weapon's own type, a list is a choice. */
+    weaponStrike: z
+      .strictObject({
+        dice: z.record(LevelKeySchema, DiceSchema),
+        type: z.union([DamageTypeSchema, z.literal('weapon'), z.array(DamageTypeSchema).min(2)]),
+      })
+      .optional(),
+    /** Add this ability's modifier to damage of this class's spells (Potent Spellcasting, Empowered Evocation). */
+    spellDamageBonus: z
+      .strictObject({
+        ability: AbilitySchema,
+        classId: refId('class'),
+        cantripsOnly: z.literal(true).optional(),
+        school: SchoolSchema.optional(),
+      })
+      .optional(),
     /** Optional -5 to hit for +10 damage with proficient weapons (Great Weapon Master, Sharpshooter). */
     powerAttack: z.enum(['heavy-melee', 'ranged']).optional(),
     modifiers: z.array(ModifierSchema).optional(),

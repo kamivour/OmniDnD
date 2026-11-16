@@ -58,6 +58,8 @@ export interface SpellCastDetails {
     type: DamageType;
     /** Elemental Affinity: add this to one damage roll. */
     affinity?: { name: string; bonus: number };
+    /** Class features that add an ability modifier to this spell's damage (Potent Spellcasting). */
+    bonuses?: { name: string; bonus: number }[];
     /** Elemental Adept for this damage type: ignore resistance, treat 1s as 2s. */
     adept?: string;
   };
@@ -154,27 +156,40 @@ export function spellCastDetails(
     ritualEligible,
     ...(ritualReason === undefined ? {} : { ritualReason }),
     ...(spell.heal ? { healing: deriveRoll(spell.heal) } : {}),
-    ...(spell.damage ? { damage: spellDamage(ctx, spell.damage, deriveRoll) } : {}),
+    ...(spell.damage ? { damage: spellDamage(ctx, spell, deriveRoll, classId) } : {}),
     ...(spell.summary?.upcast ? { upcastText: spell.summary.upcast } : {}),
   };
 }
 
-/** Damage dice plus Elemental Affinity's bonus and Elemental Adept when the spell's type matches. */
+/**
+ * Damage dice plus Elemental Affinity, Elemental Adept, and class damage bonuses when the spell is
+ * cast as that class's spell (feat castings carry no class).
+ */
 function spellDamage(
   ctx: SpellOptionsContext,
-  damage: NonNullable<SpellDef['damage']>,
+  spell: SpellDef,
   deriveRoll: (roll: NonNullable<SpellDef['heal']>) => SpellRollDetails,
+  classId?: string,
 ): SpellCastDetails['damage'] {
+  const damage = spell.damage!;
   const mods = Object.fromEntries(
     Object.entries(ctx.sheet.abilities).map(([ability, value]) => [ability, value.mod]),
   ) as Record<Ability, number>;
   const affinity = elementalAffinity(ctx.sheet.features, mods, damage.type);
   const adept = ctx.sheet.features.find(({ def }) => def.elementalAdept === damage.type)?.def.name;
+  const bonuses = ctx.sheet.features.flatMap(({ def }) => {
+    const rule = def.spellDamageBonus;
+    if (!rule || rule.classId !== classId) return [];
+    if (rule.cantripsOnly && spell.level !== 0) return [];
+    if (rule.school && rule.school !== spell.school) return [];
+    return [{ name: def.name, bonus: mods[rule.ability] }];
+  });
   return {
     ...deriveRoll(damage),
     type: damage.type,
     ...(affinity ? { affinity } : {}),
     ...(adept ? { adept } : {}),
+    ...(bonuses.length > 0 ? { bonuses } : {}),
   };
 }
 
@@ -214,7 +229,7 @@ function featCastDetails(
         }
       : {}),
     ...(spell.heal ? { healing: deriveRoll(spell.heal) } : {}),
-    ...(spell.damage ? { damage: spellDamage(ctx, spell.damage, deriveRoll) } : {}),
+    ...(spell.damage ? { damage: spellDamage(ctx, spell, deriveRoll) } : {}),
     ...(spell.summary?.upcast ? { upcastText: spell.summary.upcast } : {}),
   };
 }

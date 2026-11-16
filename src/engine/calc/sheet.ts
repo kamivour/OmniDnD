@@ -25,7 +25,7 @@ import type {
   RaceDef,
 } from '../schema';
 import { ABILITIES, abilityModifier, type Ability } from './abilities';
-import { characterFeatures, resolveFormula, type CharacterFeature } from './features';
+import { byLevel, characterFeatures, resolveFormula, type CharacterFeature } from './features';
 import { optionalRules } from './campaign-rules';
 import { levelHp, maxHp } from './hp';
 import { proficiencyBonus } from './proficiency';
@@ -69,7 +69,13 @@ export interface WeaponAttack {
   /** Absent for the Net. `dice` is absent for a flat-damage weapon (Blowgun). */
   damage?: { dice?: string; bonus: number; type: DamageType };
   /** Damage added on every hit by features (Improved Divine Smite on melee weapons). */
-  extraDamage?: { dice: string; type: DamageType; source: string }[];
+  extraDamage?: {
+    dice: string;
+    /** Several types: the player picks one (Nature Domain Divine Strike). */
+    type: DamageType | DamageType[];
+    source: string;
+    oncePerTurn?: true;
+  }[];
   /** Extra weapon dice on a critical hit from features, e.g. "1d12" (Savage Attacks). */
   critExtra?: { dice: string; sources: string[] };
   /** The -5 to hit, +10 damage option, already applied to this row's numbers. */
@@ -430,11 +436,17 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         attack.damage.bonus,
         typeof def.weapon.damage === 'number' ? { min: 0 } : {},
       );
-    const extra = features.flatMap(({ def: feature }) =>
+    const extra: NonNullable<WeaponAttack['extraDamage']> = features.flatMap(({ def: feature }) =>
       feature.meleeDamage && attack.type === 'melee'
         ? [{ ...feature.meleeDamage, source: feature.name }]
         : [],
     );
+    for (const { def: feature, level: featureLevel } of features) {
+      const strike = feature.weaponStrike;
+      const dice = strike && byLevel(strike.dice, featureLevel);
+      const type = strike?.type === 'weapon' ? attack.damage?.type : strike?.type;
+      if (dice && type) extra.push({ dice, type, source: feature.name, oncePerTurn: true });
+    }
     if (extra.length > 0) attack.extraDamage = extra;
     const die = attack.damage?.dice?.match(/d\d+$/)?.[0];
     const crits = features.filter((feature) => feature.critDice && attack.type === 'melee');

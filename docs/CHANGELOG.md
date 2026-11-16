@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 02:03 — Divine Strike, Potent Spellcasting, Empowered Evocation
+
+- Clerics with Divine Strike see the extra damage on every weapon attack, marked once per turn. War uses the weapon's type; Nature lists cold, fire or lightning.
+- Potent Spellcasting (cleric cantrips) and Empowered Evocation (wizard evocation spells) now show their bonus when you cast.
+- Spells without damage dice in the app, like Magic Missile, show no bonus yet.
+- Checks pass.
+
 ## 2026-11-17 01:58 — Dual Wielder and Soul of Artifice bonuses
 
 - Dual Wielder now adds +1 AC when two melee weapons are equipped and no shield is.

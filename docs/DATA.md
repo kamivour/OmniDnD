@@ -110,6 +110,8 @@ interface FeatureDef extends RefBase {
   smite?: { dice; die; maxDice?; type; bonusVs?; pactOnly?; note? };  // slot spent on a hit (D210)
   meleeDamage?: { dice; type };          // added to every melee weapon hit (Improved Divine Smite)
   powerAttack?: "heavy-melee" | "ranged"; // -5 to hit, +10 damage option (Great Weapon Master, Sharpshooter)
+  weaponStrike?: { dice: DiceByLevel; type: DamageType | "weapon" | DamageType[] };  // once per turn weapon damage (Divine Strike)
+  spellDamageBonus?: { ability; classId; cantripsOnly?: true; school? };  // add a modifier to that class's spell damage (Potent Spellcasting)
   critDice?: { [level]: 1..3 };          // extra weapon dice on a melee crit (Savage Attacks, Brutal Critical)
   dropToOne?: true;                       // use at 0 HP to stand at 1 HP (Relentless Endurance, D212)
   ancestry?: { type; save?; area? };     // draconic ancestry pick (D213)

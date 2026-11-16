@@ -2133,5 +2133,125 @@
   {
     "id": "feature.artificer.soul-of-artifice",
     "attunedSaves": true
+  },
+  {
+    "id": "feature.cleric.divine-strike",
+    "weaponStrike": {
+      "dice": {
+        "1": "1d8",
+        "14": "2d8"
+      },
+      "type": "radiant"
+    }
+  },
+  {
+    "id": "feature.cleric.twilight-divine-strike",
+    "weaponStrike": {
+      "dice": {
+        "1": "1d8",
+        "14": "2d8"
+      },
+      "type": "radiant"
+    }
+  },
+  {
+    "id": "feature.cleric.nature-divine-strike",
+    "weaponStrike": {
+      "dice": {
+        "1": "1d8",
+        "14": "2d8"
+      },
+      "type": ["cold", "fire", "lightning"]
+    }
+  },
+  {
+    "id": "feature.cleric.tempest-divine-strike",
+    "weaponStrike": {
+      "dice": {
+        "1": "1d8",
+        "14": "2d8"
+      },
+      "type": "thunder"
+    }
+  },
+  {
+    "id": "feature.cleric.trickery-divine-strike",
+    "weaponStrike": {
+      "dice": {
+        "1": "1d8",
+        "14": "2d8"
+      },
+      "type": "poison"
+    }
+  },
+  {
+    "id": "feature.cleric.war-divine-strike",
+    "weaponStrike": {
+      "dice": {
+        "1": "1d8",
+        "14": "2d8"
+      },
+      "type": "weapon"
+    }
+  },
+  {
+    "id": "feature.cleric.order-divine-strike",
+    "weaponStrike": {
+      "dice": {
+        "1": "1d8",
+        "14": "2d8"
+      },
+      "type": "psychic"
+    }
+  },
+  {
+    "id": "feature.cleric.forge-divine-strike",
+    "weaponStrike": {
+      "dice": {
+        "1": "1d8",
+        "14": "2d8"
+      },
+      "type": "fire"
+    }
+  },
+  {
+    "id": "feature.cleric.knowledge-potent-spellcasting",
+    "spellDamageBonus": {
+      "ability": "WIS",
+      "classId": "class.cleric",
+      "cantripsOnly": true
+    }
+  },
+  {
+    "id": "feature.cleric.light-potent-spellcasting",
+    "spellDamageBonus": {
+      "ability": "WIS",
+      "classId": "class.cleric",
+      "cantripsOnly": true
+    }
+  },
+  {
+    "id": "feature.cleric.peace-potent-spellcasting",
+    "spellDamageBonus": {
+      "ability": "WIS",
+      "classId": "class.cleric",
+      "cantripsOnly": true
+    }
+  },
+  {
+    "id": "feature.cleric.grave-potent-spellcasting",
+    "spellDamageBonus": {
+      "ability": "WIS",
+      "classId": "class.cleric",
+      "cantripsOnly": true
+    }
+  },
+  {
+    "id": "feature.wizard.empowered-evocation",
+    "spellDamageBonus": {
+      "ability": "INT",
+      "classId": "class.wizard",
+      "school": "evocation"
+    }
   }
 ]

@@ -355,6 +355,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-14 — Ability score improvement says when feats are off for the campaign and links to Campaign settings.
 - 2026-11-14 — Number fields block letters and stray signs on input, so ability scores and level stay numeric.
 - 2026-11-14 — Tasha's custom origin moves each racial increase to a different ability, on the sheet and when creating a character.
+- 2026-11-17 — Divine Strike shows on weapon attacks; Potent Spellcasting and Empowered Evocation add their bonus to spell damage notes (D219).
 - 2026-11-17 — Dual Wielder adds +1 AC with two melee weapons equipped and no shield; Soul of Artifice adds +1 to saves per attuned item.
 - 2026-11-17 — Danger Sense, Evasion, Feral Instinct and Reliable Talent show reminders on the sheet; Aura of Courage lists and warns on frightened.
 - 2026-11-17 — Healer and Inspiring Leader get Use buttons: Healer shows d6 + 4 and warns without a kit; Inspiring Leader gives you temp HP (D218).

@@ -85,7 +85,10 @@ export function combatModel(state: CharacterState, sheet: Sheet, registry: Regis
       ...(attack.extraDamage
         ? {
             extraDamage: attack.extraDamage
-              .map((extra) => `${extra.dice} ${extra.type} (${extra.source})`)
+              .map(
+                (extra) =>
+                  `${extra.dice} ${extraTypes(extra.type)} (${extra.source}${extra.oncePerTurn ? ', once per turn' : ''})`,
+              )
               .join(' + '),
           }
         : {}),
@@ -168,4 +171,10 @@ export function combatModel(state: CharacterState, sheet: Sheet, registry: Regis
     ];
   });
   return { weapons, features, spells: spellbookModel(state, sheet, registry) };
+}
+
+/** One damage type, or a choice written as "cold, fire or lightning". */
+function extraTypes(type: string | readonly string[]): string {
+  if (typeof type === 'string') return type;
+  return `${type.slice(0, -1).join(', ')} or ${type.at(-1)}`;
 }
