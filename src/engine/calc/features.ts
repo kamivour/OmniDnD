@@ -12,6 +12,8 @@ export interface CharacterFeature {
   /** Display only: dice count or flat bonus at the feature level. */
   dice?: string;
   bonus?: number;
+  /** Attacks per Attack action this feature allows at its level. */
+  attacks?: number;
   dieOverride?: { path: string; note: string; calculated: Die; value: Die };
 }
 
@@ -104,6 +106,8 @@ export function characterFeatures(
     if (dice) feature.dice = dice;
     const bonus = def.bonus && byLevel(def.bonus, level);
     if (bonus !== undefined) feature.bonus = bonus;
+    const attacks = def.attacks && byLevel(def.attacks, level);
+    if (attacks) feature.attacks = attacks;
     return [feature];
   });
 }

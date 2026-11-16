@@ -102,6 +102,7 @@ interface FeatureDef extends RefBase {
   proficiencies?: { saves?; skills?; expertise?; armor?; weapons?; tools?; languages?;   // fixed grants (D208)
                     choose?: { count; kinds: ('skill'|'expertise'|'tool'|'language'|'darkvision')[];
                                skills?; tools?: string[] | group; expertise?: boolean }[] };
+  attacks?: Record<level, 2 | 3 | 4>;   // attacks per Attack action (Extra Attack, D209)
 }
 ```
 
@@ -179,6 +180,7 @@ interface LiveState {
     economy: { actionUsed: boolean; bonusUsed: boolean; reactionUsed: boolean;
                movementUsed: number; objectInteractionUsed: boolean;
                dashCount?: number;                // extra movement allowances, removed at End Turn
+               attacksMade?: number;              // attacks made in this Attack action (Extra Attack)
                bonusActionSpellCast: boolean;      // bonus-action spell rule
                otherSpellCast: boolean };          // any spell but a 1-action cantrip
   };

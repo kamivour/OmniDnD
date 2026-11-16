@@ -54,6 +54,7 @@ describe('takeCombatAction', () => {
             ...before.live.combat!.economy,
             actionUsed: true,
             ...(action.id === 'dash' ? { dashCount: 1 } : {}),
+            ...(['attack', 'grapple', 'shove'].includes(action.id) ? { attacksMade: 1 } : {}),
           },
         },
       });

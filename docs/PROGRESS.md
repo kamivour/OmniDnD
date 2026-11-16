@@ -355,6 +355,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-14 — Ability score improvement says when feats are off for the campaign and links to Campaign settings.
 - 2026-11-14 — Number fields block letters and stray signs on input, so ability scores and level stay numeric.
 - 2026-11-14 — Tasha's custom origin moves each racial increase to a different ability, on the sheet and when creating a character.
+- 2026-11-17 — Extra Attack count tracked in Combat; follow-up attacks and grapple/shove skip confirm; Action Surge resets the action (D209).
 - 2026-11-16 — Race and subclass proficiencies derived; Skill Versatility, Blessings of Knowledge and similar picks made in To do (D208).
 - 2026-11-16 — Feat and racial spells: pick in To do, cast free once per rest from Spellbook and Combat, own DC and ability (D207).
 - 2026-11-16 — Tasha fighting styles offered per class when optional class features are on; Oathbreaker paladin oath added under the DMG book (D206).

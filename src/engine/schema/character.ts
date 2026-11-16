@@ -317,6 +317,8 @@ export const EconomySchema = z.strictObject({
   movementUsed: NonNegativeInt,
   /** Extra movement allowances from Dash; absent in legacy/default turns. */
   dashCount: NonNegativeInt.optional(),
+  /** Attacks made with this turn's Attack action (Extra Attack); absent before the first. */
+  attacksMade: NonNegativeInt.optional(),
   objectInteractionUsed: z.boolean(),
   /** Bonus-action spell rule: a spell was cast as a bonus action this turn. */
   bonusActionSpellCast: z.boolean(),

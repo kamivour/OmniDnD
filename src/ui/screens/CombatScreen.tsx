@@ -51,6 +51,8 @@ import { castingLabel, spellUnavailable, type SpellbookEntry } from '../spells/s
 import { parseDice } from '../../engine/calc/dice';
 import { RollButton } from '../dice/RollButton';
 
+/** Standard actions that can replace one attack of the Attack action. */
+const ATTACK_ACTIONS = new Set(['grapple', 'shove']);
 const ECONOMY_NAME = { A: 'Action', BA: 'Bonus action', R: 'Reaction' };
 const actionButton =
   'min-h-14 w-full rounded-btn bg-accent px-3 font-semibold text-bg disabled:cursor-not-allowed disabled:opacity-40';
@@ -99,6 +101,11 @@ export function CombatScreen() {
     bonus: !liveCombat?.economy.bonusUsed,
     reaction: !liveCombat?.economy.reactionUsed,
   };
+  const attacksMade = liveCombat?.economy.attacksMade ?? 0;
+  const attacksLeft =
+    liveCombat?.economy.actionUsed && attacksMade > 0
+      ? Math.max(0, sheet.attackAction.count - attacksMade)
+      : 0;
   const available = {
     A: economy.action,
     BA: economy.bonus,
@@ -194,7 +201,7 @@ export function CombatScreen() {
         );
       }}
       unavailable={!liveCombat}
-      spent={spentFor(reaction ? 'R' : 'A')}
+      spent={reaction ? spentFor('R') : attacksLeft > 0 ? undefined : spentFor('A')}
       onPin={() => setDetail(<LiveWeaponDetail instanceId={instanceId} reaction={reaction} />)}
       preview={{
         title: attack.name,
@@ -360,6 +367,9 @@ export function CombatScreen() {
           <section aria-label="Turn economy" data-tour="combat-economy">
             <EconomyBar
               economy={economy}
+              {...(attacksLeft > 0
+                ? { actionNote: `${attacksLeft} attack${attacksLeft === 1 ? '' : 's'} left` }
+                : {})}
               movement={{
                 left: movement.remaining,
                 max: movement.maximum,
@@ -405,7 +415,7 @@ export function CombatScreen() {
           </Tabs.List>
 
           <Tabs.Content value="actions" className="flex flex-col gap-3">
-            {!economy.action && <SpentNote what="Action" />}
+            {!economy.action && attacksLeft === 0 && <SpentNote what="Action" />}
             {!liveCombat && (
               <p className="text-xs text-text-muted">
                 Start combat to use weapon and standard actions. Spells and features can be used
@@ -416,6 +426,14 @@ export function CombatScreen() {
               Resolve attack rolls, targets and damage at the table.
             </p>
             <SectionLabel as="h3">Weapons</SectionLabel>
+            {sheet.attackAction.count > 1 && (
+              <p className="text-xs text-text-muted">
+                Attack action: {sheet.attackAction.count} attacks (
+                {sheet.attackAction.sources.join(', ')}).
+                {attacksLeft > 0 &&
+                  ` Attack ${attacksMade} of ${sheet.attackAction.count} made; ${attacksLeft} left in this action.`}
+              </p>
+            )}
             <ul className="flex flex-col gap-2">
               {model.weapons.map((weapon) => attackRow(weapon))}
             </ul>
@@ -447,7 +465,7 @@ export function CombatScreen() {
                         className="hover-lift min-h-11 rounded-btn border border-border bg-surface px-3 py-1 text-sm text-text"
                       >
                         {rule.name}
-                        {!economy.action && (
+                        {!economy.action && !(attacksLeft > 0 && ATTACK_ACTIONS.has(rule.id)) && (
                           <span className="block text-xs text-text-muted"> (Action used)</span>
                         )}
                       </button>

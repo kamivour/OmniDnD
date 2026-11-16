@@ -75,6 +75,8 @@ export interface UseFeaturePayload {
   featureId: string;
 }
 
+const ACTION_SURGE = 'feature.fighter.action-surge';
+
 export const useFeature: Command<UseFeaturePayload> = {
   name: 'useFeature',
   check: (ctx, { featureId }) => {
@@ -93,6 +95,12 @@ export const useFeature: Command<UseFeaturePayload> = {
     if (slot) spendEconomy(live, slot);
     const notes: string[] = [];
     if (die) notes.push(die);
+    // Action Surge grants one more action this turn, with a fresh Attack action.
+    if (featureId === ACTION_SURGE && live.combat?.economy.actionUsed) {
+      live.combat.economy.actionUsed = false;
+      delete live.combat.economy.attacksMade;
+      notes.push('action ready again');
+    }
     if (uses) {
       const spent = uses.spent + 1;
       live.featureUsesSpent[poolId] = spent;

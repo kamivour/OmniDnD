@@ -18,12 +18,14 @@ interface EconomyBarProps {
   /** true = still available this turn. */
   economy: Economy;
   movement: { left: number; max: number };
+  /** Replaces "used" on a spent Action, e.g. attacks left from Extra Attack. */
+  actionNote?: string;
   onToggle: (slot: Slot) => void;
   onMove: (delta: number) => void;
 }
 
 /** Action / Bonus / Reaction chips + movement. Spent = dim empty ring + readable status text. */
-export function EconomyBar({ economy, movement, onToggle, onMove }: EconomyBarProps) {
+export function EconomyBar({ economy, movement, actionNote, onToggle, onMove }: EconomyBarProps) {
   return (
     <div className="flex flex-col gap-2">
       <div className="grid grid-cols-3 gap-2">
@@ -50,7 +52,9 @@ export function EconomyBar({ economy, movement, onToggle, onMove }: EconomyBarPr
                 />
                 {label}
               </span>
-              <span className="text-xs font-normal">{available ? 'available' : 'used'}</span>
+              <span className="text-xs font-normal">
+                {available ? 'available' : key === 'action' && actionNote ? actionNote : 'used'}
+              </span>
             </button>
           );
         })}

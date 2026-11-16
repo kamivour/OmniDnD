@@ -94,6 +94,8 @@ export interface Sheet {
   /** Proficiencies from features, with the feature that gives each. */
   grantedProficiencies: GrantedProficiency[];
   attacks: WeaponAttack[];
+  /** Attacks per Attack action and the features that set it (Extra Attack). */
+  attackAction: { count: number; sources: string[] };
   /** Applied conditions, from `live.conditions` and active effects. */
   conditions: Condition[];
   carryingCapacity: number;
@@ -525,6 +527,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     proficiencies: profs,
     grantedProficiencies: owned.granted,
     attacks,
+    attackAction: attackAction(features),
     conditions,
     encumbrance: load,
     carryingCapacity: scalar(
@@ -662,6 +665,15 @@ function armorClass(
 }
 
 /** Class speed bonuses whose gear condition holds (feature `bonus` is the value at its level). */
+/** Extra Attack does not stack: the highest count wins (fighter 3 at 11, 4 at 20). */
+function attackAction(features: readonly CharacterFeature[]): Sheet['attackAction'] {
+  const count = Math.max(1, ...features.map((feature) => feature.attacks ?? 1));
+  const sources = features
+    .filter((feature) => feature.attacks === count)
+    .map((feature) => feature.def.name);
+  return { count, sources: count > 1 ? [...new Set(sources)] : [] };
+}
+
 function gearSpeedParts(features: readonly CharacterFeature[], equipped: Equipped): Part[] {
   const gear = wornArmor(equipped);
   return features.flatMap(({ def, bonus }) => {

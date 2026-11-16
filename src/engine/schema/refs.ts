@@ -250,6 +250,8 @@ export const FeatureDefSchema = z
     dice: z.record(LevelKeySchema, DiceSchema).optional(),
     /** Display only: a flat bonus that grows with level (Rage damage). */
     bonus: z.record(LevelKeySchema, z.int()).optional(),
+    /** Attacks per Attack action at this level (Extra Attack: 2; fighter 3 at 11, 4 at 20). */
+    attacks: z.record(LevelKeySchema, z.int().min(2).max(4)).optional(),
     modifiers: z.array(ModifierSchema).optional(),
     /** Feats: what taking the feat adds to the build, applied once when it is picked. */
     grants: FeatGrantsSchema.optional(),

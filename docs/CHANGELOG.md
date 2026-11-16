@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 00:13 — Extra Attack count in Combat
+
+- Characters with Extra Attack (fighter, barbarian, paladin, ranger, monk, Valor and Swords bards, Armorer and Battle Smith, Thirsting Blade) now see how many attacks their Attack action gives. Fighters get 3 at level 11 and 4 at level 20.
+- The second attack in the same action no longer asks to confirm; the Action chip shows "1 attack left". Grapple and shove each use one of the attacks.
+- Action Surge gives a fresh action straight away.
+- Please check a fighter at levels 5, 11 and 20. Checks pass.
+
 ## 2026-11-16 23:57 — Proficiencies from race and subclass
 
 - Race traits and subclass features now add their proficiencies by themselves: Keen Senses, Dwarven Combat Training, Elf Weapon Training, War and Valor armor, Hexblade weapons and more.

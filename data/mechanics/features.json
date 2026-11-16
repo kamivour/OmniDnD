@@ -13,7 +13,10 @@
   },
   {
     "id": "feature.barbarian.extra-attack",
-    "activation": "passive"
+    "activation": "passive",
+    "attacks": {
+      "1": 2
+    }
   },
   {
     "id": "feature.barbarian.fast-movement",
@@ -324,7 +327,12 @@
   },
   {
     "id": "feature.fighter.extra-attack",
-    "activation": "passive"
+    "activation": "passive",
+    "attacks": {
+      "1": 2,
+      "11": 3,
+      "20": 4
+    }
   },
   {
     "id": "feature.fighter.fighting-style",
@@ -386,7 +394,10 @@
   },
   {
     "id": "feature.monk.extra-attack",
-    "activation": "passive"
+    "activation": "passive",
+    "attacks": {
+      "1": 2
+    }
   },
   {
     "id": "feature.monk.flurry-of-blows",
@@ -557,7 +568,10 @@
   },
   {
     "id": "feature.paladin.extra-attack",
-    "activation": "passive"
+    "activation": "passive",
+    "attacks": {
+      "1": 2
+    }
   },
   {
     "id": "feature.paladin.fighting-style",
@@ -607,7 +621,10 @@
   },
   {
     "id": "feature.ranger.extra-attack",
-    "activation": "passive"
+    "activation": "passive",
+    "attacks": {
+      "1": 2
+    }
   },
   {
     "id": "feature.ranger.favored-enemy",
@@ -1592,6 +1609,36 @@
     "id": "feature.fighter.samurai-elegant-courtier",
     "proficiencies": {
       "saves": ["WIS"]
+    }
+  },
+  {
+    "id": "feature.artificer.armorer-extra-attack",
+    "attacks": {
+      "1": 2
+    }
+  },
+  {
+    "id": "feature.artificer.battle-smith-extra-attack",
+    "attacks": {
+      "1": 2
+    }
+  },
+  {
+    "id": "feature.bard.valor-extra-attack",
+    "attacks": {
+      "1": 2
+    }
+  },
+  {
+    "id": "feature.bard.swords-extra-attack",
+    "attacks": {
+      "1": 2
+    }
+  },
+  {
+    "id": "feature.warlock.eldritch-invocation-thirsting-blade",
+    "attacks": {
+      "1": 2
     }
   }
 ]

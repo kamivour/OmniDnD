@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Command } from './runner';
+import type { Command, CommandContext } from './runner';
 import {
   block,
   deadCheck,
@@ -127,6 +127,23 @@ const TakeCombatActionPayloadSchema = z.union([
 ]);
 export type TakeCombatActionPayload = z.infer<typeof TakeCombatActionPayloadSchema>;
 
+const ATTACK_ROLLS = new Set(['weapon-attack', 'grapple', 'shove']);
+
+/**
+ * Which attack of the current Attack action this would be, when an earlier attack this turn
+ * already spent the action and Extra Attack leaves more (2 of 2). Undefined otherwise.
+ */
+function followUpAttack(
+  ctx: Pick<CommandContext, 'live' | 'sheet'>,
+  choice: TakeCombatActionPayload,
+): number | undefined {
+  if (!ATTACK_ROLLS.has(choice.action) || ('reaction' in choice && choice.reaction)) return;
+  const economy = ctx.live.combat?.economy;
+  const made = economy?.attacksMade ?? 0;
+  if (!economy?.actionUsed || made === 0 || made >= ctx.sheet.attackAction.count) return;
+  return made + 1;
+}
+
 /** Named actions represent actual activity; manual economy corrections do not trigger spell ends. */
 export const takeCombatAction: Command<TakeCombatActionPayload> = {
   name: 'takeCombatAction',
@@ -144,7 +161,8 @@ export const takeCombatAction: Command<TakeCombatActionPayload> = {
       else if (reaction && weapon.type !== 'melee')
         checks.push(warn(`${weapon.name} is not a melee weapon for an opportunity attack`));
     }
-    checks.push(...economyChecks(ctx, reaction ? 'reaction' : 'action'));
+    if (followUpAttack(ctx, choice) === undefined)
+      checks.push(...economyChecks(ctx, reaction ? 'reaction' : 'action'));
     return checks;
   },
   apply: ({ live }, payload, ctx) => {
@@ -152,7 +170,20 @@ export const takeCombatAction: Command<TakeCombatActionPayload> = {
     const reaction =
       choice.action === 'readied-response' ||
       (choice.action === 'weapon-attack' && choice.reaction === true);
-    spendEconomy(live, reaction ? 'reaction' : 'action');
+    const followUp = followUpAttack({ live, sheet: ctx.sheet }, choice);
+    const perAction = ctx.sheet.attackAction.count;
+    if (followUp === undefined) spendEconomy(live, reaction ? 'reaction' : 'action');
+    if (live.combat && !reaction) {
+      const economy = live.combat.economy;
+      // Grapple and shove replace one attack; the bare Attack action resolves them all at the table.
+      if (ATTACK_ROLLS.has(choice.action)) economy.attacksMade = followUp ?? 1;
+      else if (choice.action === 'attack') economy.attacksMade = perAction;
+      else delete economy.attacksMade;
+    }
+    const count =
+      !reaction && perAction > 1 && ATTACK_ROLLS.has(choice.action)
+        ? ` ${followUp ?? 1} of ${perAction}`
+        : '';
     // The response is resolved at the table; no attack, cast or held-spell outcome is inferred.
     if (choice.action === 'readied-response') return 'Reaction: Readied action';
     if (choice.action === 'dash' && live.combat)
@@ -165,10 +196,10 @@ export const takeCombatAction: Command<TakeCombatActionPayload> = {
     const notes = attacks ? endSelfInvisibility(live, 'attack') : [];
     if (choice.action === 'weapon-attack') {
       const weapon = ctx.sheet.attacks.find((attack) => attack.instanceId === choice.instanceId)!;
-      return withNotes(`${reaction ? 'Reaction attack' : 'Attack'}: ${weapon.name}`, notes);
+      return withNotes(`${reaction ? 'Reaction attack' : `Attack${count}`}: ${weapon.name}`, notes);
     }
     return withNotes(
-      `Action: ${STANDARD_ACTIONS.find((action) => action.id === choice.action)!.name}`,
+      `Action: ${STANDARD_ACTIONS.find((action) => action.id === choice.action)!.name}${count}`,
       notes,
     );
   },
