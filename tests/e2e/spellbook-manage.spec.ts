@@ -425,12 +425,16 @@ test('ordered tags change the main row type; empty tags, reset and durable Undo 
   await importCharacter(page, file);
   const initial = await readSavedCharacter(page, file.build.id);
   await openManage(page);
+  // The type editor sits in a section that starts closed each time Manage opens.
+  const openTypes = () =>
+    manage(page).getByText('Change spell types (optional)', { exact: true }).click();
   const edit = manage(page).getByRole('button', {
-    name: 'Edit tags for Healing Word',
+    name: 'Change type of Healing Word',
     exact: true,
   });
+  await openTypes();
   await edit.click();
-  const tags = page.getByRole('dialog', { name: 'Tags: Healing Word', exact: true });
+  const tags = page.getByRole('dialog', { name: 'Spell type: Healing Word', exact: true });
   await tags.getByRole('checkbox', { name: 'Buff', exact: true }).check();
   await expectSaved(page);
   await tags.getByRole('checkbox', { name: 'Control', exact: true }).check();
@@ -460,6 +464,7 @@ test('ordered tags change the main row type; empty tags, reset and durable Undo 
   await expectSaved(page);
   expect(await readSavedCharacter(page, file.build.id)).toEqual(ordered);
   await openManage(page);
+  await openTypes();
   await edit.click();
   for (const name of ['Buff', 'Healing', 'Control']) {
     await tags.getByRole('checkbox', { name, exact: true }).uncheck();
@@ -473,6 +478,7 @@ test('ordered tags change the main row type; empty tags, reset and durable Undo 
   await manage(page).getByRole('button', { name: 'Done', exact: true }).click();
   await expect(row(page, 'Healing Word')).toContainText('Utility');
   await openManage(page);
+  await openTypes();
   await edit.click();
   await tags.getByRole('button', { name: 'Reset tags', exact: true }).click();
   await expectSaved(page);

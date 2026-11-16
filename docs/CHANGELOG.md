@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-16 13:12 — Spell types tucked away in Manage spells
+
+- The long list of "Edit tags for ..." buttons is gone from Manage spells. It is now one closed line, "Change spell types (optional)".
+- Open it to change how a spell is coloured and filtered, for example marking a spell as Buff instead of Healing. Most players never need this.
+- Checks pass.
+
 ## 2026-11-16 13:07 — Fix "Saved data is invalid" after party sync
 
 - Phones that synced a party campaign could stop loading with "Saved data is invalid: changedAt: Invalid ISO datetime". The server sends times in a slightly different format, and the app now accepts it.

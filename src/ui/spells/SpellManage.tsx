@@ -455,26 +455,34 @@ export function SpellManage({
                   )}
                 </section>
                 {selectedTagIds.length > 0 && (
-                  <section aria-label="Spell tags" className="flex flex-col gap-2">
-                    <h2 className="text-base font-semibold text-text">Spell tags</h2>
-                    <p className="text-xs text-text-muted">
-                      Tags apply to this character across all casting classes.
+                  // Rarely needed, so it starts closed below the choices.
+                  <details className="rounded-card border border-border p-3 text-sm">
+                    <summary className="min-h-11 cursor-pointer py-2 text-accent">
+                      Change spell types (optional)
+                    </summary>
+                    <p className="pb-2 text-xs text-text-muted">
+                      A spell&apos;s type (Damage, Healing, Buff, ...) sets its colour and the Type
+                      filter. Change it only if you use a spell differently, for this character in
+                      every class.
                     </p>
-                    {selectedTagIds.map((id) => (
-                      <button
-                        key={id}
-                        type="button"
-                        className={`${secondaryButton} break-words px-3 py-2 text-left`}
-                        disabled={!spellDefinition(id)}
-                        onClick={(event) => {
-                          tagsOpener.current = event.currentTarget;
-                          setTagSpellId(id);
-                        }}
-                      >
-                        Edit tags for {spellName(id)}
-                      </button>
-                    ))}
-                  </section>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedTagIds.map((id) => (
+                        <button
+                          key={id}
+                          type="button"
+                          aria-label={`Change type of ${spellName(id)}`}
+                          className={`${secondaryButton} break-words px-3 py-2 text-left`}
+                          disabled={!spellDefinition(id)}
+                          onClick={(event) => {
+                            tagsOpener.current = event.currentTarget;
+                            setTagSpellId(id);
+                          }}
+                        >
+                          {spellName(id)}
+                        </button>
+                      ))}
+                    </div>
+                  </details>
                 )}
               </>
             )}
@@ -517,7 +525,7 @@ export function SpellManage({
       <Sheet
         open={tagSpellId !== null}
         onOpenChange={(open) => !open && setTagSpellId(null)}
-        title={tagSpellId ? `Tags: ${spellName(tagSpellId)}` : 'Spell tags'}
+        title={tagSpellId ? `Spell type: ${spellName(tagSpellId)}` : 'Spell type'}
         onCloseAutoFocus={(event) => {
           event.preventDefault();
           const opener = tagsOpener.current;
