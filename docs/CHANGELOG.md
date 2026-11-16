@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 00:31 — Sorcerer Flexible Casting
+
+- Sorcerers from level 2 get a Flexible Casting box on Spells and in the Combat Bonus tab. Turn a slot into sorcery points, or spend points to make a slot up to level 5.
+- Created slots join your normal slots and fade on a long rest.
+- If converting would push points over your maximum, the app warns first; extra points are lost.
+- Checks pass.
+
 ## 2026-11-17 00:23 — Divine Smite and Eldritch Smite
 
 - Paladins see a Divine Smite box under Weapons in Combat: pick a slot, tick "undead or fiend" if it applies, and the app spends the slot and tells you the dice to roll.

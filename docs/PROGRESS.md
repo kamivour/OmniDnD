@@ -355,6 +355,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-14 — Ability score improvement says when feats are off for the campaign and links to Campaign settings.
 - 2026-11-14 — Number fields block letters and stray signs on input, so ability scores and level stay numeric.
 - 2026-11-14 — Tasha's custom origin moves each racial increase to a different ability, on the sheet and when creating a character.
+- 2026-11-17 — Sorcerer Flexible Casting: turn slots into sorcery points and back from Spells or the Combat bonus tab; created slots fade on a long rest (D211).
 - 2026-11-17 — Divine Smite and Eldritch Smite spend a slot from Combat; Improved Divine Smite adds 1d8 radiant to melee rows (D210).
 - 2026-11-17 — Extra Attack count tracked in Combat; follow-up attacks and grapple/shove skip confirm; Action Surge resets the action (D209).
 - 2026-11-16 — Race and subclass proficiencies derived; Skill Versatility, Blessings of Knowledge and similar picks made in To do (D208).

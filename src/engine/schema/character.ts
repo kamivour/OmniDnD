@@ -345,6 +345,8 @@ export const LiveStateSchema = z
     /** Index = spell level, so index 0 (cantrips) stays 0. Stores used, not remaining (D6). */
     slotsUsed: z.array(NonNegativeInt).length(10),
     pactSlotsUsed: NonNegativeInt.optional(),
+    /** Slots made with sorcery points (Flexible Casting), index = level. Gone after a long rest. */
+    createdSlots: z.array(NonNegativeInt).length(10).optional(),
     featureUsesSpent: z.record(refId('feature'), NonNegativeInt),
     /** Free feat and racial castings used, keyed `featureId|spellId`. Absent in older saves. */
     featSpellsUsed: z.record(z.string(), NonNegativeInt).optional(),

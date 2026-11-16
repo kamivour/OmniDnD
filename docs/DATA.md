@@ -166,6 +166,7 @@ interface LiveState {
   hitDiceSpent: Record<string, number>;            // { d8: 1 }
   slotsUsed: number[];                             // index = spell level
   pactSlotsUsed?: number;
+  createdSlots?: number[];                         // Flexible Casting slots by level, cleared on a long rest (D211)
   featureUsesSpent: Record<string, number>;
   featSpellsUsed?: Record<string, number>;         // 'featureId|spellId' free castings spent (D207)
   concentration?: { spellId: string; slotLevel?: number; endsAt?: number;

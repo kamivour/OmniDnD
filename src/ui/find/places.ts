@@ -290,6 +290,15 @@ export const PLACES: readonly FindEntry[] = [
     needsCharacter: true,
   },
   {
+    id: 'go.flexible-casting',
+    group: 'go',
+    title: 'Flexible Casting',
+    detail: 'Spells',
+    synonyms: ['sorcery points', 'font of magic', 'create spell slot', 'convert slot'],
+    target: { kind: 'go', path: 'spells', anchor: 'flexible-casting' },
+    needsCharacter: true,
+  },
+  {
     id: 'go.quick-tables',
     group: 'go',
     title: 'Quick tables',

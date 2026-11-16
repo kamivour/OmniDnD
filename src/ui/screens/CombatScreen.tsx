@@ -51,8 +51,12 @@ import { SpellCastControls } from '../spells/SpellCastControls';
 import { castingLabel, spellUnavailable, type SpellbookEntry } from '../spells/spellbook-model';
 import { parseDice } from '../../engine/calc/dice';
 import { RollButton } from '../dice/RollButton';
+import { FlexibleCastingPanel } from '../spells/FlexibleCastingPanel';
+import { CONVERT_SLOT, CREATE_SLOT } from '../../engine/commands';
 
 /** Standard actions that can replace one attack of the Attack action. */
+/** Flexible Casting has its own panel, so its two features skip the plain Use rows. */
+const FLEXIBLE = new Set([CONVERT_SLOT, CREATE_SLOT]);
 const ATTACK_ACTIONS = new Set(['grapple', 'shove']);
 const ECONOMY_NAME = { A: 'Action', BA: 'Bonus action', R: 'Reaction' };
 const actionButton =
@@ -581,7 +585,9 @@ export function CombatScreen() {
             {!economy.bonus && <SpentNote what="Bonus action" />}
             <ul className="flex flex-col gap-2">
               {model.spells.entries.filter(({ spell }) => spell.cost === 'BA').map(spellRow)}
-              {model.features.filter(({ feature }) => feature.cost === 'BA').map(featureRow)}
+              {model.features
+                .filter(({ feature }) => feature.cost === 'BA' && !FLEXIBLE.has(feature.id))
+                .map(featureRow)}
               {commanded.map((def) => (
                 <li
                   key={def.id}
@@ -597,6 +603,7 @@ export function CombatScreen() {
                 </li>
               ))}
             </ul>
+            <FlexibleCastingPanel />
             {!model.spells.entries.some(({ spell }) => spell.cost === 'BA') &&
               !model.features.some(({ feature }) => feature.cost === 'BA') &&
               commanded.length === 0 && (

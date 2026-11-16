@@ -21,6 +21,7 @@ import { SPELL_TYPE_ORDER, SPELL_TYPES, type SpellType } from '../spellTypes';
 import { castingLabel, spellbookModel, spellUnavailable } from '../spells/spellbook-model';
 import { SpellCastControls } from '../spells/SpellCastControls';
 import { SpellManage } from '../spells/SpellManage';
+import { FlexibleCastingPanel } from '../spells/FlexibleCastingPanel';
 import { LiveSpellDetail } from '../spells/LiveSpellDetail';
 import { useTodo } from '../todo/useTodo';
 
@@ -228,6 +229,8 @@ export function SpellbookScreen() {
             Pact Magic Spellbook support is coming in Phase 3. Adjust pact slots from the HUD.
           </p>
         )}
+
+        <FlexibleCastingPanel anchorId="flexible-casting" />
 
         <section aria-label="Filters" data-tour="spell-filters" className="flex flex-col gap-2">
           <div className="flex gap-2">

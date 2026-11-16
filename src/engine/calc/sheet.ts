@@ -390,6 +390,11 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
           { min: 0 },
         ),
   );
+  // Flexible Casting slots last until a long rest and count like ordinary ones.
+  if (live.createdSlots?.some((count) => count > 0)) {
+    slots.created = [...live.createdSlots];
+    slots.max = slots.max.map((max, slotLevel) => max + (live.createdSlots?.[slotLevel] ?? 0));
+  }
   if (slots.pact)
     slots.pact = {
       count: scalar('/slots/pact/count', 'Pact slots maximum', slots.pact.count, { min: 0 }),

@@ -13,6 +13,8 @@ export interface SpellSlots {
   max: number[];
   /** Warlock Pact Magic, tracked apart from other slots. */
   pact?: { count: number; level: number };
+  /** Slots made with sorcery points, already counted in `max`. */
+  created?: number[];
 }
 
 /** Caster level of a class when it is the character's only spellcasting class. */

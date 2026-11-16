@@ -169,6 +169,10 @@ export const completeLongRest: Command<null> = {
       });
       restored.push('spell slots');
     }
+    if (live.createdSlots) {
+      delete live.createdSlots;
+      notes.push('created slots faded');
+    }
     if (live.pactSlotsUsed) {
       delete live.pactSlotsUsed;
       restored.push('pact slots');

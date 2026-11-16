@@ -195,3 +195,12 @@ export const PACT_SLOTS: readonly { count: number; level: number }[] = [
   ...Array.from({ length: 6 }, () => ({ count: 3, level: 5 })),
   ...Array.from({ length: 4 }, () => ({ count: 4, level: 5 })),
 ];
+
+/** PHB 2014 Flexible Casting: sorcery points to create a slot, by slot level (5th is the top). */
+export const SLOT_CREATION_COST: Readonly<Record<number, number>> = {
+  1: 2,
+  2: 3,
+  3: 5,
+  4: 6,
+  5: 7,
+};
