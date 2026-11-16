@@ -259,8 +259,14 @@ export const FeatureDefSchema = z
     concentration: z.literal(true).optional(),
     /** Only before moving this turn; speed drops to 0 for the rest of the turn (Steady Aim). */
     stationary: z.literal(true).optional(),
-    /** Add the proficiency bonus to the die roll (Quickened Healing). */
-    dieBonus: z.literal('proficiency').optional(),
+    /** Added to the die roll: the proficiency bonus (Quickened Healing) or a number (Healer: 4). */
+    dieBonus: z.union([z.literal('proficiency'), z.int().min(1)]).optional(),
+    /** Warns on use when this item is not carried (Healer: a healer's kit). */
+    needsItem: refId('item').optional(),
+    /** Short reminder added to the log on use (Healer: plus the target's Hit Dice). */
+    useNote: z.string().optional(),
+    /** Grants you temporary HP equal to your level + this ability's modifier (Inspiring Leader). */
+    tempHp: z.strictObject({ abilityMod: AbilitySchema }).optional(),
     die: DieByLevelSchema.optional(),
     /** Display only: a dice count that grows with level (Sneak Attack). */
     dice: z.record(LevelKeySchema, DiceSchema).optional(),

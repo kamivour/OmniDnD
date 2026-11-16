@@ -139,7 +139,12 @@ export function featuresModel(
         ? [def.summary.effect]
         : (def.fullText?.split(/\n\s*\n/).filter(Boolean) ?? [])),
     ];
-    const usable = kind === 'active' || kind === 'triggered' || !!details.uses;
+    const usable =
+      kind === 'active' || kind === 'triggered' || !!details.uses || details.tempHp !== undefined;
+    const dieText =
+      details.die && details.dieBonus !== undefined
+        ? `${details.die} + ${details.dieBonus}`
+        : details.die;
     return {
       id: def.id,
       name: def.name,
@@ -150,9 +155,7 @@ export function featuresModel(
       lines,
       summarized: !!def.summary,
       automatic: !!(def.modifiers?.length || def.defenses),
-      ...(details.die || dice || bonus !== undefined
-        ? { die: details.die ?? dice ?? `+${bonus}` }
-        : {}),
+      ...(dieText || dice || bonus !== undefined ? { die: dieText ?? dice ?? `+${bonus}` } : {}),
       ...(details.uses && !shared
         ? {
             ownPool: {

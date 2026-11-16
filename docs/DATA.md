@@ -117,8 +117,11 @@ interface FeatureDef extends RefBase {
   restoreSlot?: true;                     // regain an expended slot up to half proficiency, rounded up
   concentration?: true;                   // ends spell concentration when used (Favored Foe)
   stationary?: true;                      // warns after moving; speed 0 for the turn (Steady Aim)
-  dieBonus?: "proficiency";               // add proficiency to the die (Quickened Healing)
+  dieBonus?: "proficiency" | number;      // add to the die (Quickened Healing: proficiency; Healer: 4)
   elementalAdept?: DamageType;            // Elemental Adept pick: spells of this type ignore resistance, 1s count as 2s
+  needsItem?: string;                     // warns on use when this item is not carried (Healer: healer's kit)
+  useNote?: string;                       // short reminder added to the use log
+  tempHp?: { abilityMod: Ability };       // you gain level + this modifier as temp HP (Inspiring Leader)
 }
 ```
 

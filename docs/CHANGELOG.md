@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 01:45 — Healer and Inspiring Leader buttons
+
+- Healer now has a Use button that shows d6 + 4 plus the target's Hit Dice, and warns if you carry no healer's kit.
+- Inspiring Leader's Use button gives you level + CHA temporary HP; if you already have more, you keep yours.
+- Healer's kit uses are not counted, so track them yourself.
+- Checks pass.
+
 ## 2026-11-17 01:38 — Ritual Caster rituals
 
 - Ritual Caster now asks in To do for a class and two level 1 ritual spells from its list.

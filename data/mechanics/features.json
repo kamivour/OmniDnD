@@ -1925,6 +1925,18 @@
     "attunementSlots": 6
   },
   {
+    "id": "feature.feat.healer",
+    "die": { "1": "d6" },
+    "dieBonus": 4,
+    "needsItem": "item.healers-kit",
+    "useNote": "plus the target's total Hit Dice; once per creature per rest; uses one kit charge"
+  },
+  {
+    "id": "feature.feat.inspiring-leader",
+    "tempHp": { "abilityMod": "CHA" },
+    "useNote": "up to five allies within 30 ft gain the same; once per creature per rest"
+  },
+  {
     "id": "feature.feat.great-weapon-master",
     "powerAttack": "heavy-melee"
   },

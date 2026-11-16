@@ -67,8 +67,10 @@ export interface FeatureUseDetails {
   /** A second pool the feature also spends (Harness Divine Power: Channel Divinity). */
   also?: { feature: CharacterFeature; uses: Uses };
   die?: Die;
-  /** Added to the die roll (Quickened Healing: proficiency bonus). */
+  /** Added to the die roll (Quickened Healing: proficiency bonus; Healer: 4). */
   dieBonus?: number;
+  /** Temporary HP the feature grants you (Inspiring Leader: level + CHA modifier). */
+  tempHp?: number;
   unavailableReason?: string;
 }
 
@@ -85,7 +87,12 @@ export function featureUseDetails(
   const alsoUses = poolUses(ctx, alsoFeature);
   const also = alsoFeature && alsoUses ? { feature: alsoFeature, uses: alsoUses } : undefined;
   const die = feature?.die ?? pool?.die;
-  const dieBonus = feature?.def.dieBonus === 'proficiency' ? ctx.sheet.proficiency : undefined;
+  const bonusDef = feature?.def.dieBonus;
+  const dieBonus = bonusDef === 'proficiency' ? ctx.sheet.proficiency : bonusDef;
+  const tempHpDef = feature?.def.tempHp;
+  const tempHp = tempHpDef
+    ? Math.max(1, feature!.level + ctx.sheet.abilities[tempHpDef.abilityMod].mod)
+    : undefined;
   let unavailableReason: string | undefined;
   if (!feature) unavailableReason = 'You do not have this feature';
   else if (isDead(ctx.live)) unavailableReason = 'You are dead';
@@ -110,6 +117,7 @@ export function featureUseDetails(
     ...(also ? { also } : {}),
     ...(die ? { die } : {}),
     ...(dieBonus !== undefined ? { dieBonus } : {}),
+    ...(tempHp !== undefined ? { tempHp } : {}),
     ...(unavailableReason ? { unavailableReason } : {}),
   };
 }
@@ -146,6 +154,21 @@ export const useFeature: Command<UseFeaturePayload> = {
           `${feature.def.name} needs concentration; this ends concentration on ${ctx.registry.get('spell', ctx.live.concentration.spellId).name}`,
         ),
       );
+    const itemId = feature.def.needsItem;
+    if (
+      itemId &&
+      !ctx.build.items.some(
+        (item) => item.itemId === itemId && (ctx.live.items[item.instanceId]?.qty ?? 1) > 0,
+      )
+    )
+      checks.push(warn(`No ${ctx.registry.get('item', itemId).name} carried`));
+    const { tempHp } = featureUseDetails(ctx, featureId);
+    if (tempHp !== undefined && ctx.live.tempHp > tempHp)
+      checks.push(
+        warn(
+          `Temp HP don't stack: you have ${ctx.live.tempHp}, more than ${tempHp}; you keep yours`,
+        ),
+      );
     if (feature.def.stationary && (ctx.live.combat?.economy.movementUsed ?? 0) > 0)
       checks.push(warn(`${feature.def.name} works only if you have not moved this turn`));
     if (feature.def.dropToOne) {
@@ -158,7 +181,7 @@ export const useFeature: Command<UseFeaturePayload> = {
     return checks;
   },
   apply: ({ live }, { featureId, slotLevel }, ctx) => {
-    const { feature, pool, poolId, uses, cost, also, die, dieBonus } = featureUseDetails(
+    const { feature, pool, poolId, uses, cost, also, die, dieBonus, tempHp } = featureUseDetails(
       ctx,
       featureId,
     );
@@ -173,6 +196,14 @@ export const useFeature: Command<UseFeaturePayload> = {
       notes.push('back up at 1 HP');
     }
     if (die) notes.push(dieBonus === undefined ? die : `${die} + ${dieBonus}`);
+    if (tempHp !== undefined) {
+      if (live.tempHp >= tempHp) notes.push(`you keep your ${live.tempHp} temp HP`);
+      else {
+        live.tempHp = tempHp;
+        notes.push(`you gain ${tempHp} temp HP`);
+      }
+    }
+    if (feature?.def.useNote) notes.push(feature.def.useNote);
     if (feature?.def.concentration) {
       const ended = dropConcentration(live, ctx.registry);
       notes.push(ended ? `concentration on ${ended} ended` : 'concentration');

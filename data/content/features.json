@@ -275,7 +275,7 @@
     "source": "PHB",
     "srd": false,
     "summary": {
-      "effect": "With a healer’s kit, use an action to restore 1d6 + 4 + the target’s level in HP. Once per rest for each creature."
+      "effect": "With a healer’s kit, use an action to restore 1d6 + 4 HP plus the target’s total Hit Dice. Once per rest for each creature."
     },
     "summaryReviewed": false,
     "origin": "feat",
