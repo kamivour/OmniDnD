@@ -203,7 +203,7 @@ function featCastDetails(
     selected: feat !== undefined,
     needsPreparation: false,
     preparedForCasting: true,
-    ritualEligible: false,
+    ritualEligible: !!(source?.grant.ritual && feat && spell.ritual),
     ...(source
       ? {
           feat: {

@@ -120,7 +120,8 @@ export function featSpellCandidates(
         (!pick.schools || pick.schools.includes(entry.school)) &&
         (!pick.fromClass || (classId !== undefined && entry.classes.includes(classId))) &&
         (!pick.classes || pick.classes.some((id) => entry.classes.includes(id))) &&
-        (!pick.attack || entry.attack !== undefined),
+        (!pick.attack || entry.attack !== undefined) &&
+        (!pick.ritual || entry.ritual),
     )
     .sort((a, b) => a.name.localeCompare(b.name));
 }

@@ -78,10 +78,11 @@ export function SpellbookScreen() {
   const { slots, levels } = model;
   const context = { ...state, sheet, registry: registryFor(state.build) };
   const entries = model.entries.map((entry) => {
+    // Feat spells carry the feature id in `classId` (Ritual Caster casts them as rituals).
+    const via = entry.feat ? { featureId: entry.classId } : { classId: entry.classId };
     const ritualAvailable =
-      !entry.feat &&
       !state.live.combat &&
-      spellCastDetails(context, { spellId: entry.spell.id, classId: entry.classId }).ritualEligible;
+      spellCastDetails(context, { spellId: entry.spell.id, ...via }).ritualEligible;
     return { ...entry, unavailable: spellUnavailable(entry, slots, ritualAvailable) };
   });
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);

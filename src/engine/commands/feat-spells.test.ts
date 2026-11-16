@@ -154,3 +154,31 @@ describe('feat and racial trait spells', () => {
     ).toEqual(['Infernal Legacy does not let you cast Hellish Rebuke with a spell slot']);
   });
 });
+
+describe('Ritual Caster', () => {
+  const RITUAL = 'feature.feat.ritual-caster';
+
+  it('picks two level 1 rituals from the chosen class and casts them only as rituals', () => {
+    const session = new Session(withFeats(RITUAL));
+    expect(
+      session.preview(chooseFeatSpells, {
+        featureId: RITUAL,
+        classId: 'class.wizard',
+        spellIds: ['spell.detect-magic', 'spell.shield'],
+      }).reasons,
+    ).toEqual(['Shield is not an option for Ritual Caster']);
+    session.run(chooseFeatSpells, {
+      featureId: RITUAL,
+      classId: 'class.wizard',
+      spellIds: ['spell.detect-magic', 'spell.find-familiar'],
+    });
+    const slotsBefore = session.live.slotsUsed;
+    const cast = { spellId: 'spell.detect-magic', featureId: RITUAL };
+    expect(session.preview(castSpell, { ...cast, ritual: true }).reasons).toEqual([]);
+    expect(session.preview(castSpell, { ...cast, slotLevel: 1 }).reasons).toEqual([
+      'Ritual Caster casts its spells only as rituals',
+    ]);
+    session.run(castSpell, { ...cast, ritual: true });
+    expect(session.live.slotsUsed).toEqual(slotsBefore);
+  });
+});

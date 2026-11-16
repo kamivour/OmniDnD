@@ -237,6 +237,6 @@ export function spellUnavailable(
   const { spell, feat } = entry;
   if (spell.level === 0) return false;
   const slotLeft = slots.some((slot) => slot.level >= spell.level && slot.used < slot.max);
-  if (feat) return feat.freeLeft <= 0 && !(feat.slots && slotLeft);
+  if (feat) return feat.freeLeft <= 0 && !(feat.slots && slotLeft) && !ritualAvailable;
   return !slotLeft && !ritualAvailable;
 }

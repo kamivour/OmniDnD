@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 01:38 — Ritual Caster rituals
+
+- Ritual Caster now asks in To do for a class and two level 1 ritual spells from its list.
+- The Spellbook lists them under Ritual Caster; they cast only as rituals, with no slot used.
+- Rituals you copy into the book later are not tracked yet, so note them yourself.
+- Checks pass.
+
 ## 2026-11-17 01:33 — Feat picks for styles, invocations and elements
 
 - Fighting Initiate, Eldritch Adept and Elemental Adept now ask for their pick in To do.

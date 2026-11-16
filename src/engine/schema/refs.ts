@@ -197,6 +197,8 @@ export const FeatureSpellsSchema = z.strictObject({
   classOptions: z.array(refId('class')).optional(),
   /** The spells can also be cast with spell slots of the right level. */
   slots: z.boolean(),
+  /** The spells can be cast only as rituals (Ritual Caster). */
+  ritual: z.literal(true).optional(),
   fixed: z
     .array(
       z.strictObject({
@@ -222,6 +224,8 @@ export const FeatureSpellsSchema = z.strictObject({
         classes: z.array(refId('class')).optional(),
         /** Only spells that make an attack roll (Spell Sniper). */
         attack: z.boolean().optional(),
+        /** Only spells with the ritual tag (Ritual Caster). */
+        ritual: z.boolean().optional(),
         free: FreeCastSchema.optional(),
       }),
     )

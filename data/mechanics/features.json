@@ -2052,5 +2052,29 @@
   {
     "id": "feature.feat.elemental-adept-thunder",
     "elementalAdept": "thunder"
+  },
+  {
+    "id": "feature.feat.ritual-caster",
+    "spells": {
+      "ability": "class",
+      "classOptions": [
+        "class.bard",
+        "class.cleric",
+        "class.druid",
+        "class.sorcerer",
+        "class.warlock",
+        "class.wizard"
+      ],
+      "slots": false,
+      "ritual": true,
+      "picks": [
+        {
+          "count": 2,
+          "level": 1,
+          "fromClass": true,
+          "ritual": true
+        }
+      ]
+    }
   }
 ]

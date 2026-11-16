@@ -96,9 +96,9 @@ interface FeatureDef extends RefBase {
   die?: DieByLevel;
   modifiers?: Modifier[];               // passive math, e.g. JoAT
   hook?: string;                        // complex logic in src/engine/hooks/<id>.ts
-  spells?: { ability: Ability | 'raised' | 'class'; classOptions?: string[]; slots: boolean;
+  spells?: { ability: Ability | 'raised' | 'class'; classOptions?: string[]; slots: boolean; ritual?: true;
              fixed?: { spellId; free?: 'long' | 'short' | 'will'; minLevel?; castLevel? }[];
-             picks?: { count; level; schools?; fromClass?; classes?; attack?; free? }[] };  // feat and racial spells (D207)
+             picks?: { count; level; schools?; fromClass?; classes?; attack?; free?; ritual? }[] };  // feat and racial spells (D207)
   proficiencies?: { saves?; skills?; expertise?; armor?; weapons?; tools?; languages?;   // fixed grants (D208)
                     choose?: { count; kinds: ('skill'|'expertise'|'tool'|'language'|'darkvision')[];
                                skills?; tools?: string[] | group; expertise?: boolean }[] };
@@ -118,7 +118,7 @@ interface FeatureDef extends RefBase {
   concentration?: true;                   // ends spell concentration when used (Favored Foe)
   stationary?: true;                      // warns after moving; speed 0 for the turn (Steady Aim)
   dieBonus?: "proficiency";               // add proficiency to the die (Quickened Healing)
-  elementalAdept?: DamageType;              // Elemental Adept pick: spells of this type ignore resistance, 1s count as 2s
+  elementalAdept?: DamageType;            // Elemental Adept pick: spells of this type ignore resistance, 1s count as 2s
 }
 ```
 
