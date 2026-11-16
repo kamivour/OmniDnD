@@ -41,3 +41,10 @@
   font-weight: 650;
   letter-spacing: -0.01em;
 }
+
+/* The OmniDnD wordmark keeps the app's own lettering, as in Dark and Parchment. */
+[data-theme='midnight'] .omni-title {
+  font-family: 'Cinzel Variable', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: normal;
+}

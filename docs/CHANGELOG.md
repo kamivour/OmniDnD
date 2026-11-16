@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-16 13:25 — Midnight title uses the app lettering
+
+- In the Midnight theme, the OmniDnD title now uses the same carved lettering as Dark and Parchment instead of the plain phone font.
+- Headings and text in Midnight still use the phone font, as before.
+- Checks pass.
+
 ## 2026-11-16 13:12 — Spell types tucked away in Manage spells
 
 - The long list of "Edit tags for ..." buttons is gone from Manage spells. It is now one closed line, "Change spell types (optional)".
