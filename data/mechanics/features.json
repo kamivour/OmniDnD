@@ -1931,5 +1931,71 @@
   {
     "id": "feature.feat.sharpshooter",
     "powerAttack": "ranged"
+  },
+  {
+    "id": "feature.tce.ranger-favored-foe",
+    "activation": "free",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    },
+    "die": {
+      "1": "d4",
+      "6": "d6",
+      "14": "d8"
+    },
+    "concentration": true
+  },
+  {
+    "id": "feature.tce.rogue-steady-aim",
+    "activation": "bonus",
+    "stationary": true
+  },
+  {
+    "id": "feature.tce.cleric-harness-divine-power",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "byLevel": {
+          "2": 1,
+          "6": 2,
+          "18": 3
+        }
+      },
+      "recharge": "long"
+    },
+    "alsoSpends": "feature.cleric.channel-divinity",
+    "restoreSlot": true
+  },
+  {
+    "id": "feature.tce.paladin-harness-divine-power",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "byLevel": {
+          "3": 1,
+          "7": 2,
+          "15": 3
+        }
+      },
+      "recharge": "long"
+    },
+    "alsoSpends": "feature.paladin.channel-divinity",
+    "restoreSlot": true
+  },
+  {
+    "id": "feature.tce.monk-quickened-healing",
+    "activation": "action",
+    "usesFrom": "feature.monk.ki",
+    "cost": 2,
+    "die": {
+      "1": "d4",
+      "5": "d6",
+      "11": "d8",
+      "17": "d10"
+    },
+    "dieBonus": "proficiency"
   }
 ]

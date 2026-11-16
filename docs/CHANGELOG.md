@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 01:21 — Tasha class options you can use
+
+- Rangers can use Favored Foe from Features: it spends a use, shows the bonus die and ends concentration on a spell.
+- Rogues get Steady Aim as a bonus action. It warns if you already moved and sets your speed to 0 for the turn.
+- Clerics and paladins can use Harness Divine Power. It spends Channel Divinity and gives back your highest allowed expended slot. Monks can use Quickened Healing for 2 ki; roll the shown die and add the healing yourself.
+- Checks pass.
+
 ## 2026-11-17 01:09 — Great Weapon Master and Sharpshooter
 
 - With Great Weapon Master, heavy melee weapons you are proficient with show a second line in Combat: 5 less to hit, 10 more damage.

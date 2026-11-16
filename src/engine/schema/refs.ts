@@ -245,6 +245,18 @@ export const FeatureDefSchema = z
       .optional(),
     /** Spends another feature's uses (Cutting Words spends Bardic Inspiration). */
     usesFrom: refId('feature').optional(),
+    /** Pool uses spent per activation (Quickened Healing: 2 ki). */
+    cost: z.int().min(2).optional(),
+    /** Also spends one use of this feature's pool (Harness Divine Power spends Channel Divinity). */
+    alsoSpends: refId('feature').optional(),
+    /** Regain one expended spell slot of level up to half the proficiency bonus, rounded up. */
+    restoreSlot: z.literal(true).optional(),
+    /** Lasts while you concentrate, as if on a spell (Favored Foe). */
+    concentration: z.literal(true).optional(),
+    /** Only before moving this turn; speed drops to 0 for the rest of the turn (Steady Aim). */
+    stationary: z.literal(true).optional(),
+    /** Add the proficiency bonus to the die roll (Quickened Healing). */
+    dieBonus: z.literal('proficiency').optional(),
     die: DieByLevelSchema.optional(),
     /** Display only: a dice count that grows with level (Sneak Attack). */
     dice: z.record(LevelKeySchema, DiceSchema).optional(),

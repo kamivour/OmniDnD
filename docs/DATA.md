@@ -112,6 +112,12 @@ interface FeatureDef extends RefBase {
   breath?: { ability };                   // Breath Weapon save DC ability
   affinity?: { ability };                 // Elemental Affinity spell damage bonus
   attunementSlots?: 4..6;                 // attunement limit (Magic Item Adept, Savant, Master)
+  cost?: 2+;                              // pool uses per activation (Quickened Healing: 2 ki)
+  alsoSpends?: FeatureId;                 // also spends one use of this pool (Harness Divine Power)
+  restoreSlot?: true;                     // regain an expended slot up to half proficiency, rounded up
+  concentration?: true;                   // ends spell concentration when used (Favored Foe)
+  stationary?: true;                      // warns after moving; speed 0 for the turn (Steady Aim)
+  dieBonus?: "proficiency";               // add proficiency to the die (Quickened Healing)
 }
 ```
 
