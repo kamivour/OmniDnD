@@ -1124,7 +1124,7 @@
     "source": "TCE",
     "srd": false,
     "summary": {
-      "effect": "Fighter, paladin or ranger. Reaction: when an ally within 5 feet is hit, reduce the damage by 1d10 plus your proficiency bonus."
+      "effect": "Fighter or paladin. Reaction: when an ally within 5 feet is hit, reduce the damage by 1d10 plus your proficiency bonus."
     },
     "summaryReviewed": false,
     "origin": "class",
@@ -1139,7 +1139,7 @@
     "source": "TCE",
     "srd": false,
     "summary": {
-      "effect": "Fighter, paladin or ranger. Learn one Battle Master maneuver and gain one d6 superiority die, restored on a short or long rest."
+      "effect": "Fighter only. Learn one Battle Master maneuver and gain one d6 superiority die, restored on a short or long rest."
     },
     "summaryReviewed": false,
     "origin": "class",
@@ -1153,7 +1153,7 @@
     "source": "TCE",
     "srd": false,
     "summary": {
-      "effect": "Fighter, paladin or ranger. Draw a thrown weapon as part of the attack, and add +2 to its damage."
+      "effect": "Fighter or ranger. Draw a thrown weapon as part of the attack, and add +2 to its damage."
     },
     "summaryReviewed": false,
     "origin": "class",
@@ -1167,7 +1167,7 @@
     "source": "TCE",
     "srd": false,
     "summary": {
-      "effect": "Fighter, paladin or ranger. Unarmed strikes deal d6 (d8 with both hands empty), and you deal 1d4 to a creature you grapple."
+      "effect": "Fighter only. Unarmed strikes deal d6 (d8 with both hands empty), and you deal 1d4 to a creature you grapple."
     },
     "summaryReviewed": false,
     "origin": "class",
@@ -10532,5 +10532,95 @@
     },
     "origin": "subclass",
     "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.oathbreaker-oath-spells",
+    "name": "Oath Spells",
+    "ruleset": "5e-2014",
+    "source": "DMG",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Always-prepared spells by level: 3 hellish rebuke, inflict wounds; 5 crown of madness, darkness; 9 animate dead, bestow curse; 13 blight, confusion; 17 contagion, dominate person."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.oathbreaker-control-undead",
+    "name": "Channel Divinity: Control Undead",
+    "ruleset": "5e-2014",
+    "source": "DMG",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: one undead within 30 ft makes a Wisdom save or follows your orders for 24 hours. Undead whose challenge rating is at least your paladin level are immune."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.oathbreaker-dreadful-aspect",
+    "name": "Channel Divinity: Dreadful Aspect",
+    "ruleset": "5e-2014",
+    "source": "DMG",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action: creatures you choose within 30 ft make a Wisdom save or are frightened of you for 1 minute. One that ends its turn more than 30 ft away can save again."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.paladin.channel-divinity"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.oathbreaker-aura-of-hate",
+    "name": "Aura of Hate",
+    "ruleset": "5e-2014",
+    "source": "DMG",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You, and fiends and undead within 10 ft of you, add your Charisma modifier to melee weapon damage. The range becomes 30 ft at level 18. Only one paladin’s aura counts at a time."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.oathbreaker-supernatural-resistance",
+    "name": "Supernatural Resistance",
+    "ruleset": "5e-2014",
+    "source": "DMG",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You resist bludgeoning, piercing and slashing damage from nonmagical weapons."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.paladin.oathbreaker-dread-lord",
+    "name": "Dread Lord",
+    "ruleset": "5e-2014",
+    "source": "DMG",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Action, 1 minute: 30 ft aura of gloom. Foes frightened of you that start their turn inside take 4d10 psychic. Sighted attackers have disadvantage against you and chosen allies inside. Bonus action: shadow attack for 3d10 + Charisma necrotic."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
   }
 ]

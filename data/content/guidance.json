@@ -2444,5 +2444,21 @@
     "mainAbilities": ["CHA", "STR"],
     "strengths": ["Strong melee for a warlock", "Medium armour and shields", "Powerful curse"],
     "weaknesses": ["Short rest dependent", "Competes with spell slots"]
+  },
+  {
+    "id": "subclass.paladin.oathbreaker",
+    "kind": "subclass",
+    "pitch": "A fallen paladin who commands undead and spreads fear.",
+    "difficulty": "medium",
+    "mainAbilities": ["STR", "CHA"],
+    "strengths": [
+      "Big melee damage from Aura of Hate",
+      "Can take control of undead",
+      "Fear on many foes at once"
+    ],
+    "weaknesses": [
+      "Needs DM approval and usually an evil character",
+      "Aura also boosts enemy fiends and undead"
+    ]
   }
 ]

@@ -95,3 +95,49 @@ describe('resolveChoices', () => {
     expect(kinds(state)).not.toContain('asi');
   });
 });
+
+describe('Tasha fighting styles', () => {
+  const withTasha = (state: CharacterState, on: boolean): CharacterState => ({
+    ...state,
+    campaign: {
+      ...state.campaign,
+      sources: ['PHB', 'TCE'],
+      optionalRules: { ...state.campaign.optionalRules, optionalClassFeatures: on },
+    },
+  });
+  const styles = (state: CharacterState) =>
+    pendingChoices(state, registry).find((item) => item.kind === 'option')?.optionIds ?? [];
+  const pick = (state: CharacterState, id: string) =>
+    runCommand(
+      resolveChoices,
+      state,
+      { classId: 'class.fighter', choices: { features: [id] } },
+      registry,
+      meta,
+    ).result;
+
+  it('are offered only with optional class features on, and only for the right class', () => {
+    expect(styles(withTasha(fighter(1), false))).not.toContain(
+      'feature.tce.fighting-style-superior-technique',
+    );
+    const on = styles(withTasha(fighter(1), true));
+    expect(on).toEqual(
+      expect.arrayContaining([
+        'feature.fighter.fighting-style-defense',
+        'feature.tce.fighting-style-superior-technique',
+        'feature.tce.fighting-style-unarmed-fighting',
+      ]),
+    );
+    expect(on).not.toContain('feature.tce.fighting-style-blessed-warrior');
+  });
+
+  it('can be chosen when allowed and are blocked otherwise', () => {
+    expect(pick(withTasha(fighter(1), true), 'feature.tce.fighting-style-interception')).toBe('ok');
+    expect(pick(withTasha(fighter(1), false), 'feature.tce.fighting-style-interception')).toBe(
+      'blocked',
+    );
+    expect(pick(withTasha(fighter(1), true), 'feature.tce.fighting-style-blessed-warrior')).toBe(
+      'blocked',
+    );
+  });
+});

@@ -1,4 +1,3 @@
-import { sourceAllows } from '../../engine/calc/campaign-rules';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { useStore } from 'zustand';
@@ -120,18 +119,11 @@ function ChoiceForm({
   const subclasses = subclassOptions(state, registry, item.classId);
   const feats = featOptions(state, registry);
   const owned = new Set(state.build.featureIds);
-  const prefix = item.prefix ?? '\u0000';
   const options =
     item.kind === 'option'
-      ? [...registry.entries.values()]
-          .filter(
-            (row) =>
-              row.kind === 'feature' &&
-              row.id.startsWith(prefix) &&
-              sourceAllows(state.campaign, row) &&
-              !owned.has(row.id),
-          )
-          .map((row) => ({ id: row.id, name: row.name }))
+      ? (item.optionIds ?? [])
+          .filter((id) => !owned.has(id))
+          .map((id) => ({ id, name: registry.get('feature', id).name }))
           .sort((a, b) => a.name.localeCompare(b.name))
       : item.kind === 'expertise'
         ? [...state.build.proficiencies.skills, ...state.build.proficiencies.tools]

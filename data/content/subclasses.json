@@ -3104,5 +3104,44 @@
         "featureId": "feature.warlock.hexblade-master-of-hexes"
       }
     ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.paladin.oathbreaker",
+    "name": "Oathbreaker",
+    "ruleset": "5e-2014",
+    "source": "DMG",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Paladin who broke their oath and now serves darker ambitions. Usually for evil characters, with the DM’s approval."
+    },
+    "classId": "class.paladin",
+    "features": [
+      {
+        "level": 3,
+        "featureId": "feature.paladin.oathbreaker-oath-spells"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.oathbreaker-control-undead"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.paladin.oathbreaker-dreadful-aspect"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.paladin.oathbreaker-aura-of-hate"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.paladin.oathbreaker-supernatural-resistance"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.paladin.oathbreaker-dread-lord"
+      }
+    ]
   }
 ]

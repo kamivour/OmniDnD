@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-16 15:07 — Tasha fighting styles and the Oathbreaker
+
+- Fighters, paladins and rangers now see Tasha's fighting styles (Blind Fighting, Interception, Blessed Warrior and others) on the To do list, but only when the campaign turns on Tasha's optional class features. Each class gets only the styles it may take.
+- New paladin oath: Oathbreaker, from the Dungeon Master's Guide. Turn on the DMG book in Campaign settings to see it; its oath spells are always prepared.
+- Check: Oath of the Crown is not included because its book is not supported. Xanathar's and Tasha's oaths appear only when those books are on.
+- Checks pass.
+
 ## 2026-11-16 14:45 — Character import moved to Settings
 
 - The Import button is gone from All campaigns. To add a character from a file, open Settings and use **Import character** under "Character files".

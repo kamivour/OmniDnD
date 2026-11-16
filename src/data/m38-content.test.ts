@@ -41,3 +41,21 @@ describe('M38 Xanathar’s subclasses, part 2', () => {
     );
   });
 });
+
+describe('Oathbreaker', () => {
+  it('is a DMG paladin oath with spells, Channel Divinity and a capstone', () => {
+    const oath = registry.get('subclass', 'subclass.paladin.oathbreaker');
+    expect(oath.source).toBe('DMG');
+    expect(oath.features.map((row) => row.level)).toEqual([3, 3, 3, 7, 15, 20]);
+    for (const { featureId } of oath.features) expect(registry.entries.has(featureId)).toBe(true);
+    expect(registry.get('feature', 'feature.paladin.oathbreaker-dreadful-aspect').usesFrom).toBe(
+      'feature.paladin.channel-divinity',
+    );
+    expect(oath.grantedSpells?.find((row) => row.level === 17)?.spellIds).toEqual([
+      'spell.contagion',
+      'spell.dominate-person',
+    ]);
+    for (const row of oath.grantedSpells ?? [])
+      for (const id of row.spellIds) expect(registry.entries.has(id)).toBe(true);
+  });
+});

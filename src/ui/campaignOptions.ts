@@ -85,7 +85,11 @@ export const PARTED_SOURCES: readonly Source[] = ['XGE', 'TCE'];
 
 export const SOURCE_OPTIONS: { value: Source; label: string; hint: string }[] = [
   { value: 'PHB', label: SOURCE_NAMES.PHB, hint: 'Always on.' },
-  { value: 'DMG', label: SOURCE_NAMES.DMG, hint: 'Magic items and variant rules.' },
+  {
+    value: 'DMG',
+    label: SOURCE_NAMES.DMG,
+    hint: 'Magic items, variant rules and the Oathbreaker.',
+  },
   { value: 'XGE', label: SOURCE_NAMES.XGE, hint: 'Extra subclasses, spells and feats.' },
   {
     value: 'TCE',

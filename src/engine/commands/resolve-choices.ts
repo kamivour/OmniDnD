@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { asiLevels, applyLevelChoices, LevelChoicesSchema } from '../calc/level-choices';
-import { OPTION_FAMILIES, pendingChoices } from '../calc/pending-choices';
+import { familyIncludes, OPTION_FAMILIES, pendingChoices } from '../calc/pending-choices';
 import { CharacterBuildSchema, refId, type CharacterBuild } from '../schema';
 import type { Command, CommandContext } from './runner';
 import { block } from './shared';
@@ -54,13 +54,16 @@ function prepare(ctx: CommandContext, input: ResolveChoicesPayload) {
     return { checks: [block(`Only ${expertise?.count ?? 0} expertise picks are open`)] };
   for (const id of choices.features ?? []) {
     const family = OPTION_FAMILIES.find(
-      (row) => row.classId === classId && id.startsWith(row.prefix),
+      (row) => row.classId === classId && familyIncludes(row, id),
     );
     if (!family) return { checks: [block('That feature is not a pick for this class')] };
-    const picked = (choices.features ?? []).filter((other) => other.startsWith(family.prefix));
-    const room = open.find((row) => row.prefix === family.prefix)?.count ?? 0;
+    const picked = (choices.features ?? []).filter((other) => familyIncludes(family, other));
+    const pick = open.find((row) => row.prefix === family.prefix);
+    const room = pick?.count ?? 0;
     if (picked.length > room)
       return { checks: [block(`Only ${room} ${family.label} picks are open`)] };
+    if (!pick?.optionIds?.includes(id))
+      return { checks: [block('That option is not available in this campaign')] };
   }
 
   let newLevel = entry.level;

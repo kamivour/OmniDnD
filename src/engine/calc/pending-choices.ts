@@ -1,4 +1,4 @@
-import { sourceAllows } from './campaign-rules';
+import { optionalRules, sourceAllows } from './campaign-rules';
 import type { Registry } from '../registry';
 import { asiLevels } from './level-choices';
 import { computeSheet, type CharacterState } from './sheet';
@@ -29,6 +29,8 @@ export interface PendingChoice {
   area: 'choices' | 'spells';
   /** For `option`: the option features to pick from. */
   prefix?: string;
+  /** For `option`: every feature the campaign allows for this pick, owned ones included. */
+  optionIds?: string[];
 }
 
 interface OptionFamily {
@@ -38,6 +40,8 @@ interface OptionFamily {
   label: string;
   /** Option features share this id prefix. */
   prefix: string;
+  /** Tasha optional class features that join this list when the campaign uses them. */
+  tasha?: string[];
   /** [class level, total picks from that level on], PHB 2014. */
   totals: [number, number][];
 }
@@ -48,18 +52,35 @@ export const OPTION_FAMILIES: OptionFamily[] = [
     classId: 'class.fighter',
     label: 'Fighting Style',
     prefix: 'feature.fighter.fighting-style-',
+    tasha: [
+      'feature.tce.fighting-style-blind-fighting',
+      'feature.tce.fighting-style-interception',
+      'feature.tce.fighting-style-superior-technique',
+      'feature.tce.fighting-style-thrown-weapon-fighting',
+      'feature.tce.fighting-style-unarmed-fighting',
+    ],
     totals: [[1, 1]],
   },
   {
     classId: 'class.paladin',
     label: 'Fighting Style',
     prefix: 'feature.paladin.fighting-style-',
+    tasha: [
+      'feature.tce.fighting-style-blessed-warrior',
+      'feature.tce.fighting-style-blind-fighting',
+      'feature.tce.fighting-style-interception',
+    ],
     totals: [[2, 1]],
   },
   {
     classId: 'class.ranger',
     label: 'Fighting Style',
     prefix: 'feature.ranger.fighting-style-',
+    tasha: [
+      'feature.tce.fighting-style-blind-fighting',
+      'feature.tce.fighting-style-druidic-warrior',
+      'feature.tce.fighting-style-thrown-weapon-fighting',
+    ],
     totals: [[2, 1]],
   },
   {
@@ -163,6 +184,31 @@ export const EXPERTISE_TOTALS: Record<string, [number, number][]> = {
   ],
 };
 
+/** True when the feature belongs to this pick list (its own prefix or a listed Tasha option). */
+export function familyIncludes(family: OptionFamily, id: string): boolean {
+  return id.startsWith(family.prefix) || (family.tasha?.includes(id) ?? false);
+}
+
+/**
+ * The features the campaign allows for a pick list. Tasha options need the optional class
+ * features rule. https://www.dndbeyond.com/sources/dnd/tcoe/character-classes#Fighter
+ */
+export function familyOptionIds(
+  family: OptionFamily,
+  registry: Registry,
+  campaign: CharacterState['campaign'],
+): string[] {
+  const tasha = optionalRules(campaign).optionalClassFeatures ? (family.tasha ?? []) : [];
+  return [...registry.entries.values()]
+    .filter(
+      (row) =>
+        row.kind === 'feature' &&
+        (row.id.startsWith(family.prefix) || tasha.includes(row.id)) &&
+        sourceAllows(campaign, row),
+    )
+    .map((row) => row.id);
+}
+
 const totalAt = (totals: [number, number][], level: number) =>
   totals.reduce((sum, [from, total]) => (level >= from ? total : sum), 0);
 
@@ -200,11 +246,8 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
         row.classId === entry.classId &&
         (row.subclassId === undefined || row.subclassId === entry.subclassId),
     )) {
-      const options = [...registry.entries.values()].filter(
-        (row) =>
-          row.kind === 'feature' && row.id.startsWith(family.prefix) && sourceAllows(campaign, row),
-      );
-      const taken = build.featureIds.filter((id) => id.startsWith(family.prefix)).length;
+      const options = familyOptionIds(family, registry, campaign);
+      const taken = build.featureIds.filter((id) => familyIncludes(family, id)).length;
       const open = Math.min(totalAt(family.totals, entry.level) - taken, options.length - taken);
       if (open > 0)
         items.push({
@@ -216,6 +259,7 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
           optional: false,
           area: 'choices',
           prefix: family.prefix,
+          optionIds: options,
         });
     }
 

@@ -150,6 +150,16 @@
     ]
   },
   {
+    "id": "subclass.paladin.oathbreaker",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.hellish-rebuke", "spell.inflict-wounds"] },
+      { "level": 5, "spellIds": ["spell.crown-of-madness", "spell.darkness"] },
+      { "level": 9, "spellIds": ["spell.animate-dead", "spell.bestow-curse"] },
+      { "level": 13, "spellIds": ["spell.blight", "spell.confusion"] },
+      { "level": 17, "spellIds": ["spell.contagion", "spell.dominate-person"] }
+    ]
+  },
+  {
     "id": "subclass.paladin.conquest",
     "grantedSpells": [
       { "level": 3, "spellIds": ["spell.armor-of-agathys", "spell.command"] },
