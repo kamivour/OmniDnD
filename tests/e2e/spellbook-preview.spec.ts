@@ -188,7 +188,7 @@ test('imported attack and save spells use their own metadata and character casti
   page,
   isMobile,
 }, info) => {
-  await page.goto('/');
+  await page.goto('/settings');
   await expectSaved(page);
   const file = ExportFileSchema.parse(seed);
   file.build.id = 'preview-bard';
@@ -267,7 +267,7 @@ test('all nine slot levels keep touch targets for a level 20 bard', async ({
   page,
   isMobile,
 }, info) => {
-  await page.goto('/');
+  await page.goto('/settings');
   await expectSaved(page);
   const file = ExportFileSchema.parse(seed);
   file.build.id = 'preview-bard-20';

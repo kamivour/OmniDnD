@@ -120,7 +120,7 @@ test('a non-Fool fighter keeps inventory and feature values in step across scree
   isMobile,
 }, info) => {
   test.setTimeout(90_000);
-  await page.goto('/');
+  await page.goto('/settings');
   await saved(page);
   await controlled(page);
   await page.getByLabel('Import character JSON', { exact: true }).setInputFiles({

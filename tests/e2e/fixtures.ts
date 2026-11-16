@@ -7,7 +7,7 @@ export type { Page };
 
 /** Import a copy of the Fool as "Party Fool" into campaign `table-one`, played as `role`. */
 export async function importPartyFool(page: Page, role: 'dm' | 'player') {
-  await page.goto('/');
+  await page.goto('/settings');
   const file = ExportFileSchema.parse(seed);
   file.campaign.id = 'table-one';
   file.campaign.name = 'Table One';

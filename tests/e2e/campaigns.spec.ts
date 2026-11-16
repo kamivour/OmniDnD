@@ -318,7 +318,7 @@ test('saved point-buy and average methods control new inputs, validate the budge
 test('changing the low-HP floor keeps legacy negative-CON rolls and HP and applies to new characters', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/settings');
   await expectSaved(page);
   const file = ExportFileSchema.parse(seed);
   file.campaign.id = 'scarred-road';
@@ -343,6 +343,7 @@ test('changing the low-HP floor keeps legacy negative-CON rolls and HP and appli
   await dialog.getByRole('button', { name: 'Add character', exact: true }).click();
   await expect(dialog).toHaveCount(0);
   await expectSaved(page);
+  await page.goto('/');
   const before = await readDatabase(page);
   await campaign(page, 'Scarred Road')
     .getByRole('link', { name: 'Campaign settings', exact: true })

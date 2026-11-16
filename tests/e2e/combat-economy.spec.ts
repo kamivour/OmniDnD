@@ -91,7 +91,7 @@ function combatFile(id: string, turnActive = true): ExportFile {
 }
 
 async function importCharacter(page: Page, file: ExportFile) {
-  await page.goto('/');
+  await page.goto('/settings');
   await expectSaved(page);
   await page.getByLabel('Import character JSON', { exact: true }).setInputFiles({
     name: `${file.build.id}.json`,

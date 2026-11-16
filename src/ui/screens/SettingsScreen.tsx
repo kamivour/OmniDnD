@@ -225,11 +225,12 @@ export function SettingsScreen() {
         className="flex flex-col gap-3 rounded-card border border-border bg-surface p-4"
       >
         <h2 id="settings-transfer" className="text-base font-semibold">
-          Character JSON
+          Character files
         </h2>
         <p className="text-sm text-text-muted">
-          Export one character’s choices, current resources, campaign rules, and game-action
-          history. Bookmarks and app preferences stay on this device.
+          Save one character as a .json file to move it to another device or give it to a friend
+          without an account. The file holds choices, current resources, campaign rules and
+          game-action history. Bookmarks and app preferences stay on this device.
         </p>
         {characterId ? (
           <p className="font-semibold">{characters[characterId]?.build.name}</p>
@@ -250,7 +251,7 @@ export function SettingsScreen() {
           </Field>
         ) : (
           <p className="text-sm text-text-muted">
-            No characters to export. Create one from All campaigns or import JSON.
+            No characters to export. Create one from All campaigns or import a character file.
           </p>
         )}
         <div className="flex flex-wrap gap-2">
@@ -261,7 +262,7 @@ export function SettingsScreen() {
             className={button}
           >
             <Download size={16} aria-hidden />
-            Export JSON
+            Export character
           </button>
           <button
             type="button"
@@ -270,11 +271,12 @@ export function SettingsScreen() {
             className={button}
           >
             <Upload size={16} aria-hidden />
-            Import JSON
+            Import character
           </button>
         </div>
         <p className="text-sm text-text-muted">
-          Import previews before saving and keeps existing characters and campaign rules.
+          Import takes only files made by Export character in OmniDnD. It previews before saving and
+          keeps existing characters and campaign rules.
         </p>
       </section>
       {characterId ? (

@@ -28,7 +28,7 @@ export const CHAPTERS: readonly Chapter[] = [
         id: 'new-character',
         target: 'new-character',
         title: 'Add a character',
-        body: 'Pick your choices; the app works out the numbers. You can also import a character from a file.',
+        body: 'Pick your choices; the app works out the numbers. To bring in a character file, use Import character in Settings.',
       },
       {
         id: 'find',

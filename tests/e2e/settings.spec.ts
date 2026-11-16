@@ -125,7 +125,7 @@ async function enterHp(page: Page, kind: 'Damage' | 'Temp HP', amount: number) {
 
 async function selectImport(page: Page, contents: string) {
   const choosing = page.waitForEvent('filechooser');
-  await page.getByRole('button', { name: 'Import JSON', exact: true }).click();
+  await page.getByRole('button', { name: 'Import character', exact: true }).click();
   await choosing;
   await page.getByLabel('Import character JSON', { exact: true }).setInputFiles({
     name: 'character.json',
@@ -136,7 +136,7 @@ async function selectImport(page: Page, contents: string) {
 
 async function downloadCharacter(page: Page): Promise<ExportFile> {
   const downloading = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Export JSON', exact: true }).click();
+  await page.getByRole('button', { name: 'Export character', exact: true }).click();
   const download = await downloading;
   const file = ExportFileSchema.parse(JSON.parse(await readFile((await download.path())!, 'utf8')));
   expect(download.suggestedFilename()).toBe(`${file.build.name.replaceAll(' ', '-')}.json`);
@@ -366,7 +366,7 @@ test('hub exports the selected character and character Settings exports its acti
   expect(await readDatabase(page)).toEqual(saved);
   await openCharacterSettings(page, isMobile);
   await expect(page.getByLabel('Character', { exact: true })).toHaveCount(0);
-  await expect(page.getByRole('region', { name: 'Character JSON', exact: true })).toContainText(
+  await expect(page.getByRole('region', { name: 'Character files', exact: true })).toContainText(
     'The Fool',
   );
   expectExportedCharacter(await downloadCharacter(page), saved, 'the-fool');
@@ -392,7 +392,7 @@ test('Settings import validates, previews collision copies, restores dismissal f
     expect(await readDatabase(page)).toEqual(before);
   }
   const dialog = page.getByRole('dialog', { name: 'Import character', exact: true });
-  const importButton = page.getByRole('button', { name: 'Import JSON', exact: true });
+  const importButton = page.getByRole('button', { name: 'Import character', exact: true });
   for (const dismiss of ['Close', 'Escape']) {
     await selectImport(page, JSON.stringify(seed));
     await expect(dialog).toContainText('The Fool (imported copy)');

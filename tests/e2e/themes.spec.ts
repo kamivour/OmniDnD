@@ -97,7 +97,7 @@ test('theme effects: still on phones and when Off, moving on computers', async (
 test('Tidewater: a tap ripples on phones and computers, and Off removes it', async ({ page }) => {
   await page.goto(`/characters/${ID}/settings`);
   await page.getByRole('radio', { name: /^Tidewater/ }).check();
-  const button = page.getByRole('button', { name: 'Export JSON' });
+  const button = page.getByRole('button', { name: 'Export character' });
   const ripples = page.locator('.omni-ripple');
   const press = async () => {
     await button.scrollIntoViewIfNeeded();

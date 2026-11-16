@@ -1,7 +1,7 @@
 import { lazy, Suspense, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { Link } from 'react-router';
-import { Copy, Download, Plus, Settings2, Trash2, Undo2, Upload, Users } from 'lucide-react';
+import { Copy, Download, Plus, Settings2, Trash2, Undo2, Users } from 'lucide-react';
 import { registry } from '../../data/registry';
 import { seedFile } from '../../data/seed';
 import { computeSheet } from '../../engine/calc/sheet';
@@ -42,7 +42,8 @@ export function CampaignsScreen() {
   const state = useStore(characterStore);
   const management = useManagement();
   const { run, undo, confirmation, pending } = management;
-  const { openImport, exportCharacter, importControls } = useCharacterTransfer(management);
+  // Home keeps per-character Export; importing a character file lives in Settings.
+  const { exportCharacter } = useCharacterTransfer(management);
   const opener = useRef<HTMLElement | null>(null);
   const restoreFocus = (event: Event) => {
     event.preventDefault();
@@ -89,15 +90,6 @@ export function CampaignsScreen() {
             <Undo2 size={16} aria-hidden />
             Undo management
           </button>
-          <button
-            type="button"
-            onClick={(event) => openImport(event.currentTarget)}
-            disabled={pending}
-            className={button}
-          >
-            <Upload size={16} aria-hidden />
-            Import
-          </button>
           <Link to="/campaigns/new" data-tour="new-campaign" className={button}>
             <Plus size={16} aria-hidden />
             New campaign
@@ -112,7 +104,6 @@ export function CampaignsScreen() {
           </Link>
         </p>
       )}
-      {importControls}
       {AccountCard && syncConfig && (
         <Suspense fallback={null}>
           <AccountCard config={syncConfig} />

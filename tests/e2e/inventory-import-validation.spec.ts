@@ -91,7 +91,7 @@ async function selectImport(page: Page, file: ExportFile) {
 }
 
 async function importValidLegacy(page: Page, characterId: string) {
-  await page.goto('/');
+  await page.goto('/settings');
   await saved(page);
   const file = legacyFile(characterId, true);
   expect(Object.hasOwn(file.live.items, legacyId)).toBe(true);
@@ -108,7 +108,7 @@ async function importValidLegacy(page: Page, characterId: string) {
 test('an item without its own live entry is rejected before preview without changing any saved data', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/settings');
   await saved(page);
   const before = await readDatabase(page);
   const malformed = legacyFile('inventory-missing-own-live', false);
@@ -119,7 +119,7 @@ test('an item without its own live entry is rejected before preview without chan
   await expect(page.getByRole('dialog', { name: 'Import character', exact: true })).toHaveCount(0);
   expect(await readDatabase(page)).toEqual(before);
 
-  await page.getByRole('article', { name: 'The Fool', exact: true }).getByRole('link').click();
+  await page.goto('/characters/the-fool');
   await expect(hud(page)).toBeVisible();
   await saved(page);
   await page.goto('/characters/the-fool/inventory');

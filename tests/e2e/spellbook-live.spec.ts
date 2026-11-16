@@ -228,7 +228,7 @@ test('a blank bard shows derived stats and slots without inheriting the Fool spe
 test('a character imported with concentration marks only its live spell Active', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/settings');
   await expectSaved(page);
   const file = ExportFileSchema.parse(seed);
   file.build.id = 'concentrating-bard';

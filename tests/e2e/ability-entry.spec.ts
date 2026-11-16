@@ -93,7 +93,7 @@ async function readSaved(page: Page, characterId: string): Promise<SavedCharacte
 }
 
 async function importFile(page: Page, file: ExportFile) {
-  await page.goto('/');
+  await page.goto('/settings');
   await saved(page);
   await page.getByLabel('Import character JSON', { exact: true }).setInputFiles({
     name: 'ability-entry.json',

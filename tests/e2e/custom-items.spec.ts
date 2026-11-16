@@ -26,7 +26,7 @@ test('creates a custom weapon that attacks, edits it, and keeps it in the export
   page,
   isMobile,
 }, info) => {
-  await page.goto('/');
+  await page.goto('/settings');
   await saved(page);
   await page.getByLabel('Import character JSON', { exact: true }).setInputFiles({
     name: 'custom.json',
@@ -87,7 +87,7 @@ test('creates a custom weapon that attacks, edits it, and keeps it in the export
   await page.goto('/characters/custom/settings');
   await saved(page);
   const downloading = page.waitForEvent('download');
-  await main(page).getByRole('button', { name: 'Export JSON', exact: true }).click();
+  await main(page).getByRole('button', { name: 'Export character', exact: true }).click();
   const exported = ExportFileSchema.parse(
     JSON.parse(await readFile((await (await downloading).path())!, 'utf8')),
   );

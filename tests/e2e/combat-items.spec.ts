@@ -35,7 +35,7 @@ test('drinks a potion with an entered roll in combat, warns on a second action a
   page,
   isMobile,
 }, info) => {
-  await page.goto('/');
+  await page.goto('/settings');
   await saved(page);
   await page.getByLabel('Import character JSON', { exact: true }).setInputFiles({
     name: 'items.json',

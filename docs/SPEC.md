@@ -77,7 +77,7 @@ A shared status row beneath the HUD shows saving status, the latest change and o
 One card per campaign: name, rules summary (e.g. `Milestone · HP rolled · Abilities rolled`), Settings link, its characters (portrait, name, race, class/level), and "New character". A "New campaign" button opens Campaign Setup with defaults (D40). Seed: Campaign #273 with The Fool.
 
 ### Characters
-Create blank (inside a campaign), import JSON, duplicate, delete (confirm). Full guided builder is Phase 3.
+Create blank (inside a campaign), duplicate, delete (confirm), import a character file from Settings. Full guided builder is Phase 3.
 
 **New character (Phase 1):** name, level, race, class, background, alignment; an ability table whose Base inputs follow the campaign method (standard array picker, point-buy range, or typed rolls) plus a racial bonus column; a per-level HP table (level 1 = die maximum; later levels = typed roll or fixed average per campaign). Score, modifier, Hit Dice, and max HP are computed.
 

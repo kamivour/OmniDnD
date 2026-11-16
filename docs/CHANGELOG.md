@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-16 14:45 — Character import moved to Settings
+
+- The Import button is gone from All campaigns. To add a character from a file, open Settings and use **Import character** under "Character files".
+- Export buttons stay on each character on All campaigns; Settings also has **Export character**.
+- Import still takes only .json files made by OmniDnD's Export, and shows a preview before saving.
+- Checks pass.
+
 ## 2026-11-16 14:02 — Domain and oath spells are always prepared
 
 - Clerics, paladins, druids, rangers, artificers and some sorcerers now get their subclass spells (for example Light Domain's Burning Hands and Faerie Fire) automatically when they reach the right level.

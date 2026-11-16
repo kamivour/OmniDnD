@@ -208,7 +208,7 @@ function resetFixture(): ExportFile {
 
 async function setupCaster(page: Page) {
   const file = resetFixture();
-  await page.goto('/');
+  await page.goto('/settings');
   await saved(page);
   await page.getByLabel('Import character JSON', { exact: true }).setInputFiles({
     name: 'reset-caster.json',

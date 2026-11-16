@@ -77,6 +77,11 @@ async function takeFiveDamage(page: Page) {
 }
 
 async function selectImport(page: Page, contents: string) {
+  // Character import lives in Settings.
+  if (new URL(page.url()).pathname !== '/settings') {
+    await page.goto('/settings');
+    await expectSaved(page);
+  }
   await page.getByLabel('Import character JSON', { exact: true }).setInputFiles({
     name: 'character.json',
     mimeType: 'application/json',
@@ -102,7 +107,7 @@ test('hub uses saved HP and duplicate keeps choices and current values with its 
   await dialog.getByRole('button', { name: 'Create copy', exact: true }).click();
   await expect(dialog).toHaveCount(0);
   await expectSaved(page);
-  await page.reload();
+  await page.goto('/');
   await expectSaved(page);
   await expect(character(page, 'The Second Fool')).toContainText('6/19');
   await page.screenshot({ path: testInfo.outputPath('live-campaigns.png'), fullPage: true });
@@ -233,7 +238,7 @@ test('import previews a separate copy for collisions and preserves conflicting c
   await dialog.getByRole('button', { name: 'Add character', exact: true }).click();
   await expect(dialog).toHaveCount(0);
   await expectSaved(page);
-  await page.reload();
+  await page.goto('/');
   await expectSaved(page);
   await expect(character(page, 'The Fool (imported copy)')).toContainText('11/19');
   const collision = await readDatabase(page);
@@ -258,7 +263,7 @@ test('import previews a separate copy for collisions and preserves conflicting c
   await dialog.getByRole('button', { name: 'Add character', exact: true }).click();
   await expect(dialog).toHaveCount(0);
   await expectSaved(page);
-  await page.reload();
+  await page.goto('/');
   await expectSaved(page);
   const importedCampaign = page.getByRole('article', {
     name: 'Campaign #273 (imported)',
@@ -291,10 +296,9 @@ test('malformed and unsupported JSON imports leave saved characters untouched', 
     await expect(page.getByRole('dialog', { name: 'Import character', exact: true })).toHaveCount(
       0,
     );
-    await expect(character(page, 'The Fool')).toContainText('6/19');
     expect(await readDatabase(page)).toEqual(before);
   }
-  await page.reload();
+  await page.goto('/');
   await expectSaved(page);
   await expect(character(page, 'The Fool')).toContainText('6/19');
   expect(await readDatabase(page)).toEqual(before);
@@ -324,6 +328,7 @@ test('imported character and campaign IDs with URL characters keep navigation an
   await dialog.getByRole('button', { name: 'Add character', exact: true }).click();
   await expect(dialog).toHaveCount(0);
   await expectSaved(page);
+  await page.goto('/');
   await character(page, 'Encoded Traveller').getByRole('link').click();
   await expect(hud(page)).toContainText('Encoded Traveller');
   expect(new URL(page.url()).pathname).toBe(`/characters/${encodeURIComponent(file.build.id)}`);

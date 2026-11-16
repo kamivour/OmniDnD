@@ -151,7 +151,7 @@ async function touchTarget(control: Locator) {
 }
 
 async function importFile(page: Page, file: ExportFile) {
-  await page.goto('/');
+  await page.goto('/settings');
   await saved(page);
   await page.getByLabel('Import character JSON', { exact: true }).setInputFiles({
     name: 'sheet-edit.json',
@@ -608,7 +608,7 @@ test('character export and import preserve a noted override and opaque legacy re
   await page.goto(`/characters/${file.build.id}/settings`);
   await saved(page);
   const downloading = page.waitForEvent('download');
-  await main(page).getByRole('button', { name: 'Export JSON', exact: true }).click();
+  await main(page).getByRole('button', { name: 'Export character', exact: true }).click();
   const download = await downloading;
   const exported = ExportFileSchema.parse(
     JSON.parse(await readFile((await download.path())!, 'utf8')),
@@ -617,6 +617,7 @@ test('character export and import preserve a noted override and opaque legacy re
   expect(exported.live).toEqual(before.live);
   expect(exported.events).toEqual(before.events);
   await importFile(page, exported);
+  await page.goto('/');
   const copyName = `${exported.build.name} (imported copy)`;
   const link = page.getByRole('article', { name: copyName, exact: true }).getByRole('link');
   const href = await link.getAttribute('href');
