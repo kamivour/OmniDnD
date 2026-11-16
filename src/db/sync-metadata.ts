@@ -12,8 +12,11 @@ export type SyncKind = z.infer<typeof SyncKindSchema>;
 export const SyncRecordSchema = z.strictObject({
   kind: SyncKindSchema,
   entityId: z.string().min(1),
-  /** Device time of the last local change, ISO 8601. Ordering hint only; sync uses revisions. */
-  changedAt: z.iso.datetime(),
+  /**
+   * Time of the last change, ISO 8601. Ordering hint only; sync uses revisions. Offsets are
+   * accepted because older builds stored server times as sent (`+00:00`).
+   */
+  changedAt: z.iso.datetime({ offset: true }),
   /** Deletion marker: the entity was removed here and the removal must reach other devices. */
   deleted: z.boolean(),
   /** Content fingerprint of the saved rows; empty for deletion markers. */

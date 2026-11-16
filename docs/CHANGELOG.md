@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-16 13:07 — Fix "Saved data is invalid" after party sync
+
+- Phones that synced a party campaign could stop loading with "Saved data is invalid: changedAt: Invalid ISO datetime". The server sends times in a slightly different format, and the app now accepts it.
+- Nothing was lost: after this update, affected phones load normally again. Just reload the page.
+- Checks pass.
+
 ## 2026-11-16 03:03 — Use only part of an expansion book
 
 - When you turn on Xanathar's or Tasha's in campaign settings, you can pick which parts the table uses: classes, subclasses and origins; feats; spells; magic items.

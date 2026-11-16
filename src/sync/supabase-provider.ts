@@ -26,13 +26,21 @@ interface Row {
   payload: unknown;
 }
 
+/** Postgres sends `+00:00` offsets and microseconds; the app stores UTC ISO strings ending in Z. */
+export function isoTime(value: string): string {
+  // Trim to milliseconds first: some Safari versions reject longer fractions.
+  const time = new Date(value.replace(/(\.\d{3})\d+/, '$1'));
+  if (Number.isNaN(time.getTime())) throw new Error(`Server sent an unreadable time: ${value}`);
+  return time.toISOString();
+}
+
 function toRemote(row: Row): RemoteEntity {
   return {
     kind: SyncKindSchema.parse(row.kind),
     entityId: row.entity_id,
     revision: Number(row.revision),
     deleted: row.deleted,
-    changedAt: row.changed_at,
+    changedAt: isoTime(row.changed_at),
     schemaVersion: row.schema_version,
     payload: row.payload,
   };
@@ -272,7 +280,7 @@ export class SupabaseProvider implements SyncProvider {
         id: row.id,
         ownerId: row.owner_id,
         revision: Number(row.revision),
-        changedAt: row.changed_at,
+        changedAt: isoTime(row.changed_at),
         schemaVersion: row.schema_version,
         payload: row.payload,
       })),
@@ -288,7 +296,7 @@ export class SupabaseProvider implements SyncProvider {
         ownerId: row.owner_id,
         revision: Number(row.revision),
         deleted: row.deleted,
-        changedAt: row.changed_at,
+        changedAt: isoTime(row.changed_at),
         schemaVersion: row.schema_version,
         payload: row.payload,
       })),
