@@ -173,6 +173,7 @@ export function CombatScreen() {
             attack.damage === undefined
               ? 'No direct damage'
               : `${attack.damage} ${attack.damageType}${attack.extraDamage ? ` + ${attack.extraDamage}` : ''}`,
+            ...(attack.powerAttack ? [attack.powerAttack] : []),
             attack.notes,
           ].join(' · ')}
           <OverrideMarker override={attack.toHitOverride} />

@@ -19,6 +19,8 @@ export interface CombatWeapon {
     /** Feature damage on every hit, e.g. "1d8 radiant (Improved Divine Smite)". */
     extraDamage?: string;
     critExtra?: string;
+    /** The -5/+10 option, e.g. "Great Weapon Master: +2 to hit, 2d6+14". */
+    powerAttack?: string;
     notes: string;
     toHitOverride?: { note: string };
     damageOverride?: { note: string };
@@ -89,6 +91,11 @@ export function combatModel(state: CharacterState, sheet: Sheet, registry: Regis
         : {}),
       ...(attack.critExtra
         ? { critExtra: `${attack.critExtra.dice} (${attack.critExtra.sources.join(', ')})` }
+        : {}),
+      ...(attack.powerAttack
+        ? {
+            powerAttack: `${attack.powerAttack.source}: ${signed(attack.powerAttack.toHit)} to hit, ${damageText(attack.damage?.dice, attack.powerAttack.damageBonus)}`,
+          }
         : {}),
       notes: [
         attack.type === 'melee' ? 'Melee weapon' : 'Ranged weapon',

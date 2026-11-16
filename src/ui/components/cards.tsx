@@ -126,6 +126,7 @@ export function AttackCard({
     damageType?: string;
     extraDamage?: string;
     critExtra?: string;
+    powerAttack?: string;
   };
 }) {
   return (
@@ -144,6 +145,7 @@ export function AttackCard({
           ? 'No direct damage.'
           : `Hit: ${attack.damage} ${damageTypeName(attack.damageType ?? '')}${attack.extraDamage ? ` + ${attack.extraDamage}` : ''}.`,
         ...(attack.critExtra ? [`Critical hit: also roll ${attack.critExtra}.`] : []),
+        ...(attack.powerAttack ? [`Or take -5 to hit for +10 damage. ${attack.powerAttack}.`] : []),
         attack.notes,
       ]}
     />

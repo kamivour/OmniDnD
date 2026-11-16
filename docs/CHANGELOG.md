@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 01:09 — Great Weapon Master and Sharpshooter
+
+- With Great Weapon Master, heavy melee weapons you are proficient with show a second line in Combat: 5 less to hit, 10 more damage.
+- Sharpshooter does the same for ranged weapons you are proficient with.
+- You still choose per attack at the table. Open the weapon card to read the full line on a phone.
+- Checks pass.
+
 ## 2026-11-17 01:03 — Artificer attunement limit
 
 - Artificers can now attune to 4 items at level 10, 5 at level 14 and 6 at level 18. Inventory shows the new limit, for example "0/4 attuned".

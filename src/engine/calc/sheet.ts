@@ -71,6 +71,8 @@ export interface WeaponAttack {
   extraDamage?: { dice: string; type: DamageType; source: string }[];
   /** Extra weapon dice on a critical hit from features, e.g. "1d12" (Savage Attacks). */
   critExtra?: { dice: string; sources: string[] };
+  /** The -5 to hit, +10 damage option, already applied to this row's numbers. */
+  powerAttack?: { source: string; toHit: number; damageBonus: number };
   versatile?: string;
   range?: { normal: number; long: number };
   properties: WeaponProperty[];
@@ -435,6 +437,18 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       attack.critExtra = {
         dice: `${crits.reduce((sum, feature) => sum + feature.critDice!, 0)}${die}`,
         sources: crits.map(({ def: feature }) => feature.name),
+      };
+    // PHB 2014: heavy melee weapon (Great Weapon Master) or ranged weapon (Sharpshooter), proficient only.
+    const power = features.find(({ def: feature }) =>
+      feature.powerAttack === 'heavy-melee'
+        ? attack.type === 'melee' && attack.properties.includes('heavy')
+        : feature.powerAttack === 'ranged' && attack.type === 'ranged',
+    );
+    if (power && attack.proficient && attack.damage)
+      attack.powerAttack = {
+        source: power.def.name,
+        toHit: attack.toHit.value - 5,
+        damageBonus: attack.damage.bonus + 10,
       };
     return [attack];
   });

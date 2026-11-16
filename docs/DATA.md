@@ -105,6 +105,7 @@ interface FeatureDef extends RefBase {
   attacks?: Record<level, 2 | 3 | 4>;   // attacks per Attack action (Extra Attack, D209)
   smite?: { dice; die; maxDice?; type; bonusVs?; pactOnly?; note? };  // slot spent on a hit (D210)
   meleeDamage?: { dice; type };          // added to every melee weapon hit (Improved Divine Smite)
+  powerAttack?: "heavy-melee" | "ranged"; // -5 to hit, +10 damage option (Great Weapon Master, Sharpshooter)
   critDice?: { [level]: 1..3 };          // extra weapon dice on a melee crit (Savage Attacks, Brutal Critical)
   dropToOne?: true;                       // use at 0 HP to stand at 1 HP (Relentless Endurance, D212)
   ancestry?: { type; save?; area? };     // draconic ancestry pick (D213)

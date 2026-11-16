@@ -1923,5 +1923,13 @@
   {
     "id": "feature.artificer.magic-item-master",
     "attunementSlots": 6
+  },
+  {
+    "id": "feature.feat.great-weapon-master",
+    "powerAttack": "heavy-melee"
+  },
+  {
+    "id": "feature.feat.sharpshooter",
+    "powerAttack": "ranged"
   }
 ]

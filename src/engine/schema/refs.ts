@@ -289,6 +289,8 @@ export const FeatureDefSchema = z
     affinity: z.strictObject({ ability: AbilitySchema }).optional(),
     /** Extra damage on every hit with a melee weapon (Improved Divine Smite). */
     meleeDamage: z.object({ dice: DiceSchema, type: DamageTypeSchema }).optional(),
+    /** Optional -5 to hit for +10 damage with proficient weapons (Great Weapon Master, Sharpshooter). */
+    powerAttack: z.enum(['heavy-melee', 'ranged']).optional(),
     modifiers: z.array(ModifierSchema).optional(),
     /** Feats: what taking the feat adds to the build, applied once when it is picked. */
     grants: FeatGrantsSchema.optional(),
