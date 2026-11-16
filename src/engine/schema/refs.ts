@@ -155,6 +155,34 @@ export const FeatGrantsSchema = z.strictObject({
   armor: z.array(z.enum(['light', 'medium', 'heavy', 'shield'])).optional(),
 });
 
+const ArmorCategorySchema = z.enum(['light', 'medium', 'heavy', 'shield']);
+
+/** One pick a feature asks for: a skill, tool or language, expertise in a skill, or darkvision (Custom Lineage). */
+export const ProficiencyChoiceSchema = z.strictObject({
+  count: z.int().positive(),
+  /** What each pick may be; with several kinds the player picks any mix (Samurai: a skill or a language). */
+  kinds: z.array(z.enum(['skill', 'tool', 'language', 'expertise', 'darkvision'])).min(1),
+  /** Skill picks (and expertise picks) come from these skills; absent means any skill. */
+  skills: z.array(SkillSchema).optional(),
+  /** Tool picks come from these tools, or a tool group. */
+  tools: z.union([z.array(refId('item')), z.enum(['artisan', 'gaming', 'any'])]).optional(),
+  /** Picked skills also get double proficiency (Blessings of Knowledge). */
+  expertise: z.boolean().optional(),
+});
+
+/** Proficiencies a race trait or class feature gives while the character has it. */
+export const FeatureProficienciesSchema = z.strictObject({
+  saves: z.array(AbilitySchema).optional(),
+  skills: z.array(SkillSchema).optional(),
+  /** Double proficiency in these skills (Survivalist). */
+  expertise: z.array(SkillSchema).optional(),
+  armor: z.array(ArmorCategorySchema).optional(),
+  weapons: z.array(z.union([z.enum(['simple', 'martial']), refId('item')])).optional(),
+  tools: z.array(refId('item')).optional(),
+  languages: z.array(z.string().min(1)).optional(),
+  choose: z.array(ProficiencyChoiceSchema).optional(),
+});
+
 /** How often a feat or racial spell can be cast without a slot: per long rest, per short rest, or at will. */
 export const FreeCastSchema = z.enum(['long', 'short', 'will']);
 
@@ -227,6 +255,8 @@ export const FeatureDefSchema = z
     grants: FeatGrantsSchema.optional(),
     /** Spells the feature teaches, cast outside class lists. */
     spells: FeatureSpellsSchema.optional(),
+    /** Proficiencies the feature gives while the character has it, fixed or picked. */
+    proficiencies: FeatureProficienciesSchema.optional(),
     /** Tasha optional class feature: granted at this class level when the campaign enables them. */
     optional: z
       .strictObject({
@@ -630,6 +660,8 @@ export type EffectTemplate = z.infer<typeof EffectTemplateSchema>;
 export type SpellDef = z.infer<typeof SpellDefSchema>;
 export type FeatureDef = z.infer<typeof FeatureDefSchema>;
 export type FeatureSpells = z.infer<typeof FeatureSpellsSchema>;
+export type FeatureProficiencies = z.infer<typeof FeatureProficienciesSchema>;
+export type ProficiencyChoice = z.infer<typeof ProficiencyChoiceSchema>;
 export type FreeCast = z.infer<typeof FreeCastSchema>;
 export type ClassDef = z.infer<typeof ClassDefSchema>;
 export type SubclassDef = z.infer<typeof SubclassDefSchema>;

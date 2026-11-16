@@ -442,6 +442,11 @@ describe('races and backgrounds', () => {
     });
   });
 
+  it('adds the Extra Language trait when the race offers a language pick', () => {
+    const halfElf = mapRace({ ...halfElfRaw, language_options: { choose: 1 } });
+    expect(halfElf.featureIds.at(-1)).toBe('feature.extra-language');
+  });
+
   it('makes a subrace a complete entry', () => {
     const dwarf = mapRace({
       ...halfElfRaw,

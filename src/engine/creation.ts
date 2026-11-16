@@ -258,15 +258,16 @@ function applyLevelPicks(
     );
   for (const { level, choices } of [...picks].sort((a, b) => a.level - b.level)) {
     build.classes[0]!.level = level;
+    const sheet = computeSheet({ campaign, build, live }, registry);
     const result = applyLevelChoices({
       campaign,
       build,
       registry,
-      score: (ability) =>
-        computeSheet({ campaign, build, live }, registry).abilities[ability].score.value,
+      score: (ability) => sheet.abilities[ability].score.value,
       classId,
       newLevel: level,
       choices,
+      granted: sheet.proficiencies,
     });
     if ('blocked' in result) invalid(['levelChoices', level], result.blocked);
     build.classes = result.build.classes;

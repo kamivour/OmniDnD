@@ -26,11 +26,13 @@ describe('recorded equipment', () => {
     state.build.proficiencies.armor = ['light', 'shield'];
     const before = structuredClone(state);
     expect(
-      wornArmor(state, registry).map(({ instanceId, def, proficient }) => ({
-        instanceId,
-        category: def.armor.category,
-        proficient,
-      })),
+      wornArmor(state, registry, state.build.proficiencies.armor).map(
+        ({ instanceId, def, proficient }) => ({
+          instanceId,
+          category: def.armor.category,
+          proficient,
+        }),
+      ),
     ).toEqual([
       { instanceId: 'leather-armor-1', category: 'light', proficient: true },
       { instanceId: 'chain', category: 'heavy', proficient: false },

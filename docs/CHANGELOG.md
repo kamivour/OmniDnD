@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-16 23:57 — Proficiencies from race and subclass
+
+- Race traits and subclass features now add their proficiencies by themselves: Keen Senses, Dwarven Combat Training, Elf Weapon Training, War and Valor armor, Hexblade weapons and more.
+- Traits that let you choose (Half-Elf Skill Versatility, Human extra language, Lore and Knowledge bonus skills, Custom Lineage, Deft Explorer) ask on the To do list.
+- Check: if you ticked those skills by hand in the editor before, pick the same ones in To do; nothing is counted twice.
+- Checks pass.
+
 ## 2026-11-16 22:59 — Spells from feats and racial traits
 
 - Magic Initiate, Fey Touched, Shadow Touched, Artificer Initiate, Spell Sniper and similar feats now ask for their spells on the To do list. Racial spells (High Elf cantrip, Tiefling, Drow, Forest Gnome and others) are added on their own.

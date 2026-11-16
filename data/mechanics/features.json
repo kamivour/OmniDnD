@@ -105,7 +105,15 @@
   },
   {
     "id": "feature.bard.bonus-proficiencies",
-    "activation": "passive"
+    "activation": "passive",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 3,
+          "kinds": ["skill"]
+        }
+      ]
+    }
   },
   {
     "id": "feature.bard.college",
@@ -253,7 +261,10 @@
   },
   {
     "id": "feature.druid.druidic",
-    "activation": "passive"
+    "activation": "passive",
+    "proficiencies": {
+      "languages": ["Druidic"]
+    }
   },
   {
     "id": "feature.druid.natural-recovery",
@@ -704,7 +715,10 @@
   },
   {
     "id": "feature.rogue.thieves-cant",
-    "activation": "passive"
+    "activation": "passive",
+    "proficiencies": {
+      "languages": ["Thieves' Cant"]
+    }
   },
   {
     "id": "feature.rogue.uncanny-dodge",
@@ -713,7 +727,15 @@
   },
   {
     "id": "feature.skill-versatility",
-    "activation": "passive"
+    "activation": "passive",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 2,
+          "kinds": ["skill"]
+        }
+      ]
+    }
   },
   {
     "id": "feature.sorcerer.ability-score-improvement",
@@ -1185,6 +1207,391 @@
           "spellId": "spell.minor-illusion"
         }
       ]
+    }
+  },
+  {
+    "id": "feature.keen-senses",
+    "proficiencies": {
+      "skills": ["perception"]
+    }
+  },
+  {
+    "id": "feature.menacing",
+    "proficiencies": {
+      "skills": ["intimidation"]
+    }
+  },
+  {
+    "id": "feature.dwarven-combat-training",
+    "proficiencies": {
+      "weapons": ["item.battleaxe", "item.handaxe", "item.light-hammer", "item.warhammer"]
+    }
+  },
+  {
+    "id": "feature.tool-proficiency",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["tool"],
+          "tools": ["item.smiths-tools", "item.brewers-supplies", "item.masons-tools"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.elf-weapon-training",
+    "proficiencies": {
+      "weapons": ["item.longsword", "item.shortsword", "item.shortbow", "item.longbow"]
+    }
+  },
+  {
+    "id": "feature.drow-weapon-training",
+    "proficiencies": {
+      "weapons": ["item.rapier", "item.shortsword", "item.crossbow-hand"]
+    }
+  },
+  {
+    "id": "feature.dwarven-armor-training",
+    "proficiencies": {
+      "armor": ["light", "medium"]
+    }
+  },
+  {
+    "id": "feature.tinker",
+    "proficiencies": {
+      "tools": ["item.tinkers-tools"]
+    }
+  },
+  {
+    "id": "feature.variant-human-skill",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.custom-lineage",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill", "darkvision"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.extra-language",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["language"]
+        }
+      ]
+    },
+    "activation": "passive"
+  },
+  {
+    "id": "feature.tce.barbarian-primal-knowledge",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill"],
+          "skills": [
+            "animal-handling",
+            "athletics",
+            "intimidation",
+            "nature",
+            "perception",
+            "survival"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.tce.ranger-deft-explorer",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["expertise"]
+        },
+        {
+          "count": 2,
+          "kinds": ["language"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.bard.valor-bonus-proficiencies",
+    "proficiencies": {
+      "armor": ["medium", "shield"],
+      "weapons": ["martial"]
+    }
+  },
+  {
+    "id": "feature.bard.swords-fighting-style",
+    "proficiencies": {
+      "armor": ["medium"],
+      "weapons": ["item.scimitar"]
+    }
+  },
+  {
+    "id": "feature.cleric.bonus-proficiency",
+    "proficiencies": {
+      "armor": ["heavy"]
+    }
+  },
+  {
+    "id": "feature.cleric.war-bonus-proficiencies",
+    "proficiencies": {
+      "armor": ["heavy"],
+      "weapons": ["martial"]
+    }
+  },
+  {
+    "id": "feature.cleric.tempest-bonus-proficiencies",
+    "proficiencies": {
+      "armor": ["heavy"],
+      "weapons": ["martial"]
+    }
+  },
+  {
+    "id": "feature.cleric.twilight-bonus-proficiencies",
+    "proficiencies": {
+      "armor": ["heavy"],
+      "weapons": ["martial"]
+    }
+  },
+  {
+    "id": "feature.cleric.nature-bonus-proficiency",
+    "proficiencies": {
+      "armor": ["heavy"]
+    }
+  },
+  {
+    "id": "feature.cleric.nature-acolyte-of-nature",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill"],
+          "skills": ["animal-handling", "nature", "survival"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.cleric.forge-bonus-proficiencies",
+    "proficiencies": {
+      "armor": ["heavy"],
+      "tools": ["item.smiths-tools"]
+    }
+  },
+  {
+    "id": "feature.cleric.order-bonus-proficiencies",
+    "proficiencies": {
+      "armor": ["heavy"],
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill"],
+          "skills": ["intimidation", "persuasion"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.cleric.peace-implement-of-peace",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill"],
+          "skills": ["insight", "performance", "persuasion"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.cleric.knowledge-blessings-of-knowledge",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 2,
+          "kinds": ["language"]
+        },
+        {
+          "count": 2,
+          "kinds": ["skill"],
+          "skills": ["arcana", "history", "nature", "religion"],
+          "expertise": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.artificer.alchemist-tool-proficiency",
+    "proficiencies": {
+      "tools": ["item.alchemists-supplies"]
+    }
+  },
+  {
+    "id": "feature.artificer.armorer-tools-of-the-trade",
+    "proficiencies": {
+      "armor": ["heavy"],
+      "tools": ["item.smiths-tools"]
+    }
+  },
+  {
+    "id": "feature.artificer.artillerist-tool-proficiency",
+    "proficiencies": {
+      "tools": ["item.woodcarvers-tools"]
+    }
+  },
+  {
+    "id": "feature.artificer.battle-smith-tool-proficiency",
+    "proficiencies": {
+      "tools": ["item.smiths-tools"]
+    }
+  },
+  {
+    "id": "feature.artificer.battle-smith-battle-ready",
+    "proficiencies": {
+      "weapons": ["martial"]
+    }
+  },
+  {
+    "id": "feature.fighter.cavalier-bonus-proficiency",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill", "language"],
+          "skills": ["animal-handling", "history", "insight", "performance", "persuasion"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.fighter.samurai-bonus-proficiency",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill", "language"],
+          "skills": ["history", "insight", "performance", "persuasion"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.fighter.battle-master-student-of-war",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["tool"],
+          "tools": "artisan"
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.fighter.rune-knight-bonus-proficiencies",
+    "proficiencies": {
+      "tools": ["item.smiths-tools"],
+      "languages": ["Giant"]
+    }
+  },
+  {
+    "id": "feature.fighter.arcane-archer-arcane-archer-lore",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill"],
+          "skills": ["arcana", "nature"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.monk.mercy-implements-of-mercy",
+    "proficiencies": {
+      "skills": ["insight", "medicine"],
+      "tools": ["item.herbalism-kit"]
+    }
+  },
+  {
+    "id": "feature.monk.drunken-master-bonus-proficiencies",
+    "proficiencies": {
+      "skills": ["performance"],
+      "tools": ["item.brewers-supplies"]
+    }
+  },
+  {
+    "id": "feature.ranger.fey-wanderer-otherworldly-glamour",
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill"],
+          "skills": ["deception", "performance", "persuasion"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.rogue.assassin-bonus-proficiencies",
+    "proficiencies": {
+      "tools": ["item.disguise-kit", "item.poisoners-kit"]
+    }
+  },
+  {
+    "id": "feature.rogue.mastermind-master-of-intrigue",
+    "proficiencies": {
+      "tools": ["item.disguise-kit", "item.forgery-kit"],
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["tool"],
+          "tools": "gaming"
+        },
+        {
+          "count": 2,
+          "kinds": ["language"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.rogue.scout-survivalist",
+    "proficiencies": {
+      "skills": ["nature", "survival"],
+      "expertise": ["nature", "survival"]
+    }
+  },
+  {
+    "id": "feature.warlock.hexblade-hex-warrior",
+    "proficiencies": {
+      "armor": ["medium", "shield"],
+      "weapons": ["martial"]
+    }
+  },
+  {
+    "id": "feature.fighter.samurai-elegant-courtier",
+    "proficiencies": {
+      "saves": ["WIS"]
     }
   }
 ]

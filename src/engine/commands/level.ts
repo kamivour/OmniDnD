@@ -168,6 +168,7 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
     classId,
     newLevel: (entries[0]?.level ?? 0) + 1,
     choices: choices ?? {},
+    granted: ctx.sheet.proficiencies,
   });
   if ('blocked' in applied) return { checks: [block(applied.blocked)] };
   let finalBuild: CharacterBuild = applied.build;

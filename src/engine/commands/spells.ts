@@ -190,7 +190,9 @@ export const castSpell: Command<CastSpellPayload> = {
       slotLevel: castLevel(ctx, spell, payload),
     });
     const checks = [...deadCheck(ctx), ...slotChecks(ctx, spell, payload)];
-    const armor = wornArmor(ctx, ctx.registry).filter((entry) => !entry.proficient);
+    const armor = wornArmor(ctx, ctx.registry, ctx.sheet.proficiencies.armor).filter(
+      (entry) => !entry.proficient,
+    );
     if (armor.length > 0)
       checks.push(
         warn(

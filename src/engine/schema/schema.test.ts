@@ -197,14 +197,6 @@ describe('CharacterBuildSchema', () => {
     expect(CharacterBuildSchema.safeParse(data).success).toBe(false);
   });
 
-  it('needs proficiency before expertise in a skill', () => {
-    const data = build();
-    data.proficiencies.expertise.push('stealth');
-    expect(messages(CharacterBuildSchema.safeParse(data))).toContain(
-      'Expertise in stealth needs proficiency in it',
-    );
-  });
-
   it('needs every ability score and valid ids', () => {
     const missing = build() as { abilityScores: { base: Record<string, number> } };
     delete missing.abilityScores.base.CHA;

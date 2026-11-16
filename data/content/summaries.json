@@ -79,6 +79,13 @@
     "summaryReviewed": false
   },
   {
+    "id": "feature.extra-language",
+    "summary": {
+      "effect": "Speak, read and write one more language of your choice."
+    },
+    "summaryReviewed": false
+  },
+  {
     "id": "feature.skill-versatility",
     "summary": {
       "effect": "Gain proficiency in two skills of your choice."

@@ -279,22 +279,22 @@ export function CharacterSheetScreen() {
                     <dl className="flex min-w-0 flex-col gap-3">
                       <ReferenceList
                         label="Armor"
-                        entries={build.proficiencies.armor.map(titleCase)}
+                        entries={sheet.proficiencies.armor.map(titleCase)}
                       />
                       <ReferenceList
                         label="Weapons"
-                        entries={build.proficiencies.weapons.map((id) =>
+                        entries={sheet.proficiencies.weapons.map((id) =>
                           id.startsWith('item.') ? itemName(id) : titleCase(id),
                         )}
                       />
                       <ReferenceList
                         label="Tools"
-                        entries={build.proficiencies.tools.map(
+                        entries={sheet.proficiencies.tools.map(
                           (id) =>
-                            `${itemName(id)}${build.proficiencies.expertise.includes(id) ? ' (Expertise)' : ''}`,
+                            `${itemName(id)}${sheet.proficiencies.expertise.includes(id) ? ' (Expertise)' : ''}`,
                         )}
                       />
-                      <ReferenceList label="Languages" entries={build.proficiencies.languages} />
+                      <ReferenceList label="Languages" entries={sheet.proficiencies.languages} />
                     </dl>
                   </Section>
                   <Section label="Senses and defenses">

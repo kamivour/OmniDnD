@@ -195,20 +195,20 @@ function PrintSheet() {
             </Block>
             <Block label="Proficiencies">
               <p className="text-sm">
-                Armor: {build.proficiencies.armor.map(titleCase).join(', ') || '-'}
+                Armor: {sheet.proficiencies.armor.map(titleCase).join(', ') || '-'}
               </p>
               <p className="text-sm">
                 Weapons:{' '}
-                {build.proficiencies.weapons
+                {sheet.proficiencies.weapons
                   .map((id) => (id.startsWith('item.') ? reg.get('item', id).name : titleCase(id)))
                   .join(', ') || '-'}
               </p>
               <p className="text-sm">
                 Tools:{' '}
-                {build.proficiencies.tools.map((id) => reg.get('item', id).name).join(', ') || '-'}
+                {sheet.proficiencies.tools.map((id) => reg.get('item', id).name).join(', ') || '-'}
               </p>
               <p className="text-sm">
-                Languages: {build.proficiencies.languages.join(', ') || '-'}
+                Languages: {sheet.proficiencies.languages.join(', ') || '-'}
               </p>
             </Block>
             <Block label="Attacks">

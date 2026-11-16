@@ -99,6 +99,8 @@ export interface RawRace {
   ability_bonuses: AbilityBonus[];
   ability_bonus_options?: { choose: number; from: { options: AbilityBonus[] } };
   languages: ApiRef[];
+  /** Human and Half-Elf pick one more language. */
+  language_options?: { choose: number };
   traits: ApiRef[];
   age: string;
   alignment: string;
@@ -543,7 +545,11 @@ export function mapRace(raw: RawRace): RaceDef {
       },
     }),
     languages: raw.languages.map((ref) => ref.name),
-    featureIds: raw.traits.map((ref) => `feature.${ref.index}`),
+    featureIds: [
+      ...raw.traits.map((ref) => `feature.${ref.index}`),
+      // The extra language pick rides on the Extra Language trait, so To do can ask for it.
+      ...(raw.language_options ? ['feature.extra-language'] : []),
+    ],
   };
 }
 

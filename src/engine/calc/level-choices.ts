@@ -56,6 +56,11 @@ interface Input {
   classId: string;
   newLevel: number;
   choices: LevelChoices;
+  /**
+   * The sheet's merged proficiencies, which include race and subclass grants. Checks for
+   * "already proficient" and expertise use them; without them only the build counts.
+   */
+  granted?: Pick<CharacterBuild['proficiencies'], 'skills' | 'tools' | 'expertise'>;
 }
 
 export type ChoiceResult = { blocked: string } | { build: CharacterBuild; summary: string[] };
@@ -128,7 +133,7 @@ export function applyLevelChoices(input: Input): ChoiceResult {
     if (skills.length > (grants.skills ?? 0) || new Set(skills).size !== skills.length)
       return { blocked: `${feat.name} gives ${grants.skills ?? 0} skills` };
     for (const skill of skills) {
-      if (build.proficiencies.skills.includes(skill))
+      if (build.proficiencies.skills.includes(skill) || input.granted?.skills.includes(skill))
         return { blocked: `Already proficient in ${skill}` };
       build.proficiencies.skills.push(skill);
     }
@@ -142,10 +147,14 @@ export function applyLevelChoices(input: Input): ChoiceResult {
   for (const id of choices.expertise ?? []) {
     const isSkill = SkillSchema.safeParse(id).success;
     const proficient = isSkill
-      ? build.proficiencies.skills.includes(id as never)
-      : build.proficiencies.tools.includes(id);
+      ? build.proficiencies.skills.includes(id as never) ||
+        input.granted?.skills.includes(id as never)
+      : build.proficiencies.tools.includes(id) || input.granted?.tools.includes(id);
     if (!proficient) return { blocked: `Expertise needs a proficiency first: ${id}` };
-    if (build.proficiencies.expertise.includes(id as never))
+    if (
+      build.proficiencies.expertise.includes(id as never) ||
+      input.granted?.expertise.includes(id as never)
+    )
       return { blocked: `Already has expertise: ${id}` };
     build.proficiencies.expertise.push(id as never);
     summary.push(`Expertise: ${registry.entries.get(id)?.name ?? id}`);

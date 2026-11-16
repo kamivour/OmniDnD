@@ -39,18 +39,7 @@
     ],
     "proficiencies": {
       "saves": ["DEX", "CHA"],
-      "skills": [
-        "deception",
-        "sleight-of-hand",
-        "acrobatics",
-        "perception",
-        "persuasion",
-        "intimidation",
-        "investigation",
-        "insight",
-        "performance",
-        "stealth"
-      ],
+      "skills": ["deception", "sleight-of-hand", "acrobatics", "perception", "persuasion"],
       "expertise": ["deception", "sleight-of-hand"],
       "armor": ["light"],
       "weapons": [
@@ -61,7 +50,12 @@
         "item.shortsword"
       ],
       "tools": ["item.flute", "item.lute", "item.drum", "item.disguise-kit", "item.forgery-kit"],
-      "languages": ["Common", "Elvish", "Celestial"]
+      "languages": ["Common", "Elvish"]
+    },
+    "proficiencyPicks": {
+      "feature.skill-versatility": { "skills": ["intimidation", "investigation"] },
+      "feature.bard.bonus-proficiencies": { "skills": ["insight", "performance", "stealth"] },
+      "feature.extra-language": { "languages": ["Celestial"] }
     },
     "spells": [
       {

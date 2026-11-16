@@ -27,6 +27,7 @@ import { characterFeatures, resolveFormula, type CharacterFeature } from './feat
 import { optionalRules } from './campaign-rules';
 import { levelHp, maxHp } from './hp';
 import { proficiencyBonus } from './proficiency';
+import { featureProficiencies, type GrantedProficiency, type Proficiencies } from './proficiencies';
 import { spellSlots, type SpellSlots } from './slots';
 import { sumParts, type Part, type Stat } from './stat';
 import { isPreparedCaster2014, preparedLevelPart } from './spell-selections';
@@ -88,6 +89,10 @@ export interface Sheet {
   spellcasting: SpellcastingStats[];
   slots: SpellSlots;
   features: CharacterFeature[];
+  /** The build's proficiencies plus what race traits and class features give. */
+  proficiencies: Proficiencies;
+  /** Proficiencies from features, with the feature that gives each. */
+  grantedProficiencies: GrantedProficiency[];
   attacks: WeaponAttack[];
   /** Applied conditions, from `live.conditions` and active effects. */
   conditions: Condition[];
@@ -231,12 +236,14 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     );
 
   const featureIds = new Set(features.map(({ def }) => def.id));
+  const owned = featureProficiencies(build, features);
+  const profs = owned.proficiencies;
   const featureSaves = new Set(
     [...featureIds].flatMap((id) => FEATURE_SAVE_PROFICIENCIES[id] ?? []),
   );
   const saves = Object.fromEntries(
     ABILITIES.map((ability) => {
-      const proficient = build.proficiencies.saves.includes(ability) || featureSaves.has(ability);
+      const proficient = profs.saves.includes(ability) || featureSaves.has(ability);
       const parts = [modPart(ability), ...(proficient ? [proficiencyPart] : [])];
       return [
         ability,
@@ -252,8 +259,8 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     }),
   ) as Sheet['saves'];
 
-  const expertise = new Set<string>(build.proficiencies.expertise);
-  const proficientSkills = new Set<string>(build.proficiencies.skills);
+  const expertise = new Set<string>(profs.expertise);
+  const proficientSkills = new Set<string>(profs.skills);
   const skills = Object.fromEntries(
     SKILLS.map((skill) => {
       const kind = expertise.has(skill)
@@ -386,7 +393,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     };
   const attacks = equipped.flatMap(({ instanceId, def }) => {
     if (!def.weapon) return [];
-    const attack = weaponAttack(instanceId, def, build, mods, proficiencyPart);
+    const attack = weaponAttack(instanceId, def, profs, mods, proficiencyPart);
     attack.toHit = value(
       overridePath('attacks', instanceId, 'toHit'),
       `${def.name} attack`,
@@ -449,7 +456,12 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       ),
       { min: 0 },
     ),
-    darkvision: scalar('/darkvision', 'Darkvision', race.darkvision ?? 0, { min: 0 }),
+    darkvision: scalar(
+      '/darkvision',
+      'Darkvision',
+      Math.max(race.darkvision ?? 0, owned.darkvision),
+      { min: 0 },
+    ),
     maxHp: value('/maxHp', 'Maximum HP', maxHpStat, { min: 1 }),
     hitDice,
     spellcasting: classDefs.flatMap(({ entry, def, casting }) => {
@@ -510,6 +522,8 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     }),
     slots,
     features,
+    proficiencies: profs,
+    grantedProficiencies: owned.granted,
     attacks,
     conditions,
     encumbrance: load,
@@ -529,6 +543,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
   };
   if (
     race.darkvision === undefined &&
+    owned.darkvision === 0 &&
     result.darkvision === 0 &&
     !values['/darkvision']?.stat.override
   )
@@ -696,7 +711,7 @@ function speed(
 function weaponAttack(
   instanceId: string,
   def: ItemDef,
-  build: CharacterBuild,
+  profs: Proficiencies,
   mods: Record<Ability, number>,
   proficiencyPart: Part,
 ): WeaponAttack {
@@ -708,7 +723,7 @@ function weaponAttack(
     : weapon.type === 'ranged'
       ? 'DEX'
       : 'STR';
-  const proficient = build.proficiencies.weapons.some(
+  const proficient = profs.weapons.some(
     (entry) => entry === weapon.category || entry === def.id || entry === def.baseItemId,
   );
   const abilityPart = { label: ability, value: mods[ability] };

@@ -96,7 +96,7 @@ export const equipItem: Command<EquipItemPayload> = {
     if (
       equipped &&
       item.def.armor &&
-      !ctx.build.proficiencies.armor.includes(item.def.armor.category)
+      !ctx.sheet.proficiencies.armor.includes(item.def.armor.category)
     )
       checks.push(
         warn(

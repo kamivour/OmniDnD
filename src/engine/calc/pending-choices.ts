@@ -1,6 +1,7 @@
 import { optionalRules, sourceAllows } from './campaign-rules';
 import type { Registry } from '../registry';
 import { featSpellSources } from './feat-spells';
+import { openProficiencyPicks } from './proficiencies';
 import { asiLevels } from './level-choices';
 import { computeSheet, type CharacterState } from './sheet';
 import { spellSelectionDetails } from './spell-selections';
@@ -14,7 +15,8 @@ export type PendingKind =
   | 'spells-known'
   | 'spellbook'
   | 'prepared'
-  | 'feat-spells';
+  | 'feat-spells'
+  | 'proficiencies';
 
 /** One decision a character still has to make. */
 export interface PendingChoice {
@@ -33,7 +35,7 @@ export interface PendingChoice {
   prefix?: string;
   /** For `option`: every feature the campaign allows for this pick, owned ones included. */
   optionIds?: string[];
-  /** For `feat-spells`: the feat or racial trait whose spells are still open. */
+  /** For `feat-spells` and `proficiencies`: the feat, trait or feature with open picks. */
   featureId?: string;
 }
 
@@ -349,6 +351,20 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
       featureId: source.featureId,
       label: `${source.name}: choose spells`,
       count: source.open,
+      optional: false,
+      area: 'choices',
+    });
+  }
+
+  // Skills, tools and languages race traits and features let the player pick (Skill Versatility).
+  for (const { def, open } of openProficiencyPicks(build, sheet.features)) {
+    items.push({
+      id: `proficiencies:${def.id}`,
+      kind: 'proficiencies',
+      classId: '',
+      featureId: def.id,
+      label: `${def.name}: choose proficiencies`,
+      count: open,
       optional: false,
       area: 'choices',
     });

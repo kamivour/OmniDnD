@@ -32,6 +32,17 @@ const card = 'flex min-w-0 flex-col gap-4 rounded-card border border-border bg-s
 const button = 'min-h-11 rounded-btn border border-border px-4 text-sm disabled:opacity-40';
 const labelFor = (value: string) =>
   value.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+/** "Perception", "Expertise: Stealth", "Medium armor" for the granted list. */
+const grantedLabel = ({ kind, value }: { kind: string; value: string }) => {
+  const name = value.startsWith('item.')
+    ? (registry.entries.get(value)?.name ?? value)
+    : labelFor(value);
+  if (kind === 'expertise') return `Expertise: ${name}`;
+  if (kind === 'saves') return `${value} saves`;
+  if (kind === 'armor' && value !== 'shield') return `${name} armor`;
+  if (kind === 'weapons' && !value.startsWith('item.')) return `${name} weapons`;
+  return name;
+};
 const abilityMethodLabel = (method: AbilityMethod) =>
   ({
     rolled: 'Rolled scores',
@@ -723,6 +734,12 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
           Choose the proficiencies your rules and table grant. Equipment ownership does not limit
           tool proficiency. Retained entries stay selected until you remove them.
         </p>
+        {sheet.grantedProficiencies.length > 0 && (
+          <p className="text-xs text-text-muted">
+            Also from race and features (no need to tick):{' '}
+            {[...new Set(sheet.grantedProficiencies.map((row) => grantedLabel(row)))].join(', ')}.
+          </p>
+        )}
         <ChoiceList
           label="Saving throw proficiency"
           options={ABILITIES.map((id) => ({ id, name: id }))}

@@ -50,7 +50,8 @@ describe('resolveChoices', () => {
       meta,
     );
     if (result.result !== 'ok') throw new Error(JSON.stringify(result));
-    expect(kinds(result.next)).toEqual([]);
+    // Only the Human's extra language is still open.
+    expect(kinds(result.next)).toEqual(['proficiencies']);
     expect(result.next.build.classes[0]?.subclassId).toBe('subclass.fighter.champion');
     const undone = undo(result.next, [result.event], { eventId: 'undo', realTime: meta.realTime });
     if (undone.result !== 'ok') throw new Error('undo blocked');

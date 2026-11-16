@@ -276,6 +276,20 @@ export function previewBuildEdit(ctx: CommandContext, input: EditBuildPayload) {
       )
         checks.push(block('Tool Expertise requires proficiency with that tool'));
     }
+    // Skill expertise may rest on a skill a race trait or subclass gives (Scout, Knowledge).
+    const grantedSkills = new Set(
+      ctx.sheet.grantedProficiencies.filter((row) => row.kind === 'skills').map((row) => row.value),
+    );
+    for (const id of next.proficiencies.expertise) {
+      if (
+        !id.startsWith('item.') &&
+        !next.proficiencies.skills.includes(id as never) &&
+        !grantedSkills.has(id) &&
+        (!build.proficiencies.expertise.includes(id) ||
+          build.proficiencies.skills.includes(id as never))
+      )
+        checks.push(block(`Expertise in ${id.replaceAll('-', ' ')} needs proficiency in it`));
+    }
   }
 
   if (changeRacialBonuses) {

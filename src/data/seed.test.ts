@@ -39,7 +39,11 @@ describe('The Fool seed', () => {
       { classId: 'class.bard', subclassId: 'subclass.bard.lore', level: 3 },
     ]);
     expect(fool.build.hpEntries.map((entry) => entry.value)).toEqual([8, 4, 4]);
-    expect(fool.build.proficiencies.skills).toHaveLength(10);
+    // Five skills from class and background; the race trait and Lore picks add five more.
+    expect(fool.build.proficiencies.skills).toHaveLength(5);
+    expect(
+      Object.values(fool.build.proficiencyPicks ?? {}).flatMap((row) => row.skills ?? []),
+    ).toHaveLength(5);
     expect(fool.build.proficiencies.expertise).toEqual(['deception', 'sleight-of-hand']);
     expect(fool.build.spells[0]?.known).toHaveLength(8);
   });

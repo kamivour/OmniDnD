@@ -16,6 +16,7 @@ function equippedArmor(
   state: EquipmentState,
   bundled: Registry,
   includeEmpty: boolean,
+  armorProficiencies: readonly string[],
 ): WornArmor[] {
   const registry = characterRegistry(bundled, state.build);
   return state.build.items.flatMap(({ instanceId, itemId }) => {
@@ -29,15 +30,22 @@ function equippedArmor(
       {
         instanceId,
         def: def as ArmorItem,
-        proficient: state.build.proficiencies.armor.includes(def.armor.category),
+        proficient: armorProficiencies.includes(def.armor.category),
       },
     ];
   });
 }
 
-/** Only armor actually present contributes penalties; legacy empty equipped rows stay recorded. */
-export function wornArmor(state: EquipmentState, registry: Registry): WornArmor[] {
-  return equippedArmor(state, registry, false);
+/**
+ * Only armor actually present contributes penalties; legacy empty equipped rows stay recorded.
+ * `armorProficiencies` is the sheet's list, which includes race and subclass grants.
+ */
+export function wornArmor(
+  state: EquipmentState,
+  registry: Registry,
+  armorProficiencies: readonly string[],
+): WornArmor[] {
+  return equippedArmor(state, registry, false, armorProficiencies);
 }
 
 /** An explicit outfit change clears competing flags, including empty legacy copies. */
@@ -51,7 +59,7 @@ export function armorReplacements(
   const def = characterRegistry(registry, state.build).get('item', item.itemId);
   if (!def.armor) return [];
   const shield = def.armor.category === 'shield';
-  return equippedArmor(state, registry, true).filter(
+  return equippedArmor(state, registry, true, state.build.proficiencies.armor).filter(
     (entry) =>
       entry.instanceId !== instanceId && (entry.def.armor.category === 'shield') === shield,
   );
@@ -63,7 +71,7 @@ export function armorEquipmentNotes(
   registry: Registry,
   sheet: Sheet = computeSheet(state, registry),
 ): string[] {
-  const armor = wornArmor(state, registry);
+  const armor = wornArmor(state, registry, sheet.proficiencies.armor);
   const unproficient = armor.filter((entry) => !entry.proficient);
   const notes =
     unproficient.length > 0

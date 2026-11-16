@@ -99,6 +99,9 @@ interface FeatureDef extends RefBase {
   spells?: { ability: Ability | 'raised' | 'class'; classOptions?: string[]; slots: boolean;
              fixed?: { spellId; free?: 'long' | 'short' | 'will'; minLevel?; castLevel? }[];
              picks?: { count; level; schools?; fromClass?; classes?; attack?; free? }[] };  // feat and racial spells (D207)
+  proficiencies?: { saves?; skills?; expertise?; armor?; weapons?; tools?; languages?;   // fixed grants (D208)
+                    choose?: { count; kinds: ('skill'|'expertise'|'tool'|'language'|'darkvision')[];
+                               skills?; tools?: string[] | group; expertise?: boolean }[] };
 }
 ```
 
@@ -137,6 +140,7 @@ interface CharacterBuild {
   spellTags?: Record<string, SpellType[]>;         // per-character tag override, edited in Manage (M4)
   favorites: string[];
   featSpells?: Record<string, { classId?: string; ability?: Ability; spellIds: string[] }>;  // picks for feature spells (D207)
+  proficiencyPicks?: Record<string, { skills?; tools?; languages?; expertise?; darkvision?: true }>;  // picks for feature proficiencies (D208)
   featureIds: string[];                            // extras only (feats, DM grants, homebrew); granted features are derived (D48)
   choices: Record<string, unknown>;
   items: { instanceId: string; itemId: string; container?: string; notes?: string }[];

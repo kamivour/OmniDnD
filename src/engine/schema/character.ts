@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { SKILLS } from '../rules2014';
 import {
   AbilitySchema,
   AnyRefIdSchema,
@@ -59,7 +58,14 @@ const HpEntrySchema = z.strictObject({
   floor: HpLevelFloorSchema.optional(),
 });
 
-const SKILL_SET: ReadonlySet<string> = new Set(SKILLS);
+/** What the player picked for one feature's proficiency choice (Skill Versatility, Lore). */
+export const ProficiencyPicksSchema = z.strictObject({
+  skills: z.array(SkillSchema).optional(),
+  tools: z.array(refId('item')).optional(),
+  languages: z.array(z.string().trim().min(1)).optional(),
+  expertise: z.array(SkillSchema).optional(),
+  darkvision: z.literal(true).optional(),
+});
 
 export const QuestSchema = z.strictObject({
   id: z.string().min(1),
@@ -178,6 +184,8 @@ export const CharacterBuildSchema = z
         }),
       )
       .optional(),
+    /** Skills, tools, languages, expertise or darkvision picked for a race trait or class feature, by feature. */
+    proficiencyPicks: z.record(refId('feature'), ProficiencyPicksSchema).optional(),
     choices: z.record(z.string(), z.unknown()),
     items: z.array(
       z.strictObject({
@@ -231,17 +239,6 @@ export const CharacterBuildSchema = z
           code: 'custom',
           message: `${entry.classId} is not one of the character's classes`,
           path: ['hpEntries', index, 'classId'],
-        });
-      }
-    });
-
-    const skills = new Set<string>(build.proficiencies.skills);
-    build.proficiencies.expertise.forEach((id, index) => {
-      if (SKILL_SET.has(id) && !skills.has(id)) {
-        ctx.addIssue({
-          code: 'custom',
-          message: `Expertise in ${id} needs proficiency in it`,
-          path: ['proficiencies', 'expertise', index],
         });
       }
     });

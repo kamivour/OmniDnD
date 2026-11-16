@@ -67,6 +67,7 @@ describe('registry', () => {
     );
     expect(activation).toEqual({
       'feature.darkvision': 'passive',
+      'feature.extra-language': 'passive',
       'feature.fey-ancestry': 'passive',
       'feature.skill-versatility': 'passive',
       'feature.false-identity': 'passive',

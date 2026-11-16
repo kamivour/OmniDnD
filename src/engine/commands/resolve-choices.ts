@@ -80,6 +80,7 @@ function prepare(ctx: CommandContext, input: ResolveChoicesPayload) {
     classId,
     newLevel,
     choices,
+    granted: ctx.sheet.proficiencies,
   });
   if ('blocked' in applied) return { checks: [block(applied.blocked)] };
   if (!CharacterBuildSchema.safeParse(applied.build).success)

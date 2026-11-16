@@ -7,6 +7,8 @@ export * from './actions';
 export * from './effects';
 export * from './features';
 export * from './feat-spells';
+export * from './proficiency-picks';
+export * from '../calc/proficiencies';
 export * from '../calc/feat-spells';
 export * from './favorites';
 export * from './hp';

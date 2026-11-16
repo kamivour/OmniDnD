@@ -108,8 +108,8 @@ export const OVERVIEW_COLUMNS: readonly OverviewColumn[] = [
     id: 'languages',
     label: 'Languages',
     initial: false,
-    value: (s) => {
-      const text = s.build.proficiencies.languages.join(', ');
+    value: (_s, sheet) => {
+      const text = sheet.proficiencies.languages.join(', ');
       return { text: text || '—', sort: text.toLowerCase() };
     },
   },

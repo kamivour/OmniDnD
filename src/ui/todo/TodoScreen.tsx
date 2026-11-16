@@ -5,7 +5,7 @@ import { registry } from '../../data/registry';
 import { chooseFeatSpells, featSpellCandidates, resolveChoices } from '../../engine/commands';
 import type { Ability } from '../../engine/calc/abilities';
 import type { PendingChoice } from '../../engine/calc/pending-choices';
-import type { CharacterState } from '../../engine/calc/sheet';
+import { computeSheet, type CharacterState } from '../../engine/calc/sheet';
 import type { Skill } from '../../engine/rules2014';
 import { deviceStore } from '../../state/device-settings';
 import { OptionGuide } from '../components/OptionGuide';
@@ -19,6 +19,7 @@ import {
   subclassOptions,
   type LevelPicks,
 } from '../level/level-up-model';
+import { ProficiencyPicksForm } from './ProficiencyPicksForm';
 import { useTodo } from './useTodo';
 
 const btn = 'min-h-11 rounded-btn border border-border bg-surface px-3 text-sm text-text';
@@ -78,6 +79,12 @@ export function TodoScreen() {
                   state={state}
                   onDone={() => setEditing(null)}
                 />
+              ) : item.kind === 'proficiencies' && item.featureId ? (
+                <ProficiencyPicksForm
+                  featureId={item.featureId}
+                  state={state}
+                  onDone={() => setEditing(null)}
+                />
               ) : (
                 <ChoiceForm item={item} state={state} onDone={() => setEditing(null)} />
               ))}
@@ -126,6 +133,7 @@ function ChoiceForm({
 
   const subclasses = subclassOptions(state, registry, item.classId);
   const feats = featOptions(state, registry);
+  const sheet = computeSheet(state, registry);
   const owned = new Set(state.build.featureIds);
   const options =
     item.kind === 'option'
@@ -134,8 +142,8 @@ function ChoiceForm({
           .map((id) => ({ id, name: registry.get('feature', id).name }))
           .sort((a, b) => a.name.localeCompare(b.name))
       : item.kind === 'expertise'
-        ? [...state.build.proficiencies.skills, ...state.build.proficiencies.tools]
-            .filter((id) => !state.build.proficiencies.expertise.includes(id as Skill))
+        ? [...sheet.proficiencies.skills, ...sheet.proficiencies.tools]
+            .filter((id) => !sheet.proficiencies.expertise.includes(id as Skill))
             .map((id) => ({ id, name: nameOf(id).replace(/-/g, ' ') }))
         : [];
 

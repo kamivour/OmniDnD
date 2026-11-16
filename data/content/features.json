@@ -3043,7 +3043,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Gain proficiency in one skill of your choice. Add it in the sheet editor."
+      "effect": "Gain proficiency in one skill of your choice. Pick it in To do."
     },
     "origin": "race",
     "activation": "special"
