@@ -326,6 +326,18 @@ export function SpellManage({
               />
             )}
           </div>
+          {details.granted.length > 0 && (
+            <p className="text-sm text-text-muted">
+              <span className="font-semibold text-text">
+                Always {details.mode === 'known' ? 'known' : 'prepared'} (
+                {[...new Set(details.granted.map((entry) => entry.from))].join(', ')}):
+              </span>{' '}
+              {details.granted
+                .map((entry) => registry.entries.get(entry.id)?.name ?? entry.id)
+                .join(', ')}
+              . These never count toward your limits.
+            </p>
+          )}
           <Field label="Search available spells" htmlFor={searchInputId}>
             <input
               ref={searchInput}

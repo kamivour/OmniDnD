@@ -1,0 +1,329 @@
+[
+  {
+    "id": "subclass.cleric.life",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.bless", "spell.cure-wounds"] },
+      { "level": 3, "spellIds": ["spell.lesser-restoration", "spell.spiritual-weapon"] },
+      { "level": 5, "spellIds": ["spell.beacon-of-hope", "spell.revivify"] },
+      { "level": 7, "spellIds": ["spell.death-ward", "spell.guardian-of-faith"] },
+      { "level": 9, "spellIds": ["spell.mass-cure-wounds", "spell.raise-dead"] }
+    ]
+  },
+  {
+    "id": "subclass.cleric.knowledge",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.command", "spell.identify"] },
+      { "level": 3, "spellIds": ["spell.augury", "spell.suggestion"] },
+      { "level": 5, "spellIds": ["spell.nondetection", "spell.speak-with-dead"] },
+      { "level": 7, "spellIds": ["spell.arcane-eye", "spell.confusion"] },
+      { "level": 9, "spellIds": ["spell.legend-lore", "spell.scrying"] }
+    ]
+  },
+  {
+    "id": "subclass.cleric.light",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.light", "spell.burning-hands", "spell.faerie-fire"] },
+      { "level": 3, "spellIds": ["spell.flaming-sphere", "spell.scorching-ray"] },
+      { "level": 5, "spellIds": ["spell.daylight", "spell.fireball"] },
+      { "level": 7, "spellIds": ["spell.guardian-of-faith", "spell.wall-of-fire"] },
+      { "level": 9, "spellIds": ["spell.flame-strike", "spell.scrying"] }
+    ]
+  },
+  {
+    "id": "subclass.cleric.nature",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.animal-friendship", "spell.speak-with-animals"] },
+      { "level": 3, "spellIds": ["spell.barkskin", "spell.spike-growth"] },
+      { "level": 5, "spellIds": ["spell.plant-growth", "spell.wind-wall"] },
+      { "level": 7, "spellIds": ["spell.dominate-beast", "spell.grasping-vine"] },
+      { "level": 9, "spellIds": ["spell.insect-plague", "spell.tree-stride"] }
+    ]
+  },
+  {
+    "id": "subclass.cleric.tempest",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.fog-cloud", "spell.thunderwave"] },
+      { "level": 3, "spellIds": ["spell.gust-of-wind", "spell.shatter"] },
+      { "level": 5, "spellIds": ["spell.call-lightning", "spell.sleet-storm"] },
+      { "level": 7, "spellIds": ["spell.control-water", "spell.ice-storm"] },
+      { "level": 9, "spellIds": ["spell.destructive-wave", "spell.insect-plague"] }
+    ]
+  },
+  {
+    "id": "subclass.cleric.trickery",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.charm-person", "spell.disguise-self"] },
+      { "level": 3, "spellIds": ["spell.mirror-image", "spell.pass-without-trace"] },
+      { "level": 5, "spellIds": ["spell.blink", "spell.dispel-magic"] },
+      { "level": 7, "spellIds": ["spell.dimension-door", "spell.polymorph"] },
+      { "level": 9, "spellIds": ["spell.dominate-person", "spell.modify-memory"] }
+    ]
+  },
+  {
+    "id": "subclass.cleric.war",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.divine-favor", "spell.shield-of-faith"] },
+      { "level": 3, "spellIds": ["spell.magic-weapon", "spell.spiritual-weapon"] },
+      { "level": 5, "spellIds": ["spell.crusaders-mantle", "spell.spirit-guardians"] },
+      { "level": 7, "spellIds": ["spell.freedom-of-movement", "spell.stoneskin"] },
+      { "level": 9, "spellIds": ["spell.flame-strike", "spell.hold-monster"] }
+    ]
+  },
+  {
+    "id": "subclass.cleric.forge",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.identify", "spell.searing-smite"] },
+      { "level": 3, "spellIds": ["spell.heat-metal", "spell.magic-weapon"] },
+      { "level": 5, "spellIds": ["spell.elemental-weapon", "spell.protection-from-energy"] },
+      { "level": 7, "spellIds": ["spell.fabricate", "spell.wall-of-fire"] },
+      { "level": 9, "spellIds": ["spell.animate-objects", "spell.creation"] }
+    ]
+  },
+  {
+    "id": "subclass.cleric.grave",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.bane", "spell.false-life"] },
+      { "level": 3, "spellIds": ["spell.gentle-repose", "spell.ray-of-enfeeblement"] },
+      { "level": 5, "spellIds": ["spell.revivify", "spell.vampiric-touch"] },
+      { "level": 7, "spellIds": ["spell.blight", "spell.death-ward"] },
+      { "level": 9, "spellIds": ["spell.antilife-shell", "spell.raise-dead"] }
+    ]
+  },
+  {
+    "id": "subclass.cleric.order",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.command", "spell.heroism"] },
+      { "level": 3, "spellIds": ["spell.hold-person", "spell.zone-of-truth"] },
+      { "level": 5, "spellIds": ["spell.mass-healing-word", "spell.slow"] },
+      { "level": 7, "spellIds": ["spell.compulsion", "spell.locate-creature"] },
+      { "level": 9, "spellIds": ["spell.commune", "spell.dominate-person"] }
+    ]
+  },
+  {
+    "id": "subclass.cleric.peace",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.heroism", "spell.sanctuary"] },
+      { "level": 3, "spellIds": ["spell.aid", "spell.warding-bond"] },
+      { "level": 5, "spellIds": ["spell.beacon-of-hope", "spell.sending"] },
+      { "level": 7, "spellIds": ["spell.aura-of-purity", "spell.resilient-sphere"] },
+      { "level": 9, "spellIds": ["spell.greater-restoration", "spell.telepathic-bond"] }
+    ]
+  },
+  {
+    "id": "subclass.cleric.twilight",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.faerie-fire", "spell.sleep"] },
+      { "level": 3, "spellIds": ["spell.moonbeam", "spell.see-invisibility"] },
+      { "level": 5, "spellIds": ["spell.aura-of-vitality", "spell.tiny-hut"] },
+      { "level": 7, "spellIds": ["spell.aura-of-life", "spell.greater-invisibility"] },
+      { "level": 9, "spellIds": ["spell.circle-of-power", "spell.mislead"] }
+    ]
+  },
+  {
+    "id": "subclass.paladin.devotion",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.protection-from-evil-and-good", "spell.sanctuary"] },
+      { "level": 5, "spellIds": ["spell.lesser-restoration", "spell.zone-of-truth"] },
+      { "level": 9, "spellIds": ["spell.beacon-of-hope", "spell.dispel-magic"] },
+      { "level": 13, "spellIds": ["spell.freedom-of-movement", "spell.guardian-of-faith"] },
+      { "level": 17, "spellIds": ["spell.commune", "spell.flame-strike"] }
+    ]
+  },
+  {
+    "id": "subclass.paladin.ancients",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.ensnaring-strike", "spell.speak-with-animals"] },
+      { "level": 5, "spellIds": ["spell.misty-step", "spell.moonbeam"] },
+      { "level": 9, "spellIds": ["spell.plant-growth", "spell.protection-from-energy"] },
+      { "level": 13, "spellIds": ["spell.ice-storm", "spell.stoneskin"] },
+      { "level": 17, "spellIds": ["spell.commune-with-nature", "spell.tree-stride"] }
+    ]
+  },
+  {
+    "id": "subclass.paladin.vengeance",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.bane", "spell.hunters-mark"] },
+      { "level": 5, "spellIds": ["spell.hold-person", "spell.misty-step"] },
+      { "level": 9, "spellIds": ["spell.haste", "spell.protection-from-energy"] },
+      { "level": 13, "spellIds": ["spell.banishment", "spell.dimension-door"] },
+      { "level": 17, "spellIds": ["spell.hold-monster", "spell.scrying"] }
+    ]
+  },
+  {
+    "id": "subclass.paladin.conquest",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.armor-of-agathys", "spell.command"] },
+      { "level": 5, "spellIds": ["spell.hold-person", "spell.spiritual-weapon"] },
+      { "level": 9, "spellIds": ["spell.bestow-curse", "spell.fear"] },
+      { "level": 13, "spellIds": ["spell.dominate-beast", "spell.stoneskin"] },
+      { "level": 17, "spellIds": ["spell.cloudkill", "spell.dominate-person"] }
+    ]
+  },
+  {
+    "id": "subclass.paladin.redemption",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.sanctuary", "spell.sleep"] },
+      { "level": 5, "spellIds": ["spell.calm-emotions", "spell.hold-person"] },
+      { "level": 9, "spellIds": ["spell.counterspell", "spell.hypnotic-pattern"] },
+      { "level": 13, "spellIds": ["spell.resilient-sphere", "spell.stoneskin"] },
+      { "level": 17, "spellIds": ["spell.hold-monster", "spell.wall-of-force"] }
+    ]
+  },
+  {
+    "id": "subclass.paladin.glory",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.guiding-bolt", "spell.heroism"] },
+      { "level": 5, "spellIds": ["spell.enhance-ability", "spell.magic-weapon"] },
+      { "level": 9, "spellIds": ["spell.haste", "spell.protection-from-energy"] },
+      { "level": 13, "spellIds": ["spell.compulsion", "spell.freedom-of-movement"] },
+      { "level": 17, "spellIds": ["spell.commune", "spell.flame-strike"] }
+    ]
+  },
+  {
+    "id": "subclass.paladin.watchers",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.alarm", "spell.detect-magic"] },
+      { "level": 5, "spellIds": ["spell.moonbeam", "spell.see-invisibility"] },
+      { "level": 9, "spellIds": ["spell.counterspell", "spell.nondetection"] },
+      { "level": 13, "spellIds": ["spell.aura-of-purity", "spell.banishment"] },
+      { "level": 17, "spellIds": ["spell.hold-monster", "spell.scrying"] }
+    ]
+  },
+  {
+    "id": "subclass.artificer.alchemist",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.healing-word", "spell.ray-of-sickness"] },
+      { "level": 5, "spellIds": ["spell.flaming-sphere", "spell.acid-arrow"] },
+      { "level": 9, "spellIds": ["spell.gaseous-form", "spell.mass-healing-word"] },
+      { "level": 13, "spellIds": ["spell.blight", "spell.death-ward"] },
+      { "level": 17, "spellIds": ["spell.cloudkill", "spell.raise-dead"] }
+    ]
+  },
+  {
+    "id": "subclass.artificer.armorer",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.magic-missile", "spell.thunderwave"] },
+      { "level": 5, "spellIds": ["spell.mirror-image", "spell.shatter"] },
+      { "level": 9, "spellIds": ["spell.hypnotic-pattern", "spell.lightning-bolt"] },
+      { "level": 13, "spellIds": ["spell.fire-shield", "spell.greater-invisibility"] },
+      { "level": 17, "spellIds": ["spell.passwall", "spell.wall-of-force"] }
+    ]
+  },
+  {
+    "id": "subclass.artificer.artillerist",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.shield", "spell.thunderwave"] },
+      { "level": 5, "spellIds": ["spell.scorching-ray", "spell.shatter"] },
+      { "level": 9, "spellIds": ["spell.fireball", "spell.wind-wall"] },
+      { "level": 13, "spellIds": ["spell.ice-storm", "spell.wall-of-fire"] },
+      { "level": 17, "spellIds": ["spell.cone-of-cold", "spell.wall-of-force"] }
+    ]
+  },
+  {
+    "id": "subclass.artificer.battle-smith",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.heroism", "spell.shield"] },
+      { "level": 5, "spellIds": ["spell.branding-smite", "spell.warding-wind"] },
+      { "level": 9, "spellIds": ["spell.aura-of-vitality", "spell.conjure-barrage"] },
+      { "level": 13, "spellIds": ["spell.aura-of-purity", "spell.fire-shield"] },
+      { "level": 17, "spellIds": ["spell.banishing-smite", "spell.mass-cure-wounds"] }
+    ]
+  },
+  {
+    "id": "subclass.druid.spores",
+    "grantedSpells": [
+      { "level": 2, "spellIds": ["spell.chill-touch"] },
+      { "level": 3, "spellIds": ["spell.blindness-deafness", "spell.gentle-repose"] },
+      { "level": 5, "spellIds": ["spell.animate-dead", "spell.gaseous-form"] },
+      { "level": 7, "spellIds": ["spell.blight", "spell.confusion"] },
+      { "level": 9, "spellIds": ["spell.cloudkill", "spell.contagion"] }
+    ]
+  },
+  {
+    "id": "subclass.druid.wildfire",
+    "grantedSpells": [
+      { "level": 2, "spellIds": ["spell.burning-hands", "spell.cure-wounds"] },
+      { "level": 3, "spellIds": ["spell.flaming-sphere", "spell.scorching-ray"] },
+      { "level": 5, "spellIds": ["spell.plant-growth", "spell.revivify"] },
+      { "level": 7, "spellIds": ["spell.aura-of-life", "spell.fire-shield"] },
+      { "level": 9, "spellIds": ["spell.flame-strike", "spell.mass-cure-wounds"] }
+    ]
+  },
+  {
+    "id": "subclass.druid.stars",
+    "grantedSpells": [{ "level": 2, "spellIds": ["spell.guidance", "spell.guiding-bolt"] }]
+  },
+  {
+    "id": "subclass.ranger.gloom-stalker",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.disguise-self"] },
+      { "level": 5, "spellIds": ["spell.rope-trick"] },
+      { "level": 9, "spellIds": ["spell.fear"] },
+      { "level": 13, "spellIds": ["spell.greater-invisibility"] },
+      { "level": 17, "spellIds": ["spell.seeming"] }
+    ]
+  },
+  {
+    "id": "subclass.ranger.horizon-walker",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.protection-from-evil-and-good"] },
+      { "level": 5, "spellIds": ["spell.misty-step"] },
+      { "level": 9, "spellIds": ["spell.haste"] },
+      { "level": 13, "spellIds": ["spell.banishment"] },
+      { "level": 17, "spellIds": ["spell.teleportation-circle"] }
+    ]
+  },
+  {
+    "id": "subclass.ranger.monster-slayer",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.protection-from-evil-and-good"] },
+      { "level": 5, "spellIds": ["spell.zone-of-truth"] },
+      { "level": 9, "spellIds": ["spell.magic-circle"] },
+      { "level": 13, "spellIds": ["spell.banishment"] },
+      { "level": 17, "spellIds": ["spell.hold-monster"] }
+    ]
+  },
+  {
+    "id": "subclass.ranger.fey-wanderer",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.charm-person"] },
+      { "level": 5, "spellIds": ["spell.misty-step"] },
+      { "level": 9, "spellIds": ["spell.dispel-magic"] },
+      { "level": 13, "spellIds": ["spell.dimension-door"] },
+      { "level": 17, "spellIds": ["spell.mislead"] }
+    ]
+  },
+  {
+    "id": "subclass.ranger.swarmkeeper",
+    "grantedSpells": [
+      { "level": 3, "spellIds": ["spell.mage-hand", "spell.faerie-fire"] },
+      { "level": 5, "spellIds": ["spell.web"] },
+      { "level": 9, "spellIds": ["spell.gaseous-form"] },
+      { "level": 13, "spellIds": ["spell.arcane-eye"] },
+      { "level": 17, "spellIds": ["spell.insect-plague"] }
+    ]
+  },
+  {
+    "id": "subclass.sorcerer.aberrant-mind",
+    "grantedSpells": [
+      {
+        "level": 1,
+        "spellIds": ["spell.mind-sliver", "spell.arms-of-hadar", "spell.dissonant-whispers"]
+      },
+      { "level": 3, "spellIds": ["spell.calm-emotions", "spell.detect-thoughts"] },
+      { "level": 5, "spellIds": ["spell.hunger-of-hadar", "spell.sending"] },
+      { "level": 7, "spellIds": ["spell.black-tentacles", "spell.summon-aberration"] },
+      { "level": 9, "spellIds": ["spell.telepathic-bond", "spell.telekinesis"] }
+    ]
+  },
+  {
+    "id": "subclass.sorcerer.clockwork-soul",
+    "grantedSpells": [
+      { "level": 1, "spellIds": ["spell.alarm", "spell.protection-from-evil-and-good"] },
+      { "level": 3, "spellIds": ["spell.aid", "spell.lesser-restoration"] },
+      { "level": 5, "spellIds": ["spell.dispel-magic", "spell.protection-from-energy"] },
+      { "level": 7, "spellIds": ["spell.freedom-of-movement", "spell.summon-construct"] },
+      { "level": 9, "spellIds": ["spell.greater-restoration", "spell.wall-of-force"] }
+    ]
+  }
+]

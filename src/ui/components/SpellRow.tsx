@@ -16,6 +16,8 @@ interface SpellRowProps {
   dc?: number;
   attack?: number;
   castingClass?: string;
+  /** Subclass that keeps this spell always ready and free of the limits (domain, oath, ...). */
+  alwaysFrom?: string;
   slots: readonly { level: number; max: number; used: number }[];
   /** Economy slot this spell needs is spent ("Action", "Bonus action", ...). */
   spent?: string;
@@ -34,6 +36,7 @@ export function SpellRow({
   dc,
   attack,
   castingClass,
+  alwaysFrom,
   slots,
   spent,
   unavailable,
@@ -57,6 +60,13 @@ export function SpellRow({
   const meta = (
     <>
       {castingClass && `${castingClass} · `}
+      {/* Phones are narrow: the row says "Always"; Manage spells names the subclass. */}
+      {alwaysFrom && (
+        <span className="text-accent" title={`Always prepared: ${alwaysFrom}`}>
+          Always<span className="sr-only"> prepared ({alwaysFrom})</span>
+        </span>
+      )}
+      {alwaysFrom && ' · '}
       <span className={type.text}>{type.label}</span> · {details}
       {spell.save && <OverrideMarker override={spell.dcOverride} />}
       {spell.attack && <OverrideMarker override={spell.attackOverride} />}

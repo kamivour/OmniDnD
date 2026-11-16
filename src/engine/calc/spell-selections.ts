@@ -1,5 +1,6 @@
 import { sourceAllows } from './campaign-rules';
 import { entryCasting } from './casting';
+import { grantedSpells } from './granted-spells';
 import type { Registry } from '../registry';
 import type { SpellDef } from '../schema';
 import type { CharacterState, Sheet } from './sheet';
@@ -23,6 +24,8 @@ export interface SpellSelectionDetails {
   classLevel: number;
   maxSpellLevel: number;
   selection: { known: string[]; prepared: string[] };
+  /** Subclass spells that are always ready and never counted (domain, oath, ...). */
+  granted: { id: string; from: string }[];
   cantrips: SpellSelectionCount;
   known: SpellSelectionCount;
   prepared: SpellSelectionCount;
@@ -149,9 +152,17 @@ export function spellSelectionDetails(
     known: unique(records.flatMap((entry) => entry.known)),
     prepared: unique(records.flatMap((entry) => entry.prepared ?? [])),
   };
-  const cantripIds = selection.known.filter((id) => spell(ctx, id)?.level === 0);
-  const knownIds = selection.known.filter((id) => (spell(ctx, id)?.level ?? 0) > 0);
-  const preparedCount = selection.prepared.filter((id) => (spell(ctx, id)?.level ?? 0) > 0).length;
+  const granted = grantedSpells(ctx.registry, ctx.build)
+    .filter((entry) => entry.classId === classId)
+    .map(({ spellId, from }) => ({ id: spellId, from }));
+  const grantedIds = new Set(granted.map((entry) => entry.id));
+  // A granted spell never uses up a pick, even if it was also chosen by hand.
+  const counted = (id: string) => !grantedIds.has(id);
+  const cantripIds = selection.known.filter((id) => spell(ctx, id)?.level === 0 && counted(id));
+  const knownIds = selection.known.filter((id) => (spell(ctx, id)?.level ?? 0) > 0 && counted(id));
+  const preparedCount = selection.prepared.filter(
+    (id) => (spell(ctx, id)?.level ?? 0) > 0 && counted(id),
+  ).length;
   const cantripLimit =
     mode === 'unsupported'
       ? undefined
@@ -179,7 +190,8 @@ export function spellSelectionDetails(
         entry.kind === 'spell' &&
         entry.ruleset === ctx.campaign.ruleset &&
         sourceAllows(ctx.campaign, entry) &&
-        entry.classes.includes(casting?.spellList ?? classId),
+        entry.classes.includes(casting?.spellList ?? classId) &&
+        !grantedIds.has(entry.id),
     )
     .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
   const leveled = eligible.filter((entry) => entry.level > 0 && entry.level <= maximum);
@@ -191,6 +203,7 @@ export function spellSelectionDetails(
     classLevel,
     maxSpellLevel: maximum,
     selection,
+    granted,
     cantrips: {
       ids: cantripIds,
       count: cantripIds.length,

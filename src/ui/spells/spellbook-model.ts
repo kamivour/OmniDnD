@@ -1,4 +1,5 @@
 import type { CharacterState, Sheet } from '../../engine/calc/sheet';
+import { grantedSpells, spellListsWithGrants } from '../../engine/calc/granted-spells';
 import { spellSelectionDetails, type SpellSelectionMode } from '../../engine/calc/spell-selections';
 import type { Registry } from '../../engine/registry';
 import type { SpellDef } from '../../engine/schema';
@@ -7,6 +8,8 @@ import type { Cost, SpellView } from '../fixtures/the-fool';
 export interface SpellbookEntry {
   spell: SpellView;
   classId: string;
+  /** Subclass that keeps this spell always ready (domain, oath, ...). */
+  alwaysFrom?: string;
   dc?: number;
   attack?: number;
 }
@@ -65,7 +68,13 @@ export function spellbookModel(
   const entries: SpellbookEntry[] = [];
   const unsupportedClassIds = new Set<string>();
 
-  for (const selection of state.build.spells) {
+  const granted = new Map(
+    grantedSpells(registry, state.build).map((entry) => [
+      `${entry.classId}:${entry.spellId}`,
+      entry.from,
+    ]),
+  );
+  for (const selection of spellListsWithGrants(registry, state.build)) {
     const casting = byClass.get(selection.classId);
     const derived = sheet.spellcasting.find((entry) => entry.classId === selection.classId);
     if (!casting && (selection.known.length > 0 || (selection.prepared?.length ?? 0) > 0))
@@ -80,9 +89,11 @@ export function spellbookModel(
         ...(derived?.saveDc.override ? { dcOverride: derived.saveDc.override } : {}),
         ...(derived?.attack.override ? { attackOverride: derived.attack.override } : {}),
       };
+      const from = granted.get(key);
       entries.push({
         spell,
         classId: selection.classId,
+        ...(from ? { alwaysFrom: from } : {}),
         ...(casting ? { dc: casting.dc, attack: casting.attack } : {}),
       });
     }

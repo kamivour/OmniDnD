@@ -1,5 +1,6 @@
 import type { SpellcastingStats } from '../calc/sheet';
 import { entryCasting } from '../calc/casting';
+import { spellListsWithGrants } from '../calc/granted-spells';
 import { isPreparedCaster2014 } from '../calc/spell-selections';
 import type { DamageType } from '../rules2014';
 import type { SpellDef } from '../schema';
@@ -82,7 +83,7 @@ export function spellCastDetails(
   options: SpellCastOptions,
 ): SpellCastDetails {
   const spell = ctx.registry.get('spell', options.spellId);
-  const associations = ctx.build.spells.filter(
+  const associations = spellListsWithGrants(ctx.registry, ctx.build).filter(
     (list) => list.known.includes(spell.id) || list.prepared?.includes(spell.id),
   );
   const classIds = [...new Set(associations.map((list) => list.classId))];

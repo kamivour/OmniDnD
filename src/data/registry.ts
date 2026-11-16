@@ -9,6 +9,7 @@ import summaries from '../../data/content/summaries.json';
 import featureMechanics from '../../data/mechanics/features.json';
 import itemMechanics from '../../data/mechanics/items.json';
 import spellMechanics from '../../data/mechanics/spells.json';
+import subclassMechanics from '../../data/mechanics/subclasses.json';
 import srdBackgrounds from '../../data/srd/backgrounds.json';
 import srdClasses from '../../data/srd/classes.json';
 import srdConditions from '../../data/srd/conditions.json';
@@ -56,6 +57,7 @@ export const mechanicsPacks = {
   features: featureMechanics,
   items: itemMechanics,
   spells: spellMechanics,
+  subclasses: subclassMechanics,
 };
 
 /** All bundled reference data. Throws at load if any pack or overlay is invalid. */

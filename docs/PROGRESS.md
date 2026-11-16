@@ -355,6 +355,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-14 — Ability score improvement says when feats are off for the campaign and links to Campaign settings.
 - 2026-11-14 — Number fields block letters and stray signs on input, so ability scores and level stay numeric.
 - 2026-11-14 — Tasha's custom origin moves each racial increase to a different ability, on the sheet and when creating a character.
+- 2026-11-16 — Domain, oath and other subclass spells are always prepared, marked "Always", castable, and free of prepared or known limits (D204).
 - 2026-11-16 — Midnight theme title uses the Cinzel lettering of Dark and Parchment; Midnight headings keep the phone font.
 - 2026-11-16 — Manage spells hides spell-type editing in a closed "Change spell types (optional)" section with a plain explanation (D203).
 - 2026-11-16 — Fixed "Saved data is invalid: changedAt" after party sync: server times are stored in the app's format, and saves already affected load again.

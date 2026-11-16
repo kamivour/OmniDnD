@@ -393,4 +393,15 @@ describe('spellbookModel', () => {
     expect(spell?.lines).toEqual(def.fullText?.split(/\n\s*\n/));
     expect(spell?.url).toBe('https://www.dndbeyond.com/sources/dnd/basic-rules-2014');
   });
+
+  it('lists domain spells as always ready with the subclass name', () => {
+    const state = character('class.cleric', 3);
+    state.build.classes = [{ ...state.build.classes[0]!, subclassId: 'subclass.cleric.light' }];
+    const entries = model(state).entries;
+    expect(entries.find((entry) => entry.spell.id === 'spell.scorching-ray')).toMatchObject({
+      classId: 'class.cleric',
+      alwaysFrom: 'Light Domain',
+    });
+    expect(entries.find((entry) => entry.spell.id === 'spell.daylight')).toBeUndefined();
+  });
 });

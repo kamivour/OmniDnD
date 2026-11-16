@@ -238,6 +238,18 @@ export const SubclassDefSchema = z
       z.strictObject({ level: z.int().min(1).max(20), featureId: refId('feature') }),
     ),
     spellcasting: SpellcastingSchema.optional(),
+    /**
+     * Domain, oath and similar spells by class level: always prepared (or known) and never
+     * counted against the class's limits.
+     */
+    grantedSpells: z
+      .array(
+        z.strictObject({
+          level: z.int().min(1).max(20),
+          spellIds: z.array(refId('spell')).min(1),
+        }),
+      )
+      .optional(),
   })
   .refine(srdTextOnly, SRD_TEXT_ONLY);
 

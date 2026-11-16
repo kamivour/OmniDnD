@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-16 14:02 — Domain and oath spells are always prepared
+
+- Clerics, paladins, druids, rangers, artificers and some sorcerers now get their subclass spells (for example Light Domain's Burning Hands and Faerie Fire) automatically when they reach the right level.
+- These spells show on the Spells screen marked "Always", can be cast without warnings, and never use up prepared or known picks. Manage spells lists them by name.
+- Circle of the Land and warlock patron spells are not added yet: Land needs a land choice, and patron spells only widen the list you pick from.
+- Checks pass.
+
 ## 2026-11-16 13:25 — Midnight title uses the app lettering
 
 - In the Midnight theme, the OmniDnD title now uses the same carved lettering as Dark and Parchment instead of the plain phone font.

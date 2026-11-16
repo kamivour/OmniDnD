@@ -1,6 +1,7 @@
 import { registry, registryFor } from '../../data/registry';
 import { TOOLS } from '../../data/tools';
 import { TOOL_OBJECTIVE_LABELS } from '../../engine/calc/tools';
+import { spellListsWithGrants } from '../../engine/calc/granted-spells';
 import { searchRules } from '../../engine/calc/rules-search';
 import type { FindEntry } from '../../engine/calc/find';
 import type { Sheet } from '../../engine/calc/sheet';
@@ -34,7 +35,7 @@ export function characterEntries(build: CharacterBuild, sheet: Sheet): FindEntry
   const add = (entry: FindEntry) => {
     if (!entries.has(entry.id)) entries.set(entry.id, entry);
   };
-  for (const list of build.spells) {
+  for (const list of spellListsWithGrants(own, build)) {
     for (const id of [...list.known, ...(list.prepared ?? [])]) {
       const spell = own.entries.get(id);
       if (spell)

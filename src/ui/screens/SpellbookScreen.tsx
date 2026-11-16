@@ -414,12 +414,13 @@ export function SpellbookScreen() {
                 </button>
               ))}
               <ul className="flex flex-col gap-2">
-                {group.map(({ spell, classId, dc, attack, ritualAvailable }) => (
+                {group.map(({ spell, classId, dc, attack, ritualAvailable, alwaysFrom }) => (
                   <SpellRow
                     key={`${classId}:${spell.id}`}
                     spell={spell}
                     dc={dc}
                     attack={attack}
+                    alwaysFrom={alwaysFrom}
                     favorite={state.build.favorites.includes(spell.id)}
                     onFavorite={() => {
                       const favorite = state.build.favorites.includes(spell.id);

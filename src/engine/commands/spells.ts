@@ -1,5 +1,6 @@
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from '../rules2014';
 import { wornArmor } from '../calc/equipment';
+import { spellListsWithGrants } from '../calc/granted-spells';
 import type { SpellDef } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
 import { previewSpellHealing, spellCastDetails, type SpellCastDetails } from './spell-options';
@@ -130,8 +131,8 @@ export function bonusActionSpellChecks(
   return [];
 }
 
-function knowsSpell({ build }: CommandContext, spellId: string): string | undefined {
-  return build.spells.find(
+function knowsSpell({ build, registry }: CommandContext, spellId: string): string | undefined {
+  return spellListsWithGrants(registry, build).find(
     (list) => list.known.includes(spellId) || list.prepared?.includes(spellId),
   )?.classId;
 }

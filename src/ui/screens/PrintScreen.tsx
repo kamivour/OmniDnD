@@ -4,6 +4,7 @@ import { useStore } from 'zustand';
 import { characterStore } from '../../state/character-store';
 import { registry, registryFor } from '../../data/registry';
 import { ABILITIES } from '../../engine/calc/abilities';
+import { spellListsWithGrants } from '../../engine/calc/granted-spells';
 import { SKILLS, SKILL_ABILITY } from '../../engine/rules2014';
 import { signed, skillName } from '../format';
 import { PlaceholderScreen } from './PlaceholderScreen';
@@ -63,7 +64,7 @@ function PrintSheet() {
     })
     .join(', ');
   const features = sheet.features.filter(({ def }) => def.origin !== 'race');
-  const spellLists = build.spells.map((list) => ({
+  const spellLists = spellListsWithGrants(reg, build).map((list) => ({
     classId: list.classId,
     spells: [...new Set([...list.known, ...(list.prepared ?? [])])]
       .map((id) => reg.get('spell', id))
