@@ -2032,5 +2032,25 @@
         }
       ]
     }
+  },
+  {
+    "id": "feature.feat.elemental-adept-acid",
+    "elementalAdept": "acid"
+  },
+  {
+    "id": "feature.feat.elemental-adept-cold",
+    "elementalAdept": "cold"
+  },
+  {
+    "id": "feature.feat.elemental-adept-fire",
+    "elementalAdept": "fire"
+  },
+  {
+    "id": "feature.feat.elemental-adept-lightning",
+    "elementalAdept": "lightning"
+  },
+  {
+    "id": "feature.feat.elemental-adept-thunder",
+    "elementalAdept": "thunder"
   }
 ]

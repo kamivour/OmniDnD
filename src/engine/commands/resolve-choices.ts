@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { asiLevels, applyLevelChoices, LevelChoicesSchema } from '../calc/level-choices';
 import {
   familyIncludes,
+  FEAT_OPTION_FAMILIES,
   OPTION_FAMILIES,
   pendingChoices,
   RACE_OPTION_FAMILIES,
@@ -64,14 +65,18 @@ function prepare(ctx: CommandContext, input: ResolveChoicesPayload) {
         (row) =>
           (row.raceId === ctx.build.raceId || row.raceId === ctx.build.subraceId) &&
           familyIncludes(row, id),
+      ) ??
+      FEAT_OPTION_FAMILIES.find(
+        (row) => ctx.build.featureIds.includes(row.featId) && familyIncludes(row, id),
       );
     if (!family) return { checks: [block('That feature is not a pick for this class')] };
     const picked = (choices.features ?? []).filter((other) => familyIncludes(family, other));
-    const pick = open.find((row) => row.prefix === family.prefix);
-    const room = pick?.count ?? 0;
+    // A class list and a feat (Fighting Initiate) can share a prefix; their open picks add up.
+    const rows = open.filter((row) => row.kind === 'option' && row.prefix === family.prefix);
+    const room = rows.reduce((sum, row) => sum + row.count, 0);
     if (picked.length > room)
       return { checks: [block(`Only ${room} ${family.label} picks are open`)] };
-    if (!pick?.optionIds?.includes(id))
+    if (!rows.some((row) => row.optionIds?.includes(id)))
       return { checks: [block('That option is not available in this campaign')] };
   }
 

@@ -299,6 +299,8 @@ export const FeatureDefSchema = z
     breath: z.strictObject({ ability: AbilitySchema }).optional(),
     /** Elemental Affinity: add this ability's modifier to one damage roll of a spell of the ancestry's type. */
     affinity: z.strictObject({ ability: AbilitySchema }).optional(),
+    /** Elemental Adept pick: spells of this damage type ignore resistance and treat 1s as 2s. */
+    elementalAdept: DamageTypeSchema.optional(),
     /** Extra damage on every hit with a melee weapon (Improved Divine Smite). */
     meleeDamage: z.object({ dice: DiceSchema, type: DamageTypeSchema }).optional(),
     /** Optional -5 to hit for +10 damage with proficient weapons (Great Weapon Master, Sharpshooter). */

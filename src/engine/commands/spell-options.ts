@@ -58,6 +58,8 @@ export interface SpellCastDetails {
     type: DamageType;
     /** Elemental Affinity: add this to one damage roll. */
     affinity?: { name: string; bonus: number };
+    /** Elemental Adept for this damage type: ignore resistance, treat 1s as 2s. */
+    adept?: string;
   };
   upcastText?: string;
   feat?: FeatCastDetails;
@@ -157,7 +159,7 @@ export function spellCastDetails(
   };
 }
 
-/** Damage dice plus Elemental Affinity's bonus when the spell's type matches the ancestry. */
+/** Damage dice plus Elemental Affinity's bonus and Elemental Adept when the spell's type matches. */
 function spellDamage(
   ctx: SpellOptionsContext,
   damage: NonNullable<SpellDef['damage']>,
@@ -167,7 +169,13 @@ function spellDamage(
     Object.entries(ctx.sheet.abilities).map(([ability, value]) => [ability, value.mod]),
   ) as Record<Ability, number>;
   const affinity = elementalAffinity(ctx.sheet.features, mods, damage.type);
-  return { ...deriveRoll(damage), type: damage.type, ...(affinity ? { affinity } : {}) };
+  const adept = ctx.sheet.features.find(({ def }) => def.elementalAdept === damage.type)?.def.name;
+  return {
+    ...deriveRoll(damage),
+    type: damage.type,
+    ...(affinity ? { affinity } : {}),
+    ...(adept ? { adept } : {}),
+  };
 }
 
 /** Number of free castings left for one feat spell. */

@@ -171,6 +171,76 @@
   },
   {
     "kind": "feature",
+    "id": "feature.feat.elemental-adept-acid",
+    "name": "Elemental Adept: Acid",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your spells ignore resistance to acid damage. When you roll acid damage for a spell, treat any 1 on a die as a 2."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.elemental-adept-cold",
+    "name": "Elemental Adept: Cold",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your spells ignore resistance to cold damage. When you roll cold damage for a spell, treat any 1 on a die as a 2."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.elemental-adept-fire",
+    "name": "Elemental Adept: Fire",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your spells ignore resistance to fire damage. When you roll fire damage for a spell, treat any 1 on a die as a 2."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.elemental-adept-lightning",
+    "name": "Elemental Adept: Lightning",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your spells ignore resistance to lightning damage. When you roll lightning damage for a spell, treat any 1 on a die as a 2."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.feat.elemental-adept-thunder",
+    "name": "Elemental Adept: Thunder",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summary": {
+      "effect": "Your spells ignore resistance to thunder damage. When you roll thunder damage for a spell, treat any 1 on a die as a 2."
+    },
+    "summaryReviewed": false,
+    "origin": "class",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
     "id": "feature.feat.grappler",
     "name": "Grappler",
     "ruleset": "5e-2014",

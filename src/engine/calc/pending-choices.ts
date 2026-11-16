@@ -198,6 +198,41 @@ export const RACE_OPTION_FAMILIES: (OptionFamily & { raceId: string })[] = [
   },
 ];
 
+/**
+ * Feats that grant one pick from an option list. A class list with the same prefix shares the
+ * count, so a fighter with Fighting Initiate picks two different styles.
+ */
+export const FEAT_OPTION_FAMILIES: (OptionFamily & { featId: string })[] = [
+  {
+    classId: '',
+    featId: 'feature.feat.fighting-initiate',
+    label: 'Fighting Initiate',
+    prefix: 'feature.fighter.fighting-style-',
+    tasha: [
+      'feature.tce.fighting-style-blind-fighting',
+      'feature.tce.fighting-style-interception',
+      'feature.tce.fighting-style-superior-technique',
+      'feature.tce.fighting-style-thrown-weapon-fighting',
+      'feature.tce.fighting-style-unarmed-fighting',
+    ],
+    totals: [[1, 1]],
+  },
+  {
+    classId: '',
+    featId: 'feature.feat.eldritch-adept',
+    label: 'Eldritch Adept',
+    prefix: 'feature.warlock.eldritch-invocation-',
+    totals: [[1, 1]],
+  },
+  {
+    classId: '',
+    featId: 'feature.feat.elemental-adept',
+    label: 'Elemental Adept',
+    prefix: 'feature.feat.elemental-adept-',
+    totals: [[1, 1]],
+  },
+];
+
 /** Skills (or tools) with double proficiency: Rogue 1 and 6, Bard 3 and 10. */
 export const EXPERTISE_TOTALS: Record<string, [number, number][]> = {
   'class.rogue': [
@@ -246,6 +281,21 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
   const { build, campaign } = state;
   const className = (id: string) => registry.entries.get(id)?.name ?? id;
   const items: PendingChoice[] = [];
+  const featAllowance = (prefix: string) =>
+    FEAT_OPTION_FAMILIES.filter(
+      (family) => family.prefix === prefix && build.featureIds.includes(family.featId),
+    ).length;
+  /** Picks the character's classes grant from a list with this prefix. */
+  const classAllowance = (prefix: string) =>
+    build.classes.reduce((sum, entry) => {
+      const family = OPTION_FAMILIES.find(
+        (row) =>
+          row.prefix === prefix &&
+          row.classId === entry.classId &&
+          (row.subclassId === undefined || row.subclassId === entry.subclassId),
+      );
+      return sum + (family ? totalAt(family.totals, entry.level) : 0);
+    }, 0);
 
   for (const entry of build.classes) {
     const def = registry.entries.get(entry.classId);
@@ -274,7 +324,12 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
     )) {
       const options = familyOptionIds(family, registry, campaign);
       const taken = build.featureIds.filter((id) => familyIncludes(family, id)).length;
-      const open = Math.min(totalAt(family.totals, entry.level) - taken, options.length - taken);
+      const classTotal = totalAt(family.totals, entry.level);
+      const allowance = classTotal + featAllowance(family.prefix);
+      const open = Math.min(
+        Math.max(0, Math.min(classTotal, allowance - taken)),
+        options.length - taken,
+      );
       if (open > 0)
         items.push({
           id: `option:${family.prefix}`,
@@ -321,6 +376,29 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
         area: 'choices',
         prefix: family.prefix,
         optionIds: options,
+      });
+  }
+
+  for (const family of FEAT_OPTION_FAMILIES) {
+    if (!build.featureIds.includes(family.featId)) continue;
+    const options = familyOptionIds(family, registry, campaign);
+    const taken = build.featureIds.filter((id) => familyIncludes(family, id)).length;
+    const classTotal = classAllowance(family.prefix);
+    const allowance = classTotal + featAllowance(family.prefix);
+    const classOpen = Math.max(0, Math.min(classTotal, allowance - taken));
+    const open = Math.min(allowance - taken - classOpen, options.length - taken - classOpen);
+    if (open > 0)
+      items.push({
+        id: `option:${family.featId}`,
+        kind: 'option',
+        classId: build.classes[0]?.classId ?? '',
+        label: `${family.label}: pick ${open}`,
+        count: open,
+        optional: false,
+        area: 'choices',
+        prefix: family.prefix,
+        optionIds: options,
+        featureId: family.featId,
       });
   }
 

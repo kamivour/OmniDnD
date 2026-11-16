@@ -94,6 +94,8 @@ export function SpellCastControls({
                 {details.damage.type}.
                 {details.damage.affinity &&
                   ` ${details.damage.affinity.name}: ${signed(details.damage.affinity.bonus)} to one damage roll.`}
+                {details.damage.adept &&
+                  ` ${details.damage.adept}: ignores resistance; count 1s on the dice as 2s.`}
               </p>
             )}
             {entryFeat && (

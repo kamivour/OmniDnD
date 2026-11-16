@@ -118,6 +118,7 @@ interface FeatureDef extends RefBase {
   concentration?: true;                   // ends spell concentration when used (Favored Foe)
   stationary?: true;                      // warns after moving; speed 0 for the turn (Steady Aim)
   dieBonus?: "proficiency";               // add proficiency to the die (Quickened Healing)
+  elementalAdept?: DamageType;              // Elemental Adept pick: spells of this type ignore resistance, 1s count as 2s
 }
 ```
 
