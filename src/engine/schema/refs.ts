@@ -318,6 +318,10 @@ export const FeatureDefSchema = z
     /** Optional -5 to hit for +10 damage with proficient weapons (Great Weapon Master, Sharpshooter). */
     powerAttack: z.enum(['heavy-melee', 'ranged']).optional(),
     modifiers: z.array(ModifierSchema).optional(),
+    /** Dual Wielder: +1 AC while a melee weapon is equipped in each hand (two melee weapons, no shield). */
+    dualWieldAc: z.literal(true).optional(),
+    /** Soul of Artifice: +1 to every saving throw for each attuned item. */
+    attunedSaves: z.literal(true).optional(),
     /** Reminders shown beside a save, initiative or ability checks (Evasion, Reliable Talent). */
     rollNotes: z
       .array(

@@ -95,6 +95,8 @@ interface FeatureDef extends RefBase {
   usesFrom?: string;                    // spends another feature's uses (Cutting Words → Bardic Inspiration)
   die?: DieByLevel;
   modifiers?: Modifier[];               // passive math, e.g. JoAT
+  dualWieldAc?: true;                   // +1 AC with two melee weapons equipped and no shield (Dual Wielder)
+  attunedSaves?: true;                  // +1 to every save per attuned item (Soul of Artifice)
   rollNotes?: { on: Ability | "initiative" | "checks"; text }[];  // reminders beside a save, initiative or checks (Evasion)
   defenses?: { resistances?; immunities?; vulnerabilities?; saveAdvantages?; magicalSleepImmunity?; conditionImmunities? };  // display; conditionImmunities warns on marking that condition
   hook?: string;                        // complex logic in src/engine/hooks/<id>.ts

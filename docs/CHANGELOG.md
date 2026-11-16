@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 01:58 — Dual Wielder and Soul of Artifice bonuses
+
+- Dual Wielder now adds +1 AC when two melee weapons are equipped and no shield is.
+- An artificer at level 20 gets +1 to every saving throw for each attuned item (Soul of Artifice).
+- Tap AC or a save to see where the bonus comes from.
+- Checks pass.
+
 ## 2026-11-17 01:51 — Reminders for passive class features
 
 - The sheet now shows Danger Sense and Evasion under your DEX save, Feral Instinct beside initiative, and Reliable Talent under skills.

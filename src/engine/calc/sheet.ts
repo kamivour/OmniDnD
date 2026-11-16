@@ -1,5 +1,6 @@
 import { characterRegistry, type Registry } from '../registry';
 import { entryCasting } from './casting';
+import { attunedItems } from './attunement';
 import { recordedLevel, xpForLevel } from './advancement';
 import { encumbrance, type Encumbrance } from './encumbrance';
 import {
@@ -255,6 +256,10 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
   const featureSaves = new Set(
     [...featureIds].flatMap((id) => FEATURE_SAVE_PROFICIENCIES[id] ?? []),
   );
+  const attunedCount = attunedItems({ build, live }).length;
+  const attunedSaveParts: Part[] = features
+    .filter(({ def }) => def.attunedSaves && attunedCount > 0)
+    .map(({ def }) => ({ label: def.name, value: attunedCount }));
   const saves = Object.fromEntries(
     ABILITIES.map((ability) => {
       const proficient = profs.saves.includes(ability) || featureSaves.has(ability);
@@ -265,7 +270,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
           ...value(
             overridePath('saves', ability),
             `${ability} save`,
-            sumParts([...parts, ...modifierParts('saves')]),
+            sumParts([...parts, ...modifierParts('saves'), ...attunedSaveParts]),
           ),
           proficient,
         },
@@ -478,7 +483,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       armorClass(
         equipped,
         mods.DEX,
-        modifierParts('ac'),
+        [...modifierParts('ac'), ...dualWieldParts(features, equipped)],
         unarmoredDefenses(features, mods),
         featureIds,
       ),
@@ -670,6 +675,16 @@ function unarmoredDefenses(
           ];
     return [{ shield: rule.shield, parts }];
   });
+}
+
+/** Dual Wielder's +1 AC needs a separate melee weapon in each hand, so no shield. */
+function dualWieldParts(features: readonly CharacterFeature[], equipped: Equipped): Part[] {
+  const melee = equipped.filter(({ def }) => def.weapon?.type === 'melee').length;
+  const shield = equipped.some(({ def }) => def.armor?.category === 'shield');
+  if (melee < 2 || shield) return [];
+  return features
+    .filter(({ def }) => def.dualWieldAc)
+    .map(({ def }) => ({ label: def.name, value: 1 }));
 }
 
 function wornArmor(equipped: Equipped) {
