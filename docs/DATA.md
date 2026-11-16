@@ -110,6 +110,7 @@ interface FeatureDef extends RefBase {
   ancestry?: { type; save?; area? };     // draconic ancestry pick (D213)
   breath?: { ability };                   // Breath Weapon save DC ability
   affinity?: { ability };                 // Elemental Affinity spell damage bonus
+  attunementSlots?: 4..6;                 // attunement limit (Magic Item Adept, Savant, Master)
 }
 ```
 

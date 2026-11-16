@@ -5,6 +5,7 @@ import { encumbrance, type Encumbrance } from './encumbrance';
 import {
   CARRY_PER_STR,
   HEAVY_ARMOR_SPEED_PENALTY,
+  ATTUNEMENT_LIMIT,
   SKILL_ABILITY,
   SKILLS,
   SPEED_ZERO_CONDITIONS,
@@ -101,6 +102,8 @@ export interface Sheet {
   attacks: WeaponAttack[];
   /** Attacks per Attack action and the features that set it (Extra Attack). */
   attackAction: { count: number; sources: string[] };
+  /** Magic items you can attune to at once: 3, more for an artificer from level 10. */
+  attunementLimit: number;
   /** Dragonborn Breath Weapon, once a Draconic Ancestry is picked. */
   breathWeapon?: BreathWeapon;
   /** Applied conditions, from `live.conditions` and active effects. */
@@ -553,6 +556,10 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     grantedProficiencies: owned.granted,
     attacks,
     attackAction: attackAction(features),
+    attunementLimit: Math.max(
+      ATTUNEMENT_LIMIT,
+      ...features.map(({ def }) => def.attunementSlots ?? 0),
+    ),
     ...withBreath(breathWeapon(features, mods, proficiency)),
     conditions,
     encumbrance: load,

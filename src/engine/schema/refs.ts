@@ -254,6 +254,8 @@ export const FeatureDefSchema = z
     attacks: z.record(LevelKeySchema, z.int().min(2).max(4)).optional(),
     /** Extra weapon damage dice on a melee critical hit (Savage Attacks, Brutal Critical). */
     critDice: z.record(LevelKeySchema, z.int().min(1).max(3)).optional(),
+    /** Raises how many magic items you can attune to at once (Magic Item Adept: 4). */
+    attunementSlots: z.int().min(4).max(6).optional(),
     /** Use at 0 HP to stand back up at 1 HP instead (Relentless Endurance). */
     dropToOne: z.literal(true).optional(),
     /** Spend a spell slot on a hit for extra damage (Divine Smite, Eldritch Smite). */

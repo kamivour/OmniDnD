@@ -3,7 +3,6 @@ import { useStore } from 'zustand';
 import { registryFor } from '../../data/registry';
 import { attunedItems } from '../../engine/calc/attunement';
 import { setItemAttunement } from '../../engine/commands';
-import { ATTUNEMENT_LIMIT } from '../../engine/rules2014';
 import { storageStatusStore } from '../../state/persistence';
 import { useCommand } from '../commands/command-context';
 import { Field, inputClass } from '../components/fields';
@@ -15,7 +14,8 @@ const button = 'min-h-11 rounded-btn border border-border px-3 text-sm disabled:
 
 /** A recorded bond remains separate from equipment, quantity and elapsed rest time. */
 export function InventoryAttunement() {
-  const { state } = useCharacter();
+  const { state, sheet } = useCharacter();
+  const limit = sheet.attunementLimit;
   const registry = registryFor(state.build);
   const [open, setOpen] = useState(false);
   const opener = useRef<HTMLButtonElement>(null);
@@ -30,7 +30,7 @@ export function InventoryAttunement() {
         <div>
           <h2 className="text-sm font-semibold">Attunement</h2>
           <p className="text-sm tabular-nums text-text-muted">
-            {attuned.length}/{ATTUNEMENT_LIMIT} attuned
+            {attuned.length}/{limit} attuned
           </p>
         </div>
         <button
@@ -43,9 +43,9 @@ export function InventoryAttunement() {
           Manage attunement
         </button>
       </div>
-      {attuned.length > ATTUNEMENT_LIMIT && (
+      {attuned.length > limit && (
         <p role="note" className="text-sm text-warn">
-          More than three bonds are recorded. Review and end a bond before recording another.
+          More than {limit} bonds are recorded. Review and end a bond before recording another.
         </p>
       )}
       {attuned.length > 0 && (
@@ -113,7 +113,7 @@ function AttunementDialog({
     >
       <div className="flex min-w-0 flex-col gap-4">
         <p className="font-semibold tabular-nums">
-          {attuned.length}/{ATTUNEMENT_LIMIT} attuned
+          {attuned.length}/{sheet.attunementLimit} attuned
         </p>
         <p className="text-sm text-text-muted">
           Attuning or voluntarily ending a bond normally needs a focused short rest. Check contact,

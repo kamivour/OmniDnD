@@ -3,7 +3,6 @@ import type { Draft } from 'immer';
 import { armorReplacements } from '../calc/equipment';
 import { attunedItems } from '../calc/attunement';
 import { itemUseCost } from '../calc/item-use';
-import { ATTUNEMENT_LIMIT } from '../rules2014';
 import type { ItemDef } from '../schema';
 import type { CharacterData, Command, CommandContext } from './runner';
 import {
@@ -151,8 +150,9 @@ export const setItemAttunement: Command<SetItemAttunementPayload> = {
     if (attuned) {
       if (target.live.qty === 0) return [block('No quantity left to attune')];
       const existing = attunedItems(ctx);
-      if (existing.length >= ATTUNEMENT_LIMIT)
-        return [block(`Already attuned to ${ATTUNEMENT_LIMIT} items; end a recorded bond first`)];
+      const limit = ctx.sheet.attunementLimit;
+      if (existing.length >= limit)
+        return [block(`Already attuned to ${limit} items; end a recorded bond first`)];
       if (existing.some((item) => item.itemId === target.item.itemId))
         return [block(`Already attuned to another copy of ${target.def.name}`)];
       if (target.def.attunement !== true)

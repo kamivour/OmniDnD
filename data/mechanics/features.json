@@ -1911,5 +1911,17 @@
     "affinity": {
       "ability": "CHA"
     }
+  },
+  {
+    "id": "feature.artificer.magic-item-adept",
+    "attunementSlots": 4
+  },
+  {
+    "id": "feature.artificer.magic-item-savant",
+    "attunementSlots": 5
+  },
+  {
+    "id": "feature.artificer.magic-item-master",
+    "attunementSlots": 6
   }
 ]

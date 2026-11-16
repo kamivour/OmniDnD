@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 01:03 — Artificer attunement limit
+
+- Artificers can now attune to 4 items at level 10, 5 at level 14 and 6 at level 18. Inventory shows the new limit, for example "0/4 attuned".
+- Other characters keep the usual limit of 3.
+- Checks pass.
+
 ## 2026-11-17 00:58 — Draconic ancestry
 
 - Dragonborn and Draconic Sorcerers now pick their dragon on the To do screen.
