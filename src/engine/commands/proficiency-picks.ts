@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { proficiencyPickProblem } from '../calc/proficiencies';
+import { featureProficiencies, proficiencyPickProblem } from '../calc/proficiencies';
+import { computeSheet } from '../calc/sheet';
 import { ProficiencyPicksSchema, refId } from '../schema';
 import type { Command, CommandContext } from './runner';
 import { block, warn } from './shared';
@@ -17,14 +18,37 @@ function prepare(ctx: CommandContext, input: ChooseProficienciesPayload) {
   const owned = ctx.sheet.features.find(({ def }) => def.id === featureId);
   if (!owned) return { problem: 'That trait or feature is not on this character' };
   // Skills this feature gave before do not count: the new picks replace them.
-  const previous = new Set(ctx.build.proficiencyPicks?.[featureId]?.skills ?? []);
-  const fromElsewhere = new Set<string>(
-    ctx.sheet.proficiencies.skills.filter(
-      (skill) => !previous.has(skill) || ctx.build.proficiencies.skills.includes(skill),
+  const withoutThisPick = {
+    ...ctx.build,
+    proficiencyPicks: Object.fromEntries(
+      Object.entries(ctx.build.proficiencyPicks ?? {}).filter(([id]) => id !== featureId),
     ),
+  };
+  const fromElsewhere = new Set<string>(
+    featureProficiencies(withoutThisPick, ctx.sheet.features).proficiencies.skills,
   );
   const problem = proficiencyPickProblem(owned.def, picks, ctx.registry, fromElsewhere);
   if (problem) return { problem };
+  const next = computeSheet(
+    {
+      ...ctx,
+      build: {
+        ...ctx.build,
+        proficiencyPicks: { ...ctx.build.proficiencyPicks, [featureId]: picks },
+      },
+    },
+    ctx.registry,
+  ).proficiencies;
+  const before = ctx.sheet.proficiencies;
+  const has = (proficiencies: typeof next, id: string) =>
+    [...proficiencies.skills, ...proficiencies.tools].includes(id);
+  const stranded = before.expertise.find(
+    (id) => next.expertise.includes(id) && has(before, id) && !has(next, id),
+  );
+  if (stranded)
+    return {
+      problem: `Expertise in ${label(stranded, ctx)} needs this proficiency. Change that expertise pick first.`,
+    };
   // Skills picked for an expertise row (Blessings of Knowledge) are fine to repeat.
   const doubles = (skill: string) =>
     owned.def.proficiencies?.choose?.some(

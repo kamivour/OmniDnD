@@ -21,6 +21,67 @@ const proficientSkills = (state: CharacterState) =>
     .map(([id]) => id);
 
 describe('race and feature proficiencies', () => {
+  it('blocks replacing a proficiency used by retained expertise, then permits changing both picks in order', () => {
+    const state = variant((draft) => {
+      draft.build.proficiencies.skills = [];
+      draft.build.proficiencies.expertise = [];
+      draft.build.proficiencyPicks = {};
+      draft.build.featureIds = ['feature.feat.skill-expert'];
+    });
+    const session = new Session(state);
+    session.run(chooseProficiencies, {
+      featureId: VERSATILITY,
+      skills: ['athletics', 'animal-handling'],
+    });
+    session.run(chooseProficiencies, {
+      featureId: 'feature.feat.skill-expert',
+      expertise: ['athletics'],
+    });
+    const before = structuredClone(session.state);
+    const events = structuredClone(session.events);
+    const replacement = { featureId: VERSATILITY, skills: ['arcana', 'animal-handling'] as const };
+    expect(
+      session.preview(chooseProficiencies, { ...replacement, skills: [...replacement.skills] }),
+    ).toEqual({
+      result: 'blocked',
+      reasons: ['Expertise in athletics needs this proficiency. Change that expertise pick first.'],
+    });
+    expect(
+      session.try(chooseProficiencies, { ...replacement, skills: [...replacement.skills] }, true)
+        .result,
+    ).toBe('blocked');
+    expect(session.state).toEqual(before);
+    expect(session.events).toEqual(events);
+    session.run(chooseProficiencies, {
+      featureId: 'feature.feat.skill-expert',
+      expertise: ['animal-handling'],
+    });
+    session.run(chooseProficiencies, { ...replacement, skills: [...replacement.skills] });
+    expect(session.sheet.skills.athletics.proficiency).toBe('none');
+    expect(session.sheet.skills['animal-handling'].proficiency).toBe('expertise');
+    session.state = JSON.parse(JSON.stringify(session.state));
+    session.events = JSON.parse(JSON.stringify(session.events));
+    session.undo();
+    session.undo();
+    expect(session.state).toEqual(before);
+  });
+
+  it('allows replacing a pick when another source still provides the expertise prerequisite', () => {
+    const state = variant((draft) => {
+      draft.build.proficiencies.skills = ['athletics'];
+      draft.build.proficiencies.expertise = ['athletics'];
+      draft.build.proficiencyPicks = {
+        [VERSATILITY]: { skills: ['athletics', 'animal-handling'] },
+      };
+    });
+    const session = new Session(state);
+    session.run(chooseProficiencies, {
+      featureId: VERSATILITY,
+      skills: ['arcana', 'animal-handling'],
+    });
+    expect(session.sheet.skills.athletics.proficiency).toBe('expertise');
+  });
+
   it('keeps The Fool at ten skills and Celestial through stored picks', () => {
     const sheet = computeSheet(freshState, registry);
     expect(proficientSkills(freshState)).toHaveLength(10);

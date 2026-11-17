@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 10:48 — Protect expertise when changing saved skills
+
+- Changing a saved proficiency now explains when existing expertise still needs it. Change that expertise pick first, then replace the skill.
+- Other sources of the same proficiency still count; saved picks are never removed automatically. Check the message and Undo when changing your choices. Checks pass.
+
 ## 2026-11-17 10:48 — Keep Steady Aim through Dash
 
 - Steady Aim now keeps speed at zero for the turn, even after Dash or a reload, without recording movement you did not take.

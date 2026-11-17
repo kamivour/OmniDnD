@@ -277,6 +277,12 @@ Check on a real phone and on a computer.
 - [ ] Try Mount Celestia and Parchment in bright light. Judge whether text is easy to read.
 - [ ] Set Theme effects to Off. Judge whether everything is still and still looks finished.
 
+## Review fixes — 2026-11-17
+
+- [ ] Open To do for a multiclass character who has taken a feat. Judge whether the remaining ability improvement and its resulting Sheet values are clear.
+- [ ] Use Steady Aim, then Dash on a rogue. Judge the zero-speed display and its return after End Turn, including Undo.
+- [ ] Replace a saved skill used by expertise. Judge whether the message makes the required order clear: change expertise first, then the skill.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

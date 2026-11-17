@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D222 | 2026-11-17 | Replacing a proficiency pick is blocked if it would remove the prerequisite of retained expertise; change that expertise pick first. Other proficiency sources count, and no saved picks are removed automatically. | Keep choices valid without silently deleting dependent choices |
 | D221 | 2026-11-17 | Legacy feats without a recorded class and level consume earned improvements once across the character, in recorded class order. To do uses the same allocation when choosing the next class with an open improvement. | Preserve saved choices without inventing advancement history |
 | D1 | 2026-11-01 | D&D 5e **2014** rules only | Campaign uses 2014; mixing editions causes wrong values |
 | D2 | 2026-11-01 | Stack: Vite, React, TypeScript, Tailwind, Zustand, Immer, Dexie, zod, Radix, Floating UI, vite-plugin-pwa, Vitest, Playwright | Typed, fast, offline-capable, well supported |

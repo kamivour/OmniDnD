@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M39 Themes done; all planned milestones complete (see PLAN.md).
-**Next up:** Finish the three review fixes, then manual QA for M26 and M39 by the user.
+**Next up:** Manual QA for the review fixes, M26 and M39 by the user.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -311,7 +311,7 @@ Details in [PLAN.md](PLAN.md).
 
 - [x] Share multiclass ASI accounting between To do and saved choices
 - [x] Keep Steady Aim's speed restriction through Dash until the turn ends
-- [ ] Prevent proficiency changes from leaving dependent expertise invalid
+- [x] Prevent proficiency changes from leaving dependent expertise invalid
 
 ## Backlog (not scheduled)
 
@@ -325,6 +325,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-17 — Saved proficiency changes now protect dependent expertise; change expertise first, then replace the skill. Reload and Undo keep both choices intact.
 - 2026-11-17 — Fixed Steady Aim through Dash, reload and Undo; speed returns when the turn ends or a new turn starts.
 - 2026-11-17 — Fixed multiclass ASI accounting and To do routing; feats consume one improvement across classes, with reload and Undo retained.
 - 2026-11-11 — M27: six PHB subraces, Beast Master with Ranger companion Stats link, guidance and tests.
