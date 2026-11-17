@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { asiLevels, applyLevelChoices, LevelChoicesSchema } from '../calc/level-choices';
+import { applyLevelChoices, LevelChoicesSchema } from '../calc/level-choices';
+import { openAsiChoices } from '../calc/asi-choices';
 import {
   familyIncludes,
   FEAT_OPTION_FAMILIES,
@@ -17,27 +18,6 @@ const ResolveChoicesPayloadSchema = z.strictObject({
 });
 
 export type ResolveChoicesPayload = z.infer<typeof ResolveChoicesPayloadSchema>;
-
-/**
- * The class level an ability score improvement belongs to: the first earned level that no
- * improvement was recorded for, after feats have used up the earliest ones.
- */
-function openAsiLevel(ctx: CommandContext, classId: string, className: string): number | undefined {
-  const level = ctx.build.classes.find((entry) => entry.classId === classId)?.level ?? 0;
-  const used = new Set(
-    ctx.build.abilityScores.bonuses
-      .map((bonus) => bonus.source)
-      .filter((source) => source.startsWith(`ASI: ${className} `))
-      .map((source) => Number(source.slice(`ASI: ${className} `.length))),
-  );
-  const feats = ctx.build.featureIds.filter((id) => {
-    const row = ctx.registry.entries.get(id);
-    return row?.kind === 'feature' && row.origin === 'feat';
-  }).length;
-  return asiLevels(classId)
-    .filter((at) => at <= level && !used.has(at))
-    .slice(feats)[0];
-}
 
 function prepare(ctx: CommandContext, input: ResolveChoicesPayload) {
   const parsed = ResolveChoicesPayloadSchema.safeParse(input);
@@ -82,7 +62,9 @@ function prepare(ctx: CommandContext, input: ResolveChoicesPayload) {
 
   let newLevel = entry.level;
   if (choices.asi !== undefined) {
-    const at = openAsiLevel(ctx, classId, def.name);
+    const at = openAsiChoices(ctx.build, ctx.registry).find(
+      (row) => row.classId === classId,
+    )?.level;
     if (at === undefined) return { checks: [block('No ability score improvement is waiting')] };
     newLevel = at;
   }

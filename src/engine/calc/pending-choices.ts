@@ -2,7 +2,7 @@ import { optionalRules, sourceAllows } from './campaign-rules';
 import type { Registry } from '../registry';
 import { featSpellSources } from './feat-spells';
 import { openProficiencyPicks } from './proficiencies';
-import { asiLevels } from './level-choices';
+import { openAsiChoices } from './asi-choices';
 import { computeSheet, type CharacterState } from './sheet';
 import { spellSelectionDetails } from './spell-selections';
 
@@ -403,25 +403,13 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
   }
 
   // Ability score improvements: earned at class levels, spent by ASI or feat picks.
-  const earned = build.classes.reduce(
-    (sum, entry) => sum + asiLevels(entry.classId).filter((at) => at <= entry.level).length,
-    0,
-  );
-  const spentAsi = new Set(
-    build.abilityScores.bonuses
-      .map((bonus) => bonus.source)
-      .filter((source) => source.startsWith('ASI: ')),
-  ).size;
-  const spentFeats = build.featureIds.filter((id) => {
-    const row = registry.entries.get(id);
-    return row?.kind === 'feature' && row.origin === 'feat';
-  }).length;
-  const asiOpen = earned - spentAsi - spentFeats;
+  const openAsis = openAsiChoices(build, registry);
+  const asiOpen = openAsis.length;
   if (asiOpen > 0)
     items.push({
       id: 'asi',
       kind: 'asi',
-      classId: build.classes[0]?.classId ?? '',
+      classId: openAsis[0]!.classId,
       label: `Ability score improvement or feat${asiOpen > 1 ? ` (${asiOpen})` : ''}`,
       count: asiOpen,
       optional: false,

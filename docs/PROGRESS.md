@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M39 Themes done; all planned milestones complete (see PLAN.md).
-**Next up:** Manual QA for M26 and M39 by the user.
+**Next up:** Finish the three review fixes, then manual QA for M26 and M39 by the user.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -307,6 +307,12 @@ Details in [PLAN.md](PLAN.md).
 - [x] 9. Astral Sea, Mechanus, Barovia, Mount Celestia
 - [x] 10. Gate
 
+## Review fixes
+
+- [x] Share multiclass ASI accounting between To do and saved choices
+- [ ] Keep Steady Aim's speed restriction through Dash until the turn ends
+- [ ] Prevent proficiency changes from leaving dependent expertise invalid
+
 ## Backlog (not scheduled)
 
 - Done 2026-11-09: site live on Netlify with Supabase accounts (HOSTING.md)
@@ -319,6 +325,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-17 — Fixed multiclass ASI accounting and To do routing; feats consume one improvement across classes, with reload and Undo retained.
 - 2026-11-11 — M27: six PHB subraces, Beast Master with Ranger companion Stats link, guidance and tests.
 - 2026-11-12 — M28: nine PHB martial subclasses, maneuver, discipline and totem picks, subclass spellcasting for Eldritch Knight and Arcane Trickster.
 - 2026-11-12 — M29: 18 PHB caster subclasses (Valor, six domains, Moon, Wild Magic, two patrons, seven schools) with Channel Divinity and Wild Shape links.

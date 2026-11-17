@@ -32,6 +32,54 @@ function fighter(level: number): CharacterState {
 const kinds = (state: CharacterState) => pendingChoices(state, registry).map((item) => item.kind);
 
 describe('resolveChoices', () => {
+  it('allocates a legacy feat once across classes and exposes the remaining class in To do', () => {
+    const state = fighter(4);
+    state.build.classes.push({ classId: 'class.wizard', level: 4 });
+    state.build.hpEntries.push(
+      ...Array.from({ length: 4 }, (_, index) => ({
+        level: index + 5,
+        classId: 'class.wizard',
+        value: 4,
+        method: 'average' as const,
+      })),
+    );
+    state.build.featureIds.push('feature.feat.alert');
+    const pending = pendingChoices(state, registry).find((item) => item.kind === 'asi')!;
+    expect(pending).toMatchObject({ count: 1, classId: 'class.wizard' });
+    const result = runCommand(
+      resolveChoices,
+      state,
+      {
+        classId: pending.classId,
+        choices: { asi: { kind: 'abilities', increases: [{ ability: 'INT', value: 2 }] } },
+      },
+      registry,
+      meta,
+    );
+    if (result.result !== 'ok') throw new Error(JSON.stringify(result));
+    expect(result.next.build.abilityScores.bonuses).toContainEqual({
+      source: 'ASI: Wizard 4',
+      ability: 'INT',
+      value: 2,
+    });
+    expect(kinds(result.next)).not.toContain('asi');
+    const restored = undo(
+      JSON.parse(JSON.stringify(result.next)),
+      [JSON.parse(JSON.stringify(result.event))],
+      { ...meta, eventId: 'undo' },
+    );
+    expect(restored).toMatchObject({ result: 'ok', next: state });
+  });
+
+  it('routes an improvement to a later class when the first class has earned none', () => {
+    const state = fighter(1);
+    state.build.classes.push({ classId: 'class.wizard', level: 4 });
+    expect(pendingChoices(state, registry).find((item) => item.kind === 'asi')).toMatchObject({
+      count: 1,
+      classId: 'class.wizard',
+    });
+  });
+
   it('settles subclass, ability increase and fighting style, then clears the list', () => {
     const state = fighter(4);
     expect(kinds(state)).toEqual(expect.arrayContaining(['subclass', 'asi', 'option']));

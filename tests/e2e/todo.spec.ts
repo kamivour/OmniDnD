@@ -1,4 +1,13 @@
-import { expect, test } from './fixtures';
+import { expect, test, type Page } from './fixtures';
+
+async function chooseHumanLanguage(page: Page) {
+  const language = page
+    .getByRole('listitem')
+    .filter({ hasText: 'Extra Language: choose proficiencies' });
+  await language.getByRole('button', { name: 'Choose', exact: true }).click();
+  await language.getByRole('checkbox', { name: 'Giant', exact: true }).check();
+  await language.getByRole('button', { name: 'Save choice', exact: true }).click();
+}
 
 test('skipped level choices wait on the To do list and clear when chosen', async ({ page }) => {
   await page.goto('/');
@@ -36,6 +45,7 @@ test('skipped level choices wait on the To do list and clear when chosen', async
   await style.getByRole('button', { name: 'Choose', exact: true }).click();
   await style.getByRole('checkbox', { name: 'Defense' }).check();
   await style.getByRole('button', { name: 'Save choice' }).click();
+  await chooseHumanLanguage(page);
   await expect(page.getByText('Nothing left to decide.')).toBeVisible();
 });
 
@@ -67,5 +77,6 @@ test("Tasha's fighting styles join the list when the campaign uses them", async 
   await expect(style.getByRole('checkbox', { name: /Blessed Warrior/ })).toHaveCount(0);
   await style.getByRole('checkbox', { name: /Superior Technique/ }).check();
   await style.getByRole('button', { name: 'Save choice' }).click();
+  await chooseHumanLanguage(page);
   await expect(page.getByText('Nothing left to decide.')).toBeVisible();
 });

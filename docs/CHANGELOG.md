@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 10:47 — Finish multiclass improvements after taking a feat
+
+- To do now offers the remaining ability improvement on the class that earned it, even after another class took a feat.
+- Check a multiclass character's remaining choices and Undo. Checks pass.
+
 ## 2026-11-17 10:23 — Class armor proficiency fix
 
 - Characters made with a blank build no longer lose their class armor and weapon proficiencies. A cleric in scale mail no longer gets the "No proficiency" warning.
