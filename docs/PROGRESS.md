@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M39 Themes done; all planned milestones complete (see PLAN.md).
-**Next up:** Manual QA for the review fixes, M26 and M39 by the user.
+**Current milestone:** M40 Campaign sharing and join requests done.
+**Next up:** Apply the M40 database migration, then manual QA with two accounts; live database permissions still need checking.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -64,6 +64,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M37 | Xanathar's subclasses, part 1 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M38 | Xanathar's subclasses, part 2 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M39 | Themes | 10 | done | Midnight, glass, water and D&D place themes with title effects; see [PLAN.md](PLAN.md) |
+| M40 | Campaign sharing and join requests | 7 | done | Share links, approve requests with existing characters, and view party characters without editing them |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -307,6 +308,14 @@ Details in [PLAN.md](PLAN.md).
 - [x] 9. Astral Sea, Mechanus, Barovia, Mount Celestia
 - [x] 10. Gate
 
+### M40 — Campaign sharing and join requests
+
+- [x] Share campaign links and request membership by campaign ID, with owner or DM approval
+- [x] Bring an existing character through an explicit, undoable copy that preserves the original
+- [x] Open party characters in a separate reader, with private journals and history excluded
+- [x] Preserve private campaigns and characters when IDs match another device's records
+- [x] Verify approval flows, offline viewing and layouts at 375 px and desktop width; live database permissions remain a hosting check
+
 ## Review fixes
 
 - [x] Share multiclass ASI accounting between To do and saved choices
@@ -325,6 +334,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-17 — M40: campaign-ID approval, share links, existing-character copies and a separate party reader; private journals and matching starter IDs stay safe.
 - 2026-11-17 — Saved proficiency changes now protect dependent expertise; change expertise first, then replace the skill. Reload and Undo keep both choices intact.
 - 2026-11-17 — Fixed Steady Aim through Dash, reload and Undo; speed returns when the turn ends or a new turn starts.
 - 2026-11-17 — Fixed multiclass ASI accounting and To do routing; feats consume one improvement across classes, with reload and Undo retained.

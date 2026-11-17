@@ -19,7 +19,7 @@ import { navPath } from '../layout/nav';
 import { RestContext } from '../rest/rest-context';
 import { scrollToAnchor } from './anchor';
 import { TOOL_ENTRIES, characterEntries, ruleEntries } from './entries';
-import { PLACES } from './places';
+import { PLACES, campaignPlaces } from './places';
 
 const isTyping = (target: EventTarget | null) =>
   target instanceof HTMLElement &&
@@ -66,7 +66,13 @@ export function FindLauncher({ withCharacter }: { withCharacter: boolean }) {
 function CharacterFind({ onClose }: { onClose: () => void }) {
   const { characterId, state, sheet } = useCharacter();
   const base = useCharacterBase();
-  const items = useMemo(() => characterEntries(state.build, sheet), [state.build, sheet]);
+  const items = useMemo(
+    () => [
+      ...characterEntries(state.build, sheet),
+      ...(state.campaign.shared ? campaignPlaces(state.build.campaignId) : []),
+    ],
+    [state.build, state.campaign.shared, sheet],
+  );
   const books = useStore(
     characterStore,
     (store) => characterState(store, characterId)?.campaign.sources,
@@ -118,7 +124,11 @@ function FindSheet({
         0,
       );
     } else {
-      const path = hasCharacter ? navPath(base, target.path) : `/${target.path}`;
+      const path = target.path.startsWith('/')
+        ? target.path
+        : hasCharacter
+          ? navPath(base, target.path)
+          : `/${target.path}`;
       navigate(target.query ? `${path}?q=${encodeURIComponent(target.query)}` : path);
       if (target.anchor) scrollToAnchor(target.anchor);
     }

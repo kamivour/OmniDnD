@@ -13,7 +13,7 @@ import { DetailPanel, DetailProvider } from './DetailPanel';
 import { CharacterToolbar } from '../log/CharacterLog';
 import { DiceTray } from '../dice/DiceTray';
 import { useTourAutostart } from '../tutorial/useTour';
-import { ViewOnlyBanner } from '../party/ViewOnlyBanner';
+import { PartyCharacterView } from '../party/PartyCharacterView';
 
 /** Character screens: sidebar (≥ 640 px) or bottom nav (< 640 px), sticky HUD, screen in the middle. */
 export function AppFrame() {
@@ -45,7 +45,7 @@ export function AppFrame() {
       navigate('/');
     previous.current = { id: characterId, existed: !!character };
   }, [characterId, character, navigate]);
-  useTourAutostart('character', characterExists);
+  useTourAutostart('character', characterExists && !character?.build.partyOwner);
   if (!character)
     return (
       <main>
@@ -57,6 +57,7 @@ export function AppFrame() {
         </p>
       </main>
     );
+  if (character.build.partyOwner) return <PartyCharacterView />;
   return (
     <DetailProvider key={characterId}>
       <CommandProvider characterId={character.build.id}>
@@ -75,13 +76,6 @@ export function AppFrame() {
                   tabIndex={-1}
                   className="@container min-w-0 flex-1 pb-20 sm:pb-0"
                 >
-                  {character.build.partyOwner && (
-                    <ViewOnlyBanner
-                      characterId={character.build.id}
-                      characterName={character.build.name}
-                      ownerName={character.build.partyOwner.name}
-                    />
-                  )}
                   <CommandNotes />
                   <Suspense fallback={null}>
                     <Outlet />

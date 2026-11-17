@@ -20,7 +20,12 @@ export async function saved(page: Page) {
   await expect(page.locator('[aria-label="Local save status"]')).toContainText('Saved locally');
 }
 
-export async function importReview(page: Page, file: ExportFile, screen: string) {
+export async function importReview(
+  page: Page,
+  file: ExportFile,
+  screen: string,
+  waitForSave = true,
+) {
   await page.goto('/settings');
   await saved(page);
   await page.getByLabel('Import character JSON', { exact: true }).setInputFiles({
@@ -33,7 +38,8 @@ export async function importReview(page: Page, file: ExportFile, screen: string)
   await expect(dialog).toBeHidden();
   await saved(page);
   await page.goto(`/characters/${file.build.id}/${screen}`);
-  await saved(page);
+  // The party reader has no editing toolbar or local-save control.
+  if (waitForSave) await saved(page);
 }
 
 export async function reviewState(page: Page, id: string) {

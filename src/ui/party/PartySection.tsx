@@ -26,9 +26,8 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
   const members = membersOf(party.members, campaign.id);
   const me = members.find((member) => member.userId === account?.id);
   const isDm = me?.role === 'dm';
-  const hasDm = members.some((member) => member.role === 'dm');
-  // The owner can invite while nobody is DM; the cloud checks this too.
-  const manages = isDm || (!hasDm && !!me);
+  // Both the owner and current DM can invite and review join requests.
+  const manages = isDm || party.owners[campaign.id] === account?.id;
 
   const act = async (work: () => Promise<void>) => {
     setBusy(true);
@@ -66,7 +65,10 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
 
   const invite = () =>
     act(async () => {
-      if (provider) setCode(await provider.createInvite(campaign.id));
+      if (provider) {
+        setCode(await provider.createInvite(campaign.id));
+        setCopied(false);
+      }
     });
 
   const copy = async () => {
@@ -77,6 +79,20 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
       setCopied(false);
     }
   };
+
+  const shareLink = () =>
+    act(async () => {
+      if (!provider) return;
+      const fresh = code || (await provider.createInvite(campaign.id));
+      setCode(fresh);
+      setCopied(false);
+      try {
+        await navigator.clipboard.writeText(joinLink(fresh));
+        setCopied(true);
+      } catch {
+        /* The selectable link remains visible when clipboard access is unavailable. */
+      }
+    });
 
   return (
     <section
@@ -107,6 +123,13 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
         </>
       ) : (
         <>
+          <p className="wrap-anywhere">
+            Campaign ID: <code>{campaign.id}</code>
+          </p>
+          <p className="text-xs text-text-muted">
+            Share an invite for direct access, or give this ID to players so they can request
+            approval.
+          </p>
           <ul className="flex flex-col gap-2" aria-label="Members">
             {members.map((member) => {
               const self = member.userId === account?.id;
@@ -116,7 +139,7 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
                   key={member.userId}
                   className="flex flex-wrap items-center gap-2 rounded-btn border border-border bg-bg p-2"
                 >
-                  <span className="min-w-0 flex-1 wrap-anywhere">
+                  <span className="min-w-0 basis-full wrap-anywhere sm:flex-1 sm:basis-0">
                     {label}
                     {self ? ' (you)' : ''}
                   </span>
@@ -164,6 +187,9 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
           {manages && (
             <div className="flex flex-col gap-2">
               <div className="flex flex-wrap gap-2">
+                <button type="button" onClick={shareLink} disabled={busy} className={button}>
+                  <Share2 size={16} aria-hidden /> Share campaign link
+                </button>
                 <button type="button" onClick={invite} disabled={busy} className={button}>
                   <Link2 size={16} aria-hidden /> {code ? 'New invite link' : 'Create invite link'}
                 </button>
@@ -194,6 +220,55 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
                 </div>
               )}
             </div>
+          )}
+
+          {manages && (
+            <section id="join-requests" aria-label="Join requests" className="flex flex-col gap-2">
+              <h3 className="font-semibold">Join requests</h3>
+              {party.requests
+                .filter((r) => r.campaignId === campaign.id && r.status === 'pending')
+                .map((r) => (
+                  <article
+                    key={r.userId}
+                    className="flex flex-col gap-2 rounded-btn border border-border p-3"
+                  >
+                    <p className="wrap-anywhere">
+                      {r.requesterName || 'Player'} · {r.characterName}
+                    </p>
+                    <p className="text-xs text-text-muted">
+                      Approval grants party viewing access. The player chooses when to bring a
+                      character copy.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        className={button}
+                        disabled={busy}
+                        onClick={() =>
+                          act(async () => provider?.resolveJoinRequest(campaign.id, r.userId, true))
+                        }
+                      >
+                        Approve {r.requesterName || 'player'}
+                      </button>
+                      <button
+                        type="button"
+                        className={button}
+                        disabled={busy}
+                        onClick={() =>
+                          act(async () =>
+                            provider?.resolveJoinRequest(campaign.id, r.userId, false),
+                          )
+                        }
+                      >
+                        Decline {r.requesterName || 'player'}
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              {!party.requests.some(
+                (r) => r.campaignId === campaign.id && r.status === 'pending',
+              ) && <p className="text-text-muted">No pending requests.</p>}
+            </section>
           )}
 
           <p className="text-xs text-text-muted">

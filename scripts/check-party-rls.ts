@@ -192,6 +192,52 @@ check(
   !(await ana.client.rpc('leave_campaign', { p_campaign: campaignId })).error,
 );
 
+// ID requests grant no access until the owner/DM approves them.
+const request = await outsider.client.rpc('request_campaign_join', {
+  p_campaign: campaignId,
+  p_character: 'existing-hero',
+  p_name: 'Existing hero',
+});
+check('an outsider can request with an existing character', !request.error, request.error);
+check(
+  'a pending requester still cannot read characters',
+  ((await outsider.client.from('party_entities').select('entity_id')).data ?? []).length === 0,
+);
+check(
+  'a requester cannot approve themselves',
+  !!(
+    await outsider.client.rpc('resolve_campaign_join', {
+      p_campaign: campaignId,
+      p_user: outsider.id,
+      p_approve: true,
+    })
+  ).error,
+);
+check(
+  'other players cannot see requests',
+  ((await ben.client.from('campaign_join_requests').select('user_id')).data ?? []).length === 0,
+);
+check(
+  'the owner can see requests',
+  ((await dm.client.from('campaign_join_requests').select('user_id')).data ?? []).some(
+    (row) => row.user_id === outsider.id,
+  ),
+);
+const approval = await dm.client.rpc('resolve_campaign_join', {
+  p_campaign: campaignId,
+  p_user: outsider.id,
+  p_approve: true,
+});
+check('the owner approves membership', !approval.error, approval.error);
+check(
+  'an approved player sees party characters',
+  ((await outsider.client.from('party_entities').select('entity_id')).data ?? []).length > 0,
+);
+check(
+  'an approved player still cannot edit another character',
+  (await changes(outsider.client)) === 0,
+);
+
 // Clean up through account deletion (cascades to every row above).
 for (const who of [dm, ana, ben, outsider]) await who.client.rpc('delete_my_account');
 

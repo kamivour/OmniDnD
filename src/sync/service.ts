@@ -53,7 +53,8 @@ export const accountSession = createStore<AccountSession>(() => ({
 let stopParty: (() => void) | null = null;
 
 export function setAccount(account: Account | null) {
-  const { provider } = accountSession.getState();
+  const { provider, account: previous } = accountSession.getState();
+  if (previous?.id !== account?.id) partyStore.setState({ requests: [], owners: {}, error: '' });
   stopParty?.();
   stopParty = account && provider ? provider.subscribeParty(() => autoSync.wake()) : null;
   accountSession.setState({ account, status: account ? 'signed-in' : 'signed-out' });

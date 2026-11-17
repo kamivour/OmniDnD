@@ -1,6 +1,7 @@
 import type {
   Account,
   InvitePreview,
+  JoinRequest,
   PartyPush,
   PartySnapshot,
   PushEntity,
@@ -32,6 +33,7 @@ export class MemoryCloud {
   readonly invites: { code: string; campaignId: string; expired: boolean; revoked: boolean }[] = [];
   readonly party = new Map<string, RemotePartyEntity>();
   readonly partyListeners = new Set<() => void>();
+  readonly joinRequests = new Map<string, JoinRequest>();
   private nextCode = 1;
 
   key(accountId: string, kind: string, entityId: string) {
@@ -186,6 +188,58 @@ export class MemoryProvider implements SyncProvider {
     const code = this.cloud.newCode();
     this.cloud.invites.push({ code, campaignId, expired: false, revoked: false });
     return Promise.resolve(code);
+  }
+
+  requestJoin(campaignId: string, characterId: string, characterName: string) {
+    const userId = this.require().id;
+    if (!this.cloud.shared.has(campaignId))
+      return Promise.reject(new Error('This campaign is not available for requests'));
+    if (this.member(campaignId)) return Promise.reject(new Error('You are already a member'));
+    if (!characterName.trim() || characterName.trim().length > 200 || characterId.length > 200)
+      return Promise.reject(new Error('Character details are invalid'));
+    const key = `${campaignId}|${userId}`;
+    if (
+      this.cloud.joinRequests.get(key)?.status !== 'pending' &&
+      [...this.cloud.joinRequests.values()].filter(
+        (r) => r.userId === userId && r.status === 'pending',
+      ).length >= 20
+    )
+      return Promise.reject(new Error('Resolve your pending requests before sending more'));
+    this.cloud.joinRequests.set(key, {
+      campaignId,
+      userId,
+      characterId,
+      characterName: characterName.trim(),
+      requesterName: this.cloud.names.get(userId) ?? 'Player',
+      status: 'pending',
+    });
+    this.cloud.notifyParty();
+    return Promise.resolve();
+  }
+
+  listJoinRequests(): Promise<JoinRequest[]> {
+    const me = this.require().id;
+    return Promise.resolve(
+      structuredClone(
+        [...this.cloud.joinRequests.values()].filter(
+          (r) => r.userId === me || this.isOwnerOrDm(r.campaignId),
+        ),
+      ),
+    );
+  }
+
+  resolveJoinRequest(campaignId: string, userId: string, approve: boolean) {
+    if (!this.isOwnerOrDm(campaignId))
+      return Promise.reject(new Error('Only the owner or DM can review requests'));
+    const request = this.cloud.joinRequests.get(`${campaignId}|${userId}`);
+    if (request?.status === (approve ? 'approved' : 'declined')) return Promise.resolve();
+    if (!request || request.status !== 'pending')
+      return Promise.reject(new Error('This request has already been reviewed'));
+    request.status = approve ? 'approved' : 'declined';
+    if (approve && !this.member(campaignId, userId))
+      this.cloud.members.push({ campaignId, userId, role: 'player' });
+    this.cloud.notifyParty();
+    return Promise.resolve();
   }
 
   revokeInvites(campaignId: string) {

@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 14:12 — Campaign sharing and join requests
+
+- Share an invite link or request access with a campaign ID; the owner or DM approves requests.
+- Bring an existing character as a copy, keeping the original. Other players open a separate view-only reader; journals stay private.
+- Apply the new database migration, then check sharing with two accounts on phone and desktop. Checks pass.
+
 ## 2026-11-17 10:48 — Protect expertise when changing saved skills
 
 - Changing a saved proficiency now explains when existing expertise still needs it. Change that expertise pick first, then replace the skill.

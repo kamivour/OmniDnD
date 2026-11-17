@@ -30,6 +30,7 @@ describe('Supabase schema', () => {
       'campaign_members',
       'campaign_invites',
       'party_entities',
+      'campaign_join_requests',
     ]);
   });
 
@@ -77,6 +78,23 @@ describe('Supabase schema', () => {
 });
 
 describe('Supabase shared campaigns (M24)', () => {
+  it('join requests are read only outside authenticated manager RPCs and grant only player membership', () => {
+    expect(sql).toContain('alter table public.campaign_join_requests enable row level security');
+    expect(sql).toContain('alter table public.campaign_join_requests force row level security');
+    expect(sql).toContain(
+      'user_id = (select auth.uid()) or public.can_manage_join_requests(campaign_id)',
+    );
+    expect(sql).toContain('revoke all on public.campaign_join_requests from anon, authenticated');
+    expect(sql).not.toMatch(/grant (insert|update|delete)[^;]*on public\.campaign_join_requests/i);
+    expect(sql).toContain('only the owner or dm can review requests');
+    expect(sql).toContain('for update');
+    expect(sql).toContain("values(p_campaign,p_user,'player')");
+    for (const signature of [
+      'request_campaign_join(text,text,text)',
+      'resolve_campaign_join(text,uuid,boolean)',
+    ])
+      expect(sql).toContain(`revoke all on function public.${signature} from public, anon`);
+  });
   const party = ['shared_campaigns', 'campaign_members', 'campaign_invites', 'party_entities'];
 
   it.each(party)('locks %s with row-level security and no anonymous access', (table) => {

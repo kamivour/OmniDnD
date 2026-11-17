@@ -9,6 +9,7 @@ Proposed 2026-11-09. User answers to the open questions are recorded as D168–D
 | M24 | Roles and shared campaigns | M22 | A DM and players share one campaign; everyone sees every party character live; each player changes only their own |
 | M25 | DM party overview | M24 | The DM sees the whole party's key numbers at a glance |
 | M26 | Friend-testing fixes | M25 | A new player on a phone creates a character without confusion, finds sign-up, and starts with no sample character |
+| M40 | Campaign sharing and join requests | M24 | Share links, review campaign-ID requests and read others' characters without editing them |
 
 The tutorial comes before party play because friends are testing now, and it builds the tour system that M24 and M25 add their own steps to.
 
@@ -97,7 +98,7 @@ Each chapter has at most 8 steps and starts only when its screen exists, so nobo
 | Change campaign books and optional rules | No | No | Yes (owner, if no DM) |
 | Read a private journal entry | Yes | No | No |
 
-- Opening someone else's character shows the full sheet with all screens read-only and a banner: "Ana's character · view only." with a **Duplicate** button. Commands are disabled, not hidden, so the layout matches.
+- Opening someone else's character uses a separate view-only reader with Sheet, Spells, Equipment, Features and Companions sections and a **Duplicate to play** button (M40). Private journals and command history are excluded.
 - To fix a mistake, a player or the DM tells the owner; the owner makes the change. (A later idea, not planned: "suggest a fix" that the owner accepts.)
 
 ### Data and sync
@@ -241,6 +242,12 @@ Later, if wanted: Elemental Planes of Water, Air and Earth, Sigil, Chult, Eberro
 - **Upkeep:** every new screen must look right in all 15 themes. Token-only styling keeps this cheap, and the screenshot gate catches breaks.
 
 ---
+
+## M40 — Campaign sharing and join requests
+
+Build on M24's existing accounts, membership, invites and automatic party sync. Add campaign-ID requests reviewed by the owner or DM, a Share campaign link button, and an optional existing-character selection that becomes an explicit, undoable copy after joining.
+
+Party characters open in a separate reader with no editors or gameplay controls. Preserve private originals, omit journals and Undo patches from shared snapshots, and keep matching starter IDs separate across members; verify both widths and offline viewing.
 
 ## Risks
 - **Free hosting limits:** Supabase allows 200 live connections and 500 MB of storage; records are capped at 5 MB (our limit). Long event logs grow records; a later fix is a snapshot plus trimmed history.

@@ -94,6 +94,9 @@ export function CampaignsScreen() {
             <Plus size={16} aria-hidden />
             New campaign
           </Link>
+          <Link to="/join" className={button}>
+            Join a campaign
+          </Link>
         </div>
       </header>
       {reminder && (

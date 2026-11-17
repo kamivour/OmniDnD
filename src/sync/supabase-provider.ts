@@ -194,6 +194,39 @@ export class SupabaseProvider implements SyncProvider {
     return this.call<string>('create_invite', { p_campaign: campaignId });
   }
 
+  async requestJoin(campaignId: string, characterId: string, characterName: string) {
+    await this.call('request_campaign_join', {
+      p_campaign: campaignId,
+      p_character: characterId,
+      p_name: characterName,
+    });
+  }
+
+  async listJoinRequests(): Promise<import('./provider').JoinRequest[]> {
+    const { data, error } = await this.client
+      .from('campaign_join_requests')
+      .select('campaign_id,user_id,character_id,character_name,requester_name,status');
+    // An older deployment can still sync existing parties while this additive migration rolls out.
+    if (error?.code === '42P01' || error?.code === 'PGRST205') return [];
+    if (error) throw new Error(error.message);
+    return (data ?? []).map((row) => ({
+      campaignId: row.campaign_id,
+      userId: row.user_id,
+      characterId: row.character_id,
+      characterName: row.character_name,
+      requesterName: row.requester_name,
+      status: row.status,
+    }));
+  }
+
+  async resolveJoinRequest(campaignId: string, userId: string, approve: boolean) {
+    await this.call('resolve_campaign_join', {
+      p_campaign: campaignId,
+      p_user: userId,
+      p_approve: approve,
+    });
+  }
+
   async revokeInvites(campaignId: string) {
     await this.call('revoke_invites', { p_campaign: campaignId });
   }
@@ -334,7 +367,12 @@ export class SupabaseProvider implements SyncProvider {
 
   subscribeParty(onChange: () => void) {
     const channel = this.client.channel('party');
-    for (const table of ['party_entities', 'shared_campaigns', 'campaign_members'])
+    for (const table of [
+      'party_entities',
+      'shared_campaigns',
+      'campaign_members',
+      'campaign_join_requests',
+    ])
       channel.on('postgres_changes', { event: '*', schema: 'public', table }, onChange);
     channel.subscribe();
     return () => void this.client.removeChannel(channel);

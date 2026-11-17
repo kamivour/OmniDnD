@@ -1,15 +1,22 @@
 import { useSyncExternalStore } from 'react';
 import { createStore } from 'zustand/vanilla';
-import type { RemoteMember } from '../sync/provider';
+import type { RemoteMember, JoinRequest } from '../sync/provider';
 
 /** Members of the shared campaigns this device knows, kept from the last party sync. */
 export interface PartyState {
   members: RemoteMember[];
   /** Last party sync problem, shown in Campaign Setup. Empty when fine. */
   error: string;
+  requests: JoinRequest[];
+  owners: Record<string, string>;
 }
 
-export const partyStore = createStore<PartyState>(() => ({ members: [], error: '' }));
+export const partyStore = createStore<PartyState>(() => ({
+  members: [],
+  error: '',
+  requests: [],
+  owners: {},
+}));
 
 export const usePartyState = (): PartyState =>
   useSyncExternalStore(partyStore.subscribe, partyStore.getState);

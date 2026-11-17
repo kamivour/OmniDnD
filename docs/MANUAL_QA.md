@@ -283,6 +283,17 @@ Check on a real phone and on a computer.
 - [ ] Use Steady Aim, then Dash on a rogue. Judge the zero-speed display and its return after End Turn, including Undo.
 - [ ] Replace a saved skill used by expertise. Judge whether the message makes the required order clear: change expertise first, then the skill.
 
+## M40 — Campaign sharing and join requests
+
+- [ ] On phone and desktop, judge whether Share campaign link, Campaign ID and Join a campaign are easy to find and explain direct invites versus approval.
+- [ ] With two accounts, request membership using an existing character. Confirm the owner or DM sees the request while the requester cannot see the party until approval.
+- [ ] Approve one request and decline another. Check the requester sees each result and only approval opens the party.
+- [ ] Bring a character, review the destination-rules warning, and check the original remains in its old campaign. Undo the copy and check the original again.
+- [ ] Join through a shared link; replace or revoke it and check an old link no longer admits a new account.
+- [ ] Open another player's character, including as DM. Judge the reader's clarity and useful detail; confirm journals and edit controls are absent.
+- [ ] Change HP on the owner's device and watch the reader update; disconnect and reload to check cached viewing stays useful.
+- [ ] Join with default starter records on both accounts. Check private characters stay private and matching IDs show separate characters.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

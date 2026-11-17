@@ -76,6 +76,13 @@ A shared status row beneath the HUD shows saving status, the latest change and o
 ### Campaigns (landing)
 One card per campaign: name, rules summary (e.g. `Milestone · HP rolled · Abilities rolled`), Settings link, its characters (portrait, name, race, class/level), and "New character". A "New campaign" button opens Campaign Setup with defaults (D40). Seed: Campaign #273 with The Fool.
 
+### Campaign sharing (M24, M40)
+
+- Campaign Settings → Party lets the owner or DM share a seven-day invite link, replace it or revoke it. A signed-in recipient joins directly; entering a campaign ID on Join a campaign sends an approval request instead.
+- A request may name an existing owned character. The owner or DM approves or declines; pending requests reveal no party characters. After joining, the player explicitly copies the selected character into the campaign, with a warning about its rules; the original stays unchanged and the copy can be undone.
+- Members see each other's characters through automatic sync. Opening another member's character uses a separate view-only reader for Sheet, Spells, Equipment, Features and Companions; only the owner can change the character, including when the viewer is the DM.
+- Private journals and Undo history stay with the owner. The reader works from cached data offline; Duplicate to play creates an editable copy. Campaigns and characters with matching IDs keep separate local records.
+
 ### Characters
 Create blank (inside a campaign), duplicate, delete (confirm), import a character file from Settings. Full guided builder is Phase 3.
 

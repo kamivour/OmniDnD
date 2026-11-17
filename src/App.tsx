@@ -54,7 +54,7 @@ const ReferenceScreen = screen(() => import('./ui/screens/ReferenceScreen'), 'Re
 const CreditsScreen = screen(() => import('./ui/screens/CreditsScreen'), 'CreditsScreen');
 const ToolsScreen = screen(() => import('./ui/screens/ToolsScreen'), 'ToolsScreen');
 const PartyScreen = screen(() => import('./ui/party/PartyScreen'), 'PartyScreen');
-const JoinScreen = screen(() => import('./ui/screens/JoinScreen'), 'JoinScreen');
+const JoinScreen = screen(() => import('./ui/party/JoinCampaign'), 'JoinScreen');
 const ResetPasswordScreen = screen(
   () => import('./ui/screens/ResetPasswordScreen'),
   'ResetPasswordScreen',
@@ -103,6 +103,7 @@ export function App() {
               <Route path="settings" element={<SettingsScreen />} />
               <Route path="reset-password" element={<ResetPasswordScreen />} />
               <Route path="join/:code" element={<JoinScreen />} />
+              <Route path="join" element={<JoinScreen />} />
               <Route path="reference/credits" element={<CreditsScreen />} />
               <Route path="reference/tools" element={<ToolsScreen />} />
               <Route path="*" element={<PlaceholderScreen title="Not found" />} />

@@ -1,12 +1,39 @@
 import type { FindEntry } from '../../engine/calc/find';
 import { VISIBLE_THEMES } from '../../theme/themes';
 
+/** Campaign sections need the actual campaign route, independent of the character base. */
+export function campaignPlaces(campaignId: string): FindEntry[] {
+  return [
+    {
+      id: 'go.join-requests',
+      group: 'go',
+      title: 'Review join requests',
+      detail: 'Campaign settings → Party: owner or DM approval',
+      synonyms: ['approve player', 'decline request', 'membership requests'],
+      target: {
+        kind: 'go',
+        path: `/campaigns/${encodeURIComponent(campaignId)}/settings`,
+        anchor: 'join-requests',
+      },
+    },
+  ];
+}
+
 /**
  * Every screen, panel and action Find can reach. Add a line here when you add a screen or a
  * section people may look for; `places.test.ts` fails when a built route has no entry.
  * `anchor` is an element id or the aria-label of a section on that screen.
  */
 export const PLACES: readonly FindEntry[] = [
+  {
+    id: 'go.join-campaign',
+    group: 'go',
+    title: 'Join a campaign',
+    detail:
+      'Request access by campaign ID, or use an invite link; bring an existing character copy',
+    synonyms: ['campaign id', 'join request', 'existing character', 'join approval'],
+    target: { kind: 'go', path: '/join', anchor: 'join-campaign' },
+  },
   // Screens
   {
     id: 'go.home',
@@ -182,6 +209,9 @@ export const PLACES: readonly FindEntry[] = [
     synonyms: [
       'party',
       'party view',
+      'view only',
+      'read only character',
+      'approve requests',
       'dm overview',
       'invite',
       'join',

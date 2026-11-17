@@ -47,6 +47,7 @@ export async function runPartySync(provider: SyncProvider): Promise<PartyReport>
   if (!account) throw new Error('Sign in to sync.');
   await flushPersistence();
   const snapshot = await provider.pullParty();
+  const requests = await provider.listJoinRequests();
   const saved = await readState();
   const before = characterStore.getState();
   const deleted = new Set(
@@ -97,7 +98,12 @@ export async function runPartySync(provider: SyncProvider): Promise<PartyReport>
   }
   const members: RemoteMember[] = plan.members;
   await database.settings.put(storedRecord(SETTING, { synced: plan.synced, members }));
-  partyStore.setState({ members, error: '' });
+  partyStore.setState({
+    members,
+    error: '',
+    requests,
+    owners: Object.fromEntries(snapshot.campaigns.map((c) => [c.id, c.ownerId])),
+  });
   return {
     uploaded: plan.pushEntities.length + plan.pushCampaigns.length,
     downloaded: plan.downloaded,

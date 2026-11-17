@@ -117,6 +117,9 @@ export interface PartyPush {
 
 /** Shared-campaign calls (M24). Row-level security decides what each account may do. */
 export interface PartyProvider {
+  requestJoin(campaignId: string, characterId: string, characterName: string): Promise<void>;
+  listJoinRequests(): Promise<JoinRequest[]>;
+  resolveJoinRequest(campaignId: string, userId: string, approve: boolean): Promise<void>;
   /** Make a campaign shared; the caller becomes its owner and first member. */
   shareCampaign(campaign: {
     id: string;
@@ -146,4 +149,13 @@ export interface PartyProvider {
   pushPartyEntity(entity: PartyPush): Promise<void>;
   /** Call `onChange` when anything in the party changes. Returns the unsubscribe. */
   subscribeParty(onChange: () => void): () => void;
+}
+
+export interface JoinRequest {
+  campaignId: string;
+  userId: string;
+  characterId: string;
+  characterName: string;
+  requesterName: string;
+  status: 'pending' | 'approved' | 'declined';
 }

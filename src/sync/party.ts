@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { registry } from '../data/registry';
+import { validateManagementData } from '../engine/commands/management';
 import { fingerprint } from '../db/sync-metadata';
 import {
   CampaignSchema,
@@ -48,11 +50,12 @@ export function sharedPayload(campaign: Campaign): Omit<Campaign, 'role' | 'shar
   return rest;
 }
 
-/** The character content a party member sees: build, live state and log. */
+/** Public build and live state; journals and Undo patches stay with the owner. */
 export const partyContent = (record: CharacterRecord) => ({
-  build: record.build,
+  build: { ...record.build, journal: {} },
   live: record.live,
-  events: record.events,
+  // Inverse patches can contain old journal text too. Other members have no Undo rights.
+  events: [],
 });
 
 function withOwn(campaign: Campaign, own: { role: 'dm' | 'player'; shared: true }): Campaign {
@@ -83,9 +86,26 @@ export function planParty(input: PartyInput): PartyPlan {
     if (!mine) continue;
     const hasDm = snapshot.members.some((m) => m.campaignId === remote.id && m.role === 'dm');
     const canEdit = mine.role === 'dm' || (remote.ownerId === me && !hasDm);
-    const local = campaigns[remote.id];
+    let local = campaigns[remote.id];
     const remoteFp = fingerprint(remote.payload);
     const own = { role: mine.role, shared: true } as const;
+
+    // Starter IDs repeat across devices. Joining must not publish an unrelated private table.
+    if (local && !local.shared && remote.ownerId !== me) {
+      const parsed = CampaignSchema.safeParse({ ...(remote.payload as object), ...own });
+      if (!parsed.success || parsed.data.id !== remote.id) continue;
+      const privateBase = `private-${remote.id.slice(0, 160)}`;
+      let privateId = privateBase;
+      for (let suffix = 2; Object.hasOwn(campaigns, privateId); suffix++)
+        privateId = `${privateBase}-${suffix}`;
+      campaigns[privateId] = { ...local, id: privateId };
+      for (const [id, record] of Object.entries(characters)) {
+        if (record.build.campaignId === remote.id && !record.build.partyOwner)
+          characters[id] = { ...record, build: { ...record.build, campaignId: privateId } };
+      }
+      delete campaigns[remote.id];
+      local = undefined;
+    }
 
     if (!local) {
       const parsed = CampaignSchema.safeParse({ ...(remote.payload as object), ...own });
@@ -129,29 +149,56 @@ export function planParty(input: PartyInput): PartyPlan {
   const seen = new Set<string>();
   for (const entity of snapshot.entities) {
     if (entity.ownerId === me || entity.schemaVersion !== SCHEMA_VERSION) continue;
-    const local = characters[entity.entityId];
-    if (local && !local.build.partyOwner) continue; // Same id as one of this person's own characters.
+    const matches = (id: string) =>
+      characters[id]?.build.partyOwner?.userId === entity.ownerId &&
+      characters[id]?.build.campaignId === entity.campaignId;
+    const alias = `party:${entity.campaignId}:${entity.ownerId}:${entity.entityId}`;
+    let cacheId = matches(alias) ? alias : entity.entityId;
+    if (characters[cacheId] && !matches(cacheId)) {
+      cacheId = alias;
+      while (characters[cacheId] && !matches(cacheId)) cacheId += ':view';
+    }
+    const local = characters[cacheId];
     if (entity.deleted) {
       if (local) {
-        delete characters[entity.entityId];
+        delete characters[cacheId];
         downloaded += 1;
       }
       continue;
     }
-    seen.add(entity.entityId);
+    seen.add(cacheId);
     const parsed = CharacterPayloadSchema.safeParse(entity.payload);
     if (!parsed.success) continue;
+    if (
+      parsed.data.build.id !== entity.entityId ||
+      parsed.data.live.characterId !== entity.entityId
+    )
+      continue;
     const name = nameOf(entity.ownerId) ?? local?.build.partyOwner?.name ?? '';
     const next: CharacterRecord = {
-      ...parsed.data,
+      ...partyContent(parsed.data),
       build: {
         ...parsed.data.build,
+        id: cacheId,
+        journal: {},
         campaignId: entity.campaignId,
         partyOwner: { userId: entity.ownerId, name },
       },
+      live: { ...parsed.data.live, characterId: cacheId },
     };
-    if (local && fingerprint(partyContent(local)) === fingerprint(partyContent(next))) continue;
-    characters[entity.entityId] = next;
+    const campaign = campaigns[entity.campaignId];
+    if (!campaign) continue;
+    try {
+      validateManagementData(
+        { campaigns: { [campaign.id]: campaign }, characters: { [cacheId]: next } },
+        registry,
+      );
+    } catch {
+      // Unsupported references or mismatched identities must not replace a readable cached copy.
+      continue;
+    }
+    if (local && fingerprint(local) === fingerprint(next)) continue;
+    characters[cacheId] = next;
     downloaded += 1;
   }
   for (const [id, record] of Object.entries(characters)) {

@@ -5,7 +5,7 @@ Accounts are optional. Without the two settings in step 3, the app builds as a g
 ## 1. Create the account database (Supabase, free tier)
 
 1. Sign up at supabase.com and create a project. Pick a region near your players.
-2. Open **SQL Editor** and run each file in `supabase/migrations/` once, oldest first: `20261106120000_sync_entities.sql`, then `20261109150000_profiles.sql` (display names), then `20261109160000_delete_account.sql` (delete account), then `20261109170000_party.sql` (shared campaigns). Already set up? Run only the files you have not run.
+2. Open **SQL Editor** and run each file in `supabase/migrations/` once, oldest first: `20261106120000_sync_entities.sql`, `20261109150000_profiles.sql` (display names), `20261109160000_delete_account.sql` (delete account), `20261109170000_party.sql` (shared campaigns), then `20261117110000_join_requests.sql` (join approval and private journals). Already set up? Run only the files you have not run.
 3. Open **Authentication → Sign In / Providers** and keep **Email** enabled. "Confirm email" on is safer; players then click a link before their first sign-in.
 
 ## 2. Copy the public connection values
@@ -42,3 +42,9 @@ In **Authentication → URL Configuration**, set **Site URL** to your published 
 ## Checking it works
 
 Sign in on two devices, change a character on one, press **Sync now** on both, and confirm the change arrives. Change the same character on both before syncing to see the "which version to keep" prompt.
+
+For M40, use a second account to request a campaign ID, approve it in Campaign Settings → Party, and bring an existing character. Confirm that the other account can read that character but cannot edit it, including as DM.
+
+The M40 migration is additive: existing invites still work, and rolling back the app does not require dropping the request table. Close old app windows, reopen the updated app and have owners sync to replace older shared snapshots with versions that omit journals and Undo patches; this migration does not rewrite old snapshots by itself.
+
+`npm run check:party` verifies live database permissions using disposable accounts in a **throwaway Supabase project only**. Browser checks use a fake backend and do not prove deployed row-level security.

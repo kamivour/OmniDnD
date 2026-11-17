@@ -13,7 +13,11 @@ import { useToast } from '../components/toast-context';
 export function useManagement() {
   const toast = useToast();
   const [pending, setPending] = useState(false);
-  const [warning, setWarning] = useState<{ reasons: string[]; confirm: () => void } | null>(null);
+  const [warning, setWarning] = useState<{
+    title: string;
+    reasons: string[];
+    confirm: () => void;
+  } | null>(null);
   const opener = useRef<HTMLElement | null>(null);
   const sequence = useRef(0);
   const mounted = useRef(true);
@@ -35,12 +39,14 @@ export function useManagement() {
     result: ManagementRunResult | ManagementUndoResult,
     confirm: () => void,
     onSaved?: () => void,
+    title = 'Confirm change',
   ) => {
     const currentSequence = ++sequence.current;
     if (result.result !== 'ok') setPending(false);
     if (result.result === 'warn') {
       opener.current = document.activeElement as HTMLElement;
       setWarning({
+        title,
         reasons: result.reasons,
         confirm: () => {
           setWarning(null);
@@ -94,13 +100,13 @@ export function useManagement() {
       return;
     }
     const result = characterStore.getState().undoManagement({ force });
-    finish(result, () => undo(expectedId, true));
+    finish(result, () => undo(expectedId, true), undefined, 'Undo changed data?');
   };
   const confirmation = (
     <Sheet
       open={warning !== null}
       onOpenChange={(open) => !open && setWarning(null)}
-      title="Undo changed data?"
+      title={warning?.title ?? 'Confirm change'}
       onCloseAutoFocus={(event) => {
         event.preventDefault();
         (opener.current?.isConnected

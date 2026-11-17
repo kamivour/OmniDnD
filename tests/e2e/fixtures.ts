@@ -27,8 +27,6 @@ export async function importPartyFool(page: Page, role: 'dm' | 'player') {
   await expect(dialog).toHaveCount(0);
 }
 
-const LOOPBACK_HTTP = 'http://127.0.0.1:4173/**';
-
 /** Chapters the tutorial spec sets to be seen; every other spec starts with the tour already done. */
 const ALL_CHAPTERS = [
   'welcome',
@@ -105,13 +103,14 @@ export const test = base.extend<{
     { auto: true },
   ],
   forwardLoopbackHttp: [
-    async ({ context }, runTest) => {
+    async ({ context, baseURL }, runTest) => {
       if (process.env.OMNI_E2E_FORWARD_HTTP === '1') {
         // Optional transport workaround for hosts that deny Chromium loopback connections.
         // Node requests the real production server; no responses or application data are mocked.
         // This does not prove native browser networking or offline behavior. Future offline tests
-        // must unroute LOOPBACK_HTTP before disabling network access.
-        await context.route(LOOPBACK_HTTP, async (route) => {
+        // must unroute these handlers before disabling network access.
+        const origin = new URL(baseURL ?? 'http://127.0.0.1:4173').origin;
+        await context.route(`${origin}/**`, async (route) => {
           const response = await route.fetch();
           await route.fulfill({ response });
         });

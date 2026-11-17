@@ -6,6 +6,8 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D223 | 2026-11-17 | Campaign IDs send requests reviewed by the owner or DM; seven-day invite links grant direct membership. Bringing an existing character creates an explicit, undoable copy under the destination rules and keeps the original. | Avoid accidental access and preserve characters used in other campaigns |
+| D224 | 2026-11-17 | Other members' characters use a separate reader with no gameplay or edit controls; journals and Undo history stay private. Matching campaign or character IDs are kept as separate local records. | Make ownership clear and prevent starter records on different devices from overwriting or publishing each other |
 | D222 | 2026-11-17 | Replacing a proficiency pick is blocked if it would remove the prerequisite of retained expertise; change that expertise pick first. Other proficiency sources count, and no saved picks are removed automatically. | Keep choices valid without silently deleting dependent choices |
 | D221 | 2026-11-17 | Legacy feats without a recorded class and level consume earned improvements once across the character, in recorded class order. To do uses the same allocation when choosing the next class with an open improvement. | Preserve saved choices without inventing advancement history |
 | D1 | 2026-11-01 | D&D 5e **2014** rules only | Campaign uses 2014; mixing editions causes wrong values |

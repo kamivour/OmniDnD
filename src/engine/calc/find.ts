@@ -15,7 +15,7 @@ export const FIND_GROUP_LABELS: Record<FindGroup, string> = {
 };
 
 export type FindTarget =
-  /** A screen under the character base (or the hub when no character is open). '' = Home. */
+  /** A screen under the character base (or hub). '' = Home; paths starting / are absolute. */
   | {
       kind: 'go';
       path: string;

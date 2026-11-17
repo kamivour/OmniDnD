@@ -73,6 +73,79 @@ async function party() {
 }
 
 describe('party sync', () => {
+  it('joining a matching private campaign ID preserves its characters without publishing them', async () => {
+    const { ana } = await party();
+    ana.state.campaigns[CAMPAIGN] = structuredClone(seedFile.campaign);
+    ana.state.characters[FOOL] = structuredClone(
+      createCharacterStore().getState().characters[FOOL]!,
+    );
+    const before = structuredClone(ana.state.characters[FOOL]!);
+    const result = await ana.sync();
+    expect(result.pushEntities).toEqual([]);
+    expect(ana.state.campaigns[CAMPAIGN]?.shared).toBe(true);
+    expect(ana.state.characters[FOOL]?.build.campaignId).not.toBe(CAMPAIGN);
+    const privateId = ana.state.characters[FOOL]!.build.campaignId;
+    expect(ana.state.campaigns[privateId]?.shared).not.toBe(true);
+    expect(ana.state.characters[FOOL]).toEqual({
+      ...before,
+      build: { ...before.build, campaignId: privateId },
+    });
+  });
+
+  it('matching character IDs keep a separate stable view-only cache without overwriting your character', async () => {
+    const { dm, ana } = await party();
+    ana.state.characters[FOOL] = structuredClone(
+      createCharacterStore().getState().characters[FOOL]!,
+    );
+    await ana.sync();
+    dm.state.characters[FOOL] = structuredClone(
+      createCharacterStore().getState().characters[FOOL]!,
+    );
+    const original = structuredClone(dm.state.characters[FOOL]);
+    await dm.sync();
+    expect(dm.state.characters[FOOL]).toEqual(original);
+    const copy = Object.values(dm.state.characters).find(
+      (r) => r.build.partyOwner?.userId === ana.account.id,
+    )!;
+    expect(copy).toBeDefined();
+    expect(copy.build.id).not.toBe(FOOL);
+    expect(copy.live.characterId).toBe(copy.build.id);
+    await dm.sync();
+    expect(dm.state.characters[copy.build.id]).toEqual(copy);
+  });
+  it('shares public character state without private journal or history patches', async () => {
+    const { dm, ana } = await party();
+    const own = structuredClone(createCharacterStore().getState().characters[FOOL]!);
+    own.build.journal.notes = 'Private journal secret';
+    own.events = [
+      {
+        id: 'private-edit',
+        characterId: FOOL,
+        realTime: NOW,
+        gameSeconds: 0,
+        command: 'editJournal',
+        text: 'Edited journal',
+        patches: [],
+        inversePatches: [
+          { op: 'replace', path: ['build', 'journal', 'notes'], value: 'Old private secret' },
+        ],
+      },
+    ];
+    ana.state.characters[FOOL] = own;
+    const upload = await ana.sync();
+    expect(JSON.stringify(upload.pushEntities)).not.toContain('Private journal secret');
+    expect(JSON.stringify(upload.pushEntities)).not.toContain('Old private secret');
+    expect(upload.pushEntities[0]?.payload).toMatchObject({ build: { journal: {} }, events: [] });
+    await dm.sync();
+    expect(dm.state.characters[FOOL]?.build.journal).toEqual({});
+    expect(ana.state.characters[FOOL]?.build.journal.notes).toBe('Private journal secret');
+    // An old cached mirror must be cleaned even when its public fields have not changed.
+    dm.state.characters[FOOL]!.build.journal.notes = 'Legacy private note';
+    dm.state.characters[FOOL]!.events = structuredClone(own.events);
+    await dm.sync();
+    expect(dm.state.characters[FOOL]?.build.journal).toEqual({});
+    expect(dm.state.characters[FOOL]?.events).toEqual([]);
+  });
   it('a joined player receives the campaign as shared with their role', async () => {
     const { ana } = await party();
     await ana.sync();
