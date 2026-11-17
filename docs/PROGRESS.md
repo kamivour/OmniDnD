@@ -315,6 +315,7 @@ Details in [PLAN.md](PLAN.md).
 - [x] Open party characters in a separate reader, with private journals and history excluded
 - [x] Preserve private campaigns and characters when IDs match another device's records
 - [x] Verify approval flows, offline viewing and layouts at 375 px and desktop width; live database permissions remain a hosting check
+- [x] Fix the join-request migration syntax and verify real PostgreSQL compilation, retries and approval permissions
 
 ## Review fixes
 
@@ -334,6 +335,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-17 — Fixed the join-request migration syntax; PostgreSQL now verifies the complete migration, retries, approval, decline and character permissions.
 - 2026-11-17 — M40: campaign-ID approval, share links, existing-character copies and a separate party reader; private journals and matching starter IDs stay safe.
 - 2026-11-17 — Saved proficiency changes now protect dependent expertise; change expertise first, then replace the skill. Reload and Undo keep both choices intact.
 - 2026-11-17 — Fixed Steady Aim through Dash, reload and Undo; speed returns when the turn ends or a new turn starts.

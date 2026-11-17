@@ -61,7 +61,9 @@ begin
   select status into v_status from public.campaign_join_requests
     where campaign_id=p_campaign and user_id=p_user for update;
   if v_status is null then raise exception 'Request not found'; end if;
-  if v_status = case when p_approve then 'approved' else 'declined' end then return; end if;
+  if v_status = (case when p_approve then 'approved' else 'declined' end) then
+    return;
+  end if;
   if v_status <> 'pending' then raise exception 'This request has already been reviewed'; end if;
   if p_approve then
     insert into public.campaign_members(campaign_id,user_id,role) values(p_campaign,p_user,'player')

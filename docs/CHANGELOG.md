@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 14:37 — Fix campaign join database update
+
+- The campaign join approval update now runs successfully.
+- Copy the updated migration into Supabase SQL Editor and run the full file again. Checks pass.
+
 ## 2026-11-17 14:12 — Campaign sharing and join requests
 
 - Share an invite link or request access with a campaign ID; the owner or DM approves requests.

@@ -1,0 +1,111 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { PGlite } from '@electric-sql/pglite';
+import { afterAll, beforeAll, expect, it } from 'vitest';
+
+const folder = join(import.meta.dirname, '..', 'supabase', 'migrations');
+const migration = readFileSync(join(folder, '20261117110000_join_requests.sql'), 'utf8');
+const db = new PGlite();
+const owner = '00000000-0000-4000-8000-000000000001';
+const player = '00000000-0000-4000-8000-000000000002';
+const declined = '00000000-0000-4000-8000-000000000003';
+
+beforeAll(async () => {
+  // Only Supabase's auth context is stubbed. PostgreSQL compiles every real migration,
+  // and the authenticated role exercises the actual functions, grants and RLS policies.
+  await db.exec(`
+    create role anon;
+    create role authenticated;
+    create schema auth;
+    create table auth.users (id uuid primary key);
+    create function auth.uid() returns uuid language sql stable as $$
+      select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
+    $$;
+    grant usage on schema auth to authenticated;
+  `);
+  for (const file of readdirSync(folder)
+    .filter((f) => f.endsWith('.sql'))
+    .sort())
+    await db.exec(readFileSync(join(folder, file), 'utf8'));
+  await db.query('insert into auth.users(id) values ($1), ($2), ($3)', [owner, player, declined]);
+}, 30_000);
+
+afterAll(async () => {
+  await db.close();
+});
+
+async function asUser(id: string) {
+  await db.exec('set role authenticated');
+  await db.query("select set_config('request.jwt.claim.sub', $1, false)", [id]);
+}
+
+it('applies the join-request migration twice without changing existing data', async () => {
+  await db.query('insert into public.profiles(user_id, display_name) values ($1, $2)', [
+    owner,
+    'Preserved name',
+  ]);
+  await db.exec(migration);
+  expect(
+    (await db.query("select to_regclass('public.campaign_join_requests') as name")).rows,
+  ).toEqual([{ name: 'campaign_join_requests' }]);
+  expect((await db.query('select display_name from public.profiles')).rows).toEqual([
+    { display_name: 'Preserved name' },
+  ]);
+});
+
+it('approves and declines idempotently while enforcing membership and owner-only writes', async () => {
+  await asUser(owner);
+  await db.query("select public.share_campaign('table', 'dm', 1, now(), $1::jsonb)", [
+    JSON.stringify({ name: 'Table' }),
+  ]);
+  await db.query(
+    `insert into public.party_entities(campaign_id, entity_id, changed_at, schema_version, payload)
+    values ('table', 'hero', now(), 1, $1::jsonb)`,
+    [
+      JSON.stringify({
+        build: { journal: { notes: 'Private notes' } },
+        live: { hp: 10 },
+        events: [{ inversePatches: [{ value: 'Old private notes' }] }],
+      }),
+    ],
+  );
+
+  await asUser(player);
+  await db.query("select public.request_campaign_join('table', 'existing', 'My bard')");
+  expect((await db.query('select * from public.party_entities')).rows).toEqual([]);
+  await expect(
+    db.query("select public.resolve_campaign_join('table', $1, true)", [player]),
+  ).rejects.toThrow('Only the owner or DM');
+
+  await asUser(declined);
+  await db.query("select public.request_campaign_join('table', '', 'No character selected')");
+  expect((await db.query('select user_id from public.campaign_join_requests')).rows).toEqual([
+    { user_id: declined },
+  ]);
+
+  await asUser(owner);
+  await db.query("select public.resolve_campaign_join('table', $1, true)", [player]);
+  await db.query("select public.resolve_campaign_join('table', $1, true)", [player]);
+  await expect(
+    db.query("select public.resolve_campaign_join('table', $1, false)", [player]),
+  ).rejects.toThrow('already been reviewed');
+  await db.query("select public.resolve_campaign_join('table', $1, false)", [declined]);
+  await db.query("select public.resolve_campaign_join('table', $1, false)", [declined]);
+
+  await asUser(player);
+  expect((await db.query('select payload from public.party_entities')).rows).toEqual([
+    { payload: { build: { journal: {} }, live: { hp: 10 }, events: [] } },
+  ]);
+  expect(
+    (
+      await db.query(
+        'update public.party_entities set deleted = true, payload = null returning entity_id',
+      )
+    ).rows,
+  ).toEqual([]);
+  await expect(
+    db.query("update public.campaign_join_requests set status = 'approved'"),
+  ).rejects.toThrow('permission denied');
+  await asUser(declined);
+  expect((await db.query('select * from public.party_entities')).rows).toEqual([]);
+});
