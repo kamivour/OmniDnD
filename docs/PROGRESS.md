@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M41 Artificer review: infusion-known validation fixed; reported class disappearance still under investigation.
+**Current milestone:** M41 review: infusion-known limits and companion forms fixed; reported Artificer disappearance still under investigation.
 **Next up:** Reproduce the Artificer disappearance using the friend's exported campaign settings. He reports a private campaign created before sharing, with Artificer disappearing immediately after Point Buy → Rolled in the same browser, despite expansion books being enabled. Live site: https://omnidnd.kamivour.workers.dev. M42's UI overhaul is planned in [PLAN.md](PLAN.md); implementation has not started.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -327,6 +327,7 @@ Details in [PLAN.md](PLAN.md).
 - [x] Verify switching to Rolled preserves Artificer availability and explain source requirements
 - [x] Check phone and desktop layouts
 - [x] Restrict newly learned infusions by Artificer level and known limit in To do, creation and level-up
+- [x] Add the three cannon forms, audit all bundled companion templates and compute spell-summon forms and upcasting
 - [ ] Reproduce the friend's missing Artificer using his actual campaign settings and deployed app
 
 ### M42 — Recognizable icons and creation cards (planned)
@@ -355,12 +356,14 @@ Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M41. 
 - Moved to PLAN.md: automatic sync (M22), shared campaign for a party or DM (M24), party view (M24)
 - Later DM ideas (after M25): map import, monsters and NPCs, rewards, DM level-ups, ambient sounds, party rests and clock, notes and handouts, shared encounter tracker
 - Later: spell import from user-pasted text
+- Later: connect companion creation costs and concentration directly; current companion records follow actions already recorded through Features/Spells.
 - Later: Remarkable Athlete half proficiency on STR/DEX/CON checks, Observant +5 passives, Dual Wielder AC (apply by hand for now)
 - Later: session recap generated from the event log
 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-18 — Added cannon and summon form choices, automatic upcasting, logged cannon actions and legacy conversion; corrected Ranger and Steel Defender template values.
 - 2026-11-18 — Planned M42 creation cards and recognizable class icons; corrected Cloudflare hosting docs and recorded the friend's private-campaign Artificer reproduction details.
 - 2026-11-17 — Desktop Sheet shows Combat Statistics first; phones and tablets keep their section order, with one set of controls at every width.
 - 2026-11-17 — Fixed infusion-known eligibility and counts; local, reload and shared-sync checks retain Artificer. Friend-specific disappearance still needs campaign data and site URL.

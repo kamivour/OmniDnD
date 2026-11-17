@@ -3,6 +3,12 @@ import { useSearchParams } from 'react-router';
 import { Pencil, Plus } from 'lucide-react';
 import { companionStats } from '../../engine/calc/companions';
 import {
+  resolveCompanion,
+  profileForSource,
+  classLevel,
+} from '../../engine/calc/companion-profiles';
+import { useCannon } from '../../engine/commands/cannons';
+import {
   combatMovement,
   adjustCompanionUse,
   commandCompanion,
@@ -68,7 +74,7 @@ export function CompanionsScreen() {
   };
 
   return (
-    <div className="mx-auto flex max-w-4xl flex-col gap-4 p-4">
+    <div id="companion-forms" className="mx-auto flex max-w-4xl flex-col gap-4 p-4">
       <header className="flex items-start justify-between gap-3">
         <div>
           <h1 className="font-display text-xl text-text">Companions</h1>
@@ -85,7 +91,8 @@ export function CompanionsScreen() {
       {combat && (
         <section aria-label="Your turn economy" className="rounded-card bg-surface p-3">
           <p className="mb-2 text-xs text-text-muted">
-            Commanding a companion spends from your own turn.
+            Use the cost shown for your companion. Spell summons take verbal orders without spending
+            your actions.
           </p>
           <EconomyBar
             economy={economy}
@@ -122,7 +129,7 @@ export function CompanionsScreen() {
 }
 
 function CompanionCard({
-  companion,
+  companion: savedCompanion,
   inCombat,
   onEdit,
 }: {
@@ -133,8 +140,9 @@ function CompanionCard({
   const { state, sheet } = useCharacter();
   const { run } = useCommand();
   const [amount, setAmount] = useState('');
-  const live = state.live.companions?.[companion.id];
+  const live = state.live.companions?.[savedCompanion.id];
   if (!live) return null;
+  const companion = resolveCompanion(savedCompanion, { build: state.build, sheet });
   const stats = companionStats(companion, { build: state.build, sheet });
   const value = parseWhole(amount) ?? -1;
   const valid = value >= 0;
@@ -160,6 +168,8 @@ function CompanionCard({
         <p className="text-xs text-text-muted">
           {companion.type}
           {companion.kind ? ` · ${companion.kind}` : ''} · {live.status}
+          {companion.profile &&
+            ` · ${companion.profile.form}${companion.profile.spellLevel ? ` · slot ${companion.profile.spellLevel}` : ''}`}
         </p>
       </div>
 
@@ -212,6 +222,71 @@ function CompanionCard({
             <li key={trait}>{trait}</li>
           ))}
         </ul>
+      )}
+
+      {!companion.profile && profileForSource(companion.sourceId) && (
+        <p className="text-xs text-warn">
+          Older template: form and cast level are not recorded. Edit and choose Configure companion
+          form to use computed stats.
+        </p>
+      )}
+      {companion.actions?.map((action) => (
+        <div key={action.name} className="flex flex-col gap-2 text-sm">
+          <p>
+            <span className="font-semibold">{action.name}</span> ·{' '}
+            {action.cost === 'bonus' ? 'Your bonus action' : action.cost} · {action.effect}
+          </p>
+          {companion.profile?.family === 'eldritch-cannon' && (
+            <button
+              type="button"
+              className={`${buttonClass} self-start`}
+              disabled={!active}
+              onClick={() => run(useCannon, { ids: [companion.id], mode: 'activate' })}
+            >
+              Activate {action.name}
+            </button>
+          )}
+        </div>
+      ))}
+      {companion.profile?.family === 'eldritch-cannon' && (
+        <div className="flex flex-wrap gap-2">
+          {classLevel({ build: state.build, sheet }, 'class.artificer') >= 15 &&
+            (state.build.companions ?? []).filter(
+              (entry) =>
+                entry.profile?.family === 'eldritch-cannon' &&
+                state.live.companions?.[entry.id]?.status === 'active',
+            ).length === 2 && (
+              <button
+                type="button"
+                className={buttonClass}
+                disabled={!active}
+                onClick={() =>
+                  run(useCannon, {
+                    ids: state.build
+                      .companions!.filter(
+                        (entry) =>
+                          entry.profile?.family === 'eldritch-cannon' &&
+                          state.live.companions?.[entry.id]?.status === 'active',
+                      )
+                      .map((entry) => entry.id),
+                    mode: 'activate',
+                  })
+                }
+              >
+                Activate both cannons
+              </button>
+            )}
+          {classLevel({ build: state.build, sheet }, 'class.artificer') >= 9 && (
+            <button
+              type="button"
+              className={buttonClass}
+              disabled={!active}
+              onClick={() => run(useCannon, { ids: [companion.id], mode: 'detonate' })}
+            >
+              Detonate {name}
+            </button>
+          )}
+        </div>
       )}
 
       {companion.notes && (
@@ -358,17 +433,18 @@ function CompanionCard({
               className={inputClass}
             />
           </Field>
-          {(['action', 'bonus', 'reaction'] as const).map((slot) => (
-            <button
-              key={slot}
-              type="button"
-              className={buttonClass}
-              aria-label={`Command ${name} (${slot})`}
-              onClick={() => run(commandCompanion, { id: companion.id, slot })}
-            >
-              Command: {slot}
-            </button>
-          ))}
+          {!companion.profile &&
+            (['action', 'bonus', 'reaction'] as const).map((slot) => (
+              <button
+                key={slot}
+                type="button"
+                className={buttonClass}
+                aria-label={`Command ${name} (${slot})`}
+                onClick={() => run(commandCompanion, { id: companion.id, slot })}
+              >
+                Command: {slot}
+              </button>
+            ))}
         </div>
       )}
 

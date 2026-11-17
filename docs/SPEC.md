@@ -193,15 +193,17 @@ Items grouped by container. Equip toggle, quantity `− / +`, Use/Consume (potio
 - Phase 2: full editor: source, duration, modifiers (e.g., +1 AC, resistance), expiry trigger, manual override. Injuries and custom effects are DM-defined (no built-in mechanics).
 
 ### Companions (Phase 2)
-Built in M12: companion screen, commands and schema. Creature import and Artificer templates are not yet in (Q30). Show name, type (pet / mount / familiar / summon / sidekick), icon, AC, HP, speed, attacks, abilities, conditions, uses, notes and initiative; Tasha sidekicks require the campaign option.
+Built: companion screen, SRD creatures, templates and undoable commands. Show name, type, icon, AC, HP, movement, attacks, abilities, conditions, uses, notes and initiative; sidekicks remain custom companions (Q30).
+
+**Forms:** choose Flamethrower, Force Ballista or Protector when recording a cannon, plus Small/Tiny and legs. Damage improves at Artificer 9; at 15, two cannons can activate with one bonus action. Spell summons ask for their form, cast level and casting class; the engine computes their stat block, including upcasting. Existing generic records offer an explicit Edit → Configure companion form conversion without healing or resetting expiry.
 
 - **Statblocks:** import SRD 5.1 creatures such as Mastiff into `data/srd/`. Non-SRD companions use user entry or own-words content; never copy book text into public content packs.
 - **Owner-derived values:** cover Eldritch Cannon, Steel Defender, Ranger companions and Find Familiar, computing values from owner class level, proficiency and ability modifiers where the selected 2014 rule requires them. Familiar forms otherwise retain fixed SRD stats; Ranger PHB/Tasha variant choice is Q23, and users never type numbers the engine can derive.
-- **Creation and recreation:** apply the source's feature/spell uses, spell-slot costs, duration and maximum count through engine commands. Expiry uses the shared saved game clock.
+- **Creation and recreation:** record the feature use or spell casting through Features/Spells, then add its companion record; adding does not spend the cost again. Companion commands track duration and count warnings through the shared saved game clock; automatically connecting creation costs and concentration remains planned.
 - **Commanding:** spend the owner's required action, bonus action or other economy cost and show that cost in the economy bar. The player enters choices, rolls and DM outcomes; the app does not decide hits, saves or target behavior.
 - **Independent live state:** track each companion's HP, damage, healing, conditions and uses; it is destroyed or dismissed at 0 HP. Creation, commands and all changes are logged and undoable.
-- **Persistence:** include owned companions and their live state in character saves and exports. Concrete data shapes and compatibility work remain M12 design work, described as planned in DATA.md.
-- **Artificer dependency:** use the 2014-compatible `TCE` Artificer, never 2024 rules or Eberron: Forge of the Artificer (2025). Cannon and Steel Defender automation depends on Artificer class support in M14; M12 does not bring that class implementation forward.
+- **Persistence:** owned companions, their chosen forms and their live state save and export with the character. Old records remain unchanged until explicitly configured.
+- **Artificer:** use the 2014-compatible `TCE` class and templates, never Eberron: Forge of the Artificer (2025).
 
 ### Journal (Phase 2)
 Backstory, personality traits, ideals, bonds, flaws, relationships, quests (open/done), NPCs, locations, session notes (dated). Markdown text.

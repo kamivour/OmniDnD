@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { companionStats, freshCompanionLive } from '../calc/companions';
+import { profileError, resolveCompanion } from '../calc/companion-profiles';
 import type { Condition } from '../rules2014';
 import { CompanionSchema, ConditionSchema, type Companion } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
@@ -55,7 +56,12 @@ export const addCompanion: Command<AddCompanionPayload> = {
   check: (ctx, input) => {
     const parsed = CompanionPayloadSchema.safeParse(input);
     if (!parsed.success) return [block('Companion details are invalid')];
-    const { companion } = parsed.data;
+    const companion = resolveCompanion(parsed.data.companion, {
+      build: ctx.build,
+      sheet: ctx.sheet,
+    });
+    const error = companion.profile && profileError(companion.profile);
+    if (error) return [block(error)];
     if (find(ctx, companion.id)) return [block('A companion with this id already exists')];
     const limit = companion.limit;
     if (!limit) return [];
@@ -66,6 +72,7 @@ export const addCompanion: Command<AddCompanionPayload> = {
     return active >= limit.max ? [warn(`Already at the limit for ${limit.key}: ${limit.max}`)] : [];
   },
   apply: (draft, { companion }, ctx) => {
+    companion = resolveCompanion(companion, { build: draft.build, sheet: ctx.sheet });
     const { maxHp } = companionStats(companion, { build: draft.build, sheet: ctx.sheet });
     draft.build.companions ??= [];
     draft.build.companions.push(companion);
@@ -88,9 +95,26 @@ export const updateCompanion: Command<UpdateCompanionPayload> = {
   check: (ctx, input) => {
     const parsed = CompanionPayloadSchema.safeParse(input);
     if (!parsed.success) return [block('Companion details are invalid')];
+    const error = parsed.data.companion.profile && profileError(parsed.data.companion.profile);
+    if (error) return [block(error)];
+    const old = find(ctx, parsed.data.companion.id)?.profile;
+    const next = parsed.data.companion.profile;
+    if (
+      old &&
+      (!next ||
+        (['family', 'form', 'spellLevel', 'castingClassId', 'size', 'legs'] as const).some(
+          (key) => old[key] !== next[key],
+        ))
+    )
+      return [
+        block(
+          'Creation choices are fixed; create another companion to change its form or cast level',
+        ),
+      ];
     return find(ctx, parsed.data.companion.id) ? [] : [block('Companion does not exist')];
   },
   apply: (draft, { companion }, ctx) => {
+    companion = resolveCompanion(companion, { build: draft.build, sheet: ctx.sheet });
     const index = draft.build.companions!.findIndex((other) => other.id === companion.id);
     draft.build.companions![index] = companion;
     const state = draft.live.companions![companion.id]!;
@@ -139,7 +163,17 @@ export const resummonCompanion: Command<{ id: string }> = {
   check: (ctx, input) => {
     const { checks, companion, state } = target(ctx, input, IdPayloadSchema);
     if (!companion || !state) return checks;
-    return state.status === 'active' ? [warn(`${companion.name} is already active`)] : [];
+    if (state.status === 'active') return [warn(`${companion.name} is already active`)];
+    const limit = resolveCompanion(companion, { build: ctx.build, sheet: ctx.sheet }).limit;
+    const active = (ctx.build.companions ?? []).filter(
+      (other) =>
+        other.id !== companion.id &&
+        other.limit?.key === limit?.key &&
+        ctx.live.companions?.[other.id]?.status === 'active',
+    ).length;
+    return limit && active >= limit.max
+      ? [warn(`Already at the limit for ${limit.key}: ${limit.max}`)]
+      : [];
   },
   apply: (draft, { id }, ctx) => {
     const companion = find(draft, id)!;

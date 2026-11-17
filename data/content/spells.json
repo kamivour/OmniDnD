@@ -2030,7 +2030,7 @@
     "name": "Summon Beast",
     "summary": {
       "effect": "Call a spirit in beast form to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 30 HP (20 in Air form).",
-      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+      "upcast": "Choose the slot level on Companions to compute its HP, AC, damage and number of attacks."
     },
     "level": 2,
     "school": "conjuration",
@@ -2062,7 +2062,7 @@
     "name": "Summon Fey",
     "summary": {
       "effect": "Call a fey spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 30 HP.",
-      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+      "upcast": "Choose the slot level on Companions to compute its HP, AC, damage and number of attacks."
     },
     "level": 3,
     "school": "conjuration",
@@ -2094,7 +2094,7 @@
     "name": "Summon Shadowspawn",
     "summary": {
       "effect": "Call a shadowy spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 35 HP.",
-      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+      "upcast": "Choose the slot level on Companions to compute its HP, AC, damage and number of attacks."
     },
     "level": 3,
     "school": "conjuration",
@@ -2126,7 +2126,7 @@
     "name": "Summon Undead",
     "summary": {
       "effect": "Call an undead spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 30 HP.",
-      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+      "upcast": "Choose the slot level on Companions to compute its HP, AC, damage and number of attacks."
     },
     "level": 3,
     "school": "necromancy",
@@ -2158,7 +2158,7 @@
     "name": "Summon Aberration",
     "summary": {
       "effect": "Call an aberrant spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 40 HP.",
-      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+      "upcast": "Choose the slot level on Companions to compute its HP, AC, damage and number of attacks."
     },
     "level": 4,
     "school": "conjuration",
@@ -2190,7 +2190,7 @@
     "name": "Summon Construct",
     "summary": {
       "effect": "Call a constructed spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 40 HP.",
-      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+      "upcast": "Choose the slot level on Companions to compute its HP, AC, damage and number of attacks."
     },
     "level": 4,
     "school": "conjuration",
@@ -2222,7 +2222,7 @@
     "name": "Summon Elemental",
     "summary": {
       "effect": "Call an elemental spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 50 HP.",
-      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+      "upcast": "Choose the slot level on Companions to compute its HP, AC, damage and number of attacks."
     },
     "level": 4,
     "school": "conjuration",
@@ -2254,7 +2254,7 @@
     "name": "Summon Celestial",
     "summary": {
       "effect": "Call a celestial spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 40 HP.",
-      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+      "upcast": "Choose the slot level on Companions to compute its HP, AC, damage and number of attacks."
     },
     "level": 5,
     "school": "conjuration",
@@ -2286,7 +2286,7 @@
     "name": "Summon Draconic Spirit",
     "summary": {
       "effect": "Call a draconic spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 50 HP.",
-      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+      "upcast": "Choose the slot level on Companions to compute its HP, AC, damage and number of attacks."
     },
     "level": 5,
     "school": "conjuration",
@@ -2318,7 +2318,7 @@
     "name": "Summon Fiend",
     "summary": {
       "effect": "Call a fiendish spirit to fight for you. It acts on your initiative, obeys your commands, and follows the stats on Companions. Starts at 50 HP.",
-      "upcast": "Its HP, AC and damage rise with the slot level; adjust the card by hand."
+      "upcast": "Choose the slot level on Companions to compute its HP, AC, damage and number of attacks."
     },
     "level": 6,
     "school": "conjuration",

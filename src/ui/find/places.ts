@@ -26,6 +26,22 @@ export function campaignPlaces(campaignId: string): FindEntry[] {
  */
 export const PLACES: readonly FindEntry[] = [
   {
+    id: 'go.companion-forms',
+    group: 'go',
+    title: 'Companion forms',
+    detail: 'Cannon types, summon forms and cast levels',
+    synonyms: [
+      'eldritch cannon',
+      'flamethrower',
+      'force ballista',
+      'protector',
+      'upcast summon',
+      'refresh companion template',
+    ],
+    target: { kind: 'go', path: 'companions', anchor: 'companion-forms' },
+    needsCharacter: true,
+  },
+  {
     id: 'go.infusions',
     group: 'go',
     title: 'Infused items',
@@ -121,7 +137,17 @@ export const PLACES: readonly FindEntry[] = [
     group: 'go',
     title: 'Companions',
     detail: 'Pets, mounts, familiars',
-    synonyms: ['pet', 'mount', 'familiar', 'summon'],
+    synonyms: [
+      'pet',
+      'mount',
+      'familiar',
+      'summon',
+      'eldritch cannon',
+      'flamethrower',
+      'force ballista',
+      'protector',
+      'companion form',
+    ],
     target: { kind: 'go', path: 'companions' },
     needsCharacter: true,
   },

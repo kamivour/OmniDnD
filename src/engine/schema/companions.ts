@@ -30,6 +30,9 @@ export const OwnerNumberSchema = z.union([
     ownerProficiency: z.int().optional(),
     /** Adds the owner's best spell attack modifier (a summoned creature attacks with it). */
     ownerSpellAttack: z.boolean().optional(),
+    classLevelBonus: z
+      .strictObject({ classId: refId('class'), level: z.int().positive(), bonus: z.int() })
+      .optional(),
     /** The result is at least this many times the owner's level (the Ranger's companion HP). */
     atLeastOwnerLevel: z.int().optional(),
   }),
@@ -55,6 +58,34 @@ export const CompanionUseSchema = z.strictObject({
   name: z.string().trim().min(1),
   max: z.int().positive(),
   recharge: RechargeSchema,
+});
+
+export const CompanionProfileSchema = z.strictObject({
+  family: z.enum([
+    'eldritch-cannon',
+    'beast',
+    'fey',
+    'shadowspawn',
+    'undead',
+    'aberration',
+    'construct',
+    'elemental',
+    'celestial',
+    'draconic-spirit',
+    'fiend',
+  ]),
+  form: z.string(),
+  spellLevel: z.int().min(1).max(9).optional(),
+  castingClassId: refId('class').optional(),
+  size: z.enum(['Small', 'Tiny']).optional(),
+  legs: z.boolean().optional(),
+});
+export type CompanionProfile = z.infer<typeof CompanionProfileSchema>;
+
+export const CompanionActionSchema = z.strictObject({
+  name: z.string().min(1),
+  cost: z.enum(['action', 'bonus', 'none']),
+  effect: z.string().min(1),
 });
 
 export const CompanionSchema = z.strictObject({
@@ -86,6 +117,9 @@ export const CompanionSchema = z.strictObject({
   /** The spell or feature that provides it. */
   sourceId: AnyRefIdSchema.optional(),
   notes: z.string().optional(),
+  /** Explicit creation choices; numbers are resolved from the 2014 profile, not typed. */
+  profile: CompanionProfileSchema.optional(),
+  actions: z.array(CompanionActionSchema).optional(),
 });
 
 export const COMPANION_STATUSES = ['active', 'dismissed', 'destroyed'] as const;

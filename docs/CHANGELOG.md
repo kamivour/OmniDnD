@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-18 01:14 — Choose companion forms and compute summon stats
+
+- Choose Flamethrower, Force Ballista or Protector when adding a cannon, with size and legs. Activation, two-cannon commands and detonation can be undone.
+- Spell summons now have their own forms and compute upcast stats. Older records offer Edit → Configure companion form without restoring HP or resetting their timer.
+- Added Chain familiars, Find Steed forms and eligible SRD Ranger beasts; corrected Ranger and Steel Defender values. Check these choices; creation costs still use Features/Spells. Checks pass.
+
 ## 2026-11-18 00:32 — Plan creation cards and recognizable icons
 
 - Planned class, subclass, race and background cards, starting with icon and layout mockups. Paladin's proposed symbol is a shield and sword; implementation is still pending.

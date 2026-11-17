@@ -12,7 +12,7 @@ function splitDamage(text: string): { dice?: string; bonus: number } {
 
 export interface CreatureCompanionOptions {
   type: Companion['type'];
-  /** The PHB Ranger's companion: the owner's proficiency bonus replaces its own and is added to AC and damage. */
+  /** The PHB Ranger's companion adds the owner's proficiency to AC, attacks and damage. */
   ownerProficiency?: boolean;
   /** Max HP is at least this many times the owner's level in a class. */
   hpFloor?: { perLevel: number; classId: string };
@@ -36,7 +36,7 @@ export function creatureCompanion(
         const damage = action.damage?.[0];
         const split = damage ? splitDamage(damage.dice) : undefined;
         const bonus: OwnerNumber = owner
-          ? { base: action.attackBonus - creature.proficiencyBonus, ownerProficiency: 1 }
+          ? { base: action.attackBonus, ownerProficiency: 1 }
           : action.attackBonus;
         const damageBonus: OwnerNumber | undefined = owner
           ? { base: split?.bonus ?? 0, ownerProficiency: 1 }
@@ -44,6 +44,11 @@ export function creatureCompanion(
             ? split.bonus
             : undefined;
         const reach = /reach (\d+) ft/.exec(action.text)?.[1];
+        const range = /range (\d+(?:\/\d+)?) ft/.exec(action.text)?.[1];
+        const extraDamage = action.damage
+          ?.slice(1)
+          .map((entry) => `${entry.dice} ${entry.type}`)
+          .join(', ');
         return [
           {
             name: action.name,
@@ -56,7 +61,10 @@ export function creatureCompanion(
                   type: damage.type,
                 },
               }),
-            range: `${reach ?? 5} ft.`,
+            range: reach && range ? `${reach} ft. or ${range} ft.` : `${reach ?? range ?? 5} ft.`,
+            ...(extraDamage && {
+              note: `Additional damage: ${extraDamage}. Apply any saves and conditions from the creature's Reference entry.`,
+            }),
           },
         ];
       });

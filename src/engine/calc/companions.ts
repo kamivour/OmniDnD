@@ -1,6 +1,7 @@
 import type { Companion, CharacterBuild, OwnerNumber, CompanionLive } from '../schema';
 import type { Sheet } from './sheet';
 import { abilityModifier } from './abilities';
+import { resolveCompanion } from './companion-profiles';
 
 /** Owner values a companion's numbers can follow. */
 export interface CompanionOwner {
@@ -15,17 +16,25 @@ export function resolveOwnerNumber(value: OwnerNumber, owner: CompanionOwner): n
     value.classId === undefined
       ? owner.sheet.level
       : (owner.build.classes.find((entry) => entry.classId === value.classId)?.level ?? 0);
+  const spellAttacks = owner.sheet.spellcasting
+    .filter((entry) => !value.classId || entry.classId === value.classId)
+    .map((entry) => entry.attack.value);
+  const extra = value.classLevelBonus;
+  const extraLevel = extra
+    ? (owner.build.classes.find((entry) => entry.classId === extra.classId)?.level ?? 0)
+    : 0;
   const computed =
     (value.base ?? 0) +
     (value.ownerLevel ?? 0) * level +
     (value.ownerAbilityMod ? owner.sheet.abilities[value.ownerAbilityMod].mod : 0) +
     (value.ownerProficiency ?? 0) * owner.sheet.proficiency +
-    (value.ownerSpellAttack
-      ? Math.max(0, ...owner.sheet.spellcasting.map((entry) => entry.attack.value))
-      : 0);
-  return value.atLeastOwnerLevel === undefined
-    ? computed
-    : Math.max(computed, value.atLeastOwnerLevel * level);
+    (extra && extraLevel >= extra.level ? extra.bonus : 0) +
+    (value.ownerSpellAttack ? (spellAttacks.length ? Math.max(...spellAttacks) : 0) : 0);
+  const floored =
+    value.atLeastOwnerLevel === undefined
+      ? computed
+      : Math.max(computed, value.atLeastOwnerLevel * level);
+  return floored;
 }
 
 export interface CompanionStats {
@@ -43,6 +52,7 @@ export interface CompanionStats {
 
 /** The companion's numbers for the owner as they are now. */
 export function companionStats(companion: Companion, owner: CompanionOwner): CompanionStats {
+  companion = resolveCompanion(companion, owner);
   return {
     ac: resolveOwnerNumber(companion.ac, owner),
     maxHp: Math.max(1, resolveOwnerNumber(companion.maxHp, owner)),

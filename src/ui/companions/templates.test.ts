@@ -21,6 +21,44 @@ const ownerAt = (classId: string, level: number) => {
 };
 
 describe('companion templates', () => {
+  it('offers every eligible SRD Ranger beast rather than only four examples', () => {
+    for (const name of ['Mastiff', 'Hawk', 'Poisonous Snake', 'Giant Frog']) {
+      expect(template(name + " (Ranger's companion)").maxHp).toMatchObject({
+        atLeastOwnerLevel: 4,
+      });
+    }
+    expect(
+      COMPANION_TEMPLATES.some((entry) => entry.label === "Giant Wasp (Ranger's companion)"),
+    ).toBe(false);
+    expect(template("Mastiff (Ranger's companion)").maxHp).toMatchObject({ atLeastOwnerLevel: 4 });
+    expect(
+      COMPANION_TEMPLATES.some((entry) => entry.label === "Brown Bear (Ranger's companion)"),
+    ).toBe(false);
+    expect(
+      COMPANION_TEMPLATES.some((entry) => entry.label === "Giant Owl (Ranger's companion)"),
+    ).toBe(false);
+  });
+
+  it('provides Chain forms without allowing ordinary familiars to attack', () => {
+    expect(COMPANION_TEMPLATES.filter((entry) => entry.group === 'Pact of the Chain')).toHaveLength(
+      4,
+    );
+    expect(template('Imp (Chain familiar)').attacks.length).toBeGreaterThan(0);
+    expect(
+      template('Sprite (Chain familiar)').attacks.find((entry) => entry.name === 'Shortbow')?.range,
+    ).toBe('40/160 ft.');
+    expect(template('Owl (familiar)').attacks).toEqual([]);
+  });
+
+  it('offers all five Find Steed forms with Intelligence 6 and a shared limit', () => {
+    const steeds = COMPANION_TEMPLATES.filter((entry) => entry.group === 'Find Steed');
+    expect(steeds).toHaveLength(5);
+    for (const { companion } of steeds) {
+      expect(companion.abilities.INT).toBe(6);
+      expect(companion.limit).toEqual({ key: 'steed', max: 1 });
+    }
+  });
+
   it('are all valid, with unique labels', () => {
     expect(new Set(COMPANION_TEMPLATES.map((entry) => entry.label)).size).toBe(
       COMPANION_TEMPLATES.length,
@@ -43,7 +81,7 @@ describe('companion templates', () => {
     const stats = companionStats(wolf, owner);
     expect(stats.ac).toBe(13 + pb);
     expect(stats.attacks[0]).toMatchObject({
-      bonus: 2 + pb,
+      bonus: 4 + pb,
       damage: { dice: '2d4', bonus: 2 + pb, type: 'piercing' },
     });
   });
@@ -65,5 +103,22 @@ describe('companion templates', () => {
     expect(preview.result).toBe('warn');
     expect(template('Owl (familiar)').attacks).toEqual([]);
     expect(template('Owl (familiar)').speed).toEqual({ walk: 5, fly: 60 });
+  });
+
+  it('uses the Sky beast stat block rather than the Land HP and damage', () => {
+    const owner = ownerAt('class.ranger', 5);
+    const sky = template('Beast of the Sky');
+    expect(sky.kind).toBe('Small beast');
+    expect(companionStats(sky, owner)).toMatchObject({
+      maxHp: 24,
+      attacks: [{ damage: { dice: '1d4', bonus: 3 + owner.sheet.proficiency } }],
+    });
+    expect(template('Beast of the Sea').abilities).toEqual(template('Beast of the Land').abilities);
+  });
+
+  it('adds Improved Defender AC using artificer level rather than total level', () => {
+    const defender = template('Steel Defender');
+    expect(companionStats(defender, ownerAt('class.artificer', 14)).ac).toBe(15);
+    expect(companionStats(defender, ownerAt('class.artificer', 15)).ac).toBe(17);
   });
 });

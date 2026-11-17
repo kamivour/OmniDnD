@@ -197,6 +197,8 @@ export function fromForm(
     ...(base?.limit && { limit: base.limit }),
     ...(base?.durationSeconds && { durationSeconds: base.durationSeconds }),
     ...(base?.sourceId && { sourceId: base.sourceId }),
+    ...(base?.profile && { profile: base.profile }),
+    ...(base?.actions && { actions: base.actions }),
     id,
     name: form.name.trim(),
     type: form.type,

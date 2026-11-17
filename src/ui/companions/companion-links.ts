@@ -36,7 +36,8 @@ const LINKS: Record<string, CompanionLink> = {
     limitKey: 'ranger-companion',
   },
   'spell.find-familiar': { key: 'familiar', limitKey: 'familiar' },
-  'spell.find-steed': { key: 'steed' },
+  'feature.warlock.pact-of-the-chain': { key: 'chain-familiar', limitKey: 'familiar' },
+  'spell.find-steed': { key: 'steed', limitKey: 'steed' },
   ...Object.fromEntries(
     SUMMON_SPELL_TEMPLATES.map(({ spellId, template }) => [
       spellId,

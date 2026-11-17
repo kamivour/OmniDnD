@@ -3,7 +3,20 @@ import { Plus, Trash2 } from 'lucide-react';
 import { ABILITIES } from '../../engine/calc/abilities';
 import { addCompanion, updateCompanion } from '../../engine/commands';
 import { DAMAGE_TYPES, type DamageType } from '../../engine/rules2014';
-import { COMPANION_TYPES, type Companion, type CompanionType } from '../../engine/schema';
+import {
+  COMPANION_TYPES,
+  type Companion,
+  type CompanionType,
+  type CompanionProfile,
+} from '../../engine/schema';
+import {
+  profileError,
+  profileForSource,
+  profileMinimumLevel,
+  resolveCompanion,
+} from '../../engine/calc/companion-profiles';
+import { useCharacter } from '../hooks/useCharacter';
+import { CompanionProfileFields } from './CompanionProfileFields';
 import { useCommand } from '../commands/command-context';
 import { Field, inputClass } from '../components/fields';
 import { Sheet } from '../components/Sheet';
@@ -46,7 +59,13 @@ export function CompanionEditor({
       open={open}
       onOpenChange={onOpenChange}
       title={editing ? `Edit ${editing.name}` : 'Add companion'}
-      description={editing ? 'Change any detail.' : 'Start from a template or enter your own.'}
+      description={
+        editing?.profile
+          ? 'Change its name or notes. Creation choices stay fixed.'
+          : editing
+            ? 'Change any detail.'
+            : 'Start from a template or enter your own.'
+      }
       className="sm:w-xl"
     >
       {open && (
@@ -71,6 +90,7 @@ function EditorForm({
   onDone: () => void;
 }) {
   const { run } = useCommand();
+  const { state, sheet } = useCharacter();
   const start = editing
     ? undefined
     : COMPANION_TEMPLATES.find((entry) => entry.label === initialTemplate)?.companion;
@@ -78,7 +98,29 @@ function EditorForm({
     editing ? toForm(editing) : start ? toForm(start) : emptyForm(),
   );
   const [template, setTemplate] = useState(start ? (initialTemplate ?? '') : '');
-  const [base, setBase] = useState<Omit<Companion, 'id'> | undefined>(start);
+  const [base, setBase] = useState<Omit<Companion, 'id'> | undefined>(editing ?? start);
+  const newProfile = (entry: Omit<Companion, 'id'> | undefined): CompanionProfile | undefined =>
+    entry?.profile && {
+      ...entry.profile,
+      form: '',
+      castingClassId: sheet.spellcasting.length === 1 ? sheet.spellcasting[0]?.classId : undefined,
+    };
+  const [profile, setProfile] = useState<CompanionProfile | undefined>(
+    () => editing?.profile ?? newProfile(start),
+  );
+  const [refreshTemplate, setRefreshTemplate] = useState('');
+  const refreshOptions =
+    editing && !profile
+      ? COMPANION_TEMPLATES.filter(
+          (entry) =>
+            !entry.companion.profile &&
+            ((editing.sourceId && entry.companion.sourceId === editing.sourceId) ||
+              (!editing.sourceId &&
+                editing.limit?.key === 'ranger-companion' &&
+                !entry.companion.sourceId &&
+                entry.companion.limit?.key === 'ranger-companion')),
+        )
+      : [];
   const [error, setError] = useState<string | null>(null);
   const prefix = editing ? `edit-${editing.id}` : 'comp';
   const set = (patch: Partial<CompanionForm>) => {
@@ -91,12 +133,36 @@ function EditorForm({
     const chosen = COMPANION_TEMPLATES.find((entry) => entry.label === label)?.companion;
     setError(null);
     setBase(chosen);
+    setProfile(newProfile(chosen));
     setForm(chosen ? toForm(chosen) : emptyForm());
   };
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
-    const result = fromForm(form, editing?.id ?? crypto.randomUUID(), editing ?? base);
+    if (profile) {
+      const problem = profileError(profile);
+      if (problem) {
+        setError(problem);
+        return;
+      }
+      if (
+        profile.family !== 'eldritch-cannon' &&
+        sheet.spellcasting.length &&
+        !profile.castingClassId
+      ) {
+        setError('Choose the class used to cast.');
+        return;
+      }
+    }
+    const id = editing?.id ?? crypto.randomUUID();
+    const resolved =
+      profile && base
+        ? resolveCompanion({ ...base, id, profile }, { build: state.build, sheet })
+        : undefined;
+    const submittedForm = resolved
+      ? { ...toForm(resolved), name: form.name, notes: form.notes }
+      : form;
+    const result = fromForm(submittedForm, id, resolved ?? editing ?? base);
     if ('error' in result) {
       setError(result.error);
       return;
@@ -154,6 +220,7 @@ function EditorForm({
             id={`${prefix}-type`}
             className={inputClass}
             value={form.type}
+            disabled={Boolean(profile)}
             onChange={(event) => set({ type: event.target.value as CompanionType })}
           >
             {COMPANION_TYPES.map((entry) => (
@@ -164,256 +231,323 @@ function EditorForm({
           </select>
         </Field>
       </div>
-      <Field label="What it is" htmlFor={`${prefix}-kind`} hint="For example: Medium beast">
-        <input
-          id={`${prefix}-kind`}
-          className={inputClass}
-          value={form.kind}
-          onChange={(event) => set({ kind: event.target.value })}
-        />
-      </Field>
-
-      <div className="grid grid-cols-2 gap-3">
-        <NumberField
-          id={`${prefix}-ac`}
-          label="AC"
-          value={form.ac}
-          onChange={(ac) => set({ ac })}
-        />
-        <NumberField
-          id={`${prefix}-hp`}
-          label="Max HP"
-          value={form.maxHp}
-          onChange={(maxHp) => set({ maxHp })}
-        />
-      </div>
-
-      <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-sm font-semibold text-text">Speed (ft.)</legend>
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
-          {SPEED_KINDS.map((kind) => (
-            <Field
-              key={kind}
-              label={kind[0]!.toUpperCase() + kind.slice(1)}
-              htmlFor={`${prefix}-speed-${kind}`}
-            >
-              <input
-                id={`${prefix}-speed-${kind}`}
-                inputMode="numeric"
-                className={inputClass}
-                value={form.speed[kind]}
-                onChange={(event) => set({ speed: { ...form.speed, [kind]: event.target.value } })}
-              />
-            </Field>
-          ))}
-        </div>
-      </fieldset>
-
-      <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-sm font-semibold text-text">Ability scores</legend>
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-          {ABILITIES.map((ability) => (
-            <Field key={ability} label={ability} htmlFor={`${prefix}-${ability}`}>
-              <input
-                id={`${prefix}-${ability}`}
-                inputMode="numeric"
-                className={inputClass}
-                value={form.abilities[ability]}
-                onChange={(event) =>
-                  set({ abilities: { ...form.abilities, [ability]: event.target.value } })
-                }
-              />
-            </Field>
-          ))}
-        </div>
-      </fieldset>
-
-      <fieldset className="flex flex-col gap-3">
-        <legend className="mb-1 text-sm font-semibold text-text">Attacks</legend>
-        {form.attacks.map((attack, index) => {
-          const id = `${prefix}-attack-${index}`;
-          const label = attack.name.trim() || `attack ${index + 1}`;
-          return (
-            <div
-              key={index}
-              role="group"
-              aria-label={`Attack ${index + 1}`}
-              className="grid grid-cols-2 gap-2 rounded-card border border-border p-3 sm:grid-cols-3"
-            >
-              <Field
-                label="Attack name"
-                htmlFor={`${id}-name`}
-                className="col-span-2 sm:col-span-1"
-              >
-                <input
-                  id={`${id}-name`}
-                  className={inputClass}
-                  value={attack.name}
-                  onChange={(event) => setAttack(index, { name: event.target.value })}
-                />
-              </Field>
-              <NumberField
-                id={`${id}-bonus`}
-                label="To hit"
-                value={attack.bonus}
-                onChange={(bonus) => setAttack(index, { bonus })}
-              />
-              <Field label="Damage dice" htmlFor={`${id}-dice`}>
-                <input
-                  id={`${id}-dice`}
-                  placeholder="1d6"
-                  className={inputClass}
-                  value={attack.dice}
-                  onChange={(event) => setAttack(index, { dice: event.target.value })}
-                />
-              </Field>
-              <NumberField
-                id={`${id}-dmg`}
-                label="Damage bonus"
-                value={attack.damageBonus}
-                onChange={(damageBonus) => setAttack(index, { damageBonus })}
-              />
-              <Field label="Damage type" htmlFor={`${id}-type`}>
-                <select
-                  id={`${id}-type`}
-                  className={inputClass}
-                  value={attack.type}
-                  onChange={(event) =>
-                    setAttack(index, { type: event.target.value as DamageType | '' })
-                  }
-                >
-                  <option value="">None</option>
-                  {DAMAGE_TYPES.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-              <Field label="Range" htmlFor={`${id}-range`}>
-                <input
-                  id={`${id}-range`}
-                  placeholder="5 ft."
-                  className={inputClass}
-                  value={attack.range}
-                  onChange={(event) => setAttack(index, { range: event.target.value })}
-                />
-              </Field>
-              <Field label="Note" htmlFor={`${id}-note`} className="col-span-2">
-                <input
-                  id={`${id}-note`}
-                  className={inputClass}
-                  value={attack.note}
-                  onChange={(event) => setAttack(index, { note: event.target.value })}
-                />
-              </Field>
-              <button
-                type="button"
-                aria-label={`Remove ${label}`}
-                className={`${smallButton} self-end text-danger`}
-                onClick={() => set({ attacks: form.attacks.filter((_, at) => at !== index) })}
-              >
-                <Trash2 size={16} aria-hidden />
-                Remove
-              </button>
-            </div>
-          );
-        })}
+      {refreshOptions.length > 0 && (
+        <Field
+          label="Refresh from template"
+          htmlFor="comp-refresh"
+          hint="Replaces stats, traits and notes; review before saving. Keeps your name and timer; HP is capped to the new maximum."
+        >
+          <select
+            id="comp-refresh"
+            className={inputClass}
+            value={refreshTemplate}
+            onChange={(event) => {
+              const chosen = refreshOptions.find((entry) => entry.label === event.target.value);
+              setRefreshTemplate(event.target.value);
+              setError(null);
+              setForm({ ...toForm(chosen?.companion ?? editing!), name: form.name });
+            }}
+          >
+            <option value="">Keep current values</option>
+            {refreshOptions.map((entry) => (
+              <option key={entry.label}>{entry.label}</option>
+            ))}
+          </select>
+        </Field>
+      )}
+      {!profile && editing && profileForSource(editing.sourceId) && (
         <button
           type="button"
-          className={`${smallButton} self-start`}
-          onClick={() => set({ attacks: [...form.attacks, emptyAttack()] })}
+          className={smallButton}
+          onClick={() => {
+            const family = profileForSource(editing.sourceId)!;
+            setProfile({
+              family,
+              form: '',
+              spellLevel: profileMinimumLevel(family),
+              castingClassId:
+                sheet.spellcasting.length === 1 ? sheet.spellcasting[0]?.classId : undefined,
+            });
+          }}
         >
-          <Plus size={16} aria-hidden />
-          Add attack
+          Configure companion form
         </button>
-      </fieldset>
-
-      <fieldset className="flex flex-col gap-3">
-        <legend className="mb-1 text-sm font-semibold text-text">Limited uses</legend>
-        {form.uses.map((use, index) => {
-          const id = `${prefix}-use-${index}`;
-          const label = use.name.trim() || `use ${index + 1}`;
-          return (
-            <div
-              key={use.id}
-              role="group"
-              aria-label={`Limited use ${index + 1}`}
-              className="grid grid-cols-2 gap-2 rounded-card border border-border p-3 sm:grid-cols-3"
-            >
-              <Field label="Use name" htmlFor={`${id}-name`} className="col-span-2 sm:col-span-1">
-                <input
-                  id={`${id}-name`}
-                  className={inputClass}
-                  value={use.name}
-                  onChange={(event) => setUse(index, { name: event.target.value })}
-                />
-              </Field>
-              <Field label="Uses" htmlFor={`${id}-max`}>
-                <input
-                  id={`${id}-max`}
-                  inputMode="numeric"
-                  className={inputClass}
-                  value={use.max}
-                  onChange={(event) => setUse(index, { max: event.target.value })}
-                />
-              </Field>
-              <Field label="Recharge" htmlFor={`${id}-recharge`}>
-                <select
-                  id={`${id}-recharge`}
-                  className={inputClass}
-                  value={use.recharge}
-                  onChange={(event) =>
-                    setUse(index, {
-                      recharge: event.target.value as CompanionForm['uses'][number]['recharge'],
-                    })
-                  }
-                >
-                  {RECHARGES.map((entry) => (
-                    <option key={entry.value} value={entry.value}>
-                      {entry.label}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-              <button
-                type="button"
-                aria-label={`Remove ${label}`}
-                className={`${smallButton} self-end text-danger`}
-                onClick={() => set({ uses: form.uses.filter((_, at) => at !== index) })}
-              >
-                <Trash2 size={16} aria-hidden />
-                Remove
-              </button>
-            </div>
-          );
-        })}
-        <button
-          type="button"
-          className={`${smallButton} self-start`}
-          onClick={() =>
-            set({
-              uses: [
-                ...form.uses,
-                { id: crypto.randomUUID(), name: '', max: '1', recharge: 'long' },
-              ],
-            })
-          }
-        >
-          <Plus size={16} aria-hidden />
-          Add limited use
-        </button>
-      </fieldset>
-
-      <Field label="Traits" htmlFor={`${prefix}-traits`} hint="One per line, in your own words.">
-        <textarea
-          id={`${prefix}-traits`}
-          rows={3}
-          className={`${inputClass} py-2`}
-          value={form.traits}
-          onChange={(event) => set({ traits: event.target.value })}
+      )}
+      {profile && base && (
+        <CompanionProfileFields
+          profile={profile}
+          companion={{ ...base, id: editing?.id ?? 'preview' }}
+          onChange={(next) => {
+            setError(null);
+            setProfile(next);
+          }}
+          editing={Boolean(editing?.profile)}
         />
-      </Field>
+      )}
+      {!profile && (
+        <>
+          <Field label="What it is" htmlFor={`${prefix}-kind`} hint="For example: Medium beast">
+            <input
+              id={`${prefix}-kind`}
+              className={inputClass}
+              value={form.kind}
+              onChange={(event) => set({ kind: event.target.value })}
+            />
+          </Field>
+
+          <div className="grid grid-cols-2 gap-3">
+            <NumberField
+              id={`${prefix}-ac`}
+              label="AC"
+              value={form.ac}
+              onChange={(ac) => set({ ac })}
+            />
+            <NumberField
+              id={`${prefix}-hp`}
+              label="Max HP"
+              value={form.maxHp}
+              onChange={(maxHp) => set({ maxHp })}
+            />
+          </div>
+
+          <fieldset className="flex flex-col gap-2">
+            <legend className="mb-1 text-sm font-semibold text-text">Speed (ft.)</legend>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+              {SPEED_KINDS.map((kind) => (
+                <Field
+                  key={kind}
+                  label={kind[0]!.toUpperCase() + kind.slice(1)}
+                  htmlFor={`${prefix}-speed-${kind}`}
+                >
+                  <input
+                    id={`${prefix}-speed-${kind}`}
+                    inputMode="numeric"
+                    className={inputClass}
+                    value={form.speed[kind]}
+                    onChange={(event) =>
+                      set({ speed: { ...form.speed, [kind]: event.target.value } })
+                    }
+                  />
+                </Field>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset className="flex flex-col gap-2">
+            <legend className="mb-1 text-sm font-semibold text-text">Ability scores</legend>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+              {ABILITIES.map((ability) => (
+                <Field key={ability} label={ability} htmlFor={`${prefix}-${ability}`}>
+                  <input
+                    id={`${prefix}-${ability}`}
+                    inputMode="numeric"
+                    className={inputClass}
+                    value={form.abilities[ability]}
+                    onChange={(event) =>
+                      set({ abilities: { ...form.abilities, [ability]: event.target.value } })
+                    }
+                  />
+                </Field>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset className="flex flex-col gap-3">
+            <legend className="mb-1 text-sm font-semibold text-text">Attacks</legend>
+            {form.attacks.map((attack, index) => {
+              const id = `${prefix}-attack-${index}`;
+              const label = attack.name.trim() || `attack ${index + 1}`;
+              return (
+                <div
+                  key={index}
+                  role="group"
+                  aria-label={`Attack ${index + 1}`}
+                  className="grid grid-cols-2 gap-2 rounded-card border border-border p-3 sm:grid-cols-3"
+                >
+                  <Field
+                    label="Attack name"
+                    htmlFor={`${id}-name`}
+                    className="col-span-2 sm:col-span-1"
+                  >
+                    <input
+                      id={`${id}-name`}
+                      className={inputClass}
+                      value={attack.name}
+                      onChange={(event) => setAttack(index, { name: event.target.value })}
+                    />
+                  </Field>
+                  <NumberField
+                    id={`${id}-bonus`}
+                    label="To hit"
+                    value={attack.bonus}
+                    onChange={(bonus) => setAttack(index, { bonus })}
+                  />
+                  <Field label="Damage dice" htmlFor={`${id}-dice`}>
+                    <input
+                      id={`${id}-dice`}
+                      placeholder="1d6"
+                      className={inputClass}
+                      value={attack.dice}
+                      onChange={(event) => setAttack(index, { dice: event.target.value })}
+                    />
+                  </Field>
+                  <NumberField
+                    id={`${id}-dmg`}
+                    label="Damage bonus"
+                    value={attack.damageBonus}
+                    onChange={(damageBonus) => setAttack(index, { damageBonus })}
+                  />
+                  <Field label="Damage type" htmlFor={`${id}-type`}>
+                    <select
+                      id={`${id}-type`}
+                      className={inputClass}
+                      value={attack.type}
+                      onChange={(event) =>
+                        setAttack(index, { type: event.target.value as DamageType | '' })
+                      }
+                    >
+                      <option value="">None</option>
+                      {DAMAGE_TYPES.map((type) => (
+                        <option key={type} value={type}>
+                          {type}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field label="Range" htmlFor={`${id}-range`}>
+                    <input
+                      id={`${id}-range`}
+                      placeholder="5 ft."
+                      className={inputClass}
+                      value={attack.range}
+                      onChange={(event) => setAttack(index, { range: event.target.value })}
+                    />
+                  </Field>
+                  <Field label="Note" htmlFor={`${id}-note`} className="col-span-2">
+                    <input
+                      id={`${id}-note`}
+                      className={inputClass}
+                      value={attack.note}
+                      onChange={(event) => setAttack(index, { note: event.target.value })}
+                    />
+                  </Field>
+                  <button
+                    type="button"
+                    aria-label={`Remove ${label}`}
+                    className={`${smallButton} self-end text-danger`}
+                    onClick={() => set({ attacks: form.attacks.filter((_, at) => at !== index) })}
+                  >
+                    <Trash2 size={16} aria-hidden />
+                    Remove
+                  </button>
+                </div>
+              );
+            })}
+            <button
+              type="button"
+              className={`${smallButton} self-start`}
+              onClick={() => set({ attacks: [...form.attacks, emptyAttack()] })}
+            >
+              <Plus size={16} aria-hidden />
+              Add attack
+            </button>
+          </fieldset>
+
+          <fieldset className="flex flex-col gap-3">
+            <legend className="mb-1 text-sm font-semibold text-text">Limited uses</legend>
+            {form.uses.map((use, index) => {
+              const id = `${prefix}-use-${index}`;
+              const label = use.name.trim() || `use ${index + 1}`;
+              return (
+                <div
+                  key={use.id}
+                  role="group"
+                  aria-label={`Limited use ${index + 1}`}
+                  className="grid grid-cols-2 gap-2 rounded-card border border-border p-3 sm:grid-cols-3"
+                >
+                  <Field
+                    label="Use name"
+                    htmlFor={`${id}-name`}
+                    className="col-span-2 sm:col-span-1"
+                  >
+                    <input
+                      id={`${id}-name`}
+                      className={inputClass}
+                      value={use.name}
+                      onChange={(event) => setUse(index, { name: event.target.value })}
+                    />
+                  </Field>
+                  <Field label="Uses" htmlFor={`${id}-max`}>
+                    <input
+                      id={`${id}-max`}
+                      inputMode="numeric"
+                      className={inputClass}
+                      value={use.max}
+                      onChange={(event) => setUse(index, { max: event.target.value })}
+                    />
+                  </Field>
+                  <Field label="Recharge" htmlFor={`${id}-recharge`}>
+                    <select
+                      id={`${id}-recharge`}
+                      className={inputClass}
+                      value={use.recharge}
+                      onChange={(event) =>
+                        setUse(index, {
+                          recharge: event.target.value as CompanionForm['uses'][number]['recharge'],
+                        })
+                      }
+                    >
+                      {RECHARGES.map((entry) => (
+                        <option key={entry.value} value={entry.value}>
+                          {entry.label}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                  <button
+                    type="button"
+                    aria-label={`Remove ${label}`}
+                    className={`${smallButton} self-end text-danger`}
+                    onClick={() => set({ uses: form.uses.filter((_, at) => at !== index) })}
+                  >
+                    <Trash2 size={16} aria-hidden />
+                    Remove
+                  </button>
+                </div>
+              );
+            })}
+            <button
+              type="button"
+              className={`${smallButton} self-start`}
+              onClick={() =>
+                set({
+                  uses: [
+                    ...form.uses,
+                    { id: crypto.randomUUID(), name: '', max: '1', recharge: 'long' },
+                  ],
+                })
+              }
+            >
+              <Plus size={16} aria-hidden />
+              Add limited use
+            </button>
+          </fieldset>
+
+          <Field
+            label="Traits"
+            htmlFor={`${prefix}-traits`}
+            hint="One per line, in your own words."
+          >
+            <textarea
+              id={`${prefix}-traits`}
+              rows={3}
+              className={`${inputClass} py-2`}
+              value={form.traits}
+              onChange={(event) => set({ traits: event.target.value })}
+            />
+          </Field>
+        </>
+      )}
       <Field label="Notes" htmlFor={`${prefix}-notes`}>
         <textarea
           id={`${prefix}-notes`}

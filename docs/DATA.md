@@ -282,7 +282,10 @@ interface RemainingCorrection {
 
 ```ts
 // build.companions?: Companion[]   live.companions?: Record<id, CompanionLive>   (absent in older saves)
-type OwnerNumber = number | { base?; ownerLevel?; classId?; ownerAbilityMod?; ownerProficiency? };
+type OwnerNumber = number | {
+  base?; ownerLevel?; classId?; ownerAbilityMod?; ownerProficiency?; ownerSpellAttack?; atLeastOwnerLevel?;
+  classLevelBonus?: { classId; level; bonus };
+};
 interface Companion {
   id; name; type: 'pet'|'mount'|'familiar'|'summon'|'sidekick'; kind?; iconId?;
   ac: OwnerNumber; maxHp: OwnerNumber; speed: { walk?, fly?, swim?, climb?, burrow? };
@@ -290,6 +293,8 @@ interface Companion {
   attacks: { name; bonus: OwnerNumber; damage?: { dice?; bonus?: OwnerNumber; type }; range?; note? }[];
   traits: string[]; uses: { id; name; max; recharge }[];
   limit?: { key; max }; durationSeconds?; sourceId?; notes?;
+  profile?: { family; form; spellLevel?; castingClassId?; size?: 'Small'|'Tiny'; legs? };
+  actions?: { name; cost: 'action'|'bonus'|'none'; effect }[];
 }
 interface CompanionLive {
   status: 'active'|'dismissed'|'destroyed'; hp; tempHp; conditions[]; usesSpent: Record<useId, n>;
@@ -301,7 +306,11 @@ interface CompanionLive {
 - **Derived values:** formulas follow the owner's level (or one class's level), proficiency and ability modifiers (`calc/companions.ts`).
 - **Play:** damage, healing, temp HP, conditions, uses, initiative, dismiss, resummon and commanding are engine commands, all logged and undoable. Timed companions leave play on the shared clock; short, long and dawn uses recharge with rests.
 - **Creatures:** `kind: 'creature'` entries (size, type, AC, HP, speeds, abilities, saves, skills, defenses, senses, CR, traits, actions, reactions, legendary actions) come from the SRD import into `data/srd/creatures.json` and show in Reference search.
-- **Still to come:** templates for Steel Defender, Eldritch Cannon, Ranger companions and Find Familiar. Artificer templates depend on M14 and use the 2014-compatible `TCE` class only.
+- **Templates:** Steel Defender, three cannon forms, eligible SRD Ranger beasts, fifteen standard familiar forms, four Chain forms and five Find Steed forms are available. Primal Sky uses its own size, HP and damage; PHB Ranger beasts add the owner's proficiency to their existing attacks.
+- **Template refresh:** older Ranger and Steel Defender records offer Edit → Refresh from template, replacing stats and notes only when saved. Current HP is capped to the new maximum and the existing timer is retained; Undo restores the old definition.
+- **Configured forms:** `data/content/companion-forms.json` holds own-words 2014 summon profiles; `calc/companion-profiles.ts` resolves form and cast-level choices. New metadata is optional; legacy definitions keep their numbers until the player configures them through `updateCompanion`, preserving current HP, conditions and expiry.
+- **Costs:** adding or resummoning records an already-created companion; feature uses, slots, concentration changes and target outcomes remain in their existing controls. Cannon activation and detonation spend the owner's economy through `useCannon`, including two-cannon activation at Artificer 15.
+- **Sources:** summon variants follow the 2020 Tasha rules ([publisher overview](https://www.dndbeyond.com/posts/924-spell-spotlight-new-summoning-spells-from-tashas)); [Draconic Spirit](https://dnd5e.wikidot.com/spell:summon-draconic-spirit) instead uses Fizban's 2014 rules. Its existing Tasha book-filter grouping remains Q49.
 
 ### Guidance (M17)
 

@@ -6,6 +6,8 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D226 | 2026-11-18 | Cannon form, size and legs, and summon form, cast level and casting class are creation choices; numbers follow the owner and cast level. Old generic companions keep their definition until the player explicitly configures them, preserving current HP and expiry. | Avoid guessing forms or granting free healing when updating old characters |
+| D227 | 2026-11-18 | Replaces D189's manual upcasting: configured summon forms compute HP, AC, damage and attack count from the selected cast level. Creation costs remain recorded through Features/Spells; cannon activation and detonation use logged companion commands. | Remove typed derived numbers without spending an already-recorded cost twice |
 | D225 | 2026-11-17 | Equipment infusions are explicit inventory assignments, with a shared review after long rests; existing infusions persist. Recording an ending or infusing outside a recorded rest warns for table confirmation, and all changes can be undone. | Track the player's actual equipment without silently choosing targets or table rulings |
 | D223 | 2026-11-17 | Campaign IDs send requests reviewed by the owner or DM; seven-day invite links grant direct membership. Bringing an existing character creates an explicit, undoable copy under the destination rules and keeps the original. | Avoid accidental access and preserve characters used in other campaigns |
 | D224 | 2026-11-17 | Other members' characters use a separate reader with no gameplay or edit controls; journals and Undo history stay private. Matching campaign or character IDs are kept as separate local records. | Make ownership clear and prevent starter records on different devices from overwriting or publishing each other |
@@ -280,6 +282,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q46 | ~~Theme per campaign?~~ Answered → D194 | — | — | — |
 | Q47 | Should Homunculus Servant and Replicate Magic Item get dedicated creation and replica-choice tracking? | After M41 | Use existing Companions and Inventory workflows; these two applications and their share of the infusion limit remain manual, stated beside the counter | User |
 | Q48 | How should Armorer's armor components be represented for its two extra armor-only infusions? | After M41 | Standard active limit only, with a visible reminder; do not grant two unrestricted slots or invent separate equipment | User |
+| Q49 | Should the already-bundled Summon Draconic Spirit move from the Tasha filter to a separate Fizban's book option? | Next source review | Preserve existing spell visibility; identify Fizban's 2014 source on its companion card | User |
 
 ## How to add an entry
 

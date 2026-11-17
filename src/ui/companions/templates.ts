@@ -63,7 +63,17 @@ export const COMPANION_TEMPLATES: CompanionTemplate[] = [
 
 const creature = (name: string) => registry.get('creature', `creature.${name}`);
 
-const RANGER_BEASTS = ['wolf', 'panther', 'boar', 'giant-badger'];
+const RANGER_BEASTS = [...registry.entries.values()]
+  .filter(
+    (entry) =>
+      entry.kind === 'creature' &&
+      entry.srd &&
+      entry.creatureType === 'beast' &&
+      ['tiny', 'small', 'medium'].includes(entry.size) &&
+      entry.cr <= 0.25,
+  )
+  .map((entry) => entry.id.slice('creature.'.length))
+  .sort();
 const FAMILIARS = [
   'bat',
   'cat',
@@ -109,21 +119,25 @@ const primal = (
   companion: {
     name: `Beast of the ${kind}`,
     type: 'pet',
-    kind: 'Medium beast',
+    kind: kind === 'Sky' ? 'Small beast' : 'Medium beast',
     ac: { base: 13, ownerProficiency: 1 },
-    maxHp: { base: 5, ownerLevel: 5, classId: 'class.ranger' },
+    maxHp: {
+      base: kind === 'Sky' ? 4 : 5,
+      ownerLevel: kind === 'Sky' ? 4 : 5,
+      classId: 'class.ranger',
+    },
     ...stats,
     uses: [],
     limit: { key: 'ranger-companion', max: 1 },
     sourceId: 'feature.tce.ranger-primal-companion',
     notes:
-      'Acts on your initiative. AC, attacks and damage follow your proficiency bonus; max HP is 5 plus 5 per ranger level.',
+      'Command with a bonus action, or sacrifice an attack from your Attack action. Add your proficiency bonus to its ability checks and saves. Stats follow ranger level; Land charge adds 1d6 damage. Sea may choose bludgeoning damage.',
   },
 });
 
 const primalAttack = (name: string, dice: string, type: 'slashing' | 'piercing') => ({
   name,
-  bonus: { ownerAbilityMod: 'WIS' as const, ownerProficiency: 1 },
+  bonus: { ownerSpellAttack: true, classId: 'class.ranger' },
   damage: { dice, bonus: { base: 2, ownerProficiency: 1 }, type },
   range: '5 ft.',
 });
@@ -134,22 +148,27 @@ const primalCompanions: CompanionTemplate[] = [
     abilities: { STR: 14, DEX: 14, CON: 15, INT: 8, WIS: 14, CHA: 11 },
     attacks: [primalAttack('Maul', '1d8', 'slashing')],
     traits: [
-      'Charge: after moving 20 ft straight at a target, its maul hit knocks the target prone on a failed Strength save.',
+      'Charge: after moving 20 ft straight, a maul hit adds 1d6 slashing damage; a creature makes a Strength save against your spell DC or falls prone.',
     ],
   }),
   primal('Sea', {
     speed: { walk: 5, swim: 60 },
-    abilities: { STR: 14, DEX: 14, CON: 15, INT: 5, WIS: 12, CHA: 8 },
+    abilities: { STR: 14, DEX: 14, CON: 15, INT: 8, WIS: 14, CHA: 11 },
     attacks: [primalAttack('Binding strike', '1d6', 'piercing')],
     traits: [
       'Amphibious.',
-      'A hit grapples the target (escape DC is your spell save DC); one grapple at a time.',
+      'A hit grapples the target (escape DC is your spell save DC); while grappling, Binding Strike can only target that creature.',
     ],
   }),
   primal('Sky', {
     speed: { walk: 10, fly: 60 },
     abilities: { STR: 6, DEX: 16, CON: 13, INT: 8, WIS: 14, CHA: 11 },
-    attacks: [primalAttack('Rend', '1d4', 'slashing')],
+    attacks: [
+      {
+        ...primalAttack('Shred', '1d4', 'slashing'),
+        damage: { dice: '1d4', bonus: { base: 3, ownerProficiency: 1 }, type: 'slashing' },
+      },
+    ],
     traits: ['Flyby: does not provoke opportunity attacks when it flies out of reach.'],
   }),
 ];
@@ -161,28 +180,28 @@ const steelDefender: CompanionTemplate = {
     name: 'Steel Defender',
     type: 'summon',
     kind: 'Medium construct',
-    ac: 15,
+    ac: { base: 15, classLevelBonus: { classId: 'class.artificer', level: 15, bonus: 2 } },
     maxHp: { base: 2, ownerAbilityMod: 'INT', ownerLevel: 5, classId: 'class.artificer' },
     speed: { walk: 40 },
     abilities: { STR: 14, DEX: 12, CON: 14, INT: 4, WIS: 10, CHA: 6 },
     attacks: [
       {
         name: 'Force-empowered rend',
-        bonus: { ownerAbilityMod: 'INT', ownerProficiency: 1 },
+        bonus: { ownerSpellAttack: true, classId: 'class.artificer' },
         damage: { dice: '1d8', bonus: { ownerProficiency: 1 }, type: 'force' },
         range: '5 ft.',
       },
     ],
     traits: [
       'Vigilant: cannot be surprised.',
-      'Deflect attack (reaction): imposes disadvantage on an attack against a nearby creature.',
-      'Immune to poison and charm, exhaustion and similar effects.',
+      'Deflect Attack: its reaction gives disadvantage to a visible attacker within 5 ft attacking another creature within 5 ft of the defender.',
+      'Immune to poison damage, charm, exhaustion and poison. Mending heals 2d6 HP; record the roll manually.',
     ],
     uses: [{ id: 'repair', name: 'Repair', max: 3, recharge: 'long' }],
     limit: { key: 'steel-defender', max: 1 },
     sourceId: 'feature.artificer.battle-smith-steel-defender',
     notes:
-      'Acts on your initiative; you command it with a bonus action. Repair: a magical mending that heals it, 3 times per long rest.',
+      'Acts on your initiative; you command it with a bonus action. Repair: its own action heals itself or a construct/object within 5 ft for 2d8 + your proficiency bonus, 3 times per long rest. At artificer 15, Deflect Attack also deals 1d4 + your Intelligence modifier force damage to the attacker.',
   },
 };
 
@@ -192,31 +211,20 @@ const eldritchCannon: CompanionTemplate = {
   companion: {
     name: 'Eldritch Cannon',
     type: 'summon',
-    kind: 'Small construct',
+    kind: 'Small magical object',
     ac: 18,
     maxHp: { ownerLevel: 5, classId: 'class.artificer' },
-    speed: { walk: 15 },
+    speed: { walk: 15, climb: 15 },
     abilities: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 },
-    attacks: [
-      {
-        name: 'Force ballista',
-        bonus: { ownerAbilityMod: 'INT', ownerProficiency: 1 },
-        damage: { dice: '2d8', type: 'force' },
-        range: '120 ft.',
-        note: 'Pushes the target 5 feet away on a hit.',
-      },
-    ],
-    traits: [
-      'Flamethrower: a 15-foot cone, targets make a Dexterity save against your spell save DC. 2d8 fire, half on a save.',
-      'Protector: gives nearby allies temporary HP of 1d8 plus your Intelligence modifier.',
-      'Immune to poison and psychic damage.',
-    ],
+    attacks: [],
+    traits: [],
     uses: [],
     limit: { key: 'eldritch-cannon', max: 1 },
     durationSeconds: 3600,
     sourceId: 'feature.artificer.artillerist-eldritch-cannon',
+    profile: { family: 'eldritch-cannon', form: 'Force Ballista', size: 'Small', legs: true },
     notes:
-      'Lasts 1 hour. You can have one at a time; a second at artificer level 15 is tracked by hand. It acts when you use a bonus action to command it.',
+      'Choose its form when creating it. Record the creation action and free use or spell slot in Features or Spells; adding this record does not spend them again. Dismissal costs an action.',
   },
 };
 
@@ -232,7 +240,46 @@ const familiars: CompanionTemplate[] = FAMILIARS.map((name) => {
     group: 'Familiar forms',
     companion: {
       ...companion,
-      notes: 'Cannot attack. Can deliver touch spells and share senses with you.',
+      notes:
+        'Cannot attack. Can deliver touch spells and share senses with you. Choose celestial, fey or fiend as its creature type, regardless of its animal shape.',
+    },
+  };
+});
+
+const chainFamiliars: CompanionTemplate[] = ['imp', 'pseudodragon', 'quasit', 'sprite'].map(
+  (name) => {
+    const companion = creatureCompanion(creature(name), {
+      type: 'familiar',
+      sourceId: 'feature.warlock.pact-of-the-chain',
+      limit: { key: 'familiar', max: 1 },
+    });
+    return {
+      label: `${companion.name} (Chain familiar)`,
+      group: 'Pact of the Chain',
+      companion: {
+        ...companion,
+        notes:
+          'Requires the 2014 Pact of the Chain. During your Attack action you can give up one attack to let the familiar attack with its own reaction. See Reference for poison, saves, transformations and other actions; invocation benefits remain manual.',
+      },
+    };
+  },
+);
+
+const steeds: CompanionTemplate[] = ['warhorse', 'pony', 'camel', 'elk', 'mastiff'].map((name) => {
+  const companion = creatureCompanion(creature(name), {
+    type: 'mount',
+    sourceId: 'spell.find-steed',
+    limit: { key: 'steed', max: 1 },
+  });
+  return {
+    label: `${companion.name} (Find Steed)`,
+    group: 'Find Steed',
+    companion: {
+      ...companion,
+      kind: `${creature(name).size} spirit`,
+      abilities: { ...companion.abilities, INT: Math.max(6, companion.abilities.INT) },
+      notes:
+        'Choose celestial, fey or fiend as its creature type and one language you speak. A spirit mount with a telepathic bond within 1 mile; mounted spell sharing and combat control remain manual.',
     },
   };
 });
@@ -244,4 +291,6 @@ COMPANION_TEMPLATES.push(
   steelDefender,
   eldritchCannon,
   ...familiars,
+  ...chainFamiliars,
+  ...steeds,
 );

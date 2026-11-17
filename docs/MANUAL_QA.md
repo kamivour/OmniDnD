@@ -305,6 +305,10 @@ Check on a real phone and on a computer.
 - [ ] Check the manual-effect reminders and the limitations for replicas, Homunculus Servant and Armorer armor components.
 - [ ] Change Point Buy to Rolled with Tasha's class options enabled; confirm Artificer remains available.
 
+- [ ] Compare the three cannon forms: saving throw, spell attack and temporary HP should be distinct, with a clear bonus-action cost.
+- [ ] Judge summon form and cast-level choices on phone and desktop; compare flying, ranged and defensive forms with the 2014 rules.
+- [ ] Compare Sky Beast HP/damage and Steel Defender AC at level 15 with their 2014 stat blocks.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).
