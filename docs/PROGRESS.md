@@ -310,7 +310,7 @@ Details in [PLAN.md](PLAN.md).
 ## Review fixes
 
 - [x] Share multiclass ASI accounting between To do and saved choices
-- [ ] Keep Steady Aim's speed restriction through Dash until the turn ends
+- [x] Keep Steady Aim's speed restriction through Dash until the turn ends
 - [ ] Prevent proficiency changes from leaving dependent expertise invalid
 
 ## Backlog (not scheduled)
@@ -325,6 +325,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-17 — Fixed Steady Aim through Dash, reload and Undo; speed returns when the turn ends or a new turn starts.
 - 2026-11-17 — Fixed multiclass ASI accounting and To do routing; feats consume one improvement across classes, with reload and Undo retained.
 - 2026-11-11 — M27: six PHB subraces, Beast Master with Ranger companion Stats link, guidance and tests.
 - 2026-11-12 — M28: nine PHB martial subclasses, maneuver, discipline and totem picks, subclass spellcasting for Eldritch Knight and Arcane Trickster.

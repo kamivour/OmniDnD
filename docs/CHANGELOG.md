@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 10:48 — Keep Steady Aim through Dash
+
+- Steady Aim now keeps speed at zero for the turn, even after Dash or a reload, without recording movement you did not take.
+- Check the movement display, End Turn and Undo on your rogue. Checks pass.
+
 ## 2026-11-17 10:47 — Finish multiclass improvements after taking a feat
 
 - To do now offers the remaining ability improvement on the class that earned it, even after another class took a feat.

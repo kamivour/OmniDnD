@@ -530,6 +530,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         conditions,
         [...gearSpeedParts(features, equipped), ...modifierParts('speed')],
         load,
+        live.combat?.economy.speedZero === true,
       ),
       { min: 0 },
     ),
@@ -782,6 +783,7 @@ function speed(
   conditions: Condition[],
   extra: Part[],
   load: Encumbrance,
+  stationary: boolean,
 ): Stat {
   const parts: Part[] = [{ label: race.name, value: race.speed }, ...extra];
   const heavy = equipped.find(({ def }) => def.armor?.category === 'heavy')?.def;
@@ -802,7 +804,9 @@ function speed(
   const beforeFloor = sumParts(parts).value;
   if (beforeFloor < 0) parts.push({ label: 'Minimum speed', value: -beforeFloor });
   const current = () => Math.max(0, sumParts(parts).value);
-  const stopped = conditions.find((condition) => SPEED_ZERO_CONDITIONS.includes(condition));
+  const stopped = stationary
+    ? 'Steady Aim'
+    : conditions.find((condition) => SPEED_ZERO_CONDITIONS.includes(condition));
   if (stopped || exhaustion >= 5) {
     parts.push({ label: stopped ?? 'Exhaustion', value: -current() });
   } else if (exhaustion >= 2) {

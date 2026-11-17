@@ -50,6 +50,7 @@ export function finishTurn(live: Live, round: number): string[] {
   combat.economy.otherSpellCast = false;
   // Dash grants movement only for the current turn.
   delete combat.economy.dashCount;
+  delete combat.economy.speedZero;
   return ended;
 }
 

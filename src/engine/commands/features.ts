@@ -209,9 +209,7 @@ export const useFeature: Command<UseFeaturePayload> = {
       notes.push(ended ? `concentration on ${ended} ended` : 'concentration');
     }
     if (feature?.def.stationary && live.combat) {
-      const economy = live.combat.economy;
-      const speed = ctx.sheet.speed.value * (1 + (economy.dashCount ?? 0));
-      economy.movementUsed = Math.max(economy.movementUsed, speed);
+      live.combat.economy.speedZero = true;
       notes.push('speed 0 this turn');
     }
     if (feature?.def.restoreSlot) {

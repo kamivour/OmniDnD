@@ -206,6 +206,7 @@ interface LiveState {
     economy: { actionUsed: boolean; bonusUsed: boolean; reactionUsed: boolean;
                movementUsed: number; objectInteractionUsed: boolean;
                dashCount?: number;                // extra movement allowances, removed at End Turn
+               speedZero?: true;                  // Steady Aim, cleared at turn end or a fresh turn
                attacksMade?: number;              // attacks made in this Attack action (Extra Attack)
                bonusActionSpellCast: boolean;      // bonus-action spell rule
                otherSpellCast: boolean };          // any spell but a 1-action cantrip

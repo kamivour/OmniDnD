@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import type { CharacterState } from '../calc/sheet';
-import { startCombat, startTurn, useEconomy } from './combat';
+import { startCombat, startTurn, endTurn, combatMovement, useEconomy } from './combat';
+import { takeCombatAction } from './actions';
 import { featureUseDetails, useFeature } from './features';
 import { freshState, Session } from './test-utils';
 
@@ -55,7 +56,9 @@ describe('Tasha class options', () => {
     session.run(useFeature, { featureId: STEADY_AIM });
     const economy = session.live.combat!.economy;
     expect(economy.bonusUsed).toBe(true);
-    expect(economy.movementUsed).toBe(session.sheet.speed.value);
+    expect(economy.movementUsed).toBe(0);
+    expect(session.sheet.speed.value).toBe(0);
+    expect(economy.speedZero).toBe(true);
 
     const moved = new Session(character('class.rogue', 3));
     moved.run(startCombat, null);
@@ -64,6 +67,32 @@ describe('Tasha class options', () => {
     expect(moved.preview(useFeature, { featureId: STEADY_AIM }).reasons).toEqual([
       'Steady Aim works only if you have not moved this turn',
     ]);
+  });
+
+  it('keeps Steady Aim through Dash, reload and Undo, then releases it at turn end', () => {
+    const session = new Session(character('class.rogue', 3));
+    session.run(startCombat, null);
+    session.run(startTurn, null);
+    const before = structuredClone(session.state);
+    session.run(useFeature, { featureId: STEADY_AIM });
+    session.run(takeCombatAction, { action: 'dash' });
+    session.state = JSON.parse(JSON.stringify(session.state));
+    session.events = JSON.parse(JSON.stringify(session.events));
+    expect(combatMovement(session)).toMatchObject({ speed: 0, maximum: 0, remaining: 0, used: 0 });
+    expect(session.preview(useEconomy, { kind: 'movement', feet: 5 }).reasons).toContain(
+      'Only 0 ft of movement left',
+    );
+    session.run(endTurn, null);
+    expect(session.sheet.speed.value).toBe(30);
+    session.undo();
+    expect(session.sheet.speed.value).toBe(0);
+    session.undo();
+    session.undo();
+    expect(session.state).toEqual(before);
+    session.run(useFeature, { featureId: STEADY_AIM });
+    session.run(startTurn, null, true);
+    expect(session.live.combat!.economy.speedZero).toBeUndefined();
+    expect(session.sheet.speed.value).toBe(30);
   });
 
   it('Harness Divine Power: spends Channel Divinity and regains the highest allowed slot', () => {

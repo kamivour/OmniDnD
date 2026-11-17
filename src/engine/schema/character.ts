@@ -317,6 +317,8 @@ export const EconomySchema = z.strictObject({
   movementUsed: NonNegativeInt,
   /** Extra movement allowances from Dash; absent in legacy/default turns. */
   dashCount: NonNegativeInt.optional(),
+  /** Steady Aim sets speed to zero until this turn ends; absent in legacy/default turns. */
+  speedZero: z.literal(true).optional(),
   /** Attacks made with this turn's Attack action (Extra Attack); absent before the first. */
   attacksMade: NonNegativeInt.optional(),
   objectInteractionUsed: z.boolean(),
