@@ -249,6 +249,36 @@ Build on M24's existing accounts, membership, invites and automatic party sync. 
 
 Party characters open in a separate reader with no editors or gameplay controls. Preserve private originals, omit journals and Undo patches from shared snapshots, and keep matching starter IDs separate across members; verify both widths and offline viewing.
 
+## M42 — Recognizable icons and creation cards
+
+Planning only, requested 2026-11-18. Start implementation after M41's review closes; complete one task per commit. Keep 2014 rules, book filtering, engine commands, both creation modes and saved characters intact.
+
+### Intended experience
+
+Class, subclass, race and background choices become labelled selection cards. Each card shows a recognizable icon, name and short own-words pitch; selecting it reveals the existing detailed guidance without expanding every card. Selection has a check mark, border and text, so colour is never the only cue.
+
+At 375 px, start with one readable column; use two only where labels and touch targets still fit. Desktop uses three or four columns beside the selected option's details. Keep Back, Next and the current step easy to find without adding another tall header.
+
+Use a shared class identity across creation, campaign character cards, Sheet and HUD. Preserve uploaded portraits and existing character-specific art, then fall back to the character's first recorded class; a subclass can add its own motif. Proposed symbols are in [DESIGN.md](DESIGN.md#10-planned-creation-cards-and-class-icons-m42).
+
+### Tasks and acceptance
+
+| Task | Deliverable | Check before closing |
+|---|---|---|
+| T1 — Visual proposal | Repo-native icon board for all 13 classes, representative subclass cards, and class/subclass creation mockups at 375 px and 1440 px | Compare silhouettes at 20 px, 40 px and card size; Paladin reads as shield and sword rather than a diamond; labels remain visible |
+| T2 — Shared icons | Class/subclass icon lookup and portrait fallback, reused in HUD, campaign cards and Sheet | Every supported class resolves to a real icon; custom portraits and The Fool's art survive; multiclass fallback is predictable |
+| T3 — Class cards | Shared accessible card picker in Step by step and One page | Radio semantics and keyboard navigation work; existing book filtering and chosen values survive back, reload and mode switches |
+| T4 — Subclass cards | Reuse the picker in creation, level-up and To do, with class identity plus a distinct subclass motif | Choices appear at the correct class level; saved choices and source restrictions remain authoritative |
+| T5 — Other identity choices | Race and background cards, with search for larger lists | Long names and empty searches work on phones; current choices remain visible when filtering |
+| T6 — Guidance and review | Compact selected-option guidance, clearer step progress and review | Existing suggestions stay optional, details are reachable by touch and keyboard, and drafts retain every entered choice |
+| T7 — Gate | Focused icon/selection tests, responsive creation checks and at most ten human QA items | Complete representative martial, prepared-caster, Artificer and multiclass flows; compare saved results and check themes, focus, contrast and reduced motion |
+
+### Boundaries
+
+Reuse `Icon`, `CharacterPortrait`, `OptionGuide` and existing choice validation. Keep attribution for licensed SVGs; do not copy official class artwork. Dense spell, equipment and skill lists retain their existing useful layouts unless a later task explicitly schedules them.
+
+This milestone changes presentation, not ability-score rules, sync or campaign permissions. The reported Artificer disappearance remains an M41 investigation: the friend confirmed an older private campaign and an immediate same-browser change, while existing regression checks still retain the class. Recheck Point Buy → Rolled with Tasha's enabled during the UI gate, without treating it as a proven fix.
+
 ## Risks
 - **Free hosting limits:** Supabase allows 200 live connections and 500 MB of storage; records are capped at 5 MB (our limit). Long event logs grow records; a later fix is a snapshot plus trimmed history.
 - **Security:** shared access depends entirely on row-level security, so every rule gets a test. Invite codes are random, hashed and expire. Emails are never shown to other members.

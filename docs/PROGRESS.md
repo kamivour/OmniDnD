@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M41 Artificer review: infusion-known validation fixed; reported class disappearance still under investigation.
-**Next up:** Get the friend's campaign settings, shared/private status and actual site URL to reproduce the disappearance. The M40 migration is applied; advanced infusion workflows remain Q47–Q48.
+**Next up:** Reproduce the Artificer disappearance using the friend's exported campaign settings. He reports a private campaign created before sharing, with Artificer disappearing immediately after Point Buy → Rolled in the same browser, despite expansion books being enabled. Live site: https://omnidnd.kamivour.workers.dev. M42's UI overhaul is planned in [PLAN.md](PLAN.md); implementation has not started.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -66,6 +66,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M39 | Themes | 10 | done | Midnight, glass, water and D&D place themes with title effects; see [PLAN.md](PLAN.md) |
 | M40 | Campaign sharing and join requests | 7 | done | Share links, approve requests with existing characters, and view party characters without editing them |
 | M41 | Artificer equipment infusions | 3 | doing | Equipment assignment works; verify known choices and investigate the reported class disappearance |
+| M42 | Recognizable icons and creation cards | 10 | todo | Class and subclass choices use clear icon cards; portraits and existing creation behavior are preserved; see [PLAN.md](PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -328,6 +329,18 @@ Details in [PLAN.md](PLAN.md).
 - [x] Restrict newly learned infusions by Artificer level and known limit in To do, creation and level-up
 - [ ] Reproduce the friend's missing Artificer using his actual campaign settings and deployed app
 
+### M42 — Recognizable icons and creation cards (planned)
+
+Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M41. One task per commit.
+
+- [ ] T1: Produce the class-icon board and creation mockups at 375 px and 1440 px
+- [ ] T2: Add shared class/subclass icons and character portrait fallbacks
+- [ ] T3: Replace the class picker with accessible selection cards in both creation modes
+- [ ] T4: Use subclass cards in creation, level-up and To do
+- [ ] T5: Extend cards to race and background choices with search for larger lists
+- [ ] T6: Refine guidance, review and navigation while preserving drafts
+- [ ] T7: Verify recognition, accessibility, themes and unchanged character results at both widths
+
 ## Review fixes
 
 - [x] Put Combat Statistics first on the desktop Sheet while preserving phone and tablet order
@@ -338,7 +351,7 @@ Details in [PLAN.md](PLAN.md).
 
 ## Backlog (not scheduled)
 
-- Done 2026-11-09: site live on Netlify with Supabase accounts (HOSTING.md)
+- Live site: Cloudflare Workers at https://omnidnd.kamivour.workers.dev, with existing Supabase accounts; Netlify retired ([HOSTING.md](HOSTING.md)).
 - Moved to PLAN.md: automatic sync (M22), shared campaign for a party or DM (M24), party view (M24)
 - Later DM ideas (after M25): map import, monsters and NPCs, rewards, DM level-ups, ambient sounds, party rests and clock, notes and handouts, shared encounter tracker
 - Later: spell import from user-pasted text
@@ -348,6 +361,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-18 — Planned M42 creation cards and recognizable class icons; corrected Cloudflare hosting docs and recorded the friend's private-campaign Artificer reproduction details.
 - 2026-11-17 — Desktop Sheet shows Combat Statistics first; phones and tablets keep their section order, with one set of controls at every width.
 - 2026-11-17 — Fixed infusion-known eligibility and counts; local, reload and shared-sync checks retain Artificer. Friend-specific disappearance still needs campaign data and site URL.
 - 2026-11-17 — M41: equipment infusion assignment after resting, computed bonuses, attunement, limits and Undo; Rolled preserves Artificer availability, with source guidance when hidden.

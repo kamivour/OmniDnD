@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-18 00:32 — Plan creation cards and recognizable icons
+
+- Planned class, subclass, race and background cards, starting with icon and layout mockups. Paladin's proposed symbol is a shield and sword; implementation is still pending.
+- Hosting guidance now points to the existing Cloudflare site and Supabase setup. The Artificer investigation records the private campaign and immediate Rolled switch; campaign data is still needed. Checks pass.
+
 ## 2026-11-17 15:55 — Put desktop combat statistics first
 
 - On desktop, the Sheet now starts with Combat Statistics below its title and section buttons.

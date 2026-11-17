@@ -220,3 +220,29 @@ Combat desktop (D42): no turn order. Two columns at `lg`: center = turn header, 
 ## 9. Core components (build once, reuse everywhere)
 
 `HudBar`, `PipRow` (slots/uses, display only), `PipStepper` (`[−] pips left/max [+]`; the only control that spends or restores a pool), `ResourceCard` (description card for a pool: left/max + short lines), `StatChip` (with breakdown tooltip), `HpControl` (damage/heal/temp + number pad), `EconomyBar`, `SpellRow`, `FeatureRow`, `ItemRow`, `PreviewPopover` / `PreviewSheet` (one API, picks by breakpoint), `DetailPanel`, `ConfirmWarn` (Cancel / Do anyway), `Toast` (with Undo), `LogList`, `EffectChip`, `ConditionChip`, `Icon` (game-icons + fallback).
+
+## 10. Planned creation cards and class icons (M42)
+
+Proposed direction; implementation and visual review are pending. Replace class, subclass, race and background dropdowns with labelled cards, using existing theme tokens and short guidance. A selected card has a check mark, visible state text and a clear border; names never depend on recognizing the icon alone.
+
+Icons need distinct silhouettes at HUD size as well as card size. Prefer simple monochrome SVGs from the existing attributed collection or original paths; colour supports meaning but does not distinguish classes. Subclasses retain the class motif with a distinctive secondary symbol.
+
+| Class | Proposed motif |
+|---|---|
+| Artificer | Gear and hammer |
+| Barbarian | Broad axe |
+| Bard | Lute |
+| Cleric | Mace with radiant halo |
+| Druid | Oak leaf |
+| Fighter | Crossed swords |
+| Monk | Fist |
+| Paladin | Shield with upright sword |
+| Ranger | Bow and arrow |
+| Rogue | Hood and dagger |
+| Sorcerer | Flame in a hand |
+| Warlock | Eldritch eye |
+| Wizard | Open spellbook |
+
+The first deliverable is an icon board and responsive class/subclass mockups, not a full screen rewrite. Test recognition in monochrome at 20 px and 40 px; adjust confusing silhouettes before rolling them out. Cards use one column on small phones unless two fit comfortably, and three or four on desktop with selected-option guidance alongside.
+
+Character portraits keep priority. Without a portrait or character-specific art, show a class icon instead of the generic diamond; use the first recorded class for multiclass characters. The generic fallback remains for unknown custom content.

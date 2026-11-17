@@ -1,6 +1,8 @@
 # Putting OmniDnD online with accounts
 
-Accounts are optional. Without the two settings in step 3, the app builds as a guest-only site and works exactly as it does locally.
+The live app is **https://omnidnd.kamivour.workers.dev**, hosted on Cloudflare Workers static assets. Netlify has been retired; the existing Supabase project still provides accounts and sync.
+
+Accounts are optional. Without the two settings in step 3, the app builds as a guest-only site and works exactly as it does locally. Do not create another Supabase project for routine site updates.
 
 ## 1. Create the account database (Supabase, free tier)
 
@@ -30,14 +32,15 @@ Run `npm run dev` to try sign-in locally, or `npm run build` to produce `dist/`.
 
 ## 4. Publish the static site
 
-The app is a static site: upload `dist/`. It currently expects to live at the site root (`/`) and needs every unknown path to serve `index.html`.
+Use the existing Cloudflare Worker, `omnidnd`. [wrangler.jsonc](../wrangler.jsonc) uploads `dist/` and sets `not_found_handling: "single-page-application"` so direct app links open correctly, as described in [Cloudflare's SPA guide](https://developers.cloudflare.com/workers/static-assets/routing/single-page-application/).
 
-- **Netlify or Cloudflare Pages (easiest):** connect the GitHub repo, build command `npm run build`, output folder `dist`, and add the two `VITE_…` values as build environment variables. Add an SPA fallback (Netlify: a `_redirects` file with `/* /index.html 200`; Cloudflare Pages does this automatically).
-- **GitHub Pages:** works with a custom domain or a `<name>.github.io` user site. A project page (`<name>.github.io/OmniDnD/`) needs a base-path change in the app first; ask for it before publishing there.
+For a local deployment, authenticate Wrangler to the existing Cloudflare account, run `npm run build` with the two Supabase values from step 3, then run `npx wrangler deploy`. For a connected Cloudflare build, set build command `npm run build`, deploy command `npx wrangler deploy`, and those same values as build environment variables; this guide does not establish whether automatic builds are configured.
+
+The `VITE_…` values are embedded during the build; setting them only as Worker runtime secrets does not enable accounts. The app lives at `/` and needs no separate Worker API for static hosting.
 
 ## 5. Tell Supabase where the site lives
 
-In **Authentication → URL Configuration**, set **Site URL** to your published address so confirmation emails link back to the app. Under **Redirect URLs**, add `https://<your address>/reset-password` (and `http://localhost:5173/reset-password` for local work) so password reset emails open the app.
+In **Authentication → URL Configuration**, use `https://omnidnd.kamivour.workers.dev` as **Site URL** so confirmation emails link back to the app. Under **Redirect URLs**, include `https://omnidnd.kamivour.workers.dev/reset-password` (and `http://localhost:5173/reset-password` for local work). Verify these settings in the existing project; updating this guide does not change Supabase configuration.
 
 ## Checking it works
 
