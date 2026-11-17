@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 10:23 — Class armor proficiency fix
+
+- Characters made with a blank build no longer lose their class armor and weapon proficiencies. A cleric in scale mail no longer gets the "No proficiency" warning.
+- Existing characters are fixed automatically with no re-import needed.
+- Check: a multiclass character gets full armor from their first class and only the multiclass armor from later classes.
+- Checks pass.
+
 ## 2026-11-17 10:11 — Change saved picks
 
 - To do now has a "Saved choices" list. It shows the spells and proficiencies you already picked for feats and traits, such as Fey Touched, Magic Initiate or Skill Versatility, and each one has a Change button.

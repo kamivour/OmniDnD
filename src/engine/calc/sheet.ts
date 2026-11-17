@@ -30,6 +30,8 @@ import { optionalRules } from './campaign-rules';
 import { levelHp, maxHp } from './hp';
 import { proficiencyBonus } from './proficiency';
 import { breathWeapon, type BreathWeapon } from './ancestry';
+import { CLASS_START } from './class-start';
+import { MULTICLASS_RULES } from './multiclass';
 import { featureProficiencies, type GrantedProficiency, type Proficiencies } from './proficiencies';
 import { spellSlots, type SpellSlots } from './slots';
 import { sumParts, type Part, type Stat } from './stat';
@@ -259,6 +261,20 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
   const featureIds = new Set(features.map(({ def }) => def.id));
   const owned = featureProficiencies(build, features);
   const profs = owned.proficiencies;
+  // Class armor and weapons are fixed grants, so they count even when a blank build or an
+  // import left them off the stored list: full grants for the first class, multiclass after.
+  build.classes.forEach(({ classId }, index) => {
+    const grant = index === 0 ? CLASS_START[classId] : MULTICLASS_RULES[classId];
+    if (!grant) return;
+    const source = registry.entries.get(classId)?.name ?? classId;
+    for (const kind of ['armor', 'weapons'] as const)
+      for (const value of grant[kind] as string[]) {
+        const list = profs[kind] as string[];
+        if (list.includes(value)) continue;
+        list.push(value);
+        owned.granted.push({ kind, value, source });
+      }
+  });
   const featureSaves = new Set(
     [...featureIds].flatMap((id) => FEATURE_SAVE_PROFICIENCIES[id] ?? []),
   );

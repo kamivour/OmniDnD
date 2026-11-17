@@ -355,6 +355,7 @@ Newest first. One line per task, about 25 words at most.
 - 2026-11-14 — Ability score improvement says when feats are off for the campaign and links to Campaign settings.
 - 2026-11-14 — Number fields block letters and stray signs on input, so ability scores and level stay numeric.
 - 2026-11-14 — Tasha's custom origin moves each racial increase to a different ability, on the sheet and when creating a character.
+- 2026-11-17 — Class armor and weapon proficiencies count on the sheet even when a blank build or import left them off (D221).
 - 2026-11-17 — Saved feat spell and proficiency picks can be changed from a Saved choices list in To do, linked from each feature card (D220).
 - 2026-11-17 — Divine Strike shows on weapon attacks; Potent Spellcasting and Empowered Evocation add their bonus to spell damage notes (D219).
 - 2026-11-17 — Dual Wielder adds +1 AC with two melee weapons equipped and no shield; Soul of Artifice adds +1 to saves per attuned item.

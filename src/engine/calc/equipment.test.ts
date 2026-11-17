@@ -41,6 +41,37 @@ describe('recorded equipment', () => {
     expect(state).toEqual(before);
   });
 
+  it('counts class armor proficiency even when the stored list is empty', () => {
+    const cleric = withArmor({ id: 'scale', itemId: 'item.scale-mail' });
+    cleric.live.items['leather-armor-1']!.equipped = false;
+    cleric.build.classes = [{ classId: 'class.cleric', level: 5 }];
+    cleric.build.proficiencies.armor = [];
+    cleric.build.proficiencies.weapons = [];
+    expect(armorEquipmentNotes(cleric, registry)).toEqual([
+      'Scale Mail: disadvantage on Stealth checks.',
+    ]);
+    const sheet = computeSheet(cleric, registry);
+    expect(sheet.proficiencies.weapons).toContain('simple');
+    expect(sheet.grantedProficiencies).toContainEqual({
+      kind: 'armor',
+      value: 'medium',
+      source: 'Cleric',
+    });
+
+    // A later class adds only its multiclass grants: Fighter gives no heavy armor.
+    const chain = withArmor({ id: 'chain', itemId: 'item.chain-mail' });
+    chain.live.items['leather-armor-1']!.equipped = false;
+    chain.build.classes = [
+      { classId: 'class.wizard', level: 1 },
+      { classId: 'class.fighter', level: 1 },
+    ];
+    chain.build.proficiencies.armor = [];
+    expect(armorEquipmentNotes(chain, registry)[0]).toMatch(/^No proficiency with Chain Mail/);
+    expect(computeSheet(chain, registry).proficiencies.armor).toEqual(
+      expect.arrayContaining(['light', 'medium', 'shield']),
+    );
+  });
+
   it('replaces only the same armor slot, including empty equipped flags', () => {
     const state = withArmor(
       { id: 'chain', itemId: 'item.chain-mail', equipped: false },
