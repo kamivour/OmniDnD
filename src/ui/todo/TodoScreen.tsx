@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { chooseFeatSpells, featSpellCandidates, resolveChoices } from '../../engine/commands';
@@ -20,6 +20,7 @@ import {
   type LevelPicks,
 } from '../level/level-up-model';
 import { ProficiencyPicksForm } from './ProficiencyPicksForm';
+import { savedChoices } from './saved-choices';
 import { useTodo } from './useTodo';
 
 const btn = 'min-h-11 rounded-btn border border-border bg-surface px-3 text-sm text-text';
@@ -27,7 +28,12 @@ const nameOf = (id: string) => registry.entries.get(id)?.name ?? id;
 
 export function TodoScreen() {
   const { characterId, state, open, hidden, dismiss, restore } = useTodo();
-  const [editing, setEditing] = useState<string | null>(null);
+  const [params] = useSearchParams();
+  const [editing, setEditing] = useState<string | null>(() => {
+    const change = params.get('change');
+    return change ? `saved:${change}` : null;
+  });
+  const saved = savedChoices(state, registry, open);
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6 p-4">
       <header>
@@ -91,6 +97,48 @@ export function TodoScreen() {
           </li>
         ))}
       </ul>
+      {saved.length > 0 && (
+        <section aria-label="Saved choices" className="flex flex-col gap-2">
+          <SectionLabel>Saved choices</SectionLabel>
+          <ul className="flex flex-col gap-3">
+            {saved.map((row) => {
+              const id = `saved:${row.id}`;
+              const close = () => setEditing(null);
+              return (
+                <li
+                  key={row.id}
+                  className="flex flex-col gap-3 rounded-card border border-border bg-surface p-3"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="min-w-0 flex-1 text-sm text-text">
+                      {row.name}
+                      <span className="block text-xs text-text-muted">{row.summary}</span>
+                    </p>
+                    <button
+                      type="button"
+                      aria-expanded={editing === id}
+                      onClick={() => setEditing(editing === id ? null : id)}
+                      className={btn}
+                    >
+                      {editing === id ? 'Close' : 'Change'}
+                    </button>
+                  </div>
+                  {editing === id &&
+                    (row.kind === 'feat-spells' ? (
+                      <FeatSpellsForm featureId={row.featureId} state={state} onDone={close} />
+                    ) : (
+                      <ProficiencyPicksForm
+                        featureId={row.featureId}
+                        state={state}
+                        onDone={close}
+                      />
+                    ))}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
       {hidden.length > 0 && (
         <section aria-label="Hidden items" className="flex flex-col gap-2">
           <SectionLabel>Hidden</SectionLabel>

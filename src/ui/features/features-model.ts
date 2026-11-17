@@ -56,6 +56,8 @@ export interface FeatureEntry {
   usable: boolean;
   unavailableReason?: string;
   favorite: boolean;
+  /** Saved spell or proficiency picks that can be changed in To do. */
+  changePicks?: 'feat-spells' | 'proficiencies';
 }
 
 /** Who granted each feature, matching the order `characterFeatures` reads them. */
@@ -179,6 +181,11 @@ export function featuresModel(
         ? { unavailableReason: details.unavailableReason }
         : {}),
       favorite: favorites.has(def.id),
+      ...(state.build.featSpells?.[def.id]
+        ? { changePicks: 'feat-spells' as const }
+        : state.build.proficiencyPicks?.[def.id]
+          ? { changePicks: 'proficiencies' as const }
+          : {}),
     };
   });
   return ORIGIN_GROUPS.map(({ origin, title }) => ({

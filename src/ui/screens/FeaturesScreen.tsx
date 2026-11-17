@@ -2,6 +2,7 @@ import { Star } from 'lucide-react';
 import { companionLink } from '../companions/companion-links';
 import { StatsLink } from '../companions/StatsLink';
 import { useRef, useState } from 'react';
+import { Link } from 'react-router';
 import { registry } from '../../data/registry';
 import { overridePath } from '../../engine/calc/value-overrides';
 import { adjustFeatureUses, setQuickAccessFavorite, useFeature } from '../../engine/commands';
@@ -94,6 +95,7 @@ function FeatureUses({ entry }: { entry: FeatureEntry }) {
 
 function FeatureCardRow({ entry }: { entry: FeatureEntry }) {
   const { run } = useCommand();
+  const { characterId } = useCharacter();
   const useButton = useRef<HTMLButtonElement>(null);
   const card = useRef<HTMLElement>(null);
   const meta = [entry.from, entry.activation, entry.die].filter(Boolean).join(' · ');
@@ -157,6 +159,14 @@ function FeatureCardRow({ entry }: { entry: FeatureEntry }) {
             <span className="text-xs text-warn">{entry.unavailableReason}</span>
           )}
         </div>
+      )}
+      {entry.changePicks && (
+        <Link
+          to={`/characters/${characterId}/todo?change=${entry.changePicks}:${entry.id}`}
+          className="flex min-h-11 w-fit items-center rounded-btn border border-border px-3 text-sm text-text"
+        >
+          Change picks
+        </Link>
       )}
       {/* Passive features can still bring a creature (Steel Defender): Stats stands alone. */}
       {!entry.usable && companionLink(entry.id) && (

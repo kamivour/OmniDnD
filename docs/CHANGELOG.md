@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 10:11 — Change saved picks
+
+- To do now has a "Saved choices" list. It shows the spells and proficiencies you already picked for feats and traits, such as Fey Touched, Magic Initiate or Skill Versatility, and each one has a Change button.
+- Feature cards with saved picks have a "Change picks" link that opens the right form in To do.
+- Check: change a pick, then confirm the sheet and Spellbook show the new choice.
+- Checks pass.
+
 ## 2026-11-17 02:03 — Divine Strike, Potent Spellcasting, Empowered Evocation
 
 - Clerics with Divine Strike see the extra damage on every weapon attack, marked once per turn. War uses the weapon's type; Nature lists cold, fire or lightning.

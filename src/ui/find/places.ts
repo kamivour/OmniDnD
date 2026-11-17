@@ -103,7 +103,7 @@ export const PLACES: readonly FindEntry[] = [
     group: 'go',
     title: 'To do',
     detail: 'Choices still waiting',
-    synonyms: ['pending', 'choices', 'level up', 'subclass'],
+    synonyms: ['pending', 'choices', 'level up', 'subclass', 'change picks', 'saved choices'],
     target: { kind: 'go', path: 'todo' },
     needsCharacter: true,
   },
