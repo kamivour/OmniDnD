@@ -177,6 +177,9 @@ Opened from HUD. Always shows a **preview diff** before applying, e.g. `HP 12 鈫
 - Prompt for prepared-spell changes (prepared casters only).
 
 ### Features (Phase 2 screen; data and Use buttons in Phase 1)
+Artificer equipment infusions are assigned from Features or Inventory; finishing a long rest opens the same review before prepared spells. The app computes ordinary weapon, armor, focus and speed bonuses, requires attunement when specified, preserves infusions across rests, and warns before the oldest ends at the active limit.
+
+Infused items given away still use an infusion slot; they give the owner no equipment bonuses. Special effects and charges remain manual; Homunculus Servant and Replicate Magic Item use the existing companion and item workflows pending Q47, and Armorer's split-armor extras wait for Q48.
 Grouped by origin: Race 路 Class 路 Subclass 路 Background 路 Feats 路 Equipment 路 Temporary 路 Homebrew. Each: type (passive / active / triggered), activation, uses pips, recharge, short summary, Use or Toggle button. Passive features feed calculations automatically.
 
 ### Inventory (Phase 2)

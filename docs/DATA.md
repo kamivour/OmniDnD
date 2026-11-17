@@ -324,6 +324,8 @@ interface Guidance {
 
 ## 5. Commands and event log
 
+**Infusions (M41):** optional `live.infusions` stores `{ featureId, instanceId, damageType? }` in oldest-first order; missing means none without rewriting older saves. `infuseItem` and `endInfusion` log reversible changes; calculated benefits require carried, equipped gear and any required attunement.
+
 ```ts
 type Command = (ctx: { build; live; refs; campaign }, payload) =>
   { result: 'ok' | 'blocked' | 'warn'; reasons: string[]; next?: { build; live } };

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { InfusionPanel } from '../features/InfusionPanel';
 import { useStore } from 'zustand';
 import { useTourAutostart } from '../tutorial/useTour';
 import { registry } from '../../data/registry';
@@ -86,6 +87,7 @@ export function InventoryScreen() {
         <InventoryCurrency />
         <InventoryWeight />
       </div>
+      <InfusionPanel />
       <InventoryRechargesDue />
       <InventoryAttunement />
       {groups.length === 0 ? (

@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M40 Campaign sharing and join requests done.
-**Next up:** Apply the M40 database migration, then manual QA with two accounts; live database permissions still need checking.
+**Current milestone:** M41 Artificer equipment infusions done.
+**Next up:** Deploy the verified commits and check live sharing with two accounts. The M40 database migration is applied; advanced infusion workflows remain Q47–Q48.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -65,6 +65,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M38 | Xanathar's subclasses, part 2 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M39 | Themes | 10 | done | Midnight, glass, water and D&D place themes with title effects; see [PLAN.md](PLAN.md) |
 | M40 | Campaign sharing and join requests | 7 | done | Share links, approve requests with existing characters, and view party characters without editing them |
+| M41 | Artificer equipment infusions | 3 | done | Assign known infusions to eligible inventory items after resting; computed bonuses, limits, reload and Undo work |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -317,6 +318,14 @@ Details in [PLAN.md](PLAN.md).
 - [x] Verify approval flows, offline viewing and layouts at 375 px and desktop width; live database permissions remain a hosting check
 - [x] Fix the join-request migration syntax and verify real PostgreSQL compilation, retries and approval permissions
 
+### M41 — Artificer equipment infusions
+
+- [x] Assign equipment infusions from Features, Inventory and the long-rest review
+- [x] Compute weapon, armor, focus and speed bonuses; respect required attunement and active limits
+- [x] Keep applications through rests and exports, and preserve older saves and Undo
+- [x] Verify switching to Rolled preserves Artificer availability and explain source requirements
+- [x] Check phone and desktop layouts
+
 ## Review fixes
 
 - [x] Share multiclass ASI accounting between To do and saved choices
@@ -335,6 +344,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-17 — M41: equipment infusion assignment after resting, computed bonuses, attunement, limits and Undo; Rolled preserves Artificer availability, with source guidance when hidden.
 - 2026-11-17 — Fixed the join-request migration syntax; PostgreSQL now verifies the complete migration, retries, approval, decline and character permissions.
 - 2026-11-17 — M40: campaign-ID approval, share links, existing-character copies and a separate party reader; private journals and matching starter IDs stay safe.
 - 2026-11-17 — Saved proficiency changes now protect dependent expertise; change expertise first, then replace the skill. Reload and Undo keep both choices intact.

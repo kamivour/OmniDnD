@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
+import { artificerLevel } from '../../engine/calc/infusions';
 import { completeLongRest } from '../../engine/commands';
 import { restDurations } from '../../engine/calc/rests';
 import { formatDuration } from '../../engine/clock';
@@ -16,7 +17,7 @@ export function LongRestForm({
   returnFocusTo,
 }: {
   onClose: () => void;
-  onApplied: (preparedClassId?: string) => void;
+  onApplied: (preparedClassId?: string, infusions?: boolean) => void;
   returnFocusTo?: CommandFocusTarget;
 }) {
   const { state } = useCharacter();
@@ -75,7 +76,10 @@ export function LongRestForm({
           onClick={(event) => {
             event.currentTarget.focus();
             run(completeLongRest, null, returnFocusTo ?? container.current ?? undefined, () =>
-              onApplied(reviewPrepared ? preparedClasses[0] : undefined),
+              onApplied(
+                reviewPrepared ? preparedClasses[0] : undefined,
+                artificerLevel(state.build) >= 2,
+              ),
             );
           }}
           className="min-h-14 rounded-btn bg-accent px-2 font-semibold text-bg disabled:opacity-40"

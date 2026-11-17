@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { useRef, useState, type ReactNode } from 'react';
 import { registry, registryFor } from '../../data/registry';
 import { ABILITIES } from '../../engine/calc/abilities';
+import { infusionDefenses } from '../../engine/calc/infusions';
 import { sheetBreakdowns } from '../../engine/calc/sheet-breakdowns';
 import { setInspiration } from '../../engine/commands';
 import { useCommand } from '../commands/command-context';
@@ -63,6 +64,10 @@ export function CharacterSheetScreen() {
   }));
   // Effects on you (a potion, an ally's spell) add their defenses while they last.
   const defenses = [
+    ...infusionDefenses(build, live, registryFor(build)).map(({ name, defenses }) => ({
+      name,
+      ...defenses,
+    })),
     ...sheet.features.flatMap(({ def }) =>
       def.defenses ? [{ name: def.name, ...def.defenses }] : [],
     ),

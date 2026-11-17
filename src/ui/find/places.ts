@@ -26,6 +26,15 @@ export function campaignPlaces(campaignId: string): FindEntry[] {
  */
 export const PLACES: readonly FindEntry[] = [
   {
+    id: 'go.infusions',
+    group: 'go',
+    title: 'Infused items',
+    detail: 'Inventory: assign Artificer infusions after a long rest',
+    synonyms: ['infuse item', 'enhanced weapon', 'enhanced defense', 'artificer'],
+    needsCharacter: true,
+    target: { kind: 'go', path: 'inventory', anchor: 'artificer-infusions' },
+  },
+  {
     id: 'go.join-campaign',
     group: 'go',
     title: 'Join a campaign',

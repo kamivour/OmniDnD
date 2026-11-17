@@ -1,6 +1,7 @@
 import { characterRegistry, type Registry } from '../registry';
 import { entryCasting } from './casting';
 import { attunedItems } from './attunement';
+import { wornInfusions, infusionKey, infusionBonus } from './infusions';
 import { recordedLevel, xpForLevel } from './advancement';
 import { encumbrance, type Encumbrance } from './encumbrance';
 import {
@@ -440,6 +441,21 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
   const attacks = equipped.flatMap(({ instanceId, def }) => {
     if (!def.weapon) return [];
     const attack = weaponAttack(instanceId, def, profs, mods, proficiencyPart);
+    const infusion = wornInfusions(build, live, registry).find((i) => i.instanceId === instanceId);
+    if (
+      infusion &&
+      ['enhanced-weapon', 'returning-weapon', 'repeating-shot', 'radiant-weapon'].includes(
+        infusionKey(infusion.featureId),
+      )
+    ) {
+      const key = infusionKey(infusion.featureId);
+      const label = registry.get('feature', infusion.featureId).name;
+      const bonus = infusionBonus(key, build);
+      attack.toHit = sumParts([...attack.toHit.parts, { label, value: bonus }]);
+      if (attack.damage) attack.damage.bonus += bonus;
+      if (key === 'repeating-shot')
+        attack.properties = attack.properties.filter((p) => p !== 'loading');
+    }
     attack.toHit = value(
       overridePath('attacks', instanceId, 'toHit'),
       `${def.name} attack`,
@@ -511,7 +527,21 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       armorClass(
         equipped,
         mods.DEX,
-        [...modifierParts('ac'), ...dualWieldParts(features, equipped)],
+        [
+          ...modifierParts('ac'),
+          ...dualWieldParts(features, equipped),
+          ...wornInfusions(build, live, registry).flatMap((i) => {
+            const key = infusionKey(i.featureId);
+            return key === 'enhanced-defense' || key === 'repulsion-shield'
+              ? [
+                  {
+                    label: registry.get('feature', i.featureId).name,
+                    value: infusionBonus(key, build),
+                  },
+                ]
+              : [];
+          }),
+        ],
         unarmoredDefenses(features, mods),
         featureIds,
       ),
@@ -528,7 +558,13 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         abilities.STR.score.value,
         live.exhaustion,
         conditions,
-        [...gearSpeedParts(features, equipped), ...modifierParts('speed')],
+        [
+          ...gearSpeedParts(features, equipped),
+          ...modifierParts('speed'),
+          ...wornInfusions(build, live, registry)
+            .filter((i) => infusionKey(i.featureId) === 'arcane-propulsion-armor')
+            .map(() => ({ label: 'Arcane Propulsion Armor', value: 5 })),
+        ],
         load,
         live.combat?.economy.speedZero === true,
       ),
@@ -557,7 +593,16 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         attack: value(
           overridePath('spellcasting', entry.classId, 'attack'),
           `${def.name} spell attack`,
-          sumParts([proficiencyPart, modPart(ability)]),
+          sumParts([
+            proficiencyPart,
+            modPart(ability),
+            ...wornInfusions(build, live, registry)
+              .filter((i) => infusionKey(i.featureId) === 'enhanced-arcane-focus')
+              .map((i) => ({
+                label: 'Enhanced Arcane Focus',
+                value: infusionBonus(infusionKey(i.featureId), build),
+              })),
+          ]),
         ),
       };
       const cantrips = known(cantripsKnown);

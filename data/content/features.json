@@ -1304,7 +1304,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "After a long rest, imbue up to your infusion limit of nonmagical items with infusions you know. Each item holds one infusion and works for one attuned creature. You learn more infusions as you level."
+      "effect": "After a long rest, infuse eligible nonmagical items using infusions you know. Each item holds one infusion; some require attunement. Your artificer level sets how many items can stay infused."
     },
     "origin": "class",
     "activation": "passive"
@@ -2023,7 +2023,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Artificer level 6+. Armor stores a charge pool to boost STR checks and saves and prevent falling prone."
+      "effect": "Artificer level 2+. Armor stores a charge pool to boost STR checks and saves and prevent falling prone."
     },
     "origin": "class",
     "activation": "special"

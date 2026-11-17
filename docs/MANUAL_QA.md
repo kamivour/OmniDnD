@@ -294,6 +294,15 @@ Check on a real phone and on a computer.
 - [ ] Change HP on the owner's device and watch the reader update; disconnect and reload to check cached viewing stays useful.
 - [ ] Join with default starter records on both accounts. Check private characters stay private and matching IDs show separate characters.
 
+## M41 — Artificer equipment infusions
+
+- [ ] Finish a long rest as an Artificer and judge the infusion review before prepared spells on phone and desktop.
+- [ ] Assign Enhanced Weapon and Enhanced Defense; check the attack, damage and AC breakdowns, reload and Undo.
+- [ ] Compare Enhanced Arcane Focus or Repeating Shot before and after attuning and equipping the item.
+- [ ] Reach the active limit and judge the oldest-infusion warning; check that giving away gear still uses a slot.
+- [ ] Check the manual-effect reminders and the limitations for replicas, Homunculus Servant and Armorer armor components.
+- [ ] Change Point Buy to Rolled with Tasha's class options enabled; confirm Artificer remains available.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

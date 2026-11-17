@@ -4,6 +4,7 @@ import { SpellManage } from '../spells/SpellManage';
 import { RestContext } from './rest-context';
 import { ShortRestForm } from './ShortRestForm';
 import { LongRestForm } from './LongRestForm';
+import { InfusionPanel } from '../features/InfusionPanel';
 import { useCharacter } from '../hooks/useCharacter';
 import { restDurations } from '../../engine/calc/rests';
 import { formatDuration } from '../../engine/clock';
@@ -12,7 +13,7 @@ import { formatDuration } from '../../engine/clock';
 export function RestProvider({ children }: { children: ReactNode }) {
   const { state } = useCharacter();
   const durations = restDurations(state.campaign);
-  const [kind, setKind] = useState<'short' | 'long' | 'manage' | null>(null);
+  const [kind, setKind] = useState<'short' | 'long' | 'manage' | 'infusions' | null>(null);
   const [opener, setOpener] = useState<HTMLElement | null>(null);
   const [preparedClass, setPreparedClass] = useState<string | undefined>(undefined);
   const manageContainer = useRef<HTMLDivElement>(null);
@@ -34,17 +35,27 @@ export function RestProvider({ children }: { children: ReactNode }) {
       <Sheet
         open={kind !== null}
         onOpenChange={(next) => !next && setKind(null)}
-        title={kind === 'manage' ? 'Manage spells' : kind === 'long' ? 'Long Rest' : 'Short Rest'}
+        title={
+          kind === 'infusions'
+            ? 'Review infusions'
+            : kind === 'manage'
+              ? 'Manage spells'
+              : kind === 'long'
+                ? 'Long Rest'
+                : 'Short Rest'
+        }
         description={
-          kind === 'manage'
-            ? 'Review prepared spells after resting. Changes are separate logged commands.'
-            : `${
-                durations.variant === 'standard'
-                  ? kind === 'long'
-                    ? 'Eight hours'
-                    : 'One hour'
-                  : formatDuration(kind === 'long' ? durations.long : durations.short)
-              } of game time. Review changes before applying.`
+          kind === 'infusions'
+            ? 'Assign infusions after resting. Each change is logged and undoable.'
+            : kind === 'manage'
+              ? 'Review prepared spells after resting. Changes are separate logged commands.'
+              : `${
+                  durations.variant === 'standard'
+                    ? kind === 'long'
+                      ? 'Eight hours'
+                      : 'One hour'
+                    : formatDuration(kind === 'long' ? durations.long : durations.short)
+                } of game time. Review changes before applying.`
         }
         onCloseAutoFocus={(event) => {
           event.preventDefault();
@@ -63,9 +74,10 @@ export function RestProvider({ children }: { children: ReactNode }) {
           <LongRestForm
             onClose={() => setKind(null)}
             returnFocusTo={() => manageContainer.current ?? opener}
-            onApplied={(classId) => {
-              if (classId) {
-                setPreparedClass(classId);
+            onApplied={(classId, infusions) => {
+              setPreparedClass(classId);
+              if (infusions) setKind('infusions');
+              else if (classId) {
                 setKind('manage');
               } else setKind(null);
             }}
@@ -75,6 +87,12 @@ export function RestProvider({ children }: { children: ReactNode }) {
           <div ref={manageContainer} tabIndex={-1}>
             <SpellManage initialClassId={preparedClass} onClose={() => setKind(null)} />
           </div>
+        )}
+        {kind === 'infusions' && (
+          <InfusionPanel
+            onDone={() => setKind(preparedClass ? 'manage' : null)}
+            onNavigate={() => setKind(null)}
+          />
         )}
       </Sheet>
     </RestContext>

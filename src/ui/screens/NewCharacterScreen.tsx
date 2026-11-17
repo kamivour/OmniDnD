@@ -604,6 +604,19 @@ function NewCharacterForm({
               </select>
             </Field>
           )}
+          {show('class') && !classes.some((entry) => entry.id === 'class.artificer') && (
+            <p className="text-sm text-text-muted">
+              Looking for Artificer? Enable Tasha’s Cauldron of Everything → Classes, subclasses and
+              origins in{' '}
+              <Link
+                className="text-accent underline"
+                to={`/campaigns/${encodeURIComponent(campaign.id)}/settings`}
+              >
+                Campaign Settings
+              </Link>
+              . Ability score method does not affect class availability.
+            </p>
+          )}
           {hints && show('class') && (
             <OptionGuide noun="classes" options={classes} value={classId} onChange={pickClass} />
           )}

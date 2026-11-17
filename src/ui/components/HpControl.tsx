@@ -4,6 +4,8 @@ import { applyDamage, heal, healthDetails, setTempHp } from '../../engine/comman
 import { useCommand } from '../commands/command-context';
 import { cx } from '../cx';
 import { damageDefenseLines } from '../effects/effects-model';
+import { infusionDefenses } from '../../engine/calc/infusions';
+import { registryFor } from '../../data/registry';
 import { DeathSaveTracker } from '../health/DeathSaveTracker';
 import { useCharacter } from '../hooks/useCharacter';
 import { HpBar } from './HpBar';
@@ -181,7 +183,11 @@ export function HpAdjustmentBody({
   const [error, setError] = useState<string | null>(null);
   const defenses =
     kind === 'damage'
-      ? damageDefenseLines([...sheet.features.map(({ def }) => def), ...state.live.effects])
+      ? damageDefenseLines([
+          ...sheet.features.map(({ def }) => def),
+          ...state.live.effects,
+          ...infusionDefenses(state.build, state.live, registryFor(state.build)),
+        ])
       : [];
   return (
     <div ref={container} tabIndex={-1} className="flex min-w-0 flex-col gap-3">

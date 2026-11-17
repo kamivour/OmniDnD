@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 15:30 — Assign Artificer equipment infusions
+
+- Choose eligible inventory items for known infusions after a long rest, or review them from Features and Inventory. Bonuses update automatically; changes survive reload and Undo.
+- Infusions persist between rests. Required attunement and the active limit are checked; replacing the oldest asks for confirmation.
+- Rolled scores keep Artificer available when Tasha’s class options are enabled. Replicas, Homunculus, special effects and Armorer’s extra slots still need table tracking. Checks pass.
+
 ## 2026-11-17 14:37 — Fix campaign join database update
 
 - The campaign join approval update now runs successfully.

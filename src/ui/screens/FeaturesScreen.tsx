@@ -12,6 +12,7 @@ import { resourceOverride } from '../components/resource-override';
 import { cx } from '../cx';
 import { featuresModel, type FeatureEntry } from '../features/features-model';
 import { useCharacter } from '../hooks/useCharacter';
+import { InfusionPanel } from '../features/InfusionPanel';
 
 const TEXT_PREVIEW_CHARS = 220;
 
@@ -188,6 +189,7 @@ export function FeaturesScreen() {
           your sheet; Use records the cost and outcomes stay at the table.
         </p>
       </header>
+      <InfusionPanel />
       {groups.length === 0 && (
         <p className="text-sm text-text-muted">This character has no features recorded.</p>
       )}

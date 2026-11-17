@@ -3,6 +3,7 @@ import {
   AbilitySchema,
   AnyRefIdSchema,
   ConditionSchema,
+  DamageTypeSchema,
   HitDieSchema,
   NonNegativeInt,
   refId,
@@ -367,6 +368,16 @@ export const LiveStateSchema = z
     effects: z.array(ActiveEffectSchema),
     conditions: z.array(ConditionSchema),
     exhaustion: z.int().min(0).max(6),
+    /** Artificer applications, oldest first; absent in older saves. */
+    infusions: z
+      .array(
+        z.strictObject({
+          featureId: refId('feature'),
+          instanceId: z.string().min(1),
+          damageType: DamageTypeSchema.optional(),
+        }),
+      )
+      .optional(),
     /** Keyed by build item instanceId. */
     items: z.record(
       z.string(),

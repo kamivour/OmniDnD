@@ -2,6 +2,7 @@ import { z } from 'zod';
 import type { Draft } from 'immer';
 import { armorReplacements } from '../calc/equipment';
 import { attunedItems } from '../calc/attunement';
+import { activeInfusions, INFUSIONS, infusionKey } from '../calc/infusions';
 import { itemUseCost } from '../calc/item-use';
 import type { ItemDef } from '../schema';
 import type { CharacterData, Command, CommandContext } from './runner';
@@ -155,7 +156,10 @@ export const setItemAttunement: Command<SetItemAttunementPayload> = {
         return [block(`Already attuned to ${limit} items; end a recorded bond first`)];
       if (existing.some((item) => item.itemId === target.item.itemId))
         return [block(`Already attuned to another copy of ${target.def.name}`)];
-      if (target.def.attunement !== true)
+      const infusedRequirement = activeInfusions(ctx.build, ctx.live).some(
+        (i) => i.instanceId === instanceId && INFUSIONS[infusionKey(i.featureId)]?.attunement,
+      );
+      if (target.def.attunement !== true && !infusedRequirement)
         checks.push(
           warn(
             `${target.def.name} has no recorded attunement requirement; confirm the DM's ruling`,

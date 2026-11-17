@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D225 | 2026-11-17 | Equipment infusions are explicit inventory assignments, with a shared review after long rests; existing infusions persist. Recording an ending or infusing outside a recorded rest warns for table confirmation, and all changes can be undone. | Track the player's actual equipment without silently choosing targets or table rulings |
 | D223 | 2026-11-17 | Campaign IDs send requests reviewed by the owner or DM; seven-day invite links grant direct membership. Bringing an existing character creates an explicit, undoable copy under the destination rules and keeps the original. | Avoid accidental access and preserve characters used in other campaigns |
 | D224 | 2026-11-17 | Other members' characters use a separate reader with no gameplay or edit controls; journals and Undo history stay private. Matching campaign or character IDs are kept as separate local records. | Make ownership clear and prevent starter records on different devices from overwriting or publishing each other |
 | D222 | 2026-11-17 | Replacing a proficiency pick is blocked if it would remove the prerequisite of retained expertise; change that expertise pick first. Other proficiency sources count, and no saved picks are removed automatically. | Keep choices valid without silently deleting dependent choices |
@@ -277,6 +278,8 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q44 | ~~Are D&D place names fine as theme labels?~~ Answered → D192 | — | — | — |
 | Q45 | ~~Water ripple on phones too?~~ Answered → D193 | — | — | — |
 | Q46 | ~~Theme per campaign?~~ Answered → D194 | — | — | — |
+| Q47 | Should Homunculus Servant and Replicate Magic Item get dedicated creation and replica-choice tracking? | After M41 | Use existing Companions and Inventory workflows; these two applications and their share of the infusion limit remain manual, stated beside the counter | User |
+| Q48 | How should Armorer's armor components be represented for its two extra armor-only infusions? | After M41 | Standard active limit only, with a visible reminder; do not grant two unrestricted slots or invent separate equipment | User |
 
 ## How to add an entry
 
