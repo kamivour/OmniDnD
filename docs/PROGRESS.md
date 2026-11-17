@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M41 Artificer equipment infusions done.
-**Next up:** Deploy the verified commits and check live sharing with two accounts. The M40 database migration is applied; advanced infusion workflows remain Q47–Q48.
+**Current milestone:** M41 Artificer review: infusion-known validation fixed; reported class disappearance still under investigation.
+**Next up:** Get the friend's campaign settings, shared/private status and actual site URL to reproduce the disappearance. The M40 migration is applied; advanced infusion workflows remain Q47–Q48.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -65,7 +65,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M38 | Xanathar's subclasses, part 2 | 9 | done | Content in own words, filtered by book; see [PLAN.md](PLAN.md) |
 | M39 | Themes | 10 | done | Midnight, glass, water and D&D place themes with title effects; see [PLAN.md](PLAN.md) |
 | M40 | Campaign sharing and join requests | 7 | done | Share links, approve requests with existing characters, and view party characters without editing them |
-| M41 | Artificer equipment infusions | 3 | done | Assign known infusions to eligible inventory items after resting; computed bonuses, limits, reload and Undo work |
+| M41 | Artificer equipment infusions | 3 | doing | Equipment assignment works; verify known choices and investigate the reported class disappearance |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -325,6 +325,8 @@ Details in [PLAN.md](PLAN.md).
 - [x] Keep applications through rests and exports, and preserve older saves and Undo
 - [x] Verify switching to Rolled preserves Artificer availability and explain source requirements
 - [x] Check phone and desktop layouts
+- [x] Restrict newly learned infusions by Artificer level and known limit in To do, creation and level-up
+- [ ] Reproduce the friend's missing Artificer using his actual campaign settings and deployed app
 
 ## Review fixes
 
@@ -344,6 +346,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-17 — Fixed infusion-known eligibility and counts; local, reload and shared-sync checks retain Artificer. Friend-specific disappearance still needs campaign data and site URL.
 - 2026-11-17 — M41: equipment infusion assignment after resting, computed bonuses, attunement, limits and Undo; Rolled preserves Artificer availability, with source guidance when hidden.
 - 2026-11-17 — Fixed the join-request migration syntax; PostgreSQL now verifies the complete migration, retries, approval, decline and character permissions.
 - 2026-11-17 — M40: campaign-ID approval, share links, existing-character copies and a separate party reader; private journals and matching starter IDs stay safe.

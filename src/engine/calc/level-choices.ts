@@ -3,6 +3,7 @@ import type { Registry } from '../registry';
 import { SkillSchema, refId, type Campaign, type CharacterBuild } from '../schema';
 import { ABILITIES, type Ability } from './abilities';
 import { optionalRules } from './campaign-rules';
+import { INFUSION_PREFIX, infusionMinimumLevel, infusionsKnownAt } from './infusions';
 
 /** PHB 2014: every class improves ability scores at 4, 8, 12, 16 and 19; Fighter also at 6 and 14, Rogue also at 10. */
 export function asiLevels(classId: string): number[] {
@@ -165,6 +166,21 @@ export function applyLevelChoices(input: Input): ChoiceResult {
     const feature = registry.entries.get(id);
     if (feature?.kind !== 'feature') return { blocked: `Unknown feature ${id}` };
     if (build.featureIds.includes(id)) return { blocked: `You already have ${feature.name}` };
+    if (id.startsWith(INFUSION_PREFIX)) {
+      const artificerLevel =
+        classId === 'class.artificer'
+          ? Math.max(newLevel, entry.level)
+          : (build.classes.find((c) => c.classId === 'class.artificer')?.level ?? 0);
+      if (artificerLevel < infusionMinimumLevel(id))
+        return { blocked: `${feature.name} requires Artificer level ${infusionMinimumLevel(id)}` };
+      if (
+        build.featureIds.filter((featureId) => featureId.startsWith(INFUSION_PREFIX)).length >=
+        infusionsKnownAt(artificerLevel)
+      )
+        return {
+          blocked: `Artificer level ${artificerLevel} can know ${infusionsKnownAt(artificerLevel)} infusions`,
+        };
+    }
     if (
       feature.id.startsWith('feature.tce.') &&
       !optionalRules(input.campaign).optionalClassFeatures

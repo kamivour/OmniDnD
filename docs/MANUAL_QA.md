@@ -296,6 +296,8 @@ Check on a real phone and on a computer.
 
 ## M41 — Artificer equipment infusions
 
+- [ ] As Artificer 2, learn four eligible infusions in To do; check that higher-level choices are absent and the picks survive reload and Undo.
+
 - [ ] Finish a long rest as an Artificer and judge the infusion review before prepared spells on phone and desktop.
 - [ ] Assign Enhanced Weapon and Enhanced Defense; check the attack, damage and AC breakdowns, reload and Undo.
 - [ ] Compare Enhanced Arcane Focus or Repeating Shot before and after attuning and equipping the item.

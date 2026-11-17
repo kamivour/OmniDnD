@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 15:51 — Check known infusion limits
+
+- Infusion choices now follow your Artificer level. At level 2, choose four known infusions; later-level options stay unavailable until eligible.
+- Creation and level-up also enforce the known limit. Existing saved choices stay intact; check learning, reload and Undo. Checks pass.
+
 ## 2026-11-17 15:30 — Assign Artificer equipment infusions
 
 - Choose eligible inventory items for known infusions after a long rest, or review them from Features and Inventory. Bonuses update automatically; changes survive reload and Undo.

@@ -17,6 +17,27 @@ test('a long rest opens infusion assignment; bonuses survive reload and Undo rem
   file.live.items = { sword: { qty: 1, equipped: true, attuned: false } };
   delete file.live.lastLongRestEnd;
   await importReview(page, file, 'features');
+  await page.goto(`/characters/${file.build.id}/todo`);
+  const knownChoices = page.getByRole('listitem').filter({ hasText: 'Infusions: pick 3' });
+  await knownChoices.getByRole('button', { name: 'Choose', exact: true }).click();
+  await expect(
+    knownChoices.getByRole('checkbox', { name: 'Infusion: Radiant Weapon', exact: true }),
+  ).toHaveCount(0);
+  for (const name of ['Enhanced Defense', 'Enhanced Arcane Focus', 'Mind Sharpener'])
+    await knownChoices.getByRole('checkbox', { name: `Infusion: ${name}`, exact: true }).check();
+  await expect(
+    knownChoices.getByRole('checkbox', { name: 'Infusion: Returning Weapon', exact: true }),
+  ).toBeDisabled();
+  await knownChoices.getByRole('button', { name: 'Save choice', exact: true }).click();
+  await saved(page);
+  await page.reload();
+  await expect(page.getByText('Infusions: pick 3', { exact: true })).toHaveCount(0);
+  expect(
+    (await reviewState(page, file.build.id)).build.featureIds.filter((id) =>
+      id.startsWith('feature.artificer.infusion-'),
+    ),
+  ).toHaveLength(4);
+  await page.goto(`/characters/${file.build.id}/features`);
   await page.getByRole('button', { name: 'Find', exact: true }).first().click();
   await page.getByRole('combobox', { name: 'Find', exact: true }).fill('long rest');
   await page.getByRole('option', { name: /Long rest/ }).click();
@@ -60,7 +81,13 @@ test('changing Point Buy to Rolled preserves Tasha class availability', async ({
   file.campaign.sourceParts = { TCE: ['options'] };
   file.campaign.abilityMethod = 'point-buy';
   await importReview(page, file, 'sheet');
+  await page.goto('/campaigns/source-check/characters/new');
+  await page.getByLabel('Class', { exact: true }).selectOption('class.artificer');
+  await expect(page.getByLabel('STR base', { exact: true })).toHaveAttribute('min', '8');
   await page.goto('/campaigns/source-check/settings');
+  await expect(
+    page.getByRole('checkbox', { name: /^Tasha's Cauldron of Everything/ }),
+  ).toBeChecked();
   await page.locator('input[name="abilities"][value="rolled"]').check();
   await page.getByRole('button', { name: 'Save', exact: true }).click();
   await saved(page);
@@ -70,4 +97,13 @@ test('changing Point Buy to Rolled preserves Tasha class availability', async ({
   ).toHaveCount(1);
   await page.getByLabel('Class', { exact: true }).selectOption('class.artificer');
   await expect(page.getByLabel('STR base', { exact: true })).toHaveAttribute('min', '3');
+  await page.reload();
+  await expect(
+    page.getByLabel('Class', { exact: true }).locator('option[value="class.artificer"]'),
+  ).toHaveCount(1);
+  await page.goto('/campaigns/source-check/settings');
+  await expect(page.locator('input[name="abilities"][value="rolled"]')).toBeChecked();
+  await expect(
+    page.getByRole('checkbox', { name: /^Tasha's Cauldron of Everything/ }),
+  ).toBeChecked();
 });

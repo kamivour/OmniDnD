@@ -326,6 +326,8 @@ interface Guidance {
 
 **Infusions (M41):** optional `live.infusions` stores `{ featureId, instanceId, damageType? }` in oldest-first order; missing means none without rewriting older saves. `infuseItem` and `endInfusion` log reversible changes; calculated benefits require carried, equipped gear and any required attunement.
 
+Known recipes remain in `build.featureIds`; their eligibility and count follow Artificer class level, separately from the active-item limit. Older saved picks are retained, while new picks must meet both checks.
+
 ```ts
 type Command = (ctx: { build; live; refs; campaign }, payload) =>
   { result: 'ok' | 'blocked' | 'warn'; reasons: string[]; next?: { build; live } };

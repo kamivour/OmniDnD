@@ -2,6 +2,17 @@ import type { CharacterBuild, LiveState, ItemDef, FeatureDefenses } from '../sch
 import type { Registry } from '../registry';
 
 export const INFUSION_PREFIX = 'feature.artificer.infusion-';
+/** Tasha's 2014 Artificer: known recipes, separate from the active-item limit. */
+export const INFUSIONS_KNOWN: [number, number][] = [
+  [2, 4],
+  [6, 6],
+  [10, 8],
+  [14, 10],
+  [18, 12],
+];
+export const infusionsKnownAt = (level: number) =>
+  INFUSIONS_KNOWN.reduce((total, [from, count]) => (level >= from ? count : total), 0);
+export const infusionMinimumLevel = (id: string) => INFUSIONS[infusionKey(id)]?.level ?? 2;
 type Gear =
   | 'weapon'
   | 'thrown'

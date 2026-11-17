@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { seedFile } from '../data/seed';
+import { registry } from '../data/registry';
+import { sourceAllows } from '../engine/calc/campaign-rules';
+import { runManagement } from '../engine/commands/management';
+import { updateCampaign } from '../engine/commands/campaigns';
 import { serializeWorkspace } from '../db/database';
 import { workspaceContents } from '../db/sync-metadata';
 import type { Campaign } from '../engine/schema';
@@ -73,6 +77,50 @@ async function party() {
 }
 
 describe('party sync', () => {
+  it('preserves Artificer source options on both devices when the DM changes Point Buy to Rolled', async () => {
+    const { dm, ana } = await party();
+    await dm.sync();
+    dm.state.campaigns[CAMPAIGN] = {
+      ...dm.state.campaigns[CAMPAIGN]!,
+      sources: ['PHB', 'TCE'],
+      sourceParts: { TCE: ['options', 'spells'] },
+      abilityMethod: 'point-buy',
+    };
+    await dm.sync();
+    await ana.sync();
+    const original = dm.state.campaigns[CAMPAIGN]!;
+    const result = runManagement(
+      updateCampaign,
+      dm.state,
+      {
+        campaignId: CAMPAIGN,
+        changes: {
+          name: original.name,
+          leveling: original.leveling,
+          hpMethod: original.hpMethod,
+          hpLevelFloor: original.hpLevelFloor,
+          abilityMethod: 'rolled',
+          sources: original.sources,
+          sourceParts: original.sourceParts,
+        },
+      },
+      registry,
+      { eventId: 'rolled', realTime: NOW },
+    );
+    if (result.result !== 'ok') throw new Error(result.reasons.join());
+    dm.state.campaigns = result.next.campaigns;
+    dm.state.characters = result.next.characters;
+    await dm.sync();
+    await ana.sync();
+    await dm.sync();
+    await ana.sync();
+    for (const device of [dm, ana]) {
+      const campaign = device.state.campaigns[CAMPAIGN]!;
+      expect(campaign.abilityMethod).toBe('rolled');
+      expect(campaign.sourceParts?.TCE).toEqual(['options', 'spells']);
+      expect(sourceAllows(campaign, registry.get('class', 'class.artificer'))).toBe(true);
+    }
+  });
   it('joining a matching private campaign ID preserves its characters without publishing them', async () => {
     const { ana } = await party();
     ana.state.campaigns[CAMPAIGN] = structuredClone(seedFile.campaign);
