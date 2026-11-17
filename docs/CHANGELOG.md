@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-17 15:55 — Put desktop combat statistics first
+
+- On desktop, the Sheet now starts with Combat Statistics below its title and section buttons.
+- Phone and tablet section order stays the same. Check that HP, AC and weapon attacks are easy to find. Checks pass.
+
 ## 2026-11-17 15:51 — Check known infusion limits
 
 - Infusion choices now follow your Artificer level. At level 2, choose four known infusions; later-level options stay unavailable until eligible.

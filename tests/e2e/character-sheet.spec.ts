@@ -19,6 +19,27 @@ const main = (page: Page) => page.getByRole('main');
 const section = (page: Page, name: string) => main(page).getByRole('region', { name, exact: true });
 const number = (page: Page, label: string) =>
   main(page).getByRole('button', { name: `Show ${label} breakdown`, exact: true });
+
+test('desktop puts combat statistics first while phones keep identity first', async ({ page }) => {
+  await page.goto('/characters/the-fool/sheet');
+  await saved(page);
+  const sections = main(page).getByRole('group', { name: 'Show sections' });
+  await sections.getByRole('button', { name: 'All', exact: true }).click();
+  const desktop = page.viewportSize()!.width >= 1024;
+  const combat = section(page, 'Combat statistics');
+  await expect(combat).toHaveCount(1);
+  await expect(main(page).getByRole('region').first()).toHaveAttribute(
+    'aria-label',
+    desktop ? 'Combat statistics' : 'Identity',
+  );
+  const controls = (await sections.boundingBox())!;
+  const statistics = (await combat.boundingBox())!;
+  const identity = (await section(page, 'Identity').boundingBox())!;
+  expect(statistics.y).toBeGreaterThanOrEqual(controls.y + controls.height);
+  expect(desktop ? statistics.y < identity.y : identity.y < statistics.y).toBe(true);
+  await page.screenshot({ path: test.info().outputPath('sheet-top.png') });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
 const sheetLog = (page: Page) => page.getByRole('region', { name: 'Character log', exact: true });
 const inspiration = (page: Page) =>
   section(page, 'Identity').getByRole('checkbox', { name: 'Inspiration', exact: true });
@@ -449,6 +470,8 @@ test('an XP High Elf Fighter displays its own subrace, subclass, choices and emp
   page,
 }) => {
   const file = sheetFile('sheet-high-elf-fighter');
+  // This is a different character, without the Fool's saved feature picks.
+  file.build.proficiencyPicks = {};
   file.campaign.id = 'sheet-xp-campaign';
   file.campaign.name = 'Sheet XP campaign';
   file.campaign.leveling = 'xp';
@@ -633,6 +656,7 @@ test('a Human without recorded proficiencies or defenses inherits no Fool metada
   page,
 }) => {
   const file = sheetFile('sheet-human-empty');
+  file.build.proficiencyPicks = {};
   file.build.raceId = 'race.human';
   file.build.backgroundId = 'background.acolyte';
   file.build.alignment = undefined;

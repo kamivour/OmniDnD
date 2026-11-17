@@ -330,6 +330,8 @@ Details in [PLAN.md](PLAN.md).
 
 ## Review fixes
 
+- [x] Put Combat Statistics first on the desktop Sheet while preserving phone and tablet order
+
 - [x] Share multiclass ASI accounting between To do and saved choices
 - [x] Keep Steady Aim's speed restriction through Dash until the turn ends
 - [x] Prevent proficiency changes from leaving dependent expertise invalid
@@ -346,6 +348,7 @@ Details in [PLAN.md](PLAN.md).
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-17 — Desktop Sheet shows Combat Statistics first; phones and tablets keep their section order, with one set of controls at every width.
 - 2026-11-17 — Fixed infusion-known eligibility and counts; local, reload and shared-sync checks retain Artificer. Friend-specific disappearance still needs campaign data and site URL.
 - 2026-11-17 — M41: equipment infusion assignment after resting, computed bonuses, attunement, limits and Undo; Rolled preserves Artificer availability, with source guidance when hidden.
 - 2026-11-17 — Fixed the join-request migration syntax; PostgreSQL now verifies the complete migration, retries, approval, decline and character permissions.

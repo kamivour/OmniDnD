@@ -19,6 +19,7 @@ import { SheetBuildEditor } from '../sheet/SheetBuildEditor';
 import { SheetOverrideEditor } from '../sheet/SheetOverrideEditor';
 import { LevelUpControl } from '../level/LevelUpControl';
 import { cx } from '../cx';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { SHEET_VIEWS, useSheetView, type SheetView } from '../sheet/sheet-view';
 
 const titleCase = (value: string) =>
@@ -48,6 +49,7 @@ function Section({ label, children }: { label: string; children: ReactNode }) {
 /** Saved choices and engine-derived values, with explicit logged edits and noted overrides. */
 export function CharacterSheetScreen() {
   const [editing, setEditing] = useState(false);
+  const desktop = useMediaQuery('(min-width: 1024px)');
   const editButton = useRef<HTMLButtonElement>(null);
   const { state, sheet } = useCharacter();
   const { run } = useCommand();
@@ -85,6 +87,110 @@ export function CharacterSheetScreen() {
   const itemName = (id: string) => registryFor(build).get('item', id).name;
   const attackDamage = (dice: string | undefined, bonus: number) =>
     dice ? `${dice}${bonus ? signed(bonus) : ''}` : String(bonus);
+  const combatStatistics = shows('combat') && (
+    <Section label="Combat statistics">
+      <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 @min-[900px]:grid-cols-3">
+        <p className="flex min-h-11 items-center justify-between gap-2 px-2 text-sm text-text">
+          <span>HP</span>
+          <strong>
+            {live.hp}/{sheet.maxHp.value}
+            <OverrideMarker override={sheet.maxHp.override} />
+          </strong>
+        </p>
+        <StatChip label="Maximum HP" value={sheet.maxHp.value} stat={sheet.maxHp} />
+        <p className="flex min-h-11 items-center justify-between gap-2 px-2 text-sm text-text">
+          <span>Temp HP</span>
+          <strong>{live.tempHp}</strong>
+        </p>
+        <StatChip label="Armor class" value={sheet.ac.value} stat={sheet.ac} />
+        <StatChip
+          label="Initiative"
+          value={signed(sheet.initiative.value)}
+          stat={sheet.initiative}
+        />
+        <StatChip label="Speed" value={`${sheet.speed.value} ft`} stat={sheet.speed} />
+        <StatChip
+          label="Carrying capacity"
+          value={`${sheet.carryingCapacity} lb`}
+          stat={breakdowns.carryingCapacity}
+        />
+        {breakdowns.hitDice.map(({ die, max, remaining }) => (
+          <div key={die} className="flex min-w-0 flex-col">
+            <StatChip
+              label="Hit Dice"
+              value={`${max.value}${die}`}
+              stat={max}
+              breakdownLabel={`${die} Hit Dice maximum`}
+            />
+            <StatChip
+              label={`${die} remaining`}
+              value={`${remaining.value}/${max.value}`}
+              stat={remaining}
+              breakdownLabel={`${die} Hit Dice remaining`}
+            />
+          </div>
+        ))}
+      </div>
+      {rollNotes('initiative').map((note) => (
+        <p key={note.key} className="px-2 text-sm text-text-muted">
+          Initiative: {note.text}
+        </p>
+      ))}
+      <p className="px-2 text-sm text-text-muted">
+        Death saves: {live.deathSaves.success} successes · {live.deathSaves.fail} failures
+      </p>
+      <DeathSaveTracker />
+      <h3 className="text-sm font-semibold text-text">Equipped weapon attacks</h3>
+      {sheet.attacks.length ? (
+        <ul className="grid min-w-0 gap-2 sm:grid-cols-2">
+          {sheet.attacks.map((attack) => {
+            const damage = breakdowns.attacks.find(
+              ({ instanceId }) => instanceId === attack.instanceId,
+            )?.damageBonus;
+            return (
+              <li
+                key={attack.instanceId}
+                className="flex min-w-0 flex-col rounded-card border border-border p-2"
+              >
+                <h4 className="px-2 text-sm font-semibold text-text">{attack.name}</h4>
+                <StatChip
+                  label="To hit"
+                  value={signed(attack.toHit.value)}
+                  stat={attack.toHit}
+                  breakdownLabel={`${attack.name} attack`}
+                />
+                {attack.damage && damage ? (
+                  <StatChip
+                    label={attack.damage.type}
+                    value={attackDamage(attack.damage.dice, attack.damage.bonus)}
+                    stat={damage}
+                    breakdownLabel={`${attack.name} damage`}
+                  />
+                ) : (
+                  <p className="px-2 text-sm text-text-muted">No damage roll</p>
+                )}
+                <p className="px-2 text-xs text-text-muted">
+                  {[
+                    titleCase(attack.type),
+                    attack.proficient ? 'Proficient' : 'Not proficient',
+                    ...attack.properties,
+                    ...(attack.range
+                      ? [`Range ${attack.range.normal}/${attack.range.long} ft`]
+                      : []),
+                    ...(attack.versatile
+                      ? [`Versatile ${attackDamage(attack.versatile, attack.damage?.bonus ?? 0)}`]
+                      : []),
+                  ].join(' · ')}
+                </p>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p className="text-sm text-text-muted">No equipped weapon attacks.</p>
+      )}
+    </Section>
+  );
   const closeEdit = () => {
     setEditing(false);
     requestAnimationFrame(() => editButton.current?.focus());
@@ -149,6 +255,7 @@ export function CharacterSheetScreen() {
             </button>
           ))}
         </div>
+        {desktop && combatStatistics}
         {shows('basics') && (
           <>
             <Section label="Identity">
@@ -417,112 +524,7 @@ export function CharacterSheetScreen() {
             </div>
           </div>
         )}
-        {shows('combat') && (
-          <Section label="Combat statistics">
-            <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 @min-[900px]:grid-cols-3">
-              <p className="flex min-h-11 items-center justify-between gap-2 px-2 text-sm text-text">
-                <span>HP</span>
-                <strong>
-                  {live.hp}/{sheet.maxHp.value}
-                  <OverrideMarker override={sheet.maxHp.override} />
-                </strong>
-              </p>
-              <StatChip label="Maximum HP" value={sheet.maxHp.value} stat={sheet.maxHp} />
-              <p className="flex min-h-11 items-center justify-between gap-2 px-2 text-sm text-text">
-                <span>Temp HP</span>
-                <strong>{live.tempHp}</strong>
-              </p>
-              <StatChip label="Armor class" value={sheet.ac.value} stat={sheet.ac} />
-              <StatChip
-                label="Initiative"
-                value={signed(sheet.initiative.value)}
-                stat={sheet.initiative}
-              />
-              <StatChip label="Speed" value={`${sheet.speed.value} ft`} stat={sheet.speed} />
-              <StatChip
-                label="Carrying capacity"
-                value={`${sheet.carryingCapacity} lb`}
-                stat={breakdowns.carryingCapacity}
-              />
-              {breakdowns.hitDice.map(({ die, max, remaining }) => (
-                <div key={die} className="flex min-w-0 flex-col">
-                  <StatChip
-                    label="Hit Dice"
-                    value={`${max.value}${die}`}
-                    stat={max}
-                    breakdownLabel={`${die} Hit Dice maximum`}
-                  />
-                  <StatChip
-                    label={`${die} remaining`}
-                    value={`${remaining.value}/${max.value}`}
-                    stat={remaining}
-                    breakdownLabel={`${die} Hit Dice remaining`}
-                  />
-                </div>
-              ))}
-            </div>
-            {rollNotes('initiative').map((note) => (
-              <p key={note.key} className="px-2 text-sm text-text-muted">
-                Initiative: {note.text}
-              </p>
-            ))}
-            <p className="px-2 text-sm text-text-muted">
-              Death saves: {live.deathSaves.success} successes · {live.deathSaves.fail} failures
-            </p>
-            <DeathSaveTracker />
-            <h3 className="text-sm font-semibold text-text">Equipped weapon attacks</h3>
-            {sheet.attacks.length ? (
-              <ul className="grid min-w-0 gap-2 sm:grid-cols-2">
-                {sheet.attacks.map((attack) => {
-                  const damage = breakdowns.attacks.find(
-                    ({ instanceId }) => instanceId === attack.instanceId,
-                  )?.damageBonus;
-                  return (
-                    <li
-                      key={attack.instanceId}
-                      className="flex min-w-0 flex-col rounded-card border border-border p-2"
-                    >
-                      <h4 className="px-2 text-sm font-semibold text-text">{attack.name}</h4>
-                      <StatChip
-                        label="To hit"
-                        value={signed(attack.toHit.value)}
-                        stat={attack.toHit}
-                        breakdownLabel={`${attack.name} attack`}
-                      />
-                      {attack.damage && damage ? (
-                        <StatChip
-                          label={attack.damage.type}
-                          value={attackDamage(attack.damage.dice, attack.damage.bonus)}
-                          stat={damage}
-                          breakdownLabel={`${attack.name} damage`}
-                        />
-                      ) : (
-                        <p className="px-2 text-sm text-text-muted">No damage roll</p>
-                      )}
-                      <p className="px-2 text-xs text-text-muted">
-                        {[
-                          titleCase(attack.type),
-                          attack.proficient ? 'Proficient' : 'Not proficient',
-                          ...attack.properties,
-                          ...(attack.range
-                            ? [`Range ${attack.range.normal}/${attack.range.long} ft`]
-                            : []),
-                          ...(attack.versatile
-                            ? [
-                                `Versatile ${attackDamage(attack.versatile, attack.damage?.bonus ?? 0)}`,
-                              ]
-                            : []),
-                        ].join(' · ')}
-                      </p>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p className="text-sm text-text-muted">No equipped weapon attacks.</p>
-            )}
-          </Section>
-        )}
+        {!desktop && combatStatistics}
         {shows('spells') && (
           <Section label="Spellcasting">
             {sheet.spellcasting.length ? (

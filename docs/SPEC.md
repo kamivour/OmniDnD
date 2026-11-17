@@ -107,6 +107,8 @@ Resources, concentration, effects on you, conditions, Quick Access (favorited sp
 - **Concentration** is its own block (spell, remaining time, End). **Effects on you** lists only effects whose target is this character (D41).
 
 ### Character Sheet
+On desktop (1024 px and wider), Combat Statistics is the first section below the title and section buttons. Phone and tablet section order stays unchanged.
+
 - **Identity:** name, race/subrace, class/subclass/level, background, alignment, inspiration toggle. XP field and "next level at" only when the campaign uses XP leveling; otherwise hidden.
 - **Abilities:** score, modifier, save (proficiency marked). Edit bases as typed rolls, standard-array assignments or a point-buy purchase costing at most 27 points; bonuses (racial, ASI, feat, item) stay separate, with their sources shown.
 - **Max HP:** computed from per-level HP entries (see §6). Shows each level's entry in the breakdown.
