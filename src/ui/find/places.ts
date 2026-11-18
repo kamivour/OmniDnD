@@ -16,6 +16,18 @@ export function campaignPlaces(campaignId: string): FindEntry[] {
         anchor: 'join-requests',
       },
     },
+    {
+      id: 'go.dm-seat',
+      group: 'go',
+      title: 'DM seat',
+      detail: 'Party: take the empty DM seat or step down',
+      synonyms: ['become dm', 'dungeon master', 'step down', 'take dm', 'who is dm'],
+      target: {
+        kind: 'go',
+        path: `/campaigns/${encodeURIComponent(campaignId)}/party`,
+        anchor: 'dm-seat',
+      },
+    },
   ];
 }
 

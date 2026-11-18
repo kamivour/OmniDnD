@@ -142,6 +142,9 @@ describe('Supabase shared campaigns (M24)', () => {
     'leave_campaign(text)',
     'remove_member(text, uuid)',
     'set_dm(text, uuid)',
+    'claim_dm(text)',
+    'release_dm(text)',
+    'join_campaign(text, text)',
   ])('keeps %s authenticated-only with a fixed search path', (signature) => {
     expect(sql).toContain(`'${signature}'`);
     const name = signature.split('(')[0]!;

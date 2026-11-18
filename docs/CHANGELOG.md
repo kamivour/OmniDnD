@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 02:17 — Choose the DM seat
+
+- When joining from an invite, choose Player or DM. If someone already holds the DM seat, DM is locked and shows who holds it.
+- Party screens and shared campaign cards show who is DM. Any member can take an empty seat, and the DM can step down.
+- Run the new `supabase/migrations/20261119120000_dm_seat.sql` in the Supabase SQL Editor. Until then, joining works as a player only.
+- Checks pass.
+
 ## 2026-11-19 02:06 — Copy or move characters between campaigns
 
 - On Campaigns, each of your characters now has Move. Copy also lets you pick which campaign the copy goes into.

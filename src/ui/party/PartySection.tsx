@@ -11,6 +11,7 @@ import { sharedPayload } from '../../sync/party';
 import { autoSync, useAccountSession } from '../../sync/service';
 import { keepOutOfSharing } from '../../engine/commands/party';
 import { useManagement } from '../commands/useManagement';
+import { DmSeat } from './DmSeat';
 
 const button =
   'inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-border px-3 text-sm hover:bg-surface-2 disabled:opacity-40';
@@ -202,6 +203,7 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
             Share an invite for direct access, or give this ID to players so they can request
             approval.
           </p>
+          <DmSeat campaignId={campaign.id} />
           <ul className="flex flex-col gap-2" aria-label="Members">
             {members.map((member) => {
               const self = member.userId === account?.id;

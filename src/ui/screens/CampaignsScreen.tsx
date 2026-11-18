@@ -27,6 +27,7 @@ import { backupReminder } from '../../state/backup-reminder';
 import { useTourAutostart } from '../tutorial/useTour';
 import { rulesSummary } from '../campaignOptions';
 import { syncConfig } from '../../sync/config';
+import { dmLabel, usePartyState } from '../../state/party-store';
 
 const button =
   'hover-lift inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-border bg-surface px-3 text-sm text-text disabled:opacity-40';
@@ -395,6 +396,7 @@ function CampaignCard({
             )}
           </h2>
           <p className="text-xs text-text-muted">{rulesSummary(campaign)}</p>
+          {campaign.shared && <DmLine campaignId={campaign.id} />}
         </div>
         {campaign.shared && (
           <Link
@@ -531,4 +533,10 @@ function CampaignCard({
       </div>
     </article>
   );
+}
+
+/** "DM: name" or "DM seat: empty" once party members have loaded. */
+function DmLine({ campaignId }: { campaignId: string }) {
+  const label = dmLabel(usePartyState().members, campaignId);
+  return label ? <p className="text-xs text-text-muted wrap-anywhere">{label}</p> : null;
 }

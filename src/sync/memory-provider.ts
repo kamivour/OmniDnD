@@ -269,6 +269,7 @@ export class MemoryProvider implements SyncProvider {
         campaignId,
         name: payload?.name ?? '',
         dmName: dm ? (this.cloud.names.get(dm.userId) ?? null) : null,
+        hasDm: !!dm,
         memberCount: this.cloud.members.filter((m) => m.campaignId === campaignId).length,
         alreadyMember: !!this.member(campaignId),
       });
@@ -277,16 +278,48 @@ export class MemoryProvider implements SyncProvider {
     }
   }
 
-  joinCampaign(code: string) {
+  joinCampaign(code: string, role: 'dm' | 'player' = 'player') {
     try {
       const { campaignId } = this.invite(code);
+      // Same order as the server: a taken DM seat refuses before membership changes.
+      if (role === 'dm') this.seatFree(campaignId);
       if (!this.member(campaignId))
         this.cloud.members.push({ campaignId, userId: this.require().id, role: 'player' });
+      if (role === 'dm') this.member(campaignId)!.role = 'dm';
       this.cloud.notifyParty();
       return Promise.resolve(campaignId);
     } catch (cause) {
       return Promise.reject(cause as Error);
     }
+  }
+
+  /** Throws when someone else holds the DM seat. */
+  private seatFree(campaignId: string) {
+    const dm = this.cloud.members.find((m) => m.campaignId === campaignId && m.role === 'dm');
+    if (dm && dm.userId !== this.require().id)
+      throw new Error(
+        `The DM seat is taken by ${this.cloud.names.get(dm.userId) ?? 'another member'}`,
+      );
+  }
+
+  claimDm(campaignId: string) {
+    try {
+      const me = this.member(campaignId);
+      if (!me) throw new Error('Join this campaign first');
+      this.seatFree(campaignId);
+      me.role = 'dm';
+      this.cloud.notifyParty();
+      return Promise.resolve();
+    } catch (cause) {
+      return Promise.reject(cause as Error);
+    }
+  }
+
+  releaseDm(campaignId: string) {
+    const me = this.member(campaignId);
+    if (me?.role === 'dm') me.role = 'player';
+    this.cloud.notifyParty();
+    return Promise.resolve();
   }
 
   leaveCampaign(campaignId: string) {

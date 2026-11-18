@@ -297,6 +297,25 @@ describe('party rules in the memory cloud', () => {
     ]);
   });
 
+  it('locks a taken DM seat, and a player takes it once the DM steps down', async () => {
+    const { cloud, dm, ana } = await party();
+    const ben = await device(cloud, 'ben@example.com', 'Ben');
+    const code = await dm.provider.createInvite(CAMPAIGN);
+    expect(await ben.provider.previewInvite(code)).toMatchObject({ hasDm: true, dmName: 'Dana' });
+    await expect(ben.provider.joinCampaign(code, 'dm')).rejects.toThrow('taken by Dana');
+    expect(cloud.members.some((m) => m.userId === ben.account.id)).toBe(false);
+    await expect(ana.provider.claimDm(CAMPAIGN)).rejects.toThrow('taken by Dana');
+    await dm.provider.releaseDm(CAMPAIGN);
+    await ana.provider.claimDm(CAMPAIGN);
+    await expect(dm.provider.claimDm(CAMPAIGN)).rejects.toThrow('taken by Ana');
+    expect(cloud.members.filter((m) => m.role === 'dm').map((m) => m.userId)).toEqual([
+      ana.account.id,
+    ]);
+    // The next sync turns Ana's copy of the campaign into a DM campaign.
+    await ana.sync();
+    expect(ana.state.campaigns[CAMPAIGN]?.role).toBe('dm');
+  });
+
   it('a new invite revokes the old one', async () => {
     const { dm, cloud } = await party();
     const first = await dm.provider.createInvite(CAMPAIGN);

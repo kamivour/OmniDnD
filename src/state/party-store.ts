@@ -27,3 +27,11 @@ export function membersOf(members: readonly RemoteMember[], campaignId: string):
     .filter((member) => member.campaignId === campaignId)
     .sort((a, b) => (a.role === b.role ? a.name.localeCompare(b.name) : a.role === 'dm' ? -1 : 1));
 }
+
+/** "DM: name" or "DM seat: empty" for a shared campaign; undefined before members load. */
+export function dmLabel(members: readonly RemoteMember[], campaignId: string): string | undefined {
+  const here = members.filter((member) => member.campaignId === campaignId);
+  if (here.length === 0) return undefined;
+  const dm = here.find((member) => member.role === 'dm');
+  return dm ? `DM: ${dm.name || 'Unnamed player'}` : 'DM seat: empty';
+}

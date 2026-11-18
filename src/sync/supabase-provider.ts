@@ -16,6 +16,9 @@ import type {
 
 const TABLE = 'sync_entities';
 const COLUMNS = 'kind, entity_id, revision, deleted, changed_at, schema_version, payload';
+/** Shown when the server has not run the DM seat migration (M43). */
+const SEAT_UPDATE =
+  'This server needs an update before members can choose the DM seat. Join as a player, then ask the owner to make you DM.';
 
 interface Row {
   kind: string;
@@ -237,6 +240,7 @@ export class SupabaseProvider implements SyncProvider {
       campaign_id: string;
       name: string;
       dm_name: string | null;
+      has_dm?: boolean;
       member_count: number;
       already_member: boolean;
     }>('preview_invite', { p_code: code });
@@ -244,13 +248,32 @@ export class SupabaseProvider implements SyncProvider {
       campaignId: row.campaign_id,
       name: row.name,
       dmName: row.dm_name,
+      hasDm: row.has_dm ?? row.dm_name != null,
       memberCount: Number(row.member_count),
       alreadyMember: row.already_member,
     };
   }
 
-  joinCampaign(code: string) {
-    return this.call<string>('join_campaign', { p_code: code });
+  async joinCampaign(code: string, role: 'dm' | 'player' = 'player') {
+    const { data, error } = await this.client.rpc('join_campaign', { p_code: code, p_role: role });
+    if (!error) return data as string;
+    // A server without the DM seat migration only has join_campaign(p_code), which joins as a player.
+    if (error.code === 'PGRST202' && role === 'player')
+      return this.call<string>('join_campaign', { p_code: code });
+    throw new Error(error.code === 'PGRST202' ? SEAT_UPDATE : error.message);
+  }
+
+  claimDm(campaignId: string) {
+    return this.seat('claim_dm', campaignId);
+  }
+
+  releaseDm(campaignId: string) {
+    return this.seat('release_dm', campaignId);
+  }
+
+  private async seat(name: string, campaignId: string) {
+    const { error } = await this.client.rpc(name, { p_campaign: campaignId });
+    if (error) throw new Error(error.code === 'PGRST202' ? SEAT_UPDATE : error.message);
   }
 
   async leaveCampaign(campaignId: string) {

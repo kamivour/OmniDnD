@@ -109,3 +109,58 @@ it('approves and declines idempotently while enforcing membership and owner-only
   await asUser(declined);
   expect((await db.query('select * from public.party_entities')).rows).toEqual([]);
 });
+
+it('joins with a seat, locks a taken DM seat and lets the DM step down', async () => {
+  const third = '00000000-0000-4000-8000-000000000004';
+  await db.exec('reset role');
+  await db.query('insert into auth.users(id) values ($1)', [third]);
+  await db.query('insert into public.profiles(user_id, display_name) values ($1, $2)', [
+    player,
+    'Ana',
+  ]);
+  await asUser(owner);
+  await db.query("select public.share_campaign('seat', 'player', 1, now(), $1::jsonb)", [
+    JSON.stringify({ name: 'Seat' }),
+  ]);
+  const code = (await db.query<{ code: string }>("select public.create_invite('seat') as code"))
+    .rows[0]!.code;
+  const dms = async () =>
+    (
+      await db.query<{ user_id: string }>(
+        "select user_id from public.campaign_members where campaign_id = 'seat' and role = 'dm'",
+      )
+    ).rows.map((row) => row.user_id);
+
+  await asUser(player);
+  await db.query('select public.join_campaign($1, $2)', [code, 'dm']);
+  expect(await dms()).toEqual([player]);
+
+  await asUser(third);
+  const preview = await db.query<{ p: { has_dm: boolean; dm_name: string } }>(
+    'select public.preview_invite($1) as p',
+    [code],
+  );
+  expect(preview.rows[0]!.p).toMatchObject({ has_dm: true, dm_name: 'Ana' });
+  await expect(db.query('select public.join_campaign($1, $2)', [code, 'dm'])).rejects.toThrow(
+    'taken by Ana',
+  );
+  const inside = await db.query(
+    "select 1 from public.campaign_members where campaign_id = 'seat' and user_id = $1",
+    [third],
+  );
+  expect(inside.rows).toEqual([]);
+  await db.query('select public.join_campaign($1, $2)', [code, 'player']);
+  await expect(db.query("select public.claim_dm('seat')")).rejects.toThrow('taken by Ana');
+
+  await asUser(player);
+  await db.query("select public.release_dm('seat')");
+  expect(await dms()).toEqual([]);
+  await asUser(third);
+  await db.query("select public.claim_dm('seat')");
+  expect(await dms()).toEqual([third]);
+
+  // Hand-over still works from the new DM.
+  await db.query("select public.set_dm('seat', $1)", [player]);
+  expect(await dms()).toEqual([player]);
+  await expect(db.query("select public.claim_dm('other')")).rejects.toThrow('Join this campaign');
+});

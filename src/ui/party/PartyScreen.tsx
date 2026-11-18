@@ -14,6 +14,7 @@ import { useTourAutostart } from '../tutorial/useTour';
 import { Sheet } from '../components/Sheet';
 import { BringCharacter } from './BringCharacter';
 import { DmOverview } from './DmOverview';
+import { DmSeat } from './DmSeat';
 
 /** One card per party character: the numbers a table asks for. Read only. */
 export function PartyScreen() {
@@ -50,6 +51,7 @@ export function PartyScreen() {
           Add my character
         </button>
       </header>
+      {campaign.shared && <DmSeat campaignId={campaign.id} />}
       <Sheet open={adding} onOpenChange={setAdding} title="Add my character">
         <BringCharacter campaignId={campaign.id} inParty onDone={() => setAdding(false)} />
       </Sheet>

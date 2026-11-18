@@ -102,6 +102,8 @@ export interface InvitePreview {
   campaignId: string;
   name: string;
   dmName: string | null;
+  /** True when someone holds the DM seat, even without a display name. */
+  hasDm: boolean;
   memberCount: number;
   alreadyMember: boolean;
 }
@@ -132,8 +134,12 @@ export interface PartyProvider {
   createInvite(campaignId: string): Promise<string>;
   revokeInvites(campaignId: string): Promise<void>;
   previewInvite(code: string): Promise<InvitePreview>;
-  /** Join as a player; returns the campaign id. */
-  joinCampaign(code: string): Promise<string>;
+  /** Join with a seat; returns the campaign id. DM fails with a clear message once taken. */
+  joinCampaign(code: string, role?: 'dm' | 'player'): Promise<string>;
+  /** Take the empty DM seat in a campaign you belong to. */
+  claimDm(campaignId: string): Promise<void>;
+  /** Step down as DM; you stay as a player. */
+  releaseDm(campaignId: string): Promise<void>;
   leaveCampaign(campaignId: string): Promise<void>;
   removeMember(campaignId: string, userId: string): Promise<void>;
   setDm(campaignId: string, userId: string): Promise<void>;

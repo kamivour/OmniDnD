@@ -11,8 +11,11 @@ const file = ExportFileSchema.parse(seed);
 const campaign = { ...file.campaign, id: 'shared-test', name: 'Shared Table' };
 const now = '2026-11-17T00:00:00.000Z';
 
-async function backend(page: Page, host = false) {
+async function backend(page: Page, host = false, dmTaken = true) {
   let joined = host;
+  let myRole = host ? 'dm' : 'player';
+  // Without a host, the friend holds the seat unless the test leaves it empty.
+  const friendRole = !host && dmTaken ? 'dm' : 'player';
   const decisions: { user: string; approve: boolean }[] = [];
   const requests = host
     ? [owner, friend].map((user, index) => ({
@@ -77,13 +80,21 @@ async function backend(page: Page, host = false) {
       data = {
         campaign_id: campaign.id,
         name: campaign.name,
-        dm_name: 'DM',
+        dm_name: friendRole === 'dm' ? 'Friend' : myRole === 'dm' ? 'Me' : null,
+        has_dm: friendRole === 'dm' || myRole === 'dm',
         member_count: 2,
         already_member: joined,
       };
     else if (path.endsWith('/rpc/join_campaign')) {
       joined = true;
+      if (body?.p_role === 'dm') myRole = 'dm';
       data = campaign.id;
+    } else if (path.endsWith('/rpc/claim_dm')) {
+      myRole = 'dm';
+      data = null;
+    } else if (path.endsWith('/rpc/release_dm')) {
+      myRole = 'player';
+      data = null;
     } else if (path.endsWith('/shared_campaigns'))
       data = joined
         ? [
@@ -100,8 +111,8 @@ async function backend(page: Page, host = false) {
     else if (path.endsWith('/campaign_members'))
       data = joined
         ? [
-            { campaign_id: campaign.id, user_id: me, role: host ? 'dm' : 'player' },
-            { campaign_id: campaign.id, user_id: friend, role: 'player' },
+            { campaign_id: campaign.id, user_id: me, role: myRole },
+            { campaign_id: campaign.id, user_id: friend, role: friendRole },
           ]
         : [];
     else if (path.endsWith('/campaign_join_requests')) data = requests;
@@ -205,6 +216,8 @@ test('an invite link grants direct membership without sending a request', async 
   const server = await backend(page);
   await page.goto('/join/INVITE-TEST');
   await expect(page.getByRole('heading', { name: 'Shared Table', exact: true })).toBeVisible();
+  await expect(page.getByRole('radio', { name: /^DM/ })).toBeDisabled();
+  await expect(page.getByText('· Taken by Friend', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Join campaign', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Bring a character', exact: true })).toBeVisible();
   expect(server.requests).toEqual([]);
@@ -264,4 +277,25 @@ test('a member adds a character from the Party screen and moves another from its
   const shared = page.getByRole('article', { name: /^Shared Table/ });
   await expect(shared.getByRole('article', { name: 'The Fool', exact: true })).toHaveCount(2);
   await expect(home.getByRole('article', { name: 'The Fool', exact: true })).toHaveCount(0);
+});
+
+test('a member joins into an empty DM seat, steps down and takes it back', async ({ page }) => {
+  await backend(page, false, false);
+  await page.goto('/join/INVITE-TEST');
+  await expect(page.getByText(/DM seat: empty/)).toBeVisible();
+  await page.getByRole('radio', { name: 'DM', exact: true }).check();
+  await page.getByRole('button', { name: 'Join campaign', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Bring a character', exact: true })).toBeVisible();
+  await page.goto('/');
+  await expect(page.getByRole('article', { name: /^Shared Table/ })).toContainText('DM: Me');
+  await page.goto('/campaigns/shared-test/party');
+  const seat = page.getByRole('group', { name: 'DM seat' });
+  await expect(seat).toContainText('DM: Me (you)');
+  await seat.getByRole('button', { name: 'Step down as DM', exact: true }).click();
+  await seat.getByRole('button', { name: 'Confirm step down', exact: true }).click();
+  await expect(seat).toContainText('DM seat: empty');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: test.info().outputPath('dm-seat.png'), fullPage: true });
+  await seat.getByRole('button', { name: 'Take DM seat', exact: true }).click();
+  await expect(seat).toContainText('DM: Me (you)');
 });

@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D234 | 2026-11-19 | Any member can take an empty DM seat, and the DM can step down. When someone holds the seat, joining as DM is locked; only the owner or the current DM can hand the seat to someone else. | Groups often pick the DM after making the campaign; locking prevents two DMs and quiet takeovers. |
 | D233 | 2026-11-19 | Characters left unticked when sharing move to a new private campaign named "<name> (private)" with the same books and rules. A join request by campaign ID carries no character; the player picks Copy, Move or New after approval. | Keeps unshared characters playable without exposing them, and stops a request from committing a character early |
 | D232 | 2026-11-19 | The phone bar holds six tight slots: Home, Sheet, Spells, Inventory, Combat and More. Icons and labels sit closer together so all six fit at 320 px. | Sheet is the most-used screen and was hidden in More; the user wanted Combat kept in the bar too |
 | D231 | 2026-11-19 | Signup no longer needs email confirmation: a new account is signed in at once. Anyone can register an address they do not own, and password-reset emails stay limited until custom SMTP is set up. | The built-in email limit (about 2 per hour) blocked friends from signing up; the owner accepted the trade-off |

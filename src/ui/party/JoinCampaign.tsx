@@ -28,6 +28,7 @@ function JoinCampaignForm({ code }: { code: string }) {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [busy, setBusy] = useState(false);
+  const [seat, setSeat] = useState<'dm' | 'player'>('player');
   const target = preview?.campaignId ?? campaignId.trim();
   const member = party.members.some((m) => m.campaignId === target && m.userId === account?.id);
   const ready = useStore(characterStore, (s) => s.campaigns[target]?.shared === true);
@@ -99,9 +100,39 @@ function JoinCampaignForm({ code }: { code: string }) {
               <div className="rounded-card border border-border bg-surface p-4">
                 <h2 className="text-lg font-semibold wrap-anywhere">{preview.name}</h2>
                 <p>
-                  DM: {preview.dmName || 'none yet'} · {preview.memberCount} members
+                  {preview.hasDm ? `DM: ${preview.dmName || 'Unnamed player'}` : 'DM seat: empty'} ·{' '}
+                  {preview.memberCount} members
                 </p>
                 <p className="text-xs text-text-muted">This invite lets you join directly.</p>
+                <fieldset className="mt-3 flex flex-col gap-2">
+                  <legend className="mb-1 font-semibold">Join as</legend>
+                  <label className="flex min-h-11 items-center gap-2">
+                    <input
+                      type="radio"
+                      name="join-seat"
+                      checked={seat === 'player'}
+                      onChange={() => setSeat('player')}
+                    />
+                    Player
+                  </label>
+                  <label
+                    className={`flex min-h-11 items-center gap-2 ${preview.hasDm ? 'text-text-muted' : ''}`}
+                  >
+                    <input
+                      type="radio"
+                      name="join-seat"
+                      checked={seat === 'dm'}
+                      disabled={preview.hasDm}
+                      onChange={() => setSeat('dm')}
+                    />
+                    DM
+                    {preview.hasDm && (
+                      <span className="text-xs wrap-anywhere">
+                        · Taken by {preview.dmName || 'another member'}
+                      </span>
+                    )}
+                  </label>
+                </fieldset>
               </div>
             ) : (
               !error && <p>Checking invite…</p>
@@ -130,7 +161,13 @@ function JoinCampaignForm({ code }: { code: string }) {
                 type="button"
                 className={button}
                 disabled={busy}
-                onClick={() => act(async () => provider!.joinCampaign(code).then(() => undefined))}
+                onClick={() =>
+                  act(async () =>
+                    provider!
+                      .joinCampaign(code, preview.hasDm ? 'player' : seat)
+                      .then(() => undefined),
+                  )
+                }
               >
                 Join campaign
               </button>

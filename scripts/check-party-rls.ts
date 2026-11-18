@@ -171,8 +171,30 @@ check(
       .insert({ campaign_id: campaignId, user_id: outsider.id, role: 'player' })
   ).error,
 );
+check(
+  'joining as DM is refused while the seat is held',
+  !!(await outsider.client.rpc('join_campaign', { p_code: code, p_role: 'dm' })).error,
+);
+check(
+  'a refused DM join does not add the member',
+  ((await outsider.client.from('campaign_members').select('user_id')).data ?? []).length === 0,
+);
+check(
+  'a player cannot take a held DM seat',
+  !!(await ana.client.rpc('claim_dm', { p_campaign: campaignId })).error,
+);
+const released = await dm.client.rpc('release_dm', { p_campaign: campaignId });
+check('the DM steps down', !released.error, released.error);
+const claims = await Promise.all(
+  [ana, ben].map((who) => who.client.rpc('claim_dm', { p_campaign: campaignId })),
+);
+check(
+  'two claims at once leave exactly one DM',
+  claims.filter((claim) => !claim.error).length === 1,
+  claims.map((claim) => claim.error?.message),
+);
 const handed = await dm.client.rpc('set_dm', { p_campaign: campaignId, p_user: ana.id });
-check('the DM hands over the DM role', !handed.error, handed.error);
+check('the owner hands over the DM role', !handed.error, handed.error);
 const roles = await ana.client.from('campaign_members').select('role');
 check(
   'there is still exactly one DM',
