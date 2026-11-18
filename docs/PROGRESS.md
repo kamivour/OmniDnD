@@ -341,7 +341,7 @@ Follow [PLAN.md](PLAN.md#m43--friend-testing-fixes-accounts-profiles-and-joining
 - [x] T1: Turn off email confirmation (D231), document it, and explain rate-limit errors
 - [x] T2: Give sample characters fresh IDs and start the store empty
 - [x] T3: Make the sync chip explain paused sync, jump to highlighted choices, and replace "Saved locally" with one clear status
-- [ ] T4: Reproduce the join reports with two-account tests
+- [x] T4: Reproduce the join reports with two-account tests
 - [ ] T5: Rebuild joining as join, then an explicit Copy or Move of chosen characters
 - [ ] T6: Add Copy and Move to campaign from Party and campaign cards
 - [ ] T7: Show the DM seat, choose DM or Player when joining, and lock a taken seat
@@ -415,6 +415,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-19 — M43 T4: Two-account tests rule out joining (no character uploads). Reproduced: sharing a campaign, or the owner's second device with same-ID samples, uploads every own character there unasked.
 - 2026-11-19 — M43 T3: one save status (Synced, syncing soon, paused, not signed in) replaces Saved locally and the chip; Choose jumps to highlighted sync choices with both change times.
 - 2026-11-19 — M43 T2: the Campaigns sample button makes a new campaign and character ID each time; stores start empty unless given files.
 - 2026-11-19 — M43 T1: plain messages for email rate limits, wrong passwords and existing accounts; HOSTING.md records Confirm email off (D231) and how to confirm old accounts.

@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 01:35 — Found why characters were pushed into campaigns
+
+- Joining a campaign never uploads your characters, whether or not you have any. That part works.
+- Sharing a campaign shows every character already in it to all members, without asking first. The same happens when the owner's other device has its own sample characters under the old fixed campaign ID.
+- Next: joining and sharing will list your characters and ask which ones to bring.
+- Checks pass.
+
 ## 2026-11-19 01:31 — One clear save and sync status
 
 - The bar now shows one status instead of "Saved locally" plus a sync chip: "Synced", "Saved on this device, syncing soon", "Sync paused: choose versions", or "Not signed in: only on this device" with a Sign in link.
