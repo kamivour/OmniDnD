@@ -353,7 +353,7 @@ Follow [PLAN.md](PLAN.md#m43--friend-testing-fixes-accounts-profiles-and-joining
 
 Follow [PLAN.md](PLAN.md#m44--phone-navigation-and-screen-cleanup) after M43. One task per commit.
 
-- [ ] T1: Phone bar Home · Sheet · Spells (Combat without spells) · Inv · More
+- [ ] T1: Phone bar Home · Sheet · Spells · Inv · Combat · More, packed to fit (D232)
 - [ ] T2: Group More and the sidebar into main and secondary screens with a divider
 - [ ] T3: Hide the Game Clock behind a Settings switch
 - [ ] T4: Remove the empty Details button where details open as a sheet

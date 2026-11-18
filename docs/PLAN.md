@@ -344,7 +344,7 @@ Planning only, requested 2026-11-19. Build after M43 and before M42; one task pe
 
 | Task | Deliverable | Check before closing |
 |---|---|---|
-| T1 — Phone bar | Home · Sheet · Spells · Inv · More. A character with no spells sees Combat in place of Spells | Active tab highlights on every route; More shows active when a More screen is open; at 320 px labels stay readable; tour and Find steps updated |
+| T1 — Phone bar | Home · Sheet · Spells · Inv · Combat · More (D232), with tighter icon and label spacing so six slots fit | Active tab highlights on every route; More shows active when a More screen is open; at 320 px labels stay readable; tour and Find steps updated |
 | T2 — More and sidebar order | More: rests, then main screens (Combat or Spells, Features, Companions, Explore), a divider, then Journal, Reference and Settings, then Back to campaigns. The desktop sidebar uses the same two groups | Order matches on phone and desktop; the divider is a visual separator with group labels for screen readers; `places.test.ts` passes |
 | T3 — Game Clock | Hidden by default on Home and Explore; a Settings switch "Show game clock" brings it back. Code and engine time stay | With the switch off, nothing changes in rest timing, durations or log times; with it on, the clock appears as before |
 | T4 — Details button | Removed where details open as a sheet. On wide screens with the side panel it stays and shows a short hint instead of an empty panel | Tapping a spell, resource or action still opens its details on phones; keyboard users can still reach the panel on desktop |
@@ -407,4 +407,4 @@ DM outcomes stay manual: the player enters hits, saves and rulings, and every su
 M26: Q41 (alignment label), Q42 (background scope) and Q43 (conjure and summon spells) in DECISIONS.md. Earlier answers are D168–D175.
 M39: Q44 (D&D place names as theme labels), Q45 (ripple on phones) and Q46 (theme per campaign) in DECISIONS.md.
 M43: Q51 (avatar storage) in DECISIONS.md; signup email is decided in D231.
-M44: Q52 (phone bar tabs) in DECISIONS.md.
+M44: phone bar decided in D232.

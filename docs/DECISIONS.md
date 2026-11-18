@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D232 | 2026-11-19 | The phone bar holds six tight slots: Home, Sheet, Spells, Inventory, Combat and More. Icons and labels sit closer together so all six fit at 320 px. | Sheet is the most-used screen and was hidden in More; the user wanted Combat kept in the bar too |
 | D231 | 2026-11-19 | Signup no longer needs email confirmation: a new account is signed in at once. Anyone can register an address they do not own, and password-reset emails stay limited until custom SMTP is set up. | The built-in email limit (about 2 per hour) blocked friends from signing up; the owner accepted the trade-off |
 | D230 | 2026-11-19 | A character enters a shared campaign only through an explicit Copy or Move; sharing a campaign first lists the characters that will become visible. Anyone joining picks DM or Player, and a taken DM seat is locked. Display names are required at signup and unique ignoring case. | Friends were surprised by characters appearing in a shared campaign and by an unchosen display name |
 | D229 | 2026-11-18 | If saved workspace Undo history (adding, copying or deleting characters, campaign and settings changes) can no longer be replayed or has duplicate steps, it is dropped on load. Characters, play history and per-character Undo are kept. | A damaged Undo step locked the whole app and blocked saves after a long rest; losing workspace Undo is the smaller cost |
@@ -287,7 +288,6 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q48 | How should Armorer's armor components be represented for its two extra armor-only infusions? | After M41 | Standard active limit only, with a visible reminder; do not grant two unrestricted slots or invent separate equipment | User |
 | Q49 | Should the already-bundled Summon Draconic Spirit move from the Tasha filter to a separate Fizban's book option? | Next source review | Preserve existing spell visibility; identify Fizban's 2014 source on its companion card | User |
 | Q51 | Store avatars in the profile row or in Supabase Storage? | M43 T9 | Profile row as a 256 px JPEG up to about 100 KB; members already read profiles, so no new access rules | Agent |
-| Q52 | Which four screens belong in the phone bar? | M44 T1 | Home, Sheet, Spells and Inventory; characters without spells get Combat in place of Spells; everything else in More | User |
 
 ## How to add an entry
 
