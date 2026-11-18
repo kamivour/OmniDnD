@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 01:05 — Clearer account errors
+
+- Signup, sign-in and Forgot password now say what went wrong in plain words, such as "too many emails in the last hour" or "email or password is not right".
+- The hosting guide now says to turn **Confirm email** off, so friends are signed in right after creating an account. Do this in the Supabase dashboard: Authentication → Sign In / Providers → Email.
+- Accounts made earlier and never confirmed still cannot sign in; the guide shows how to confirm them.
+- Checks pass.
+
 ## 2026-11-19 00:54 — Plan for phone layout cleanup and a new Combat direction
 
 - New plan (M44): Sheet moves into the phone bar, More is grouped into main and secondary screens, the Game Clock is hidden behind a Settings switch, the empty Details button goes, and spell filters fold into one Filter button with Sort.

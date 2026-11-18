@@ -1,5 +1,6 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { SyncKindSchema } from '../db/sync-metadata';
+import { authErrorText } from './auth-errors';
 import type { SyncConfig } from './config';
 import type {
   Account,
@@ -63,13 +64,13 @@ export class SupabaseProvider implements SyncProvider {
 
   async signIn(email: string, password: string): Promise<SignInResult> {
     const { data, error } = await this.client.auth.signInWithPassword({ email, password });
-    if (error) return { result: 'error', message: error.message };
+    if (error) return { result: 'error', message: authErrorText(error) };
     return { result: 'ok', account: toAccount(data.user) };
   }
 
   async signUp(email: string, password: string): Promise<SignInResult> {
     const { data, error } = await this.client.auth.signUp({ email, password });
-    if (error) return { result: 'error', message: error.message };
+    if (error) return { result: 'error', message: authErrorText(error) };
     if (!data.session || !data.user) return { result: 'confirm-email' };
     return { result: 'ok', account: toAccount(data.user) };
   }
@@ -107,13 +108,13 @@ export class SupabaseProvider implements SyncProvider {
 
   async requestPasswordReset(email: string, redirectTo: string) {
     const { error } = await this.client.auth.resetPasswordForEmail(email, { redirectTo });
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(authErrorText(error));
   }
 
   async updatePassword(password: string) {
     if (password.length < 8) throw new Error('Use at least 8 characters.');
     const { error } = await this.client.auth.updateUser({ password });
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(authErrorText(error));
   }
 
   async pull(): Promise<RemoteEntity[]> {
