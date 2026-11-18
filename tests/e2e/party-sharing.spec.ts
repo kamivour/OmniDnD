@@ -231,3 +231,37 @@ test('sharing lists the characters members will see and keeps unticked ones priv
   await page.goto('/');
   await expect(page.getByText(`${file.campaign.name} (private)`).first()).toBeVisible();
 });
+
+test('a member adds a character from the Party screen and moves another from its card', async ({
+  page,
+}) => {
+  await backend(page);
+  await page.goto('/join/INVITE-TEST');
+  await page.getByRole('button', { name: 'Join campaign', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Bring a character', exact: true })).toBeVisible();
+  await page.goto('/campaigns/shared-test/party');
+  await page.getByRole('button', { name: 'Add my character', exact: true }).click();
+  const sheet = page.getByRole('dialog', { name: 'Add my character', exact: true });
+  await sheet.getByRole('button', { name: 'Copy The Fool', exact: true }).click();
+  await page
+    .getByRole('dialog', { name: 'Confirm change', exact: true })
+    .getByRole('button', { name: 'Do anyway', exact: true })
+    .click();
+  await expect(sheet).toHaveCount(0);
+  await expect(page.getByRole('article', { name: 'The Fool', exact: true })).toBeVisible();
+
+  await page.goto('/');
+  const home = page.getByRole('article', { name: file.campaign.name, exact: true });
+  await home.getByRole('button', { name: 'Move The Fool', exact: true }).click();
+  const move = page.getByRole('dialog', { name: 'Move character', exact: true });
+  await expect(move.getByLabel('Move to campaign')).toHaveValue(campaign.id);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: test.info().outputPath('move-character.png'), fullPage: true });
+  await move.getByRole('button', { name: 'Move', exact: true }).click();
+  const confirm = page.getByRole('dialog', { name: 'Confirm change', exact: true });
+  await expect(confirm).toContainText('Members of Shared Table will see this character.');
+  await confirm.getByRole('button', { name: 'Do anyway', exact: true }).click();
+  const shared = page.getByRole('article', { name: /^Shared Table/ });
+  await expect(shared.getByRole('article', { name: 'The Fool', exact: true })).toHaveCount(2);
+  await expect(home.getByRole('article', { name: 'The Fool', exact: true })).toHaveCount(0);
+});

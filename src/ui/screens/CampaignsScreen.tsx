@@ -1,7 +1,7 @@
 import { lazy, Suspense, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { Link } from 'react-router';
-import { Copy, Download, Plus, Settings2, Trash2, Undo2, Users } from 'lucide-react';
+import { Copy, Download, MoveRight, Plus, Settings2, Trash2, Undo2, Users } from 'lucide-react';
 import { registry } from '../../data/registry';
 import { freshSampleFile } from '../../data/seed';
 import { computeSheet } from '../../engine/calc/sheet';
@@ -11,6 +11,7 @@ import {
   duplicateCharacter,
   importCharacter,
 } from '../../engine/commands/management';
+import { copyToCampaign, moveToCampaign } from '../../engine/commands/party';
 import type { Campaign } from '../../engine/schema';
 import { characterState, characterStore, type CharacterRecord } from '../../state/character-store';
 import { HpBar } from '../components/HpBar';
@@ -35,6 +36,9 @@ const AccountCard = import.meta.env.VITE_SUPABASE_URL
   : null;
 
 const path = (id: string) => encodeURIComponent(id);
+/** Your own player characters can be copied or moved into other campaigns. */
+const movable = (record: CharacterRecord) =>
+  !record.build.partyOwner && record.build.playedBy !== 'dm';
 
 /** The landing page reads the same saved characters as the HUD. */
 export function CampaignsScreen() {
@@ -56,12 +60,20 @@ export function CampaignsScreen() {
   const [duplicate, setDuplicate] = useState<string | null>(null);
   const [duplicateId, setDuplicateId] = useState('');
   const [name, setName] = useState('');
+  const [copyTarget, setCopyTarget] = useState('');
+  const [moving, setMoving] = useState<string | null>(null);
+  const [moveTarget, setMoveTarget] = useState('');
   const [deleting, setDeleting] = useState<string | null>(null);
   const [deletingCampaign, setDeletingCampaign] = useState<string | null>(null);
   const doomed = deletingCampaign ? state.campaigns[deletingCampaign] : undefined;
   const doomedCount = Object.values(state.characters).filter(
     (record) => record.build.campaignId === deletingCampaign,
   ).length;
+  const campaigns = Object.values(state.campaigns);
+  const duplicateRecord = duplicate ? state.characters[duplicate] : undefined;
+  const moveChoices = campaigns.filter(
+    (campaign) => moving && campaign.id !== state.characters[moving]?.build.campaignId,
+  );
   const last = state.managementEvents.findLast(
     (event) => event.command !== 'undo' && !event.undoneBy,
   );
@@ -145,6 +157,12 @@ export function CampaignsScreen() {
             setDuplicate(id);
             setDuplicateId(crypto.randomUUID());
             setName(`${state.characters[id]!.build.name} (copy)`);
+            setCopyTarget(campaign.id);
+          }}
+          onMove={(id) => {
+            opener.current = document.activeElement as HTMLElement;
+            setMoving(id);
+            setMoveTarget(campaigns.find((other) => other.id !== campaign.id)?.id ?? '');
           }}
           onDelete={(id) => {
             opener.current = document.activeElement as HTMLElement;
@@ -161,19 +179,33 @@ export function CampaignsScreen() {
       <Sheet
         open={duplicate !== null}
         onOpenChange={(open) => !open && setDuplicate(null)}
-        title="Duplicate character"
+        title="Copy character"
         onCloseAutoFocus={restoreFocus}
       >
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            if (duplicate)
+            if (!duplicateRecord) return;
+            const close = () => setDuplicate(null);
+            if (copyTarget === duplicateRecord.build.campaignId)
               run(
                 duplicateCharacter,
-                { sourceId: duplicate, id: duplicateId, name: name.trim() },
-                () => setDuplicate(null),
+                { sourceId: duplicateRecord.build.id, id: duplicateId, name: name.trim() },
+                close,
+              );
+            else
+              run(
+                copyToCampaign,
+                {
+                  sourceId: duplicateRecord.build.id,
+                  id: duplicateId,
+                  campaignId: copyTarget,
+                  name: name.trim(),
+                },
+                close,
               );
           }}
+          className="flex flex-col gap-3"
         >
           <label className="flex flex-col gap-2">
             Copy name
@@ -185,11 +217,75 @@ export function CampaignsScreen() {
               className={inputClass}
             />
           </label>
-          <p className="my-3 text-sm text-text-muted">
+          {duplicateRecord && movable(duplicateRecord) && (
+            <label className="flex flex-col gap-2">
+              Copy into campaign
+              <select
+                aria-label="Copy into campaign"
+                value={copyTarget}
+                onChange={(event) => setCopyTarget(event.target.value)}
+                className={inputClass}
+              >
+                {campaigns.map((campaign) => (
+                  <option key={campaign.id} value={campaign.id}>
+                    {campaign.name}
+                    {campaign.id === duplicateRecord.build.campaignId ? ' (same campaign)' : ''}
+                    {campaign.shared ? ' · shared' : ''}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          <p className="text-sm text-text-muted">
             Copies choices and current values. The copy starts with a new game-action history.
           </p>
           <button type="submit" disabled={pending || !name.trim()} className={`${button} w-full`}>
             Create copy
+          </button>
+        </form>
+      </Sheet>
+      <Sheet
+        open={moving !== null}
+        onOpenChange={(open) => !open && setMoving(null)}
+        title="Move character"
+        onCloseAutoFocus={restoreFocus}
+      >
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (moving && moveTarget)
+              run(moveToCampaign, { characterId: moving, campaignId: moveTarget }, () =>
+                setMoving(null),
+              );
+          }}
+          className="flex flex-col gap-3"
+        >
+          {moveChoices.length > 0 ? (
+            <label className="flex flex-col gap-2">
+              Move to campaign
+              <select
+                aria-label="Move to campaign"
+                value={moveTarget}
+                onChange={(event) => setMoveTarget(event.target.value)}
+                className={inputClass}
+              >
+                {moveChoices.map((campaign) => (
+                  <option key={campaign.id} value={campaign.id}>
+                    {campaign.name}
+                    {campaign.shared ? ' · shared' : ''}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : (
+            <p className="text-sm text-text-muted">Create or join another campaign first.</p>
+          )}
+          <p className="text-sm text-text-muted">
+            The character keeps its history. Members of a shared campaign see it only while it is
+            there.
+          </p>
+          <button type="submit" disabled={pending || !moveTarget} className={`${button} w-full`}>
+            Move
           </button>
         </form>
       </Sheet>
@@ -271,6 +367,7 @@ function CampaignCard({
   characters,
   pending,
   onDuplicate,
+  onMove,
   onDelete,
   onExport,
   onDeleteCampaign,
@@ -279,6 +376,7 @@ function CampaignCard({
   characters: CharacterRecord[];
   pending: boolean;
   onDuplicate: (id: string) => void;
+  onMove: (id: string) => void;
   onDelete: (id: string) => void;
   onExport: (id: string) => void;
   onDeleteCampaign: () => void;
@@ -364,7 +462,9 @@ function CampaignCard({
                       </span>
                     </span>
                   </Link>
-                  <div className="grid grid-cols-3 border-t border-border px-1">
+                  <div
+                    className={`grid ${movable(record) ? 'grid-cols-4' : 'grid-cols-3'} border-t border-border px-1`}
+                  >
                     <button
                       type="button"
                       aria-label={`Duplicate ${record.build.name}`}
@@ -375,6 +475,18 @@ function CampaignCard({
                       <Copy size={14} aria-hidden />
                       Copy
                     </button>
+                    {movable(record) && (
+                      <button
+                        type="button"
+                        aria-label={`Move ${record.build.name}`}
+                        disabled={pending}
+                        onClick={() => onMove(record.build.id)}
+                        className="flex min-h-11 items-center justify-center gap-1 text-xs text-accent"
+                      >
+                        <MoveRight size={14} aria-hidden />
+                        Move
+                      </button>
+                    )}
                     <button
                       type="button"
                       aria-label={`Export ${record.build.name}`}

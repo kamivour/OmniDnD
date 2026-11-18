@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { seedFile } from '../data/seed';
 import { registry } from '../data/registry';
 import { runManagement } from '../engine/commands/management';
-import { keepOutOfSharing } from '../engine/commands/party';
+import { keepOutOfSharing, moveToCampaign } from '../engine/commands/party';
 import type { Campaign } from '../engine/schema';
 import { createCharacterStore, type CharacterRecord } from '../state/character-store';
 import { MemoryCloud, MemoryProvider } from './memory-provider';
@@ -251,5 +251,34 @@ describe('join reproduction (M43 T4)', () => {
     await ana.share('home', 'player');
     await ana.sync();
     expect(visible(cloud, 'home')).toEqual(['a']);
+  });
+
+  it('moving a character out of a shared campaign removes it for members', async () => {
+    const cloud = new MemoryCloud();
+    const dm = await table(cloud);
+    const ana = await device(cloud, 'ana@example.com', {
+      campaigns: { home: campaign('home') },
+      characters: { a: character('a', 'home') },
+    });
+    await ana.provider.joinCampaign(await dm.provider.createInvite('table'));
+    await ana.sync();
+    const move = (campaignId: string) => {
+      const result = runManagement(
+        moveToCampaign,
+        ana.state,
+        { characterId: 'a', campaignId },
+        registry,
+        { eventId: `move-${campaignId}`, realTime: NOW, force: true },
+      );
+      if (result.result !== 'ok') throw new Error(result.reasons.join());
+      ana.state.characters = structuredClone(result.next.characters);
+    };
+    move('table');
+    await ana.sync();
+    expect(visible(cloud, 'table')).toEqual(['a']);
+    move('home');
+    await ana.sync();
+    expect(visible(cloud, 'table')).toEqual([]);
+    expect(ana.state.characters.a?.build.campaignId).toBe('home');
   });
 });

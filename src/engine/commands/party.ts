@@ -1,13 +1,29 @@
 import { z } from 'zod';
-import { duplicateCharacter, type ManagementCommand } from './management';
+import { sourceConflicts } from '../calc/campaign-rules';
+import type { Campaign, CharacterBuild } from '../schema';
+import { duplicateCharacter, type ManagementCommand, type ManagementContext } from './management';
+
+/** Warns about choices the destination campaign's books or optional rules do not allow. */
+function bookWarnings(ctx: ManagementContext, build: CharacterBuild, target: Campaign) {
+  const missing = sourceConflicts(target, build, ctx.registry);
+  return missing.length
+    ? [
+        {
+          level: 'warn' as const,
+          reason: `${target.name} does not allow: ${missing.join(', ')}. These choices stay on the character until you replace them.`,
+        },
+      ]
+    : [];
+}
 
 const CopySchema = z.strictObject({
   sourceId: z.string().min(1),
   id: z.string().min(1),
   campaignId: z.string().min(1),
+  name: z.string().trim().min(1).max(100).optional(),
 });
 
-/** Membership is cloud-managed; bringing your own character is a separate, undoable local copy. */
+/** Copies one of your characters into another campaign, private or shared; the original stays. */
 export const copyToCampaign: ManagementCommand<z.infer<typeof CopySchema>> = {
   name: 'copyToCampaign',
   check: (ctx, input) => {
@@ -18,12 +34,9 @@ export const copyToCampaign: ManagementCommand<z.infer<typeof CopySchema>> = {
     if (!source || source.build.partyOwner || source.build.playedBy === 'dm')
       return [{ level: 'block', reason: 'Choose one of your own player characters' }];
     const target = Object.hasOwn(ctx.campaigns, campaignId) ? ctx.campaigns[campaignId] : undefined;
-    if (!target?.shared)
-      return [
-        { level: 'block', reason: 'Join and sync this campaign before bringing a character' },
-      ];
-    const invalid =
-      duplicateCharacter.check?.(ctx, { sourceId, id, name: source.build.name }) ?? [];
+    if (!target) return [{ level: 'block', reason: 'That campaign is not on this device' }];
+    const name = parsed.data.name ?? source.build.name;
+    const invalid = duplicateCharacter.check?.(ctx, { sourceId, id, name }) ?? [];
     if (invalid.length) return invalid;
     if (source.build.campaignId === campaignId)
       return [{ level: 'block', reason: 'This character is already in this campaign' }];
@@ -32,17 +45,18 @@ export const copyToCampaign: ManagementCommand<z.infer<typeof CopySchema>> = {
         level: 'warn',
         reason: `The copy follows ${target.name}'s books and rules, so calculated values may change. Your original character stays unchanged.`,
       },
+      ...(target.shared
+        ? [{ level: 'warn' as const, reason: `Members of ${target.name} will see the copy.` }]
+        : []),
+      ...bookWarnings(ctx, source.build, target),
     ];
   },
-  apply: (draft, { sourceId, id, campaignId }, ctx) => {
-    duplicateCharacter.apply(
-      draft,
-      { sourceId, id, name: ctx.characters[sourceId]!.build.name },
-      ctx,
-    );
+  apply: (draft, { sourceId, id, campaignId, name }, ctx) => {
+    const source = ctx.characters[sourceId]!.build.name;
+    duplicateCharacter.apply(draft, { sourceId, id, name: name?.trim() || source }, ctx);
     draft.characters[id]!.build.campaignId = campaignId;
     draft.characters[id]!.build.playedBy = 'me';
-    return `Bring ${ctx.characters[sourceId]!.build.name} to ${ctx.campaigns[campaignId]!.name} (copy)`;
+    return `Copy ${source} to ${ctx.campaigns[campaignId]!.name}`;
   },
 };
 
@@ -84,6 +98,7 @@ export const moveToCampaign: ManagementCommand<z.infer<typeof MoveSchema>> = {
             },
           ]
         : []),
+      ...bookWarnings(ctx, record.build, target),
     ];
   },
   apply: (draft, { characterId, campaignId }, ctx) => {

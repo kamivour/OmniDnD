@@ -117,3 +117,25 @@ it('characters left out of sharing move to a private copy with the same rules', 
       .result,
   ).toBe('blocked');
 });
+
+it('copies into a private campaign under a new name and warns about books it lacks', () => {
+  const state = workspace();
+  state.campaigns.table = { ...state.campaigns.table!, shared: false, sources: ['XGE'] };
+  const payload = { sourceId: seedFile.build.id, id: 'copy', campaignId: 'table', name: 'Twin' };
+  const warned = runManagement(copyToCampaign, state, payload, registry, META);
+  expect(warned.result).toBe('warn');
+  expect(warned.reasons.join(' ')).toContain('Table does not allow:');
+  expect(warned.reasons.join(' ')).not.toContain('Members of');
+  const result = runManagement(copyToCampaign, state, payload, registry, { ...META, force: true });
+  if (result.result !== 'ok') throw new Error(result.reasons.join());
+  expect(result.next.characters.copy?.build).toMatchObject({ name: 'Twin', campaignId: 'table' });
+  expect(result.event.text).toBe('Copy The Fool to Table');
+  const moved = runManagement(
+    moveToCampaign,
+    state,
+    { characterId: 'other', campaignId: 'table' },
+    registry,
+    META,
+  );
+  expect(moved.reasons.join(' ')).toContain('Table does not allow:');
+});

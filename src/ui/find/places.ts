@@ -66,6 +66,14 @@ export const PLACES: readonly FindEntry[] = [
     synonyms: ['existing character', 'copy character', 'move character', 'add my character'],
     target: { kind: 'go', path: '/join', anchor: 'bring-character' },
   },
+  {
+    id: 'go.move-character',
+    group: 'go',
+    title: 'Copy or move a character',
+    detail: 'On Campaigns, use Copy or Move on a character card to change its campaign',
+    synonyms: ['change campaign', 'transfer character', 'copy to campaign', 'move to campaign'],
+    target: { kind: 'go', path: '/' },
+  },
   // Screens
   {
     id: 'go.home',

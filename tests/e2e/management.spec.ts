@@ -101,7 +101,7 @@ test('hub uses saved HP and duplicate keeps choices and current values with its 
   await expect(character(page, 'The Fool')).toContainText('6/19');
 
   await page.getByRole('button', { name: 'Duplicate The Fool', exact: true }).click();
-  const dialog = page.getByRole('dialog', { name: 'Duplicate character', exact: true });
+  const dialog = page.getByRole('dialog', { name: 'Copy character', exact: true });
   await expect(dialog.getByLabel('Copy name', { exact: true })).toHaveValue('The Fool (copy)');
   await dialog.getByLabel('Copy name', { exact: true }).fill('The Second Fool');
   await dialog.getByRole('button', { name: 'Create copy', exact: true }).click();

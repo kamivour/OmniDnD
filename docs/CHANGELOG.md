@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 02:06 — Copy or move characters between campaigns
+
+- On Campaigns, each of your characters now has Move. Copy also lets you pick which campaign the copy goes into.
+- The Party screen has an Add my character button to copy or move one of your characters in.
+- The app warns when the new campaign's books or rules do not allow some of the character's choices; they stay until you replace them. Moving out of a shared campaign removes it for members after sync.
+- Checks pass. One older Find check ("long rest") already failed before this change.
+
 ## 2026-11-19 01:50 — Choose which characters a campaign shows
 
 - After joining, a new Bring a character step lists your characters. Copy one, move one, or create a new one there. Nothing joins until you pick.

@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Link } from 'react-router';
+import { UserPlus } from 'lucide-react';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { computeSheet } from '../../engine/calc/sheet';
@@ -9,6 +11,8 @@ import { HpBar } from '../components/HpBar';
 import { useCampaign } from '../hooks/useCampaign';
 import { PlaceholderScreen } from '../screens/PlaceholderScreen';
 import { useTourAutostart } from '../tutorial/useTour';
+import { Sheet } from '../components/Sheet';
+import { BringCharacter } from './BringCharacter';
 import { DmOverview } from './DmOverview';
 
 /** One card per party character: the numbers a table asks for. Read only. */
@@ -18,6 +22,7 @@ export function PartyScreen() {
   useTourAutostart(isDm ? 'party-dm' : 'party', !!campaign);
   const state = useStore(characterStore);
   const { members } = usePartyState();
+  const [adding, setAdding] = useState(false);
   if (!campaign) return <PlaceholderScreen title="Campaign not found" />;
   const here = membersOf(members, campaign.id);
   const records = Object.values(state.characters).filter(
@@ -35,7 +40,19 @@ export function PartyScreen() {
         >
           Members and invites
         </Link>
+        <button
+          type="button"
+          id="add-my-character"
+          onClick={() => setAdding(true)}
+          className="inline-flex min-h-11 items-center gap-2 rounded-btn border border-border px-3 text-sm hover:bg-surface-2"
+        >
+          <UserPlus size={16} aria-hidden />
+          Add my character
+        </button>
       </header>
+      <Sheet open={adding} onOpenChange={setAdding} title="Add my character">
+        <BringCharacter campaignId={campaign.id} inParty onDone={() => setAdding(false)} />
+      </Sheet>
       {records.length === 0 ? (
         <p className="text-text-muted">No characters in the party yet.</p>
       ) : isDm ? (

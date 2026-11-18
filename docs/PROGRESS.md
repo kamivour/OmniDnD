@@ -343,7 +343,7 @@ Follow [PLAN.md](PLAN.md#m43--friend-testing-fixes-accounts-profiles-and-joining
 - [x] T3: Make the sync chip explain paused sync, jump to highlighted choices, and replace "Saved locally" with one clear status
 - [x] T4: Reproduce the join reports with two-account tests
 - [x] T5: Rebuild joining as join, then an explicit Copy or Move of chosen characters
-- [ ] T6: Add Copy and Move to campaign from Party and campaign cards
+- [x] T6: Add Copy and Move to campaign from Party and campaign cards
 - [ ] T7: Show the DM seat, choose DM or Player when joining, and lock a taken seat
 - [ ] T8: Require a unique display name at signup and prompt existing accounts
 - [ ] T9: Add the Profile button and screen with uploadable avatar and default mask
@@ -415,6 +415,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-19 — M43 T6: Copy and Move to any campaign from Campaigns cards; Party screen gains Add my character. Warns about books the destination lacks; moving out removes the party copy.
 - 2026-11-19 — M43 T5: Joining now ends at a Bring a character step (Copy, Move or New). Sharing lists your characters there; unticked ones move to a private copy. Requests attach no character.
 - 2026-11-19 — M43 T4: Two-account tests rule out joining (no character uploads). Reproduced: sharing a campaign, or the owner's second device with same-ID samples, uploads every own character there unasked.
 - 2026-11-19 — M43 T3: one save status (Synced, syncing soon, paused, not signed in) replaces Saved locally and the chip; Choose jumps to highlighted sync choices with both change times.
