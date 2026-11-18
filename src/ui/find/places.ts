@@ -54,10 +54,17 @@ export const PLACES: readonly FindEntry[] = [
     id: 'go.join-campaign',
     group: 'go',
     title: 'Join a campaign',
-    detail:
-      'Request access by campaign ID, or use an invite link; bring an existing character copy',
-    synonyms: ['campaign id', 'join request', 'existing character', 'join approval'],
+    detail: 'Request access by campaign ID, or use an invite link',
+    synonyms: ['campaign id', 'join request', 'join approval', 'invite link'],
     target: { kind: 'go', path: '/join', anchor: 'join-campaign' },
+  },
+  {
+    id: 'go.bring-character',
+    group: 'go',
+    title: 'Bring a character',
+    detail: 'After joining: copy or move one of your characters into the campaign',
+    synonyms: ['existing character', 'copy character', 'move character', 'add my character'],
+    target: { kind: 'go', path: '/join', anchor: 'bring-character' },
   },
   // Screens
   {

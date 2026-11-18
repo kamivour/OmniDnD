@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D233 | 2026-11-19 | Characters left unticked when sharing move to a new private campaign named "<name> (private)" with the same books and rules. A join request by campaign ID carries no character; the player picks Copy, Move or New after approval. | Keeps unshared characters playable without exposing them, and stops a request from committing a character early |
 | D232 | 2026-11-19 | The phone bar holds six tight slots: Home, Sheet, Spells, Inventory, Combat and More. Icons and labels sit closer together so all six fit at 320 px. | Sheet is the most-used screen and was hidden in More; the user wanted Combat kept in the bar too |
 | D231 | 2026-11-19 | Signup no longer needs email confirmation: a new account is signed in at once. Anyone can register an address they do not own, and password-reset emails stay limited until custom SMTP is set up. | The built-in email limit (about 2 per hour) blocked friends from signing up; the owner accepted the trade-off |
 | D230 | 2026-11-19 | A character enters a shared campaign only through an explicit Copy or Move; sharing a campaign first lists the characters that will become visible. Anyone joining picks DM or Player, and a taken DM seat is locked. Display names are required at signup and unique ignoring case. | Friends were surprised by characters appearing in a shared campaign and by an unchosen display name |

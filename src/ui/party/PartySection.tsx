@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
+import { useStore } from 'zustand';
 import { Copy, Link2, LogOut, Share2, UserMinus, Crown } from 'lucide-react';
 import type { Campaign } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
@@ -8,6 +9,8 @@ import { membersOf, usePartyState } from '../../state/party-store';
 import { SCHEMA_VERSION } from '../../engine/schema';
 import { sharedPayload } from '../../sync/party';
 import { autoSync, useAccountSession } from '../../sync/service';
+import { keepOutOfSharing } from '../../engine/commands/party';
+import { useManagement } from '../commands/useManagement';
 
 const button =
   'inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-border px-3 text-sm hover:bg-surface-2 disabled:opacity-40';
@@ -23,6 +26,14 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
   const [code, setCode] = useState('');
   const [copied, setCopied] = useState(false);
   const [confirming, setConfirming] = useState('');
+  const [picking, setPicking] = useState(false);
+  const [hidden, setHidden] = useState<ReadonlySet<string>>(new Set());
+  const characters = useStore(characterStore, (s) => s.characters);
+  const { run, pending, confirmation } = useManagement();
+  // Own player characters already in this campaign become visible to members once it is shared.
+  const own = Object.values(characters).filter(
+    (r) => r.build.campaignId === campaign.id && !r.build.partyOwner && r.build.playedBy !== 'dm',
+  );
   const members = membersOf(party.members, campaign.id);
   const me = members.find((member) => member.userId === account?.id);
   const isDm = me?.role === 'dm';
@@ -62,6 +73,20 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
         });
       await flushPersistence();
     });
+
+  const confirmShare = () => {
+    const leaveOut = own.map((r) => r.build.id).filter((id) => hidden.has(id));
+    if (leaveOut.length > 0) {
+      const result = run(keepOutOfSharing, {
+        campaignId: campaign.id,
+        characterIds: leaveOut,
+        privateId: `private-${crypto.randomUUID()}`,
+      });
+      if (result.result !== 'ok') return;
+    }
+    setPicking(false);
+    void share();
+  };
 
   const invite = () =>
     act(async () => {
@@ -117,9 +142,56 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
             Share this campaign to invite players. Members see each other&apos;s characters but
             cannot change them. Only you and the DM can invite.
           </p>
-          <button type="button" onClick={share} disabled={busy} className={button}>
-            <Share2 size={16} aria-hidden /> Share campaign
-          </button>
+          {picking ? (
+            <fieldset
+              id="share-characters"
+              className="flex flex-col gap-2 rounded-btn border border-border p-3"
+            >
+              <legend className="px-1 font-semibold">Characters members will see</legend>
+              <p className="text-xs text-text-muted">
+                Untick any to keep private. They move to a private copy of this campaign with the
+                same books and rules.
+              </p>
+              {own.map((r) => (
+                <label key={r.build.id} className="flex min-h-11 items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="size-5 accent-(--omni-accent)"
+                    checked={!hidden.has(r.build.id)}
+                    onChange={(e) => {
+                      const next = new Set(hidden);
+                      if (e.target.checked) next.delete(r.build.id);
+                      else next.add(r.build.id);
+                      setHidden(next);
+                    }}
+                  />
+                  <span className="wrap-anywhere">{r.build.name}</span>
+                </label>
+              ))}
+              <div className="grid grid-cols-2 gap-2">
+                <button type="button" className={button} onClick={() => setPicking(false)}>
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className={button}
+                  disabled={busy || pending}
+                  onClick={confirmShare}
+                >
+                  <Share2 size={16} aria-hidden /> Share now
+                </button>
+              </div>
+            </fieldset>
+          ) : (
+            <button
+              type="button"
+              onClick={() => (own.length > 0 ? setPicking(true) : void share())}
+              disabled={busy}
+              className={button}
+            >
+              <Share2 size={16} aria-hidden /> Share campaign
+            </button>
+          )}
         </>
       ) : (
         <>
@@ -295,6 +367,7 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
           {error || `Party sync problem: ${party.error}`}
         </p>
       )}
+      {confirmation}
     </section>
   );
 }

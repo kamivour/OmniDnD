@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { seedFile } from '../data/seed';
+import { registry } from '../data/registry';
+import { runManagement } from '../engine/commands/management';
+import { keepOutOfSharing } from '../engine/commands/party';
 import type { Campaign } from '../engine/schema';
 import { createCharacterStore, type CharacterRecord } from '../state/character-store';
 import { MemoryCloud, MemoryProvider } from './memory-provider';
@@ -227,5 +230,26 @@ describe('join reproduction (M43 T4)', () => {
     await laptop.sync();
     expect(visible(cloud, 'table')).toEqual(['t']);
     expect(laptop.pushed).toEqual([]);
+  });
+
+  it('FIXED: characters left out when sharing stay private', async () => {
+    const cloud = new MemoryCloud();
+    const ana = await device(cloud, 'ana@example.com', {
+      campaigns: { home: campaign('home') },
+      characters: { a: character('a', 'home'), b: character('b', 'home') },
+    });
+    const result = runManagement(
+      keepOutOfSharing,
+      ana.state,
+      { campaignId: 'home', characterIds: ['b'], privateId: 'home-private' },
+      registry,
+      { eventId: 'keep', realTime: NOW },
+    );
+    if (result.result !== 'ok') throw new Error(result.reasons.join());
+    ana.state.campaigns = structuredClone(result.next.campaigns);
+    ana.state.characters = structuredClone(result.next.characters);
+    await ana.share('home', 'player');
+    await ana.sync();
+    expect(visible(cloud, 'home')).toEqual(['a']);
   });
 });

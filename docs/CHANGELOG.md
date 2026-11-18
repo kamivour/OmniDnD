@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 01:50 — Choose which characters a campaign shows
+
+- After joining, a new Bring a character step lists your characters. Copy one, move one, or create a new one there. Nothing joins until you pick.
+- Requests by campaign ID no longer ask for a character up front.
+- Sharing a campaign now lists your characters in it. Untick any you want kept private; they move to a "(private)" copy of the campaign with the same rules.
+- Checks pass.
+
 ## 2026-11-19 01:35 — Found why characters were pushed into campaigns
 
 - Joining a campaign never uploads your characters, whether or not you have any. That part works.

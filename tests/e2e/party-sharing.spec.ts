@@ -162,15 +162,16 @@ test('request by ID, approve externally, bring an existing copy and view a frien
   await page.goto('/join');
   await expect(page.getByLabel('Campaign ID', { exact: true })).toBeVisible();
   await page.getByLabel('Campaign ID', { exact: true }).fill(campaign.id);
-  await page.getByLabel('Existing character', { exact: true }).selectOption('the-fool');
   await page.getByRole('button', { name: 'Request to join', exact: true }).click();
   await expect(page.getByRole('region', { name: 'Your join requests' })).toContainText('pending');
-  expect(server.requests[0]?.character_id).toBe('the-fool');
-  await expect(page.getByRole('button', { name: 'Copy character into campaign' })).toHaveCount(0);
+  // No character is attached to the request; the player chooses after approval.
+  expect(server.requests[0]?.character_id).toBe('');
+  await expect(page.getByRole('heading', { name: 'Bring a character' })).toHaveCount(0);
   server.approve();
   await page.getByRole('button', { name: 'Refresh membership', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Copy character into campaign' })).toBeVisible();
-  await page.getByRole('button', { name: 'Copy character into campaign' }).click();
+  const bring = page.getByRole('region', { name: 'Bring a character' });
+  await expect(bring.getByRole('link', { name: 'Create a new character here' })).toBeVisible();
+  await bring.getByRole('button', { name: 'Copy The Fool', exact: true }).click();
   await page
     .getByRole('dialog', { name: 'Confirm change', exact: true })
     .getByRole('button', { name: 'Do anyway', exact: true })
@@ -205,8 +206,28 @@ test('an invite link grants direct membership without sending a request', async 
   await page.goto('/join/INVITE-TEST');
   await expect(page.getByRole('heading', { name: 'Shared Table', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Join campaign', exact: true }).click();
-  await expect(page.getByText('You are a member of this campaign.', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Bring a character', exact: true })).toBeVisible();
   expect(server.requests).toEqual([]);
+  await expect(page.getByRole('article', { name: 'The Fool', exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: test.info().outputPath('bring-character.png'), fullPage: true });
   await page.getByRole('link', { name: 'Open party', exact: true }).click();
   await expect(page.getByRole('article', { name: 'Friend Hero', exact: true })).toBeVisible();
+});
+
+test('sharing lists the characters members will see and keeps unticked ones private', async ({
+  page,
+}) => {
+  await backend(page);
+  await page.goto(`/campaigns/${file.campaign.id}/settings`);
+  await page.getByRole('button', { name: 'Share campaign', exact: true }).click();
+  const list = page.getByRole('group', { name: 'Characters members will see' });
+  await expect(list.getByRole('checkbox', { name: 'The Fool' })).toBeChecked();
+  await list.getByRole('checkbox', { name: 'The Fool' }).uncheck();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: test.info().outputPath('share-characters.png'), fullPage: true });
+  await list.getByRole('button', { name: 'Share now', exact: true }).click();
+  await expect(page.getByText(/Keep 1 character private when sharing/)).toBeVisible();
+  await page.goto('/');
+  await expect(page.getByText(`${file.campaign.name} (private)`).first()).toBeVisible();
 });
