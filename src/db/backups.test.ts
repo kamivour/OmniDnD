@@ -79,6 +79,35 @@ describe('automatic backup capture', () => {
     expect(loaded.activityOrder).toEqual(captured?.data.workspace.activityOrder);
   });
 
+  it('still captures a long rest when old workspace Undo history no longer replays', () => {
+    const store = createCharacterStore();
+    const copied = store
+      .getState()
+      .dispatchManagement(
+        duplicateCharacter,
+        { sourceId: FOOL, id: 'copy', name: 'Copy' },
+        event('copy'),
+      );
+    expect(copied.result).toBe('ok');
+    const [step] = store.getState().managementEvents;
+    if (!step) throw new Error('Workspace event missing');
+    store.setState({
+      managementEvents: [
+        {
+          ...step,
+          inversePatches: [{ op: 'replace', path: ['characters', FOOL, 'live', 'hp'], value: -1 }],
+        },
+      ],
+    });
+    const previous = store.getState();
+    store.getState().dispatch(FOOL, completeLongRest, null, event('rest'));
+    const intent = createBackupIntent(previous, store.getState(), metadata());
+    expect(intent?.data.reason).toBe('after-long-rest');
+    const loaded = deserializeWorkspace(intent!.data.workspace);
+    expect(Object.keys(loaded.characters).sort()).toEqual(['copy', FOOL].sort());
+    expect(loaded.managementEvents).toEqual([]);
+  });
+
   it('captures exact pre-reset source state, including resources and retained history', () => {
     const store = createCharacterStore();
     store.getState().dispatch(FOOL, applyDamage, { amount: 3 }, event('damage'));

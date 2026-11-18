@@ -311,7 +311,7 @@ describe('persisted workspace management history', () => {
   );
 
   it.each(['invalid value', 'invalid path', 'changed identity'] as const)(
-    'rejects an older corrupt management inverse after validating newer history: %s',
+    'drops workspace Undo history with an older unreplayable step, keeping characters: %s',
     (kind) => {
       const saved = managementRows();
       const oldest = saved.managementEvents?.[0];
@@ -330,7 +330,7 @@ describe('persisted workspace management history', () => {
               ];
       const before = structuredClone(saved);
 
-      expect(() => deserializeWorkspace(saved)).toThrow(/management undo history is invalid/);
+      expect(deserializeWorkspace(saved).managementEvents).toEqual([]);
       expect(saved).toEqual(before);
     },
   );
@@ -450,7 +450,7 @@ describe('persisted Reference bookmarks', () => {
   });
 
   it.each(['unsafe URL', 'duplicate ID', 'invalid path'] as const)(
-    'rejects corrupted bookmark Undo: %s',
+    'drops corrupted bookmark Undo history on load: %s',
     (kind) => {
       const store = createCharacterStore();
       store.getState().dispatchManagement(addBookmark, { bookmark }, metadata('add-first'));
@@ -479,7 +479,7 @@ describe('persisted Reference bookmarks', () => {
             : { op: 'replace', path: ['bookmarks', 0, 'missing', 'url'], value: bookmark.url },
       ];
       const before = structuredClone(saved);
-      expect(() => deserializeWorkspace(saved)).toThrow('Saved management undo history is invalid');
+      expect(deserializeWorkspace(saved).managementEvents).toEqual([]);
       expect(saved).toEqual(before);
     },
   );
@@ -609,7 +609,7 @@ describe('persisted app preferences', () => {
   it.each([
     ['automation', 'automatic'],
     ['reducedMotion', null],
-  ])('rejects corrupted %s inverse patches without changing saved data', (key, value) => {
+  ])('drops corrupted %s Undo history on load without changing saved data', (key, value) => {
     const store = createCharacterStore();
     store
       .getState()
@@ -623,7 +623,7 @@ describe('persisted app preferences', () => {
     if (!event) throw new Error('Saved preferences event missing');
     event.inversePatches = [{ op: 'replace', path: [String(key)], value }];
     const before = structuredClone(saved);
-    expect(() => deserializeWorkspace(saved)).toThrow('Saved management undo history is invalid');
+    expect(deserializeWorkspace(saved).managementEvents).toEqual([]);
     expect(saved).toEqual(before);
   });
 });

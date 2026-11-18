@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-18 23:06 — App no longer locks on damaged Undo history
+
+- Fixed "Local storage unavailable — Saved management undo history is invalid". The app now opens and keeps every character.
+- Long rests save and back up again.
+- Workspace Undo (adding, copying or deleting characters, campaign and settings changes) starts fresh when its old history was damaged. Character Undo is not affected.
+- Checks pass.
+
 ## 2026-11-18 01:14 — Choose companion forms and compute summon stats
 
 - Choose Flamethrower, Force Ballista or Protector when adding a cannon, with size and legs. Activation, two-cannon commands and detonation can be undone.

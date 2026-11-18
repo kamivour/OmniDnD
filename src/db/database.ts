@@ -315,6 +315,16 @@ export function deserializeWorkspace(rows: WorkspaceRows): Workspace {
       ? {}
       : { activityOrder: ActivityOrderSchema.parse(rows.activityOrder) }),
   };
+  const ids = new Set(workspace.managementEvents.map((event) => event.id));
+  if (ids.size !== workspace.managementEvents.length)
+    throw new Error('Duplicate saved management event');
+  // Later character play can make an old workspace step impossible to replay. That only costs
+  // workspace Undo, so drop the history instead of locking every saved character (D229).
+  return replaysManagementHistory(workspace) ? workspace : { ...workspace, managementEvents: [] };
+}
+
+/** True when workspace Undo history replays all the way back to its start. */
+function replaysManagementHistory(workspace: Workspace): boolean {
   let check: ManagementData = {
     campaigns: workspace.campaigns,
     characters: workspace.characters,
@@ -323,11 +333,9 @@ export function deserializeWorkspace(rows: WorkspaceRows): Workspace {
     reducedMotion: workspace.reducedMotion,
   };
   let history = workspace.managementEvents;
-  const ids = new Set(history.map((event) => event.id));
-  if (ids.size !== history.length) throw new Error('Duplicate saved management event');
   try {
     for (let index = 0; index < EVENT_LIMIT; index += 1) {
-      if (!history.some((event) => event.command !== 'undo' && !event.undoneBy)) break;
+      if (!history.some((event) => event.command !== 'undo' && !event.undoneBy)) return true;
       const result = undoManagement(
         check,
         history,
@@ -335,12 +343,12 @@ export function deserializeWorkspace(rows: WorkspaceRows): Workspace {
         { eventId: `load-management-${index}`, realTime: '1970-01-01T00:00:00.000Z' },
         true,
       );
-      if (result.result !== 'ok') throw new Error('Saved management command cannot be undone');
+      if (result.result !== 'ok') return false;
       check = result.next;
       history = result.events;
     }
   } catch {
-    throw new Error('Saved management undo history is invalid');
+    return false;
   }
-  return workspace;
+  return true;
 }
