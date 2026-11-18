@@ -415,6 +415,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-19 — M43 T10 (part): added M43 manual QA list; automated checks pass at both widths. Live two-account join waits on the three new migrations.
 - 2026-11-19 — M43 T9: New Profile screen and top-bar button with avatar. Upload or take a photo, cropped to 256 px; default mask. Party lists show pictures. New migration.
 - 2026-11-19 — M43 T8: Signup asks for a display name with a live check; names are 3–24 characters and unique ignoring case. Accounts without a valid name get a required prompt. New migration.
 - 2026-11-19 — M43 T7: Join as Player or DM; a taken seat locks DM. Party and campaign cards show who is DM, with Take DM seat and Step down. New migration.

@@ -309,6 +309,20 @@ Check on a real phone and on a computer.
 - [ ] Judge summon form and cast-level choices on phone and desktop; compare flying, ranged and defensive forms with the 2014 rules.
 - [ ] Compare Sky Beast HP/damage and Steel Defender AC at level 15 with their 2014 stat blocks.
 
+## M43 — Joining, DM seat, names and profile
+
+Use two test accounts on a phone and a desktop, after running the three new migrations.
+
+- [ ] Sign up a new account: the name check reads clearly, and no confirmation email is needed.
+- [ ] Join by invite as Player, then Copy one character and Move another; judge that the wording makes the difference clear.
+- [ ] Join as DM into an empty seat; on the second account check that the DM choice is locked and explained.
+- [ ] Step down as DM and take the seat back; the DM label and crown update on both devices.
+- [ ] Copy and Move a character from the Party screen and from a campaign card between two campaigns.
+- [ ] Pause sync with a conflict; the status chip explains it and opens the highlighted choices on Profile.
+- [ ] Upload a picture and take a photo on the phone; judge the crop, the mask default and the top-bar button size at 375 px.
+- [ ] Check the other account sees your name and picture in the members list, and never your email.
+- [ ] An older account without a valid name gets the name prompt and cannot skip it.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).
