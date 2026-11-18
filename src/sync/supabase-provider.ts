@@ -1,6 +1,7 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { SyncKindSchema } from '../db/sync-metadata';
 import { authErrorText } from './auth-errors';
+import { cleanName, NAME_TAKEN, nameProblem } from './display-name';
 import type { SyncConfig } from './config';
 import type {
   Account,
@@ -71,10 +72,28 @@ export class SupabaseProvider implements SyncProvider {
     return { result: 'ok', account: toAccount(data.user) };
   }
 
-  async signUp(email: string, password: string): Promise<SignInResult> {
-    const { data, error } = await this.client.auth.signUp({ email, password });
-    if (error) return { result: 'error', message: authErrorText(error) };
+  async signUp(email: string, password: string, displayName?: string): Promise<SignInResult> {
+    const name = displayName === undefined ? undefined : cleanName(displayName);
+    const problem = name === undefined ? null : nameProblem(name);
+    if (problem) return { result: 'error', message: problem };
+    // The signup trigger (M43) reserves the name with the account in one step.
+    const { data, error } = await this.client.auth.signUp({
+      email,
+      password,
+      ...(name ? { options: { data: { display_name: name } } } : {}),
+    });
+    if (error)
+      return {
+        result: 'error',
+        message:
+          name && /database error saving new user/i.test(error.message)
+            ? `${NAME_TAKEN}. Someone may have just chosen it; try another.`
+            : authErrorText(error),
+      };
     if (!data.session || !data.user) return { result: 'confirm-email' };
+    // A server without the M43 signup trigger has no profile yet, so save the name now.
+    if (name && !(await this.getDisplayName().catch(() => null)))
+      await this.setDisplayName(name).catch(() => undefined);
     return { result: 'ok', account: toAccount(data.user) };
   }
 
@@ -84,22 +103,34 @@ export class SupabaseProvider implements SyncProvider {
   }
 
   async getDisplayName() {
+    // Party members can read each other's profiles, so pick the caller's own row.
+    const account = await this.currentAccount();
+    if (!account) return null;
     const { data, error } = await this.client
       .from('profiles')
       .select('display_name')
+      .eq('user_id', account.id)
       .returns<{ display_name: string }[]>();
     if (error) throw new Error(error.message);
     return data[0]?.display_name ?? null;
   }
 
   async setDisplayName(name: string) {
-    const trimmed = name.trim();
-    if (trimmed.length < 1 || trimmed.length > 40) throw new Error('Use 1 to 40 characters.');
+    const problem = nameProblem(name);
+    if (problem) throw new Error(problem);
     // user_id defaults to auth.uid(); row-level security keeps this to the caller's own row.
     const { error } = await this.client
       .from('profiles')
-      .upsert({ display_name: trimmed }, { onConflict: 'user_id' });
-    if (error) throw new Error(error.message);
+      .upsert({ display_name: cleanName(name) }, { onConflict: 'user_id' });
+    if (error) throw new Error(error.code === '23505' ? NAME_TAKEN : error.message);
+  }
+
+  async displayNameAvailable(name: string) {
+    const { data, error } = await this.client.rpc('display_name_available', {
+      p_name: cleanName(name),
+    });
+    if (error) return null;
+    return data === true;
   }
 
   async deleteAccount() {

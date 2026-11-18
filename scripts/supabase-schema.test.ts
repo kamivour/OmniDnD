@@ -71,6 +71,19 @@ describe('Supabase schema', () => {
     );
   });
 
+  it('keeps display names unique and lets signup check a name before sign-in', () => {
+    expect(sql).toContain('on public.profiles (lower(trim(display_name)))');
+    expect(sql).toContain('create unique index if not exists profiles_display_name_unique');
+    const start = sql.indexOf('function public.display_name_available(');
+    expect(sql.slice(start, start + 600)).toContain("set search_path = ''");
+    expect(sql).toContain(
+      'grant execute on function public.display_name_available(text) to anon, authenticated',
+    );
+    const trigger = sql.indexOf('function public.create_profile_from_signup()');
+    expect(sql.slice(trigger, trigger + 600)).toContain("set search_path = ''");
+    expect(sql).toContain('after insert on auth.users');
+  });
+
   it('assigns revisions on the server', () => {
     expect(sql).toContain('new.revision := old.revision + 1');
     expect(sql).toContain('before insert or update on public.sync_entities');

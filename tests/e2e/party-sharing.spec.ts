@@ -11,7 +11,13 @@ const file = ExportFileSchema.parse(seed);
 const campaign = { ...file.campaign, id: 'shared-test', name: 'Shared Table' };
 const now = '2026-11-17T00:00:00.000Z';
 
-async function backend(page: Page, host = false, dmTaken = true) {
+async function backend(
+  page: Page,
+  host = false,
+  dmTaken = true,
+  startName: string | null = 'Me Player',
+) {
+  let myName = startName;
   let joined = host;
   let myRole = host ? 'dm' : 'player';
   // Without a host, the friend holds the seat unless the test leaves it empty.
@@ -80,7 +86,7 @@ async function backend(page: Page, host = false, dmTaken = true) {
       data = {
         campaign_id: campaign.id,
         name: campaign.name,
-        dm_name: friendRole === 'dm' ? 'Friend' : myRole === 'dm' ? 'Me' : null,
+        dm_name: friendRole === 'dm' ? 'Friend' : myRole === 'dm' ? myName : null,
         has_dm: friendRole === 'dm' || myRole === 'dm',
         member_count: 2,
         already_member: joined,
@@ -116,12 +122,19 @@ async function backend(page: Page, host = false, dmTaken = true) {
           ]
         : [];
     else if (path.endsWith('/campaign_join_requests')) data = requests;
-    else if (path.endsWith('/profiles'))
+    else if (path.endsWith('/rpc/display_name_available'))
+      data = !['friend', 'me player'].includes(String(body?.p_name).trim().toLowerCase());
+    else if (path.endsWith('/profiles')) {
+      if (request.method() === 'POST') {
+        const row = (Array.isArray(body) ? body[0] : body) as { display_name?: string } | null;
+        myName = row?.display_name ?? myName;
+      }
+      const only = new URL(request.url()).searchParams.get('user_id')?.replace('eq.', '');
       data = [
-        { user_id: me, display_name: 'Me' },
+        ...(myName ? [{ user_id: me, display_name: myName }] : []),
         { user_id: friend, display_name: 'Friend' },
-      ];
-    else if (path.endsWith('/party_entities'))
+      ].filter((row) => !only || row.user_id === only);
+    } else if (path.endsWith('/party_entities'))
       data =
         request.method() === 'GET' && joined
           ? [
@@ -287,15 +300,39 @@ test('a member joins into an empty DM seat, steps down and takes it back', async
   await page.getByRole('button', { name: 'Join campaign', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Bring a character', exact: true })).toBeVisible();
   await page.goto('/');
-  await expect(page.getByRole('article', { name: /^Shared Table/ })).toContainText('DM: Me');
+  await expect(page.getByRole('article', { name: /^Shared Table/ })).toContainText('DM: Me Player');
   await page.goto('/campaigns/shared-test/party');
   const seat = page.getByRole('group', { name: 'DM seat' });
-  await expect(seat).toContainText('DM: Me (you)');
+  await expect(seat).toContainText('DM: Me Player (you)');
   await seat.getByRole('button', { name: 'Step down as DM', exact: true }).click();
   await seat.getByRole('button', { name: 'Confirm step down', exact: true }).click();
   await expect(seat).toContainText('DM seat: empty');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: test.info().outputPath('dm-seat.png'), fullPage: true });
   await seat.getByRole('button', { name: 'Take DM seat', exact: true }).click();
-  await expect(seat).toContainText('DM: Me (you)');
+  await expect(seat).toContainText('DM: Me Player (you)');
+});
+
+test('an account without a display name must choose a free one', async ({ page }) => {
+  await backend(page, false, true, null);
+  await page.goto('/');
+  const prompt = page.getByRole('dialog', { name: 'Choose your display name', exact: true });
+  await expect(prompt).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(prompt).toBeVisible();
+  const field = prompt.getByLabel('Display name', { exact: true });
+  await expect(field).toHaveAttribute('autocomplete', 'off');
+  await field.fill('Me');
+  await expect(prompt).toContainText('Use 3 to 24 characters.');
+  await field.fill(' FRIEND ');
+  await expect(prompt).toContainText('That name is taken');
+  await expect(prompt.getByRole('button', { name: 'Save name', exact: true })).toBeDisabled();
+  await field.fill('Wanderer');
+  await expect(prompt).toContainText('Available');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: test.info().outputPath('name-prompt.png'), fullPage: true });
+  await prompt.getByRole('button', { name: 'Save name', exact: true }).click();
+  await expect(prompt).toHaveCount(0);
+  await page.goto('/settings');
+  await expect(page.getByLabel('Display name', { exact: true })).toHaveValue('Wanderer');
 });

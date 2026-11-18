@@ -6,6 +6,7 @@ import type { SignInResult } from '../../sync/provider';
 import type { SyncReport } from '../../sync/runner';
 import {
   autoSync,
+  saveDisplayName,
   setAccount,
   startAccounts,
   useAccountSession,
@@ -13,6 +14,8 @@ import {
 } from '../../sync/service';
 import { Field, inputClass } from '../components/fields';
 import { cx } from '../cx';
+import { nameReady, useNameCheck } from './name-check';
+import { NameField } from './NameField';
 
 const button =
   'inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-border px-3 text-sm hover:bg-surface-2 disabled:opacity-40';
@@ -69,28 +72,13 @@ export default function AccountSection({
   }, [config]);
 
   // `undefined`: not loaded yet. `null`: signed in but no name chosen.
-  const [savedName, setSavedNameState] = useState<string | null | undefined>(undefined);
-  const [nameDraft, setNameDraft] = useState('');
-  const setSavedName = (name: string | null) => {
-    setSavedNameState(name);
-    setNameDraft(name ?? '');
-  };
-
-  useEffect(() => {
-    if (status !== 'signed-in' || !provider) return;
-    let live = true;
-    provider
-      .getDisplayName()
-      .then((name) => {
-        if (live) setSavedName(name);
-      })
-      .catch(() => {
-        if (live) setSavedName(null);
-      });
-    return () => {
-      live = false;
-    };
-  }, [status, provider]);
+  const savedName = session.displayName;
+  const [nameDraft, setNameDraft] = useState<string | null>(null);
+  const shownName = nameDraft ?? savedName ?? '';
+  const nameCheck = useNameCheck(provider, shownName, savedName);
+  // Creating an account asks for its display name in the same form.
+  const [signupName, setSignupName] = useState('');
+  const signupCheck = useNameCheck(status === 'signed-out' ? provider : null, signupName);
 
   /** Sync now and report the outcome in the notice or error line. */
   const sync = async (settled = new Map<string, ConflictChoice>()) => {
@@ -129,7 +117,7 @@ export default function AccountSection({
       const result: SignInResult =
         mode === 'sign-in'
           ? await provider.signIn(email.trim(), password)
-          : await provider.signUp(email.trim(), password);
+          : await provider.signUp(email.trim(), password, signupName);
       if (result.result === 'error') {
         setError(message(result.message));
         return;
@@ -139,6 +127,7 @@ export default function AccountSection({
         return;
       }
       setPassword('');
+      setSignupName('');
       setAccount(result.account);
       await sync();
     });
@@ -228,6 +217,13 @@ export default function AccountSection({
               className={inputClass}
             />
           </Field>
+          <NameField
+            id="account-signup-name"
+            label="Display name (new accounts only)"
+            value={signupName}
+            onChange={setSignupName}
+            check={signupCheck}
+          />
           <div className="flex flex-wrap gap-2">
             <button type="submit" disabled={busy} className={button}>
               <LogIn size={16} aria-hidden />
@@ -235,7 +231,7 @@ export default function AccountSection({
             </button>
             <button
               type="button"
-              disabled={busy || !email.trim() || password.length < 8}
+              disabled={busy || !email.trim() || password.length < 8 || !nameReady(signupCheck)}
               onClick={() => enter('sign-up')()}
               className={button}
             >
@@ -264,34 +260,21 @@ export default function AccountSection({
             onSubmit={(event) => {
               event.preventDefault();
               void act(async () => {
-                await provider.setDisplayName(nameDraft);
-                setSavedName(nameDraft.trim());
+                await saveDisplayName(shownName);
+                setNameDraft(null);
                 setNotice('Display name saved.');
               });
             }}
           >
-            <Field
-              label="Display name"
-              htmlFor="account-display-name"
-              hint={
-                savedName === null
-                  ? 'Choose a name. Your party will see it later; your email is never shown.'
-                  : 'Your party will see this name, never your email.'
-              }
-            >
-              <input
-                id="account-display-name"
-                type="text"
-                maxLength={40}
-                autoComplete="nickname"
-                value={nameDraft}
-                onChange={(event) => setNameDraft(event.target.value)}
-                className={inputClass}
-              />
-            </Field>
+            <NameField
+              id="account-display-name"
+              value={shownName}
+              onChange={setNameDraft}
+              check={nameCheck}
+            />
             <button
               type="submit"
-              disabled={busy || !nameDraft.trim() || nameDraft.trim() === savedName}
+              disabled={busy || !nameReady(nameCheck)}
               className={`${button} self-start`}
             >
               Save name

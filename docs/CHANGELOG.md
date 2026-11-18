@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 02:27 — Unique display names
+
+- Creating an account now asks for a display name. It says "Available" or "That name is taken" while you type; names are 3 to 24 characters.
+- Signed-in accounts with no name, or a name that no longer fits, get a prompt to choose one. Only saving a name or signing out closes it.
+- Run `20261119130000_display_names.sql` in the Supabase SQL Editor. If two accounts already share a name, it stops and lists them; ask those players to rename, then run it again.
+- Checks pass.
+
 ## 2026-11-19 02:17 — Choose the DM seat
 
 - When joining from an invite, choose Player or DM. If someone already holds the DM seat, DM is locked and shows who holds it.

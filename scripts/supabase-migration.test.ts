@@ -17,7 +17,7 @@ beforeAll(async () => {
     create role anon;
     create role authenticated;
     create schema auth;
-    create table auth.users (id uuid primary key);
+    create table auth.users (id uuid primary key, raw_user_meta_data jsonb);
     create function auth.uid() returns uuid language sql stable as $$
       select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
     $$;
@@ -164,3 +164,81 @@ it('joins with a seat, locks a taken DM seat and lets the DM step down', async (
   expect(await dms()).toEqual([player]);
   await expect(db.query("select public.claim_dm('other')")).rejects.toThrow('Join this campaign');
 });
+
+it('reserves unique display names at signup and checks them before sign-in', async () => {
+  const [first, second] = [
+    '00000000-0000-4000-8000-000000000005',
+    '00000000-0000-4000-8000-000000000006',
+  ];
+  await db.exec('reset role');
+  await db.query('insert into auth.users(id, raw_user_meta_data) values ($1, $2)', [
+    first,
+    JSON.stringify({ display_name: '  Rook  ' }),
+  ]);
+  expect(
+    (await db.query('select display_name from public.profiles where user_id = $1', [first])).rows,
+  ).toEqual([{ display_name: 'Rook' }]);
+  // A taken name cancels the whole signup.
+  await expect(
+    db.query('insert into auth.users(id, raw_user_meta_data) values ($1, $2)', [
+      second,
+      JSON.stringify({ display_name: 'ROOK' }),
+    ]),
+  ).rejects.toThrow('profiles_display_name_unique');
+  expect((await db.query('select 1 from auth.users where id = $1', [second])).rows).toEqual([]);
+  // Older clients send no name and get no profile.
+  await db.query('insert into auth.users(id) values ($1)', [second]);
+
+  await db.exec('set role anon');
+  await db.query("select set_config('request.jwt.claim.sub', '', false)");
+  const free = async (name: string) =>
+    (await db.query<{ ok: boolean }>('select public.display_name_available($1) as ok', [name]))
+      .rows[0]!.ok;
+  expect(await free(' rook ')).toBe(false);
+  expect(await free('Rookie')).toBe(true);
+  expect(await free('ab')).toBe(false);
+  expect(await free('x'.repeat(25))).toBe(false);
+
+  await asUser(first);
+  expect(await free('ROOK')).toBe(true);
+  await asUser(second);
+  await expect(
+    db.query("insert into public.profiles(user_id, display_name) values ($1, 'rook')", [second]),
+  ).rejects.toThrow('profiles_display_name_unique');
+  await expect(
+    db.query("insert into public.profiles(user_id, display_name) values ($1, 'ab')", [second]),
+  ).rejects.toThrow('profiles_display_name_shape');
+  await db.query("insert into public.profiles(user_id, display_name) values ($1, 'Rookie')", [
+    second,
+  ]);
+});
+
+it('stops the name migration while two accounts share a name, renaming nobody', async () => {
+  const fresh = new PGlite();
+  try {
+    await fresh.exec(`
+      create role anon; create role authenticated; create schema auth;
+      create table auth.users (id uuid primary key, raw_user_meta_data jsonb);
+      create function auth.uid() returns uuid language sql stable as $$ select null::uuid $$;
+    `);
+    const files = readdirSync(folder)
+      .filter((f) => f.endsWith('.sql'))
+      .sort();
+    const names = files.indexOf('20261119130000_display_names.sql');
+    for (const file of files.slice(0, names))
+      await fresh.exec(readFileSync(join(folder, file), 'utf8'));
+    await fresh.query('insert into auth.users(id) values ($1), ($2)', [owner, player]);
+    await fresh.query(
+      "insert into public.profiles(user_id, display_name) values ($1, 'Kit'), ($2, 'kit ')",
+      [owner, player],
+    );
+    await expect(fresh.exec(readFileSync(join(folder, files[names]!), 'utf8'))).rejects.toThrow(
+      'used by more than one account: kit',
+    );
+    expect(
+      (await fresh.query('select display_name from public.profiles order by display_name')).rows,
+    ).toEqual([{ display_name: 'Kit' }, { display_name: 'kit ' }]);
+  } finally {
+    await fresh.close();
+  }
+}, 30_000);

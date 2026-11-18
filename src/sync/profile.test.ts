@@ -58,10 +58,31 @@ describe('display name', () => {
     expect(await bo.getDisplayName()).toBeNull();
   });
 
-  it('rejects empty and over-long names', async () => {
+  it('rejects names outside 3 to 24 characters', async () => {
     const provider = new MemoryProvider(new MemoryCloud());
     await provider.signUp('ana@example.com', 'password1');
-    await expect(provider.setDisplayName('   ')).rejects.toThrow('1 to 40');
-    await expect(provider.setDisplayName('x'.repeat(41))).rejects.toThrow('1 to 40');
+    await expect(provider.setDisplayName('  ab  ')).rejects.toThrow('3 to 24');
+    await expect(provider.setDisplayName('x'.repeat(25))).rejects.toThrow('3 to 24');
+  });
+
+  it('keeps names unique ignoring case and reserves one at signup', async () => {
+    const cloud = new MemoryCloud();
+    const ana = new MemoryProvider(cloud);
+    expect(await ana.signUp('ana@example.com', 'password1', ' Ana ')).toMatchObject({
+      result: 'ok',
+    });
+    expect(await ana.getDisplayName()).toBe('Ana');
+    // Your own name counts as available, so saving it again is fine.
+    expect(await ana.displayNameAvailable('ANA')).toBe(true);
+    await ana.setDisplayName('ana');
+
+    const bo = new MemoryProvider(cloud);
+    expect(await bo.displayNameAvailable(' ana ')).toBe(false);
+    expect(await bo.signUp('bo@example.com', 'password1', 'ANA')).toEqual({
+      result: 'error',
+      message: 'That name is taken',
+    });
+    await bo.signUp('bo@example.com', 'password1', 'Bo the Bold');
+    await expect(bo.setDisplayName('Ana')).rejects.toThrow('That name is taken');
   });
 });

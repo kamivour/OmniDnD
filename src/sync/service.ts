@@ -40,6 +40,8 @@ export interface AccountSession {
   provider: SyncProvider | null;
   account: Account | null;
   error: string;
+  /** `undefined`: not loaded or unknown. `null`: signed in without a name. */
+  displayName?: string | null | undefined;
 }
 
 export const accountSession = createStore<AccountSession>(() => ({
@@ -57,9 +59,32 @@ export function setAccount(account: Account | null) {
   if (previous?.id !== account?.id) partyStore.setState({ requests: [], owners: {}, error: '' });
   stopParty?.();
   stopParty = account && provider ? provider.subscribeParty(() => autoSync.wake()) : null;
-  accountSession.setState({ account, status: account ? 'signed-in' : 'signed-out' });
+  const changed = previous?.id !== account?.id;
+  accountSession.setState({
+    account,
+    status: account ? 'signed-in' : 'signed-out',
+    ...(changed ? { displayName: undefined } : {}),
+  });
+  if (account && provider && changed) void refreshDisplayName();
   if (account && provider) autoSync.attach(provider);
   else autoSync.detach();
+}
+
+/** Load the signed-in account's display name into the session. Errors leave it unknown. */
+export async function refreshDisplayName(): Promise<void> {
+  const { provider, account } = accountSession.getState();
+  if (!provider || !account) return;
+  const name = await provider.getDisplayName().catch(() => undefined);
+  if (accountSession.getState().account?.id === account.id)
+    accountSession.setState({ displayName: name });
+}
+
+/** Save a display name; throws the server's reason (for example a taken name). */
+export async function saveDisplayName(name: string): Promise<void> {
+  const { provider } = accountSession.getState();
+  if (!provider) throw new Error('Sign in first.');
+  await provider.setDisplayName(name);
+  accountSession.setState({ displayName: name.trim() });
 }
 
 let starting: Promise<void> | null = null;

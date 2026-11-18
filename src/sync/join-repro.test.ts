@@ -46,7 +46,7 @@ async function device(
   const provider = new MemoryProvider(cloud);
   if (options.signUp ?? true) {
     await provider.signUp(email, 'password1');
-    await provider.setDisplayName(email.split('@')[0]!);
+    await provider.setDisplayName(`${email.split('@')[0]!} player`);
   } else {
     await provider.signIn(email, 'password1');
   }

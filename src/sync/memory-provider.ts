@@ -1,3 +1,4 @@
+import { cleanName, NAME_TAKEN, nameKey, nameProblem } from './display-name';
 import type {
   Account,
   InvitePreview,
@@ -62,14 +63,30 @@ export class MemoryProvider implements SyncProvider {
     return Promise.resolve(this.account);
   }
 
-  signUp(email: string, password: string): Promise<SignInResult> {
+  signUp(email: string, password: string, displayName?: string): Promise<SignInResult> {
     const key = email.trim().toLowerCase();
     if (this.cloud.accounts.has(key))
       return Promise.resolve({ result: 'error', message: 'An account with this email exists.' });
+    if (displayName !== undefined) {
+      const problem = nameProblem(displayName) ?? (this.nameTaken(displayName) ? NAME_TAKEN : null);
+      if (problem) return Promise.resolve({ result: 'error', message: problem });
+    }
     const account = { id: `user-${this.cloud.accounts.size + 1}`, email: key };
     this.cloud.accounts.set(key, { account, password });
+    if (displayName !== undefined) this.cloud.names.set(account.id, cleanName(displayName));
     this.account = account;
     return Promise.resolve({ result: 'ok', account });
+  }
+
+  /** True when an account other than `self` uses the name, ignoring case. */
+  private nameTaken(name: string, self?: string) {
+    return [...this.cloud.names].some(
+      ([id, used]) => id !== self && nameKey(used) === nameKey(name),
+    );
+  }
+
+  displayNameAvailable(name: string) {
+    return Promise.resolve(!this.nameTaken(name, this.account?.id));
   }
 
   signIn(email: string, password: string): Promise<SignInResult> {
@@ -90,10 +107,10 @@ export class MemoryProvider implements SyncProvider {
   }
 
   setDisplayName(name: string) {
-    const trimmed = name.trim();
-    if (trimmed.length < 1 || trimmed.length > 40)
-      return Promise.reject(new Error('Use 1 to 40 characters.'));
-    this.cloud.names.set(this.require().id, trimmed);
+    const id = this.require().id;
+    const problem = nameProblem(name) ?? (this.nameTaken(name, id) ? NAME_TAKEN : null);
+    if (problem) return Promise.reject(new Error(problem));
+    this.cloud.names.set(id, cleanName(name));
     return Promise.resolve();
   }
 

@@ -41,11 +41,15 @@ export type SignInResult =
 export interface SyncProvider extends PartyProvider {
   currentAccount(): Promise<Account | null>;
   signIn(email: string, password: string): Promise<SignInResult>;
-  signUp(email: string, password: string): Promise<SignInResult>;
+  /** `displayName` is reserved with the account when the server supports it. */
+  signUp(email: string, password: string, displayName?: string): Promise<SignInResult>;
   signOut(): Promise<void>;
   /** The signed-in account's display name, or null until one is chosen. */
   getDisplayName(): Promise<string | null>;
+  /** Throws "That name is taken" when another account uses it, ignoring case. */
   setDisplayName(name: string): Promise<void>;
+  /** Whether another account already uses this name; null when the server cannot tell yet. */
+  displayNameAvailable(name: string): Promise<boolean | null>;
   /** Email a reset link that opens `redirectTo`. Never reveals whether the email has an account. */
   requestPasswordReset(email: string, redirectTo: string): Promise<void>;
   /** Set a new password for the signed-in account (also used after a reset link). */
