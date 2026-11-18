@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 00:33 — Plan for friend-testing fixes and a Compendium
+
+- New plan (M43) covers signup that is blocked by the email limit, required unique display names, a Profile button with an avatar, a sync chip that explains itself, and joining shared campaigns with an explicit Copy or Move and one DM seat.
+- A Compendium (M44) for browsing spells, classes, subclasses, races, backgrounds and feats is planned after the icon work.
+- Class icons in the plan now use a warhammer and shield for Paladin, a bow for Ranger, a dagger for Rogue and a flute for Bard.
+- Nothing is built yet. To fix signup now, choose custom email or turn off email confirmation in Supabase (see Q50). Checks pass.
+
 ## 2026-11-18 23:19 — Retry loading picks up app updates
 
 - If the app is stuck on "Local storage unavailable", Retry loading now switches to a newer app version first, then loads again.

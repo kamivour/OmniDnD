@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M41 review: infusion-known limits and companion forms fixed; reported Artificer disappearance still under investigation.
-**Next up:** Reproduce the Artificer disappearance using the friend's exported campaign settings. He reports a private campaign created before sharing, with Artificer disappearing immediately after Point Buy → Rolled in the same browser, despite expansion books being enabled. Live site: https://omnidnd.kamivour.workers.dev. M42's UI overhaul is planned in [PLAN.md](PLAN.md); implementation has not started.
+**Next up:** Reproduce the Artificer disappearance using the friend's exported campaign settings. He reports a private campaign created before sharing, with Artificer disappearing immediately after Point Buy → Rolled in the same browser, despite expansion books being enabled. Live site: https://omnidnd.kamivour.workers.dev. M43 friend-testing fixes, then M42's UI overhaul, are planned in [PLAN.md](PLAN.md); implementation has not started.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -66,7 +66,9 @@ Build for multiple campaigns and characters, including friends' future character
 | M39 | Themes | 10 | done | Midnight, glass, water and D&D place themes with title effects; see [PLAN.md](PLAN.md) |
 | M40 | Campaign sharing and join requests | 7 | done | Share links, approve requests with existing characters, and view party characters without editing them |
 | M41 | Artificer equipment infusions | 3 | doing | Equipment assignment works; verify known choices and investigate the reported class disappearance |
-| M42 | Recognizable icons and creation cards | 10 | todo | Class and subclass choices use clear icon cards; portraits and existing creation behavior are preserved; see [PLAN.md](PLAN.md) |
+| M43 | Friend-testing fixes: accounts, profiles and joining | 10 | todo | Signup works, names are unique, profile with avatar, clear sync choices, explicit copy or move into shared campaigns, one DM seat; see [PLAN.md](PLAN.md) |
+| M42 | Recognizable icons and creation cards | 10 | todo | Class and subclass choices use clear icon cards; portraits and existing creation behavior are preserved; after M43; see [PLAN.md](PLAN.md) |
+| M44 | Compendium | 5 | todo | Browse and read spells, classes, subclasses, races, backgrounds and feats to plan characters; see [PLAN.md](PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -330,9 +332,24 @@ Details in [PLAN.md](PLAN.md).
 - [x] Add the three cannon forms, audit all bundled companion templates and compute spell-summon forms and upcasting
 - [ ] Reproduce the friend's missing Artificer using his actual campaign settings and deployed app
 
+### M43 — Friend-testing fixes: accounts, profiles and joining (planned)
+
+Follow [PLAN.md](PLAN.md#m43--friend-testing-fixes-accounts-profiles-and-joining). Build before M42. One task per commit; bug tasks start with a failing test or reproduction.
+
+- [ ] T1: Make signup work despite the email limit (owner picks Q50) and explain rate-limit errors
+- [ ] T2: Give sample characters fresh IDs and start the store empty
+- [ ] T3: Make the sync chip explain paused sync and jump to highlighted choices
+- [ ] T4: Reproduce the join reports with two-account tests
+- [ ] T5: Rebuild joining as join, then an explicit Copy or Move of chosen characters
+- [ ] T6: Add Copy and Move to campaign from Party and campaign cards
+- [ ] T7: Show the DM seat, choose DM or Player when joining, and lock a taken seat
+- [ ] T8: Require a unique display name at signup and prompt existing accounts
+- [ ] T9: Add the Profile button and screen with uploadable avatar and default mask
+- [ ] T10: Verify all flows at both widths and with two live test accounts
+
 ### M42 — Recognizable icons and creation cards (planned)
 
-Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M41. One task per commit.
+Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M43. One task per commit.
 
 - [ ] T1: Produce the class-icon board and creation mockups at 375 px and 1440 px
 - [ ] T2: Add shared class/subclass icons and character portrait fallbacks
@@ -341,6 +358,16 @@ Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M41. 
 - [ ] T5: Extend cards to race and background choices with search for larger lists
 - [ ] T6: Refine guidance, review and navigation while preserving drafts
 - [ ] T7: Verify recognition, accessibility, themes and unchanged character results at both widths
+
+### M44 — Compendium (planned)
+
+Follow [PLAN.md](PLAN.md#m44--compendium) after M42.
+
+- [ ] T1: Catalog helpers over the bundled registry with filters
+- [ ] T2: Compendium screen with tabs, search, filters and details panel
+- [ ] T3: Detail pages for classes, subclasses, races, backgrounds, feats and spells
+- [ ] T4: "Plan this" wishlist notes in the Journal
+- [ ] T5: Verify at both widths, offline and across themes
 
 ## Review fixes
 
@@ -363,6 +390,7 @@ Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M41. 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-19 — Planned M43 (signup, unique names, profile and avatar, sync choices, join, copy or move, DM seat) and M44 Compendium; M42 icons follow M43.
 - 2026-11-18 — Retry loading on the storage lock screen switches to a downloaded app update first; duplicate workspace Undo steps no longer lock the app.
 - 2026-11-18 — Damaged workspace Undo history is dropped on load instead of locking the app; long rest backups and saves work again (D229).
 - 2026-11-17 — Class armor and weapon proficiencies count on the sheet even when a blank build or import left them off (D228).

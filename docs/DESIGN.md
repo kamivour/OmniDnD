@@ -231,14 +231,14 @@ Icons need distinct silhouettes at HUD size as well as card size. Prefer simple 
 |---|---|
 | Artificer | Gear and hammer |
 | Barbarian | Broad axe |
-| Bard | Lute |
+| Bard | Flute or other instrument |
 | Cleric | Mace with radiant halo |
 | Druid | Oak leaf |
 | Fighter | Crossed swords |
 | Monk | Fist |
-| Paladin | Shield with upright sword |
+| Paladin | Warhammer and shield |
 | Ranger | Bow and arrow |
-| Rogue | Hood and dagger |
+| Rogue | Dagger |
 | Sorcerer | Flame in a hand |
 | Warlock | Eldritch eye |
 | Wizard | Open spellbook |

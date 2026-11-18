@@ -251,7 +251,7 @@ Party characters open in a separate reader with no editors or gameplay controls.
 
 ## M42 — Recognizable icons and creation cards
 
-Planning only, requested 2026-11-18. Start implementation after M41's review closes; complete one task per commit. Keep 2014 rules, book filtering, engine commands, both creation modes and saved characters intact.
+Planning only, requested 2026-11-18. Start implementation after M43; complete one task per commit. Keep 2014 rules, book filtering, engine commands, both creation modes and saved characters intact.
 
 ### Intended experience
 
@@ -265,7 +265,7 @@ Use a shared class identity across creation, campaign character cards, Sheet and
 
 | Task | Deliverable | Check before closing |
 |---|---|---|
-| T1 — Visual proposal | Repo-native icon board for all 13 classes, representative subclass cards, and class/subclass creation mockups at 375 px and 1440 px | Compare silhouettes at 20 px, 40 px and card size; Paladin reads as shield and sword rather than a diamond; labels remain visible |
+| T1 — Visual proposal | Repo-native icon board for all 13 classes, representative subclass cards, and class/subclass creation mockups at 375 px and 1440 px | Compare silhouettes at 20 px, 40 px and card size; Paladin reads as warhammer and shield, Ranger as bow, Rogue as dagger and Bard as flute, never a diamond; labels remain visible |
 | T2 — Shared icons | Class/subclass icon lookup and portrait fallback, reused in HUD, campaign cards and Sheet | Every supported class resolves to a real icon; custom portraits and The Fool's art survive; multiclass fallback is predictable |
 | T3 — Class cards | Shared accessible card picker in Step by step and One page | Radio semantics and keyboard navigation work; existing book filtering and chosen values survive back, reload and mode switches |
 | T4 — Subclass cards | Reuse the picker in creation, level-up and To do, with class identity plus a distinct subclass motif | Choices appear at the correct class level; saved choices and source restrictions remain authoritative |
@@ -279,6 +279,67 @@ Reuse `Icon`, `CharacterPortrait`, `OptionGuide` and existing choice validation.
 
 This milestone changes presentation, not ability-score rules, sync or campaign permissions. The reported Artificer disappearance remains an M41 investigation: the friend confirmed an older private campaign and an immediate same-browser change, while existing regression checks still retain the class. Recheck Point Buy → Rolled with Tasha's enabled during the UI gate, without treating it as a proven fix.
 
+## M43 — Friend-testing fixes: accounts, profiles and joining
+
+Planning only, requested 2026-11-19 after friends tried shared campaigns. Build before M42; one task per commit. Each bug task starts with a failing test or a recorded reproduction, then the fix.
+
+### What we found
+
+- **Sync chip:** "Needs your choice" means the same campaign or character changed here and in the cloud. Automatic sync pauses until the player picks a version. The chip only opens Settings, where the choices sit unexplained at the bottom of the Account card.
+- **Repeated sample IDs:** the Campaigns "Try the sample character" button imports The Fool with fixed IDs (`campaign-273`, `the-fool`). Two devices that both played the sample then conflict in sync, and two members can collide in one shared campaign. The in-campaign offer already uses fresh IDs.
+- **First open:** new devices have started empty since 2026-11-11, and a fresh browser on the live site showed no campaign on 2026-11-19. Friends who still see The Fool most likely opened the app before that date. `createCharacterStore()` still defaults to the sample, a latent path to remove.
+- **Join flow:**
+  - The character picker is an optional dropdown that defaults to "Join without a character".
+  - Copying works only after membership has synced, and only on the join page. A fresh device shows an empty dropdown and no next step.
+  - No Copy or Move action exists anywhere else, so after leaving the join page only export and import remain.
+  - Every own character in a shared campaign is uploaded, so sharing a campaign publishes all its characters without listing them first.
+- **DM seat:** `join_campaign` always adds a player. The database already allows one DM per campaign, but a member becomes DM only when the owner or current DM hands the role over.
+- **Display names:** nothing in the code generates names. "Niko" was most likely filled in by the browser or keyboard: the field uses `autocomplete="nickname"`, and saving takes one tap. Names are optional at signup and not unique.
+- **Signup rate limit:** Supabase's built-in email sender allows about 2 auth emails per hour for the whole project and may deliver only to the project team's addresses. With "Confirm email" on, one or two signups use up the hour; Forgot password shares the same limit.
+
+### Tasks and acceptance
+
+| Task | Deliverable | Check before closing |
+|---|---|---|
+| T1 — Signup limit | Plain messages for Supabase rate-limit and email errors. [HOSTING.md](HOSTING.md) steps for the owner's choice between custom SMTP with a higher limit and no email confirmation (Q50) | A friend can create an account and sign in; the rate-limit message says what happened and when to retry; Forgot password works or clearly says it is unavailable |
+| T2 — Sample IDs | Both sample buttons create fresh campaign and character IDs. `createCharacterStore()` starts empty, and the sample never syncs under a fixed ID again | Two devices on one account each add the sample without a sync conflict; existing `the-fool` characters keep their data and history |
+| T3 — Clear sync choices | The chip opens `settings#sync-choices`, scrolls there and applies the Find highlight. A short notice explains why sync paused and lists each item with both change times and what each option keeps | Works from the hub and inside a character, at both widths; the chip's label reads "Sync paused: choose versions"; a Find entry exists |
+| T4 — Join reproduction | Repeatable two-account tests on the memory provider covering: join with and without local characters, sharing a campaign that already holds characters, matching sample IDs, a second device on the same account | "All my characters were pushed in" is reproduced or ruled out with evidence, recorded in the session log |
+| T5 — Join flow | Step 1 joins with a DM or Player choice (T7). Step 2, "Bring a character", opens straight after. It lists the player's characters as cards with campaign names and an explicit Copy or Move, plus "Create a new character here". An empty state explains signing in on the device that has them | Nothing enters a campaign without an explicit choice; sharing lists the characters that become visible and lets the owner leave any out; a fresh device always sees a next step |
+| T6 — Copy or move later | "Add my character" on the Party screen. "Copy to campaign…" and "Move to campaign…" on campaign character cards, for private and shared campaigns. Moving out of a shared campaign removes the party copy | Engine command, logged and undoable; warns when the destination's books lack the character's options; repeated moves keep history; members see the change after sync |
+| T7 — DM seat | Campaign cards, the Party header and the invite preview show "DM: name" or an empty DM slot. Joining offers DM or Player; once a DM exists, DM shows "Taken by name" and is locked. A member can take an empty seat or step down | New `join_campaign(code, role)`, `claim_dm` and `release_dm` with row-level checks; two simultaneous claims leave one DM and a clear message; hand-over still works; `check:party` on a throwaway project only |
+| T8 — Display names | Signup requires a display name: 3–24 characters, trimmed, unique ignoring case. Availability is checked while typing, and the name is reserved when the account is created. Signed-in accounts without a name get a required prompt | A unique index and a signup trigger enforce it on the server; a taken name shows "That name is taken"; existing duplicates are listed first and renamed only with the owner's approval; the field does not autofill a stored nickname |
+| T9 — Profile and avatar | Profile button with the avatar beside Settings, in the hub and inside a character. The Profile screen holds avatar, display name, email (owner only), password, sign-out, delete account and sync choices; Settings links to it | Camera or file upload is cropped square and resized to 256 px JPEG; the default is an original mask SVG in theme tokens; party lists and the DM slot show avatars; signed-out players can sign in there; Find entries exist |
+| T10 — Gate | Focused tests, both widths, a live join with two test accounts, at most ten human QA items | Join, copy, move, DM seat, signup name, avatar and sync choices pass at 375 px and 1440 px; no email is shown to other members |
+
+### Data changes
+
+One migration per server task, each with row-level security tests. Party members already read each other's profiles, so avatars need no new policy.
+
+- `profiles` gains `avatar text`, a JPEG data URL capped at about 100 KB.
+- `profiles` gains a unique index on lower-cased, trimmed `display_name`.
+- New function `display_name_available(name)`, callable before sign-in.
+- New trigger that creates the profile from signup metadata.
+- New party functions: `join_campaign(code, role)`, `claim_dm(campaign)` and `release_dm(campaign)`.
+
+### Boundaries
+
+The app never holds a service key, and emails stay private. Character rules, the engine and offline play do not change. Joining by campaign ID keeps its approval step; approved members can then take an empty DM seat.
+
+## M44 — Compendium
+
+Planning only, requested 2026-11-19; build after M42. A read-only library for planning characters, covering spells, classes, subclasses, races, backgrounds and feats from the bundled 2014 data.
+
+### Tasks and acceptance
+
+| Task | Deliverable | Check before closing |
+|---|---|---|
+| T1 — Catalog | Pure engine helpers that list and filter `registry` entries by kind, class, level, school, book and text | Every bundled class, subclass, race, background, feat and spell is reachable; non-SRD entries show only own-words summaries |
+| T2 — Screen | `/compendium`, also inside a character: kind tabs, search, filter chips, and a list that opens details in a sheet on phones or a side panel on desktop | Long lists stay fast at 375 px; filters live in the URL and survive Back; Find entries with synonyms such as "database", "library" and "spell list" |
+| T3 — Details | Classes show hit die, saves, features by level and subclasses. Spells show level, school, casting time, range, components, duration and class lists. Feats show prerequisites | SRD text or own-words summary with the book named; inside a character, the campaign's books are the default filter, with a "Show all books" switch |
+| T4 — Planning notes | "Plan this" adds the entry to a per-character wishlist in the Journal | Logged and undoable; nothing is learned or prepared automatically |
+| T5 — Gate | Tests, both widths, themes, at most ten QA items | Representative class, subclass, race, feat and spell pages read correctly offline |
+
 ## Risks
 - **Free hosting limits:** Supabase allows 200 live connections and 500 MB of storage; records are capped at 5 MB (our limit). Long event logs grow records; a later fix is a snapshot plus trimmed history.
 - **Security:** shared access depends entirely on row-level security, so every rule gets a test. Invite codes are random, hashed and expire. Emails are never shown to other members.
@@ -286,3 +347,4 @@ This milestone changes presentation, not ability-score rules, sync or campaign p
 ## Open questions
 M26: Q41 (alignment label), Q42 (background scope) and Q43 (conjure and summon spells) in DECISIONS.md. Earlier answers are D168–D175.
 M39: Q44 (D&D place names as theme labels), Q45 (ripple on phones) and Q46 (theme per campaign) in DECISIONS.md.
+M43: Q50 (signup email) and Q51 (avatar storage) in DECISIONS.md.
