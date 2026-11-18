@@ -7,7 +7,6 @@ import { Sheet } from '../components/Sheet';
 import { useCharacter } from '../hooks/useCharacter';
 import { FindLauncher } from '../find/FindLauncher';
 import { useCharacterBase } from '../hooks/useCharacterBase';
-import { SyncChipSlot } from '../settings/SyncChipSlot';
 import { useDetail } from '../layout/detail-context';
 import { useRest } from '../rest/rest-context';
 import { StorageStatus } from '../storage/StorageStatus';
@@ -68,7 +67,7 @@ export function CharacterToolbar() {
       data-tour="history"
       className="flex min-w-0 flex-wrap items-center gap-1 border-b border-border bg-bg px-3 sm:gap-2 sm:px-4"
     >
-      <StorageStatus compact />
+      <StorageStatus compact settingsPath={`${base}/settings`} />
       <button
         ref={opener}
         type="button"
@@ -103,7 +102,6 @@ export function CharacterToolbar() {
         Long Rest
       </button>
       {undoButton()}
-      <SyncChipSlot to={`${base}/settings`} />
       <FindLauncher withCharacter />
       <button
         id="detail-toggle"

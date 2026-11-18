@@ -35,8 +35,8 @@ const motion = (page: Page) =>
 
 async function saved(page: Page) {
   // Modal sheets hide the background status from the accessibility tree.
-  await expect(page.locator('[role="status"][aria-label="Local save status"]')).toContainText(
-    'Saved locally',
+  await expect(page.locator('[role="status"][aria-label="Save status"]')).toContainText(
+    'Saved on this device',
   );
 }
 
@@ -601,7 +601,7 @@ test('a failed save retains Retry, details and one Undo without a second action 
     };
   });
   await takeDamage(page);
-  await expect(page.getByRole('status', { name: 'Local save status', exact: true })).toContainText(
+  await expect(page.getByRole('status', { name: 'Save status', exact: true })).toContainText(
     'Save failed',
   );
   await expect(feedback(page)).toContainText('Retry saving');
@@ -630,7 +630,7 @@ test('a cross-window conflict keeps its explanation, log, details and single Und
     await takeDamage(page, 1);
     await saved(page);
     await takeDamage(stale, 1);
-    const status = stale.getByRole('status', { name: 'Local save status', exact: true });
+    const status = stale.getByRole('status', { name: 'Save status', exact: true });
     await expect(status).toContainText('Save conflict');
     await expect(status).toContainText(/Reload this window before editing/i);
     await expect(stale.getByRole('button', { name: 'Retry save', exact: true })).toHaveCount(0);

@@ -43,10 +43,10 @@ test('a multiclass character settles the remaining ASI after a feat, reloads and
   await row().getByLabel('Ability', { exact: true }).selectOption('INT');
   await row().getByRole('button', { name: 'Save choice', exact: true }).click();
   await expect(row()).toHaveCount(0);
-  await expect(page.locator('[aria-label="Local save status"]')).toContainText('Saved locally');
+  await expect(page.locator('[aria-label="Save status"]')).toContainText('Saved on this device');
   await page.reload();
   await expect(row()).toHaveCount(0);
   await page.getByRole('button', { name: 'Undo last command', exact: true }).click();
   await expect(row()).toHaveCount(1);
-  await expect(page.locator('[aria-label="Local save status"]')).toContainText('Saved locally');
+  await expect(page.locator('[aria-label="Save status"]')).toContainText('Saved on this device');
 });

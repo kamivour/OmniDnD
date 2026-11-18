@@ -4,7 +4,6 @@ import { Library, Settings } from 'lucide-react';
 import { cx } from '../cx';
 import { ThemeTitle } from '../theme/ThemeTitle';
 import { FindLauncher } from '../find/FindLauncher';
-import { SyncChipSlot } from '../settings/SyncChipSlot';
 import { StorageStatus } from '../storage/StorageStatus';
 
 const LINKS = [
@@ -22,7 +21,6 @@ export function HubFrame() {
             <ThemeTitle />
           </Link>
           <nav aria-label="Main" className="ml-auto flex items-center gap-1">
-            <SyncChipSlot to="/settings" />
             <FindLauncher withCharacter={false} />
             {LINKS.map(({ to, label, icon: Glyph }) => (
               <NavLink

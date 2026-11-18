@@ -45,8 +45,8 @@ const undo = (page: Page) =>
     : page.getByRole('button', { name: 'Undo management', exact: true });
 
 async function expectSaved(page: Page) {
-  await expect(page.getByRole('status', { name: 'Local save status', exact: true })).toContainText(
-    'Saved locally',
+  await expect(page.getByRole('status', { name: 'Save status', exact: true })).toContainText(
+    'Saved on this device',
   );
 }
 

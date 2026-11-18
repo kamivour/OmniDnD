@@ -53,8 +53,8 @@ const hp = (page: Page) => hud(page).getByRole('button', { name: 'Adjust hit poi
 const undo = (page: Page) => page.getByRole('button', { name: 'Undo last command', exact: true });
 
 async function saved(page: Page) {
-  await expect(page.locator('[role="status"][aria-label="Local save status"]')).toContainText(
-    'Saved locally',
+  await expect(page.locator('[role="status"][aria-label="Save status"]')).toContainText(
+    'Saved on this device',
   );
 }
 
@@ -393,7 +393,7 @@ test('a failed reset save keeps the original recovery point through Retry and re
     };
   });
   await applyReset(page);
-  await expect(page.getByRole('status', { name: 'Local save status', exact: true })).toContainText(
+  await expect(page.getByRole('status', { name: 'Save status', exact: true })).toContainText(
     'Save failed',
   );
   await expect(hp(page)).toHaveText(/44\s*\/\s*44/);
@@ -429,9 +429,9 @@ test('a stale window cannot commit reset or its backup over a newer saved comman
     const newer = await readDatabase(second);
     await apply(page).click();
     await expect(dialog(page)).toBeHidden();
-    await expect(
-      page.getByRole('status', { name: 'Local save status', exact: true }),
-    ).toContainText('Save conflict');
+    await expect(page.getByRole('status', { name: 'Save status', exact: true })).toContainText(
+      'Save conflict',
+    );
     await expect(page.getByRole('button', { name: 'Retry save', exact: true })).toHaveCount(0);
     expect(await readDatabase(page)).toEqual(newer);
     expect(newer.backups).toEqual([]);

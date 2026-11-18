@@ -24,6 +24,13 @@ function message(error: unknown): string {
     : text;
 }
 
+/** A change time for the conflict prompt, in the reader's own format. */
+function when(iso: string | undefined): string {
+  const date = iso ? new Date(iso) : null;
+  if (!date || Number.isNaN(date.getTime())) return 'at an unknown time';
+  return `on ${date.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}`;
+}
+
 function reportText(report: SyncReport): string {
   const parts = [`Uploaded ${report.uploaded}, downloaded ${report.downloaded}.`];
   if (report.skipped > 0)
@@ -372,7 +379,17 @@ export default function AccountSection({
             </form>
           </details>
           {conflicts.length > 0 && (
-            <div className="flex flex-col gap-3">
+            <section
+              id="sync-choices"
+              aria-label="Sync choices"
+              className="flex flex-col gap-3 rounded-card"
+            >
+              <h3 className="text-sm font-semibold">Sync paused: choose versions</h3>
+              <p className="text-sm text-text-muted">
+                These items changed on this device and on another device since they last synced.
+                Automatic sync waits until you pick which copy to keep, so nothing is lost by
+                accident.
+              </p>
               {conflicts.map((conflict) => (
                 <fieldset
                   key={conflict.id}
@@ -386,24 +403,36 @@ export default function AccountSection({
                   </legend>
                   {(
                     [
-                      ['this-device', 'Keep this device’s version'],
                       [
-                        'cloud',
-                        conflict.remote.deleted
-                          ? 'Keep the cloud’s deletion'
-                          : 'Keep the cloud version',
+                        'this-device',
+                        'Keep this device’s version',
+                        `Changed here ${when(conflict.localChangedAt)}. Replaces the cloud copy on every device.`,
                       ],
-                    ] as const
-                  ).map(([value, label]) => (
-                    <label key={value} className="flex min-h-11 items-center gap-3 text-sm">
+                      conflict.remote.deleted
+                        ? [
+                            'cloud',
+                            'Keep the cloud’s deletion',
+                            `Deleted on another device ${when(conflict.remote.changedAt)}. Removes it from this device too.`,
+                          ]
+                        : [
+                            'cloud',
+                            'Keep the cloud version',
+                            `Changed on another device ${when(conflict.remote.changedAt)}. Drops this device’s changes to it.`,
+                          ],
+                    ] satisfies [ConflictChoice, string, string][]
+                  ).map(([value, label, detail]) => (
+                    <label key={value} className="flex min-h-11 items-start gap-3 py-1 text-sm">
                       <input
                         type="radio"
                         name={`conflict-${conflict.id}`}
                         checked={choices.get(conflict.id) === value}
                         onChange={() => choose(conflict.id, value)}
-                        className="size-4 accent-(--omni-accent)"
+                        className="mt-0.5 size-4 shrink-0 accent-(--omni-accent)"
                       />
-                      {label}
+                      <span className="flex flex-col">
+                        {label}
+                        <span className="text-xs text-text-muted">{detail}</span>
+                      </span>
                     </label>
                   ))}
                 </fieldset>
@@ -417,7 +446,7 @@ export default function AccountSection({
                 <CloudUpload size={16} aria-hidden />
                 Apply choices
               </button>
-            </div>
+            </section>
           )}
         </>
       )}

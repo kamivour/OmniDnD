@@ -45,8 +45,8 @@ const inspiration = (page: Page) =>
   section(page, 'Identity').getByRole('checkbox', { name: 'Inspiration', exact: true });
 
 async function saved(page: Page) {
-  await expect(page.getByRole('status', { name: 'Local save status', exact: true })).toContainText(
-    'Saved locally',
+  await expect(page.getByRole('status', { name: 'Save status', exact: true })).toContainText(
+    'Saved on this device',
   );
 }
 

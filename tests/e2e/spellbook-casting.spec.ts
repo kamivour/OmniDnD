@@ -29,8 +29,8 @@ const healingRoll = (detail: Locator) => detail.getByLabel('Healing dice total',
 
 async function expectSaved(page: Page) {
   await expect(
-    page.getByRole('status', { name: 'Local save status', exact: true, includeHidden: true }),
-  ).toContainText('Saved locally');
+    page.getByRole('status', { name: 'Save status', exact: true, includeHidden: true }),
+  ).toContainText('Saved on this device');
 }
 
 async function expectNoOverflow(page: Page) {

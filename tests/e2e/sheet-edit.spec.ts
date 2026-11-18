@@ -54,8 +54,8 @@ const undo = (page: Page) =>
 
 async function saved(page: Page) {
   // Sheets hide the background toolbar from the accessibility tree.
-  await expect(page.locator('[role="status"][aria-label="Local save status"]')).toContainText(
-    'Saved locally',
+  await expect(page.locator('[role="status"][aria-label="Save status"]')).toContainText(
+    'Saved on this device',
   );
 }
 

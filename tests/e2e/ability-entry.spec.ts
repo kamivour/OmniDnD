@@ -56,8 +56,8 @@ const undo = (page: Page) =>
     .getByRole('button', { name: 'Undo last command', exact: true });
 
 async function saved(page: Page) {
-  await expect(page.locator('[role="status"][aria-label="Local save status"]')).toContainText(
-    'Saved locally',
+  await expect(page.locator('[role="status"][aria-label="Save status"]')).toContainText(
+    'Saved on this device',
   );
 }
 

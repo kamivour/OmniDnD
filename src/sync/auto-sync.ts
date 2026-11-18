@@ -11,6 +11,8 @@ export interface AutoSyncState {
   lastSyncedAt: number | null;
   lastReport: SyncReport | null;
   error: string;
+  /** Local changes wait to upload. */
+  waiting: boolean;
 }
 
 export interface AutoSyncDeps {
@@ -37,6 +39,7 @@ const EMPTY: AutoSyncState = {
   lastSyncedAt: null,
   lastReport: null,
   error: '',
+  waiting: false,
 };
 
 /**
@@ -87,6 +90,7 @@ export class AutoSync {
     if (!this.provider || this.running || this.state.status === 'needs-choice') return;
     const now = this.deps.now();
     this.pendingSince ??= now;
+    if (!this.state.waiting) this.set({ ...this.state, waiting: true });
     this.schedule(Math.min(CHANGE_DELAY_MS, Math.max(0, this.pendingSince + CHANGE_CAP_MS - now)));
   }
 
@@ -149,7 +153,7 @@ export class AutoSync {
       if (this.provider !== provider) return;
       if (report === undefined) {
         // Another tab is syncing and shares this device's data.
-        this.set({ ...this.state, status: 'idle' });
+        this.set({ ...this.state, status: 'idle', waiting: false });
         return;
       }
       this.retryIndex = 0;
@@ -159,6 +163,7 @@ export class AutoSync {
         lastSyncedAt: this.deps.now(),
         lastReport: report,
         error: '',
+        waiting: false,
       });
       if (report.deferred || this.again) this.schedule(1_000);
     } catch (cause) {

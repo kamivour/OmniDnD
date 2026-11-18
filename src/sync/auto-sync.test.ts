@@ -85,6 +85,20 @@ describe('AutoSync', () => {
     expect(t.sync.getState().lastSyncedAt).toBe(0);
   });
 
+  it('marks local changes as waiting until a sync succeeds', async () => {
+    const t = setup([new Error('boom')]);
+    t.sync.attach(provider);
+    await t.advance(0);
+    t.sync.changed();
+    expect(t.sync.getState().waiting).toBe(true);
+    await t.advance(RETRY_MS[0]!);
+    expect(t.sync.getState()).toMatchObject({ status: 'idle', waiting: false });
+    t.sync.changed();
+    expect(t.sync.getState().waiting).toBe(true);
+    t.sync.detach();
+    expect(t.sync.getState().waiting).toBe(false);
+  });
+
   it('waits for a quiet spell after changes, but never past the cap', async () => {
     const t = setup();
     t.sync.attach(provider);

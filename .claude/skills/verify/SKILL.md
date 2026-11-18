@@ -20,7 +20,7 @@ Drive it with a plain Playwright script (`require('<repo>/node_modules/@playwrig
 - A tour covers each screen on its first visit (Home, Combat, ...). Click **Skip tutorial** every time it shows, or clicks time out.
 - New character opens a **Who plays this character?** dialog (pick **Me**) and starts in **Step by step**. Click **One page** to fill the whole form at once.
 - Windows sometimes blocks Chromium loopback: blank page, `ERR_NETWORK_ACCESS_DENIED`, HMR WebSocket errors. Retry `goto` and reload while the body text is empty. This is the machine, not the app.
-- Wait for the "Saved locally" status after each command before reading the page.
+- Wait for the "Saved on this device" status after each command before reading the page.
 - Each browser context has its own storage, so characters made in one script run are gone in the next.
 
 ## Flows worth driving

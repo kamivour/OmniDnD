@@ -33,8 +33,8 @@ const effectRow = (page: Page, name: string) =>
   effects(page).getByRole('listitem').filter({ hasText: name });
 
 async function saved(page: Page) {
-  await expect(page.getByRole('status', { name: 'Local save status', exact: true })).toContainText(
-    'Saved locally',
+  await expect(page.getByRole('status', { name: 'Save status', exact: true })).toContainText(
+    'Saved on this device',
   );
 }
 

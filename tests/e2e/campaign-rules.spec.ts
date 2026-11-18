@@ -3,8 +3,8 @@ import { expect, test, type Page } from './fixtures';
 const campaign = (page: Page, name: string) => page.getByRole('article', { name, exact: true });
 
 async function expectSaved(page: Page) {
-  await expect(page.getByRole('status', { name: 'Local save status', exact: true })).toContainText(
-    'Saved locally',
+  await expect(page.getByRole('status', { name: 'Save status', exact: true })).toContainText(
+    'Saved on this device',
   );
 }
 

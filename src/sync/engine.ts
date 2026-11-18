@@ -29,6 +29,8 @@ export interface SyncConflict {
   entityId: string;
   /** Name on this device, falling back to the cloud's, for the conflict prompt. */
   name: string;
+  /** When this device last changed it, if known. */
+  localChangedAt?: string;
   remote: RemoteEntity;
 }
 
@@ -150,6 +152,7 @@ export async function syncWorkspace(
       kind: theirs.kind,
       entityId: theirs.entityId,
       name: nameOf(contents.get(id)?.content) ?? nameOf(theirs.payload) ?? theirs.entityId,
+      ...(byId.get(id)?.changedAt ? { localChangedAt: byId.get(id)?.changedAt } : {}),
       remote: theirs,
     });
     return null;

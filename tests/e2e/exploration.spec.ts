@@ -60,8 +60,8 @@ const spellRow = (page: Page, name: string) =>
     .filter({ has: page.getByRole('button', { name: new RegExp(`^${name}\\b`) }) });
 
 async function saved(page: Page) {
-  await expect(page.locator('[role="status"][aria-label="Local save status"]')).toContainText(
-    'Saved locally',
+  await expect(page.locator('[role="status"][aria-label="Save status"]')).toContainText(
+    'Saved on this device',
   );
 }
 

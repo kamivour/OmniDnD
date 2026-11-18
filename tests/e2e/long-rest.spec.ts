@@ -28,8 +28,8 @@ const review = (page: Page) =>
 const manage = (page: Page) => page.getByRole('dialog', { name: 'Manage spells', exact: true });
 
 async function saved(page: Page) {
-  await expect(page.locator('[role="status"][aria-label="Local save status"]')).toContainText(
-    'Saved locally',
+  await expect(page.locator('[role="status"][aria-label="Save status"]')).toContainText(
+    'Saved on this device',
   );
 }
 

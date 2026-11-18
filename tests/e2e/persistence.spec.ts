@@ -31,8 +31,8 @@ const hud = (page: Page) => page.getByRole('banner', { name: 'Character HUD', ex
 const hp = (page: Page) => hud(page).getByRole('button', { name: 'Adjust hit points' });
 
 async function expectSaved(page: Page) {
-  await expect(page.getByRole('status', { name: 'Local save status', exact: true })).toContainText(
-    'Saved locally',
+  await expect(page.getByRole('status', { name: 'Save status', exact: true })).toContainText(
+    'Saved on this device',
   );
 }
 
@@ -221,9 +221,9 @@ test('queued writes publish only the latest feedback and Undo reverses that comm
     await expect(
       hud(page).getByRole('img', { name: 'L1: 2 of 4 left', exact: true }),
     ).toBeVisible();
-    await expect(
-      page.getByRole('status', { name: 'Local save status', exact: true }),
-    ).toContainText('Saving');
+    await expect(page.getByRole('status', { name: 'Save status', exact: true })).toContainText(
+      'Saving',
+    );
     await expect(page.getByRole('status', { name: 'Command feedback', exact: true })).toBeEmpty();
   } finally {
     await page.evaluate(async () => {
@@ -286,9 +286,9 @@ test('a stale second window cannot overwrite newer saved commands', async ({ pag
       .getByRole('button', { name: 'Restore one: Level 1 spell slots' })
       .click();
     await second.keyboard.press('Escape');
-    await expect(
-      second.getByRole('status', { name: 'Local save status', exact: true }),
-    ).toContainText('Save conflict');
+    await expect(second.getByRole('status', { name: 'Save status', exact: true })).toContainText(
+      'Save conflict',
+    );
     await expect(second.getByRole('button', { name: 'Retry save', exact: true })).toHaveCount(0);
     await hud(second).getByRole('button', { name: 'Adjust spell slots' }).click();
     await second
@@ -333,9 +333,7 @@ test('failed writes roll back atomically and Retry saves retained changes', asyn
   const dialog = page.getByRole('dialog', { name: 'Hit points', exact: true });
   await dialog.getByRole('button', { name: '5', exact: true }).click();
   await dialog.getByRole('button', { name: 'Apply', exact: true }).click();
-  await expect(page.getByRole('status', { name: 'Local save status' })).toContainText(
-    'Save failed',
-  );
+  await expect(page.getByRole('status', { name: 'Save status' })).toContainText('Save failed');
   await expect(hp(page)).toHaveText(/6\s*\/\s*19/);
   expect(await readDatabase(page)).toEqual(before);
   await page.getByRole('button', { name: 'Retry save', exact: true }).click();

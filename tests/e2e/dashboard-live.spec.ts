@@ -42,8 +42,8 @@ const quickTrigger = (page: Page, name: string) =>
   quick(page).getByRole('button', { name, exact: true });
 
 async function saved(page: Page) {
-  await expect(page.getByRole('status', { name: 'Local save status', exact: true })).toContainText(
-    'Saved locally',
+  await expect(page.getByRole('status', { name: 'Save status', exact: true })).toContainText(
+    'Saved on this device',
   );
 }
 

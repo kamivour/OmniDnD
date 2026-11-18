@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 01:31 — One clear save and sync status
+
+- The bar now shows one status instead of "Saved locally" plus a sync chip: "Synced", "Saved on this device, syncing soon", "Sync paused: choose versions", or "Not signed in: only on this device" with a Sign in link.
+- When sync pauses, Choose opens Settings at a highlighted Sync choices box that says why, shows when each copy changed, and what each option keeps.
+- Without an account the status reads "Saved on this device", so a phone never looks synced when it is not.
+- Checks pass.
+
 ## 2026-11-19 01:11 — Sample character no longer clashes across devices
 
 - "Try the sample character" on the Campaigns screen now makes a new campaign and character each time, so two devices or two friends on the same account no longer fight over one copy in sync.

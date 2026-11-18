@@ -17,7 +17,7 @@ export function reviewFile(id: string) {
 }
 
 export async function saved(page: Page) {
-  await expect(page.locator('[aria-label="Local save status"]')).toContainText('Saved locally');
+  await expect(page.locator('[aria-label="Save status"]')).toContainText('Saved on this device');
 }
 
 export async function importReview(
