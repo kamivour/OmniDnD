@@ -18,6 +18,7 @@ async function backend(
   startName: string | null = 'Me Player',
 ) {
   let myName = startName;
+  let myAvatar: string | null = null;
   let joined = host;
   let myRole = host ? 'dm' : 'player';
   // Without a host, the friend holds the seat unless the test leaves it empty.
@@ -129,10 +130,13 @@ async function backend(
         const row = (Array.isArray(body) ? body[0] : body) as { display_name?: string } | null;
         myName = row?.display_name ?? myName;
       }
+      const patch = body as { avatar?: string | null } | null;
+      if (request.method() === 'PATCH' && patch && 'avatar' in patch)
+        myAvatar = patch.avatar ?? null;
       const only = new URL(request.url()).searchParams.get('user_id')?.replace('eq.', '');
       data = [
-        ...(myName ? [{ user_id: me, display_name: myName }] : []),
-        { user_id: friend, display_name: 'Friend' },
+        ...(myName ? [{ user_id: me, display_name: myName, avatar: myAvatar }] : []),
+        { user_id: friend, display_name: 'Friend', avatar: null },
       ].filter((row) => !only || row.user_id === only);
     } else if (path.endsWith('/party_entities'))
       data =
@@ -334,5 +338,27 @@ test('an account without a display name must choose a free one', async ({ page }
   await prompt.getByRole('button', { name: 'Save name', exact: true }).click();
   await expect(prompt).toHaveCount(0);
   await page.goto('/settings');
+  await page.getByRole('link', { name: 'Open Profile' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Profile' })).toBeVisible();
   await expect(page.getByLabel('Display name', { exact: true })).toHaveValue('Wanderer');
+  const topBar = page.getByRole('navigation', { name: 'Main' }).getByRole('link', {
+    name: 'Profile',
+  });
+  await expect(topBar.locator('[data-avatar="mask"]')).toBeVisible();
+  // A tiny PNG; the app crops and re-encodes it as a JPEG before saving.
+  await page.getByLabel('Profile picture file').setInputFiles({
+    name: 'me.png',
+    mimeType: 'image/png',
+    buffer: Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFklEQVR4nGP8z8DAwMDAxMDAwMDAAAANHQEDasKb6QAAAABJRU5ErkJggg==',
+      'base64',
+    ),
+  });
+  await expect(page.getByRole('status').filter({ hasText: 'Picture saved.' })).toBeVisible();
+  await expect(topBar.locator('img')).toHaveAttribute('src', /^data:image\/jpeg;base64,/);
+  await expect(page.getByRole('img', { name: 'Your profile picture' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: test.info().outputPath('profile.png'), fullPage: true });
+  await page.getByRole('button', { name: 'Remove' }).click();
+  await expect(topBar.locator('[data-avatar="mask"]')).toBeVisible();
 });

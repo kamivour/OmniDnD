@@ -35,11 +35,11 @@ export interface SaveStatusLineProps {
   /** Character bar: icon only on phones unless the status needs attention. */
   compact?: boolean;
   /** Settings route that holds the account section, for the status link. */
-  settingsPath: string;
+  accountPath: string;
 }
 
 /** The visible save and sync status. Guest and account builds share it. */
-export function SaveStatusLine({ view, compact = false, settingsPath }: SaveStatusLineProps) {
+export function SaveStatusLine({ view, compact = false, accountPath }: SaveStatusLineProps) {
   const Glyph = GLYPH[view.icon];
   const tone = TONE[view.tone];
   const { action } = view;
@@ -73,7 +73,7 @@ export function SaveStatusLine({ view, compact = false, settingsPath }: SaveStat
       </span>
       {action && (
         <Link
-          to={settingsPath}
+          to={accountPath}
           onClick={() => scrollToAnchor(action.anchor)}
           className="flex min-h-11 items-center px-1 text-accent underline-offset-2 hover:underline"
         >

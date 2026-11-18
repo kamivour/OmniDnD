@@ -50,6 +50,10 @@ export interface SyncProvider extends PartyProvider {
   setDisplayName(name: string): Promise<void>;
   /** Whether another account already uses this name; null when the server cannot tell yet. */
   displayNameAvailable(name: string): Promise<boolean | null>;
+  /** The signed-in account's picture (a small JPEG data URL), or null for the default mask. */
+  getAvatar(): Promise<string | null>;
+  /** Save a picture, or clear it with null. Needs a display name first. */
+  setAvatar(avatar: string | null): Promise<void>;
   /** Email a reset link that opens `redirectTo`. Never reveals whether the email has an account. */
   requestPasswordReset(email: string, redirectTo: string): Promise<void>;
   /** Set a new password for the signed-in account (also used after a reset link). */
@@ -81,6 +85,8 @@ export interface RemoteMember {
   role: 'dm' | 'player';
   /** Display name; empty when the member has not chosen one. */
   name: string;
+  /** Small JPEG data URL; missing when the member has no picture. */
+  avatar?: string;
 }
 
 /** One character in a shared campaign (`party_entities`). */

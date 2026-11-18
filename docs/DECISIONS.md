@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D236 | 2026-11-19 | Profile pictures live in the profile row as a 256 px JPEG of about 100 KB at most, not in file storage. Party members see them; the default is a plain mask. | Members already read profiles, so no new access rules or storage bucket are needed. |
 | D235 | 2026-11-19 | Display names are 3 to 24 characters and unique ignoring case. The migration stops while two accounts share a name instead of renaming anyone; accounts with no name or an old out-of-range name must pick one before using the app. | Party lists must tell players apart, and silently renaming someone would confuse their party. |
 | D234 | 2026-11-19 | Any member can take an empty DM seat, and the DM can step down. When someone holds the seat, joining as DM is locked; only the owner or the current DM can hand the seat to someone else. | Groups often pick the DM after making the campaign; locking prevents two DMs and quiet takeovers. |
 | D233 | 2026-11-19 | Characters left unticked when sharing move to a new private campaign named "<name> (private)" with the same books and rules. A join request by campaign ID carries no character; the player picks Copy, Move or New after approval. | Keeps unshared characters playable without exposing them, and stops a request from committing a character early |
@@ -290,7 +291,6 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q47 | Should Homunculus Servant and Replicate Magic Item get dedicated creation and replica-choice tracking? | After M41 | Use existing Companions and Inventory workflows; these two applications and their share of the infusion limit remain manual, stated beside the counter | User |
 | Q48 | How should Armorer's armor components be represented for its two extra armor-only infusions? | After M41 | Standard active limit only, with a visible reminder; do not grant two unrestricted slots or invent separate equipment | User |
 | Q49 | Should the already-bundled Summon Draconic Spirit move from the Tasha filter to a separate Fizban's book option? | Next source review | Preserve existing spell visibility; identify Fizban's 2014 source on its companion card | User |
-| Q51 | Store avatars in the profile row or in Supabase Storage? | M43 T9 | Profile row as a 256 px JPEG up to about 100 KB; members already read profiles, so no new access rules | Agent |
 
 ## How to add an entry
 

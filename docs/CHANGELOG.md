@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 02:46 — Profile screen and pictures
+
+- A round picture button in the top bar opens your new Profile: picture, display name, password, sync and sign-out now live there. Settings links to it.
+- Choose a picture or take a photo; the app crops it to a small square. Without one you get a plain mask.
+- Party member lists and the DM seat show each player's picture.
+- Run `20261119140000_profile_avatars.sql` in the Supabase SQL Editor before saving pictures. Checks pass.
+
 ## 2026-11-19 02:27 — Unique display names
 
 - Creating an account now asks for a display name. It says "Available" or "That name is taken" while you type; names are 3 to 24 characters.

@@ -6,6 +6,7 @@ import { SectionLabel } from '../components/SectionLabel';
 import { Sheet } from '../components/Sheet';
 import { useCharacter } from '../hooks/useCharacter';
 import { FindLauncher } from '../find/FindLauncher';
+import { ProfileButton } from '../profile/ProfileButton';
 import { useCharacterBase } from '../hooks/useCharacterBase';
 import { useDetail } from '../layout/detail-context';
 import { useRest } from '../rest/rest-context';
@@ -67,7 +68,7 @@ export function CharacterToolbar() {
       data-tour="history"
       className="flex min-w-0 flex-wrap items-center gap-1 border-b border-border bg-bg px-3 sm:gap-2 sm:px-4"
     >
-      <StorageStatus compact settingsPath={`${base}/settings`} />
+      <StorageStatus compact accountPath={`${base}/profile`} />
       <button
         ref={opener}
         type="button"
@@ -103,6 +104,7 @@ export function CharacterToolbar() {
       </button>
       {undoButton()}
       <FindLauncher withCharacter />
+      <ProfileButton to={`${base}/profile`} />
       <button
         id="detail-toggle"
         type="button"

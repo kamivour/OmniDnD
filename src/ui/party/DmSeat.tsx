@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Crown } from 'lucide-react';
 import { dmLabel, membersOf, usePartyState } from '../../state/party-store';
 import { autoSync, useAccountSession } from '../../sync/service';
+import { Avatar } from '../components/Avatar';
 
 const button =
   'inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-border px-3 text-sm hover:bg-surface-2 disabled:opacity-40';
@@ -20,7 +21,8 @@ export function DmSeat({ campaignId }: { campaignId: string }) {
   if (!label) return null;
   const here = membersOf(members, campaignId);
   const me = here.find((member) => member.userId === account?.id);
-  const empty = !here.some((member) => member.role === 'dm');
+  const dm = here.find((member) => member.role === 'dm');
+  const empty = !dm;
   const act = async (work: () => Promise<void>) => {
     setBusy(true);
     setError('');
@@ -43,6 +45,7 @@ export function DmSeat({ campaignId }: { campaignId: string }) {
     >
       <span className="inline-flex items-center gap-1 wrap-anywhere">
         <Crown size={16} aria-hidden className="text-accent" />
+        {dm && <Avatar avatar={dm.avatar} size={24} />}
         {label}
         {me?.role === 'dm' ? ' (you)' : ''}
       </span>

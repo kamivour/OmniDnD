@@ -13,5 +13,6 @@ test('guest build shows no account section and loads no sync library', async ({ 
   await page.goto('/characters/the-fool/settings');
   await expect(page.getByRole('heading', { name: 'Character files' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Account' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Profile' })).toHaveCount(0);
   expect(scripts.filter((url) => /supabase|runner-/i.test(url))).toEqual([]);
 });

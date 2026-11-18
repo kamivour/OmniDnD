@@ -12,6 +12,7 @@ import { autoSync, useAccountSession } from '../../sync/service';
 import { keepOutOfSharing } from '../../engine/commands/party';
 import { useManagement } from '../commands/useManagement';
 import { DmSeat } from './DmSeat';
+import { Avatar } from '../components/Avatar';
 
 const button =
   'inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-border px-3 text-sm hover:bg-surface-2 disabled:opacity-40';
@@ -213,9 +214,12 @@ export function PartySection({ campaign }: { campaign: Campaign }) {
                   key={member.userId}
                   className="flex flex-wrap items-center gap-2 rounded-btn border border-border bg-bg p-2"
                 >
-                  <span className="min-w-0 basis-full wrap-anywhere sm:flex-1 sm:basis-0">
-                    {label}
-                    {self ? ' (you)' : ''}
+                  <span className="flex min-w-0 basis-full items-center gap-2 sm:flex-1 sm:basis-0">
+                    <Avatar avatar={member.avatar} size={28} />
+                    <span className="min-w-0 wrap-anywhere">
+                      {label}
+                      {self ? ' (you)' : ''}
+                    </span>
                   </span>
                   <span className="rounded-btn bg-surface-2 px-2 py-0.5 text-xs text-text-muted">
                     {member.role === 'dm' ? 'DM' : 'Player'}

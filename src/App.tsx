@@ -60,6 +60,7 @@ const ResetPasswordScreen = screen(
   'ResetPasswordScreen',
 );
 const SettingsScreen = screen(() => import('./ui/screens/SettingsScreen'), 'SettingsScreen');
+const ProfileScreen = screen(() => import('./ui/screens/ProfileScreen'), 'ProfileScreen');
 
 const SyncHost = syncConfig ? lazy(() => import('./ui/settings/SyncHost')) : null;
 
@@ -101,6 +102,7 @@ export function App() {
               <Route path="campaigns/:campaignId/characters/new" element={<NewCharacterScreen />} />
               <Route path="reference" element={<ReferenceScreen />} />
               <Route path="settings" element={<SettingsScreen />} />
+              <Route path="profile" element={<ProfileScreen />} />
               <Route path="reset-password" element={<ResetPasswordScreen />} />
               <Route path="join/:code" element={<JoinScreen />} />
               <Route path="join" element={<JoinScreen />} />
@@ -129,6 +131,7 @@ export function App() {
               <Route path="companions" element={<CompanionsScreen />} />
               <Route path="reference" element={<ReferenceScreen />} />
               <Route path="settings" element={<SettingsScreen />} />
+              <Route path="profile" element={<ProfileScreen />} />
               {NAV.filter((n) => !BUILT.has(n.to)).map((n) => (
                 <Route
                   key={n.to}

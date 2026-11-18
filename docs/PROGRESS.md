@@ -346,7 +346,7 @@ Follow [PLAN.md](PLAN.md#m43--friend-testing-fixes-accounts-profiles-and-joining
 - [x] T6: Add Copy and Move to campaign from Party and campaign cards
 - [x] T7: Show the DM seat, choose DM or Player when joining, and lock a taken seat
 - [x] T8: Require a unique display name at signup and prompt existing accounts
-- [ ] T9: Add the Profile button and screen with uploadable avatar and default mask
+- [x] T9: Add the Profile button and screen with uploadable avatar and default mask
 - [ ] T10: Verify all flows at both widths and with two live test accounts
 
 ### M44 — Phone navigation and screen cleanup (planned)
@@ -415,6 +415,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-19 — M43 T9: New Profile screen and top-bar button with avatar. Upload or take a photo, cropped to 256 px; default mask. Party lists show pictures. New migration.
 - 2026-11-19 — M43 T8: Signup asks for a display name with a live check; names are 3–24 characters and unique ignoring case. Accounts without a valid name get a required prompt. New migration.
 - 2026-11-19 — M43 T7: Join as Player or DM; a taken seat locks DM. Party and campaign cards show who is DM, with Take DM seat and Step down. New migration.
 - 2026-11-19 — M43 T6: Copy and Move to any campaign from Campaigns cards; Party screen gains Add my character. Warns about books the destination lacks; moving out removes the party copy.

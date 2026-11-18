@@ -1,7 +1,7 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { useStore } from 'zustand';
-import { Download, Undo2, Upload } from 'lucide-react';
+import { Download, Undo2, Upload, UserRound } from 'lucide-react';
 import { updatePreferences } from '../../engine/commands/preferences';
 import type { Preferences } from '../../engine/schema';
 import { characterStore } from '../../state/character-store';
@@ -15,11 +15,6 @@ import { BackupsSection } from '../settings/BackupsSection';
 import { ResetCharacterControl } from '../settings/ResetCharacterControl';
 import { ThemePicker } from '../settings/ThemePicker';
 import { cx } from '../cx';
-
-// Replaced at build time: guest builds (no provider configured) drop the account code entirely.
-const AccountSection = import.meta.env.VITE_SUPABASE_URL
-  ? lazy(() => import('../settings/AccountSection'))
-  : null;
 
 const button =
   'inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-border px-3 text-sm hover:bg-surface-2 disabled:opacity-40';
@@ -215,10 +210,25 @@ export function SettingsScreen() {
       </section>
       <TutorialSection />
       <BackupsSection />
-      {AccountSection && syncConfig && (
-        <Suspense fallback={null}>
-          <AccountSection config={syncConfig} />
-        </Suspense>
+      {syncConfig && (
+        <section
+          aria-labelledby="settings-profile"
+          className="flex flex-col gap-2 rounded-card border border-border bg-surface p-4"
+        >
+          <h2 id="settings-profile" className="text-base font-semibold">
+            Account
+          </h2>
+          <p className="text-sm text-text-muted">
+            Sign-in, sync, display name and picture live on your Profile.
+          </p>
+          <Link
+            to={characterId ? `/characters/${encodeURIComponent(characterId)}/profile` : '/profile'}
+            className={`${button} self-start`}
+          >
+            <UserRound size={16} aria-hidden />
+            Open Profile
+          </Link>
+        </section>
       )}
       <section
         aria-labelledby="settings-transfer"

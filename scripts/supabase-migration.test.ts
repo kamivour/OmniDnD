@@ -242,3 +242,35 @@ it('stops the name migration while two accounts share a name, renaming nobody', 
     await fresh.close();
   }
 }, 30_000);
+
+it('keeps a small JPEG avatar that party members can see and nobody else can change', async () => {
+  const picture = `data:image/jpeg;base64,${'A'.repeat(200)}`;
+  await asUser(owner);
+  await db.query('update public.profiles set avatar = $1 where user_id = $2', [picture, owner]);
+  await expect(
+    db.query(
+      "update public.profiles set avatar = 'https://example.test/me.png' where user_id = $1",
+      [owner],
+    ),
+  ).rejects.toThrow('profiles_avatar_shape');
+  await expect(
+    db.query('update public.profiles set avatar = $1 where user_id = $2', [
+      `data:image/jpeg;base64,${'A'.repeat(140_000)}`,
+      owner,
+    ]),
+  ).rejects.toThrow('profiles_avatar_shape');
+
+  // A party member reads it but cannot overwrite it; an outsider sees nothing.
+  await asUser(player);
+  const seen = await db.query('select avatar from public.profiles where user_id = $1', [owner]);
+  expect(seen.rows).toEqual([{ avatar: picture }]);
+  const changed = await db.query(
+    'update public.profiles set avatar = null where user_id = $1 returning user_id',
+    [owner],
+  );
+  expect(changed.rows).toEqual([]);
+  await asUser(declined);
+  expect(
+    (await db.query('select avatar from public.profiles where user_id = $1', [owner])).rows,
+  ).toEqual([]);
+});

@@ -1,3 +1,4 @@
+import { avatarProblem } from './avatar';
 import { cleanName, NAME_TAKEN, nameKey, nameProblem } from './display-name';
 import type {
   Account,
@@ -25,6 +26,8 @@ export class MemoryCloud {
   readonly rows = new Map<string, RemoteEntity>();
   /** Display names by account id. */
   readonly names = new Map<string, string>();
+  /** Profile pictures by account id. */
+  readonly avatars = new Map<string, string>();
   /** Emails that asked for a password reset link. */
   readonly resetRequests: string[] = [];
 
@@ -114,10 +117,25 @@ export class MemoryProvider implements SyncProvider {
     return Promise.resolve();
   }
 
+  getAvatar() {
+    return Promise.resolve(this.cloud.avatars.get(this.require().id) ?? null);
+  }
+
+  setAvatar(avatar: string | null) {
+    const id = this.require().id;
+    const problem =
+      avatarProblem(avatar) ?? (this.cloud.names.has(id) ? null : 'Choose a display name first.');
+    if (problem) return Promise.reject(new Error(problem));
+    if (avatar) this.cloud.avatars.set(id, avatar);
+    else this.cloud.avatars.delete(id);
+    return Promise.resolve();
+  }
+
   deleteAccount() {
     const account = this.require();
     this.cloud.accounts.delete(account.email);
     this.cloud.names.delete(account.id);
+    this.cloud.avatars.delete(account.id);
     for (const key of [...this.cloud.rows.keys()])
       if (key.startsWith(`${account.id}|`)) this.cloud.rows.delete(key);
     this.account = null;
@@ -381,7 +399,10 @@ export class MemoryProvider implements SyncProvider {
     );
     const members: RemoteMember[] = this.cloud.members
       .filter((m) => mine.has(m.campaignId))
-      .map((m) => ({ ...m, name: this.cloud.names.get(m.userId) ?? '' }));
+      .map((m) => {
+        const avatar = this.cloud.avatars.get(m.userId);
+        return { ...m, name: this.cloud.names.get(m.userId) ?? '', ...(avatar ? { avatar } : {}) };
+      });
     return Promise.resolve(
       structuredClone({
         campaigns: [...this.cloud.shared.values()].filter((c) => mine.has(c.id)),

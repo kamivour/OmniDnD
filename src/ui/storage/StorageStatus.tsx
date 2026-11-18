@@ -13,10 +13,10 @@ const SyncSaveStatus = syncConfig ? lazy(() => import('./SyncSaveStatus')) : nul
  */
 export function StorageStatus({
   compact = false,
-  settingsPath = '/settings',
+  accountPath = '/profile',
 }: {
   compact?: boolean;
-  settingsPath?: string;
+  accountPath?: string;
 }) {
   const { pending, error, conflict } = useStore(storageStatusStore);
   if (conflict || error) {
@@ -48,14 +48,14 @@ export function StorageStatus({
   const guest = (
     <SaveStatusLine
       compact={compact}
-      settingsPath={settingsPath}
+      accountPath={accountPath}
       view={saveStatusView({ saving, account: 'none', sync: 'signed-out', waiting: false })}
     />
   );
   if (!SyncSaveStatus) return guest;
   return (
     <Suspense fallback={guest}>
-      <SyncSaveStatus saving={saving} compact={compact} settingsPath={settingsPath} />
+      <SyncSaveStatus saving={saving} compact={compact} accountPath={accountPath} />
     </Suspense>
   );
 }

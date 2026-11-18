@@ -18,6 +18,7 @@ const StateSchema = z.object({
       userId: z.string(),
       role: z.enum(['dm', 'player']),
       name: z.string(),
+      avatar: z.string().optional(),
     }),
   ),
 });

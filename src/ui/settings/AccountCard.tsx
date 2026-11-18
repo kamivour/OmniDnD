@@ -8,7 +8,7 @@ import AccountSection from './AccountSection';
 
 /**
  * Sign-in card for the Campaigns page. Shows only while signed out and not dismissed;
- * the full account controls stay in Settings.
+ * the full account controls live on the Profile screen.
  */
 export default function AccountCard({ config }: { config: SyncConfig }) {
   const { status } = useAccountSession();
@@ -32,7 +32,7 @@ export default function AccountCard({ config }: { config: SyncConfig }) {
       </button>
       <AccountSection config={config} embedded />
       <p className="mt-2 text-xs text-text-muted">
-        Hide this card any time. You can still sign in from Settings.
+        Hide this card any time. You can still sign in from Profile.
       </p>
     </div>
   );

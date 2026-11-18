@@ -84,6 +84,13 @@ describe('Supabase schema', () => {
     expect(sql).toContain('after insert on auth.users');
   });
 
+  it('keeps profile pictures to small JPEG data URLs', () => {
+    expect(sql).toContain('add column if not exists avatar text');
+    expect(sql).toContain(
+      "avatar like 'data:image/jpeg;base64,%' and char_length(avatar) <= 140000",
+    );
+  });
+
   it('assigns revisions on the server', () => {
     expect(sql).toContain('new.revision := old.revision + 1');
     expect(sql).toContain('before insert or update on public.sync_entities');

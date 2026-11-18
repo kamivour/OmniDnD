@@ -5,6 +5,7 @@ import { cx } from '../cx';
 import { ThemeTitle } from '../theme/ThemeTitle';
 import { FindLauncher } from '../find/FindLauncher';
 import { StorageStatus } from '../storage/StorageStatus';
+import { ProfileButton } from '../profile/ProfileButton';
 
 const LINKS = [
   { to: '/reference', label: 'Reference', icon: Library },
@@ -40,6 +41,7 @@ export function HubFrame() {
                 <span className="sr-only sm:not-sr-only">{label}</span>
               </NavLink>
             ))}
+            <ProfileButton to="/profile" />
           </nav>
         </div>
       </header>

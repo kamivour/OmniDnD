@@ -1,6 +1,7 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { SyncKindSchema } from '../db/sync-metadata';
 import { authErrorText } from './auth-errors';
+import { avatarProblem, isAvatar } from './avatar';
 import { cleanName, NAME_TAKEN, nameProblem } from './display-name';
 import type { SyncConfig } from './config';
 import type {
@@ -131,6 +132,39 @@ export class SupabaseProvider implements SyncProvider {
     });
     if (error) return null;
     return data === true;
+  }
+
+  async getAvatar() {
+    const account = await this.currentAccount();
+    if (!account) return null;
+    const { data, error } = await this.client
+      .from('profiles')
+      .select('avatar')
+      .eq('user_id', account.id)
+      .returns<{ avatar: string | null }[]>();
+    // A server without the avatar column shows the default mask.
+    if (error) return null;
+    const avatar = data[0]?.avatar;
+    return isAvatar(avatar) ? avatar : null;
+  }
+
+  async setAvatar(avatar: string | null) {
+    const problem = avatarProblem(avatar);
+    if (problem) throw new Error(problem);
+    const account = await this.currentAccount();
+    if (!account) throw new Error('Sign in first.');
+    const { data, error } = await this.client
+      .from('profiles')
+      .update({ avatar })
+      .eq('user_id', account.id)
+      .select('user_id');
+    if (error)
+      throw new Error(
+        error.code === '42703' || error.code === 'PGRST204'
+          ? 'The account server needs an update before it can keep pictures.'
+          : error.message,
+      );
+    if (!data?.length) throw new Error('Choose a display name first.');
   }
 
   async deleteAccount() {
@@ -319,6 +353,17 @@ export class SupabaseProvider implements SyncProvider {
     await this.call('set_dm', { p_campaign: campaignId, p_user: userId });
   }
 
+  /** Names and pictures of visible profiles; a server without the avatar column gives names only. */
+  private async memberProfiles() {
+    type Profile = { user_id: string; display_name: string; avatar?: string | null };
+    const full = await this.client
+      .from('profiles')
+      .select('user_id, display_name, avatar')
+      .returns<Profile[]>();
+    if (!full.error) return full;
+    return this.client.from('profiles').select('user_id, display_name').returns<Profile[]>();
+  }
+
   async pullParty(): Promise<PartySnapshot> {
     const [campaigns, members, entities, names] = await Promise.all([
       this.client
@@ -355,14 +400,12 @@ export class SupabaseProvider implements SyncProvider {
             payload: unknown;
           }[]
         >(),
-      this.client
-        .from('profiles')
-        .select('user_id, display_name')
-        .returns<{ user_id: string; display_name: string }[]>(),
+      this.memberProfiles(),
     ]);
     for (const result of [campaigns, members, entities, names])
       if (result.error) throw new Error(result.error.message);
     const nameOf = new Map((names.data ?? []).map((row) => [row.user_id, row.display_name]));
+    const avatarOf = new Map((names.data ?? []).map((row) => [row.user_id, row.avatar]));
     return {
       campaigns: (campaigns.data ?? []).map((row) => ({
         id: row.id,
@@ -372,12 +415,16 @@ export class SupabaseProvider implements SyncProvider {
         schemaVersion: row.schema_version,
         payload: row.payload,
       })),
-      members: (members.data ?? []).map((row) => ({
-        campaignId: row.campaign_id,
-        userId: row.user_id,
-        role: row.role,
-        name: nameOf.get(row.user_id) ?? '',
-      })),
+      members: (members.data ?? []).map((row) => {
+        const avatar = avatarOf.get(row.user_id);
+        return {
+          campaignId: row.campaign_id,
+          userId: row.user_id,
+          role: row.role,
+          name: nameOf.get(row.user_id) ?? '',
+          ...(isAvatar(avatar) ? { avatar } : {}),
+        };
+      }),
       entities: (entities.data ?? []).map((row) => ({
         campaignId: row.campaign_id,
         entityId: row.entity_id,

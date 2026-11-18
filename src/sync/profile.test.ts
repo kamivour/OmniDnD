@@ -86,3 +86,41 @@ describe('display name', () => {
     await expect(bo.setDisplayName('Ana')).rejects.toThrow('That name is taken');
   });
 });
+
+describe('profile picture', () => {
+  const picture = `data:image/jpeg;base64,${'A'.repeat(100)}`;
+
+  it('needs a name, accepts only small JPEG data URLs, and shows to party members', async () => {
+    const cloud = new MemoryCloud();
+    const ana = new MemoryProvider(cloud);
+    const bo = new MemoryProvider(cloud);
+    await ana.signUp('ana@example.com', 'password1');
+    await bo.signUp('bo@example.com', 'password1');
+    expect(await ana.getAvatar()).toBeNull();
+    await expect(ana.setAvatar(picture)).rejects.toThrow('display name first');
+    await ana.setDisplayName('Ana');
+    await expect(ana.setAvatar('https://example.test/me.png')).rejects.toThrow('JPEG');
+    await expect(ana.setAvatar(`data:image/jpeg;base64,${'A'.repeat(140_000)}`)).rejects.toThrow(
+      'too large',
+    );
+    await ana.setAvatar(picture);
+    expect(await ana.getAvatar()).toBe(picture);
+    expect(await bo.getAvatar()).toBeNull();
+
+    await ana.shareCampaign({
+      id: 'c1',
+      role: 'dm',
+      changedAt: '2026-01-01T00:00:00Z',
+      schemaVersion: 1,
+      payload: {},
+    });
+    await bo.setDisplayName('Bodo');
+    await bo.joinCampaign(await ana.createInvite('c1'));
+    const members = (await bo.pullParty()).members;
+    expect(members.find((member) => member.name === 'Ana')?.avatar).toBe(picture);
+    expect(members.find((member) => member.name === 'Bodo')).not.toHaveProperty('avatar');
+
+    await ana.setAvatar(null);
+    expect(await ana.getAvatar()).toBeNull();
+  });
+});

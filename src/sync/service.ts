@@ -42,6 +42,8 @@ export interface AccountSession {
   error: string;
   /** `undefined`: not loaded or unknown. `null`: signed in without a name. */
   displayName?: string | null | undefined;
+  /** Same states as `displayName`, for the profile picture. */
+  avatar?: string | null | undefined;
 }
 
 export const accountSession = createStore<AccountSession>(() => ({
@@ -63,20 +65,23 @@ export function setAccount(account: Account | null) {
   accountSession.setState({
     account,
     status: account ? 'signed-in' : 'signed-out',
-    ...(changed ? { displayName: undefined } : {}),
+    ...(changed ? { displayName: undefined, avatar: undefined } : {}),
   });
-  if (account && provider && changed) void refreshDisplayName();
+  if (account && provider && changed) void refreshProfile();
   if (account && provider) autoSync.attach(provider);
   else autoSync.detach();
 }
 
-/** Load the signed-in account's display name into the session. Errors leave it unknown. */
-export async function refreshDisplayName(): Promise<void> {
+/** Load the signed-in account's name and picture into the session. Errors leave them unknown. */
+export async function refreshProfile(): Promise<void> {
   const { provider, account } = accountSession.getState();
   if (!provider || !account) return;
-  const name = await provider.getDisplayName().catch(() => undefined);
+  const [name, avatar] = await Promise.all([
+    provider.getDisplayName().catch(() => undefined),
+    provider.getAvatar().catch(() => undefined),
+  ]);
   if (accountSession.getState().account?.id === account.id)
-    accountSession.setState({ displayName: name });
+    accountSession.setState({ displayName: name, avatar });
 }
 
 /** Save a display name; throws the server's reason (for example a taken name). */
@@ -85,6 +90,14 @@ export async function saveDisplayName(name: string): Promise<void> {
   if (!provider) throw new Error('Sign in first.');
   await provider.setDisplayName(name);
   accountSession.setState({ displayName: name.trim() });
+}
+
+/** Save or clear the profile picture; throws the server's reason. */
+export async function saveAvatar(avatar: string | null): Promise<void> {
+  const { provider } = accountSession.getState();
+  if (!provider) throw new Error('Sign in first.');
+  await provider.setAvatar(avatar);
+  accountSession.setState({ avatar });
 }
 
 let starting: Promise<void> | null = null;
