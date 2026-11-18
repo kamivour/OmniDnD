@@ -40,7 +40,7 @@ function roundTrip(file: ExportFile) {
 
 describe('character JSON files', () => {
   it('exports the joined current campaign, build, live state, and complete log as a detached file', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, heal, { amount: 3 }, metadata('heal'));
     const campaign = { ...seedFile.campaign, name: 'Current campaign title' };
     store.setState({ campaigns: { [campaign.id]: campaign } });
@@ -67,7 +67,7 @@ describe('character JSON files', () => {
   });
 
   it('reports an absent character without changing current data', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const before = sourceData(store.getState);
     expect(() => characterExport(store.getState(), 'missing', TIME)).toThrow('Character not found');
     expect(sourceData(store.getState)).toEqual(before);
@@ -75,7 +75,7 @@ describe('character JSON files', () => {
 
   it('preserves an unambiguous file and its usable history without requesting new IDs', () => {
     const raw = fileWithHistory('visiting-bard');
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const before = structuredClone(raw);
     const current = sourceData(store.getState);
     const makeId = vi.fn(() => 'unused');
@@ -94,7 +94,7 @@ describe('character JSON files', () => {
 
   it('assigns a colliding character a new ID while keeping current values and starting fresh history', () => {
     const raw = fileWithHistory();
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const before = structuredClone(raw);
     const current = sourceData(store.getState);
     const makeId = vi.fn(() => 'imported-bard');
@@ -140,7 +140,7 @@ describe('character JSON files', () => {
     const raw = fileWithHistory('visiting-bard');
     raw.campaign.hpMethod = 'average';
     const before = structuredClone(raw);
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const current = sourceData(store.getState);
     const makeId = vi.fn(() => 'imported-campaign');
 
@@ -171,7 +171,7 @@ describe('character JSON files', () => {
       else if (kind === 'unsupported schema') raw.schemaVersion = 999;
       else raw.campaign = { ...seedFile.campaign, ruleset: '5e-2024' };
       const before = structuredClone(raw);
-      const store = createCharacterStore();
+      const store = createCharacterStore([seedFile]);
       const current = sourceData(store.getState);
       const makeId = vi.fn(() => 'should-not-be-used');
 
@@ -195,7 +195,7 @@ describe('character JSON files', () => {
             ? [{ op: 'replace', path: ['live', 'absent', 'hp'], value: 11 }]
             : [{ op: 'replace', path: ['build', 'id'], value: 'other-character' }];
       const before = structuredClone(raw);
-      const store = createCharacterStore();
+      const store = createCharacterStore([seedFile]);
       const current = sourceData(store.getState);
       const makeId = vi.fn(() => 'should-not-be-used');
 

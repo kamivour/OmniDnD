@@ -18,7 +18,7 @@ const FOOL = seedFile.build.id;
 const metadata = (eventId: string) => ({ eventId, realTime: '2026-11-02T00:00:00.000Z' });
 
 function rows(): WorkspaceRows {
-  const store = createCharacterStore();
+  const store = createCharacterStore([seedFile]);
   store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, metadata('damage'));
   store.getState().dispatch(FOOL, heal, { amount: 1 }, metadata('heal'));
   return serializeWorkspace(store.getState());
@@ -26,7 +26,7 @@ function rows(): WorkspaceRows {
 
 describe('persisted workspace validation', () => {
   it('round-trips source state and undo history without derived values', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, metadata('damage'));
     store.getState().undo(FOOL, metadata('undo'));
     const saved = serializeWorkspace(store.getState());
@@ -53,7 +53,7 @@ describe('persisted workspace validation', () => {
   });
 
   it('round-trips optional local activity order without changing saved game events', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, heal, { amount: 1 }, metadata('game'));
     store
       .getState()
@@ -177,7 +177,7 @@ describe('persisted workspace validation', () => {
     first.order = 5;
     expect(() => deserializeWorkspace(unordered)).toThrow('invalid event order');
 
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, heal, { amount: 1 }, metadata('duplicate'));
     store.getState().dispatch(FOOL, heal, { amount: 1 }, metadata('duplicate'));
     expect(() => serializeWorkspace(store.getState())).toThrow('Duplicate saved event "duplicate"');
@@ -239,7 +239,7 @@ describe('persisted workspace validation', () => {
 
 describe('persisted workspace management history', () => {
   function managementRows() {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, metadata('damage'));
     for (const id of ['copy-one', 'copy-two']) {
       const result = store
@@ -255,7 +255,7 @@ describe('persisted workspace management history', () => {
   }
 
   it('round-trips active and undone management events with working management and character Undo', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, metadata('damage'));
     store
       .getState()
@@ -364,7 +364,7 @@ describe('persisted Reference bookmarks', () => {
   }
 
   it('round-trips add, edit, delete and each Undo alongside character state and history', () => {
-    let store = createCharacterStore();
+    let store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, metadata('damage'));
     expect(
       store.getState().dispatchManagement(addBookmark, { bookmark }, metadata('add-bookmark'))
@@ -442,7 +442,7 @@ describe('persisted Reference bookmarks', () => {
   });
 
   it('rejects duplicate in-memory bookmark IDs before writing any rows', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.setState({ bookmarks: [bookmark, { ...bookmark }] });
     const before = structuredClone(store.getState().bookmarks);
     expect(() => serializeWorkspace(store.getState())).toThrow('Duplicate saved bookmark');
@@ -452,7 +452,7 @@ describe('persisted Reference bookmarks', () => {
   it.each(['unsafe URL', 'duplicate ID', 'invalid path'] as const)(
     'drops corrupted bookmark Undo history on load: %s',
     (kind) => {
-      const store = createCharacterStore();
+      const store = createCharacterStore([seedFile]);
       store.getState().dispatchManagement(addBookmark, { bookmark }, metadata('add-first'));
       store
         .getState()
@@ -496,7 +496,7 @@ describe('persisted app preferences', () => {
   }
 
   it('round-trips preference changes and each Undo while retaining characters, bookmarks and history', () => {
-    let store = createCharacterStore();
+    let store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, metadata('damage'));
     store
       .getState()
@@ -598,7 +598,7 @@ describe('persisted app preferences', () => {
   it.each(['automation', 'reducedMotion'] as const)(
     'rejects invalid in-memory %s before writing rows',
     (key) => {
-      const state = createCharacterStore().getState();
+      const state = createCharacterStore([seedFile]).getState();
       Object.assign(state, { [key]: null });
       const before = { automation: state.automation, reducedMotion: state.reducedMotion };
       expect(() => serializeWorkspace(state)).toThrow();
@@ -610,7 +610,7 @@ describe('persisted app preferences', () => {
     ['automation', 'automatic'],
     ['reducedMotion', null],
   ])('drops corrupted %s Undo history on load without changing saved data', (key, value) => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store
       .getState()
       .dispatchManagement(

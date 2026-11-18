@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { characterStore } from '../state/character-store';
+import { createCharacterStore } from '../state/character-store';
+import { seedFile } from './seed';
 import { prepareWorkspaceImport, summarizeWorkspace, workspaceExport } from './workspace-files';
 
 describe('workspace backup file', () => {
   const workspace = () => {
     const { campaigns, characters, bookmarks, automation, reducedMotion, managementEvents } =
-      characterStore.getState();
+      createCharacterStore([seedFile]).getState();
     return { campaigns, characters, bookmarks, automation, reducedMotion, managementEvents };
   };
 

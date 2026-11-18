@@ -15,6 +15,7 @@ import {
   SCHEMA_VERSION,
 } from '../engine/schema';
 import { createCharacterStore } from '../state/character-store';
+import { seedFile } from '../data/seed';
 import { mergeCharacters } from './merge';
 import { planSync, remoteFingerprint, type SyncStep } from './plan';
 import type { RemoteEntity, SyncProvider } from './provider';
@@ -67,9 +68,11 @@ let seedFingerprints: Set<string> | undefined;
 /** Fingerprints of the untouched starter data, so a fresh device takes the cloud's copy quietly. */
 function pristine(): Set<string> {
   seedFingerprints ??= new Set(
-    [...workspaceContents(serializeWorkspace(createCharacterStore().getState())).values()].map(
-      ({ content }) => fingerprint(content),
-    ),
+    [
+      ...workspaceContents(
+        serializeWorkspace(createCharacterStore([seedFile]).getState()),
+      ).values(),
+    ].map(({ content }) => fingerprint(content)),
   );
   return seedFingerprints;
 }

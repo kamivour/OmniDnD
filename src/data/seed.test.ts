@@ -1,10 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import seed from '../../data/characters/the-fool.json';
 import { ABILITIES } from '../engine/calc/abilities';
-import { addCharacter, runManagement } from '../engine/commands/management';
+import {
+  addCharacter,
+  importCharacter,
+  runManagement,
+  type ManagementData,
+} from '../engine/commands/management';
 import { ExportFileSchema } from '../engine/schema';
 import { registry } from './registry';
-import { sampleFileFor, seedFile } from './seed';
+import { createCharacterStore } from '../state/character-store';
+import { freshSampleFile, sampleFileFor, seedFile } from './seed';
 
 /** The seed must match TEST_CHARACTER.md §1–3. */
 const fool = ExportFileSchema.parse(seed);
@@ -105,6 +111,39 @@ describe('sampleFileFor', () => {
       { eventId: 'e1', realTime: '2026-11-16T00:00:00.000Z' },
     );
     expect(result.result).toBe('ok');
+  });
+});
+
+describe('freshSampleFile', () => {
+  it('never reuses the shipped ids, so two devices cannot collide', () => {
+    const a = freshSampleFile();
+    const b = freshSampleFile();
+    for (const file of [a, b]) {
+      expect(file.campaign.id).not.toBe(seedFile.campaign.id);
+      expect(file.build.id).not.toBe(seedFile.build.id);
+      expect(file.build.campaignId).toBe(file.campaign.id);
+      expect(file.campaign.name).toBe(seedFile.campaign.name);
+    }
+    expect(a.campaign.id).not.toBe(b.campaign.id);
+    expect(a.build.id).not.toBe(b.build.id);
+  });
+
+  it('imports twice as two separate campaigns', () => {
+    let state: ManagementData = { campaigns: {}, characters: {} };
+    for (const id of ['e1', 'e2']) {
+      const result = runManagement(importCharacter, state, { file: freshSampleFile() }, registry, {
+        eventId: id,
+        realTime: '2026-11-19T00:00:00.000Z',
+      });
+      expect(result.result).toBe('ok');
+      if (result.result === 'ok') state = result.next;
+    }
+    expect(Object.keys(state.campaigns)).toHaveLength(2);
+    expect(Object.keys(state.characters)).toHaveLength(2);
+  });
+
+  it('is not loaded by a default store', () => {
+    expect(createCharacterStore().getState().characters).toEqual({});
   });
 });
 

@@ -21,7 +21,7 @@ async function device(cloud: MemoryCloud, email: string, name: string) {
   await provider.signUp(email, 'password1');
   await provider.setDisplayName(name);
   const account = (await provider.currentAccount())!;
-  const store = createCharacterStore().getState();
+  const store = createCharacterStore([seedFile]).getState();
   const state = {
     campaigns: { ...store.campaigns } as Record<string, Campaign>,
     characters: { ...store.characters } as Record<string, CharacterRecord>,
@@ -125,7 +125,7 @@ describe('party sync', () => {
     const { ana } = await party();
     ana.state.campaigns[CAMPAIGN] = structuredClone(seedFile.campaign);
     ana.state.characters[FOOL] = structuredClone(
-      createCharacterStore().getState().characters[FOOL]!,
+      createCharacterStore([seedFile]).getState().characters[FOOL]!,
     );
     const before = structuredClone(ana.state.characters[FOOL]!);
     const result = await ana.sync();
@@ -143,11 +143,11 @@ describe('party sync', () => {
   it('matching character IDs keep a separate stable view-only cache without overwriting your character', async () => {
     const { dm, ana } = await party();
     ana.state.characters[FOOL] = structuredClone(
-      createCharacterStore().getState().characters[FOOL]!,
+      createCharacterStore([seedFile]).getState().characters[FOOL]!,
     );
     await ana.sync();
     dm.state.characters[FOOL] = structuredClone(
-      createCharacterStore().getState().characters[FOOL]!,
+      createCharacterStore([seedFile]).getState().characters[FOOL]!,
     );
     const original = structuredClone(dm.state.characters[FOOL]);
     await dm.sync();
@@ -163,7 +163,7 @@ describe('party sync', () => {
   });
   it('shares public character state without private journal or history patches', async () => {
     const { dm, ana } = await party();
-    const own = structuredClone(createCharacterStore().getState().characters[FOOL]!);
+    const own = structuredClone(createCharacterStore([seedFile]).getState().characters[FOOL]!);
     own.build.journal.notes = 'Private journal secret';
     own.events = [
       {
@@ -203,7 +203,8 @@ describe('party sync', () => {
   it('uploads own characters and gives the others a read-only copy', async () => {
     const { dm, ana } = await party();
     const fool = ana.state.characters[FOOL] ?? dm.state.characters[FOOL];
-    ana.state.characters[FOOL] = fool ?? createCharacterStore().getState().characters[FOOL]!;
+    ana.state.characters[FOOL] =
+      fool ?? createCharacterStore([seedFile]).getState().characters[FOOL]!;
     await ana.sync();
     const plan = await dm.sync();
     const copy = dm.state.characters[FOOL];
@@ -211,7 +212,7 @@ describe('party sync', () => {
     expect(plan.pushEntities).toEqual([]);
     // The copy never uploads as the DM's own and never enters account sync.
     const rows = serializeWorkspace({
-      ...createCharacterStore().getState(),
+      ...createCharacterStore([seedFile]).getState(),
       characters: dm.state.characters,
       campaigns: dm.state.campaigns,
     });
@@ -221,7 +222,7 @@ describe('party sync', () => {
 
   it('keeps DM characters private', async () => {
     const { dm } = await party();
-    const base = createCharacterStore().getState().characters[FOOL]!;
+    const base = createCharacterStore([seedFile]).getState().characters[FOOL]!;
     dm.state.characters[FOOL] = { ...base, build: { ...base.build, playedBy: 'dm' } };
     const plan = await dm.sync();
     expect(plan.pushEntities).toEqual([]);
@@ -242,7 +243,7 @@ describe('party sync', () => {
 
   it('leaving keeps a private copy and drops the others characters', async () => {
     const { dm, ana } = await party();
-    ana.state.characters[FOOL] = createCharacterStore().getState().characters[FOOL]!;
+    ana.state.characters[FOOL] = createCharacterStore([seedFile]).getState().characters[FOOL]!;
     await ana.sync();
     await dm.sync();
     expect(dm.state.characters[FOOL]).toBeDefined();
@@ -254,7 +255,7 @@ describe('party sync', () => {
 
   it('removing an own character deletes the party copy', async () => {
     const { dm, ana } = await party();
-    ana.state.characters[FOOL] = createCharacterStore().getState().characters[FOOL]!;
+    ana.state.characters[FOOL] = createCharacterStore([seedFile]).getState().characters[FOOL]!;
     await ana.sync();
     delete ana.state.characters[FOOL];
     ana.state.deleted.add(FOOL);
@@ -265,7 +266,7 @@ describe('party sync', () => {
 
   it('a missing character without a deletion marker does not delete the party copy', async () => {
     const { ana } = await party();
-    ana.state.characters[FOOL] = createCharacterStore().getState().characters[FOOL]!;
+    ana.state.characters[FOOL] = createCharacterStore([seedFile]).getState().characters[FOOL]!;
     await ana.sync();
     delete ana.state.characters[FOOL];
     const plan = await ana.sync();

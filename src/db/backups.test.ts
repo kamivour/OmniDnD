@@ -15,7 +15,7 @@ const event = (eventId: string) => ({ eventId, realTime: TIME });
 const metadata = (id = 'backup:test', capturedAt = TIME) => ({ id, capturedAt });
 
 function restIntent(id = 'backup:rest'): BackupIntent {
-  const store = createCharacterStore();
+  const store = createCharacterStore([seedFile]);
   const previous = store.getState();
   expect(store.getState().dispatch(FOOL, completeLongRest, null, event('rest')).result).toBe('ok');
   const intent = createBackupIntent(previous, store.getState(), metadata(id));
@@ -32,7 +32,7 @@ function importedFile() {
 
 describe('automatic backup capture', () => {
   it('captures the whole current workspace before import, including an unsaved edit', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, event('damage'));
     const previous = store.getState();
     const expected = serializeWorkspace(previous);
@@ -63,7 +63,7 @@ describe('automatic backup capture', () => {
   });
 
   it('captures after a long rest and keeps that immutable moment after later damage', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const previous = store.getState();
     store.getState().dispatch(FOOL, completeLongRest, null, event('rest'));
     const intent = createBackupIntent(previous, store.getState(), metadata());
@@ -80,7 +80,7 @@ describe('automatic backup capture', () => {
   });
 
   it('still captures a long rest when old workspace Undo history no longer replays', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const copied = store
       .getState()
       .dispatchManagement(
@@ -109,7 +109,7 @@ describe('automatic backup capture', () => {
   });
 
   it('captures exact pre-reset source state, including resources and retained history', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, applyDamage, { amount: 3 }, event('damage'));
     const previous = store.getState();
     expect(store.getState().dispatch(FOOL, resetCharacter, {}, event('reset')).result).toBe('ok');
@@ -121,7 +121,7 @@ describe('automatic backup capture', () => {
   });
 
   it('ignores creation, duplication, ordinary commands, unchanged state and Undo', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     let previous = store.getState();
     expect(createBackupIntent(previous, previous, metadata())).toBeUndefined();
     store.getState().dispatchManagement(addCharacter, { file: importedFile() }, event('create'));
@@ -147,7 +147,7 @@ describe('automatic backup capture', () => {
   });
 
   it('does not capture a warning, a blocked rest or a replayed activity reference', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, completeLongRest, null, event('rest'));
     const rested = store.getState();
     expect(store.getState().dispatch(FOOL, completeLongRest, null, event('warned')).result).toBe(
@@ -169,7 +169,7 @@ describe('automatic backup capture', () => {
     imported.getState().dispatch('another-bard', completeLongRest, null, event('foreign-rest'));
     const record = imported.getState().characters['another-bard']!;
     const file = { ...importedFile(), ...record };
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const previous = store.getState();
     expect(
       store.getState().dispatchManagement(importCharacter, { file }, event('import')).result,
@@ -181,7 +181,7 @@ describe('automatic backup capture', () => {
   });
 
   it('resolves only the exact content identity, not a reused event id', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, completeLongRest, null, event('rest'));
     const next = store.getState();
     const source = next.activityOrder!.at(-1)!;
@@ -189,7 +189,7 @@ describe('automatic backup capture', () => {
     expect(resolveActivity(next, { ...source, fingerprint: 'different' })).toBeUndefined();
     const forged = { ...next, activityOrder: [{ ...source, fingerprint: 'different' }] };
     expect(
-      createBackupIntent(createCharacterStore().getState(), forged, metadata()),
+      createBackupIntent(createCharacterStore([seedFile]).getState(), forged, metadata()),
     ).toBeUndefined();
   });
 });

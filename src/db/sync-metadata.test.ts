@@ -11,7 +11,7 @@ const T2 = '2026-11-06T11:00:00.000Z';
 const T3 = '2026-11-06T12:00:00.000Z';
 
 function workspace() {
-  return createCharacterStore();
+  return createCharacterStore([seedFile]);
 }
 
 describe('sync metadata', () => {

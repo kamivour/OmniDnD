@@ -1,6 +1,5 @@
 import { createStore } from 'zustand/vanilla';
 import { registry } from '../data/registry';
-import { seedFile } from '../data/seed';
 import type { CharacterState } from '../engine/calc/sheet';
 import {
   runManagement,
@@ -82,7 +81,7 @@ function eventMetadata(options?: Partial<Pick<RunOptions, 'eventId' | 'realTime'
 }
 
 /** The UI mirrors engine results only; persistence subscribes to successful changes. */
-export function createCharacterStore(files: ExportFile[] = [seedFile]) {
+export function createCharacterStore(files: ExportFile[] = []) {
   // Validation also clones the input, so independent stores cannot share mutable seed state.
   const validated = files.map((file) => ExportFileSchema.parse(file));
   const campaigns = Object.fromEntries(validated.map((file) => [file.campaign.id, file.campaign]));

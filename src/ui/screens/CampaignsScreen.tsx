@@ -3,7 +3,7 @@ import { useStore } from 'zustand';
 import { Link } from 'react-router';
 import { Copy, Download, Plus, Settings2, Trash2, Undo2, Users } from 'lucide-react';
 import { registry } from '../../data/registry';
-import { seedFile } from '../../data/seed';
+import { freshSampleFile } from '../../data/seed';
 import { computeSheet } from '../../engine/calc/sheet';
 import {
   deleteCampaign,
@@ -126,7 +126,7 @@ export function CampaignsScreen() {
             type="button"
             disabled={pending}
             className={button}
-            onClick={() => run(importCharacter, { file: seedFile })}
+            onClick={() => run(importCharacter, { file: freshSampleFile() })}
           >
             Try the sample character
           </button>

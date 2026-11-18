@@ -44,7 +44,7 @@ function undoLatest(store: CharacterStore, eventId: string) {
 
 describe('workspace-local activity order', () => {
   it('orders interleaved character, preferences and bookmarks by local application through reload and Undo', () => {
-    let store = createCharacterStore();
+    let store = createCharacterStore([seedFile]);
     const initial = structuredClone(store.getState().characters[FOOL]);
     store
       .getState()
@@ -91,7 +91,7 @@ describe('workspace-local activity order', () => {
   });
 
   it('uses character-first legacy fallback while preserving each log order and input records', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store
       .getState()
       .dispatch(FOOL, heal, { amount: 1 }, metadata('old-game', '1900-01-01T00:00:00.000Z'));
@@ -117,7 +117,7 @@ describe('workspace-local activity order', () => {
   });
 
   it('does not let future-dated imported history outrank later local actions or alter exports', () => {
-    const source = createCharacterStore();
+    const source = createCharacterStore([seedFile]);
     source
       .getState()
       .dispatch(FOOL, heal, { amount: 1 }, metadata('imported-future', '2999-01-01T00:00:00.000Z'));
@@ -141,7 +141,7 @@ describe('workspace-local activity order', () => {
   });
 
   it('keeps trusted order while a deletion snapshot can restore history across reload', () => {
-    let store = createCharacterStore();
+    let store = createCharacterStore([seedFile]);
     store
       .getState()
       .dispatchManagement(updatePreferences, preferences, metadata('older-preferences'));
@@ -162,14 +162,14 @@ describe('workspace-local activity order', () => {
   });
 
   it('does not lend trusted ordering to reused IDs with a different imported event payload', () => {
-    let store = createCharacterStore();
+    let store = createCharacterStore([seedFile]);
     store
       .getState()
       .dispatchManagement(updatePreferences, preferences, metadata('older-preferences'));
     store.getState().dispatch(FOOL, heal, { amount: 1 }, metadata('reused-id'));
     const original = structuredClone(store.getState().characters[FOOL]);
     store.getState().dispatchManagement(deleteCharacter, { characterId: FOOL }, metadata('delete'));
-    const source = createCharacterStore();
+    const source = createCharacterStore([seedFile]);
     source.getState().dispatch(FOOL, applyDamage, { amount: 1 }, metadata('reused-id'));
     const imported = characterExport(source.getState(), FOOL, '2026-11-04T10:00:00.000Z');
     store.getState().dispatchManagement(addCharacter, { file: imported }, metadata('import'));
@@ -208,7 +208,7 @@ describe('workspace-local activity order', () => {
   });
 
   it('adds no ordering for blocked/warned attempts and trims only unrecoverable old references', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     expect(store.getState()).not.toHaveProperty('activityOrder');
     store.getState().dispatch(FOOL, applyDamage, { amount: -1 }, metadata('blocked'));
     expect(store.getState()).not.toHaveProperty('activityOrder');
@@ -226,7 +226,7 @@ describe('workspace-local activity order', () => {
   });
 
   it('rejects malformed or duplicate local references without accepting them as imported event fields', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, heal, { amount: 1 }, metadata('heal'));
     const ref = store.getState().activityOrder?.[0];
     expect(ref).toBeDefined();
@@ -239,7 +239,7 @@ describe('workspace-local activity order', () => {
   });
 
   it('retains trimmed game references only while management snapshots can recover them', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, heal, { amount: 1 }, metadata('snapshot-game'));
     store.getState().dispatchManagement(deleteCharacter, { characterId: FOOL }, metadata('delete'));
     expect(store.getState().undoManagement(metadata('restore')).result).toBe('ok');

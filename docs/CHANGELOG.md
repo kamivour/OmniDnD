@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 01:11 — Sample character no longer clashes across devices
+
+- "Try the sample character" on the Campaigns screen now makes a new campaign and character each time, so two devices or two friends on the same account no longer fight over one copy in sync.
+- Samples you already have keep their data and history.
+- Checks pass.
+
 ## 2026-11-19 01:05 — Clearer account errors
 
 - Signup, sign-in and Forgot password now say what went wrong in plain words, such as "too many emails in the last hour" or "email or password is not right".

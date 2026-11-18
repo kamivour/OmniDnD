@@ -26,7 +26,7 @@ function state(store: CharacterStore, id = FOOL) {
 
 describe('character command store', () => {
   it('starts from the real seed and derives sheet values without storing them', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const current = state(store);
     expect(current.live.hp).toBe(11);
     expect(current.live.slotsUsed.slice(1, 3)).toEqual([4, 0]);
@@ -37,7 +37,7 @@ describe('character command store', () => {
   });
 
   it('applies engine commands and keeps their log events with the same character', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const before = record(store);
     const damage = store.getState().dispatch(FOOL, applyDamage, { amount: 3 }, event('damage'));
     expect(damage.result).toBe('ok');
@@ -61,7 +61,7 @@ describe('character command store', () => {
   });
 
   it('keeps warned changes out of the store until the player overrides', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, setTempHp, { amount: 10 }, event('temp'));
     const before = store.getState();
     const warning = store.getState().dispatch(FOOL, setTempHp, { amount: 5 }, event('cancelled'));
@@ -84,7 +84,7 @@ describe('character command store', () => {
   });
 
   it('never changes state or adds a log event for blocked commands', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const before = store.getState();
     const result = store.getState().dispatch(
       FOOL,
@@ -102,7 +102,7 @@ describe('character command store', () => {
   });
 
   it('undo restores exact build and live state and marks the original event', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const before = structuredClone(state(store));
     store.getState().dispatch(FOOL, applyDamage, { amount: 6 }, event('damage'));
     const result = store.getState().undo(FOOL, event('undo'));
@@ -128,12 +128,12 @@ describe('character command store', () => {
     expect(record(store, second.build.id)).toBe(other);
     expect(other.live.hp).toBe(11);
     expect(other.events).toEqual([]);
-    expect(record(createCharacterStore()).live.hp).toBe(11);
+    expect(record(createCharacterStore([seedFile])).live.hp).toBe(11);
     expect(seedFile.live.hp).toBe(11);
   });
 
   it('joins current campaign rules instead of a stale character copy', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const campaign = { ...seedFile.campaign, name: 'Updated campaign' };
     store.setState({ campaigns: { [campaign.id]: campaign } });
     expect(state(store).campaign).toBe(campaign);
@@ -142,7 +142,7 @@ describe('character command store', () => {
   });
 
   it('uses the selected automation level unless this command overrides it', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, setTempHp, { amount: 10 }, event('temp'));
     store.setState({ automation: 'manual' });
     expect(store.getState().dispatch(FOOL, setTempHp, { amount: 5 }, event('manual')).result).toBe(
@@ -165,7 +165,7 @@ describe('character command store', () => {
   });
 
   it('generates event metadata outside the pure engine', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const started = Date.now();
     store.getState().dispatch(FOOL, heal, { amount: 1 });
     const saved = record(store).events.at(-1);
@@ -174,7 +174,7 @@ describe('character command store', () => {
   });
 
   it('reports missing characters without changing the store', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const before = store.getState();
     expect(characterState(before, 'missing')).toBeUndefined();
     expect(() => store.getState().dispatch('missing', heal, { amount: 1 })).toThrow(
@@ -194,7 +194,7 @@ describe('workspace management command store', () => {
   }
 
   it('commits successful engine results and management logs, while blocked calls leave the store untouched', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const before = store.getState();
     const file = importedFile();
     const fileBefore = structuredClone(file);
@@ -236,7 +236,7 @@ describe('workspace management command store', () => {
   });
 
   it('restores a deleted character with its exact game history and keeps character Undo usable', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, event('damage'));
     store.getState().dispatch(FOOL, heal, { amount: 1 }, event('heal'));
     const beforeDelete = structuredClone(record(store));
@@ -259,7 +259,7 @@ describe('workspace management command store', () => {
   });
 
   it('warns before undoing an add that would discard subsequent game commands', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     const file = importedFile();
     const original = record(store);
     store.getState().dispatchManagement(addCharacter, { file }, event('add'));
@@ -286,7 +286,7 @@ describe('workspace management command store', () => {
   });
 
   it('keeps existing-character game changes independent from duplicate history and its undo', () => {
-    const store = createCharacterStore();
+    const store = createCharacterStore([seedFile]);
     store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, event('first-damage'));
     expect(
       store

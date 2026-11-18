@@ -27,3 +27,8 @@ export function sampleFileFor(campaign: Campaign, id: string): ExportFile {
     live: { ...file.live, characterId: id },
   };
 }
+
+/** The sample as a new campaign and character, so two devices or two players never share its ids. */
+export function freshSampleFile(): ExportFile {
+  return sampleFileFor({ ...seedFile.campaign, id: crypto.randomUUID() }, crypto.randomUUID());
+}

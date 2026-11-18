@@ -339,7 +339,7 @@ Details in [PLAN.md](PLAN.md).
 Follow [PLAN.md](PLAN.md#m43--friend-testing-fixes-accounts-profiles-and-joining). Build before M42. One task per commit; bug tasks start with a failing test or reproduction.
 
 - [x] T1: Turn off email confirmation (D231), document it, and explain rate-limit errors
-- [ ] T2: Give sample characters fresh IDs and start the store empty
+- [x] T2: Give sample characters fresh IDs and start the store empty
 - [ ] T3: Make the sync chip explain paused sync, jump to highlighted choices, and replace "Saved locally" with one clear status
 - [ ] T4: Reproduce the join reports with two-account tests
 - [ ] T5: Rebuild joining as join, then an explicit Copy or Move of chosen characters
@@ -415,6 +415,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-19 — M43 T2: the Campaigns sample button makes a new campaign and character ID each time; stores start empty unless given files.
 - 2026-11-19 — M43 T1: plain messages for email rate limits, wrong passwords and existing accounts; HOSTING.md records Confirm email off (D231) and how to confirm old accounts.
 - 2026-11-19 — Planned M44 phone cleanup (bar, More order, clock, Details, spell filters, magic containers), M46 combat direction; Compendium is now M45; email confirmation off (D231).
 - 2026-11-19 — Planned M43 (signup, unique names, profile and avatar, sync choices, join, copy or move, DM seat) and a Compendium.

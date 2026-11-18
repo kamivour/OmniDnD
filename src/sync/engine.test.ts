@@ -36,7 +36,7 @@ function snapshot(state: Workspace): Workspace {
 
 /** One device: a store, its sync rows as the persistence layer keeps them, and a provider. */
 async function device(cloud: MemoryCloud) {
-  const store = createCharacterStore();
+  const store = createCharacterStore([seedFile]);
   const records = new Map<string, SyncRecord>();
   const save = () => {
     const changes = planSyncRecords(
