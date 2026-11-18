@@ -251,7 +251,7 @@ Party characters open in a separate reader with no editors or gameplay controls.
 
 ## M42 — Recognizable icons and creation cards
 
-Planning only, requested 2026-11-18. Start implementation after M43; complete one task per commit. Keep 2014 rules, book filtering, engine commands, both creation modes and saved characters intact.
+Planning only, requested 2026-11-18. Start implementation after M44; complete one task per commit. Keep 2014 rules, book filtering, engine commands, both creation modes and saved characters intact.
 
 ### Intended experience
 
@@ -296,14 +296,15 @@ Planning only, requested 2026-11-19 after friends tried shared campaigns. Build 
 - **DM seat:** `join_campaign` always adds a player. The database already allows one DM per campaign, but a member becomes DM only when the owner or current DM hands the role over.
 - **Display names:** nothing in the code generates names. "Niko" was most likely filled in by the browser or keyboard: the field uses `autocomplete="nickname"`, and saving takes one tap. Names are optional at signup and not unique.
 - **Signup rate limit:** Supabase's built-in email sender allows about 2 auth emails per hour for the whole project and may deliver only to the project team's addresses. With "Confirm email" on, one or two signups use up the hour; Forgot password shares the same limit.
+- **"Saved locally":** this label only reports the save on the device and shows even when the account is synced. Sync state is a separate, mostly icon-only chip that disappears when signed out, and "Needs your choice" pauses sync for every campaign and character until resolved.
 
 ### Tasks and acceptance
 
 | Task | Deliverable | Check before closing |
 |---|---|---|
-| T1 — Signup limit | Plain messages for Supabase rate-limit and email errors. [HOSTING.md](HOSTING.md) steps for the owner's choice between custom SMTP with a higher limit and no email confirmation (Q50) | A friend can create an account and sign in; the rate-limit message says what happened and when to retry; Forgot password works or clearly says it is unavailable |
+| T1 — Signup limit | The owner turns off "Confirm email" (D231). Plain messages for Supabase rate-limit and email errors. [HOSTING.md](HOSTING.md) records the setting, its trade-off, and custom SMTP as the later fix for password-reset emails | A friend creates an account and is signed in at once, with no email step; the rate-limit message says what happened and when to retry; Forgot password works or says it is busy and to try later |
 | T2 — Sample IDs | Both sample buttons create fresh campaign and character IDs. `createCharacterStore()` starts empty, and the sample never syncs under a fixed ID again | Two devices on one account each add the sample without a sync conflict; existing `the-fool` characters keep their data and history |
-| T3 — Clear sync choices | The chip opens `settings#sync-choices`, scrolls there and applies the Find highlight. A short notice explains why sync paused and lists each item with both change times and what each option keeps | Works from the hub and inside a character, at both widths; the chip's label reads "Sync paused: choose versions"; a Find entry exists |
+| T3 — Clear sync choices | The chip opens `settings#sync-choices`, scrolls there and applies the Find highlight. A short notice explains why sync paused and lists each item with both change times and what each option keeps. One status replaces "Saved locally" and the sync chip: "Synced", "Saved on this device, syncing soon", "Sync paused: choose versions", or "Not signed in: only on this device" with a Sign in link | Works from the hub and inside a character, at both widths; the chip's label reads "Sync paused: choose versions"; a signed-out device never looks synced; a Find entry exists |
 | T4 — Join reproduction | Repeatable two-account tests on the memory provider covering: join with and without local characters, sharing a campaign that already holds characters, matching sample IDs, a second device on the same account | "All my characters were pushed in" is reproduced or ruled out with evidence, recorded in the session log |
 | T5 — Join flow | Step 1 joins with a DM or Player choice (T7). Step 2, "Bring a character", opens straight after. It lists the player's characters as cards with campaign names and an explicit Copy or Move, plus "Create a new character here". An empty state explains signing in on the device that has them | Nothing enters a campaign without an explicit choice; sharing lists the characters that become visible and lets the owner leave any out; a fresh device always sees a next step |
 | T6 — Copy or move later | "Add my character" on the Party screen. "Copy to campaign…" and "Move to campaign…" on campaign character cards, for private and shared campaigns. Moving out of a shared campaign removes the party copy | Engine command, logged and undoable; warns when the destination's books lack the character's options; repeated moves keep history; members see the change after sync |
@@ -326,7 +327,36 @@ One migration per server task, each with row-level security tests. Party members
 
 The app never holds a service key, and emails stay private. Character rules, the engine and offline play do not change. Joining by campaign ID keeps its approval step; approved members can then take an empty DM seat.
 
-## M44 — Compendium
+## M44 — Phone navigation and screen cleanup
+
+Planning only, requested 2026-11-19. Build after M43 and before M42; one task per commit. Layout and data changes only, except T6, which changes how carried weight is counted.
+
+### What we found
+
+- **Phone bar:** Home · Combat · Spells · Inv · More. Sheet, the screen players open most, is inside More.
+- **More and the sidebar:** the order follows build history. Features and Companions sit below Inventory next to Journal and Reference, with no split between main and secondary screens.
+- **Game Clock:** a full card at the top of Home and Explore. On phones it pushes resources below the fold, and few players track game time by hand. Rests and commands keep the clock without it.
+- **Details button:** the panel icon beside Find opens an empty "Select a spell, resource, or action" panel. Tapping an item already opens its details, so on phones the button adds nothing.
+- **Spell filters:** search, level, school and eight chips take several rows above the list on a phone. There is no sort.
+- **Containers:** items can already sit inside a container, but every item counts toward carried weight. Bag of Holding, Handy Haversack and Portable Hole have no weight or capacity in the data, so they show as unknown weight.
+
+### Tasks and acceptance
+
+| Task | Deliverable | Check before closing |
+|---|---|---|
+| T1 — Phone bar | Home · Sheet · Spells · Inv · More. A character with no spells sees Combat in place of Spells | Active tab highlights on every route; More shows active when a More screen is open; at 320 px labels stay readable; tour and Find steps updated |
+| T2 — More and sidebar order | More: rests, then main screens (Combat or Spells, Features, Companions, Explore), a divider, then Journal, Reference and Settings, then Back to campaigns. The desktop sidebar uses the same two groups | Order matches on phone and desktop; the divider is a visual separator with group labels for screen readers; `places.test.ts` passes |
+| T3 — Game Clock | Hidden by default on Home and Explore; a Settings switch "Show game clock" brings it back. Code and engine time stay | With the switch off, nothing changes in rest timing, durations or log times; with it on, the clock appears as before |
+| T4 — Details button | Removed where details open as a sheet. On wide screens with the side panel it stays and shows a short hint instead of an empty panel | Tapping a spell, resource or action still opens its details on phones; keyboard users can still reach the panel on desktop |
+| T5 — Spell filters | One row: search, a Filter button with an active count, and a Sort button. Filter opens a sheet (phone) or popover (desktop) holding level, cost, type, school, concentration, ritual, castable now and favorites, with Clear. Sort: level (default), name, school, castable first. Active filters show as small removable chips under the row | The list starts within one row of the header at 375 px; filters and sort stay view state and never change the character; the existing favorites shortcut still focuses its control |
+| T6 — Containers | Bag of Holding (15 lb, holds 500 lb and 64 cubic feet), Handy Haversack (5 lb; two 20 lb side pouches and an 80 lb center) and Portable Hole get weights and capacity in own-words data. Items inside them do not count toward carried weight. The container card shows contents, "Put in…" and filled capacity. Custom items take a unit label and weight per unit, for example 40 × "liter of water" | Over capacity shows a warning that a Bag of Holding may rupture; the player decides, nothing is destroyed automatically. Placing a Bag of Holding inside a Haversack or Portable Hole warns about the Astral gate. Ordinary containers still count their contents |
+| T7 — Gate | Focused tests, both widths, themes, at most ten QA items | Bar, More order, hidden clock, details, filters and containers checked at 375 px and 1440 px |
+
+### Boundaries
+
+No new screens. Combat stays as it is until M46. 2014 rules only; liters are a player-chosen unit with a player-entered weight, not a rule.
+
+## M45 — Compendium
 
 Planning only, requested 2026-11-19; build after M42. A read-only library for planning characters, covering spells, classes, subclasses, races, backgrounds and feats from the bundled 2014 data.
 
@@ -340,6 +370,35 @@ Planning only, requested 2026-11-19; build after M42. A read-only library for pl
 | T4 — Planning notes | "Plan this" adds the entry to a per-character wishlist in the Journal | Logged and undoable; nothing is learned or prepared automatically |
 | T5 — Gate | Tests, both widths, themes, at most ten QA items | Representative class, subclass, race, feat and spell pages read correctly offline |
 
+## M46 — Combat around "I got hit"
+
+Direction only, requested 2026-11-19. Write the detailed design and get the owner's review before building; build after M45.
+
+Today Combat centers on a Start combat button, and damage is a bare number: `applyDamage` takes an amount and a critical flag, with no damage type. The new direction starts from what happened to the character, and the app works out what follows.
+
+### Proposed flow
+
+1. **Took a hit** on Home and Combat: amount, one or more damage types, critical, and an optional source (a creature, spell or free text).
+2. The app applies what it can derive: resistance, immunity and vulnerability from race, class features, items and active effects; temporary HP first; then HP.
+3. It lists follow-ups to confirm: a concentration save with its DC, death-save failures at 0 HP, and the effects a known source carries, such as a condition or a save at the end of each turn.
+4. **Effects on me:** confirmed conditions appear with what they change (for example disadvantage on attacks) and how they end. Ending one is a tap.
+5. Combat starts on its own when the player logs a hit or rolls initiative; there is no separate start step.
+
+### Tasks to plan in detail
+
+| Task | Deliverable |
+|---|---|
+| T1 — Design review | Mockups for Took a hit, follow-ups and Effects on me at 375 px and 1440 px, reviewed by the owner |
+| T2 — Typed damage | Engine damage with types and sources; resistance, immunity and vulnerability; logged and undoable |
+| T3 — Follow-ups | Concentration, 0 HP and source effects as suggestions the player confirms or dismisses |
+| T4 — Effects on me | Active conditions and effects with their impact and end condition |
+| T5 — Combat start | Combat begins from a logged hit or initiative; turn tracking stays optional |
+| T6 — Gate | Tests, both widths, at most ten QA items |
+
+### Boundaries
+
+DM outcomes stay manual: the player enters hits, saves and rulings, and every suggestion needs a tap. No 2024 rules.
+
 ## Risks
 - **Free hosting limits:** Supabase allows 200 live connections and 500 MB of storage; records are capped at 5 MB (our limit). Long event logs grow records; a later fix is a snapshot plus trimmed history.
 - **Security:** shared access depends entirely on row-level security, so every rule gets a test. Invite codes are random, hashed and expire. Emails are never shown to other members.
@@ -347,4 +406,5 @@ Planning only, requested 2026-11-19; build after M42. A read-only library for pl
 ## Open questions
 M26: Q41 (alignment label), Q42 (background scope) and Q43 (conjure and summon spells) in DECISIONS.md. Earlier answers are D168–D175.
 M39: Q44 (D&D place names as theme labels), Q45 (ripple on phones) and Q46 (theme per campaign) in DECISIONS.md.
-M43: Q50 (signup email) and Q51 (avatar storage) in DECISIONS.md.
+M43: Q51 (avatar storage) in DECISIONS.md; signup email is decided in D231.
+M44: Q52 (phone bar tabs) in DECISIONS.md.

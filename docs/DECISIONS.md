@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D231 | 2026-11-19 | Signup no longer needs email confirmation: a new account is signed in at once. Anyone can register an address they do not own, and password-reset emails stay limited until custom SMTP is set up. | The built-in email limit (about 2 per hour) blocked friends from signing up; the owner accepted the trade-off |
 | D230 | 2026-11-19 | A character enters a shared campaign only through an explicit Copy or Move; sharing a campaign first lists the characters that will become visible. Anyone joining picks DM or Player, and a taken DM seat is locked. Display names are required at signup and unique ignoring case. | Friends were surprised by characters appearing in a shared campaign and by an unchosen display name |
 | D229 | 2026-11-18 | If saved workspace Undo history (adding, copying or deleting characters, campaign and settings changes) can no longer be replayed or has duplicate steps, it is dropped on load. Characters, play history and per-character Undo are kept. | A damaged Undo step locked the whole app and blocked saves after a long rest; losing workspace Undo is the smaller cost |
 | D226 | 2026-11-18 | Cannon form, size and legs, and summon form, cast level and casting class are creation choices; numbers follow the owner and cast level. Old generic companions keep their definition until the player explicitly configures them, preserving current HP and expiry. | Avoid guessing forms or granting free healing when updating old characters |
@@ -285,8 +286,8 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q47 | Should Homunculus Servant and Replicate Magic Item get dedicated creation and replica-choice tracking? | After M41 | Use existing Companions and Inventory workflows; these two applications and their share of the infusion limit remain manual, stated beside the counter | User |
 | Q48 | How should Armorer's armor components be represented for its two extra armor-only infusions? | After M41 | Standard active limit only, with a visible reminder; do not grant two unrestricted slots or invent separate equipment | User |
 | Q49 | Should the already-bundled Summon Draconic Spirit move from the Tasha filter to a separate Fizban's book option? | Next source review | Preserve existing spell visibility; identify Fizban's 2014 source on its companion card | User |
-| Q50 | How should signup avoid the built-in email limit: custom SMTP (needs a sender account and a higher limit) or no email confirmation? | M43 T1 | Turn off "Confirm email" in the dashboard; password reset emails stay limited until custom SMTP exists | User |
 | Q51 | Store avatars in the profile row or in Supabase Storage? | M43 T9 | Profile row as a 256 px JPEG up to about 100 KB; members already read profiles, so no new access rules | Agent |
+| Q52 | Which four screens belong in the phone bar? | M44 T1 | Home, Sheet, Spells and Inventory; characters without spells get Combat in place of Spells; everything else in More | User |
 
 ## How to add an entry
 

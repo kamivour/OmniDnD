@@ -4,10 +4,17 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 00:54 — Plan for phone layout cleanup and a new Combat direction
+
+- New plan (M44): Sheet moves into the phone bar, More is grouped into main and secondary screens, the Game Clock is hidden behind a Settings switch, the empty Details button goes, and spell filters fold into one Filter button with Sort.
+- Bag of Holding and similar bags will hold items without adding weight, with capacity warnings and custom items such as liters of water.
+- Email confirmation is being turned off so friends can sign up; "Saved locally" will be replaced by a status that says whether the character is synced.
+- Combat around "I got hit" is sketched for later (M46) and needs your design review first. Checks pass.
+
 ## 2026-11-19 00:33 — Plan for friend-testing fixes and a Compendium
 
 - New plan (M43) covers signup that is blocked by the email limit, required unique display names, a Profile button with an avatar, a sync chip that explains itself, and joining shared campaigns with an explicit Copy or Move and one DM seat.
-- A Compendium (M44) for browsing spells, classes, subclasses, races, backgrounds and feats is planned after the icon work.
+- A Compendium (M45) for browsing spells, classes, subclasses, races, backgrounds and feats is planned after the icon work.
 - Class icons in the plan now use a warhammer and shield for Paladin, a bow for Ranger, a dagger for Rogue and a flute for Bard.
 - Nothing is built yet. To fix signup now, choose custom email or turn off email confirmation in Supabase (see Q50). Checks pass.
 
