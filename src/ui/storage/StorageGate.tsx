@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from 'react';
 import { useStore } from 'zustand';
 import { initializePersistence, storageStatusStore } from '../../state/persistence';
+import { activateWaitingUpdate } from './app-update';
 
 /** Saved records must validate before any character screen can act on them. */
 export function StorageGate({ children }: { children: ReactNode }) {
@@ -32,7 +33,10 @@ export function StorageGate({ children }: { children: ReactNode }) {
           <button
             type="button"
             onClick={() => {
-              void initializePersistence().catch(() => undefined);
+              // A fix may already be downloaded; switch to it before loading again.
+              void activateWaitingUpdate().then((reloading) => {
+                if (!reloading) void initializePersistence().catch(() => undefined);
+              });
             }}
             className="min-h-11 rounded-btn bg-accent px-4 font-semibold text-bg"
           >

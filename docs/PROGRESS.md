@@ -363,6 +363,7 @@ Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M41. 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-18 — Retry loading on the storage lock screen switches to a downloaded app update first; duplicate workspace Undo steps no longer lock the app.
 - 2026-11-18 — Damaged workspace Undo history is dropped on load instead of locking the app; long rest backups and saves work again (D229).
 - 2026-11-17 — Class armor and weapon proficiencies count on the sheet even when a blank build or import left them off (D228).
 - 2026-11-17 — Saved feat spell and proficiency picks can be changed from a Saved choices list in To do, linked from each feature card (D220).

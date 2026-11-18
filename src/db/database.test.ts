@@ -335,14 +335,14 @@ describe('persisted workspace management history', () => {
     },
   );
 
-  it('rejects duplicate management event IDs without changing saved data', () => {
+  it('drops workspace Undo history with duplicate event IDs without changing saved data', () => {
     const saved = managementRows();
     const first = saved.managementEvents?.[0];
     const second = saved.managementEvents?.[1];
     if (!first || !second) throw new Error('Saved management events missing');
     second.id = first.id;
     const before = structuredClone(saved);
-    expect(() => deserializeWorkspace(saved)).toThrow('Duplicate saved management event');
+    expect(deserializeWorkspace(saved).managementEvents).toEqual([]);
     expect(saved).toEqual(before);
   });
 });

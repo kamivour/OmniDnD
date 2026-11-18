@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-18 23:19 — Retry loading picks up app updates
+
+- If the app is stuck on "Local storage unavailable", Retry loading now switches to a newer app version first, then loads again.
+- Damaged workspace Undo history with repeated steps no longer locks the app either.
+- Phones still on the old version need the app fully closed and opened again once to get this fix.
+- Checks pass.
+
 ## 2026-11-18 23:06 — App no longer locks on damaged Undo history
 
 - Fixed "Local storage unavailable — Saved management undo history is invalid". The app now opens and keeps every character.

@@ -315,12 +315,12 @@ export function deserializeWorkspace(rows: WorkspaceRows): Workspace {
       ? {}
       : { activityOrder: ActivityOrderSchema.parse(rows.activityOrder) }),
   };
-  const ids = new Set(workspace.managementEvents.map((event) => event.id));
-  if (ids.size !== workspace.managementEvents.length)
-    throw new Error('Duplicate saved management event');
   // Later character play can make an old workspace step impossible to replay. That only costs
   // workspace Undo, so drop the history instead of locking every saved character (D229).
-  return replaysManagementHistory(workspace) ? workspace : { ...workspace, managementEvents: [] };
+  const ids = new Set(workspace.managementEvents.map((event) => event.id));
+  return ids.size === workspace.managementEvents.length && replaysManagementHistory(workspace)
+    ? workspace
+    : { ...workspace, managementEvents: [] };
 }
 
 /** True when workspace Undo history replays all the way back to its start. */
