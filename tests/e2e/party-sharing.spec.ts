@@ -215,10 +215,15 @@ test('owner copies an invite link, approves one request and declines another', a
   const server = await backend(page, true);
   await page.goto('/join');
   await page.getByRole('button', { name: 'Refresh membership', exact: true }).click();
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Share campaign Shared Table', exact: true }).click();
+  const sheet = page.getByRole('dialog', { name: 'Share Shared Table', exact: true });
+  await sheet.getByRole('button', { name: 'Copy invite link', exact: true }).click();
+  await expect(sheet.getByTestId('invite-link')).toContainText('/join/INVITE-TEST');
+  await expect(sheet.getByRole('button', { name: /invite link$/ })).toHaveCount(0);
+  await page.screenshot({ path: test.info().outputPath('share-sheet.png') });
   await page.goto('/campaigns/shared-test/settings');
   await expect(page.getByRole('heading', { name: 'Party', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Share campaign link', exact: true }).click();
-  await expect(page.getByTestId('invite-link')).toContainText('/join/INVITE-TEST');
   await page.getByRole('button', { name: 'Approve Alice', exact: true }).click();
   await page.getByRole('button', { name: 'Decline Bob', exact: true }).click();
   await expect(page.getByText('No pending requests.', { exact: true })).toBeVisible();
@@ -249,7 +254,10 @@ test('sharing lists the characters members will see and keeps unticked ones priv
   page,
 }) => {
   await backend(page);
-  await page.goto(`/campaigns/${file.campaign.id}/settings`);
+  await page.goto('/');
+  await page
+    .getByRole('button', { name: `Share campaign ${file.campaign.name}`, exact: true })
+    .click();
   await page.getByRole('button', { name: 'Share campaign', exact: true }).click();
   const list = page.getByRole('group', { name: 'Characters members will see' });
   await expect(list.getByRole('checkbox', { name: 'The Fool' })).toBeChecked();

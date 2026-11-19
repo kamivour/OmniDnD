@@ -285,7 +285,7 @@ Check on a real phone and on a computer.
 
 ## M40 — Campaign sharing and join requests
 
-- [ ] On phone and desktop, judge whether Share campaign link, Campaign ID and Join a campaign are easy to find and explain direct invites versus approval.
+- [ ] On phone and desktop, judge whether Share on the campaign card, Campaign ID and Join a campaign are easy to find and explain direct invites versus approval.
 - [ ] With two accounts, request membership using an existing character. Confirm the owner or DM sees the request while the requester cannot see the party until approval.
 - [ ] Approve one request and decline another. Check the requester sees each result and only approval opens the party.
 - [ ] Bring a character, review the destination-rules warning, and check the original remains in its old campaign. Undo the copy and check the original again.

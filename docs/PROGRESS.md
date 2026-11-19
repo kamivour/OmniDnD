@@ -415,6 +415,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+- 2026-11-19 — Fix: Share moved to a button on the campaign card; one Copy invite link replaces the two duplicate invite buttons.
 - 2026-11-19 — Fix: Export asks to include history (with file sizes); backup banner removed from Campaigns; class icons replace the diamond for characters without a picture.
 - 2026-11-19 — M43 T10 (part): added M43 manual QA list; automated checks pass at both widths. Live two-account join waits on the three new migrations.
 - 2026-11-19 — M43 T9: New Profile screen and top-bar button with avatar. Upload or take a photo, cropped to 256 px; default mask. Party lists show pictures. New migration.

@@ -33,6 +33,9 @@ const button =
 const AccountCard = import.meta.env.VITE_SUPABASE_URL
   ? lazy(() => import('../settings/AccountCard'))
   : null;
+const ShareCampaign = import.meta.env.VITE_SUPABASE_URL
+  ? lazy(() => import('../party/ShareCampaign'))
+  : null;
 
 const path = (id: string) => encodeURIComponent(id);
 /** Your own player characters can be copied or moved into other campaigns. */
@@ -398,6 +401,11 @@ function CampaignCard({
           <Settings2 size={16} aria-hidden />
           Campaign settings
         </Link>
+        {ShareCampaign && syncConfig && (
+          <Suspense fallback={null}>
+            <ShareCampaign campaign={campaign} />
+          </Suspense>
+        )}
         <button
           type="button"
           aria-label={`Delete campaign ${campaign.name}`}

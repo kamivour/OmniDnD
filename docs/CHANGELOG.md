@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 11:58 — One Share button on the campaign card
+
+- Each campaign card on Campaigns now has a **Share** button next to Campaign settings. It shares the campaign and gives one invite link to copy.
+- The two invite buttons that did the same thing are now one: **Copy invite link**.
+- Campaign settings → Party keeps members, the DM seat, join requests and Leave.
+- Checks pass.
+
 ## 2026-11-19 11:14 — Export without history, class icons
 
 - Export now asks: with or without the history log. Each choice shows the file size. A file without history keeps current HP and resources but has nothing to undo.
