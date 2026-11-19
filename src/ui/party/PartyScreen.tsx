@@ -116,6 +116,7 @@ function PartyCard({
         <CharacterPortrait
           id={build.id}
           portrait={build.portrait}
+          classId={build.classes[0]?.classId}
           size={40}
           className="text-accent"
         />

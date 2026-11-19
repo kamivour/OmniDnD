@@ -30,7 +30,8 @@ export function SettingsScreen() {
   const beginnerHints = useStore(deviceStore, (state) => state.beginnerHints);
   const management = useManagement();
   const { pending, run, undo, confirmation } = management;
-  const { openImport, exportCharacter, importControls } = useCharacterTransfer(management);
+  const { openImport, exportCharacter, importControls, exportControls } =
+    useCharacterTransfer(management);
   const [selectedId, setSelectedId] = useState('');
   const preferenceFocus = useRef<HTMLInputElement | null>(null);
   const exportId =
@@ -314,6 +315,7 @@ export function SettingsScreen() {
         All campaigns
       </Link>
       {importControls}
+      {exportControls}
       {confirmation}
     </section>
   );

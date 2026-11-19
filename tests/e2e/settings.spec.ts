@@ -137,6 +137,7 @@ async function selectImport(page: Page, contents: string) {
 async function downloadCharacter(page: Page): Promise<ExportFile> {
   const downloading = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export character', exact: true }).click();
+  await page.getByRole('button', { name: /^With history/ }).click();
   const download = await downloading;
   const file = ExportFileSchema.parse(JSON.parse(await readFile((await download.path())!, 'utf8')));
   expect(download.suggestedFilename()).toBe(`${file.build.name.replaceAll(' ', '-')}.json`);

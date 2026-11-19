@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-19 11:14 — Export without history, class icons
+
+- Export now asks: with or without the history log. Each choice shows the file size. A file without history keeps current HP and resources but has nothing to undo.
+- The "not saved a backup file yet" banner is gone from Campaigns. Settings → Backups still shows it.
+- Characters without a picture now show their class icon (lyre for bards, holy symbol for clerics, and so on) instead of a diamond. Check the icons look right to you.
+- Checks pass.
+
 ## 2026-11-19 02:46 — Profile screen and pictures
 
 - A round picture button in the top bar opens your new Profile: picture, display name, password, sync and sign-out now live there. Settings links to it.

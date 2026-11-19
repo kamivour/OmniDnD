@@ -210,6 +210,7 @@ test('export downloads a valid JSON file containing the live character, campaign
   const before = await readDatabase(page);
   const downloaded = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export The Fool', exact: true }).click();
+  await page.getByRole('button', { name: /^With history/ }).click();
   const download = await downloaded;
   expect(download.suggestedFilename()).toBe('The-Fool.json');
   const file = ExportFileSchema.parse(JSON.parse(await readFile((await download.path())!, 'utf8')));
@@ -222,6 +223,23 @@ test('export downloads a valid JSON file containing the live character, campaign
   expect(file.live.hp).toBe(6);
   expect(file.events).toEqual(before.events.map(({ data }) => data));
   expect(await readDatabase(page)).toEqual(before);
+});
+
+test('export can leave the history log out', async ({ page }) => {
+  await takeFiveDamage(page);
+  const before = await readDatabase(page);
+  await page.getByRole('button', { name: 'Export The Fool', exact: true }).click();
+  const sheet = page.getByRole('dialog', { name: 'Export The Fool' });
+  await expect(sheet.getByRole('button', { name: /^With history: \d+ entr/ })).toBeVisible();
+  const downloaded = page.waitForEvent('download');
+  await sheet.getByRole('button', { name: /^Without history/ }).click();
+  const file = ExportFileSchema.parse(
+    JSON.parse(await readFile((await (await downloaded).path())!, 'utf8')),
+  );
+  expect(file.events).toEqual([]);
+  expect(file.live).toEqual(before.live[0]!.data);
+  await expect(sheet).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Export The Fool', exact: true })).toBeFocused();
 });
 
 test('import previews a separate copy for collisions and preserves conflicting campaign rules', async ({

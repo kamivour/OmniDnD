@@ -22,8 +22,6 @@ import { OverrideMarker } from '../components/StatChip';
 import { inputClass } from '../components/fields';
 import { useCharacterTransfer } from '../commands/useCharacterTransfer';
 import { useManagement } from '../commands/useManagement';
-import { deviceStore } from '../../state/device-settings';
-import { backupReminder } from '../../state/backup-reminder';
 import { useTourAutostart } from '../tutorial/useTour';
 import { rulesSummary } from '../campaignOptions';
 import { syncConfig } from '../../sync/config';
@@ -48,7 +46,7 @@ export function CampaignsScreen() {
   const management = useManagement();
   const { run, undo, confirmation, pending } = management;
   // Home keeps per-character Export; importing a character file lives in Settings.
-  const { exportCharacter } = useCharacterTransfer(management);
+  const { exportCharacter, exportControls } = useCharacterTransfer(management);
   const opener = useRef<HTMLElement | null>(null);
   const restoreFocus = (event: Event) => {
     event.preventDefault();
@@ -79,13 +77,6 @@ export function CampaignsScreen() {
     (event) => event.command !== 'undo' && !event.undoneBy,
   );
 
-  const lastBackupAt = useStore(deviceStore, (state) => state.lastBackupAt);
-  const reminder = backupReminder(
-    lastBackupAt,
-    new Date(),
-    Object.keys(state.characters).length > 0,
-  );
-
   return (
     <section className="flex flex-col gap-6">
       <header className="flex flex-wrap items-center gap-2">
@@ -112,14 +103,6 @@ export function CampaignsScreen() {
           </Link>
         </div>
       </header>
-      {reminder && (
-        <p role="status" className="rounded-card border border-warn bg-surface p-3 text-sm">
-          {reminder}{' '}
-          <Link to="/settings" className="underline">
-            Save one in Settings.
-          </Link>
-        </p>
-      )}
       {AccountCard && syncConfig && (
         <Suspense fallback={null}>
           <AccountCard config={syncConfig} />
@@ -358,6 +341,7 @@ export function CampaignsScreen() {
           )}
         </div>
       </Sheet>
+      {exportControls}
       {confirmation}
     </section>
   );
@@ -448,6 +432,7 @@ function CampaignCard({
                     <CharacterPortrait
                       id={record.build.id}
                       portrait={record.build.portrait}
+                      classId={record.build.classes[0]?.classId}
                       size={40}
                       className="text-accent"
                     />

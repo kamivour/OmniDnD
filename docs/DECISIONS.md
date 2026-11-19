@@ -6,6 +6,8 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D238 | 2026-11-19 | Characters without their own picture or icon show the icon of their first class instead of a plain diamond. | Cards stay easy to tell apart at a glance. |
+| D237 | 2026-11-19 | Character Export asks whether to include the history log, showing both file sizes. The backup reminder no longer shows on Campaigns; it stays only in Settings → Backups. | Long logs make files large, and not every player wants backup files. |
 | D236 | 2026-11-19 | Profile pictures live in the profile row as a 256 px JPEG of about 100 KB at most, not in file storage. Party members see them; the default is a plain mask. | Members already read profiles, so no new access rules or storage bucket are needed. |
 | D235 | 2026-11-19 | Display names are 3 to 24 characters and unique ignoring case. The migration stops while two accounts share a name instead of renaming anyone; accounts with no name or an old out-of-range name must pick one before using the app. | Party lists must tell players apart, and silently renaming someone would confuse their party. |
 | D234 | 2026-11-19 | Any member can take an empty DM seat, and the DM can step down. When someone holds the seat, joining as DM is locked; only the owner or the current DM can hand the seat to someone else. | Groups often pick the DM after making the campaign; locking prevents two DMs and quiet takeovers. |

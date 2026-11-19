@@ -609,6 +609,7 @@ test('character export and import preserve a noted override and opaque legacy re
   await saved(page);
   const downloading = page.waitForEvent('download');
   await main(page).getByRole('button', { name: 'Export character', exact: true }).click();
+  await page.getByRole('button', { name: /^With history/ }).click();
   const download = await downloading;
   const exported = ExportFileSchema.parse(
     JSON.parse(await readFile((await download.path())!, 'utf8')),

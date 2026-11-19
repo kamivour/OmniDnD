@@ -88,6 +88,7 @@ test('creates a custom weapon that attacks, edits it, and keeps it in the export
   await saved(page);
   const downloading = page.waitForEvent('download');
   await main(page).getByRole('button', { name: 'Export character', exact: true }).click();
+  await page.getByRole('button', { name: /^With history/ }).click();
   const exported = ExportFileSchema.parse(
     JSON.parse(await readFile((await (await downloading).path())!, 'utf8')),
   );

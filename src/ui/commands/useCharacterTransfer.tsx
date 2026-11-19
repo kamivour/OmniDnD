@@ -21,12 +21,15 @@ export function useCharacterTransfer({
   openImport: (opener: HTMLElement) => void;
   exportCharacter: (id: string) => void;
   importControls: ReactNode;
+  exportControls: ReactNode;
 } {
   const toast = useToast();
   const input = useRef<HTMLInputElement>(null);
   const opener = useRef<HTMLElement | null>(null);
   const [importing, setImporting] = useState<{ file: ExportFile; notes: string[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [exporting, setExporting] = useState<string | null>(null);
+  const exportOpener = useRef<Element | null>(null);
 
   const openImport = (target: HTMLElement) => {
     opener.current = target;
@@ -34,15 +37,23 @@ export function useCharacterTransfer({
   };
 
   const exportCharacter = (id: string) => {
+    exportOpener.current = document.activeElement;
+    setExporting(id);
+  };
+
+  const download = (id: string, history: boolean) => {
+    setExporting(null);
     try {
-      const file = characterExport(characterStore.getState(), id, new Date().toISOString());
+      const file = characterExport(characterStore.getState(), id, new Date().toISOString(), {
+        history,
+      });
       const url = URL.createObjectURL(
         new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' }),
       );
-      const download = document.createElement('a');
-      download.href = url;
-      download.download = `${file.build.name.replace(/[^a-z0-9_-]+/gi, '-').replace(/^-|-$/g, '') || 'character'}.json`;
-      download.click();
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${file.build.name.replace(/[^a-z0-9_-]+/gi, '-').replace(/^-|-$/g, '') || 'character'}.json`;
+      link.click();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (cause) {
       toast({ text: cause instanceof Error ? cause.message : 'Export failed' });
@@ -141,5 +152,58 @@ export function useCharacterTransfer({
     </>
   );
 
-  return { openImport, exportCharacter, importControls };
+  const record = exporting ? characterStore.getState().characters[exporting] : undefined;
+  const size = (history: boolean) =>
+    exporting
+      ? kilobytes(
+          JSON.stringify(
+            characterExport(characterStore.getState(), exporting, new Date().toISOString(), {
+              history,
+            }),
+            null,
+            2,
+          ).length,
+        )
+      : '';
+  const exportControls = (
+    <Sheet
+      open={record !== undefined}
+      onOpenChange={(open) => !open && setExporting(null)}
+      title={`Export ${record?.build.name ?? 'character'}`}
+      description="The file holds choices, current resources and campaign rules. History is the game-action log; leave it out for a smaller file with nothing to undo."
+      onCloseAutoFocus={(event) => {
+        event.preventDefault();
+        const target = exportOpener.current;
+        if (target instanceof HTMLElement && target.isConnected) target.focus();
+      }}
+    >
+      {record && exporting && (
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() => download(exporting, false)}
+            className={`${button} w-full`}
+          >
+            Without history ({size(false)})
+          </button>
+          <button
+            type="button"
+            onClick={() => download(exporting, true)}
+            className={`${button} w-full`}
+          >
+            With history: {record.events.length} {record.events.length === 1 ? 'entry' : 'entries'}{' '}
+            ({size(true)})
+          </button>
+        </div>
+      )}
+    </Sheet>
+  );
+
+  return { openImport, exportCharacter, importControls, exportControls };
+}
+
+function kilobytes(length: number) {
+  return length < 1024 * 1024
+    ? `${Math.max(1, Math.round(length / 1024))} KB`
+    : `${(length / 1024 / 1024).toFixed(1)} MB`;
 }

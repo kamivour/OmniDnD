@@ -5,7 +5,16 @@ import type { CharacterStoreState } from '../state/character-store';
 
 type Source = Pick<CharacterStoreState, 'characters' | 'campaigns'>;
 
-export function characterExport(state: Source, id: string, exportedAt: string): ExportFile {
+/**
+ * One character as a detached file. Without history the log is left out: the file is
+ * smaller, keeps current resources, and imports with nothing to undo.
+ */
+export function characterExport(
+  state: Source,
+  id: string,
+  exportedAt: string,
+  { history = true }: { history?: boolean } = {},
+): ExportFile {
   const record = Object.hasOwn(state.characters, id) ? state.characters[id] : undefined;
   if (!record) throw new Error('Character not found');
   const campaign = Object.hasOwn(state.campaigns, record.build.campaignId)
@@ -17,6 +26,7 @@ export function characterExport(state: Source, id: string, exportedAt: string): 
     exportedAt,
     campaign,
     ...record,
+    events: history ? record.events : [],
   });
 }
 

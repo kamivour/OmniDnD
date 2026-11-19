@@ -60,6 +60,7 @@ export function HudBar() {
           <CharacterPortrait
             id={build.id}
             portrait={build.portrait}
+            classId={build.classes[0]?.classId}
             size={20}
             className="hidden shrink-0 text-accent sm:block"
           />

@@ -66,6 +66,27 @@ describe('character JSON files', () => {
     expect(sourceData(store.getState)).toEqual(before);
   });
 
+  it('can leave the history log out and still import with current resources', () => {
+    const source = structuredClone(seedFile);
+    const store = createCharacterStore([source]);
+    store.getState().dispatch(FOOL, applyDamage, { amount: 2 }, metadata('damage'));
+    const full = characterExport(store.getState(), FOOL, TIME);
+    const slim = characterExport(store.getState(), FOOL, TIME, { history: false });
+    expect(slim.events).toEqual([]);
+    expect(slim.live).toEqual(full.live);
+    expect(slim.build).toEqual(full.build);
+    expect(store.getState().characters[FOOL]?.events).toHaveLength(1);
+
+    const { file } = prepareCharacterImport(
+      JSON.parse(JSON.stringify(slim)),
+      createCharacterStore([]).getState(),
+      () => 'new-id',
+    );
+    expect(file.events).toEqual([]);
+    expect(file.live.hp).toBe(full.live.hp);
+    expect(roundTrip(file).characters[FOOL]?.live).toEqual(full.live);
+  });
+
   it('reports an absent character without changing current data', () => {
     const store = createCharacterStore([seedFile]);
     const before = sourceData(store.getState);

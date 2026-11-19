@@ -46,6 +46,21 @@ const ICONS: Record<string, string> = {
 
   'ui.concentration': 'lorc/concentration-orb',
 
+  // Default character portraits, by first class.
+  'class.artificer': 'lorc/gears',
+  'class.barbarian': 'delapouite/barbarian',
+  'class.bard': 'lorc/lyre',
+  'class.cleric': 'lorc/holy-symbol',
+  'class.druid': 'delapouite/oak-leaf',
+  'class.fighter': 'lorc/sword-clash',
+  'class.monk': 'lorc/meditation',
+  'class.paladin': 'delapouite/templar-shield',
+  'class.ranger': 'lorc/high-shot',
+  'class.rogue': 'lorc/cloak-dagger',
+  'class.sorcerer': 'lorc/magic-palm',
+  'class.warlock': 'delapouite/warlock-eye',
+  'class.wizard': 'lorc/wizard-staff',
+
   // Subclass cards.
   'subclass.artificer.alchemist': 'lorc/potion-ball',
   'subclass.artificer.armorer': 'lorc/breastplate',

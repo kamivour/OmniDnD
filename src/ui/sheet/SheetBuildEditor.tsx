@@ -404,6 +404,7 @@ export function SheetBuildEditor({ onDone }: { onDone: () => void }) {
             <CharacterPortrait
               id={baseline.id}
               portrait={portrait}
+              classId={baseline.classes[0]?.classId}
               size={40}
               className="text-accent"
             />
