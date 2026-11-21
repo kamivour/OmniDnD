@@ -1,0 +1,7 @@
+# The service worker must always be fetched fresh so every device sees new versions.
+/sw.js
+  Cache-Control: no-cache
+/registerSW.js
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache

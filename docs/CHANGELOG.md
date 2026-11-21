@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 17:23 — Update now banner
+
+- When a new version is out, a banner says so with **Update now**. Before, phones that kept the app open could stay on an old version for days.
+- The app checks when it opens, when you switch back to it, and every 30 minutes. It never reloads on its own.
+- Friends on an old version see the banner once their device loads this version; closing the app fully and reopening it once gets them there.
+- Checks pass.
+
 ## 2026-11-21 16:02 — Compendium finished
 
 - The Compendium is complete: spells, classes, subclasses, races, backgrounds, feats and equipment, with equipment grouped by tier (Mundane, Common, Uncommon, Rare and up) and filtered by type (weapons, armor, wondrous items and more).

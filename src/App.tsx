@@ -13,6 +13,7 @@ import { AmbientLayer } from './ui/theme/AmbientLayer';
 import { PressEffects } from './ui/theme/PressEffects';
 import { TourHost } from './ui/tutorial/TourHost';
 import { StorageGate } from './ui/storage/StorageGate';
+import { UpdateBanner } from './ui/storage/UpdateBanner';
 
 /**
  * Load a screen's code the first time it opens; the service worker precaches every chunk.
@@ -94,6 +95,7 @@ export function App() {
             </Suspense>
           )}
           <TourHost />
+          <UpdateBanner />
           <Routes>
             <Route element={<HubFrame />}>
               <Route index element={<CampaignsScreen />} />
