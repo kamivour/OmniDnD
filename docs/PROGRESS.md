@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M41 review: infusion-known limits and companion forms fixed; reported Artificer disappearance still under investigation.
+**Current milestone:** M41 review: infusion limits, replica recipes and companion forms fixed; reported Artificer disappearance still under investigation.
 **Next up:** Reproduce the Artificer disappearance with the friend's exported campaign settings. M43 awaits live account verification, M44 and M45 are complete, and M42's broader overhaul is planned. See [AUDIT_REPORT.md](AUDIT_REPORT.md) for class fixes and remaining gaps.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -331,6 +331,7 @@ Details in [PLAN.md](PLAN.md).
 - [x] Verify switching to Rolled preserves Artificer availability and explain source requirements
 - [x] Check phone and desktop layouts
 - [x] Restrict newly learned infusions by Artificer level and known limit in To do, creation and level-up
+- [x] List each Tasha’s replica recipe at its Artificer level and show known infusions in To do
 - [x] Add the three cannon forms, audit all bundled companion templates and compute spell-summon forms and upcasting
 - [ ] Reproduce the friend's missing Artificer using his actual campaign settings and deployed app
 
@@ -417,6 +418,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-22 — M41: added separate Tasha’s replica recipes, searchable known infusion picks, and force and psychic options for Resistant Armor.
 - 2026-11-21 — Audited class and subclass coverage. Fixed Paladin and Cleric Channel Divinity, fighting styles, Land Druid terrain, and subclass spell picks.
 
 - 2026-11-21 — M44 T7: Full browser suite passes at 375 px and 1440 px; M44 screens checked in dark, parchment and prism themes. M44 done.

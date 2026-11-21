@@ -4,11 +4,13 @@ import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { chooseFeatSpells, featSpellCandidates, resolveChoices } from '../../engine/commands';
 import type { Ability } from '../../engine/calc/abilities';
+import { artificerLevel, INFUSION_PREFIX, infusionsKnownAt } from '../../engine/calc/infusions';
 import type { PendingChoice } from '../../engine/calc/pending-choices';
 import { computeSheet, type CharacterState } from '../../engine/calc/sheet';
 import type { Skill } from '../../engine/rules2014';
 import { deviceStore } from '../../state/device-settings';
 import { OptionGuide } from '../components/OptionGuide';
+import { inputClass } from '../components/fields';
 import { SectionLabel } from '../components/SectionLabel';
 import { useCommand } from '../commands/command-context';
 import { AsiPick, SubclassPick } from '../level/LevelUpChoices';
@@ -169,6 +171,7 @@ function ChoiceForm({
   const hints = useStore(deviceStore, (settings) => settings.beginnerHints);
   const [picks, setPicks] = useState<LevelPicks>(emptyPicks);
   const [chosen, setChosen] = useState<string[]>([]);
+  const [query, setQuery] = useState('');
   const set = (patch: Partial<LevelPicks>) => setPicks({ ...picks, ...patch });
   const toggle = (id: string) =>
     setChosen(
@@ -205,6 +208,17 @@ function ChoiceForm({
           : item.kind === 'option'
             ? { features: chosen }
             : { expertise: chosen as Skill[] };
+  const infusions = item.prefix === INFUSION_PREFIX;
+  const level = infusions ? artificerLevel(state.build) : 0;
+  const known = infusions
+    ? state.build.featureIds.filter((id) => id.startsWith(INFUSION_PREFIX))
+    : [];
+  const visibleOptions = infusions
+    ? options.filter(
+        ({ id, name }) =>
+          chosen.includes(id) || name.toLowerCase().includes(query.trim().toLowerCase()),
+      )
+    : options;
 
   return (
     <div className="flex flex-col gap-3">
@@ -224,13 +238,42 @@ function ChoiceForm({
       {item.kind === 'asi' && (
         <AsiPick feats={feats} picks={picks} set={set} campaign={state.campaign} />
       )}
+      {infusions && (
+        <div className="flex flex-col gap-2 text-sm">
+          <p className="text-text-muted">
+            Artificer {level} · {known.length}/{infusionsKnownAt(level)} infusions known. This list
+            shows recipes you can learn now. More unlock at levels 6, 10 and 14.
+          </p>
+          {known.length > 0 && (
+            <details>
+              <summary className="min-h-11 cursor-pointer py-3">
+                Already known ({known.length})
+              </summary>
+              <ul className="list-disc pl-5">
+                {known.map((id) => (
+                  <li key={id}>{nameOf(id)}</li>
+                ))}
+              </ul>
+            </details>
+          )}
+          <label className="flex flex-col gap-1">
+            Search infusions
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              className={inputClass}
+            />
+          </label>
+        </div>
+      )}
       {options.length > 0 && (
         <fieldset className="flex flex-col">
           <legend className="mb-1 text-sm text-text">
             Pick {item.count} ({chosen.length} chosen)
           </legend>
           <div className="grid max-h-72 gap-1 overflow-y-auto sm:grid-cols-2">
-            {options.map((option) => (
+            {visibleOptions.map((option) => (
               <label
                 key={option.id}
                 className="flex min-h-11 items-center gap-2 text-sm capitalize text-text"
@@ -245,6 +288,9 @@ function ChoiceForm({
                 {option.name}
               </label>
             ))}
+            {visibleOptions.length === 0 && (
+              <p className="text-sm text-text-muted">No recipes match your search.</p>
+            )}
           </div>
         </fieldset>
       )}

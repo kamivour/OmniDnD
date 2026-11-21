@@ -8,6 +8,7 @@ import {
   infusionFits,
   infusionKey,
   infusionLimit,
+  isResistantArmorType,
   magicalItem,
 } from '../calc/infusions';
 import { block, warn } from './shared';
@@ -45,12 +46,8 @@ export const infuseItem: Command<z.infer<typeof Input>> = {
       ];
     if (magicalItem(def) || ctx.live.infusions?.some((i) => i.instanceId === instanceId))
       return [block('Infusions require a nonmagical item with no existing infusion')];
-    if (
-      key === 'resistant-armor' &&
-      (!damageType ||
-        ['force', 'psychic', 'bludgeoning', 'piercing', 'slashing'].includes(damageType))
-    )
-      return [block('Choose acid, cold, fire, lightning, necrotic, poison, radiant or thunder')];
+    if (key === 'resistant-armor' && (!damageType || !isResistantArmorType(damageType)))
+      return [block('Choose an eligible damage type for Resistant Armor')];
     const current = activeInfusions(ctx.build, ctx.live);
     if (current.length > infusionLimit(ctx.build))
       return [

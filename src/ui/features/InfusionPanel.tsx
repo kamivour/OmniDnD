@@ -10,7 +10,9 @@ import {
   infusionFits,
   infusionKey,
   infusionLimit,
+  isReplicateInfusion,
   magicalItem,
+  RESISTANT_ARMOR_TYPES,
 } from '../../engine/calc/infusions';
 import { infuseItem, endInfusion } from '../../engine/commands/infusions';
 import type { DamageType } from '../../engine/rules2014';
@@ -148,9 +150,9 @@ export function InfusionPanel({
       </label>
       {featureId && !rule && (
         <p>
-          For Homunculus Servant, use Companions to create its stat block. For Replicate Magic Item,
-          record the DM-approved item in Inventory; replication choices and their limits need table
-          review.
+          {isReplicateInfusion(featureId)
+            ? 'Record the replicated item in Inventory and count it against your active infusion limit.'
+            : 'Record your Homunculus Servant in Companions and count it against your active infusion limit.'}
         </p>
       )}
       {rule && (
@@ -185,18 +187,7 @@ export function InfusionPanel({
                 value={damageType}
                 onChange={(e) => setDamageType(e.target.value as DamageType)}
               >
-                {(
-                  [
-                    'acid',
-                    'cold',
-                    'fire',
-                    'lightning',
-                    'necrotic',
-                    'poison',
-                    'radiant',
-                    'thunder',
-                  ] as const
-                ).map((t) => (
+                {RESISTANT_ARMOR_TYPES.map((t) => (
                   <option key={t}>{t}</option>
                 ))}
               </select>

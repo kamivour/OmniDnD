@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D249 | 2026-11-22 | Each named Replicate Magic Item recipe uses one known infusion. The existing general pick remains available for eligible common items recorded at the table. | Follow Tasha’s recipe choices and preserve existing picks |
 | D247 | 2026-11-21 | Cantrips learned from a fighting style use its class's casting statistics and sit outside normal class picks. Land Druids choose one terrain, with circle spells unlocked by druid level. | Keep class limits and granted spells separate |
 | D248 | 2026-11-21 | Cleric/Paladin Channel Divinity uses the higher pool maximum. Previously recorded spending from both classes counts until it is corrected or recovered through a rest. | Follow the 2014 multiclass rule and preserve saved spending |
 | D246 | 2026-11-21 | Items inside an extradimensional container add no carried weight. Overfilling or nesting magic containers only warns; the Haversack is tracked as one 120 lb total with its pouches listed as text, and volume is shown as text only. | The DM rules on ruptures and Astral gates; per-pouch and volume tracking would make the player type numbers for little gain. |
@@ -300,7 +301,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q44 | ~~Are D&D place names fine as theme labels?~~ Answered → D192 | — | — | — |
 | Q45 | ~~Water ripple on phones too?~~ Answered → D193 | — | — | — |
 | Q46 | ~~Theme per campaign?~~ Answered → D194 | — | — | — |
-| Q47 | Should Homunculus Servant and Replicate Magic Item get dedicated creation and replica-choice tracking? | After M41 | Use existing Companions and Inventory workflows; these two applications and their share of the infusion limit remain manual, stated beside the counter | User |
+| Q47 | Should Homunculus Servant and Replicate Magic Item get dedicated creation and active-limit tracking? | After M41 | Learn named recipes in To do. Use Companions and Inventory to record creation and count these applications manually. | User |
 | Q48 | How should Armorer's armor components be represented for its two extra armor-only infusions? | After M41 | Standard active limit only, with a visible reminder; do not grant two unrestricted slots or invent separate equipment | User |
 | Q49 | Should the already-bundled Summon Draconic Spirit move from the Tasha filter to a separate Fizban's book option? | Next source review | Preserve existing spell visibility; identify Fizban's 2014 source on its companion card | User |
 

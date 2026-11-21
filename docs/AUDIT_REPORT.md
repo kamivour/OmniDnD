@@ -124,3 +124,9 @@ The Progress, Changelog, Decisions and Data notes reflect the changes above. Slo
 - Reproduce the Artificer report with the tester's exported campaign settings. The prior fixture retained Artificer after switching to Rolled.
 - Complete M43 on a disposable Supabase project before marking live account verification done.
 - Decide how far to automate table choices already documented as manual, especially in D186, D187 and D208.
+
+## 2026-11-22 · Infusion choices follow-up
+
+- To do already hid learned recipes and recipes above the character’s Artificer level. At level 2, the old nine-option pool would show six choices after three picks.
+- The generic Replicate Magic Item entry missed individual recipes. The selector now offers all 49 named Tasha’s recipes at their required levels and shows the character’s known picks. Existing general picks still count toward the limit.
+- Resistant Armor also accepts force and psychic. Replica creation stays in Inventory under Q47.

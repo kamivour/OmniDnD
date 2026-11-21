@@ -1,6 +1,58 @@
 import { expect, test } from './fixtures';
 import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
+test('known infusion picker searches and learns separate replica recipes at the right level', async ({
+  page,
+}) => {
+  const file = reviewFile('replicate-artificer');
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.build.classes = [{ classId: 'class.artificer', level: 2 }];
+  file.build.hpEntries = [
+    { level: 1, classId: 'class.artificer', method: 'max', value: 8 },
+    { level: 2, classId: 'class.artificer', method: 'average', value: 5 },
+  ];
+  file.build.spells = [];
+  file.build.proficiencyPicks = {};
+  file.build.featureIds = ['feature.artificer.infusion-enhanced-weapon'];
+  await importReview(page, file, 'todo');
+  const row = page.getByRole('listitem').filter({ hasText: 'Infusions: pick 3' });
+  await row.getByRole('button', { name: 'Choose', exact: true }).click();
+  await expect(row.getByText(/Artificer 2 · 1\/4 infusions known/)).toBeVisible();
+  await row.getByText('Already known (1)', { exact: true }).click();
+  await expect(row.getByText('Infusion: Enhanced Weapon', { exact: true })).toBeVisible();
+  await expect(
+    row.getByRole('checkbox', { name: 'Infusion: Homunculus Servant', exact: true }),
+  ).toBeVisible();
+  await expect(
+    row.getByRole('checkbox', { name: 'Replicate Magic Item: Winged Boots', exact: true }),
+  ).toHaveCount(0);
+  const search = row.getByRole('searchbox', { name: 'Search infusions', exact: true });
+  await search.fill('bag of holding');
+  const bag = row.getByRole('checkbox', {
+    name: 'Replicate Magic Item: Bag of Holding',
+    exact: true,
+  });
+  await bag.check();
+  await search.fill('sending stones');
+  await expect(bag).toBeChecked();
+  await row
+    .getByRole('checkbox', { name: 'Replicate Magic Item: Sending Stones', exact: true })
+    .check();
+  await row.getByRole('button', { name: 'Save choice', exact: true }).click();
+  await saved(page);
+  await page.reload();
+  await expect(page.getByText('Infusions: pick 1', { exact: true })).toBeVisible();
+  expect((await reviewState(page, file.build.id)).build.featureIds).toEqual([
+    ...file.build.featureIds,
+    'feature.artificer.infusion-replicate-magic-item-bag-of-holding',
+    'feature.artificer.infusion-replicate-magic-item-sending-stones',
+  ]);
+  await page.getByRole('button', { name: 'Undo last command', exact: true }).click();
+  await saved(page);
+  await expect(page.getByText('Infusions: pick 3', { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
 test('a long rest opens infusion assignment; bonuses survive reload and Undo removes only the infusion', async ({
   page,
 }) => {

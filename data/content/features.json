@@ -1943,13 +1943,13 @@
   {
     "kind": "feature",
     "id": "feature.artificer.infusion-replicate-magic-item",
-    "name": "Infusion: Replicate Magic Item",
+    "name": "Replicate Magic Item: Table choice",
     "ruleset": "5e-2014",
     "source": "TCE",
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Artificer level 2+. Copy one item from the replicable list, such as bag of holding or alchemy jug."
+      "effect": "Keep the recipe you recorded for an existing pick. For a new pick, record an eligible common item in your notes. Potions and scrolls are excluded."
     },
     "origin": "class",
     "activation": "special"

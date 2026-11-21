@@ -4,11 +4,15 @@ import { CharacterBuildSchema, LiveStateSchema } from '../schema';
 import { freshState, Session } from './test-utils';
 import { completeLongRest } from './rest';
 import { infuseItem, endInfusion } from './infusions';
+import { resolveChoices } from './resolve-choices';
+import { pendingChoices } from '../calc/pending-choices';
 import {
   INFUSION_PREFIX,
   infusionLimit,
   activeInfusions,
   infusionDefenses,
+  REPLICATE_INFUSION,
+  REPLICATE_RECIPES,
 } from '../calc/infusions';
 import { computeSheet } from '../calc/sheet';
 
@@ -181,23 +185,65 @@ describe('infusing inventory', () => {
       }).result,
     ).toBe('blocked');
   });
-  it('records resistance as a reminder only when the infused armor is worn and attuned', () => {
-    const state = artificer(6);
-    state.build.featureIds.push(INFUSION_PREFIX + 'resistant-armor');
-    state.build.items.push({ instanceId: 'armor', itemId: 'item.leather-armor' });
-    state.live.items.armor = { qty: 1, equipped: true, attuned: false };
+  it.each(['fire', 'force', 'psychic'] as const)(
+    'shows %s resistance when the infused armor is worn and attuned',
+    (damageType) => {
+      const state = artificer(6);
+      state.build.featureIds.push(INFUSION_PREFIX + 'resistant-armor');
+      state.build.items.push({ instanceId: 'armor', itemId: 'item.leather-armor' });
+      state.live.items.armor = { qty: 1, equipped: true, attuned: false };
+      const session = new Session(state);
+      const input = {
+        featureId: INFUSION_PREFIX + 'resistant-armor',
+        instanceId: 'armor',
+        damageType,
+        attune: true,
+      };
+      expect(session.try(infuseItem, { ...input, damageType: 'slashing' }).result).toBe('blocked');
+      session.run(infuseItem, input);
+      expect(
+        infusionDefenses(session.state.build, session.live, registry)[0]?.defenses.resistances,
+      ).toEqual([damageType]);
+      expect(session.live.hp).toBe(state.live.hp);
+    },
+  );
+});
+
+describe('learning replicate recipes', () => {
+  const recipe = (slug: string) => `${REPLICATE_INFUSION}-${slug}`;
+  const picks = (state: ReturnType<typeof artificer>) =>
+    pendingChoices(state, registry).find((item) => item.prefix === INFUSION_PREFIX);
+
+  it.each([
+    [2, 8],
+    [6, 16],
+    [10, 37],
+    [14, 49],
+  ])('offers the full cumulative replica table at Artificer %i', (level, count) => {
+    const state = artificer(level);
+    state.campaign.sources = ['PHB', 'TCE'];
+    state.build.featureIds = [];
+    const ids = picks(state)?.optionIds ?? [];
+    expect(ids.filter((id) => id.startsWith(`${REPLICATE_INFUSION}-`))).toHaveLength(count);
+  });
+
+  it('learns two separate level-2 recipes, keeps the legacy slot and undoes them together', () => {
+    const state = artificer();
+    state.campaign.sources = ['PHB', 'TCE'];
+    state.build.featureIds = [REPLICATE_INFUSION];
     const session = new Session(state);
-    const input = {
-      featureId: INFUSION_PREFIX + 'resistant-armor',
-      instanceId: 'armor',
-      damageType: 'fire' as const,
-      attune: true,
-    };
-    expect(session.try(infuseItem, { ...input, damageType: 'force' }).result).toBe('blocked');
-    session.run(infuseItem, input);
-    expect(
-      infusionDefenses(session.state.build, session.live, registry)[0]?.defenses.resistances,
-    ).toEqual(['fire']);
-    expect(session.live.hp).toBe(state.live.hp);
+    const classId = 'class.artificer';
+    const learn = (...features: string[]) => ({ classId, choices: { features } });
+    expect(session.preview(resolveChoices, learn(recipe('ring-of-the-ram'))).result).toBe(
+      'blocked',
+    );
+    const low = [recipe('bag-of-holding'), recipe('sending-stones')];
+    session.run(resolveChoices, learn(...low));
+    expect(session.state.build.featureIds).toEqual([REPLICATE_INFUSION, ...low]);
+    expect(picks(session.state)?.count).toBe(1);
+    expect(session.preview(resolveChoices, learn(low[0]!)).result).toBe('blocked');
+    session.undo();
+    expect(session.state.build.featureIds).toEqual([REPLICATE_INFUSION]);
+    expect(new Set(REPLICATE_RECIPES.map(({ id }) => id)).size).toBe(49);
   });
 });

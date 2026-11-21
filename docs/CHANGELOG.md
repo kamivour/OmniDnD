@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 02:48 — Artificer infusion recipes
+
+- Choose from 49 named Replicate Magic Item recipes as your Artificer reaches levels 2, 6, 10 and 14.
+- In To do, search available recipes and expand Already known to see past picks. Each named recipe takes one slot.
+- Resistant Armor now supports force and psychic damage. Checks pass.
+
 ## 2026-11-21 19:57 — Complete missing fighting style and subclass choices
 
 - Blessed Warrior and Druidic Warrior now let you choose two cantrips in To do. Champion gets its second style, and Archery adds its attack bonus.

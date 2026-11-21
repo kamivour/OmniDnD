@@ -21,6 +21,7 @@ import srdRaces from '../../data/srd/races.json';
 import srdSpells from '../../data/srd/spells.json';
 import srdSubclasses from '../../data/srd/subclasses.json';
 import { buildRegistry, characterRegistry } from '../engine/registry';
+import { REPLICATE_RECIPES } from '../engine/calc/infusions';
 import {
   type CharacterBuild,
   MechanicsOverlayPackSchema,
@@ -51,6 +52,20 @@ export const contentPacks = {
   races: contentRaces,
   spells: contentSpells,
   subclasses: contentSubclasses,
+  infusionRecipes: REPLICATE_RECIPES.map(({ id, name, level }) => ({
+    kind: 'feature',
+    id,
+    name: `Replicate Magic Item: ${name}`,
+    ruleset: '5e-2014',
+    source: 'TCE',
+    srd: false,
+    origin: 'class',
+    activation: 'passive',
+    summaryReviewed: false,
+    summary: {
+      effect: `Artificer ${level}+. Learn to replicate ${name}. This is one known infusion. Record the created item in Inventory and count it against your active limit.`,
+    },
+  })),
 };
 
 export const mechanicsPacks = {

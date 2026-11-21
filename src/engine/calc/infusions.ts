@@ -1,7 +1,37 @@
+import replicas from '../../../data/content/infusion-replicas.json';
 import type { CharacterBuild, LiveState, ItemDef, FeatureDefenses } from '../schema';
+import type { DamageType } from '../rules2014';
 import type { Registry } from '../registry';
 
 export const INFUSION_PREFIX = 'feature.artificer.infusion-';
+export const REPLICATE_INFUSION = `${INFUSION_PREFIX}replicate-magic-item`;
+
+/** Tasha's named tables. Each item is a separate known infusion. */
+export const REPLICATE_RECIPES = Object.entries(replicas).flatMap(([level, names]) =>
+  names.map((name) => ({
+    id: `${REPLICATE_INFUSION}-${name.toLowerCase().replaceAll(' ', '-')}`,
+    name,
+    level: Number(level),
+  })),
+);
+const recipeLevels = new Map(REPLICATE_RECIPES.map(({ id, level }) => [id, level]));
+
+export const isReplicateInfusion = (id: string) =>
+  id === REPLICATE_INFUSION || recipeLevels.has(id);
+export const RESISTANT_ARMOR_TYPES = [
+  'acid',
+  'cold',
+  'fire',
+  'force',
+  'lightning',
+  'necrotic',
+  'poison',
+  'psychic',
+  'radiant',
+  'thunder',
+] as const satisfies readonly DamageType[];
+export const isResistantArmorType = (type: DamageType) =>
+  RESISTANT_ARMOR_TYPES.some((candidate) => candidate === type);
 /** Tasha's 2014 Artificer: known recipes, separate from the active-item limit. */
 export const INFUSIONS_KNOWN: [number, number][] = [
   [2, 4],
@@ -12,7 +42,8 @@ export const INFUSIONS_KNOWN: [number, number][] = [
 ];
 export const infusionsKnownAt = (level: number) =>
   INFUSIONS_KNOWN.reduce((total, [from, count]) => (level >= from ? count : total), 0);
-export const infusionMinimumLevel = (id: string) => INFUSIONS[infusionKey(id)]?.level ?? 2;
+export const infusionMinimumLevel = (id: string) =>
+  recipeLevels.get(id) ?? INFUSIONS[infusionKey(id)]?.level ?? 2;
 type Gear =
   | 'weapon'
   | 'thrown'
