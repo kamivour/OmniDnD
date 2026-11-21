@@ -3,6 +3,7 @@ import { Moon, Tent } from 'lucide-react';
 import { registry } from '../../data/registry';
 import { endConcentration } from '../../engine/commands';
 import { overridePath } from '../../engine/calc/value-overrides';
+import { featureResource } from '../../engine/calc/features';
 import { ConcentrationChip } from '../components/chips';
 import { HpBar } from '../components/HpBar';
 import { CharacterPortrait } from '../components/CharacterPortrait';
@@ -38,6 +39,7 @@ export function HudBar() {
     max > 0 ? [{ max, level, used: live.slotsUsed[level] ?? 0 }] : [],
   );
   const resource = sheet.features.find((feature) => feature.uses);
+  const resourceUses = resource && featureResource(sheet.features, live, resource.def.id);
   const shownSlots = slots.slice(0, sheet.slots.pact && resource ? 1 : 2);
   const largeHp = [live.hp, live.tempHp, sheet.maxHp.value].some((value) => value >= 1_000_000);
   const concentration = live.concentration && registry.get('spell', live.concentration.spellId);
@@ -187,7 +189,7 @@ export function HudBar() {
               />
             </button>
           )}
-          {resource?.uses && (
+          {resource && resourceUses && (
             <button
               type="button"
               aria-label="Adjust class resources"
@@ -200,8 +202,8 @@ export function HudBar() {
                     ? 'BI'
                     : (resource.def.name.split(' ')[0] ?? resource.def.name)
                 }
-                max={resource.uses.max}
-                used={live.featureUsesSpent[resource.def.id] ?? 0}
+                max={resourceUses.max}
+                used={resourceUses.spent}
                 tone="accent"
                 size="sm"
                 wrap
@@ -212,8 +214,8 @@ export function HudBar() {
                   sheet,
                   overridePath('features', resource.def.id, 'uses', 'max'),
                   overridePath('features', resource.def.id, 'uses', 'remaining'),
-                  live.featureUsesSpent[resource.def.id] ?? 0,
-                  resource.uses.max,
+                  resourceUses.spent,
+                  resourceUses.max,
                 )}
               />
               <OverrideMarker override={resource.dieOverride} />

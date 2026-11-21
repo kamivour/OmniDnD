@@ -125,7 +125,7 @@ export function CombatScreen() {
     }
   }, [events]);
 
-  const spentFor = (cost: Cost): string | undefined => {
+  const spentFor = (cost: Cost | 'No action'): string | undefined => {
     if (cost !== 'A' && cost !== 'BA' && cost !== 'R') return undefined;
     return available[cost] ? undefined : ECONOMY_NAME[cost];
   };
@@ -500,11 +500,15 @@ export function CombatScreen() {
             {!model.spells.entries.some(({ spell }) => spell.cost === 'A') && (
               <p className="text-sm text-text-muted">No action spells selected.</p>
             )}
-            {model.features.some(({ feature }) => feature.cost === 'A') && (
+            {model.features.some(
+              ({ feature }) => feature.cost === 'A' || feature.cost === 'No action',
+            ) && (
               <>
                 <SectionLabel as="h3">Action features</SectionLabel>
                 <ul className="flex flex-col gap-2">
-                  {model.features.filter(({ feature }) => feature.cost === 'A').map(featureRow)}
+                  {model.features
+                    .filter(({ feature }) => feature.cost === 'A' || feature.cost === 'No action')
+                    .map(featureRow)}
                 </ul>
               </>
             )}

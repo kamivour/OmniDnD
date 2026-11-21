@@ -46,7 +46,7 @@ export interface FeatureView {
   dieOverride?: { note: string };
   id: string;
   name: string;
-  cost: Cost | 'Passive' | 'Rest';
+  cost: Cost | 'Passive' | 'Rest' | 'No action';
   uses?: { max: number; used: number; die: string; recharge: string };
   lines: string[];
 }

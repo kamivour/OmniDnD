@@ -62,13 +62,18 @@ function abilityFor(ctx: FeatSpellContext, def: FeatureDef, grant: FeatureSpells
 
 /** Every feat and racial trait on the character that teaches spells. */
 export function featSpellSources(ctx: FeatSpellContext): FeatSpellSource[] {
-  return ctx.sheet.features.flatMap(({ def }) => {
+  return ctx.sheet.features.flatMap(({ def, level }) => {
     const grant = def.spells;
     if (!grant) return [];
+    if (
+      grant.requiredSubclassId &&
+      !ctx.build.classes.some(({ subclassId }) => subclassId === grant.requiredSubclassId)
+    )
+      return [];
     const stored = ctx.build.featSpells?.[def.id];
     const ability = abilityFor(ctx, def, grant);
     const fixed = (grant.fixed ?? [])
-      .filter((row) => (row.minLevel ?? 1) <= ctx.sheet.level)
+      .filter((row) => (row.minLevel ?? 1) <= (grant.castingClassId ? level : ctx.sheet.level))
       .map(({ spellId, free, castLevel }) => ({
         spellId,
         ...(free ? { free } : {}),

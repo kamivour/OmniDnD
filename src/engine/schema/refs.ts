@@ -193,6 +193,9 @@ export const FreeCastSchema = z.enum(['long', 'short', 'will']);
  * spells are cast with this ability, outside any class's lists and limits.
  */
 export const FeatureSpellsSchema = z.strictObject({
+  /** Class-list grants use the owning class's casting stats and leave its normal limits intact. */
+  castingClassId: refId('class').optional(),
+  requiredSubclassId: refId('subclass').optional(),
   /** A fixed ability, the ability the feat raised, or the spellcasting ability of the picked class. */
   ability: z.union([AbilitySchema, z.enum(['raised', 'class'])]),
   /** The player picks one of these classes; its spell list supplies `fromClass` picks. */
@@ -206,7 +209,7 @@ export const FeatureSpellsSchema = z.strictObject({
       z.strictObject({
         spellId: refId('spell'),
         free: FreeCastSchema.optional(),
-        /** Character level needed before the spell is available. */
+        /** Class level for a class-list grant, character level otherwise. */
         minLevel: z.int().min(1).max(20).optional(),
         /** The free casting is at this spell level (Infernal Legacy: hellish rebuke as 2nd level). */
         castLevel: z.int().min(1).max(9).optional(),
@@ -411,6 +414,10 @@ export const SubclassDefSchema = z
       z.strictObject({ level: z.int().min(1).max(20), featureId: refId('feature') }),
     ),
     spellcasting: SpellcastingSchema.optional(),
+    /** Extra candidates the subclass adds to its class list, never learned automatically. */
+    expandedSpellIds: z.array(refId('spell')).optional(),
+    /** Other class lists this subclass can learn from, such as Divine Soul's cleric spells. */
+    additionalSpellLists: z.array(refId('class')).optional(),
     /**
      * Domain, oath and similar spells by class level: always prepared (or known) and never
      * counted against the class's limits.

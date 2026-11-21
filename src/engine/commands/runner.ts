@@ -94,7 +94,12 @@ export function runCommand<Payload>(
     { build: state.build, live: state.live },
     (draft) => {
       text = command.apply(draft, payload, { ...ctx, eventId, automation });
-      const retained = retainCounterCorrections(draft.build, draft.live, state.live);
+      const retained = retainCounterCorrections(
+        draft.build,
+        draft.live,
+        state.live,
+        ctx.sheet.features,
+      );
       if (retained.length !== draft.build.overrides.length) draft.build.overrides = retained;
     },
   );

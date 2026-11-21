@@ -63,6 +63,17 @@ function spell(ctx: SpellSelectionContext, id: string): SpellDef | undefined {
 
 const unique = (ids: readonly string[]): string[] => [...new Set(ids)];
 
+function onClassSpellList(ctx: SpellSelectionContext, classId: string) {
+  const entry = ctx.build.classes.find((row) => row.classId === classId);
+  const subclass = entry?.subclassId ? ctx.registry.entries.get(entry.subclassId) : undefined;
+  const base = entry ? (entryCasting(ctx.registry, entry)?.spellList ?? classId) : classId;
+  return (spell: SpellDef) =>
+    spell.classes.includes(base) ||
+    (subclass?.kind === 'subclass' &&
+      (subclass.expandedSpellIds?.includes(spell.id) ||
+        subclass.additionalSpellLists?.some((id) => spell.classes.includes(id))));
+}
+
 /** Retained selections are reported rather than repaired or silently removed. */
 export function spellSelectionRuleWarnings(
   ctx: SpellSelectionContext,
@@ -70,6 +81,8 @@ export function spellSelectionRuleWarnings(
 ): string[] {
   const warnings: string[] = [];
   const { classId, name, mode, selection } = details;
+  const onList = onClassSpellList(ctx, classId);
+  const granted = new Set(details.granted.map(({ id }) => id));
   const classDef = ctx.registry.entries.get(classId);
   if (mode === 'unsupported') warnings.push(`${name} spell selection is not supported.`);
   if (classDef?.kind === 'class' && !sourceAllows(ctx.campaign, classDef))
@@ -83,7 +96,7 @@ export function spellSelectionRuleWarnings(
       }
       if (!sourceAllows(ctx.campaign, def) || def.ruleset !== ctx.campaign.ruleset)
         warnings.push(`${def.name}'s source is not enabled in this campaign.`);
-      if (!def.classes.includes(classId))
+      if (!onList(def) && !granted.has(id))
         warnings.push(`${def.name} is not on the ${name} spell list.`);
       if (mode !== 'unsupported' && def.level > details.maxSpellLevel)
         warnings.push(`${def.name} exceeds ${name}'s level ${details.maxSpellLevel} spell limit.`);
@@ -163,12 +176,19 @@ export function spellSelectionDetails(
   const preparedCount = selection.prepared.filter(
     (id) => (spell(ctx, id)?.level ?? 0) > 0 && counted(id),
   ).length;
-  const cantripLimit =
+  const totalCantripLimit =
     mode === 'unsupported'
       ? undefined
       : (effective?.cantripsKnown ??
         casting?.cantripsKnown?.[classLevel - 1] ??
         (classId === 'class.paladin' || classId === 'class.ranger' ? 0 : undefined));
+  // The Arcane Trickster table includes the required Mage Hand in its cantrip total.
+  const cantripLimit =
+    casterEntry?.subclassId === 'subclass.rogue.arcane-trickster' &&
+    totalCantripLimit !== undefined &&
+    grantedIds.has('spell.mage-hand')
+      ? Math.max(0, totalCantripLimit - 1)
+      : totalCantripLimit;
   const knownLimit =
     mode === 'known'
       ? (effective?.spellsKnown ?? casting?.spellsKnown?.[classLevel - 1])
@@ -184,13 +204,14 @@ export function spellSelectionDetails(
               preparedLevelPart(classId, classLevel) + ctx.sheet.abilities[casting!.ability].mod,
             )))
       : undefined;
+  const onList = onClassSpellList(ctx, classId);
   const eligible = [...ctx.registry.entries.values()]
     .filter(
       (entry): entry is SpellDef =>
         entry.kind === 'spell' &&
         entry.ruleset === ctx.campaign.ruleset &&
         sourceAllows(ctx.campaign, entry) &&
-        entry.classes.includes(casting?.spellList ?? classId) &&
+        Boolean(onList(entry)) &&
         !grantedIds.has(entry.id),
     )
     .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));

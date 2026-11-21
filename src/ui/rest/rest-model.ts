@@ -1,4 +1,5 @@
 import { computeSheet, type CharacterState } from '../../engine/calc/sheet';
+import { featureResource } from '../../engine/calc/features';
 import { formatClock } from '../../engine/clock';
 import {
   completeLongRest,
@@ -146,12 +147,13 @@ export function restChanges(
     });
   }
   for (const feature of previous.features) {
-    if (!feature.uses) continue;
-    const max = feature.uses.max;
+    const pool = featureResource(previous.features, before.live, feature.def.id);
+    const restored = featureResource(previous.features, after.live, feature.def.id);
+    if (!pool || !restored) continue;
     rows.push({
       label: feature.def.name,
-      before: `${Math.max(0, max - (before.live.featureUsesSpent[feature.def.id] ?? 0))} / ${max}`,
-      after: `${Math.max(0, max - (after.live.featureUsesSpent[feature.def.id] ?? 0))} / ${max}`,
+      before: `${pool.remaining} / ${pool.max}`,
+      after: `${restored.remaining} / ${restored.max}`,
     });
   }
   if (before.live.concentration) {

@@ -10,15 +10,14 @@ export interface GrantedSpell {
 }
 
 type SpellList = CharacterBuild['spells'][number];
+type GrantBuild = Pick<CharacterBuild, 'classes'> &
+  Partial<Pick<CharacterBuild, 'featureIds' | 'featSpells'>>;
 
 /**
  * Subclass spells (domain, oath, circle, ...) unlocked by the class level reached.
  * https://www.dndbeyond.com/sources/dnd/basic-rules-2014/classes#DomainSpells
  */
-export function grantedSpells(
-  registry: Registry,
-  build: Pick<CharacterBuild, 'classes'>,
-): GrantedSpell[] {
+export function grantedSpells(registry: Registry, build: GrantBuild): GrantedSpell[] {
   const granted: GrantedSpell[] = [];
   const seen = new Set<string>();
   for (const classId of new Set(build.classes.map((entry) => entry.classId))) {
@@ -26,15 +25,35 @@ export function grantedSpells(
     const level = entries.reduce((sum, entry) => sum + entry.level, 0);
     const subclassId = entries.find((entry) => entry.subclassId)?.subclassId;
     const subclass = subclassId ? registry.entries.get(subclassId) : undefined;
-    if (subclass?.kind !== 'subclass') continue;
-    for (const step of subclass.grantedSpells ?? []) {
+    const add = (spellId: string, from: string) => {
+      const key = `${classId}:${spellId}`;
+      if (seen.has(key) || registry.entries.get(spellId)?.kind !== 'spell') return;
+      seen.add(key);
+      granted.push({ spellId, classId, from });
+    };
+    for (const step of (subclass?.kind === 'subclass' ? subclass.grantedSpells : undefined) ?? []) {
       if (step.level > level) continue;
       for (const spellId of step.spellIds) {
-        const key = `${classId}:${spellId}`;
-        if (seen.has(key) || registry.entries.get(spellId)?.kind !== 'spell') continue;
-        seen.add(key);
-        granted.push({ spellId, classId, from: subclass.name });
+        add(spellId, subclass!.name);
       }
+    }
+    const classDef = registry.entries.get(classId);
+    const featureIds = new Set(build.featureIds ?? []);
+    for (const row of [
+      ...(classDef?.kind === 'class' ? classDef.features : []),
+      ...(subclass?.kind === 'subclass' ? subclass.features : []),
+    ]) {
+      if (row.level <= level) featureIds.add(row.featureId);
+    }
+    for (const id of featureIds) {
+      const feature = registry.entries.get(id);
+      if (feature?.kind !== 'feature' || feature.spells?.castingClassId !== classId) continue;
+      if (feature.spells.requiredSubclassId && feature.spells.requiredSubclassId !== subclassId)
+        continue;
+      for (const row of feature.spells.fixed ?? []) {
+        if ((row.minLevel ?? 1) <= level) add(row.spellId, feature.name);
+      }
+      for (const spellId of build.featSpells?.[id]?.spellIds ?? []) add(spellId, feature.name);
     }
   }
   return granted;
@@ -47,7 +66,7 @@ export function grantedSpells(
  */
 export function spellListsWithGrants(
   registry: Registry,
-  build: Pick<CharacterBuild, 'classes' | 'spells'>,
+  build: GrantBuild & Pick<CharacterBuild, 'spells'>,
 ): SpellList[] {
   const byClass = new Map<string, string[]>();
   for (const { classId, spellId } of grantedSpells(registry, build))

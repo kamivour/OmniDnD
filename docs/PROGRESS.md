@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M41 review: infusion-known limits and companion forms fixed; reported Artificer disappearance still under investigation.
-**Next up:** Reproduce the Artificer disappearance using the friend's exported campaign settings. He reports a private campaign created before sharing, with Artificer disappearing immediately after Point Buy → Rolled in the same browser, despite expansion books being enabled. Live site: https://omnidnd.kamivour.workers.dev. M43 friend-testing fixes, M44 phone cleanup, then M42's UI overhaul are planned in [PLAN.md](PLAN.md); implementation has not started.
+**Next up:** Reproduce the Artificer disappearance with the friend's exported campaign settings. M43 awaits live account verification, M44 and M45 are complete, and M42's broader overhaul is planned. See [AUDIT_REPORT.md](AUDIT_REPORT.md) for class fixes and remaining gaps.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -66,7 +66,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M39 | Themes | 10 | done | Midnight, glass, water and D&D place themes with title effects; see [PLAN.md](PLAN.md) |
 | M40 | Campaign sharing and join requests | 7 | done | Share links, approve requests with existing characters, and view party characters without editing them |
 | M41 | Artificer equipment infusions | 3 | doing | Equipment assignment works; verify known choices and investigate the reported class disappearance |
-| M43 | Friend-testing fixes: accounts, profiles and joining | 10 | todo | Signup works, names are unique, profile with avatar, clear sync choices, explicit copy or move into shared campaigns, one DM seat; see [PLAN.md](PLAN.md) |
+| M43 | Friend-testing fixes: accounts, profiles and joining | 10 | doing | Signup works, names are unique, profile with avatar, clear sync choices, explicit copy or move into shared campaigns, one DM seat; see [PLAN.md](PLAN.md) |
 | M44 | Phone navigation and screen cleanup | 7 | done | Sheet in the phone bar, grouped More menu, hidden Game Clock, no empty Details button, compact spell filters, weightless magic containers; see [PLAN.md](PLAN.md) |
 | M42 | Recognizable icons and creation cards | 10 | todo | Class and subclass choices use clear icon cards; portraits and existing creation behavior are preserved; after M44; see [PLAN.md](PLAN.md) |
 | M45 | Compendium | 5 | done | Browse and read spells, classes, subclasses, races, backgrounds and feats to plan characters; see [PLAN.md](PLAN.md) |
@@ -334,7 +334,7 @@ Details in [PLAN.md](PLAN.md).
 - [x] Add the three cannon forms, audit all bundled companion templates and compute spell-summon forms and upcasting
 - [ ] Reproduce the friend's missing Artificer using his actual campaign settings and deployed app
 
-### M43 — Friend-testing fixes: accounts, profiles and joining (planned)
+### M43 — Friend-testing fixes: accounts, profiles and joining (live verification pending)
 
 Follow [PLAN.md](PLAN.md#m43--friend-testing-fixes-accounts-profiles-and-joining). Build before M42. One task per commit; bug tasks start with a failing test or reproduction.
 
@@ -396,6 +396,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 ## Review fixes
 
+- [x] Audit class and subclass choices, fix missing cantrips and spell lists, and verify Channel Divinity in Combat
 - [x] Put Combat Statistics first on the desktop Sheet while preserving phone and tablet order
 
 - [x] Share multiclass ASI accounting between To do and saved choices
@@ -415,6 +416,8 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
+
+- 2026-11-21 — Audited class and subclass coverage. Fixed Paladin and Cleric Channel Divinity, fighting styles, Land Druid terrain, and subclass spell picks.
 
 - 2026-11-21 — M44 T7: Full browser suite passes at 375 px and 1440 px; M44 screens checked in dark, parchment and prism themes. M44 done.
 - 2026-11-21 — M44 T6: Bag of Holding, Handy Haversack and Portable Hole show fill and Put in…; contents add no carried weight. Custom items take a unit.

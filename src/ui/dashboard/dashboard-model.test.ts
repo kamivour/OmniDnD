@@ -224,7 +224,7 @@ describe('dashboardQuickAccess', () => {
     ]);
   });
 
-  it('retains owned passive/free/special features and marks only combat activations actionable', () => {
+  it('offers Use for combat activations, including features that spend no action', () => {
     const character = state();
     const free: FeatureDef = {
       ...registry.get('feature', 'feature.false-identity'),
@@ -244,7 +244,7 @@ describe('dashboardQuickAccess', () => {
       true,
       false,
       false,
-      false,
+      true,
     ]);
     expect(entries.map(({ id }) => id)).toEqual(character.build.favorites);
   });

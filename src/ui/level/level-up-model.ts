@@ -1,6 +1,7 @@
 import type { Ability } from '../../engine/calc/abilities';
 import { optionalRules, sourceAllows } from '../../engine/calc/campaign-rules';
 import { levelSpellGains } from '../../engine/calc/level-spells';
+import { featureResource } from '../../engine/calc/features';
 import { MULTICLASS_RULES, type MulticlassRule } from '../../engine/calc/multiclass';
 import { averageHpRoll, type HitDie } from '../../engine/calc/hp';
 import type { ClassDef, FeatureDef, HitDieName, SubclassDef } from '../../engine/schema';
@@ -208,39 +209,35 @@ export function levelUpChanges(
         after: newFeature?.uses ? recharge[newFeature.uses.recharge] : 'None',
       });
     }
-    if (oldFeature?.uses || newFeature?.uses) {
-      const oldValue = pool(
-        oldFeature?.uses?.max ?? 0,
-        before.live.featureUsesSpent[featureId] ?? 0,
-      );
-      const newValue = pool(
-        newFeature?.uses?.max ?? 0,
-        after.live.featureUsesSpent[featureId] ?? 0,
-      );
+    const oldPool = featureResource(previous.features, before.live, featureId);
+    const newPool = featureResource(next.features, after.live, featureId);
+    if (oldPool || newPool) {
+      const oldValue = pool(oldPool?.max ?? 0, oldPool?.spent ?? 0);
+      const newValue = pool(newPool?.max ?? 0, newPool?.spent ?? 0);
       if (oldValue !== newValue) {
         const path = overridePath('features', featureId, 'uses', 'max');
         rows.push({
           label: `${name} uses`,
           before: oldValue,
           after: newValue,
-          beforeNote: oldFeature?.uses
+          beforeNote: oldPool
             ? resourceOverride(
                 before.build,
                 previous,
                 path,
                 overridePath('features', featureId, 'uses', 'remaining'),
-                before.live.featureUsesSpent[featureId] ?? 0,
-                oldFeature.uses.max,
+                oldPool.spent,
+                oldPool.max,
               )?.note
             : undefined,
-          afterNote: newFeature?.uses
+          afterNote: newPool
             ? resourceOverride(
                 after.build,
                 next,
                 path,
                 overridePath('features', featureId, 'uses', 'remaining'),
-                after.live.featureUsesSpent[featureId] ?? 0,
-                newFeature.uses.max,
+                newPool.spent,
+                newPool.max,
               )?.note
             : undefined,
         });

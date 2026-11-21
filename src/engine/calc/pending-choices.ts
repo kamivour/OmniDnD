@@ -58,6 +58,20 @@ interface OptionFamily {
 /** Class features that make the player pick from a list of option features. */
 export const OPTION_FAMILIES: OptionFamily[] = [
   {
+    classId: 'class.bard',
+    subclassId: 'subclass.bard.swords',
+    label: 'Fighting Style',
+    prefix: 'feature.bard.swords-fighting-style-',
+    totals: [[3, 1]],
+  },
+  {
+    classId: 'class.druid',
+    subclassId: 'subclass.druid.land',
+    label: 'Circle Spells terrain',
+    prefix: 'feature.druid.circle-of-the-land-',
+    totals: [[3, 1]],
+  },
+  {
     classId: 'class.fighter',
     label: 'Fighting Style',
     prefix: 'feature.fighter.fighting-style-',
@@ -272,6 +286,14 @@ export function familyOptionIds(
 const totalAt = (totals: [number, number][], level: number) =>
   totals.reduce((sum, [from, total]) => (level >= from ? total : sum), 0);
 
+function classOptionTotal(family: OptionFamily, entry: CharacterState['build']['classes'][number]) {
+  const championStyle =
+    family.prefix === 'feature.fighter.fighting-style-' &&
+    entry.subclassId === 'subclass.fighter.champion' &&
+    entry.level >= 10;
+  return totalAt(family.totals, entry.level) + (championStyle ? 1 : 0);
+}
+
 /**
  * What the character still has to decide, from the build alone. It only lists things the data
  * can verify; table rulings and homebrew choices are never guessed.
@@ -293,7 +315,7 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
           row.classId === entry.classId &&
           (row.subclassId === undefined || row.subclassId === entry.subclassId),
       );
-      return sum + (family ? totalAt(family.totals, entry.level) : 0);
+      return sum + (family ? classOptionTotal(family, entry) : 0);
     }, 0);
 
   for (const entry of build.classes) {
@@ -323,7 +345,7 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
     )) {
       const options = familyOptionIds(family, registry, campaign, entry.level);
       const taken = build.featureIds.filter((id) => familyIncludes(family, id)).length;
-      const classTotal = totalAt(family.totals, entry.level);
+      const classTotal = classOptionTotal(family, entry);
       const allowance = classTotal + featAllowance(family.prefix);
       const open = Math.min(
         Math.max(0, Math.min(classTotal, allowance - taken)),

@@ -1,6 +1,20 @@
 [
   {
     "kind": "feature",
+    "id": "feature.druid.circle-of-the-land-underdark",
+    "name": "Circle of the Land: Underdark",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Your Underdark circle magic adds pairs of always-prepared spells at druid levels 3, 5, 7 and 9."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
     "id": "feature.false-identity",
     "name": "False Identity",
     "ruleset": "5e-2014",
@@ -1251,7 +1265,19 @@
     },
     "summaryReviewed": false,
     "origin": "class",
-    "activation": "passive"
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.paladin",
+      "ability": "CHA",
+      "slots": false,
+      "picks": [
+        {
+          "count": 2,
+          "level": 0,
+          "classes": ["class.cleric"]
+        }
+      ]
+    }
   },
   {
     "kind": "feature",
@@ -1265,7 +1291,19 @@
     },
     "summaryReviewed": false,
     "origin": "class",
-    "activation": "passive"
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.ranger",
+      "ability": "WIS",
+      "slots": false,
+      "picks": [
+        {
+          "count": 2,
+          "level": 0,
+          "classes": ["class.druid"]
+        }
+      ]
+    }
   },
   {
     "kind": "feature",
@@ -2400,7 +2438,7 @@
     "summaryReviewed": false,
     "source": "TCE",
     "summary": {
-      "effect": "As an action, touch a creature (not yourself) to give it advantage on its next initiative roll. The blessing ends when used or when you give it again."
+      "effect": "Touch a willing creature, including yourself, to grant advantage on its next initiative roll. The benefit ends on that roll or when you bless someone again."
     },
     "origin": "subclass",
     "activation": "action"
@@ -2417,7 +2455,8 @@
       "effect": "A 30-foot sphere of twilight lasts 1 minute around you. A creature ending its turn there gains 1d6 + your cleric level temporary hit points, or you end one charm or fright effect on it."
     },
     "origin": "subclass",
-    "activation": "action"
+    "activation": "action",
+    "usesFrom": "feature.cleric.channel-divinity"
   },
   {
     "kind": "feature",
@@ -4688,7 +4727,19 @@
       "effect": "You learn one druid cantrip and gain proficiency in one of Animal Handling, Nature or Survival."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.cleric",
+      "ability": "WIS",
+      "slots": false,
+      "picks": [
+        {
+          "count": 1,
+          "level": 0,
+          "classes": ["class.druid"]
+        }
+      ]
+    }
   },
   {
     "kind": "feature",
@@ -7319,11 +7370,12 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "After a divine smite, share temp HP among nearby creatures equal to 2d8 plus your paladin level."
+      "effect": "Give out temporary HP totaling 2d8 plus your paladin level among chosen creatures within 30 feet, including yourself. Record the roll and distribution at the table."
     },
     "origin": "subclass",
-    "activation": "special",
-    "usesFrom": "feature.paladin.channel-divinity"
+    "activation": "bonus",
+    "usesFrom": "feature.paladin.channel-divinity",
+    "trigger": "Immediately after dealing Divine Smite damage"
   },
   {
     "kind": "feature",
@@ -8907,6 +8959,34 @@
   },
   {
     "kind": "feature",
+    "id": "feature.bard.swords-fighting-style-dueling",
+    "name": "Fighting Style: Dueling",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add 2 to damage with a melee weapon held in one hand while you wield no other weapon."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.swords-fighting-style-two-weapon-fighting",
+    "name": "Fighting Style: Two-Weapon Fighting",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Add your ability modifier to the bonus-action attack damage when you fight with two weapons."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
     "id": "feature.bard.swords-fighting-style",
     "name": "Fighting Style",
     "ruleset": "5e-2014",
@@ -9601,8 +9681,9 @@
       "effect": "Add +10 to an attack roll you make, after seeing the die."
     },
     "origin": "subclass",
-    "activation": "special",
-    "usesFrom": "feature.paladin.channel-divinity"
+    "activation": "free",
+    "usesFrom": "feature.paladin.channel-divinity",
+    "trigger": "After rolling an attack, before knowing whether it hits"
   },
   {
     "kind": "feature",

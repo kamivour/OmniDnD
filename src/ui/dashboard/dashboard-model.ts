@@ -90,7 +90,7 @@ export function dashboardResources(
     // A shared-use feature such as Cutting Words does not create another pool.
     if (!uses || def.usesFrom) return [];
     const details = featureUseDetails({ live: state.live, sheet }, def.id);
-    const used = state.live.featureUsesSpent[def.id] ?? 0;
+    const { spent: used, max, recharge } = details.uses ?? { spent: 0, ...uses };
     const lines = def.summary
       ? [def.summary.effect]
       : (def.fullText?.split(/\n\s*\n/).filter(Boolean) ?? []);
@@ -101,10 +101,10 @@ export function dashboardResources(
         featureId: def.id,
         label: `${def.name}${details.die ? ` (${details.die})` : ''}`,
         name: def.name,
-        max: uses.max,
+        max,
         used,
         tone: 'accent',
-        lines: [...lines, remaining(uses.max, used), RECHARGE[uses.recharge]],
+        lines: [...lines, remaining(max, used), RECHARGE[recharge]],
       },
     ];
   });

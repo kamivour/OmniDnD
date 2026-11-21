@@ -1,4 +1,4 @@
-import type { CharacterFeature } from '../calc/features';
+import { featureResource, writeFeatureResource, type CharacterFeature } from '../calc/features';
 import type { Die, FeatureDef, Recharge } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
 import {
@@ -35,13 +35,6 @@ function lookup({ sheet }: Pick<CommandContext, 'sheet'>, featureId: string) {
 }
 
 type Uses = { max: number; spent: number; remaining: number; recharge: Recharge };
-
-function poolUses(ctx: Pick<CommandContext, 'live'>, pool: CharacterFeature | undefined) {
-  if (!pool?.uses) return undefined;
-  const spent = ctx.live.featureUsesSpent[pool.def.id] ?? 0;
-  const { max, recharge } = pool.uses;
-  return { max, spent, remaining: Math.max(0, max - spent), recharge };
-}
 
 /** Highest slot level Harness Divine Power may restore: half the proficiency bonus, rounded up. */
 export function restoreSlotCap({ sheet }: Pick<CommandContext, 'sheet'>): number {
@@ -80,11 +73,11 @@ export function featureUseDetails(
   featureId: string,
 ): FeatureUseDetails {
   const { feature, pool, poolId } = lookup(ctx, featureId);
-  const uses = poolUses(ctx, pool);
+  const uses = featureResource(ctx.sheet.features, ctx.live, poolId);
   const cost = feature?.def.cost ?? 1;
   const alsoId = feature?.def.alsoSpends;
   const alsoFeature = alsoId ? ctx.sheet.features.find(({ def }) => def.id === alsoId) : undefined;
-  const alsoUses = poolUses(ctx, alsoFeature);
+  const alsoUses = alsoFeature && featureResource(ctx.sheet.features, ctx.live, alsoFeature.def.id);
   const also = alsoFeature && alsoUses ? { feature: alsoFeature, uses: alsoUses } : undefined;
   const die = feature?.die ?? pool?.die;
   const bonusDef = feature?.def.dieBonus;
@@ -225,12 +218,12 @@ export const useFeature: Command<UseFeaturePayload> = {
     }
     if (also) {
       const spent = also.uses.spent + 1;
-      live.featureUsesSpent[also.feature.def.id] = spent;
+      writeFeatureResource(ctx.sheet.features, live, also.feature.def.id, spent);
       notes.push(usesLeft(also.feature.def.name, spent, also.uses.max));
     }
     if (uses) {
       const spent = uses.spent + (cost ?? 1);
-      live.featureUsesSpent[poolId] = spent;
+      writeFeatureResource(ctx.sheet.features, live, poolId, spent);
       notes.push(
         poolId === featureId && !also
           ? `${uses.max - spent}/${uses.max} left`
@@ -257,8 +250,7 @@ export const adjustFeatureUses: Command<AdjustFeatureUsesPayload> = {
   },
   apply: ({ live }, { featureId, spent }, ctx) => {
     const { pool, poolId, uses } = featureUseDetails(ctx, featureId);
-    if (spent === 0) delete live.featureUsesSpent[poolId];
-    else live.featureUsesSpent[poolId] = spent;
+    writeFeatureResource(ctx.sheet.features, live, poolId, spent);
     const max = uses?.max ?? 0;
     return `${pool?.def.name ?? poolId}: ${max - spent}/${max} left`;
   },

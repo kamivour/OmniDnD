@@ -438,9 +438,20 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       count: scalar('/slots/pact/count', 'Pact slots maximum', slots.pact.count, { min: 0 }),
       level: scalar('/slots/pact/level', 'Pact slot level', slots.pact.level, { min: 1, max: 5 }),
     };
+  const archery = features.some(({ def }) =>
+    ['feature.fighter.fighting-style-archery', 'feature.ranger.fighting-style-archery'].includes(
+      def.id,
+    ),
+  );
   const attacks = equipped.flatMap(({ instanceId, def }) => {
     if (!def.weapon) return [];
     const attack = weaponAttack(instanceId, def, profs, mods, proficiencyPart);
+    if (archery && attack.type === 'ranged') {
+      attack.toHit = sumParts([
+        ...attack.toHit.parts,
+        { label: 'Archery (fighting style)', value: 2 },
+      ]);
+    }
     const infusion = wornInfusions(build, live, registry).find((i) => i.instanceId === instanceId);
     if (
       infusion &&

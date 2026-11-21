@@ -1,5 +1,5 @@
 import type { Registry } from '../registry';
-import type { CharacterBuild, Die, FeatureDef, Formula, Recharge } from '../schema';
+import type { CharacterBuild, Die, FeatureDef, Formula, LiveState, Recharge } from '../schema';
 import type { Ability } from './abilities';
 
 /** A feature the character has, with its level-based values resolved. */
@@ -16,6 +16,44 @@ export interface CharacterFeature {
   attacks?: number;
   critDice?: number;
   dieOverride?: { path: string; note: string; calculated: Die; value: Die };
+}
+
+const CHANNEL_DIVINITY = ['feature.cleric.channel-divinity', 'feature.paladin.channel-divinity'];
+
+/** PHB 2014 multiclass Channel Divinity shares uses across classes. */
+function resourceIds(features: readonly CharacterFeature[], id: string) {
+  if (!CHANNEL_DIVINITY.includes(id)) return [id];
+  const owned = features.filter(({ def, uses }) => uses && CHANNEL_DIVINITY.includes(def.id));
+  return owned.length > 1 ? owned.map(({ def }) => def.id) : [id];
+}
+
+export function featureResource(
+  features: readonly CharacterFeature[],
+  live: Pick<LiveState, 'featureUsesSpent'>,
+  id: string,
+) {
+  const pool = features.find(({ def }) => def.id === id);
+  if (!pool?.uses) return undefined;
+  const ids = resourceIds(features, id);
+  const max = Math.max(
+    pool.uses.max,
+    ...features.flatMap((feature) =>
+      ids.includes(feature.def.id) && feature.uses ? [feature.uses.max] : [],
+    ),
+  );
+  const spent = ids.reduce((sum, poolId) => sum + (live.featureUsesSpent[poolId] ?? 0), 0);
+  return { max, spent, remaining: Math.max(0, max - spent), recharge: pool.uses.recharge };
+}
+
+/** Store the current total on the pool used by the command. Old per-class amounts remain readable. */
+export function writeFeatureResource(
+  features: readonly CharacterFeature[],
+  live: Pick<LiveState, 'featureUsesSpent'>,
+  id: string,
+  spent: number,
+) {
+  for (const poolId of resourceIds(features, id)) delete live.featureUsesSpent[poolId];
+  if (spent > 0) live.featureUsesSpent[id] = spent;
 }
 
 /** Value of a by-level table (`{ 1: 'd6', 5: 'd8' }`) at a level: the row with the highest key at or below it. */

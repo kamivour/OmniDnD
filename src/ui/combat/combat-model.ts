@@ -28,13 +28,13 @@ export interface CombatWeapon {
 }
 
 export interface CombatFeature {
-  feature: FeatureView & { cost: 'A' | 'BA' | 'R' };
+  feature: FeatureView & { cost: 'A' | 'BA' | 'R' | 'No action' };
   meta: string;
   remainingUses?: number;
   unavailableReason?: string;
 }
 
-const COSTS = { action: 'A', bonus: 'BA', reaction: 'R' } as const;
+const COSTS = { action: 'A', bonus: 'BA', reaction: 'R', free: 'No action' } as const;
 const RECHARGE = { short: 'Short rest', long: 'Long rest', dawn: 'Dawn', none: 'No recharge' };
 
 /** Formatting only: dice and modifiers are already derived by the engine. */

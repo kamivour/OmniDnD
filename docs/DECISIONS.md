@@ -6,6 +6,8 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D247 | 2026-11-21 | Cantrips learned from a fighting style use its class's casting statistics and sit outside normal class picks. Land Druids choose one terrain, with circle spells unlocked by druid level. | Keep class limits and granted spells separate |
+| D248 | 2026-11-21 | Cleric/Paladin Channel Divinity uses the higher pool maximum. Previously recorded spending from both classes counts until it is corrected or recovered through a rest. | Follow the 2014 multiclass rule and preserve saved spending |
 | D246 | 2026-11-21 | Items inside an extradimensional container add no carried weight. Overfilling or nesting magic containers only warns; the Haversack is tracked as one 120 lb total with its pouches listed as text, and volume is shown as text only. | The DM rules on ruptures and Astral gates; per-pouch and volume tracking would make the player type numbers for little gain. |
 | D245 | 2026-11-21 | Sorting spells by Name, School or Castable shows one flat list with the slot pips in a row above it; Level keeps the level sections. Filters and sort are view state and reset when you leave. | Level sections only make sense when sorted by level; view choices must never change the character. |
 | D244 | 2026-11-21 | Spare characters live on a Bench: a local campaign that is never shared and always listed last. The first Bench copies the source campaign's rules; later moves only add books, so a benched character keeps its allowed choices. | Characters need a campaign's rules to compute; a Bench keeps them valid without a separate archived state. |

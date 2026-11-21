@@ -117,6 +117,7 @@ export function spellbookModel(
   }
 
   for (const source of featSpellSources({ registry, build: state.build, sheet })) {
+    if (source.grant.castingClassId) continue;
     for (const feat of source.spells) {
       const def = registry.get('spell', feat.spellId);
       entries.push({

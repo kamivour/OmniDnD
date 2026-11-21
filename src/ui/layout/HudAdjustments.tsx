@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { EXHAUSTION_LEVELS } from '../../engine/calc/conditions';
+import { featureResource } from '../../engine/calc/features';
 import { Popover, Tabs } from 'radix-ui';
 import { X } from 'lucide-react';
 import {
@@ -165,59 +166,62 @@ export function HudAdjustments({
         <div className="flex flex-col gap-4">
           {sheet.features
             .filter((feature) => feature.uses)
-            .map((feature) => (
-              <section key={feature.def.id}>
-                <h3 className="mb-2 font-semibold">
-                  {feature.def.name}
-                  {feature.die && ` (${feature.die})`}
-                  <OverrideMarker override={feature.dieOverride} />
-                </h3>
-                <PipStepper
-                  label={feature.def.name}
-                  max={feature.uses!.max}
-                  used={live.featureUsesSpent[feature.def.id] ?? 0}
-                  tone="accent"
-                  override={resourceOverride(
-                    build,
-                    sheet,
-                    overridePath('features', feature.def.id, 'uses', 'max'),
-                    overridePath('features', feature.def.id, 'uses', 'remaining'),
-                    live.featureUsesSpent[feature.def.id] ?? 0,
-                    feature.uses!.max,
+            .map((feature) => {
+              const uses = featureResource(sheet.features, live, feature.def.id)!;
+              return (
+                <section key={feature.def.id}>
+                  <h3 className="mb-2 font-semibold">
+                    {feature.def.name}
+                    {feature.die && ` (${feature.die})`}
+                    <OverrideMarker override={feature.dieOverride} />
+                  </h3>
+                  <PipStepper
+                    label={feature.def.name}
+                    max={uses.max}
+                    used={uses.spent}
+                    tone="accent"
+                    override={resourceOverride(
+                      build,
+                      sheet,
+                      overridePath('features', feature.def.id, 'uses', 'max'),
+                      overridePath('features', feature.def.id, 'uses', 'remaining'),
+                      uses.spent,
+                      uses.max,
+                    )}
+                    onUse={() =>
+                      run(adjustFeatureUses, {
+                        featureId: feature.def.id,
+                        spent: uses.spent + 1,
+                      })
+                    }
+                    onRestore={() =>
+                      run(adjustFeatureUses, {
+                        featureId: feature.def.id,
+                        spent: uses.spent - 1,
+                      })
+                    }
+                  />
+                  {uses.spent > uses.max && (
+                    <p className="mt-2 text-xs text-warn">
+                      Recorded spending exceeds this maximum. Correct remaining in Sheet Edit mode,
+                      or undo the maximum change.
+                    </p>
                   )}
-                  onUse={() =>
-                    run(adjustFeatureUses, {
-                      featureId: feature.def.id,
-                      spent: (live.featureUsesSpent[feature.def.id] ?? 0) + 1,
-                    })
-                  }
-                  onRestore={() =>
-                    run(adjustFeatureUses, {
-                      featureId: feature.def.id,
-                      spent: (live.featureUsesSpent[feature.def.id] ?? 0) - 1,
-                    })
-                  }
-                />
-                {(live.featureUsesSpent[feature.def.id] ?? 0) > feature.uses!.max && (
-                  <p className="mt-2 text-xs text-warn">
-                    Recorded spending exceeds this maximum. Correct remaining in Sheet Edit mode, or
-                    undo the maximum change.
-                  </p>
-                )}
-                <p className="mt-2 text-xs text-text-muted">
-                  Restores:{' '}
-                  {
+                  <p className="mt-2 text-xs text-text-muted">
+                    Restores:{' '}
                     {
-                      short: 'Short rest',
-                      long: 'Long rest',
-                      dawn: 'Dawn',
-                      none: 'Manual adjustment',
-                    }[feature.uses!.recharge]
-                  }
-                  .
-                </p>
-              </section>
-            ))}
+                      {
+                        short: 'Short rest',
+                        long: 'Long rest',
+                        dawn: 'Dawn',
+                        none: 'Manual adjustment',
+                      }[uses.recharge]
+                    }
+                    .
+                  </p>
+                </section>
+              );
+            })}
         </div>
       )}
       {(selection === 'ac' || selection === 'initiative' || selection === 'speed') && (

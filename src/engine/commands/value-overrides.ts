@@ -1,5 +1,6 @@
 import { produce, type Draft } from 'immer';
 import { z } from 'zod';
+import { writeFeatureResource, type CharacterFeature } from '../calc/features';
 import {
   overrideTargets,
   type OverrideCounter,
@@ -46,7 +47,12 @@ function changedSinceReview(target: OverrideTarget, expected: OverrideExpectatio
   );
 }
 
-function setSpent(live: Draft<CharacterData['live']>, counter: OverrideCounter, spent: number) {
+function setSpent(
+  live: Draft<CharacterData['live']>,
+  counter: OverrideCounter,
+  spent: number,
+  features: readonly CharacterFeature[],
+) {
   switch (counter.kind) {
     case 'hitDice':
       if (spent === 0) delete live.hitDiceSpent[counter.die];
@@ -60,8 +66,7 @@ function setSpent(live: Draft<CharacterData['live']>, counter: OverrideCounter, 
       else live.pactSlotsUsed = spent;
       break;
     case 'feature':
-      if (spent === 0) delete live.featureUsesSpent[counter.featureId];
-      else live.featureUsesSpent[counter.featureId] = spent;
+      writeFeatureResource(features, live, counter.featureId, spent);
       break;
   }
 }
@@ -70,6 +75,7 @@ function applySet(
   draft: Draft<CharacterData>,
   target: OverrideTarget,
   { value, note }: SetValueOverridePayload,
+  features: readonly CharacterFeature[],
 ) {
   draft.build.overrides = draft.build.overrides.filter((entry) => entry.path !== target.path);
   const stored =
@@ -84,13 +90,17 @@ function applySet(
       : value;
   draft.build.overrides.push({ path: target.path, value: stored, note });
   if (target.kind === 'remaining' && typeof stored === 'object')
-    setSpent(draft.live, target.counter, stored.spent);
+    setSpent(draft.live, target.counter, stored.spent, features);
 }
 
-function applyReset(draft: Draft<CharacterData>, target: OverrideTarget) {
+function applyReset(
+  draft: Draft<CharacterData>,
+  target: OverrideTarget,
+  features: readonly CharacterFeature[],
+) {
   draft.build.overrides = draft.build.overrides.filter((entry) => entry.path !== target.path);
   if (target.kind === 'remaining' && target.override)
-    setSpent(draft.live, target.counter, target.override.value.spentBefore);
+    setSpent(draft.live, target.counter, target.override.value.spentBefore, features);
 }
 
 function safeNumbers(value: unknown): boolean {
@@ -106,7 +116,7 @@ function prospectiveSet(
   payload: SetValueOverridePayload,
 ) {
   const next = produce({ build: ctx.build, live: ctx.live }, (draft) =>
-    applySet(draft, target, payload),
+    applySet(draft, target, payload, ctx.sheet.features),
   );
   if (equalData(next.build, ctx.build) && equalData(next.live, ctx.live))
     return [block('This override is already saved')];
@@ -155,7 +165,7 @@ export const setValueOverride: Command<SetValueOverridePayload> = {
   apply: (draft, input, ctx) => {
     const payload = SetPayloadSchema.parse(input);
     const target = overrideTargets(ctx).find((entry) => entry.path === payload.path)!;
-    applySet(draft, target, payload);
+    applySet(draft, target, payload, ctx.sheet.features);
     return target.kind === 'remaining'
       ? `Correct ${target.label}: ${payload.value}/${target.max} (${payload.note})`
       : `Override ${target.label}: ${payload.value} (${payload.note})`;
@@ -176,7 +186,7 @@ export const resetValueOverride: Command<ResetValueOverridePayload> = {
     if (!target.hasOverride) return [block('This value has no override to reset')];
     try {
       const next = produce({ build: ctx.build, live: ctx.live }, (draft) =>
-        applyReset(draft, target),
+        applyReset(draft, target, ctx.sheet.features),
       );
       const sheet = computeSheet({ campaign: ctx.campaign, ...next }, ctx.registry);
       return safeNumbers(sheet) ? [] : [block('Reset would produce unsafe calculated values')];
@@ -187,7 +197,7 @@ export const resetValueOverride: Command<ResetValueOverridePayload> = {
   apply: (draft, input, ctx) => {
     const { path } = ResetPayloadSchema.parse(input);
     const target = overrideTargets(ctx).find((entry) => entry.path === path)!;
-    applyReset(draft, target);
+    applyReset(draft, target, ctx.sheet.features);
     return `Reset ${target.label} ${target.kind === 'remaining' ? 'correction' : 'override'}`;
   },
 };

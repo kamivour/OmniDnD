@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 19:57 — Complete missing fighting style and subclass choices
+
+- Blessed Warrior and Druidic Warrior now let you choose two cantrips in To do. Champion gets its second style, and Archery adds its attack bonus.
+- Glory's Inspiring Smite and Conquest's Guided Strike appear in Combat. Twilight Sanctuary spends Channel Divinity, and Cleric/Paladin multiclass characters share one pool.
+- Land Druids can pick a terrain, Arcane Tricksters get Mage Hand, and Swords Bards can pick their style. Check your choices in To do.
+- Warlock patrons and Divine Soul have expanded spell choices. Checks pass.
+
 ## 2026-11-21 18:46 — Phone navigation and cleanup finished
 
 - All of M44 is done: six-button phone bar, grouped More menu, hidden Game Clock, tidier Details, compact spell filters and magic containers.

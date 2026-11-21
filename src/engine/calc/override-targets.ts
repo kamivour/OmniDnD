@@ -1,6 +1,7 @@
 import type { Registry } from '../registry';
 import type { CharacterBuild, HitDieName } from '../schema';
 import type { CharacterState, Sheet } from './sheet';
+import { featureResource } from './features';
 import {
   counterCorrection,
   overridePath,
@@ -166,12 +167,13 @@ export function overrideTargets({ build, live, sheet }: OverrideTargetContext): 
       { kind: 'pact' },
     );
   for (const feature of sheet.features) {
-    if (!feature.uses) continue;
+    const uses = featureResource(sheet.features, live, feature.def.id);
+    if (!uses) continue;
     remaining(
       overridePath('features', feature.def.id, 'uses', 'remaining'),
       `${feature.def.name} uses remaining`,
-      feature.uses.max,
-      live.featureUsesSpent[feature.def.id] ?? 0,
+      uses.max,
+      uses.spent,
       { kind: 'feature', featureId: feature.def.id },
     );
   }

@@ -1,5 +1,358 @@
 [
   {
+    "id": "feature.druid.circle-of-the-land-arctic",
+    "spells": {
+      "castingClassId": "class.druid",
+      "requiredSubclassId": "subclass.druid.land",
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.hold-person",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.spike-growth",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.sleet-storm",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.slow",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.freedom-of-movement",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.ice-storm",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.commune-with-nature",
+          "minLevel": 9
+        },
+        {
+          "spellId": "spell.cone-of-cold",
+          "minLevel": 9
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.druid.circle-of-the-land-coast",
+    "spells": {
+      "castingClassId": "class.druid",
+      "requiredSubclassId": "subclass.druid.land",
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.mirror-image",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.misty-step",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.water-breathing",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.water-walk",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.control-water",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.freedom-of-movement",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.conjure-elemental",
+          "minLevel": 9
+        },
+        {
+          "spellId": "spell.scrying",
+          "minLevel": 9
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.druid.circle-of-the-land-desert",
+    "spells": {
+      "castingClassId": "class.druid",
+      "requiredSubclassId": "subclass.druid.land",
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.blur",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.silence",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.create-food-and-water",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.protection-from-energy",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.blight",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.hallucinatory-terrain",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.insect-plague",
+          "minLevel": 9
+        },
+        {
+          "spellId": "spell.wall-of-stone",
+          "minLevel": 9
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.druid.circle-of-the-land-forest",
+    "spells": {
+      "castingClassId": "class.druid",
+      "requiredSubclassId": "subclass.druid.land",
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.barkskin",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.spider-climb",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.call-lightning",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.plant-growth",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.divination",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.freedom-of-movement",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.commune-with-nature",
+          "minLevel": 9
+        },
+        {
+          "spellId": "spell.tree-stride",
+          "minLevel": 9
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.druid.circle-of-the-land-grassland",
+    "spells": {
+      "castingClassId": "class.druid",
+      "requiredSubclassId": "subclass.druid.land",
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.invisibility",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.pass-without-trace",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.daylight",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.haste",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.divination",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.freedom-of-movement",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.dream",
+          "minLevel": 9
+        },
+        {
+          "spellId": "spell.insect-plague",
+          "minLevel": 9
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.druid.circle-of-the-land-mountain",
+    "spells": {
+      "castingClassId": "class.druid",
+      "requiredSubclassId": "subclass.druid.land",
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.spider-climb",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.spike-growth",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.lightning-bolt",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.meld-into-stone",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.stone-shape",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.stoneskin",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.passwall",
+          "minLevel": 9
+        },
+        {
+          "spellId": "spell.wall-of-stone",
+          "minLevel": 9
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.druid.circle-of-the-land-swamp",
+    "spells": {
+      "castingClassId": "class.druid",
+      "requiredSubclassId": "subclass.druid.land",
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.darkness",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.acid-arrow",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.water-walk",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.stinking-cloud",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.freedom-of-movement",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.locate-creature",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.insect-plague",
+          "minLevel": 9
+        },
+        {
+          "spellId": "spell.scrying",
+          "minLevel": 9
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.druid.circle-of-the-land-underdark",
+    "spells": {
+      "castingClassId": "class.druid",
+      "requiredSubclassId": "subclass.druid.land",
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.spider-climb",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.web",
+          "minLevel": 3
+        },
+        {
+          "spellId": "spell.gaseous-form",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.stinking-cloud",
+          "minLevel": 5
+        },
+        {
+          "spellId": "spell.greater-invisibility",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.stone-shape",
+          "minLevel": 7
+        },
+        {
+          "spellId": "spell.cloudkill",
+          "minLevel": 9
+        },
+        {
+          "spellId": "spell.insect-plague",
+          "minLevel": 9
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.druid.bonus-cantrip",
+    "spells": {
+      "castingClassId": "class.druid",
+      "ability": "WIS",
+      "slots": false,
+      "picks": [{ "count": 1, "level": 0, "classes": ["class.druid"] }]
+    }
+  },
+  {
     "id": "feature.barbarian.ability-score-improvement",
     "activation": "passive"
   },

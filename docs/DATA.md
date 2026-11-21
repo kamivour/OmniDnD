@@ -39,6 +39,8 @@ Also credit game-icons.net (CC BY 3.0) and Lucide (ISC).
 
 ## 3. IDs and tags
 
+Subclass `expandedSpellIds` and `additionalSpellLists` add candidates to normal spell picks. `grantedSpells` and feature spells with `castingClassId` add class spells outside normal limits.
+
 - Stable kebab IDs with kind prefix: `spell.faerie-fire`, `feature.bard.cutting-words`, `item.rapier`, `condition.prone`.
 - SRD entries reuse API indexes, with class prefixes for features/subclasses and one combined entry for features split by level (D50). Non-SRD entries follow the same kebab style (D49).
 - `ruleset: '5e-2014'` on every entry. Loader rejects anything else.

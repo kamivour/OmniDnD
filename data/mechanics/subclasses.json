@@ -1,5 +1,112 @@
 [
   {
+    "id": "subclass.rogue.arcane-trickster",
+    "grantedSpells": [{ "level": 3, "spellIds": ["spell.mage-hand"] }]
+  },
+  { "id": "subclass.sorcerer.divine-soul", "additionalSpellLists": ["class.cleric"] },
+  {
+    "id": "subclass.warlock.genie",
+    "expandedSpellIds": [
+      "spell.detect-evil-and-good",
+      "spell.phantasmal-force",
+      "spell.create-food-and-water",
+      "spell.phantasmal-killer",
+      "spell.creation",
+      "spell.wish"
+    ]
+  },
+  {
+    "id": "subclass.warlock.fathomless",
+    "expandedSpellIds": [
+      "spell.create-or-destroy-water",
+      "spell.thunderwave",
+      "spell.gust-of-wind",
+      "spell.silence",
+      "spell.lightning-bolt",
+      "spell.sleet-storm",
+      "spell.control-water",
+      "spell.summon-elemental",
+      "spell.arcane-hand",
+      "spell.cone-of-cold"
+    ]
+  },
+  {
+    "id": "subclass.warlock.hexblade",
+    "expandedSpellIds": [
+      "spell.shield",
+      "spell.wrathful-smite",
+      "spell.blur",
+      "spell.branding-smite",
+      "spell.blink",
+      "spell.elemental-weapon",
+      "spell.phantasmal-killer",
+      "spell.staggering-smite",
+      "spell.banishing-smite",
+      "spell.cone-of-cold"
+    ]
+  },
+  {
+    "id": "subclass.warlock.great-old-one",
+    "expandedSpellIds": [
+      "spell.dissonant-whispers",
+      "spell.hideous-laughter",
+      "spell.detect-thoughts",
+      "spell.phantasmal-force",
+      "spell.clairvoyance",
+      "spell.sending",
+      "spell.dominate-beast",
+      "spell.black-tentacles",
+      "spell.dominate-person",
+      "spell.telekinesis"
+    ]
+  },
+  {
+    "id": "subclass.warlock.archfey",
+    "expandedSpellIds": [
+      "spell.faerie-fire",
+      "spell.sleep",
+      "spell.calm-emotions",
+      "spell.phantasmal-force",
+      "spell.blink",
+      "spell.plant-growth",
+      "spell.dominate-beast",
+      "spell.greater-invisibility",
+      "spell.dominate-person",
+      "spell.seeming"
+    ]
+  },
+  {
+    "id": "subclass.warlock.fiend",
+    "expandedSpellIds": [
+      "spell.burning-hands",
+      "spell.command",
+      "spell.blindness-deafness",
+      "spell.scorching-ray",
+      "spell.fireball",
+      "spell.stinking-cloud",
+      "spell.fire-shield",
+      "spell.wall-of-fire",
+      "spell.flame-strike",
+      "spell.hallow"
+    ]
+  },
+  {
+    "id": "subclass.warlock.celestial",
+    "expandedSpellIds": [
+      "spell.cure-wounds",
+      "spell.guiding-bolt",
+      "spell.flaming-sphere",
+      "spell.lesser-restoration",
+      "spell.daylight",
+      "spell.revivify",
+      "spell.guardian-of-faith",
+      "spell.wall-of-fire",
+      "spell.flame-strike",
+      "spell.greater-restoration"
+    ],
+    "grantedSpells": [{ "level": 1, "spellIds": ["spell.light", "spell.sacred-flame"] }]
+  },
+  {
     "id": "subclass.cleric.life",
     "grantedSpells": [
       { "level": 1, "spellIds": ["spell.bless", "spell.cure-wounds"] },

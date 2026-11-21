@@ -8,6 +8,7 @@ import {
   type LiveState,
 } from '../schema';
 import type { Stat } from './stat';
+import { featureResource, type CharacterFeature } from './features';
 
 type OverrideBuild = Pick<CharacterBuild, 'overrides'>;
 
@@ -137,7 +138,11 @@ export function counterCorrection(
 }
 
 /** Only known physical spending counters have correction lifetimes. No arbitrary path access. */
-export function correctionSpent(live: LiveState, path: string): number | undefined {
+export function correctionSpent(
+  live: LiveState,
+  path: string,
+  features: readonly CharacterFeature[] = [],
+): number | undefined {
   const parts = path
     .split('/')
     .slice(1)
@@ -162,7 +167,9 @@ export function correctionSpent(live: LiveState, path: string): number | undefin
     parts[3] === 'remaining' &&
     refId('feature').safeParse(parts[1]).success
   )
-    return live.featureUsesSpent[parts[1]!] ?? 0;
+    return (
+      featureResource(features, live, parts[1]!)?.spent ?? live.featureUsesSpent[parts[1]!] ?? 0
+    );
   return undefined;
 }
 
@@ -171,11 +178,14 @@ export function retainCounterCorrections(
   build: OverrideBuild,
   live: LiveState,
   previousLive: LiveState,
+  features: readonly CharacterFeature[],
 ): CharacterBuild['overrides'] {
   return build.overrides.filter((entry) => {
     const correction = CounterCorrectionValueSchema.safeParse(entry.value);
-    const spent = correction.success ? correctionSpent(live, entry.path) : undefined;
-    const before = correction.success ? correctionSpent(previousLive, entry.path) : undefined;
+    const spent = correction.success ? correctionSpent(live, entry.path, features) : undefined;
+    const before = correction.success
+      ? correctionSpent(previousLive, entry.path, features)
+      : undefined;
     return (
       !correction.success ||
       spent === undefined ||
