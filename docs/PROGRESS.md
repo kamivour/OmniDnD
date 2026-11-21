@@ -356,7 +356,7 @@ Follow [PLAN.md](PLAN.md#m44--phone-navigation-and-screen-cleanup) after M43. On
 - [x] T1: Phone bar Home · Sheet · Spells · Inv · Combat · More, packed to fit (D232)
 - [x] T2: Group More and the sidebar into main and secondary screens with a divider
 - [x] T3: Hide the Game Clock behind a Settings switch
-- [ ] T4: Remove the empty Details button where details open as a sheet
+- [x] T4: Remove the empty Details button where details open as a sheet
 - [ ] T5: Put spell filters behind one Filter button and add Sort
 - [ ] T6: Weightless magic containers with capacity, contents and unit-based custom items
 - [ ] T7: Verify at both widths and across themes
@@ -416,6 +416,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-21 — M44 T4: Details toggle only on wide screens with the side panel; an empty panel now shows a short hint.
 - 2026-11-21 — M44 T3: Game Clock card hidden on Home and Explore by default; Settings "Show game clock" brings it back; time still runs.
 - 2026-11-21 — M44 T2: More and the sidebar list main screens, a divider, then Journal, Reference and Settings, with labelled groups.
 - 2026-11-21 — M44 T1: phone bar shows Home, Sheet, Spells, Inv, Combat and More; fits at 320 px; More lights up for its screens.

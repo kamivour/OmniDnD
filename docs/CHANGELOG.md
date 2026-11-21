@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 17:43 — No empty Details button on phones
+
+- The panel button next to Find is gone on phones and tablets. Tap a spell, resource or action to open its details.
+- On wide screens the button stays, and an empty panel now explains what to click.
+- Checks pass.
+
 ## 2026-11-21 17:40 — Game clock hidden by default
 
 - The Game clock card no longer sits at the top of Home and Explore, so resources show sooner on phones.

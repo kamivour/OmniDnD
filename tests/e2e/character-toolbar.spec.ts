@@ -203,7 +203,10 @@ test('every built and placeholder character route shares one compact log and Und
       await oneUndo(page);
       await fullyInViewport(page, latest(page));
       await fullyInViewport(page, undo(page));
-      await expect(page.getByRole('button', { name: 'Open details', exact: true })).toBeVisible();
+      // The Details toggle is desktop only; smaller widths open details as a sheet (M44 T4).
+      await expect(page.getByRole('button', { name: 'Open details', exact: true })).toHaveCount(
+        width >= 1024 ? 1 : 0,
+      );
       await noOverflow(page);
       if (width === 375) {
         await expect
@@ -587,6 +590,7 @@ test('full history keeps its single Undo visible while reading the oldest retain
 
 test('a failed save retains Retry, details and one Undo without a second action in command feedback', async ({
   page,
+  isMobile,
 }) => {
   await page.goto('/characters/the-fool');
   await saved(page);
@@ -608,7 +612,9 @@ test('a failed save retains Retry, details and one Undo without a second action 
   await expect(feedback(page).getByRole('button', { name: 'Undo', exact: true })).toHaveCount(0);
   await expect(latest(page)).toContainText('Took 5 damage');
   await oneUndo(page);
-  await expect(page.getByRole('button', { name: 'Open details', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open details', exact: true })).toHaveCount(
+    isMobile ? 0 : 1,
+  );
   await page.getByRole('button', { name: 'Retry save', exact: true }).click();
   await saved(page);
   await page.reload();
@@ -620,6 +626,7 @@ test('a failed save retains Retry, details and one Undo without a second action 
 test('a cross-window conflict keeps its explanation, log, details and single Undo visible', async ({
   page,
   context,
+  isMobile,
 }) => {
   await page.goto('/characters/the-fool');
   await saved(page);
@@ -637,7 +644,9 @@ test('a cross-window conflict keeps its explanation, log, details and single Und
     await expect(latest(stale)).toContainText('Took 1 damage');
     await fullyInViewport(stale, latest(stale));
     await fullyInViewport(stale, undo(stale));
-    await expect(stale.getByRole('button', { name: 'Open details', exact: true })).toBeVisible();
+    await expect(stale.getByRole('button', { name: 'Open details', exact: true })).toHaveCount(
+      isMobile ? 0 : 1,
+    );
     await oneUndo(stale);
     await noOverflow(stale);
   } finally {

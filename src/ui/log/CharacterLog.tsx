@@ -9,6 +9,7 @@ import { FindLauncher } from '../find/FindLauncher';
 import { ProfileButton } from '../profile/ProfileButton';
 import { useCharacterBase } from '../hooks/useCharacterBase';
 import { useDetail } from '../layout/detail-context';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { useRest } from '../rest/rest-context';
 import { StorageStatus } from '../storage/StorageStatus';
 import { characterLogEntries } from './log-model';
@@ -18,6 +19,8 @@ import { useCharacterHistory } from './useCharacterHistory';
 export function CharacterToolbar() {
   const { activity, target, undo, pending, confirmation } = useCharacterHistory();
   const details = useDetail();
+  // Below 1024 px details open as a sheet when an item is tapped, so the toggle is desktop only (M44 T4).
+  const pinnable = useMediaQuery('(min-width: 1024px)');
   const base = useCharacterBase();
   const { openShortRest, openLongRest } = useRest();
   const [open, setOpen] = useState(false);
@@ -105,18 +108,20 @@ export function CharacterToolbar() {
       {undoButton()}
       <FindLauncher withCharacter />
       <ProfileButton to={`${base}/profile`} />
-      <button
-        id="detail-toggle"
-        type="button"
-        aria-label={details.open ? 'Hide details' : 'Open details'}
-        aria-expanded={details.open}
-        aria-controls="character-details"
-        onClick={() => details.setOpen(!details.open)}
-        className="flex min-h-11 min-w-11 shrink-0 items-center justify-center gap-2 rounded-btn text-xs text-text-muted hover:text-text"
-      >
-        <PanelRight size={18} aria-hidden />
-        <span className="hidden sm:inline">{details.open ? 'Hide details' : 'Open details'}</span>
-      </button>
+      {pinnable && (
+        <button
+          id="detail-toggle"
+          type="button"
+          aria-label={details.open ? 'Hide details' : 'Open details'}
+          aria-expanded={details.open}
+          aria-controls="character-details"
+          onClick={() => details.setOpen(!details.open)}
+          className="flex min-h-11 min-w-11 shrink-0 items-center justify-center gap-2 rounded-btn text-xs text-text-muted hover:text-text"
+        >
+          <PanelRight size={18} aria-hidden />
+          <span>{details.open ? 'Hide details' : 'Open details'}</span>
+        </button>
+      )}
       <Sheet
         open={open}
         onOpenChange={setOpen}

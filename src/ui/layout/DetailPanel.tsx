@@ -54,7 +54,9 @@ export function DetailPanel() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [desktop, open, setOpen]);
   const body = content ?? (
-    <p className="text-text-muted">Select a spell, resource, or action to see its details.</p>
+    <p className="text-sm text-text-muted">
+      Nothing pinned yet. Click a spell, resource or action to see it here.
+    </p>
   );
 
   if (!desktop) {

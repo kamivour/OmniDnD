@@ -37,8 +37,11 @@ test.describe('desktop shell', () => {
     await page.getByRole('button', { name: 'Expand navigation' }).click();
     await expect(navigation(page)).toHaveCSS('width', '220px');
 
-    await healingWord(page).click();
     const panel = page.getByRole('complementary', { name: 'Pinned detail' });
+    await page.getByRole('button', { name: 'Open details' }).click();
+    await expect(panel).toContainText('Nothing pinned yet');
+    await page.getByRole('button', { name: 'Close details' }).click();
+    await healingWord(page).click();
     await expect(panel).toContainText('Healing Word');
     await expect(panel).toHaveCSS('width', '360px');
     await expectNoOverflow(page);
