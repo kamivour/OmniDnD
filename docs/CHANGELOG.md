@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 15:50 — Compendium details
+
+- Each Compendium entry now shows its key facts: hit die, saves and features by level for classes; casting time, range, components, duration and class lists for spells; prerequisites for feats; damage, AC, cost and weight for equipment.
+- Classes list their subclasses, and subclasses list their always-prepared spells. Tap one to open it.
+- Opened from a character, the Compendium shows only your campaign's books. Tick **Show all books** to see everything.
+- Checks pass.
+
 ## 2026-11-21 15:41 — Compendium screen
 
 - New **Compendium** screen: open it from the book icon in the top bar, from Reference, or search Find for "library".

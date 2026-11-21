@@ -1,16 +1,20 @@
 import { useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
 import { X } from 'lucide-react';
+import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import {
   CATALOG_KINDS,
   ITEM_TIERS,
   ITEM_TYPES,
+  campaignAllows,
   catalogEntries,
+  compareEntries,
+  entryKind,
   groupBy,
   itemTier,
   itemType,
-  searchCatalog,
+  matchesFilter,
   type CatalogEntry,
   type CatalogKind,
 } from '../../engine/catalog';
@@ -34,6 +38,7 @@ import { inputClass } from '../components/fields';
 import { Sheet } from '../components/Sheet';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { cx } from '../cx';
+import { characterState, characterStore } from '../../state/character-store';
 
 const PAGE = 100;
 
@@ -54,16 +59,27 @@ export function CompendiumScreen() {
   const navigate = useNavigate();
   const desktop = useMediaQuery('(min-width: 1024px)');
   const query = useMemo(() => readQuery(params), [params]);
-  const { kind, filter, entryId } = query;
+  const { kind, filter, entryId, allBooks } = query;
+  const campaign = useStore(characterStore, (s) =>
+    characterId ? characterState(s, characterId)?.campaign : undefined,
+  );
+  // Inside a character the campaign's books are the default; "Show all books" lifts it.
+  const scope = campaign && !allBooks ? campaign : undefined;
 
-  const all = useMemo(() => catalogEntries(registry, kind), [kind]);
-  const results = useMemo(() => searchCatalog(registry, kind, filter), [kind, filter]);
+  const all = useMemo(
+    () => catalogEntries(registry, kind).filter((e) => !scope || campaignAllows(scope, e)),
+    [kind, scope],
+  );
+  const results = useMemo(
+    () => all.filter((e) => matchesFilter(e, filter)).sort(compareEntries),
+    [all, filter],
+  );
   const books = useMemo(
     () => (Object.keys(SOURCE_NAMES) as Source[]).filter((b) => all.some((e) => e.source === b)),
     [all],
   );
   const entry = entryId ? registry.entries.get(entryId) : undefined;
-  const open = entry && all.includes(entry as CatalogEntry) ? (entry as CatalogEntry) : undefined;
+  const open = entry && entryKind(entry) ? (entry as CatalogEntry) : undefined;
 
   const update = (next: URLSearchParams) => {
     next.delete('entry');
@@ -85,7 +101,7 @@ export function CompendiumScreen() {
   };
 
   const listKey = [...params.entries()].filter(([k]) => k !== 'entry').join('&');
-  const detail = open && <CompendiumDetail entry={open} meta={rowMeta(open, nameOf)} />;
+  const detail = open && <CompendiumDetail key={open.id} entry={open} onOpen={openEntry} />;
 
   return (
     <section
@@ -157,6 +173,23 @@ export function CompendiumScreen() {
               </button>
             ))}
           </ChipRow>
+        )}
+        {campaign && (
+          <label className="flex min-h-9 items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={allBooks}
+              onChange={(e) => {
+                const next = new URLSearchParams(params);
+                if (e.target.checked) next.set('books', 'all');
+                else next.delete('books');
+                update(next);
+              }}
+              className="size-4 accent-accent"
+            />
+            Show all books
+            {!allBooks && <span className="text-text-muted">(now: {campaign.name}'s books)</span>}
+          </label>
         )}
         <div className="flex flex-wrap items-center gap-2 text-sm text-text-muted">
           <span aria-live="polite">

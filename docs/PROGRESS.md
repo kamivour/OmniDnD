@@ -379,7 +379,7 @@ Follow [PLAN.md](PLAN.md#m45--compendium). Started before M42 at the owner's req
 
 - [x] T1: Catalog helpers over the bundled registry with filters, including item tier and type
 - [x] T2: Compendium screen with tabs, search, filters and details panel
-- [ ] T3: Detail pages for classes, subclasses, races, backgrounds, feats and spells
+- [x] T3: Detail pages for classes, subclasses, races, backgrounds, feats and spells
 - [ ] T4: "Plan this" wishlist notes in the Journal
 - [ ] T5: Verify at both widths, offline and across themes
 
@@ -416,6 +416,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-21 — M45 T3: Compendium details show class, subclass, race, background, feat, spell and item facts; inside a character the campaign's books are the default.
 - 2026-11-21 — M45 T2: Compendium screen with kind tabs, search, tier/type/level filters kept in the link, sheet or side panel details; Find entry.
 - 2026-11-21 — M45 T1: catalog helpers list and filter every class, subclass, race, background, feat, spell and item; equipment sorts by tier and type.
 - 2026-11-19 — Fix: Share moved to a button on the campaign card; one Copy invite link replaces the two duplicate invite buttons.

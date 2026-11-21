@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import type { CatalogEntry } from '../../engine/catalog';
 import { SOURCE_NAMES } from '../../engine/calc/campaign-rules';
+import { registry } from '../../data/registry';
+import { entryFacts } from './compendium-facts';
 import { Icon } from '../components/Icon';
 import { Markdown } from '../components/Markdown';
 import { schoolIconId } from '../format';
@@ -14,7 +16,14 @@ const SUMMARY_LABELS = [
 ] as const;
 
 /** Read-only page for one compendium entry: facts, then SRD text or our own summary. */
-export function CompendiumDetail({ entry, meta }: { entry: CatalogEntry; meta: string }) {
+export function CompendiumDetail({
+  entry,
+  onOpen,
+}: {
+  entry: CatalogEntry;
+  /** Opens another compendium entry (a subclass from its class, a granted spell). */
+  onOpen: (id: string) => void;
+}) {
   const summary = entry.summary;
   return (
     <article aria-label={entry.name} className="flex min-w-0 flex-col gap-3 text-sm">
@@ -27,14 +36,13 @@ export function CompendiumDetail({ entry, meta }: { entry: CatalogEntry; meta: s
         />
         <div className="min-w-0 flex-1">
           <h2 className="font-display text-lg wrap-anywhere">{entry.name}</h2>
-          {meta && <p className="text-text-muted">{meta}</p>}
           <p className="text-xs text-text-muted">
             {SOURCE_NAMES[entry.source]}
             {entry.srd ? ' · SRD 5.1' : ''}
           </p>
         </div>
       </header>
-      <CompendiumFacts entry={entry} />
+      <CompendiumFacts entry={entry} onOpen={onOpen} />
       {summary && (
         <Section title="Summary">
           <p>{summary.effect}</p>
@@ -52,7 +60,8 @@ export function CompendiumDetail({ entry, meta }: { entry: CatalogEntry; meta: s
           <Markdown text={entry.fullText} />
         </Section>
       ) : (
-        !summary && (
+        !summary &&
+        !(entry.kind === 'item' && entry.rarity === undefined) && (
           <p className="text-text-muted">
             No summary yet. Check {SOURCE_NAMES[entry.source]} for the full rules.
           </p>
@@ -62,10 +71,47 @@ export function CompendiumDetail({ entry, meta }: { entry: CatalogEntry; meta: s
   );
 }
 
-/** Kind-specific facts. */
-function CompendiumFacts({ entry }: { entry: CatalogEntry }) {
-  void entry;
-  return null;
+/** Kind-specific facts, then lists such as features by level. */
+function CompendiumFacts({ entry, onOpen }: { entry: CatalogEntry; onOpen: (id: string) => void }) {
+  const { facts, lists } = entryFacts(entry, registry);
+  return (
+    <>
+      {facts.length > 0 && (
+        <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 border-t border-border pt-3">
+          {facts.map(([label, value]) => (
+            <div key={label} className="contents">
+              <dt className="text-text-muted">{label}</dt>
+              <dd className="wrap-anywhere">{value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+      {lists.map((list) => (
+        <Section key={list.title} title={list.title}>
+          <ul className="flex flex-col gap-0.5">
+            {list.items.map((item, i) => (
+              <li key={`${item.id ?? item.label}-${i}`} className="flex items-baseline gap-2">
+                {item.level !== undefined && (
+                  <span className="w-12 shrink-0 text-xs text-text-muted">Lv {item.level}</span>
+                )}
+                {item.id ? (
+                  <button
+                    type="button"
+                    onClick={() => onOpen(item.id!)}
+                    className="min-h-9 text-left text-accent underline"
+                  >
+                    {item.label}
+                  </button>
+                ) : (
+                  <span>{item.label}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ))}
+    </>
+  );
 }
 
 export function Section({ title, children }: { title: string; children: ReactNode }) {
