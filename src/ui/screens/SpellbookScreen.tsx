@@ -1,9 +1,7 @@
-import { useEffect, useRef, useState, type Ref } from 'react';
-import { Search } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { useTourAutostart } from '../tutorial/useTour';
 import { registry, registryFor } from '../../data/registry';
 import { adjustSlot, setSpellFavorite, spellCastDetails } from '../../engine/commands';
-import { SchoolSchema } from '../../engine/schema';
 import { overridePath } from '../../engine/calc/value-overrides';
 import { useCommand } from '../commands/command-context';
 import { Sheet } from '../components/Sheet';
@@ -12,58 +10,27 @@ import { OverrideMarker } from '../components/StatChip';
 import { resourceOverride } from '../components/resource-override';
 import { SectionLabel } from '../components/SectionLabel';
 import { SpellRow } from '../components/SpellRow';
-import { cx } from '../cx';
 import { type Cost, type SpellView } from '../fixtures/the-fool';
 import { useCharacter } from '../hooks/useCharacter';
 import { signed } from '../format';
 import { useDetail } from '../layout/detail-context';
-import { SPELL_TYPE_ORDER, SPELL_TYPES, type SpellType } from '../spellTypes';
 import { castingLabel, spellbookModel, spellUnavailable } from '../spells/spellbook-model';
 import { SpellCastControls } from '../spells/SpellCastControls';
 import { SpellManage } from '../spells/SpellManage';
 import { FlexibleCastingPanel } from '../spells/FlexibleCastingPanel';
 import { LiveSpellDetail } from '../spells/LiveSpellDetail';
 import { useTodo } from '../todo/useTodo';
-
-interface Filters {
-  query: string;
-  level: 'all' | number;
-  costs: Cost[];
-  /** Any of these tags (OR). */
-  types: SpellType[];
-  concentration: boolean;
-  ritual: boolean;
-  castableNow: boolean;
-  school: string;
-  favorites: boolean;
-}
-
-const NO_FILTERS: Filters = {
-  query: '',
-  level: 'all',
-  costs: [],
-  types: [],
-  concentration: false,
-  ritual: false,
-  castableNow: false,
-  school: 'all',
-  favorites: false,
-};
+import { SpellFilterBar } from '../spells/SpellFilterBar';
+import {
+  levelLabel,
+  matches,
+  NO_FILTERS,
+  sortEntries,
+  type Filters,
+  type SpellSort,
+} from '../spells/spell-filters';
 
 const COSTS: Cost[] = ['A', 'BA', 'R'];
-
-function matches(spell: SpellView, f: Filters, unavailable: boolean, favorite = false): boolean {
-  if (f.query && !spell.name.toLowerCase().includes(f.query.trim().toLowerCase())) return false;
-  if (f.level !== 'all' && spell.level !== f.level) return false;
-  if (f.costs.length > 0 && !f.costs.includes(spell.cost)) return false;
-  if (f.types.length > 0 && !spell.tags.some((t) => f.types.includes(t))) return false;
-  if (f.concentration && !spell.concentration) return false;
-  if (f.ritual && !spell.ritual) return false;
-  if (f.school !== 'all' && spell.school.toLowerCase() !== f.school) return false;
-  if (f.favorites && !favorite) return false;
-  if (f.castableNow && unavailable) return false;
-  return true;
-}
 
 /**
  * Frame B (DESIGN.md §8). Filters are view state only; they never touch the character.
@@ -86,6 +53,7 @@ export function SpellbookScreen() {
     return { ...entry, unavailable: spellUnavailable(entry, slots, ritualAvailable) };
   });
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
+  const [sort, setSort] = useState<SpellSort>('level');
   const [manageOpen, setManageOpen] = useState(false);
   const [manageClass, setManageClass] = useState<string | undefined>(undefined);
   const [manageFocus, setManageFocus] = useState<'cantrips' | 'spells' | undefined>(undefined);
@@ -105,11 +73,6 @@ export function SpellbookScreen() {
     }
   }, [events]);
   const { pin } = useDetail();
-
-  const set = <K extends keyof Filters>(key: K, value: Filters[K]) =>
-    setFilters((f) => ({ ...f, [key]: value }));
-  const toggle = <T,>(list: T[], value: T) =>
-    list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 
   const setPinned = (spell: SpellView, classId: string) =>
     pin(<LiveSpellDetail spellId={spell.id} classId={classId} />);
@@ -139,6 +102,81 @@ export function SpellbookScreen() {
     setManageFocus(focus);
     setManageOpen(true);
   };
+
+  type Slot = (typeof slots)[number];
+  const slotStepper = (slot: Slot, className?: string) => {
+    const level = slot.level;
+    return (
+      <PipStepper
+        label={`Level ${level} spell slots`}
+        max={slot.max}
+        used={slot.used}
+        override={resourceOverride(
+          state.build,
+          sheet,
+          overridePath('slots', 'max', level),
+          overridePath('slots', 'remaining', level),
+          slot.used,
+          slot.max,
+        )}
+        onUse={() => run(adjustSlot, { level, used: slot.used + 1 })}
+        onRestore={() => run(adjustSlot, { level, used: slot.used - 1 })}
+        onSetUsed={(used) => run(adjustSlot, { level, used })}
+        className={className}
+      />
+    );
+  };
+  const pendingButton = (item: (typeof pendingSpells)[number]) => (
+    <button
+      key={item.id}
+      type="button"
+      onClick={() => openManage(item.classId, item.kind === 'cantrips' ? 'cantrips' : 'spells')}
+      className="flex min-h-11 items-center gap-2 rounded-card border border-dashed border-accent px-3 py-2 text-left text-sm text-text hover:bg-surface-2"
+    >
+      <span className="font-semibold text-accent">Pending</span>
+      <span className="min-w-0 wrap-anywhere">{item.label}</span>
+    </button>
+  );
+  const spellRow = (entry: (typeof entries)[number]) => {
+    const { spell, classId, dc, attack, alwaysFrom, unavailable } = entry;
+    return (
+      <SpellRow
+        key={`${classId}:${spell.id}`}
+        spell={spell}
+        dc={dc}
+        attack={attack}
+        alwaysFrom={alwaysFrom}
+        favorite={state.build.favorites.includes(spell.id)}
+        onFavorite={() => {
+          const favorite = state.build.favorites.includes(spell.id);
+          restoreFavoritesFocus.current = filters.favorites && favorite;
+          const result = run(setSpellFavorite, {
+            spellId: spell.id,
+            favorite: !favorite,
+          });
+          if (result.result !== 'ok') restoreFavoritesFocus.current = false;
+        }}
+        castingClass={castingLabel(entry, model, registry)}
+        slots={slots}
+        concentrating={spell.id === state.live.concentration?.spellId}
+        unavailable={unavailable}
+        onCast={(selected, _level, opener) => {
+          castOpener.current = opener ?? (document.activeElement as HTMLElement);
+          setCasting({ spellId: selected.id, classId, opener: castOpener.current });
+        }}
+        sheetFooter={({ close, trigger }) => (
+          <SpellCastControls
+            spellId={spell.id}
+            classId={classId}
+            returnFocusTo={trigger}
+            onApplied={close}
+          />
+        )}
+        onPin={(spell) => setPinned(spell, classId)}
+      />
+    );
+  };
+  const flat = sort === 'level' ? [] : sortEntries(visible, sort);
 
   return (
     <div className="mx-auto max-w-screen-2xl px-4 py-4 lg:px-6">
@@ -233,113 +271,15 @@ export function SpellbookScreen() {
 
         <FlexibleCastingPanel anchorId="flexible-casting" />
 
-        <section aria-label="Filters" data-tour="spell-filters" className="flex flex-col gap-2">
-          <div className="flex gap-2">
-            <label className="flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-btn border border-border bg-surface px-3 focus-within:border-accent">
-              <Search size={16} aria-hidden className="shrink-0 text-text-muted" />
-              <span className="sr-only">Search spells</span>
-              <input
-                type="search"
-                value={filters.query}
-                onChange={(e) => set('query', e.target.value)}
-                placeholder="Search"
-                className="min-w-0 flex-1 bg-transparent text-text placeholder:text-text-muted"
-              />
-            </label>
-            <label className="sr-only" htmlFor="spell-level">
-              Level
-            </label>
-            <select
-              id="spell-level"
-              value={filters.level}
-              onChange={(e) =>
-                set('level', e.target.value === 'all' ? 'all' : Number(e.target.value))
-              }
-              className="min-h-11 rounded-btn border border-border bg-surface px-2 text-sm text-text"
-            >
-              <option value="all">All levels</option>
-              {levels.map((l) => (
-                <option key={l} value={l}>
-                  {l === 0 ? 'Cantrips' : `Level ${l}`}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <label className="sr-only" htmlFor="spell-school">
-              School
-            </label>
-            <select
-              id="spell-school"
-              value={filters.school}
-              onChange={(event) => set('school', event.target.value)}
-              className="min-h-11 min-w-0 flex-1 rounded-btn border border-border bg-surface px-2 text-sm text-text sm:max-w-xs"
-            >
-              <option value="all">All schools</option>
-              {SchoolSchema.options.map((school) => (
-                <option key={school} value={school}>
-                  {school[0]!.toUpperCase() + school.slice(1)}
-                </option>
-              ))}
-            </select>
-            <FilterChip
-              buttonRef={favoritesFilter}
-              pressed={filters.favorites}
-              onClick={() => set('favorites', !filters.favorites)}
-            >
-              Favorites
-            </FilterChip>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {costs.map((c) => (
-              <FilterChip
-                key={c}
-                pressed={filters.costs.includes(c)}
-                onClick={() => set('costs', toggle(filters.costs, c))}
-              >
-                {c}
-              </FilterChip>
-            ))}
-            <FilterChip
-              pressed={filters.concentration}
-              onClick={() => set('concentration', !filters.concentration)}
-            >
-              Conc
-            </FilterChip>
-            <FilterChip pressed={filters.ritual} onClick={() => set('ritual', !filters.ritual)}>
-              Ritual
-            </FilterChip>
-            <FilterChip
-              pressed={filters.castableNow}
-              onClick={() => set('castableNow', !filters.castableNow)}
-            >
-              Castable now
-            </FilterChip>
-          </div>
-          <div role="group" aria-label="Spell type" className="flex flex-wrap gap-2">
-            {SPELL_TYPE_ORDER.map((t) => (
-              <FilterChip
-                key={t}
-                pressed={filters.types.includes(t)}
-                onClick={() => set('types', toggle(filters.types, t))}
-                title={SPELL_TYPES[t].hint}
-                className={SPELL_TYPES[t].text}
-                pressedClassName={cx(SPELL_TYPES[t].chip, 'bg-surface-2 font-semibold')}
-              >
-                {SPELL_TYPES[t].label}
-              </FilterChip>
-            ))}
-            {filtered && (
-              <button
-                type="button"
-                onClick={() => setFilters(NO_FILTERS)}
-                className="min-h-11 px-2 text-sm text-accent"
-              >
-                Clear
-              </button>
-            )}
-          </div>
-        </section>
+        <SpellFilterBar
+          filters={filters}
+          onChange={setFilters}
+          sort={sort}
+          onSort={setSort}
+          levels={levels}
+          costs={costs}
+          favoritesRef={favoritesFilter}
+        />
 
         {visible.length === 0 && (
           <p className="py-8 text-center text-text-muted">
@@ -351,103 +291,50 @@ export function SpellbookScreen() {
           </p>
         )}
 
+        {sort === 'level' ? (
+          shownLevels.map((level) => {
+            const group = visible.filter(({ spell }) => spell.level === level);
+            const slot = slots.find((s) => s.level === level);
+            const picks = pendingAt(level);
+            if (group.length === 0 && !slot && picks.length === 0) return null;
+            return (
+              <section key={level} aria-label={levelLabel(level)} className="flex flex-col gap-2">
+                <div className="flex min-h-11 flex-wrap items-center gap-3">
+                  <SectionLabel>{levelLabel(level)}</SectionLabel>
+                  {slot && slotStepper(slot, 'ml-auto')}
+                </div>
+                {picks.map(pendingButton)}
+                <ul className="flex flex-col gap-2">{group.map(spellRow)}</ul>
+              </section>
+            );
+          })
+        ) : (
+          <>
+            {slots.length > 0 && (
+              <section aria-label="Spell slots" className="flex flex-wrap gap-x-4 gap-y-2">
+                {slots.map((slot) => (
+                  <div key={slot.level} className="flex items-center gap-2">
+                    <span className="text-xs text-text-muted">L{slot.level}</span>
+                    {slotStepper(slot)}
+                  </div>
+                ))}
+              </section>
+            )}
+            {pendingSpells.map(pendingButton)}
+            {flat.length > 0 && (
+              <section aria-label="Spells" className="flex flex-col gap-2">
+                <ul className="flex flex-col gap-2">{flat.map(spellRow)}</ul>
+              </section>
+            )}
+          </>
+        )}
+
         {slots.length > 0 && (
           <p className="text-xs text-text-muted">
             − uses one slot; + restores one. Small pools also let you tap a pip to set remaining
             slots.
           </p>
         )}
-
-        {shownLevels.map((level) => {
-          const group = visible.filter(({ spell }) => spell.level === level);
-          const slot = slots.find((s) => s.level === level);
-          const picks = pendingAt(level);
-          if (group.length === 0 && !slot && picks.length === 0) return null;
-          return (
-            <section
-              key={level}
-              aria-label={level === 0 ? 'Cantrips' : `Level ${level}`}
-              className="flex flex-col gap-2"
-            >
-              <div className="flex min-h-11 flex-wrap items-center gap-3">
-                <SectionLabel>{level === 0 ? 'Cantrips' : `Level ${level}`}</SectionLabel>
-                {slot && (
-                  <PipStepper
-                    label={`Level ${level} spell slots`}
-                    max={slot.max}
-                    used={slot.used}
-                    override={resourceOverride(
-                      state.build,
-                      sheet,
-                      overridePath('slots', 'max', level),
-                      overridePath('slots', 'remaining', level),
-                      slot.used,
-                      slot.max,
-                    )}
-                    onUse={() => run(adjustSlot, { level, used: slot.used + 1 })}
-                    onRestore={() => run(adjustSlot, { level, used: slot.used - 1 })}
-                    onSetUsed={(used) => run(adjustSlot, { level, used })}
-                    className="ml-auto"
-                  />
-                )}
-              </div>
-              {picks.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() =>
-                    openManage(item.classId, item.kind === 'cantrips' ? 'cantrips' : 'spells')
-                  }
-                  className="flex min-h-11 items-center gap-2 rounded-card border border-dashed border-accent px-3 py-2 text-left text-sm text-text hover:bg-surface-2"
-                >
-                  <span className="font-semibold text-accent">Pending</span>
-                  <span className="min-w-0 wrap-anywhere">{item.label}</span>
-                </button>
-              ))}
-              <ul className="flex flex-col gap-2">
-                {group.map((entry) => {
-                  const { spell, classId, dc, attack, alwaysFrom, unavailable } = entry;
-                  return (
-                    <SpellRow
-                      key={`${classId}:${spell.id}`}
-                      spell={spell}
-                      dc={dc}
-                      attack={attack}
-                      alwaysFrom={alwaysFrom}
-                      favorite={state.build.favorites.includes(spell.id)}
-                      onFavorite={() => {
-                        const favorite = state.build.favorites.includes(spell.id);
-                        restoreFavoritesFocus.current = filters.favorites && favorite;
-                        const result = run(setSpellFavorite, {
-                          spellId: spell.id,
-                          favorite: !favorite,
-                        });
-                        if (result.result !== 'ok') restoreFavoritesFocus.current = false;
-                      }}
-                      castingClass={castingLabel(entry, model, registry)}
-                      slots={slots}
-                      concentrating={spell.id === state.live.concentration?.spellId}
-                      unavailable={unavailable}
-                      onCast={(selected, _level, opener) => {
-                        castOpener.current = opener ?? (document.activeElement as HTMLElement);
-                        setCasting({ spellId: selected.id, classId, opener: castOpener.current });
-                      }}
-                      sheetFooter={({ close, trigger }) => (
-                        <SpellCastControls
-                          spellId={spell.id}
-                          classId={classId}
-                          returnFocusTo={trigger}
-                          onApplied={close}
-                        />
-                      )}
-                      onPin={(spell) => setPinned(spell, classId)}
-                    />
-                  );
-                })}
-              </ul>
-            </section>
-          );
-        })}
       </div>
       <Sheet
         open={manageOpen}
@@ -491,40 +378,5 @@ export function SpellbookScreen() {
         )}
       </Sheet>
     </div>
-  );
-}
-
-function FilterChip({
-  pressed,
-  onClick,
-  title,
-  className = 'text-text-muted',
-  pressedClassName = 'border-accent bg-surface-2 text-accent',
-  children,
-  buttonRef,
-}: {
-  pressed: boolean;
-  onClick: () => void;
-  title?: string;
-  /** Unpressed text color. */
-  className?: string;
-  pressedClassName?: string;
-  children: string;
-  buttonRef?: Ref<HTMLButtonElement>;
-}) {
-  return (
-    <button
-      ref={buttonRef}
-      type="button"
-      aria-pressed={pressed}
-      onClick={onClick}
-      title={title}
-      className={cx(
-        'min-h-11 rounded-btn border px-3 text-sm',
-        pressed ? pressedClassName : cx('border-border bg-surface', className),
-      )}
-    >
-      {children}
-    </button>
   );
 }

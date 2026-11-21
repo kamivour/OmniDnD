@@ -24,24 +24,37 @@ test('rows show their main type and the saved seed has no active concentration',
   await expect(row(page, 'Suggestion')).not.toContainText('Active');
 });
 
+const panel = (page: Page) => page.getByRole('dialog', { name: 'Spell filters', exact: true });
+async function inFilters(page: Page, steps: () => Promise<unknown>) {
+  await page.getByRole('button', { name: /^Filter/ }).click();
+  await steps();
+  await panel(page).getByRole('button', { name: 'Done', exact: true }).click();
+  await expect(panel(page)).toBeHidden();
+}
+
 test('type filter matches any tag', async ({ page }) => {
-  const types = page.getByRole('group', { name: 'Spell type' });
-  await types.getByRole('button', { name: 'Control', exact: true }).click();
+  const types = panel(page).getByRole('group', { name: 'Spell type' });
+  await inFilters(page, () => types.getByRole('button', { name: 'Control', exact: true }).click());
   // Suggestion (main type) and Dissonant Whispers (second tag) both match.
   await expect(row(page, 'Suggestion')).toBeVisible();
   await expect(row(page, 'Dissonant Whispers')).toBeVisible();
   await expect(row(page, 'Healing Word')).toHaveCount(0);
 
-  await types.getByRole('button', { name: 'Healing', exact: true }).click();
+  await inFilters(page, () => types.getByRole('button', { name: 'Healing', exact: true }).click());
   await expect(row(page, 'Healing Word')).toBeVisible();
 });
 
 test('filters narrow the list and Clear resets it', async ({ page }) => {
-  await page.getByRole('button', { name: 'Conc', exact: true }).click();
+  await inFilters(page, () =>
+    panel(page).getByRole('button', { name: 'Conc', exact: true }).click(),
+  );
   await expect(row(page, 'Faerie Fire')).toBeVisible();
   await expect(row(page, 'Healing Word')).toHaveCount(0);
 
-  await page.getByRole('button', { name: 'Clear' }).click();
+  await page
+    .getByRole('region', { name: 'Filters' })
+    .getByRole('button', { name: 'Clear', exact: true })
+    .click();
   await page.getByRole('searchbox', { name: 'Search spells' }).fill('word');
   await expect(row(page, 'Healing Word')).toBeVisible();
   await expect(row(page, 'Faerie Fire')).toHaveCount(0);

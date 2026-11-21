@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 17:57 — Compact spell filters and Sort
+
+- The spellbook top now has one row: search, a Filter button and a Sort menu.
+- Filter opens a panel (a sheet on phones). Active filters show as small chips you can tap to remove.
+- Sort by Name, School or Castable shows one list with slot pips above it; Level keeps the old sections.
+- Checks pass.
+
 ## 2026-11-21 17:43 — No empty Details button on phones
 
 - The panel button next to Find is gone on phones and tablets. Tap a spell, resource or action to open its details.

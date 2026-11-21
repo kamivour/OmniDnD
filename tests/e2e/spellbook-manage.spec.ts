@@ -456,10 +456,17 @@ test('ordered tags change the main row type; empty tags, reset and durable Undo 
   await expect(edit).toBeFocused();
   await manage(page).getByRole('button', { name: 'Done', exact: true }).click();
   await expect(row(page, 'Healing Word')).toContainText('Buff');
-  const types = main(page).getByRole('group', { name: 'Spell type', exact: true });
-  await types.getByRole('button', { name: 'Control', exact: true }).click();
+  const filterPanel = page.getByRole('dialog', { name: 'Spell filters', exact: true });
+  await main(page)
+    .getByRole('button', { name: /^Filter/ })
+    .click();
+  await filterPanel
+    .getByRole('group', { name: 'Spell type', exact: true })
+    .getByRole('button', { name: 'Control', exact: true })
+    .click();
+  await filterPanel.getByRole('button', { name: 'Done', exact: true }).click();
   await expect(row(page, 'Healing Word')).toBeVisible();
-  await types.getByRole('button', { name: 'Control', exact: true }).click();
+  await main(page).getByRole('button', { name: 'Remove Control filter', exact: true }).click();
   await page.reload();
   await expectSaved(page);
   expect(await readSavedCharacter(page, file.build.id)).toEqual(ordered);

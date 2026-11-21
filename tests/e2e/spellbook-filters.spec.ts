@@ -20,11 +20,25 @@ const row = (page: Page, name: string) =>
   main(page).getByRole('button', { name: new RegExp(`^${name}`) });
 const star = (page: Page, name: string) =>
   main(page).getByRole('button', { name: `Favorite ${name}`, exact: true });
-const chip = (page: Page, name: string) => filters(page).getByRole('button', { name, exact: true });
+const panel = (page: Page) => page.getByRole('dialog', { name: 'Spell filters', exact: true });
+const chip = (page: Page, name: string) => panel(page).getByRole('button', { name, exact: true });
 const type = (page: Page, name: string) =>
-  filters(page)
+  panel(page)
     .getByRole('group', { name: 'Spell type', exact: true })
     .getByRole('button', { name, exact: true });
+const active = (page: Page, name: string) =>
+  filters(page).getByRole('button', { name: `Remove ${name} filter`, exact: true });
+
+/** Opens the Filter panel (sheet or popover), runs the steps, then closes it with Done. */
+async function inFilters(page: Page, steps: () => Promise<unknown>) {
+  await filters(page)
+    .getByRole('button', { name: /^Filter/ })
+    .click();
+  await expect(panel(page)).toBeVisible();
+  await steps();
+  await panel(page).getByRole('button', { name: 'Done', exact: true }).click();
+  await expect(panel(page)).toBeHidden();
+}
 
 async function expectSaved(page: Page) {
   await expect(page.getByRole('status', { name: 'Save status', exact: true })).toContainText(
@@ -119,13 +133,16 @@ test('combined filters match across groups; Clear resets every choice without ch
   await filters(page)
     .getByRole('searchbox', { name: 'Search spells', exact: true })
     .fill('  mAgIc  ');
-  await filters(page).getByLabel('Level', { exact: true }).selectOption('1');
-  await filters(page).getByLabel('School', { exact: true }).selectOption('divination');
-  for (const name of ['A', 'Conc', 'Ritual', 'Castable now', 'Favorites'])
-    await chip(page, name).click();
-  await type(page, 'Utility').click();
-  // A spell needs either selected type, while every other selected group still applies.
-  await type(page, 'Damage').click();
+  await inFilters(page, async () => {
+    await panel(page).getByLabel('Level', { exact: true }).selectOption('1');
+    await panel(page).getByLabel('School', { exact: true }).selectOption('divination');
+    for (const name of ['A', 'Conc', 'Ritual', 'Castable now', 'Favorites'])
+      await chip(page, name).click();
+    await type(page, 'Utility').click();
+    // A spell needs either selected type, while every other selected group still applies.
+    await type(page, 'Damage').click();
+  });
+  await expect(filters(page).getByRole('button', { name: 'Filter, 9 active' })).toBeVisible();
   await expect(row(page, 'Detect Magic')).toBeVisible();
   await expect(main(page).getByRole('listitem')).toHaveCount(1);
   await expect(main(page)).toContainText('Cantrips 2 / 2');
@@ -137,15 +154,19 @@ test('combined filters match across groups; Clear resets every choice without ch
     main(page).getByLabel('Level 2 spell slots: 2 of 2 left', { exact: true }),
   ).toBeVisible();
 
-  await filters(page).getByLabel('School', { exact: true }).selectOption('illusion');
+  await inFilters(page, () =>
+    panel(page).getByLabel('School', { exact: true }).selectOption('illusion'),
+  );
   await expect(row(page, 'Detect Magic')).toHaveCount(0);
   await expect(main(page)).toContainText('No spells match these filters.');
-  await filters(page).getByLabel('School', { exact: true }).selectOption('divination');
-  await chip(page, 'A').click();
-  await chip(page, 'BA').click();
+  await inFilters(page, async () => {
+    await panel(page).getByLabel('School', { exact: true }).selectOption('divination');
+    await chip(page, 'A').click();
+    await chip(page, 'BA').click();
+  });
   await expect(main(page).getByRole('listitem')).toHaveCount(0);
-  await chip(page, 'BA').click();
-  await chip(page, 'A').click();
+  await active(page, 'BA').click();
+  await inFilters(page, () => chip(page, 'A').click());
   await expect(row(page, 'Detect Magic')).toBeVisible();
   expect(await readSavedCharacter(page, file.build.id)).toEqual(initial);
   await expectNoOverflow(page);
@@ -154,23 +175,26 @@ test('combined filters match across groups; Clear resets every choice without ch
     animations: 'disabled',
   });
 
-  await chip(page, 'Clear').click();
+  await inFilters(page, async () => {
+    await chip(page, 'Clear').click();
+    await expect(panel(page).getByLabel('Level', { exact: true })).toHaveValue('all');
+    await expect(panel(page).getByLabel('School', { exact: true })).toHaveValue('all');
+    for (const name of [
+      'A',
+      'BA',
+      'Conc',
+      'Ritual',
+      'Castable now',
+      'Favorites',
+      'Utility',
+      'Damage',
+    ]) {
+      await expect(chip(page, name)).toHaveAttribute('aria-pressed', 'false');
+    }
+    await expect(chip(page, 'Clear')).toBeDisabled();
+  });
   await expect(filters(page).getByRole('searchbox', { name: 'Search spells' })).toHaveValue('');
-  await expect(filters(page).getByLabel('Level', { exact: true })).toHaveValue('all');
-  await expect(filters(page).getByLabel('School', { exact: true })).toHaveValue('all');
-  for (const name of [
-    'A',
-    'BA',
-    'Conc',
-    'Ritual',
-    'Castable now',
-    'Favorites',
-    'Utility',
-    'Damage',
-  ]) {
-    await expect(chip(page, name)).toHaveAttribute('aria-pressed', 'false');
-  }
-  await expect(chip(page, 'Clear')).toHaveCount(0);
+  await expect(filters(page).getByRole('group', { name: 'Active filters' })).toHaveCount(0);
   await expect(main(page).getByRole('listitem')).toHaveCount(8);
   expect(await readSavedCharacter(page, file.build.id)).toEqual(initial);
 });
@@ -221,7 +245,7 @@ test('favorites support click and keyboard, persist and undo, and restore focus 
     'undo',
   ]);
   expect(undone.events[1]?.undoneBy).toBe(undone.events[2]?.id);
-  await chip(page, 'Favorites').click();
+  await inFilters(page, () => chip(page, 'Favorites').click());
   await expect(main(page).getByRole('listitem')).toHaveCount(1);
   await expect(row(page, 'Healing Word')).toBeVisible();
   const bounds = await star(page, 'Healing Word').boundingBox();
@@ -238,8 +262,7 @@ test('favorites support click and keyboard, persist and undo, and restore focus 
   await star(page, 'Healing Word').click();
   await expect(row(page, 'Healing Word')).toHaveCount(0);
   await expect(main(page).getByRole('listitem')).toHaveCount(0);
-  await expect(chip(page, 'Favorites')).toBeFocused();
-  await expect(chip(page, 'Favorites')).toHaveAttribute('aria-pressed', 'true');
+  await expect(active(page, 'Favorites')).toBeFocused();
   await expectSaved(page);
   const removed = await readSavedCharacter(page);
   expect(removed.build).toEqual(initial.build);
@@ -276,27 +299,33 @@ test('an imported book uses actual long casting times and tag overrides without 
   await expect(row(page, 'Healing Word')).toHaveCount(0);
   await expect(row(page, 'Dissonant Whispers')).toHaveCount(0);
   await expect(row(page, 'Vicious Mockery')).toHaveCount(0);
-  await expect(chip(page, '1 min')).toBeVisible();
-  await expect(chip(page, '1 h')).toBeVisible();
-  await chip(page, '1 min').click();
+  await inFilters(page, async () => {
+    await expect(chip(page, '1 min')).toBeVisible();
+    await expect(chip(page, '1 h')).toBeVisible();
+    await chip(page, '1 min').click();
+  });
   await expect(main(page).getByRole('listitem')).toHaveCount(1);
   await expect(row(page, 'Identify')).toBeVisible();
-  await chip(page, '1 min').click();
-  await chip(page, '1 h').click();
+  await inFilters(page, async () => {
+    await chip(page, '1 min').click();
+    await chip(page, '1 h').click();
+  });
   await expect(main(page).getByRole('listitem')).toHaveCount(1);
   await expect(row(page, 'Find Familiar')).toBeVisible();
-  await chip(page, 'Clear').click();
-  await type(page, 'Buff').click();
+  await filters(page).getByRole('button', { name: 'Clear', exact: true }).click();
+  await inFilters(page, () => type(page, 'Buff').click());
   await expect(main(page).getByRole('listitem')).toHaveCount(1);
   await expect(row(page, 'Identify')).toBeVisible();
-  await type(page, 'Utility').click();
+  await inFilters(page, () => type(page, 'Utility').click());
   await expect(main(page).getByRole('listitem')).toHaveCount(4);
   await expect(row(page, 'Magic Missile')).toContainText('Utility');
-  await type(page, 'Buff').click();
-  await type(page, 'Damage').click();
-  await type(page, 'Utility').click();
+  await inFilters(page, async () => {
+    await type(page, 'Buff').click();
+    await type(page, 'Damage').click();
+    await type(page, 'Utility').click();
+  });
   await expect(main(page).getByRole('listitem')).toHaveCount(0);
-  await chip(page, 'Clear').click();
+  await filters(page).getByRole('button', { name: 'Clear', exact: true }).click();
   await expect(main(page).getByRole('listitem')).toHaveCount(4);
   await expectNoOverflow(page);
   expect(await readSavedCharacter(page, file.build.id)).toEqual(initial);
@@ -315,7 +344,7 @@ test('Castable now retains an eligible slotless ritual and hides a spent ordinar
   file.live.slotsUsed[2] = 2;
   await importCharacter(page, file);
   const initial = await readSavedCharacter(page, file.build.id);
-  await chip(page, 'Castable now').click();
+  await inFilters(page, () => chip(page, 'Castable now').click());
   await expect(row(page, 'Detect Magic')).toBeVisible();
   await expect(row(page, 'Minor Illusion')).toBeVisible();
   await expect(row(page, 'Healing Word')).toHaveCount(0);
@@ -327,9 +356,51 @@ test('Castable now retains an eligible slotless ritual and hides a spent ordinar
   await expect(
     main(page).getByLabel('Level 2 spell slots: 0 of 2 left', { exact: true }),
   ).toBeVisible();
-  await chip(page, 'Ritual').click();
+  await inFilters(page, () => chip(page, 'Ritual').click());
   await expect(main(page).getByRole('listitem')).toHaveCount(1);
   await expect(row(page, 'Detect Magic')).toBeVisible();
   await expect(row(page, 'Minor Illusion')).toHaveCount(0);
   expect(await readSavedCharacter(page, file.build.id)).toEqual(initial);
+});
+
+test('one row holds search, Filter and Sort; Sort reorders without touching the character', async ({
+  page,
+  isMobile,
+}, info) => {
+  await page.goto('/characters/the-fool/spells');
+  await expectSaved(page);
+  const initial = await readSavedCharacter(page);
+  const search = filters(page).getByRole('searchbox', { name: 'Search spells', exact: true });
+  const sort = filters(page).getByLabel('Sort spells', { exact: true });
+  const searchBox = await search.boundingBox();
+  const sortBox = await sort.boundingBox();
+  const middle = (box: typeof searchBox) => (box ? box.y + box.height / 2 : -99);
+  expect(Math.abs(middle(searchBox) - middle(sortBox))).toBeLessThan(4);
+  await expect(main(page).getByRole('region', { name: 'Cantrips', exact: true })).toBeVisible();
+
+  const byLevel = await main(page)
+    .getByRole('listitem')
+    .evaluateAll((items) => items.map((item) => item.textContent ?? ''));
+  await sort.selectOption('name');
+  await expect(main(page).getByRole('region', { name: 'Cantrips', exact: true })).toHaveCount(0);
+  const list = main(page).getByRole('region', { name: 'Spells', exact: true });
+  const names = await list
+    .getByRole('listitem')
+    .evaluateAll((items) => items.map((item) => item.textContent ?? ''));
+  expect(names.length).toBeGreaterThan(3);
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+  await expect(
+    main(page).getByLabel('Level 1 spell slots: 0 of 4 left', { exact: true }),
+  ).toBeVisible();
+  await sort.selectOption('castable');
+  // Every Fool spell can be cast (level 1 spells upcast), so this matches the level order.
+  await expect(list.getByRole('listitem')).toHaveText(byLevel);
+  await expectNoOverflow(page);
+  await page.screenshot({
+    path: info.outputPath(`sort-${isMobile ? '375' : '1440'}.png`),
+    animations: 'disabled',
+  });
+  await sort.selectOption('level');
+  await expect(main(page).getByRole('region', { name: 'Cantrips', exact: true })).toBeVisible();
+  expect(await readSavedCharacter(page)).toEqual(initial);
 });
