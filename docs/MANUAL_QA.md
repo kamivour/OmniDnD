@@ -323,6 +323,18 @@ Use two test accounts on a phone and a desktop, after running the three new migr
 - [ ] Check the other account sees your name and picture in the members list, and never your email.
 - [ ] An older account without a valid name gets the name prompt and cannot skip it.
 
+## M44 — Phone navigation and screen cleanup
+
+- [ ] Phone bar: six buttons (Home, Sheet, Spells, Inv, Combat, More) fit at 375 px and are easy to hit.
+- [ ] More and the sidebar: main screens above the divider, other screens below, and the order feels natural.
+- [ ] Game Clock card stays hidden until you turn it on in Settings.
+- [ ] No empty Details button on phones; on desktop the side panel hint reads well.
+- [ ] Spellbook: Filter, chips and Sort feel quick to use on a phone and on desktop.
+- [ ] Bag of Holding: fill meter, Put in… and the "no carried weight" note make sense; weight drops as expected.
+- [ ] Overfilling a bag or nesting magic bags gives a clear warning that matches your table's rulings.
+- [ ] Custom item with a unit (for example "liter of water") reads well in the list and details.
+- [ ] Update banner appears on an older open tab and the Bench keeps spare characters out of campaigns.
+
 ## M45 — Compendium
 
 - [ ] Equipment: tier headers (Mundane, Common, Uncommon, ...) and type chips feel easy to scan on a phone.

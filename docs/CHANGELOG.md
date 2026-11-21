@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 18:46 — Phone navigation and cleanup finished
+
+- All of M44 is done: six-button phone bar, grouped More menu, hidden Game Clock, tidier Details, compact spell filters and magic containers.
+- Please try the checklist in the manual QA list on your phone, in a light and a dark theme.
+- Checks pass.
+
 ## 2026-11-21 18:11 — Magic containers and item units
 
 - Bag of Holding, Handy Haversack and Portable Hole show how full they are, with a Put in… button to move items inside.
