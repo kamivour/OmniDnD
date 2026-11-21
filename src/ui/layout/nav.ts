@@ -22,15 +22,16 @@ export interface NavItem {
   /** Milestone that builds the real screen. Undefined = built (key frame). */
   milestone?: string;
   phase?: 2 | 3 | 4;
+  /** Journal, Reference and Settings sit below the divider (M44). */
+  secondary?: true;
 }
 
-/** Character screens in sidebar order (DESIGN.md Frame A). The divider sits before Inventory. */
+/** Character screens in sidebar order: main screens, a divider, then secondary screens (M44 T2). */
 export const NAV: NavItem[] = [
   { to: '', label: 'Home', short: 'Home', icon: House },
   { to: 'sheet', label: 'Sheet', short: 'Sheet', icon: ScrollText },
   { to: 'spells', label: 'Spells', short: 'Spells', icon: Sparkles },
   { to: 'combat', label: 'Combat', short: 'Combat', icon: Swords },
-  { to: 'explore', label: 'Explore', short: 'Explore', icon: Compass },
   { to: 'inventory', label: 'Inventory', short: 'Inv', icon: Backpack, milestone: 'M9', phase: 2 },
   { to: 'features', label: 'Features', short: 'Features', icon: Star, milestone: 'M9', phase: 2 },
   {
@@ -41,12 +42,44 @@ export const NAV: NavItem[] = [
     milestone: 'M12',
     phase: 2,
   },
-  { to: 'journal', label: 'Journal', short: 'Journal', icon: BookOpen, milestone: 'M12', phase: 2 },
-  { to: 'reference', label: 'Reference', short: 'Ref', icon: Library, milestone: 'M3' },
-  { to: 'settings', label: 'Settings', short: 'Settings', icon: Settings, milestone: 'M3' },
+  { to: 'explore', label: 'Explore', short: 'Explore', icon: Compass },
+  {
+    to: 'journal',
+    label: 'Journal',
+    short: 'Journal',
+    icon: BookOpen,
+    milestone: 'M12',
+    phase: 2,
+    secondary: true,
+  },
+  {
+    to: 'reference',
+    label: 'Reference',
+    short: 'Ref',
+    icon: Library,
+    milestone: 'M3',
+    secondary: true,
+  },
+  {
+    to: 'settings',
+    label: 'Settings',
+    short: 'Settings',
+    icon: Settings,
+    milestone: 'M3',
+    secondary: true,
+  },
 ];
 
-export const NAV_DIVIDER_BEFORE = 'inventory';
+/** The two labelled groups shared by the sidebar and the phone More sheet. */
+export const NAV_GROUPS = [
+  { label: 'Main screens', secondary: false },
+  { label: 'Other screens', secondary: true },
+] as const;
+
+/** Items of one group, keeping NAV order. */
+export function navGroup(items: NavItem[], secondary: boolean): NavItem[] {
+  return items.filter((n) => Boolean(n.secondary) === secondary);
+}
 
 /** Mobile bottom nav: five direct links in this order + More (D232). */
 export const BOTTOM_NAV = ['', 'sheet', 'spells', 'inventory', 'combat'];

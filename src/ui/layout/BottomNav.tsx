@@ -5,7 +5,7 @@ import { cx } from '../cx';
 import { Sheet } from '../components/Sheet';
 import { useCharacterBase } from '../hooks/useCharacterBase';
 import { useRest } from '../rest/rest-context';
-import { BOTTOM_NAV, NAV, navPath } from './nav';
+import { BOTTOM_NAV, NAV, NAV_GROUPS, navGroup, navPath } from './nav';
 
 const tab =
   'flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-0.5 text-[0.6875rem] leading-tight transition-colors duration-(--omni-motion-hover)';
@@ -86,25 +86,34 @@ export function BottomNav() {
             <Moon size={18} aria-hidden /> Long Rest
           </button>
         </div>
-        <ul className="grid grid-cols-2 gap-2">
-          {rest.map(({ to, label, icon: Glyph }) => (
-            <li key={to}>
-              <NavLink
-                to={navPath(base, to)}
-                onClick={() => setMore(false)}
-                className={({ isActive }) =>
-                  cx(
-                    'flex min-h-12 items-center gap-3 rounded-btn px-3',
-                    isActive ? 'bg-surface text-accent' : 'text-text hover:bg-surface',
-                  )
-                }
-              >
-                <Glyph size={18} aria-hidden className="text-text-muted" />
-                {label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+        {NAV_GROUPS.map((group, index) => (
+          <ul
+            key={group.label}
+            aria-label={group.label}
+            className={cx(
+              'grid grid-cols-2 gap-2',
+              index > 0 && 'mt-3 border-t border-border pt-3',
+            )}
+          >
+            {navGroup(rest, group.secondary).map(({ to, label, icon: Glyph }) => (
+              <li key={to}>
+                <NavLink
+                  to={navPath(base, to)}
+                  onClick={() => setMore(false)}
+                  className={({ isActive }) =>
+                    cx(
+                      'flex min-h-12 items-center gap-3 rounded-btn px-3',
+                      isActive ? 'bg-surface text-accent' : 'text-text hover:bg-surface',
+                    )
+                  }
+                >
+                  <Glyph size={18} aria-hidden className="text-text-muted" />
+                  {label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        ))}
         <Link
           to="/"
           className="mt-3 flex min-h-12 items-center gap-3 rounded-btn border-t border-border px-3 pt-3 text-text-muted hover:text-text"

@@ -4,7 +4,7 @@ import { ChevronLeft, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { cx } from '../cx';
 import { ThemeTitle } from '../theme/ThemeTitle';
 import { useCharacterBase } from '../hooks/useCharacterBase';
-import { NAV, NAV_DIVIDER_BEFORE, navPath } from './nav';
+import { NAV, NAV_GROUPS, navGroup, navPath } from './nav';
 
 const item =
   'flex min-h-11 items-center gap-3 rounded-btn px-3 transition-colors duration-(--omni-motion-hover) justify-center';
@@ -49,26 +49,33 @@ export function SideNav() {
         <ChevronLeft size={20} aria-hidden />
         <span className={labels}>All campaigns</span>
       </Link>
-      {NAV.map(({ to, label, icon: Glyph }) => (
-        <div key={to} className="contents">
-          {to === NAV_DIVIDER_BEFORE && <hr className="my-2 border-border" />}
-          <NavLink
-            to={navPath(base, to)}
-            end={to === ''}
-            title={label}
-            className={({ isActive }) =>
-              cx(
-                item,
-                !collapsed && 'lg:justify-start',
-                isActive
-                  ? 'bg-surface-2 text-accent'
-                  : 'text-text-muted hover:bg-surface hover:text-text',
-              )
-            }
-          >
-            <Glyph size={20} aria-hidden />
-            <span className={labels}>{label}</span>
-          </NavLink>
+      {NAV_GROUPS.map((group, index) => (
+        <div
+          key={group.label}
+          role="group"
+          aria-label={group.label}
+          className={cx('flex flex-col gap-1', index > 0 && 'mt-2 border-t border-border pt-2')}
+        >
+          {navGroup(NAV, group.secondary).map(({ to, label, icon: Glyph }) => (
+            <NavLink
+              key={to}
+              to={navPath(base, to)}
+              end={to === ''}
+              title={label}
+              className={({ isActive }) =>
+                cx(
+                  item,
+                  !collapsed && 'lg:justify-start',
+                  isActive
+                    ? 'bg-surface-2 text-accent'
+                    : 'text-text-muted hover:bg-surface hover:text-text',
+                )
+              }
+            >
+              <Glyph size={20} aria-hidden />
+              <span className={labels}>{label}</span>
+            </NavLink>
+          ))}
         </div>
       ))}
       <button

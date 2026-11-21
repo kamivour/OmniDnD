@@ -28,6 +28,9 @@ test.describe('desktop shell', () => {
     await page.goto(spellPath);
     await expectStyled(page);
     await expect(navigation(page)).toHaveCSS('width', '220px');
+    await expect(
+      navigation(page).getByRole('group', { name: 'Other screens' }).getByRole('link'),
+    ).toHaveText(['Journal', 'Reference', 'Settings']);
     await page.getByRole('button', { name: 'Collapse navigation' }).click();
     await expect(navigation(page)).toHaveCSS('width', '64px');
     await expect(navigation(page).getByRole('link', { name: 'Home', exact: true })).toBeVisible();
@@ -202,6 +205,17 @@ test.describe('mobile shell', () => {
     await page.screenshot({ path: info.outputPath('mobile-shell.png'), fullPage: true });
     await nav.getByRole('button', { name: 'More', exact: true }).tap();
     const more = page.getByRole('dialog', { name: 'More', exact: true });
+    await expect(more.getByRole('list', { name: 'Main screens' }).getByRole('link')).toHaveText([
+      'Features',
+      'Companions',
+      'Explore',
+    ]);
+    await expect(more.getByRole('list', { name: 'Other screens' }).getByRole('link')).toHaveText([
+      'Journal',
+      'Reference',
+      'Settings',
+    ]);
+    await page.screenshot({ path: info.outputPath('mobile-more.png') });
     await more.getByRole('link', { name: 'Journal', exact: true }).tap();
     await expect(more).toBeHidden();
     await expect(page).toHaveURL(/\/characters\/the-fool\/journal$/);

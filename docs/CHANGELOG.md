@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 17:36 — Tidier More menu and sidebar
+
+- More and the desktop sidebar now show main screens first (Features, Companions, Explore), then a line, then Journal, Reference and Settings.
+- Inventory moved up next to Combat in the sidebar.
+- Checks pass.
+
 ## 2026-11-21 17:32 — Sheet in the phone bar
 
 - The phone bar now has six buttons: Home, Sheet, Spells, Inv, Combat and More.
