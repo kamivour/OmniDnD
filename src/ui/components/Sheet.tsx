@@ -43,7 +43,7 @@ export function Sheet({
             className,
           )}
         >
-          <div className="mb-3 flex items-start gap-3">
+          <div className="mb-3 flex shrink-0 items-start gap-3">
             <div className="min-w-0 flex-1">
               <Dialog.Title className="text-base font-semibold text-text">{title}</Dialog.Title>
               <Dialog.Description className={description ? 'text-xs text-text-muted' : 'sr-only'}>

@@ -35,6 +35,7 @@ export function RestProvider({ children }: { children: ReactNode }) {
       <Sheet
         open={kind !== null}
         onOpenChange={(next) => !next && setKind(null)}
+        className={kind === 'manage' ? 'lg:flex lg:max-h-[90dvh] lg:w-4xl lg:flex-col' : undefined}
         title={
           kind === 'infusions'
             ? 'Review infusions'
@@ -84,8 +85,8 @@ export function RestProvider({ children }: { children: ReactNode }) {
           />
         )}
         {kind === 'manage' && (
-          <div ref={manageContainer} tabIndex={-1}>
-            <SpellManage initialClassId={preparedClass} onClose={() => setKind(null)} />
+          <div ref={manageContainer} tabIndex={-1} className="lg:flex lg:min-h-0 lg:flex-col">
+            <SpellManage initialClassId={preparedClass} desktopWide onClose={() => setKind(null)} />
           </div>
         )}
         {kind === 'infusions' && (

@@ -662,6 +662,7 @@ test('prepared-caster review opens the existing manager on the first prepared cl
   await importCharacter(page, file);
   const before = await readSaved(page, file.build.id);
   const opener = await openRest(page);
+  const previewWidth = (await rest(page).boundingBox())!.width;
   await expect(review(page)).toBeChecked();
   expect(await readSaved(page, file.build.id)).toEqual(before);
   await apply(page).click();
@@ -673,6 +674,27 @@ test('prepared-caster review opens the existing manager on the first prepared cl
   await expect(manage(page).locator('[aria-label="Spell selection counts"]')).toContainText(
     '1 / 4 prepared',
   );
+  const dialog = (await manage(page).boundingBox())!;
+  const selected = (await manage(page)
+    .getByRole('region', { name: 'Selected spells' })
+    .boundingBox())!;
+  const available = (await manage(page)
+    .getByRole('region', { name: 'Available spells' })
+    .boundingBox())!;
+  expect(dialog.x).toBeGreaterThanOrEqual(0);
+  expect(dialog.x + dialog.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+  if (isMobile) {
+    expect(dialog.width).toBe(previewWidth);
+    expect(available.y).toBeGreaterThan(selected.y);
+  } else {
+    expect(dialog.width).toBeGreaterThanOrEqual(previewWidth * 2);
+    expect(available.x).toBeGreaterThan(selected.x + selected.width);
+    expect(available.y).toBeCloseTo(selected.y);
+    await expect(manage(page).getByRole('region', { name: 'Available spells' })).toBeInViewport();
+  }
+  await expect(manage(page).getByRole('button', { name: 'Done', exact: true })).toBeInViewport({
+    ratio: 1,
+  });
   await expect
     .poll(() => manage(page).evaluate((element) => element.contains(document.activeElement)))
     .toBe(true);

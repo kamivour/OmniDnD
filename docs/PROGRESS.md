@@ -397,6 +397,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 ## Review fixes
 
+- [x] Widen the desktop spell review after a long rest and show selected and available spells side by side
 - [x] Audit class and subclass choices, fix missing cantrips and spell lists, and verify Channel Divinity in Combat
 - [x] Put Combat Statistics first on the desktop Sheet while preserving phone and tablet order
 
@@ -418,6 +419,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-22 — Widened the desktop spell review after a long rest and put selected and available spells side by side.
 - 2026-11-22 — M41: added separate Tasha’s replica recipes, searchable known infusion picks, and force and psychic options for Resistant Armor.
 - 2026-11-21 — Audited class and subclass coverage. Fixed Paladin and Cleric Channel Divinity, fighting styles, Land Druid terrain, and subclass spell picks.
 

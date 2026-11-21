@@ -6,6 +6,7 @@ import type { SpellDef } from '../../engine/schema';
 import { useCommand } from '../commands/command-context';
 import { Field, inputClass } from '../components/fields';
 import { Sheet } from '../components/Sheet';
+import { cx } from '../cx';
 import { useCharacter } from '../hooks/useCharacter';
 import { useCharacterHistory } from '../log/useCharacterHistory';
 import { overridePath } from '../../engine/calc/value-overrides';
@@ -59,11 +60,13 @@ export function SpellManage({
   onClose,
   initialClassId,
   focus,
+  desktopWide = false,
 }: {
   onClose: () => void;
   initialClassId?: string;
   /** Opened from a Pending pick: list only that kind of spell until the player asks for all. */
   focus?: 'cantrips' | 'spells';
+  desktopWide?: boolean;
 }) {
   const { state, sheet, events } = useCharacter();
   const { run } = useCommand();
@@ -265,7 +268,14 @@ export function SpellManage({
   };
 
   return (
-    <div ref={container} tabIndex={-1} className="flex max-h-[65dvh] min-w-0 flex-col gap-3">
+    <div
+      ref={container}
+      tabIndex={-1}
+      className={cx(
+        'flex max-h-[65dvh] min-w-0 flex-col gap-3',
+        desktopWide && 'lg:min-h-0 lg:max-h-none',
+      )}
+    >
       {details ? (
         <>
           <Field label="Casting class" htmlFor={classInputId}>
@@ -349,14 +359,19 @@ export function SpellManage({
               onChange={(event) => setQuery(event.target.value)}
             />
           </Field>
-          <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto pr-1">
+          <div
+            className={cx(
+              'flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto pr-1',
+              desktopWide && 'lg:grid lg:grid-cols-2 lg:content-start lg:items-start',
+            )}
+          >
             {error && (
-              <p role="alert" className="text-sm text-warn">
+              <p role="alert" className="text-sm text-warn lg:col-span-2">
                 {error}
               </p>
             )}
             {details.mode !== 'unsupported' && (
-              <p className="text-xs text-text-muted">
+              <p className="text-xs text-text-muted lg:col-span-2">
                 {details.name} level {details.classLevel} · Spells through level{' '}
                 {details.maxSpellLevel}. Base limits are guidance; confirm feature or DM exceptions
                 in the warning.
@@ -365,7 +380,7 @@ export function SpellManage({
             {details.warnings.length > 0 && (
               <ul
                 aria-label="Spell selection warnings"
-                className="list-disc space-y-1 pl-5 text-xs text-warn"
+                className="list-disc space-y-1 pl-5 text-xs text-warn lg:col-span-2"
               >
                 {details.warnings.map((warning) => (
                   <li key={warning}>{warning}</li>
@@ -373,7 +388,10 @@ export function SpellManage({
               </ul>
             )}
             {replacement ? (
-              <section aria-label="Choose replacement" className="flex flex-col gap-3">
+              <section
+                aria-label="Choose replacement"
+                className="flex flex-col gap-3 lg:col-span-2"
+              >
                 <h3 className="break-words text-sm font-semibold text-text">
                   Replace {replacement.list} {spellName(replacement.spellId)}
                 </h3>
@@ -407,7 +425,7 @@ export function SpellManage({
               </section>
             ) : (
               <>
-                <section aria-label="Selected spells" className="flex flex-col gap-3">
+                <section aria-label="Selected spells" className="flex min-w-0 flex-col gap-3">
                   <h2 className="text-base font-semibold text-text">Selected spells</h2>
                   {renderSelected('Cantrips', 'known', details.cantrips.ids)}
                   {renderSelected(
@@ -429,7 +447,7 @@ export function SpellManage({
                       <p className="text-sm text-text-muted">No spells selected for this class.</p>
                     )}
                 </section>
-                <section aria-label="Available spells" className="flex flex-col gap-3">
+                <section aria-label="Available spells" className="flex min-w-0 flex-col gap-3">
                   <h2 className="text-base font-semibold text-text">Available spells</h2>
                   {focus && (
                     <p className="text-sm text-text-muted">
@@ -468,7 +486,7 @@ export function SpellManage({
                 </section>
                 {selectedTagIds.length > 0 && (
                   // Rarely needed, so it starts closed below the choices.
-                  <details className="rounded-card border border-border p-3 text-sm">
+                  <details className="rounded-card border border-border p-3 text-sm lg:col-span-2">
                     <summary className="min-h-11 cursor-pointer py-2 text-accent">
                       Change spell types (optional)
                     </summary>
