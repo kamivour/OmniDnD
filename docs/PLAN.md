@@ -360,7 +360,7 @@ No new screens. Combat stays as it is until M46. 2014 rules only; liters are a p
 
 Requested 2026-11-19; started 2026-11-21 ahead of M42 at the owner's request. A read-only library for planning characters, covering spells, classes, subclasses, races, backgrounds, feats and equipment from the bundled 2014 data. Equipment groups by tier (mundane, common, uncommon, rare, very rare, legendary, artifact) and filters by type (weapon, armor, gear, tools, potion, ring, wand, wondrous and so on).
 
-The [Compendium redesign proposal](COMPENDIUM_REDESIGN.md) covers equipment facts, artwork, rarity colors and layouts for all seven tabs. It is ready for owner review.
+The [Compendium redesign](COMPENDIUM_REDESIGN.md) covers equipment facts, artwork, rarity colors and layouts for all seven tabs.
 
 ### Tasks and acceptance
 

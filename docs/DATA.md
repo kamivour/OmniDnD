@@ -35,7 +35,7 @@ The data model supports many campaigns and characters, including future friends'
 
 > This work includes material taken from the System Reference Document 5.1 ("SRD 5.1") by Wizards of the Coast LLC and available at https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode.
 
-Also credit game-icons.net (CC BY 3.0) and Lucide (ISC).
+Also credit game-icons.net and Elle Trudgett’s Ardentryst item drawings (CC BY 3.0), and Lucide (ISC).
 
 ## 3. IDs and tags
 
@@ -237,6 +237,8 @@ interface LiveState {
 **Custom items (M9):** custom weapons and armor copy stats from a catalogue item and record it as `baseItemId`, which also counts for weapon proficiency. Import rejects duplicate or non-custom ids.
 
 **Item charges (M9):** `data/srd/magic-items.json` imports SRD magic items with charges from a table checked against the item text; new items start full. A dice regain sets `rechargePending` until the entered roll is applied or skipped (D117).
+
+**Compendium equipment (M45):** `src/ui/compendium/equipment-reference.ts` links magic items to verified 2014 base item IDs and lists display-only exceptions. Item art in `public/compendium/` and Game-icons silhouettes work offline and are credited in Reference → Credits.
 
 **Currency and weight (M9):** saved coin counts stay separate; value uses 2014 exchange rates and coins weigh 50 per pound. Weight counts each positive item instance once, divides purchase-bundle weights by bundle size, and marks missing weights as incomplete; capacity comes from the shared Sheet calculation.
 

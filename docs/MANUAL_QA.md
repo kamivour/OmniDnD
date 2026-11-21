@@ -337,13 +337,14 @@ Use two test accounts on a phone and a desktop, after running the three new migr
 
 ## M45 — Compendium
 
-- [ ] Equipment: tier headers (Mundane, Common, Uncommon, ...) and type chips feel easy to scan on a phone.
-- [ ] Rarity and type shown for a few magic items match the books you know.
-- [ ] Class and subclass pages: features by level read clearly and link to subclasses and granted spells.
-- [ ] Race, background and feat summaries are short, accurate and in plain words.
-- [ ] Inside a character the campaign's books are the default; switching to all books feels obvious.
-- [ ] Plan this and the Journal Plans tab make sense as a wish list and never change the sheet.
-- [ ] Both themes look right on the entry panel and the sheet at 375 px.
+- [ ] Distinguish a trident, sword, bow, shield, boots and potion at thumbnail size.
+- [ ] Trident of Fish Command shows the 2014 damage, damage type, thrown range and two-handed die together.
+- [ ] Property explanations are easy to open and read with a pointer, keyboard and touch.
+- [ ] Tier labels and selection marks stand out in Dark, Parchment and Tidewater.
+- [ ] Preview two bases for Flame Tongue and read the AC of Animated Shield.
+- [ ] Feat icons and prerequisites make the results easy to compare.
+- [ ] Scan all seven tabs at 375 px and 1440 px. Check space, text wrapping and the return to results.
+- [ ] Inside a character, the campaign book scope and `Plan this` feel clear.
 
 ## Rules review — M5
 

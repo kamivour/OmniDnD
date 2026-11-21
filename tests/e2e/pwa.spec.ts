@@ -423,11 +423,7 @@ test('an updated worker waits for the open draft to close before activating', as
   expect(await readDatabase(reopened)).toEqual(initial);
 });
 
-test('compendium class, subclass, race, feat and spell pages read offline', async ({
-  page,
-  context,
-  isMobile,
-}) => {
+test('all Compendium tabs and equipment art work offline', async ({ page, context, isMobile }) => {
   await page.goto('/characters/the-fool');
   await saved(page);
   await controlled(page);
@@ -437,8 +433,11 @@ test('compendium class, subclass, race, feat and spell pages read offline', asyn
     ['class.fighter', 'classes', 'Hit die'],
     ['subclass.fighter.champion', 'subclasses', 'Features by level'],
     ['race.hill-dwarf', 'races', 'Darkvision'],
+    ['background.acolyte', 'backgrounds', 'Skills'],
     ['feature.feat.grappler', 'feats', 'Prerequisite'],
     ['spell.fireball', 'spells', 'Casting time'],
+    ['item.trident-of-fish-command', 'equipment', 'Damage Type'],
+    ['item.longsword', 'equipment', 'Slashing'],
   ] as const) {
     const response = await page.goto(`/characters/the-fool/compendium?kind=${kind}&entry=${id}`);
     expect(response?.fromServiceWorker()).toBe(true);
@@ -446,6 +445,14 @@ test('compendium class, subclass, race, feat and spell pages read offline', asyn
       ? page.getByRole('dialog')
       : page.getByRole('complementary', { name: 'Compendium entry', exact: true });
     await expect(panel.getByText(fact, { exact: true }).first()).toBeVisible();
+    if (id === 'item.longsword')
+      await expect
+        .poll(() =>
+          panel
+            .locator('img[src="/compendium/longsword.png"]')
+            .evaluate((img: HTMLImageElement) => img.naturalWidth),
+        )
+        .toBeGreaterThan(0);
   }
   expect(await page.evaluate(() => navigator.onLine)).toBe(false);
 });

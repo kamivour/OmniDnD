@@ -6,6 +6,8 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D250 | 2026-11-22 | Compendium reads verified equipment bases for reference. A magic item with several possible bases offers a preview picker that stays on the library page. | Show the correct profile for the chosen base and preserve existing character mechanics |
+| D251 | 2026-11-22 | Rarity colors run from gray and ivory through green, blue, purple, gold and red. Compendium uses credited artwork where available, then recognizable object or feat icons. | Make tier and category recognizable in lists, detail and offline |
 | D249 | 2026-11-22 | Each named Replicate Magic Item recipe uses one known infusion. The existing general pick remains available for eligible common items recorded at the table. | Follow Tasha’s recipe choices and preserve existing picks |
 | D247 | 2026-11-21 | Cantrips learned from a fighting style use its class's casting statistics and sit outside normal class picks. Land Druids choose one terrain, with circle spells unlocked by druid level. | Keep class limits and granted spells separate |
 | D248 | 2026-11-21 | Cleric/Paladin Channel Divinity uses the higher pool maximum. Previously recorded spending from both classes counts until it is corrected or recovered through a rest. | Follow the 2014 multiclass rule and preserve saved spending |

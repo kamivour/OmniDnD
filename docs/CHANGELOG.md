@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 04:05 — Compendium redesign
+
+- Check damage, range, properties and armor stats on equipment. Preview the base of a magic item such as Flame Tongue.
+- Equipment and Feats have recognizable art or icons. Rarity colors match across filters, results and details.
+- Browse all seven tabs with clearer details, compact filters and a taller phone sheet. Checks pass.
+
 ## 2026-11-22 03:34 — Compendium redesign plan
 
 - The plan spells out what equipment details will show, using Trident of Fish Command as the first example.

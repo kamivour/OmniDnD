@@ -2,7 +2,8 @@ import { itemTier, itemType, type CatalogEntry } from '../../engine/catalog';
 import type { Registry } from '../../engine/registry';
 import type { ItemDef, SpellDef } from '../../engine/schema';
 import { skillName } from '../format';
-import { TIER_LABELS, TYPE_NAMES } from './compendium-model';
+import { TIER_LABELS, TYPE_NAMES, titleCase } from './compendium-model';
+import { equipmentProfile } from './equipment-reference';
 
 /** One labelled value in the facts grid. */
 export type Fact = readonly [label: string, value: string];
@@ -10,7 +11,7 @@ export type Fact = readonly [label: string, value: string];
 /** A list under the facts. `id` makes the row open another compendium entry. */
 export interface FactList {
   title: string;
-  items: { label: string; level?: number; id?: string }[];
+  items: { label: string; level?: number; id?: string; detail?: string }[];
 }
 
 export interface EntryFacts {
@@ -51,6 +52,9 @@ export function spellComponents({ components: c }: SpellDef): string {
  * Undefined when the feat has none.
  */
 export function featPrerequisite(entry: CatalogEntry): string | undefined {
+  if (entry.id === 'feature.feat.elemental-adept' || entry.id === 'feature.feat.spell-sniper')
+    return 'Ability to cast at least one spell';
+  if (entry.id === 'feature.feat.wood-elf-magic') return 'Wood elf';
   const srd = entry.fullText?.match(/Prerequisite:\s*([^*\n]+)/i)?.[1];
   if (srd) return srd.trim().replace(/\.$/, '');
   const effect = entry.summary?.effect ?? '';
@@ -72,39 +76,78 @@ function armorClass(armor: NonNullable<ItemDef['armor']>): string {
   }
 }
 
-function itemFacts(item: ItemDef, name: (id: string) => string): Fact[] {
-  const facts: Fact[] = [['Type', TYPE_NAMES[itemType(item)]]];
+function itemFacts(item: ItemDef, registry: Registry, variantId?: string): Fact[] {
+  const {
+    reference,
+    weapon: w,
+    armor: a,
+    base,
+    bases,
+  } = equipmentProfile(item, registry, variantId);
+  const facts: Fact[] = [
+    ['Type', reference?.ammunition ? 'Ammunition' : TYPE_NAMES[itemType(item)]],
+  ];
   const tier = itemTier(item);
   if (tier !== 'mundane') facts.push(['Rarity', TIER_LABELS[tier]]);
-  if (item.attunement) facts.push(['Attunement', 'Required']);
-  if (item.weapon) {
-    const w = item.weapon;
-    facts.push(['Weapon', `${w.category === 'simple' ? 'Simple' : 'Martial'} ${w.type}`]);
-    if (w.damage !== undefined)
-      facts.push([
-        'Damage',
-        `${w.damage} ${w.damageType ?? ''}`.trim() +
-          (w.versatile ? ` (${w.versatile} two-handed)` : ''),
-      ]);
-    const props = w.properties.map((p) => p.replaceAll('-', ' '));
-    if (props.length) facts.push(['Properties', props.join(', ')]);
-    if (w.range) facts.push(['Range', `${w.range.normal}/${w.range.long} ft`]);
+  if (item.attunement) {
+    const header = item.fullText?.split('\n', 1)[0] ?? '';
+    const condition =
+      reference?.attunement ?? header.match(/\(requires attunement (by [^)]+)\)/i)?.[1];
+    facts.push(['Attunement', condition ? `Required · ${condition}` : 'Required']);
   }
-  if (item.armor) {
-    const a = item.armor;
+  if (base) facts.push(['Base item', base.name]);
+  else if (reference?.fit) facts.push(['Applies to', reference.fit]);
+  if (w) {
+    facts.push(['Weapon', `${w.category === 'simple' ? 'Simple' : 'Martial'} ${w.type}`]);
+    facts.push([
+      'Damage',
+      w.damage === undefined
+        ? 'No damage'
+        : `${w.damage}${w.versatile ? ` (${w.versatile} two-handed)` : ''}`,
+    ]);
+    if (w.damageType) facts.push(['Damage Type', titleCase(w.damageType)]);
+    const props = [
+      ...(w.range ? ['Range'] : []),
+      ...w.properties.map((property) =>
+        property === 'two-handed' ? 'Two-handed' : titleCase(property),
+      ),
+    ];
+    if (w.range) facts.push(['Range', `${w.range.normal}/${w.range.long} ft`]);
+    if (props.length) facts.push(['Properties', props.join(', ')]);
+  }
+  if (reference?.weaponBonus)
+    facts.push([
+      'Magic bonus',
+      w && w.damage === undefined
+        ? `+${reference.weaponBonus} to attack rolls`
+        : `+${reference.weaponBonus} to attack and damage rolls`,
+    ]);
+  if (a) {
     facts.push(['Armor', a.category === 'shield' ? 'Shield' : `${titleWord(a.category)} armor`]);
     facts.push(['AC', armorClass(a)]);
     if (a.strMin) facts.push(['Strength', `${a.strMin} needed`]);
     if (a.stealthDisadvantage) facts.push(['Stealth', 'Disadvantage']);
+  } else if (reference?.armorBonus) {
+    facts.push(['Magic bonus', `+${reference.armorBonus} AC`]);
   }
-  if (item.charges) facts.push(['Charges', String(item.charges.max)]);
+  if (item.charges) {
+    const { max, recharge, regain } = item.charges;
+    facts.push(['Charges', String(max)]);
+    if (recharge === 'dawn') {
+      const amount =
+        regain && regain !== 'all'
+          ? `${regain.dice}${regain.bonus ? ` + ${regain.bonus}` : ''}`
+          : undefined;
+      facts.push(['Recharge', amount ? `${amount} at dawn` : 'At dawn']);
+    }
+  }
   if (item.cost)
     facts.push([
       'Cost',
       `${item.cost.amount} ${item.cost.unit}${item.bundle ? ` for ${item.bundle}` : ''}`,
     ]);
   if (item.weight !== undefined && item.weight > 0) facts.push(['Weight', `${item.weight} lb`]);
-  if (item.baseItemId) facts.push(['Counts as', name(item.baseItemId)]);
+  if (!base && bases.length === 0 && item.baseItemId) facts.push(['Base item', item.baseItemId]);
   return facts;
 }
 
@@ -112,19 +155,29 @@ const titleWord = (w: string) => w.charAt(0).toUpperCase() + w.slice(1);
 
 const featureList = (
   title: string,
-  features: readonly { level: number; featureId: string }[],
-  name: (id: string) => string,
+  features: readonly { level?: number; featureId: string }[],
+  registry: Registry,
 ): FactList => ({
   title,
   items: [...features]
-    .sort((a, b) => a.level - b.level)
-    .map((f) => ({ label: name(f.featureId), level: f.level })),
+    .sort((a, b) => (a.level ?? 0) - (b.level ?? 0))
+    .map(({ featureId, level }) => {
+      const entry = registry.entries.get(featureId);
+      return {
+        label: entry?.name ?? featureId,
+        level,
+        detail: entry?.summary?.effect ?? entry?.fullText,
+      };
+    }),
 });
 
 /** Kind-specific facts and lists for the compendium detail. Pure: reads the registry only. */
-export function entryFacts(entry: CatalogEntry, registry: Registry): EntryFacts {
+export function entryFacts(
+  entry: CatalogEntry,
+  registry: Registry,
+  variantId?: string,
+): EntryFacts {
   const name = (id: string) => registry.entries.get(id)?.name ?? id;
-  const all = [...registry.entries.values()];
   switch (entry.kind) {
     case 'spell':
       return {
@@ -163,28 +216,39 @@ export function entryFacts(entry: CatalogEntry, registry: Registry): EntryFacts 
           'Spellcasting',
           `${ABBR(entry.spellcasting.ability)}, ${entry.spellcasting.progression === 'pact' ? 'Pact Magic' : `${entry.spellcasting.progression} caster`}`,
         ]);
-      const subclasses = all
+      const subclasses = [...registry.entries.values()]
         .filter((e) => e.kind === 'subclass' && e.classId === entry.id)
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((e) => ({ label: e.name, id: e.id }));
       return {
         facts,
         lists: [
-          featureList('Features by level', entry.features, name),
+          featureList('Features by level', entry.features, registry),
           ...(subclasses.length ? [{ title: 'Subclasses', items: subclasses }] : []),
         ],
       };
     }
     case 'subclass': {
-      const lists: FactList[] = [featureList('Features by level', entry.features, name)];
+      const lists: FactList[] = [featureList('Features by level', entry.features, registry)];
+      const parent = registry.entries.get(entry.classId);
+      const knowsSpells =
+        parent?.kind === 'class' && parent.spellcasting?.spellsKnown !== undefined;
       if (entry.grantedSpells?.length)
         lists.push({
-          title: 'Always prepared spells',
+          title: knowsSpells ? 'Granted spells' : 'Always prepared spells',
           items: entry.grantedSpells.flatMap((g) =>
             g.spellIds.map((id) => ({ label: name(id), level: g.level, id })),
           ),
         });
+      if (entry.expandedSpellIds?.length)
+        lists.push({
+          title: 'Added to your spell choices',
+          items: entry.expandedSpellIds.map((id) => ({ label: name(id), id })),
+        });
       const facts: Fact[] = [['Class', name(entry.classId)]];
+      if (parent?.kind === 'class') facts.push(['Subclass at', `Level ${parent.subclassLevel}`]);
+      if (entry.additionalSpellLists?.length)
+        facts.push(['Additional spell lists', entry.additionalSpellLists.map(name).join(', ')]);
       if (entry.spellcasting)
         facts.push([
           'Spellcasting',
@@ -210,14 +274,20 @@ export function entryFacts(entry: CatalogEntry, registry: Registry): EntryFacts 
       if (bonuses.length) facts.push(['Abilities', bonuses.join(', ')]);
       if (entry.languages.length) facts.push(['Languages', entry.languages.join(', ')]);
       if (entry.subraceOf) facts.push(['Subrace of', name(entry.subraceOf)]);
-      const subraces = all
+      const subraces = [...registry.entries.values()]
         .filter((e) => e.kind === 'race' && e.subraceOf === entry.id)
         .map((e) => ({ label: e.name, id: e.id }));
       return {
         facts,
         lists: [
           ...(entry.featureIds.length
-            ? [{ title: 'Traits', items: entry.featureIds.map((id) => ({ label: name(id) })) }]
+            ? [
+                featureList(
+                  'Traits',
+                  entry.featureIds.map((featureId) => ({ featureId })),
+                  registry,
+                ),
+              ]
             : []),
           ...(subraces.length ? [{ title: 'Subraces', items: subraces }] : []),
         ],
@@ -239,7 +309,13 @@ export function entryFacts(entry: CatalogEntry, registry: Registry): EntryFacts 
       return {
         facts,
         lists: entry.featureIds.length
-          ? [{ title: 'Feature', items: entry.featureIds.map((id) => ({ label: name(id) })) }]
+          ? [
+              featureList(
+                'Feature',
+                entry.featureIds.map((featureId) => ({ featureId })),
+                registry,
+              ),
+            ]
           : [],
       };
     }
@@ -260,6 +336,6 @@ export function entryFacts(entry: CatalogEntry, registry: Registry): EntryFacts 
       return { facts, lists: [] };
     }
     case 'item':
-      return { facts: itemFacts(entry, name), lists: [] };
+      return { facts: itemFacts(entry, registry, variantId), lists: [] };
   }
 }

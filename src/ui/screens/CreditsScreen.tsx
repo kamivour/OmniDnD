@@ -67,6 +67,21 @@ export function CreditsScreen() {
           Non-SRD summaries are written in our own words.
         </p>
       </section>
+      <section aria-labelledby="credits-item-art" className="flex flex-col gap-2">
+        <h2 id="credits-item-art" className="text-base font-semibold">
+          Compendium item art
+        </h2>
+        <p className="text-text-muted">
+          <a className={linkClass} href="https://opengameart.org/node/11858">
+            Ardentryst inventory drawings
+          </a>{' '}
+          © 2008 Elle Trudgett, licensed under{' '}
+          <a className={linkClass} href="https://creativecommons.org/licenses/by/3.0/">
+            CC BY 3.0
+          </a>
+          . Selected images are reused as item illustrations.
+        </p>
+      </section>
       <section aria-labelledby="credits-game-icons" className="flex flex-col gap-3">
         <h2 id="credits-game-icons" className="text-base font-semibold">
           game-icons.net

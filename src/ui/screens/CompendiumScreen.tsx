@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
-import { X } from 'lucide-react';
+import { Check, ChevronRight, Search, SlidersHorizontal, X } from 'lucide-react';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import {
@@ -16,17 +16,22 @@ import {
   itemType,
   matchesFilter,
   type CatalogEntry,
+  type CatalogFilter,
   type CatalogKind,
 } from '../../engine/catalog';
 import { SOURCE_NAMES } from '../../engine/calc/campaign-rules';
 import { SCHOOLS } from '../../engine/rules2014';
 import type { Source } from '../../engine/schema';
 import { CompendiumDetail } from '../compendium/CompendiumDetail';
+import { CompendiumArt } from '../compendium/CompendiumArt';
 import { PlanButton } from '../compendium/PlanButton';
+import { featPrerequisite } from '../compendium/compendium-facts';
+import { equipmentBases, equipmentProfile } from '../compendium/equipment-reference';
 import {
   KIND_LABELS,
   TIER_LABELS,
   TYPE_LABELS,
+  TYPE_NAMES,
   clearFilters,
   groupLabel,
   hasFilters,
@@ -34,12 +39,14 @@ import {
   rowMeta,
   switchKind,
   toggleParam,
+  titleCase,
 } from '../compendium/compendium-model';
 import { inputClass } from '../components/fields';
 import { Sheet } from '../components/Sheet';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { cx } from '../cx';
 import { characterState, characterStore } from '../../state/character-store';
+import '../compendium/compendium.css';
 
 const PAGE = 100;
 
@@ -47,7 +54,7 @@ const nameOf = (id: string) => registry.entries.get(id)?.name ?? id;
 
 const chip = (on: boolean) =>
   cx(
-    'inline-flex min-h-9 items-center rounded-btn border px-2.5 text-sm',
+    'inline-flex min-h-11 items-center rounded-btn border px-2.5 text-sm',
     on ? 'border-accent bg-surface-2 text-accent' : 'border-border text-text-muted hover:text-text',
   );
 
@@ -59,6 +66,12 @@ export function CompendiumScreen() {
   const location = useLocation();
   const navigate = useNavigate();
   const desktop = useMediaQuery('(min-width: 1024px)');
+  const [hasReadingRoom, setHasReadingRoom] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const columns = useRef<HTMLDivElement>(null);
+  const readingPanel = useRef<HTMLElement>(null);
+  const listOpener = useRef<HTMLButtonElement>(null);
+  const listScrollTop = useRef<number>(null);
   const query = useMemo(() => readQuery(params), [params]);
   const { kind, filter, entryId, allBooks } = query;
   const campaign = useStore(characterStore, (s) =>
@@ -66,13 +79,42 @@ export function CompendiumScreen() {
   );
   // Inside a character the campaign's books are the default; "Show all books" lifts it.
   const scope = campaign && !allBooks ? campaign : undefined;
+  const inlineDetail = desktop && hasReadingRoom;
+  useLayoutEffect(() => {
+    const node = columns.current;
+    if (!node) return;
+    const measure = () => setHasReadingRoom(node.clientWidth >= 688);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  useLayoutEffect(() => {
+    if (!entryId && listScrollTop.current !== null) {
+      window.scrollTo({ top: listScrollTop.current, behavior: 'instant' });
+      listScrollTop.current = null;
+    }
+    if (!inlineDetail) return;
+    const target = entryId ? readingPanel.current : listOpener.current;
+    target?.focus({ preventScroll: true });
+  }, [entryId, inlineDetail]);
 
   const all = useMemo(
     () => catalogEntries(registry, kind).filter((e) => !scope || campaignAllows(scope, e)),
     [kind, scope],
   );
   const results = useMemo(
-    () => all.filter((e) => matchesFilter(e, filter)).sort(compareEntries),
+    () =>
+      all
+        .filter((e) => {
+          const bases = filter.text && e.kind === 'item' ? equipmentBases(e, registry) : [];
+          return matchesFilter(
+            e,
+            filter,
+            bases.map(({ name }) => name),
+          );
+        })
+        .sort(compareEntries),
     [all, filter],
   );
   const books = useMemo(
@@ -81,12 +123,25 @@ export function CompendiumScreen() {
   );
   const entry = entryId ? registry.entries.get(entryId) : undefined;
   const open = entry && entryKind(entry) ? (entry as CatalogEntry) : undefined;
+  const active = activeFilters(filter);
+  const filterable =
+    kind === 'equipment' ||
+    kind === 'spells' ||
+    kind === 'subclasses' ||
+    books.length > 1 ||
+    active.length > 0;
 
   const update = (next: URLSearchParams) => {
+    listOpener.current = null;
+    listScrollTop.current = null;
     next.delete('entry');
     setParams(next, { replace: true });
   };
-  const openEntry = (id: string) => {
+  const openEntry = (id: string, opener?: HTMLButtonElement) => {
+    if (opener) {
+      listOpener.current = opener;
+      listScrollTop.current = window.scrollY;
+    }
     const next = new URLSearchParams(params);
     next.set('entry', id);
     setParams(next, { state: { compendiumEntry: true } });
@@ -108,13 +163,14 @@ export function CompendiumScreen() {
       entry={open}
       onOpen={openEntry}
       action={characterId && <PlanButton characterId={characterId} entryId={open.id} />}
+      titleInSheet={!inlineDetail}
     />
   );
 
   return (
     <section
       className={cx(
-        'mx-auto flex min-w-0 max-w-6xl flex-col gap-4',
+        'compendium mx-auto flex min-w-0 max-w-7xl flex-col gap-4',
         characterId && 'px-4 py-4 lg:px-6',
       )}
     >
@@ -124,12 +180,11 @@ export function CompendiumScreen() {
           Reference
         </Link>
       </header>
-      <p className="text-sm text-text-muted">
-        Browse 2014 spells, classes, origins, feats and equipment to plan a character. Nothing here
-        changes your character.
-      </p>
-
-      <div role="group" aria-label="Kinds" className="flex flex-wrap gap-1.5">
+      <div
+        role="group"
+        aria-label="Kinds"
+        className="flex flex-wrap gap-1 rounded-card border border-border bg-surface p-1"
+      >
         {CATALOG_KINDS.map((k) => (
           <button
             key={k}
@@ -140,7 +195,7 @@ export function CompendiumScreen() {
               'inline-flex min-h-11 items-center rounded-btn border px-3 text-sm',
               k === kind
                 ? 'border-accent bg-surface-2 font-semibold text-accent'
-                : 'border-border hover:bg-surface-2',
+                : 'border-transparent text-text-muted hover:bg-surface-2 hover:text-text',
             )}
           >
             {KIND_LABELS[k]}
@@ -149,38 +204,106 @@ export function CompendiumScreen() {
       </div>
 
       <div className="flex flex-col gap-3 rounded-card border border-border bg-surface p-3">
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="sr-only">Search {KIND_LABELS[kind].toLowerCase()}</span>
-          <input
-            type="search"
-            value={params.get('q') ?? ''}
-            placeholder={`Search ${KIND_LABELS[kind].toLowerCase()}`}
-            aria-label={`Search ${KIND_LABELS[kind].toLowerCase()}`}
-            onChange={(e) => {
-              const next = new URLSearchParams(params);
-              if (e.target.value) next.set('q', e.target.value);
-              else next.delete('q');
-              update(next);
-            }}
-            className={inputClass}
-          />
-        </label>
-        <KindFilters kind={kind} params={params} update={update} />
-        {books.length > 1 && (
-          <ChipRow label="Books">
-            {books.map((b) => (
+        <div className="flex min-w-0 items-center gap-2">
+          <div className="relative min-w-0 flex-1">
+            <Search
+              size={17}
+              aria-hidden
+              className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-muted"
+            />
+            <input
+              type="search"
+              value={params.get('q') ?? ''}
+              placeholder={`Search ${KIND_LABELS[kind].toLowerCase()}`}
+              aria-label={`Search ${KIND_LABELS[kind].toLowerCase()}`}
+              onChange={(e) => {
+                const next = new URLSearchParams(params);
+                if (e.target.value) next.set('q', e.target.value);
+                else next.delete('q');
+                update(next);
+              }}
+              className={cx(inputClass, 'pl-9')}
+            />
+          </div>
+          {filterable && (
+            <button
+              type="button"
+              aria-expanded={filtersOpen}
+              aria-controls="compendium-filters"
+              onClick={() => setFiltersOpen(!filtersOpen)}
+              className={cx(chip(filtersOpen), 'shrink-0 gap-2')}
+            >
+              <SlidersHorizontal size={16} aria-hidden /> Filters
+            </button>
+          )}
+        </div>
+        {kind === 'equipment' && (
+          <ChipRow label="Tier">
+            {ITEM_TIERS.filter(
+              (tier) =>
+                all.some((e) => e.kind === 'item' && itemTier(e) === tier) ||
+                filter.tiers?.includes(tier),
+            ).map((tier) => {
+              const pressed = filter.tiers?.includes(tier) ?? false;
+              return (
+                <button
+                  key={tier}
+                  type="button"
+                  data-tier={tier}
+                  aria-pressed={pressed}
+                  onClick={() => update(toggleParam(params, 'tier', tier))}
+                  className="compendium-tier inline-flex min-h-11 items-center gap-1.5 rounded-btn border border-border px-2.5 text-sm hover:bg-surface-2"
+                >
+                  {pressed ? (
+                    <Check size={14} aria-hidden />
+                  ) : (
+                    <span aria-hidden className="tier-dot size-2 rounded-full" />
+                  )}
+                  {TIER_LABELS[tier]}
+                </button>
+              );
+            })}
+          </ChipRow>
+        )}
+        {filterable && (
+          <div
+            id="compendium-filters"
+            hidden={!filtersOpen}
+            className={filtersOpen ? 'flex flex-col gap-3 border-t border-border pt-3' : undefined}
+          >
+            <KindFilters kind={kind} all={all} params={params} update={update} />
+            {books.length > 1 || filter.books?.length ? (
+              <ChipRow label="Books">
+                {[...new Set([...books, ...(filter.books ?? [])])].map((book) => (
+                  <button
+                    key={book}
+                    type="button"
+                    aria-pressed={filter.books?.includes(book) ?? false}
+                    title={SOURCE_NAMES[book]}
+                    onClick={() => update(toggleParam(params, 'book', book))}
+                    className={chip(filter.books?.includes(book) ?? false)}
+                  >
+                    {book}
+                  </button>
+                ))}
+              </ChipRow>
+            ) : null}
+          </div>
+        )}
+        {active.length > 0 && (
+          <div role="group" aria-label="Active filters" className="flex flex-wrap gap-1.5">
+            {active.map(({ key, value, label }) => (
               <button
-                key={b}
                 type="button"
-                aria-pressed={filter.books?.includes(b) ?? false}
-                title={SOURCE_NAMES[b]}
-                onClick={() => update(toggleParam(params, 'book', b))}
-                className={chip(filter.books?.includes(b) ?? false)}
+                key={`${key}:${value}`}
+                aria-label={`Remove filter ${label}`}
+                className={cx(chip(true), 'gap-1')}
+                onClick={() => update(toggleParam(params, key, value))}
               >
-                {b}
+                {label} <X size={14} aria-hidden />
               </button>
             ))}
-          </ChipRow>
+          </div>
         )}
         {campaign && (
           <label className="flex min-h-9 items-center gap-2 text-sm">
@@ -215,38 +338,41 @@ export function CompendiumScreen() {
         </div>
       </div>
 
-      <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_24rem]">
+      <div
+        ref={columns}
+        data-inline-detail={inlineDetail && Boolean(open)}
+        className="compendium-columns grid min-w-0 gap-5"
+      >
         <ResultList key={listKey} results={results} selected={open?.id} onOpen={openEntry} />
-        {desktop && (
+        {inlineDetail && open && (
           <aside
+            ref={readingPanel}
+            tabIndex={-1}
             aria-label="Compendium entry"
-            className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] self-start overflow-y-auto rounded-card border border-border bg-surface p-4 lg:block"
+            className="sticky top-[calc(var(--character-header-height,0px)+16px)] max-h-[calc(100dvh-var(--character-header-height,0px)-32px)] self-start overflow-y-auto rounded-card border border-border bg-surface p-4"
           >
-            {open ? (
-              <>
-                <div className="-mt-2 -mr-2 flex justify-end">
-                  <button
-                    type="button"
-                    aria-label="Close entry"
-                    onClick={closeEntry}
-                    className="grid size-11 place-items-center rounded-btn text-text-muted hover:text-text"
-                  >
-                    <X size={20} aria-hidden />
-                  </button>
-                </div>
-                {detail}
-              </>
-            ) : (
-              <p className="text-sm text-text-muted">Pick an entry to read it here.</p>
-            )}
+            <button
+              type="button"
+              aria-label="Close entry"
+              onClick={closeEntry}
+              className="absolute top-2 right-2 grid size-11 place-items-center rounded-btn text-text-muted hover:text-text"
+            >
+              <X size={20} aria-hidden />
+            </button>
+            {detail}
           </aside>
         )}
       </div>
-      {!desktop && (
+      {!inlineDetail && (
         <Sheet
           open={!!open}
           onOpenChange={(next) => !next && closeEntry()}
           title={open?.name ?? 'Entry'}
+          className="compendium-sheet max-h-[92dvh] sm:w-xl"
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+            listOpener.current?.focus({ preventScroll: true });
+          }}
         >
           {detail}
         </Sheet>
@@ -262,7 +388,7 @@ function ResultList({
 }: {
   results: readonly CatalogEntry[];
   selected: string | undefined;
-  onOpen: (id: string) => void;
+  onOpen: (id: string, opener: HTMLButtonElement) => void;
 }) {
   const [limit, setLimit] = useState(PAGE);
   const shown = results.slice(0, limit);
@@ -271,36 +397,51 @@ function ResultList({
     return <p className="text-sm text-text-muted">Nothing matches. Try fewer filters.</p>;
   return (
     <div className="flex min-w-0 flex-col gap-4">
-      {groups.map((group) => (
-        <section key={group.key || 'all'} aria-label={group.key || 'Results'} className="min-w-0">
-          {group.key && (
-            <h2 className="mb-1 text-xs font-semibold tracking-wide text-text-muted uppercase">
-              {group.key}
-            </h2>
-          )}
-          <ul className="flex flex-col divide-y divide-border rounded-card border border-border bg-surface">
-            {group.items.map((entry) => (
-              <li key={entry.id}>
-                <button
-                  type="button"
-                  onClick={() => onOpen(entry.id)}
-                  aria-current={entry.id === selected ? 'true' : undefined}
-                  className={cx(
-                    'flex min-h-11 w-full min-w-0 items-baseline gap-2 px-3 py-2 text-left hover:bg-surface-2',
-                    entry.id === selected && 'bg-surface-2',
-                  )}
-                >
-                  <span className="min-w-0 flex-1">
-                    <span className="block font-medium wrap-anywhere">{entry.name}</span>
-                    <span className="block text-xs text-text-muted">{rowMeta(entry, nameOf)}</span>
-                  </span>
-                  <span className="shrink-0 text-xs text-text-muted">{entry.source}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
+      {groups.map((group) => {
+        const first = group.items[0];
+        const tier = first?.kind === 'item' ? itemTier(first) : undefined;
+        return (
+          <section key={group.key || 'all'} aria-label={group.key || 'Results'} className="min-w-0">
+            {group.key && (
+              <h2
+                data-tier={tier}
+                className={cx(
+                  'mb-2 flex items-center gap-2 text-sm font-semibold',
+                  tier ? 'compendium-tier' : 'text-text-muted',
+                )}
+              >
+                {tier && <span aria-hidden className="tier-dot size-2 rounded-full" />}
+                {group.key}
+              </h2>
+            )}
+            <ul className="flex flex-col divide-y divide-border rounded-card border border-border bg-surface">
+              {group.items.map((entry) => (
+                <li key={entry.id}>
+                  <button
+                    type="button"
+                    onClick={(event) => onOpen(entry.id, event.currentTarget)}
+                    aria-current={entry.id === selected ? 'true' : undefined}
+                    className={cx(
+                      'flex min-h-14 w-full min-w-0 items-center gap-3 border-l-2 border-transparent px-3 py-2 text-left hover:bg-surface-2',
+                      entry.id === selected && 'border-l-accent bg-surface-2',
+                    )}
+                  >
+                    <CompendiumArt entry={entry} />
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-medium wrap-anywhere">{entry.name}</span>
+                      <span className="block text-xs text-text-muted">{resultMeta(entry)}</span>
+                    </span>
+                    <span className="inline-flex shrink-0 items-center gap-1 text-xs text-text-muted">
+                      {entry.source}
+                      <ChevronRight size={14} aria-hidden />
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })}
       {results.length > limit && (
         <button
           type="button"
@@ -314,6 +455,53 @@ function ResultList({
   );
 }
 
+function resultMeta(entry: CatalogEntry): string {
+  if (entry.kind === 'item') {
+    const { weapon, armor, reference } = equipmentProfile(entry, registry);
+    const type = reference?.ammunition ? 'Ammunition' : TYPE_NAMES[itemType(entry)];
+    const stat =
+      weapon?.damage !== undefined && weapon.damageType
+        ? `${weapon.damage} ${weapon.damageType}`
+        : armor
+          ? `AC ${armor.category === 'shield' ? '+' : ''}${armor.baseAc}`
+          : undefined;
+    return stat ? `${type} · ${stat}` : type;
+  }
+  if (entry.kind === 'feature') {
+    const prerequisite = featPrerequisite(entry);
+    return prerequisite ? `Needs ${prerequisite}` : 'Feat';
+  }
+  if (entry.kind === 'class') return `${rowMeta(entry)} · Subclass at level ${entry.subclassLevel}`;
+  if (entry.kind === 'subclass') {
+    const parent = registry.entries.get(entry.classId);
+    return parent?.kind === 'class'
+      ? `${parent.name} · Level ${parent.subclassLevel}`
+      : nameOf(entry.classId);
+  }
+  if (entry.kind === 'race') return `${titleCase(entry.size)} · ${entry.speed} ft`;
+  return rowMeta(entry, nameOf);
+}
+
+function activeFilters(filter: CatalogFilter) {
+  return [
+    ...(filter.types ?? []).map((type) => ({ key: 'type', value: type, label: TYPE_LABELS[type] })),
+    ...(filter.books ?? []).map((book) => ({ key: 'book', value: book, label: book })),
+    ...(filter.levels ?? []).map((level) => ({
+      key: 'level',
+      value: String(level),
+      label: level === 0 ? 'Cantrips' : `Level ${level}`,
+    })),
+    ...(filter.schools ?? []).map((school) => ({
+      key: 'school',
+      value: school,
+      label: titleCase(school),
+    })),
+    ...[filter.classId ?? filter.parentClassId].flatMap((id) =>
+      id ? [{ key: 'class', value: id, label: nameOf(id) }] : [],
+    ),
+  ];
+}
+
 function ChipRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div role="group" aria-label={label} className="flex flex-wrap items-center gap-1.5">
@@ -325,10 +513,12 @@ function ChipRow({ label, children }: { label: string; children: React.ReactNode
 
 function KindFilters({
   kind,
+  all,
   params,
   update,
 }: {
   kind: CatalogKind;
+  all: readonly CatalogEntry[];
   params: URLSearchParams;
   update: (next: URLSearchParams) => void;
 }) {
@@ -345,23 +535,14 @@ function KindFilters({
     return classes.filter((c) => ids.has(c.id));
   }, [classes]);
   const typesByTier = useMemo(() => {
-    const items = catalogEntries(registry, 'equipment');
     const tiers = filter.tiers;
     const present = new Set(
-      items.flatMap((e) =>
+      all.flatMap((e) =>
         e.kind === 'item' && (!tiers?.length || tiers.includes(itemTier(e))) ? [itemType(e)] : [],
       ),
     );
-    return ITEM_TYPES.filter((t) => present.has(t));
-  }, [filter.tiers]);
-  const tiersPresent = useMemo(() => {
-    const present = new Set(
-      catalogEntries(registry, 'equipment').flatMap((e) =>
-        e.kind === 'item' ? [itemTier(e)] : [],
-      ),
-    );
-    return ITEM_TIERS.filter((t) => present.has(t));
-  }, []);
+    return ITEM_TYPES.filter((t) => present.has(t) || filter.types?.includes(t));
+  }, [all, filter.tiers, filter.types]);
 
   const select = (key: string, value: string) => {
     const next = new URLSearchParams(params);
@@ -444,40 +625,22 @@ function KindFilters({
     );
   if (kind === 'equipment')
     return (
-      <>
-        <ChipRow label="Tier">
-          {tiersPresent.map((t) => {
-            const on = filter.tiers?.includes(t) ?? false;
-            return (
-              <button
-                key={t}
-                type="button"
-                aria-pressed={on}
-                onClick={() => update(toggleParam(params, 'tier', t))}
-                className={chip(on)}
-              >
-                {TIER_LABELS[t]}
-              </button>
-            );
-          })}
-        </ChipRow>
-        <ChipRow label="Type">
-          {typesByTier.map((t) => {
-            const on = filter.types?.includes(t) ?? false;
-            return (
-              <button
-                key={t}
-                type="button"
-                aria-pressed={on}
-                onClick={() => update(toggleParam(params, 'type', t))}
-                className={chip(on)}
-              >
-                {TYPE_LABELS[t]}
-              </button>
-            );
-          })}
-        </ChipRow>
-      </>
+      <ChipRow label="Type">
+        {typesByTier.map((t) => {
+          const on = filter.types?.includes(t) ?? false;
+          return (
+            <button
+              key={t}
+              type="button"
+              aria-pressed={on}
+              onClick={() => update(toggleParam(params, 'type', t))}
+              className={chip(on)}
+            >
+              {TYPE_LABELS[t]}
+            </button>
+          );
+        })}
+      </ChipRow>
     );
   return null;
 }

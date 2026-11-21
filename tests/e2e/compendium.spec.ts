@@ -34,11 +34,21 @@ test('compendium: equipment by tier and type, details, both themes', async ({
 
   // Items group under rarity headers; tier and type chips narrow the list.
   await expect(page.getByRole('region', { name: 'Mundane', exact: true })).toBeVisible();
+  const colors = await tiers
+    .getByRole('button')
+    .evaluateAll((buttons) => buttons.map((button) => getComputedStyle(button).color));
+  expect(new Set(colors).size).toBe(7);
   await tiers.getByRole('button', { name: 'Uncommon', exact: true }).click();
   await expect(page).toHaveURL(/tier=uncommon/);
+  await expect(tiers.getByRole('button', { name: 'Uncommon', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
   await expect(page.getByRole('region', { name: 'Mundane', exact: true })).toHaveCount(0);
   await expect(page.getByRole('region', { name: 'Uncommon', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Filters', exact: true }).click();
   await types.getByRole('button', { name: 'Wondrous items', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Remove filter Wondrous items' })).toBeVisible();
   await page.getByRole('button', { name: /^Bag of Holding/ }).click();
   const panel = entryPanel(page, isMobile);
   await expect(panel.getByText('Wondrous item', { exact: true })).toBeVisible();
@@ -48,8 +58,10 @@ test('compendium: equipment by tier and type, details, both themes', async ({
 
   // Weapons: damage and properties come from the data.
   await page.goto('/compendium?kind=equipment&type=weapon&entry=item.longsword');
+  await expect(entryPanel(page, isMobile).getByText('1d8 (1d10 two-handed)')).toBeVisible();
+  await expect(entryPanel(page, isMobile).getByText('Slashing', { exact: true })).toBeVisible();
   await expect(
-    entryPanel(page, isMobile).getByText('1d8 slashing (1d10 two-handed)'),
+    entryPanel(page, isMobile).locator('img[src="/compendium/longsword.png"]'),
   ).toBeVisible();
 
   // Parchment theme renders the same screen.
@@ -61,6 +73,102 @@ test('compendium: equipment by tier and type, details, both themes', async ({
   await expect(entryPanel(page, isMobile).getByText('150 ft', { exact: false })).toBeVisible();
   await noOverflow(page);
   await page.screenshot({ path: info.outputPath(`spell-parchment-${isMobile ? 375 : 1440}.png`) });
+});
+
+test('compendium links 2014 magic weapons to their bases and explains properties on pointer and touch', async ({
+  page,
+  isMobile,
+}, info) => {
+  await page.goto('/compendium?kind=equipment&tier=uncommon&q=Trident');
+  const row = page.getByRole('button', { name: /^Trident of Fish Command/ });
+  await row.scrollIntoViewIfNeeded();
+  const originalScroll = await page.evaluate(() => window.scrollY);
+  await row.click();
+  const panel = entryPanel(page, isMobile);
+  await expect(panel.getByText('Damage Type', { exact: true })).toBeVisible();
+  await expect(panel.getByText('Piercing', { exact: true })).toBeVisible();
+  await expect(panel.getByText('20/60 ft', { exact: true })).toBeVisible();
+  await expect(panel.getByText('1d6 (1d8 two-handed)', { exact: true })).toBeVisible();
+  await expect(panel.locator('[data-icon="catalog.trident"] svg')).toHaveCount(1);
+  const thrown = panel.getByRole('button', { name: 'Thrown', exact: true });
+  if (isMobile) {
+    await thrown.tap();
+    await expect(panel.getByRole('status')).toContainText('same ability modifier');
+    await panel.getByRole('button', { name: 'Versatile', exact: true }).tap();
+    await expect(panel.getByRole('status')).toContainText('two-handed damage die');
+  } else {
+    await thrown.hover();
+    await expect(page.getByRole('tooltip')).toContainText('same ability modifier');
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('tooltip')).toBeHidden();
+    const versatile = panel.getByRole('button', { name: 'Versatile', exact: true });
+    await versatile.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('tooltip')).toContainText('two-handed damage die');
+    await page.keyboard.press('Escape');
+  }
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath(`trident-${isMobile ? 375 : 1440}.png`) });
+  await panel
+    .getByRole('button', { name: isMobile ? 'Close' : 'Close entry', exact: true })
+    .click();
+  await expect(row).toBeFocused();
+  await expect(page).not.toHaveURL(/entry=/);
+  await expect(page).toHaveURL(/tier=uncommon/);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(originalScroll);
+
+  await page.goto('/compendium?kind=equipment&q=warhammer');
+  await expect(page.getByRole('button', { name: /^Dwarven Thrower/ })).toBeVisible();
+  await page.goto('/compendium?kind=equipment&entry=item.flame-tongue');
+  await expect(panel.getByText('Any sword', { exact: true })).toBeVisible();
+  await panel.getByRole('combobox', { name: 'Preview a base item' }).selectOption('item.longsword');
+  await expect(panel.getByText('1d8 (1d10 two-handed)', { exact: true })).toBeVisible();
+  await expect(panel.getByText('Slashing', { exact: true })).toBeVisible();
+});
+
+test('compendium character book scope and tier colors work in Tidewater', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto(`/characters/${ID}/settings`);
+  await page.getByRole('radio', { name: /^Tidewater/ }).check();
+  await page.goto(`/characters/${ID}/compendium?kind=equipment&q=Trident+of+Fish+Command`);
+  const result = page.getByRole('button', { name: /^Trident of Fish Command/ });
+  await expect(result).toHaveCount(0);
+  await expect(page.getByText('Nothing matches. Try fewer filters.')).toBeVisible();
+  const showAll = page.getByRole('checkbox', { name: /Show all books/ });
+  await showAll.click();
+  await expect(showAll).toBeChecked();
+  await expect(result).toBeVisible();
+  await expect(page).toHaveURL(/books=all/);
+  await expect.poll(() => theme(page)).toBe('tidewater');
+  const tiers = page.getByRole('group', { name: 'Tier', exact: true });
+  const colors = await tiers
+    .getByRole('button')
+    .evaluateAll((buttons) => buttons.map((button) => getComputedStyle(button).color));
+  expect(new Set(colors).size).toBe(7);
+  await noOverflow(page);
+  if (!isMobile) {
+    await page.setViewportSize({ width: 1200, height: 800 });
+    await page.getByRole('button', { name: 'Open details', exact: true }).click();
+    await expect(page.getByRole('complementary', { name: 'Pinned detail' })).toBeVisible();
+    await result.click();
+    const sheet = page.getByRole('dialog', { name: 'Trident of Fish Command' });
+    await expect(sheet.getByText('Piercing', { exact: true })).toBeVisible();
+    await noOverflow(page);
+  }
+});
+
+test('compendium shows a meaningful icon when a local illustration cannot load', async ({
+  page,
+  isMobile,
+}) => {
+  await page.route('**/compendium/longsword.png', (route) => route.abort());
+  await page.goto('/compendium?kind=equipment&q=longsword&entry=item.longsword');
+  const panel = entryPanel(page, isMobile);
+  await expect(panel.locator('[data-icon="catalog.sword"] svg')).toBeVisible();
+  await page.goto('/compendium?kind=feats&q=sharpshooter&entry=feature.feat.sharpshooter');
+  await expect(panel.locator('[data-icon="catalog.target"] svg')).toBeVisible();
 });
 
 test('compendium: Plan this adds to the Journal plans and Undo removes it', async ({

@@ -1,0 +1,62 @@
+[data-tier='mundane'],
+[data-tier='varies'] {
+  --rarity-color: light-dark(#40444a, #acb5c2);
+}
+
+[data-tier='common'] {
+  --rarity-color: light-dark(#514636, #f3eddf);
+}
+
+[data-tier='uncommon'] {
+  --rarity-color: light-dark(#205038, #78dca4);
+}
+
+[data-tier='rare'] {
+  --rarity-color: light-dark(#1c4073, #8bbaff);
+}
+
+[data-tier='very-rare'] {
+  --rarity-color: light-dark(#503276, #d6aaff);
+}
+
+[data-tier='legendary'] {
+  --rarity-color: light-dark(#5e4200, #f4ce73);
+}
+
+[data-tier='artifact'] {
+  --rarity-color: light-dark(#78222b, #ff9298);
+}
+
+.compendium-tier {
+  color: var(--rarity-color);
+}
+
+.compendium-tier .tier-dot {
+  background: var(--rarity-color);
+}
+
+.compendium-tier[aria-pressed='true'] {
+  border-color: var(--rarity-color);
+  background: color-mix(in srgb, var(--rarity-color) 10%, var(--omni-surface));
+  font-weight: 600;
+}
+
+.compendium-art {
+  --icon-ink: var(--rarity-color, var(--omni-accent));
+  color: var(--icon-ink);
+  border-color: color-mix(in srgb, var(--icon-ink) 23%, var(--omni-border));
+  background: radial-gradient(
+    ellipse at 50% 15%,
+    color-mix(in srgb, var(--icon-ink) 18%, var(--omni-surface)),
+    var(--omni-surface) 85%
+  );
+}
+
+.compendium-columns[data-inline-detail='true'] {
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, 43%);
+}
+
+.compendium-sheet {
+  max-height: 92dvh;
+  overscroll-behavior: contain;
+}

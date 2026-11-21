@@ -151,11 +151,15 @@ export function campaignAllows(
 
 const fold = (text: string) => text.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '');
 
-export function matchesFilter(entry: CatalogEntry, filter: CatalogFilter): boolean {
+export function matchesFilter(
+  entry: CatalogEntry,
+  filter: CatalogFilter,
+  aliases: readonly string[] = [],
+): boolean {
   if (filter.books?.length && !filter.books.includes(entry.source)) return false;
   if (filter.text) {
     const words = fold(filter.text).split(/\s+/).filter(Boolean);
-    const name = fold(entry.name);
+    const name = fold([entry.name, ...aliases].join(' '));
     if (!words.every((w) => name.includes(w))) return false;
   }
   if (entry.kind === 'spell') {

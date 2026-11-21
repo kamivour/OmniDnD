@@ -397,7 +397,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 ## Review fixes
 
-- [ ] Build the [Compendium redesign](COMPENDIUM_REDESIGN.md) in stages after owner review
+- [x] Complete the [Compendium redesign](COMPENDIUM_REDESIGN.md) for all seven tabs
 - [x] Scroll casting class, search and spell lists together in Manage spells
 - [x] Widen the desktop spell review after a long rest and show selected and available spells side by side
 - [x] Audit class and subclass choices, fix missing cantrips and spell lists, and verify Channel Divinity in Combat
@@ -421,6 +421,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-22 — Redesigned Compendium with verified equipment profiles, weapon tooltips, rarity colors, equipment artwork, feat icons, and layouts for all seven tabs.
 - 2026-11-22 — Wrote the Compendium redesign proposal for equipment facts, item and feat art, rarity colors and all seven tabs.
 - 2026-11-22 — Manage spells scrolls class, search and lists together while Undo and Done stay visible.
 - 2026-11-22 — Widened the desktop spell review after a long rest and put selected and available spells side by side.

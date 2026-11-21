@@ -46,7 +46,8 @@ describe('compendium facts', () => {
     expect(facts('races', 'Hill Dwarf')).toMatchObject({ Speed: '25 ft', Darkvision: '60 ft' });
     expect(facts('backgrounds', 'Acolyte').Skills).toBe('Insight, Religion');
     expect(facts('equipment', 'Longsword')).toMatchObject({
-      Damage: '1d8 slashing (1d10 two-handed)',
+      Damage: '1d8 (1d10 two-handed)',
+      'Damage Type': 'Slashing',
       Weapon: 'Martial melee',
     });
     expect(facts('equipment', 'Chain Mail')).toMatchObject({ AC: '16', Stealth: 'Disadvantage' });
@@ -62,5 +63,56 @@ describe('compendium facts', () => {
     expect(featPrerequisite(find('feats', 'Actor'))).toBeUndefined();
     expect(featPrerequisite(find('feats', 'Alert'))).toBeUndefined();
     expect(facts('feats', 'Resilient').Ability).toMatch(/saving throws/);
+    expect(facts('feats', 'Elemental Adept').Prerequisite).toBe(
+      'Ability to cast at least one spell',
+    );
+    expect(facts('feats', 'Wood Elf Magic').Prerequisite).toBe('Wood elf');
+  });
+
+  it('shows 2014 Trident data and keeps magic-specific facts', () => {
+    expect(facts('equipment', 'Trident of Fish Command')).toMatchObject({
+      Type: 'Weapon',
+      Rarity: 'Uncommon',
+      'Base item': 'Trident',
+      Damage: '1d6 (1d8 two-handed)',
+      'Damage Type': 'Piercing',
+      Properties: 'Range, Thrown, Versatile',
+      Range: '20/60 ft',
+      Charges: '3',
+      Recharge: '1d3 at dawn',
+    });
+    const trident = registry.get('item', 'item.trident-of-fish-command');
+    expect(trident.category).toBe('magic');
+    expect(trident.weapon).toBeUndefined();
+  });
+
+  it('uses verified base variants and magic overrides without inventing damage', () => {
+    const item = find('equipment', 'Flame Tongue');
+    expect(Object.fromEntries(entryFacts(item, registry).facts)).toMatchObject({
+      'Applies to': 'Any sword',
+    });
+    expect(Object.fromEntries(entryFacts(item, registry, 'item.rapier').facts)).toMatchObject({
+      Damage: '1d8',
+      'Damage Type': 'Piercing',
+      Properties: 'Finesse',
+    });
+    expect(Object.fromEntries(entryFacts(item, registry, 'item.halberd').facts)).not.toHaveProperty(
+      'Damage',
+    );
+    expect(facts('equipment', 'Longbow').Range).toBe('150/600 ft');
+    expect(facts('equipment', 'Blowgun')).toMatchObject({ Damage: '1', 'Damage Type': 'Piercing' });
+    expect(facts('equipment', 'Net')).toMatchObject({ Damage: 'No damage', Range: '5/15 ft' });
+    expect(facts('equipment', 'Ammunition, +1')).not.toHaveProperty('Damage');
+    expect(facts('equipment', 'Animated Shield').AC).toBe('+2');
+    expect(facts('equipment', 'Sun Blade')).toMatchObject({
+      'Damage Type': 'Radiant',
+      Properties: 'Finesse, Versatile',
+      'Magic bonus': '+2 to attack and damage rolls',
+    });
+    const mithral = find('equipment', 'Mithral Armor');
+    const plate = Object.fromEntries(entryFacts(mithral, registry, 'item.plate-armor').facts);
+    expect(plate.AC).toBe('18');
+    expect(plate).not.toHaveProperty('Strength');
+    expect(plate).not.toHaveProperty('Stealth');
   });
 });

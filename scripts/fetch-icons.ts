@@ -9,7 +9,8 @@
  */
 import { writeFileSync } from 'node:fs';
 
-const SOURCE = 'https://raw.githubusercontent.com/game-icons/icons/master';
+const SOURCE =
+  'https://raw.githubusercontent.com/game-icons/icons/82d948812bfe3f269ef8f731dcdb07b08160edc4';
 const OUT = new URL('../src/ui/icons/game-icons.ts', import.meta.url);
 
 /** Content id → `<author>/<icon>` in the game-icons repo. */
@@ -83,6 +84,55 @@ const ICONS: Record<string, string> = {
   'subclass.warlock.fiend': 'lorc/daemon-skull',
   'subclass.wizard.evocation': 'lorc/fireball',
   'subclass.wizard.war-magic': 'lorc/crossed-swords',
+
+  'catalog.trident': 'lorc/trident',
+  'catalog.sword': 'lorc/broadsword',
+  'catalog.rapier': 'delapouite/spiral-hilt',
+  'catalog.dagger': 'lorc/plain-dagger',
+  'catalog.axe': 'lorc/battle-axe',
+  'catalog.bow': 'lorc/pocket-bow',
+  'catalog.crossbow': 'carl-olsen/crossbow',
+  'catalog.hammer': 'delapouite/warhammer',
+  'catalog.mace': 'delapouite/flanged-mace',
+  'catalog.flail': 'delapouite/flail',
+  'catalog.spear': 'lorc/barbed-spear',
+  'catalog.staff': 'lorc/wizard-staff',
+  'catalog.net': 'lorc/fishing-net',
+  'catalog.whip': 'lorc/whip',
+  'catalog.sling': 'delapouite/slingshot',
+  'catalog.lantern': 'delapouite/old-lantern',
+  'catalog.rope': 'delapouite/rope-coil',
+  'catalog.arrow': 'lorc/arrow-flights',
+  'catalog.armor': 'lorc/breastplate',
+  'catalog.shield': 'delapouite/roman-shield',
+  'catalog.helmet': 'lorc/visored-helm',
+  'catalog.boots': 'lorc/boots',
+  'catalog.gloves': 'lorc/mailed-fist',
+  'catalog.cloak': 'lucasms/cloak',
+  'catalog.ring': 'delapouite/diamond-ring',
+  'catalog.amulet': 'lorc/gem-pendant',
+  'catalog.potion': 'lorc/potion-ball',
+  'catalog.scroll': 'lorc/scroll-unfurled',
+  'catalog.pack': 'delapouite/backpack',
+  'catalog.chest': 'lorc/locked-chest',
+  'catalog.tool': 'lorc/hammer-nails',
+  'catalog.instrument': 'lorc/lyre',
+  'catalog.food': 'delapouite/meal',
+  'catalog.wand': 'lorc/fairy-wand',
+  'catalog.orb': 'lorc/crystal-ball',
+  'catalog.book': 'lorc/book-cover',
+  'catalog.medal': 'lorc/laurel-crown',
+  'catalog.eye': 'lorc/eye-shield',
+  'catalog.target': 'delapouite/crosshair',
+  'catalog.mask': 'delapouite/carnival-mask',
+  'catalog.heart': 'lorc/heart-bottle',
+  'catalog.fist': 'lorc/fist',
+  'catalog.fire': 'lorc/fireball',
+  'catalog.dice': 'delapouite/rolling-dices',
+  'catalog.horse': 'delapouite/horse-head',
+  'catalog.tree': 'lorc/oak',
+  'catalog.dragon': 'lorc/dragon-head',
+  'catalog.moon': 'delapouite/moon-bats',
 };
 
 const BACKGROUND = '<path d="M0 0h512v512H0z"/>';

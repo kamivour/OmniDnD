@@ -1,8 +1,8 @@
 # Kế hoạch nâng cấp Compendium
 
-Bản đề xuất sau M45, ngày 2026-11-22. Mục tiêu là nhìn hình nhận ra loại mục, đọc được chỉ số chính ngay khi mở mục và lọc nhanh trên cả điện thoại lẫn desktop.
+Bản nâng cấp sau M45, ngày 2026-11-22. Mục tiêu là nhìn hình nhận ra loại mục, đọc được chỉ số chính ngay khi mở mục và lọc nhanh trên cả điện thoại lẫn desktop.
 
-## Hiện trạng
+## Trước khi nâng cấp
 
 - **Trident of Fish Command** được import với loại `magic`, Uncommon, attunement và 3 charges. Mục Trident thường đã có sát thương, tầm ném và thuộc tính. Compendium chỉ đọc `weapon` và `armor` nằm trực tiếp trên mục đang mở, còn bản phép thiếu liên kết tới Trident. [Dữ liệu bản phép](../data/srd/magic-items.json) · [Dữ liệu vũ khí gốc](../data/srd/items.json) · [Cách hiển thị hiện tại](../src/ui/compendium/compendium-facts.ts)
 - Rà các pack hiện tại thấy **541 mục Equipment và 72 feat**. Chỉ 4 mục Equipment có glyph riêng trong bộ icon hiện tại và chưa có glyph riêng cho feat. Danh sách kết quả hiện chỉ có chữ, còn trang chi tiết dùng diamond khi tra icon thất bại. [Danh sách](../src/ui/screens/CompendiumScreen.tsx) · [Icon](../src/ui/components/Icon.tsx)
@@ -88,6 +88,8 @@ Mỗi tier dùng cùng sắc cho chip lọc, tiêu đề nhóm và nhãn rarity 
 3. Khi chỉ biết họ item, dùng icon phù hợp, như kiếm cho melee, cung cho ranged, khiên cho shield, áo giáp cho body armor, mũ/bốt/găng đúng món đeo. Potion, scroll, wand, staff, ring, tools và container có hình riêng. Với wondrous item, ưu tiên hình vật thể như áo choàng, túi, dây chuyền hoặc gương.
 4. Feat lấy icon theo hiệu ứng dễ nhận ra. **Sharpshooter** dùng tâm ngắm, **Sentinel** dùng khiên/điểm chặn, **War Caster** dùng hình thi triển phép, **Mobile** dùng bốt, **Actor** dùng mặt nạ, **Alert** dùng mắt. Mục không có hình riêng dùng icon theo nhóm hoặc huy hiệu feat. Toàn bộ Equipment và Feats có hình có nghĩa hoặc fallback phù hợp, bỏ diamond khỏi hai tab ở cả danh sách và chi tiết.
 5. Dùng lại bộ icon nội bộ và Credits hiện có. Ảnh lưu nội bộ, tải thumbnail khi cần, giữ kích thước để tránh nhảy bố cục. Khi lỗi tải hoặc offline, silhouette nội bộ vẫn hiện. Icon cạnh tên là trang trí với trình đọc màn hình. [Bộ icon và điều kiện ghi công](https://github.com/game-icons/icons/blob/master/license.txt) · [Script icon của repo](../scripts/fetch-icons.ts)
+
+Bản triển khai dùng 15 ảnh Ardentryst có giấy phép CC BY 3.0, tổng khoảng 150 KiB. Bộ silhouette cục bộ phủ các món và feat còn lại, gồm Trident of Fish Command. [Ảnh và giấy phép](https://opengameart.org/node/11858)
 
 ## Dữ liệu và giới hạn triển khai
 
