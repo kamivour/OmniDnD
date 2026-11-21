@@ -69,7 +69,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M43 | Friend-testing fixes: accounts, profiles and joining | 10 | todo | Signup works, names are unique, profile with avatar, clear sync choices, explicit copy or move into shared campaigns, one DM seat; see [PLAN.md](PLAN.md) |
 | M44 | Phone navigation and screen cleanup | 7 | todo | Sheet in the phone bar, grouped More menu, hidden Game Clock, no empty Details button, compact spell filters, weightless magic containers; see [PLAN.md](PLAN.md) |
 | M42 | Recognizable icons and creation cards | 10 | todo | Class and subclass choices use clear icon cards; portraits and existing creation behavior are preserved; after M44; see [PLAN.md](PLAN.md) |
-| M45 | Compendium | 5 | in progress | Browse and read spells, classes, subclasses, races, backgrounds and feats to plan characters; see [PLAN.md](PLAN.md) |
+| M45 | Compendium | 5 | done | Browse and read spells, classes, subclasses, races, backgrounds and feats to plan characters; see [PLAN.md](PLAN.md) |
 | M46 | Combat around "I got hit" | 6 | todo | Log a hit with damage types; the app applies resistances and suggests saves and effects to confirm; design review first; see [PLAN.md](PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
@@ -373,7 +373,7 @@ Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M44. 
 - [ ] T6: Refine guidance, review and navigation while preserving drafts
 - [ ] T7: Verify recognition, accessibility, themes and unchanged character results at both widths
 
-### M45 — Compendium (in progress)
+### M45 — Compendium (done)
 
 Follow [PLAN.md](PLAN.md#m45--compendium). Started before M42 at the owner's request.
 
@@ -381,7 +381,7 @@ Follow [PLAN.md](PLAN.md#m45--compendium). Started before M42 at the owner's req
 - [x] T2: Compendium screen with tabs, search, filters and details panel
 - [x] T3: Detail pages for classes, subclasses, races, backgrounds, feats and spells
 - [x] T4: "Plan this" wishlist notes in the Journal
-- [ ] T5: Verify at both widths, offline and across themes
+- [x] T5: Verify at both widths, offline and across themes
 
 ### M46 — Combat around "I got hit" (direction only)
 
@@ -416,6 +416,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-21 — M45 T5: browser checks at 375 and 1440 px cover tier and type filters, both themes, Plan this with Undo, and offline class, race, feat and spell pages.
 - 2026-11-21 — M45 T4: "Plan this" in the character compendium adds entries to a new Journal Plans tab; logged, undoable, learns nothing.
 - 2026-11-21 — M45 T3: Compendium details show class, subclass, race, background, feat, spell and item facts; inside a character the campaign's books are the default.
 - 2026-11-21 — M45 T2: Compendium screen with kind tabs, search, tier/type/level filters kept in the link, sheet or side panel details; Find entry.

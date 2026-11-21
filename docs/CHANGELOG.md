@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 16:02 — Compendium finished
+
+- The Compendium is complete: spells, classes, subclasses, races, backgrounds, feats and equipment, with equipment grouped by tier (Mundane, Common, Uncommon, Rare and up) and filtered by type (weapons, armor, wondrous items and more).
+- The Compendium reads offline once the app has loaded.
+- Please try it on your phone and check the list in Manual QA for M45.
+- Checks pass.
+
 ## 2026-11-21 15:56 — Plan this
 
 - Inside a character, every compendium entry has a **Plan this** button. It adds the entry to a new **Plans** tab in the Journal.

@@ -422,3 +422,30 @@ test('an updated worker waits for the open draft to close before activating', as
   await controlled(reopened);
   expect(await readDatabase(reopened)).toEqual(initial);
 });
+
+test('compendium class, subclass, race, feat and spell pages read offline', async ({
+  page,
+  context,
+  isMobile,
+}) => {
+  await page.goto('/characters/the-fool');
+  await saved(page);
+  await controlled(page);
+  if (process.env.OMNI_E2E_FORWARD_HTTP === '1') await context.unrouteAll({ behavior: 'wait' });
+  await context.setOffline(true);
+  for (const [id, kind, fact] of [
+    ['class.fighter', 'classes', 'Hit die'],
+    ['subclass.fighter.champion', 'subclasses', 'Features by level'],
+    ['race.hill-dwarf', 'races', 'Darkvision'],
+    ['feature.feat.grappler', 'feats', 'Prerequisite'],
+    ['spell.fireball', 'spells', 'Casting time'],
+  ] as const) {
+    const response = await page.goto(`/characters/the-fool/compendium?kind=${kind}&entry=${id}`);
+    expect(response?.fromServiceWorker()).toBe(true);
+    const panel = isMobile
+      ? page.getByRole('dialog')
+      : page.getByRole('complementary', { name: 'Compendium entry', exact: true });
+    await expect(panel.getByText(fact, { exact: true }).first()).toBeVisible();
+  }
+  expect(await page.evaluate(() => navigator.onLine)).toBe(false);
+});

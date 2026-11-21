@@ -323,6 +323,16 @@ Use two test accounts on a phone and a desktop, after running the three new migr
 - [ ] Check the other account sees your name and picture in the members list, and never your email.
 - [ ] An older account without a valid name gets the name prompt and cannot skip it.
 
+## M45 — Compendium
+
+- [ ] Equipment: tier headers (Mundane, Common, Uncommon, ...) and type chips feel easy to scan on a phone.
+- [ ] Rarity and type shown for a few magic items match the books you know.
+- [ ] Class and subclass pages: features by level read clearly and link to subclasses and granted spells.
+- [ ] Race, background and feat summaries are short, accurate and in plain words.
+- [ ] Inside a character the campaign's books are the default; switching to all books feels obvious.
+- [ ] Plan this and the Journal Plans tab make sense as a wish list and never change the sheet.
+- [ ] Both themes look right on the entry panel and the sheet at 375 px.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).
