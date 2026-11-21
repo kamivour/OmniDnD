@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Link, NavLink, Outlet } from 'react-router';
-import { Library, Settings } from 'lucide-react';
+import { BookOpen, Library, Settings } from 'lucide-react';
 import { cx } from '../cx';
 import { ThemeTitle } from '../theme/ThemeTitle';
 import { FindLauncher } from '../find/FindLauncher';
@@ -8,6 +8,7 @@ import { StorageStatus } from '../storage/StorageStatus';
 import { ProfileButton } from '../profile/ProfileButton';
 
 const LINKS = [
+  { to: '/compendium', label: 'Compendium', icon: BookOpen },
   { to: '/reference', label: 'Reference', icon: Library },
   { to: '/settings', label: 'Settings', icon: Settings },
 ];

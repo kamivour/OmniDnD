@@ -51,6 +51,7 @@ const NewCharacterScreen = screen(
 );
 const SpellbookScreen = screen(() => import('./ui/screens/SpellbookScreen'), 'SpellbookScreen');
 const ReferenceScreen = screen(() => import('./ui/screens/ReferenceScreen'), 'ReferenceScreen');
+const CompendiumScreen = screen(() => import('./ui/screens/CompendiumScreen'), 'CompendiumScreen');
 const CreditsScreen = screen(() => import('./ui/screens/CreditsScreen'), 'CreditsScreen');
 const ToolsScreen = screen(() => import('./ui/screens/ToolsScreen'), 'ToolsScreen');
 const PartyScreen = screen(() => import('./ui/party/PartyScreen'), 'PartyScreen');
@@ -108,6 +109,7 @@ export function App() {
               <Route path="join" element={<JoinScreen />} />
               <Route path="reference/credits" element={<CreditsScreen />} />
               <Route path="reference/tools" element={<ToolsScreen />} />
+              <Route path="compendium" element={<CompendiumScreen />} />
               <Route path="*" element={<PlaceholderScreen title="Not found" />} />
             </Route>
             <Route
@@ -147,6 +149,7 @@ export function App() {
               ))}
               <Route path="reference/credits" element={<CreditsScreen />} />
               <Route path="reference/tools" element={<ToolsScreen />} />
+              <Route path="compendium" element={<CompendiumScreen />} />
               <Route path="*" element={<PlaceholderScreen title="Not found" />} />
             </Route>
           </Routes>

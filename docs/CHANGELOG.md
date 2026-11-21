@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 15:41 — Compendium screen
+
+- New **Compendium** screen: open it from the book icon in the top bar, from Reference, or search Find for "library".
+- Tabs for spells, classes, subclasses, races, backgrounds, feats and equipment, with search and filters. Equipment filters by tier and type; spells by level, school and class.
+- Tap an entry to read it in a sheet on phones or a side panel on desktop. Back closes it and keeps your filters.
+- Checks pass.
+
 ## 2026-11-21 15:32 — Compendium groundwork
 
 - Started the Compendium: a read-only library of spells, classes, subclasses, races, backgrounds, feats and equipment.

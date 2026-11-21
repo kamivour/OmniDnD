@@ -3,7 +3,14 @@ import { NAV } from '../layout/nav';
 import { PLACES, campaignPlaces } from './places';
 
 /** Routes that are not in the side nav but must still be findable. */
-const EXTRA_ROUTES = ['todo', 'print', 'profile', 'reference/tools', 'reference/credits'];
+const EXTRA_ROUTES = [
+  'compendium',
+  'todo',
+  'print',
+  'profile',
+  'reference/tools',
+  'reference/credits',
+];
 
 describe('PLACES', () => {
   const screens = new Set(
