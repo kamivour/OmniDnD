@@ -397,6 +397,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 ## Review fixes
 
+- [ ] Build the [Compendium redesign](COMPENDIUM_REDESIGN.md) in stages after owner review
 - [x] Scroll casting class, search and spell lists together in Manage spells
 - [x] Widen the desktop spell review after a long rest and show selected and available spells side by side
 - [x] Audit class and subclass choices, fix missing cantrips and spell lists, and verify Channel Divinity in Combat
@@ -420,6 +421,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-22 — Wrote the Compendium redesign proposal for equipment facts, item and feat art, rarity colors and all seven tabs.
 - 2026-11-22 — Manage spells scrolls class, search and lists together while Undo and Done stay visible.
 - 2026-11-22 — Widened the desktop spell review after a long rest and put selected and available spells side by side.
 - 2026-11-22 — M41: added separate Tasha’s replica recipes, searchable known infusion picks, and force and psychic options for Resistant Armor.

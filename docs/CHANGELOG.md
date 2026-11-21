@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 03:34 — Compendium redesign plan
+
+- The plan spells out what equipment details will show, using Trident of Fish Command as the first example.
+- Review the proposed item art, feat icons, rarity colors and layouts before implementation. Checks pass.
+
 ## 2026-11-22 03:13 — Scroll the full spell review
 
 - The casting class, search and spell lists scroll together. Undo and Done stay visible.
