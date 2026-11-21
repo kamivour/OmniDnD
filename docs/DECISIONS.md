@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D240 | 2026-11-21 | The Compendium also lists equipment, grouped by rarity tier (mundane first) and filtered by type. Magic items take their type from the SRD text, so a +1 longsword lists as a weapon, not a wondrous item. Mundane gear shows whenever its book is on, even if that book's magic items are off. | Owner asked for equipment by tier and type; players browse magic swords with swords. |
 | D239 | 2026-11-19 | Sharing and invite links live behind a Share button on each campaign card, with one Copy invite link button. Campaign settings → Party keeps members, DM seat and join requests. | Sharing is easier to find, and the two invite buttons did the same thing. |
 | D238 | 2026-11-19 | Characters without their own picture or icon show the icon of their first class instead of a plain diamond. | Cards stay easy to tell apart at a glance. |
 | D237 | 2026-11-19 | Character Export asks whether to include the history log, showing both file sizes. The backup reminder no longer shows on Campaigns; it stays only in Settings → Backups. | Long logs make files large, and not every player wants backup files. |

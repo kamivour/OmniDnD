@@ -1,0 +1,115 @@
+import { describe, expect, it } from 'vitest';
+import { registry } from '../data/registry';
+import {
+  CATALOG_KINDS,
+  ITEM_TIERS,
+  campaignAllows,
+  catalogEntries,
+  entryKind,
+  groupBy,
+  itemTier,
+  itemType,
+  searchCatalog,
+  type CatalogEntry,
+} from './catalog';
+import type { ItemDef } from './schema';
+
+const item = (id: string) => registry.get('item', id);
+const find = (kind: (typeof CATALOG_KINDS)[number], name: string) =>
+  catalogEntries(registry, kind).find((e) => e.name === name);
+
+describe('compendium catalog', () => {
+  it('reaches every bundled class, subclass, race, background, feat, spell and item', () => {
+    for (const entry of registry.entries.values()) {
+      const wanted =
+        ['spell', 'class', 'subclass', 'race', 'background', 'item'].includes(entry.kind) ||
+        (entry.kind === 'feature' && entry.origin === 'feat');
+      expect(entryKind(entry) !== undefined, entry.id).toBe(wanted);
+    }
+    for (const kind of CATALOG_KINDS)
+      expect(catalogEntries(registry, kind).length).toBeGreaterThan(0);
+  });
+
+  it('non-SRD entries carry no book text', () => {
+    for (const kind of CATALOG_KINDS)
+      for (const e of catalogEntries(registry, kind))
+        if (!e.srd) expect(e.fullText, e.id).toBeUndefined();
+  });
+
+  it('reads magic item types from the SRD text and mundane types from the category', () => {
+    const counts = new Map<string, number>();
+    for (const e of catalogEntries(registry, 'equipment')) {
+      const key = itemType(e as ItemDef);
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+    for (const type of [
+      'weapon',
+      'armor',
+      'gear',
+      'tool',
+      'potion',
+      'ring',
+      'rod',
+      'scroll',
+      'staff',
+      'wand',
+      'wondrous',
+    ])
+      expect(counts.get(type), type).toBeGreaterThan(0);
+    const longsword = find('equipment', 'Longsword') as ItemDef;
+    expect(itemType(longsword)).toBe('weapon');
+    expect(itemTier(longsword)).toBe('mundane');
+    const bag = find('equipment', 'Bag of Holding') as ItemDef;
+    expect([itemType(bag), itemTier(bag)]).toEqual(['wondrous', 'uncommon']);
+    const healing = find('equipment', 'Potion of Healing') as ItemDef | undefined;
+    if (healing) expect(itemType(healing)).toBe('potion');
+  });
+
+  it('sorts equipment by tier, then type, then name', () => {
+    const list = searchCatalog(registry, 'equipment');
+    const tiers = list.map((e) => ITEM_TIERS.indexOf(itemTier(e as ItemDef)));
+    expect(tiers).toEqual([...tiers].sort((a, b) => a - b));
+    const groups = groupBy(list, (e) => itemTier(e as ItemDef)).map((g) => g.key);
+    expect(new Set(groups).size).toBe(groups.length);
+    expect(groups[0]).toBe('mundane');
+  });
+
+  it('filters by tier, type, text, book, spell level, school and class', () => {
+    const rareRings = searchCatalog(registry, 'equipment', { tiers: ['rare'], types: ['ring'] });
+    expect(rareRings.length).toBeGreaterThan(0);
+    for (const e of rareRings)
+      expect([itemTier(e as ItemDef), itemType(e as ItemDef)]).toEqual(['rare', 'ring']);
+
+    const fire = searchCatalog(registry, 'spells', { text: 'fire bolt' });
+    expect(fire.map((e) => e.name)).toContain('Fire Bolt');
+
+    const evocation3 = searchCatalog(registry, 'spells', {
+      levels: [3],
+      schools: ['evocation'],
+      classId: 'class.wizard',
+    });
+    expect(evocation3.map((e) => e.name)).toContain('Fireball');
+    for (const e of evocation3)
+      expect(e.kind === 'spell' && e.level === 3 && e.school === 'evocation').toBe(true);
+
+    const phb = searchCatalog(registry, 'spells', { books: ['XGE'] });
+    for (const e of phb) expect(e.source).toBe('XGE');
+
+    const spells = searchCatalog(registry, 'spells');
+    const levels = spells.map((e) => (e.kind === 'spell' ? e.level : -1));
+    expect(levels).toEqual([...levels].sort((a, b) => a - b));
+  });
+
+  it('keeps mundane gear when a campaign leaves out a book’s magic items', () => {
+    const campaign = {
+      sources: ['PHB', 'DMG'] as const,
+      sourceParts: { DMG: ['options' as const] },
+    };
+    const sword = item(find('equipment', 'Longsword')!.id) as CatalogEntry;
+    const bag = find('equipment', 'Bag of Holding')!;
+    expect(campaignAllows({ ...campaign, sources: [...campaign.sources] }, sword)).toBe(true);
+    expect(campaignAllows({ ...campaign, sources: [...campaign.sources] }, bag)).toBe(
+      bag.source !== 'DMG',
+    );
+  });
+});

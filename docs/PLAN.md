@@ -358,13 +358,13 @@ No new screens. Combat stays as it is until M46. 2014 rules only; liters are a p
 
 ## M45 — Compendium
 
-Planning only, requested 2026-11-19; build after M42. A read-only library for planning characters, covering spells, classes, subclasses, races, backgrounds and feats from the bundled 2014 data.
+Requested 2026-11-19; started 2026-11-21 ahead of M42 at the owner's request. A read-only library for planning characters, covering spells, classes, subclasses, races, backgrounds, feats and equipment from the bundled 2014 data. Equipment groups by tier (mundane, common, uncommon, rare, very rare, legendary, artifact) and filters by type (weapon, armor, gear, tools, potion, ring, wand, wondrous and so on).
 
 ### Tasks and acceptance
 
 | Task | Deliverable | Check before closing |
 |---|---|---|
-| T1 — Catalog | Pure engine helpers that list and filter `registry` entries by kind, class, level, school, book and text | Every bundled class, subclass, race, background, feat and spell is reachable; non-SRD entries show only own-words summaries |
+| T1 — Catalog | Pure engine helpers that list and filter `registry` entries by kind, class, level, school, book, text, item tier and item type | Every bundled class, subclass, race, background, feat, spell and item is reachable; non-SRD entries show only own-words summaries |
 | T2 — Screen | `/compendium`, also inside a character: kind tabs, search, filter chips, and a list that opens details in a sheet on phones or a side panel on desktop | Long lists stay fast at 375 px; filters live in the URL and survive Back; Find entries with synonyms such as "database", "library" and "spell list" |
 | T3 — Details | Classes show hit die, saves, features by level and subclasses. Spells show level, school, casting time, range, components, duration and class lists. Feats show prerequisites | SRD text or own-words summary with the book named; inside a character, the campaign's books are the default filter, with a "Show all books" switch |
 | T4 — Planning notes | "Plan this" adds the entry to a per-character wishlist in the Journal | Logged and undoable; nothing is learned or prepared automatically |

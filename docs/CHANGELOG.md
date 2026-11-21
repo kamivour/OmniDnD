@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 15:32 — Compendium groundwork
+
+- Started the Compendium: a read-only library of spells, classes, subclasses, races, backgrounds, feats and equipment.
+- Equipment sorts by tier (mundane, common, uncommon, rare, very rare, legendary, artifact) and by type (weapons, armor, gear, tools, potions, rings, wands, wondrous items and more).
+- Nothing to see on screen yet; the Compendium screen comes next.
+- Checks pass.
+
 ## 2026-11-19 11:58 — One Share button on the campaign card
 
 - Each campaign card on Campaigns now has a **Share** button next to Campaign settings. It shares the campaign and gives one invite link to copy.
