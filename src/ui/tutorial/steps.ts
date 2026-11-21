@@ -70,7 +70,7 @@ export const CHAPTERS: readonly Chapter[] = [
         id: 'nav',
         target: 'nav',
         title: 'The menus',
-        body: 'Combat for turns and attacks, Spells for casting, Inventory for gear, Features for class abilities, Journal for notes, Companions for allies, Reference for rules.',
+        body: 'Sheet for your full character, Spells for casting, Inventory for gear, Combat for turns and attacks. More holds Features, Companions, Journal, Reference and rests.',
       },
       {
         id: 'todo',

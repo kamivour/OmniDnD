@@ -188,11 +188,11 @@ for (const touch of [false, true]) {
 test.describe('mobile shell', () => {
   test.skip(({ isMobile }) => !isMobile, 'mobile only');
 
-  test('five navigation items and More route without covering content', async ({ page }, info) => {
+  test('six navigation items and More route without covering content', async ({ page }, info) => {
     await page.goto('/characters/the-fool');
     await expectStyled(page);
     const nav = navigation(page);
-    await expect(nav.getByRole('link')).toHaveText(['Home', 'Combat', 'Spells', 'Inv']);
+    await expect(nav.getByRole('link')).toHaveText(['Home', 'Sheet', 'Spells', 'Inv', 'Combat']);
     await nav.getByRole('link', { name: 'Combat', exact: true }).tap();
     await expect(nav.getByRole('link', { name: 'Combat', exact: true })).toHaveAttribute(
       'aria-current',
@@ -202,9 +202,11 @@ test.describe('mobile shell', () => {
     await page.screenshot({ path: info.outputPath('mobile-shell.png'), fullPage: true });
     await nav.getByRole('button', { name: 'More', exact: true }).tap();
     const more = page.getByRole('dialog', { name: 'More', exact: true });
-    await more.getByRole('link', { name: 'Sheet', exact: true }).tap();
+    await more.getByRole('link', { name: 'Journal', exact: true }).tap();
     await expect(more).toBeHidden();
-    await expect(page).toHaveURL(/\/characters\/the-fool\/sheet$/);
+    await expect(page).toHaveURL(/\/characters\/the-fool\/journal$/);
+    await expect(nav.getByRole('button', { name: 'More', exact: true })).toHaveClass(/text-accent/);
+    await page.setViewportSize({ width: 320, height: 640 });
     await expectNoOverflow(page);
   });
 });

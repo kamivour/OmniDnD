@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 17:32 — Sheet in the phone bar
+
+- The phone bar now has six buttons: Home, Sheet, Spells, Inv, Combat and More.
+- More stays highlighted while you are on one of its screens, such as Journal.
+- Check the labels are readable on your phone.
+- Checks pass.
+
 ## 2026-11-21 17:27 — Bench for spare characters
 
 - On Campaigns, **Move** a character to the **Bench** to keep it out of every campaign. The Bench is always last, stays on this device and is never shared.

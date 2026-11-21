@@ -67,7 +67,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M40 | Campaign sharing and join requests | 7 | done | Share links, approve requests with existing characters, and view party characters without editing them |
 | M41 | Artificer equipment infusions | 3 | doing | Equipment assignment works; verify known choices and investigate the reported class disappearance |
 | M43 | Friend-testing fixes: accounts, profiles and joining | 10 | todo | Signup works, names are unique, profile with avatar, clear sync choices, explicit copy or move into shared campaigns, one DM seat; see [PLAN.md](PLAN.md) |
-| M44 | Phone navigation and screen cleanup | 7 | todo | Sheet in the phone bar, grouped More menu, hidden Game Clock, no empty Details button, compact spell filters, weightless magic containers; see [PLAN.md](PLAN.md) |
+| M44 | Phone navigation and screen cleanup | 7 | in progress | Sheet in the phone bar, grouped More menu, hidden Game Clock, no empty Details button, compact spell filters, weightless magic containers; see [PLAN.md](PLAN.md) |
 | M42 | Recognizable icons and creation cards | 10 | todo | Class and subclass choices use clear icon cards; portraits and existing creation behavior are preserved; after M44; see [PLAN.md](PLAN.md) |
 | M45 | Compendium | 5 | done | Browse and read spells, classes, subclasses, races, backgrounds and feats to plan characters; see [PLAN.md](PLAN.md) |
 | M46 | Combat around "I got hit" | 6 | todo | Log a hit with damage types; the app applies resistances and suggests saves and effects to confirm; design review first; see [PLAN.md](PLAN.md) |
@@ -349,11 +349,11 @@ Follow [PLAN.md](PLAN.md#m43--friend-testing-fixes-accounts-profiles-and-joining
 - [x] T9: Add the Profile button and screen with uploadable avatar and default mask
 - [ ] T10: Verify all flows at both widths and with two live test accounts
 
-### M44 — Phone navigation and screen cleanup (planned)
+### M44 — Phone navigation and screen cleanup (in progress)
 
 Follow [PLAN.md](PLAN.md#m44--phone-navigation-and-screen-cleanup) after M43. One task per commit.
 
-- [ ] T1: Phone bar Home · Sheet · Spells · Inv · Combat · More, packed to fit (D232)
+- [x] T1: Phone bar Home · Sheet · Spells · Inv · Combat · More, packed to fit (D232)
 - [ ] T2: Group More and the sidebar into main and secondary screens with a divider
 - [ ] T3: Hide the Game Clock behind a Settings switch
 - [ ] T4: Remove the empty Details button where details open as a sheet
@@ -416,6 +416,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-21 — M44 T1: phone bar shows Home, Sheet, Spells, Inv, Combat and More; fits at 320 px; More lights up for its screens.
 - 2026-11-21 — Bench: Move a character to a private, never-shared Bench to keep it out of every campaign; undoable; Find "archive".
 - 2026-11-21 — Update banner: open apps check for new versions and offer Update now, so devices no longer stay on old builds.
 - 2026-11-21 — M45 T5: browser checks at 375 and 1440 px cover tier and type filters, both themes, Plan this with Undo, and offline class, race, feat and spell pages.

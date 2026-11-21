@@ -197,15 +197,7 @@ test('Sheet navigation shows every Fool ability, save, skill, combat value and s
   const navigation = page
     .getByRole('navigation', { name: 'Main', exact: true })
     .filter({ visible: true });
-  if (isMobile) {
-    await navigation.getByRole('button', { name: 'More', exact: true }).tap();
-    await page
-      .getByRole('dialog', { name: 'More', exact: true })
-      .getByRole('link', { name: 'Sheet', exact: true })
-      .tap();
-  } else {
-    await navigation.getByRole('link', { name: 'Sheet', exact: true }).click();
-  }
+  await navigation.getByRole('link', { name: 'Sheet', exact: true }).click();
   await expect(page).toHaveURL('/characters/the-fool/sheet');
   await expect(
     main(page).getByRole('heading', { name: 'Character sheet', exact: true }),

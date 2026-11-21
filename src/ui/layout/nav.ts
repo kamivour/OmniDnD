@@ -48,8 +48,8 @@ export const NAV: NavItem[] = [
 
 export const NAV_DIVIDER_BEFORE = 'inventory';
 
-/** Mobile bottom nav: four direct links in this order + More. */
-export const BOTTOM_NAV = ['', 'combat', 'spells', 'inventory'];
+/** Mobile bottom nav: five direct links in this order + More (D232). */
+export const BOTTOM_NAV = ['', 'sheet', 'spells', 'inventory', 'combat'];
 
 /** Full path of a character screen. */
 export function navPath(base: string, to: string): string {

@@ -8,9 +8,9 @@ import { useRest } from '../rest/rest-context';
 import { BOTTOM_NAV, NAV, navPath } from './nav';
 
 const tab =
-  'flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-xs transition-colors duration-(--omni-motion-hover)';
+  'flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-0.5 text-[0.6875rem] leading-tight transition-colors duration-(--omni-motion-hover)';
 
-/** < 640 px: Home · Combat · Spells · Inv · More. More holds the rest, rests, and the way back to campaigns. */
+/** < 640 px: Home · Sheet · Spells · Inv · Combat · More (D232). More holds the rest, rests, and the way back to campaigns. */
 export function BottomNav() {
   const [more, setMore] = useState(false);
   const { pathname } = useLocation();
@@ -18,10 +18,13 @@ export function BottomNav() {
   const moreButton = useRef<HTMLButtonElement>(null);
   const openingRest = useRef<'short' | 'long' | null>(null);
   const base = useCharacterBase();
-  // BOTTOM_NAV order, not sidebar order (SPEC §3: Home · Combat · Spells · Inventory).
+  // BOTTOM_NAV order, not sidebar order.
   const direct = BOTTOM_NAV.flatMap((to) => NAV.filter((n) => n.to === to));
   const rest = NAV.filter((n) => !BOTTOM_NAV.includes(n.to));
-  const moreActive = rest.some((n) => navPath(base, n.to) === pathname);
+  const moreActive = rest.some((n) => {
+    const target = navPath(base, n.to);
+    return pathname === target || pathname.startsWith(`${target}/`);
+  });
 
   return (
     <nav
