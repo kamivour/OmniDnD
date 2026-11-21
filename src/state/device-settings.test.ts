@@ -22,6 +22,13 @@ describe('device settings', () => {
     expect(deviceStore.getState()).toMatchObject({ creationMode: 'steps', beginnerHints: true });
   });
 
+  it('hides the Game Clock card until switched on, and remembers the switch', async () => {
+    const { deviceStore, store } = await load();
+    expect(deviceStore.getState().gameClock).toBe(false);
+    deviceStore.getState().setGameClock(true);
+    expect((await load(JSON.parse(store.get(KEY)!))).deviceStore.getState().gameClock).toBe(true);
+  });
+
   it('starts on the Dark theme, keeps System when chosen, and drops hidden themes', async () => {
     expect((await load()).deviceStore.getState().theme).toBe('dark');
     expect((await load({ theme: 'system' })).deviceStore.getState().theme).toBe('system');

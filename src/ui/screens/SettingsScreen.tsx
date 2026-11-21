@@ -24,6 +24,7 @@ export function SettingsScreen() {
   const { characterId } = useParams();
   const { automation, reducedMotion, characters, managementEvents } = useStore(characterStore);
   const diceRoller = useStore(deviceStore, (state) => state.diceRoller);
+  const gameClock = useStore(deviceStore, (state) => state.gameClock);
   const theme = useStore(deviceStore, (state) => state.theme);
   const fx = useStore(deviceStore, (state) => state.fx);
   const creationMode = useStore(deviceStore, (state) => state.creationMode);
@@ -207,6 +208,28 @@ export function SettingsScreen() {
         <p className="text-sm text-text-muted">
           Adds Roll buttons and a dice tray. Results are only shown to you; nothing is applied to
           your character until you enter it. Stored on this device only.
+        </p>
+      </section>
+      <section
+        aria-labelledby="settings-clock"
+        id="settings-clock-section"
+        className="flex flex-col gap-3"
+      >
+        <h2 id="settings-clock" className="text-base font-semibold">
+          Game clock
+        </h2>
+        <label className="flex min-h-11 items-center gap-3 rounded-card border border-border bg-surface p-3">
+          <input
+            type="checkbox"
+            checked={gameClock}
+            onChange={(event) => deviceStore.getState().setGameClock(event.target.checked)}
+            className="size-4 accent-(--omni-accent)"
+          />
+          Show game clock
+        </label>
+        <p className="text-sm text-text-muted">
+          Adds the in-game time card to Home and Explore so you can move time by hand. Rests, spell
+          durations and the log keep time either way. Stored on this device only.
         </p>
       </section>
       <TutorialSection />

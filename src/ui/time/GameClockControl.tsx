@@ -5,6 +5,7 @@ import { formatClock } from '../../engine/clock';
 import { advanceTime, runCommand } from '../../engine/commands';
 import { SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from '../../engine/rules2014';
 import { characterStore } from '../../state/character-store';
+import { deviceStore } from '../../state/device-settings';
 import { useCommand, type CommandFocusTarget } from '../commands/command-context';
 import { inputClass } from '../components/fields';
 import { SectionLabel } from '../components/SectionLabel';
@@ -19,7 +20,13 @@ const PRESETS = [
 ];
 
 /** Explicit game-time choices; the saved clock never follows the device clock. */
+/** Shown on Home and Explore only when Settings "Show game clock" is on; engine time runs either way. */
 export function GameClockControl() {
+  const visible = useStore(deviceStore, (state) => state.gameClock);
+  return visible ? <GameClockCard /> : null;
+}
+
+function GameClockCard() {
   const { state } = useCharacter();
   const [open, setOpen] = useState(false);
   const opener = useRef<HTMLButtonElement>(null);

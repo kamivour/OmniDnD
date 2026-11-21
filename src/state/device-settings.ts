@@ -4,7 +4,7 @@ import { VISIBLE_THEMES, type ThemeId } from '../theme/themes';
 /**
  * Device-only conveniences (not character or workspace state, never synced or backed up):
  * the optional dice roller switch, its short roll history, the theme, how new characters are made,
- * beginner hints and the last backup time.
+ * beginner hints, the Game Clock card and the last backup time.
  */
 const KEY = 'omnidnd.device';
 const HISTORY_LIMIT = 30;
@@ -47,6 +47,8 @@ interface Saved {
   lastBackupAt: string | undefined;
   /** The sign-in card on the Campaigns page was dismissed. */
   accountCardHidden: boolean;
+  /** Show the Game Clock card on Home and Explore (hidden by default, M44 T3). */
+  gameClock: boolean;
 }
 
 interface DeviceState extends Saved {
@@ -59,6 +61,7 @@ interface DeviceState extends Saved {
   setBeginnerHints: (on: boolean) => void;
   markBackedUp: (at: string) => void;
   setAccountCardHidden: (hidden: boolean) => void;
+  setGameClock: (on: boolean) => void;
   addRoll: (entry: Omit<RollEntry, 'id'>) => void;
   clearHistory: () => void;
 }
@@ -76,6 +79,7 @@ function read(): Saved {
       askRoles: parsed?.askRoles !== false,
       lastBackupAt: typeof at === 'string' && !Number.isNaN(Date.parse(at)) ? at : undefined,
       accountCardHidden: parsed?.accountCardHidden === true,
+      gameClock: parsed?.gameClock === true,
     };
   } catch {
     return {
@@ -87,6 +91,7 @@ function read(): Saved {
       askRoles: true,
       lastBackupAt: undefined,
       accountCardHidden: false,
+      gameClock: false,
     };
   }
 }
@@ -101,6 +106,7 @@ function write(saved: Saved) {
     askRoles,
     lastBackupAt,
     accountCardHidden,
+    gameClock,
   } = saved;
   try {
     localStorage.setItem(
@@ -114,6 +120,7 @@ function write(saved: Saved) {
         askRoles,
         lastBackupAt,
         accountCardHidden,
+        gameClock,
       }),
     );
   } catch {
@@ -134,6 +141,7 @@ export const deviceStore = createStore<DeviceState>((set) => {
       askRoles,
       lastBackupAt,
       accountCardHidden,
+      gameClock,
     } = { ...deviceStore.getState(), ...patch };
     write({
       creationMode,
@@ -144,6 +152,7 @@ export const deviceStore = createStore<DeviceState>((set) => {
       askRoles,
       lastBackupAt,
       accountCardHidden,
+      gameClock,
     });
     set(patch);
   };
@@ -158,6 +167,7 @@ export const deviceStore = createStore<DeviceState>((set) => {
     setBeginnerHints: (beginnerHints) => change({ beginnerHints }),
     markBackedUp: (lastBackupAt) => change({ lastBackupAt }),
     setAccountCardHidden: (accountCardHidden) => change({ accountCardHidden }),
+    setGameClock: (gameClock) => change({ gameClock }),
     addRoll: (entry) =>
       set((state) => ({
         history: [{ ...entry, id: nextId++ }, ...state.history].slice(0, HISTORY_LIMIT),

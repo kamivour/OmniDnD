@@ -325,6 +325,14 @@ export const PLACES: readonly FindEntry[] = [
     target: { kind: 'go', path: 'settings', anchor: 'settings-tutorial' },
   },
   {
+    id: 'go.game-clock',
+    group: 'go',
+    title: 'Game clock',
+    detail: 'Settings: show the in-game time card',
+    synonyms: ['clock', 'time', 'advance time', 'in-game time', 'day', 'hour'],
+    target: { kind: 'go', path: 'settings', anchor: 'settings-clock-section' },
+  },
+  {
     id: 'go.party-account',
     group: 'go',
     title: 'Share a campaign',

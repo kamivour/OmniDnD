@@ -44,6 +44,7 @@ export const test = base.extend<{
   defaultToOnePage: void;
   showTutorial: boolean;
   showRoles: boolean;
+  showGameClock: boolean;
   tutorialDone: void;
   sampleCharacter: void;
 }>({
@@ -64,6 +65,8 @@ export const test = base.extend<{
   ],
   // The role questions block the New campaign and New character forms, so only the roles spec sees them.
   showRoles: [false, { option: true }],
+  // The Game Clock card is hidden on new devices (M44 T3); older clock specs keep it on.
+  showGameClock: [true, { option: true }],
   // The tour covers the page and blocks clicks, so other specs start with it finished.
   tutorialDone: [
     async ({ context, showTutorial }, runTest) => {
@@ -84,20 +87,23 @@ export const test = base.extend<{
   // Most specs fill the whole New character form, so they start in One page mode.
   // The step-by-step spec switches mode on screen.
   defaultToOnePage: [
-    async ({ context, showRoles }, runTest) => {
-      await context.addInitScript((askRoles) => {
-        try {
-          const saved = JSON.parse(localStorage.getItem('omnidnd.device') ?? '{}') as object;
-          if (!('creationMode' in saved)) {
-            localStorage.setItem(
-              'omnidnd.device',
-              JSON.stringify({ ...saved, creationMode: 'page', askRoles }),
-            );
+    async ({ context, showRoles, showGameClock }, runTest) => {
+      await context.addInitScript(
+        ({ askRoles, gameClock }) => {
+          try {
+            const saved = JSON.parse(localStorage.getItem('omnidnd.device') ?? '{}') as object;
+            if (!('creationMode' in saved)) {
+              localStorage.setItem(
+                'omnidnd.device',
+                JSON.stringify({ ...saved, creationMode: 'page', askRoles, gameClock }),
+              );
+            }
+          } catch {
+            // Storage unavailable: the app default applies.
           }
-        } catch {
-          // Storage unavailable: the app default applies.
-        }
-      }, showRoles);
+        },
+        { askRoles: showRoles, gameClock: showGameClock },
+      );
       await runTest();
     },
     { auto: true },

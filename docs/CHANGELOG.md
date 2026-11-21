@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 17:40 — Game clock hidden by default
+
+- The Game clock card no longer sits at the top of Home and Explore, so resources show sooner on phones.
+- Turn it back on in Settings → Game clock → Show game clock (per device).
+- Rests, spell durations and the log still keep time either way.
+- Checks pass.
+
 ## 2026-11-21 17:36 — Tidier More menu and sidebar
 
 - More and the desktop sidebar now show main screens first (Features, Companions, Explore), then a line, then Journal, Reference and Settings.

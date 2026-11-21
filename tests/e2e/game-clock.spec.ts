@@ -409,3 +409,21 @@ test('an imported near-limit clock disables every overflowing preset and custom 
   await dialog(page).getByRole('button', { name: 'Cancel', exact: true }).click();
   expect(await readSaved(page, file.build.id)).toEqual(before);
 });
+
+test.describe('new device', () => {
+  test.use({ showGameClock: false });
+
+  test('hides the Game Clock card until Settings turns it on', async ({ page }) => {
+    await page.goto('/characters/the-fool');
+    await expect(page.getByRole('region', { name: 'Resources', exact: true })).toBeVisible();
+    await expect(clock(page)).toHaveCount(0);
+    await page.goto('/characters/the-fool/explore');
+    await expect(page.getByRole('heading', { name: 'Explore', exact: true })).toBeVisible();
+    await expect(clock(page)).toHaveCount(0);
+
+    await page.goto('/characters/the-fool/settings');
+    await page.getByRole('checkbox', { name: 'Show game clock', exact: true }).check();
+    await page.goto('/characters/the-fool');
+    await expect(clock(page)).toContainText('Day 1');
+  });
+});
