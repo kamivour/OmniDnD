@@ -12,7 +12,9 @@ import {
   removeLocation,
   removeNpc,
   removeQuest,
+  planEntry,
   removeSessionNote,
+  unplanEntry,
   updateJournalNarrative,
 } from './journal';
 import { freshState, Session } from './test-utils';
@@ -329,5 +331,37 @@ describe('journal commands', () => {
         reasons: ['Session note does not exist'],
       });
     });
+  });
+});
+
+describe('compendium plans', () => {
+  it('plans an entry, survives export and Undo removes it', () => {
+    const session = new Session(freshState);
+    const before = structuredClone(session.state);
+    expect(session.run(planEntry, { entryId: 'spell.fireball' })).toBe('Plan: Fireball');
+    expect(session.state.build.journal.plans).toEqual([{ entryId: 'spell.fireball' }]);
+    // Planning learns nothing.
+    expect(session.state.build).toEqual({
+      ...before.build,
+      journal: { ...before.build.journal, plans: [{ entryId: 'spell.fireball' }] },
+    });
+    reload(session);
+    expect(session.state.build.journal.plans).toHaveLength(1);
+    session.undo();
+    expect(session.state.build.journal).toEqual(before.build.journal);
+  });
+
+  it('blocks duplicates and unknown entries, and removes plans', () => {
+    const session = new Session(freshState);
+    session.run(planEntry, { entryId: 'class.fighter' });
+    expect(session.preview(planEntry, { entryId: 'class.fighter' }).result).toBe('blocked');
+    expect(session.preview(planEntry, { entryId: 'spell.not-real' }).result).toBe('blocked');
+    expect(session.preview(unplanEntry, { entryId: 'spell.fireball' }).result).toBe('blocked');
+    expect(session.run(unplanEntry, { entryId: 'class.fighter' })).toBe(
+      'Remove from plans: Fighter',
+    );
+    expect(session.state.build.journal.plans).toEqual([]);
+    session.undo();
+    expect(session.state.build.journal.plans).toEqual([{ entryId: 'class.fighter' }]);
   });
 });

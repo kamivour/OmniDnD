@@ -19,10 +19,13 @@ const SUMMARY_LABELS = [
 export function CompendiumDetail({
   entry,
   onOpen,
+  action,
 }: {
   entry: CatalogEntry;
   /** Opens another compendium entry (a subclass from its class, a granted spell). */
   onOpen: (id: string) => void;
+  /** Shown under the header, e.g. "Plan this" inside a character. */
+  action?: ReactNode;
 }) {
   const summary = entry.summary;
   return (
@@ -42,6 +45,7 @@ export function CompendiumDetail({
           </p>
         </div>
       </header>
+      {action}
       <CompendiumFacts entry={entry} onOpen={onOpen} />
       {summary && (
         <Section title="Summary">

@@ -188,6 +188,22 @@ export const PLACES: readonly FindEntry[] = [
     needsCharacter: true,
   },
   {
+    id: 'go.journal-plans',
+    group: 'go',
+    title: 'Plans',
+    detail: 'Journal: entries you want later',
+    synonyms: [
+      'wishlist',
+      'wish list',
+      'plan this',
+      'planned spells',
+      'future feats',
+      'build plan',
+    ],
+    target: { kind: 'go', path: 'journal?tab=plans' },
+    needsCharacter: true,
+  },
+  {
     id: 'go.todo',
     group: 'go',
     title: 'To do',

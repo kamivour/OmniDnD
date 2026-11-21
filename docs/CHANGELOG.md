@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 15:56 — Plan this
+
+- Inside a character, every compendium entry has a **Plan this** button. It adds the entry to a new **Plans** tab in the Journal.
+- Plans are reminders only: nothing is learned, prepared or bought. Remove a plan from the Journal or tap **Planned** again; Undo works too.
+- Find "plans" or "wishlist" to jump straight to the tab.
+- Checks pass.
+
 ## 2026-11-21 15:50 — Compendium details
 
 - Each Compendium entry now shows its key facts: hit die, saves and features by level for classes; casting time, range, components, duration and class lists for spells; prerequisites for feats; damage, AC, cost and weight for equipment.

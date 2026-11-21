@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { entryKind } from '../catalog';
 import { LocationEntrySchema, NpcSchema, QuestSchema, SessionNoteSchema } from '../schema';
 import type { Command } from './runner';
 import { block } from './shared';
@@ -305,5 +306,46 @@ export const removeSessionNote: Command<RemoveSessionNotePayload> = {
       (n) => n.id !== sessionNoteId,
     );
     return `Remove session note: ${note?.title || note?.date || sessionNoteId}`;
+  },
+};
+
+const PlanPayloadSchema = z.strictObject({
+  entryId: z.string().min(1),
+});
+export type PlanPayload = z.infer<typeof PlanPayloadSchema>;
+
+/** Adds a compendium entry to the character's plans. A wish list only: nothing is learned. */
+export const planEntry: Command<PlanPayload> = {
+  name: 'planEntry',
+  check: ({ build, registry }, input) => {
+    const parsed = PlanPayloadSchema.safeParse(input);
+    if (!parsed.success) return [block('Plan entry id is invalid')];
+    const entry = registry.entries.get(parsed.data.entryId);
+    if (!entry || !entryKind(entry)) return [block('This entry is not in the compendium')];
+    if (build.journal.plans?.some((p) => p.entryId === entry.id))
+      return [block(`${entry.name} is already in your plans`)];
+    return [];
+  },
+  apply: (draft, { entryId }, { registry }) => {
+    draft.build.journal.plans ??= [];
+    draft.build.journal.plans.push({ entryId });
+    return `Plan: ${registry.entries.get(entryId)?.name ?? entryId}`;
+  },
+};
+
+export const unplanEntry: Command<PlanPayload> = {
+  name: 'unplanEntry',
+  check: ({ build }, input) => {
+    const parsed = PlanPayloadSchema.safeParse(input);
+    if (!parsed.success) return [block('Plan entry id is invalid')];
+    if (!build.journal.plans?.some((p) => p.entryId === parsed.data.entryId))
+      return [block('This entry is not in your plans')];
+    return [];
+  },
+  apply: (draft, { entryId }, { registry }) => {
+    draft.build.journal.plans = (draft.build.journal.plans ?? []).filter(
+      (p) => p.entryId !== entryId,
+    );
+    return `Remove from plans: ${registry.entries.get(entryId)?.name ?? entryId}`;
   },
 };

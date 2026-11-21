@@ -100,6 +100,12 @@ export const SessionNoteSchema = z.strictObject({
 });
 export type SessionNote = z.infer<typeof SessionNoteSchema>;
 
+/** A compendium entry the player wants to take later. Nothing is learned automatically. */
+export const PlanSchema = z.strictObject({
+  entryId: z.string().min(1),
+});
+export type Plan = z.infer<typeof PlanSchema>;
+
 export const JournalSchema = z.strictObject({
   personality: z.string().optional(),
   ideals: z.string().optional(),
@@ -113,6 +119,7 @@ export const JournalSchema = z.strictObject({
   npcs: z.array(NpcSchema).optional(),
   locations: z.array(LocationEntrySchema).optional(),
   sessionNotes: z.array(SessionNoteSchema).optional(),
+  plans: z.array(PlanSchema).optional(),
 });
 export type Journal = z.infer<typeof JournalSchema>;
 

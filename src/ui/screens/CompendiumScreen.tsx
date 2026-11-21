@@ -22,6 +22,7 @@ import { SOURCE_NAMES } from '../../engine/calc/campaign-rules';
 import { SCHOOLS } from '../../engine/rules2014';
 import type { Source } from '../../engine/schema';
 import { CompendiumDetail } from '../compendium/CompendiumDetail';
+import { PlanButton } from '../compendium/PlanButton';
 import {
   KIND_LABELS,
   TIER_LABELS,
@@ -101,7 +102,14 @@ export function CompendiumScreen() {
   };
 
   const listKey = [...params.entries()].filter(([k]) => k !== 'entry').join('&');
-  const detail = open && <CompendiumDetail key={open.id} entry={open} onOpen={openEntry} />;
+  const detail = open && (
+    <CompendiumDetail
+      key={open.id}
+      entry={open}
+      onOpen={openEntry}
+      action={characterId && <PlanButton characterId={characterId} entryId={open.id} />}
+    />
+  );
 
   return (
     <section

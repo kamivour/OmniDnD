@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D242 | 2026-11-21 | Compendium plans are a per-character reminder list in the Journal; planning never learns, prepares or buys anything. Plans link back with all books shown, so an entry outside the campaign's books still opens. | The user enters choices; a wish list must never change the sheet. |
 | D241 | 2026-11-21 | Inside a character, the Compendium shows only the campaign's books until you tick **Show all books**. Feat prerequisites come from the SRD text or the first "Needs ..." line of our summary. | Planning should match the table's books; feats have no separate prerequisite field yet. |
 | D240 | 2026-11-21 | The Compendium also lists equipment, grouped by rarity tier (mundane first) and filtered by type. Magic items take their type from the SRD text, so a +1 longsword lists as a weapon, not a wondrous item. Mundane gear shows whenever its book is on, even if that book's magic items are off. | Owner asked for equipment by tier and type; players browse magic swords with swords. |
 | D239 | 2026-11-19 | Sharing and invite links live behind a Share button on each campaign card, with one Copy invite link button. Campaign settings → Party keeps members, DM seat and join requests. | Sharing is easier to find, and the two invite buttons did the same thing. |

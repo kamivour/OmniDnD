@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { Link, useSearchParams } from 'react-router';
 import { Check, MapPin, Plus, User, Calendar, Edit2, Trash2 } from 'lucide-react';
+import { registry } from '../../data/registry';
+import { entryKind, type CatalogEntry } from '../../engine/catalog';
 import {
   addLocation,
   addNpc,
@@ -13,9 +16,11 @@ import {
   removeNpc,
   removeQuest,
   removeSessionNote,
+  unplanEntry,
   updateJournalNarrative,
 } from '../../engine/commands/journal';
-import type { LocationEntry, Npc, Quest, SessionNote } from '../../engine/schema';
+import type { LocationEntry, Npc, Plan, Quest, SessionNote } from '../../engine/schema';
+import { KIND_NAMES, rowMeta } from '../compendium/compendium-model';
 import { useCommand } from '../commands/command-context';
 import { Markdown } from '../components/Markdown';
 import { Field, inputClass } from '../components/fields';
@@ -23,7 +28,7 @@ import { Sheet } from '../components/Sheet';
 import { cx } from '../cx';
 import { useCharacter } from '../hooks/useCharacter';
 
-type Tab = 'story' | 'quests' | 'world' | 'notes';
+type Tab = 'story' | 'quests' | 'world' | 'notes' | 'plans';
 
 /** Today's date in the player's own time zone, as YYYY-MM-DD. */
 function localDate(now = new Date()): string {
@@ -36,11 +41,20 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'quests', label: 'Quests' },
   { id: 'world', label: 'NPCs & Locations' },
   { id: 'notes', label: 'Session Log' },
+  { id: 'plans', label: 'Plans' },
 ];
 
 export function JournalScreen() {
   const { state } = useCharacter();
-  const [tab, setTab] = useState<Tab>('story');
+  const [params, setParams] = useSearchParams();
+  // The tab lives in the URL so "See plans in Journal" and Find can open it.
+  const tab = TABS.find((t) => t.id === params.get('tab'))?.id ?? 'story';
+  const setTab = (next: Tab) => {
+    const updated = new URLSearchParams(params);
+    if (next === 'story') updated.delete('tab');
+    else updated.set('tab', next);
+    setParams(updated, { replace: true });
+  };
 
   const journal = state.build.journal;
 
@@ -80,6 +94,7 @@ export function JournalScreen() {
         <WorldTab npcs={journal.npcs ?? []} locations={journal.locations ?? []} />
       )}
       {tab === 'notes' && <SessionNotesTab notes={journal.sessionNotes ?? []} />}
+      {tab === 'plans' && <PlansTab characterId={state.build.id} plans={journal.plans ?? []} />}
     </div>
   );
 }
@@ -1074,5 +1089,80 @@ function SessionNotesTab({ notes }: { notes: SessionNote[] }) {
         </form>
       </Sheet>
     </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Plans Tab
+// ---------------------------------------------------------------------------
+
+/** Compendium entries the player wants later. A reminder only: nothing here is learned. */
+function PlansTab({ characterId, plans }: { characterId: string; plans: Plan[] }) {
+  const { run } = useCommand();
+  const base = `/characters/${encodeURIComponent(characterId)}/compendium`;
+  const className = (id: string) => registry.entries.get(id)?.name ?? id;
+  const rows = plans.map((plan) => {
+    const entry = registry.entries.get(plan.entryId);
+    const kind = entry && entryKind(entry);
+    return { plan, entry: kind ? (entry as CatalogEntry) : undefined, kind };
+  });
+
+  return (
+    <section aria-labelledby="plans-heading" className="flex flex-col gap-3">
+      <div>
+        <h2 id="plans-heading" className="text-sm font-semibold text-text">
+          Plans
+        </h2>
+        <p className="text-xs text-text-muted">
+          Spells, feats, items and more you want later. Add them with Plan this in the Compendium.
+          Nothing is learned until you pick it yourself.
+        </p>
+      </div>
+      {rows.length === 0 ? (
+        <p className="rounded-card bg-surface p-4 text-sm text-text-muted">
+          No plans yet.{' '}
+          <Link to={base} className="text-accent underline">
+            Open the Compendium
+          </Link>
+        </p>
+      ) : (
+        <ul className="flex flex-col gap-2">
+          {rows.map(({ plan, entry, kind }) => (
+            <li
+              key={plan.entryId}
+              className="flex items-center gap-3 rounded-card bg-surface p-3 text-sm"
+            >
+              <div className="min-w-0 flex-1">
+                {entry && kind ? (
+                  <Link
+                    to={`${base}?kind=${kind}&entry=${encodeURIComponent(entry.id)}&books=all`}
+                    className="font-semibold text-accent underline wrap-anywhere"
+                  >
+                    {entry.name}
+                  </Link>
+                ) : (
+                  <span className="font-semibold wrap-anywhere">{plan.entryId}</span>
+                )}
+                <p className="text-xs text-text-muted">
+                  {entry && kind
+                    ? [KIND_NAMES[kind], kind === 'feats' ? '' : rowMeta(entry, className)]
+                        .filter(Boolean)
+                        .join(' · ')
+                    : 'No longer in the bundled data'}
+                </p>
+              </div>
+              <button
+                type="button"
+                aria-label={`Remove ${entry?.name ?? plan.entryId} from plans`}
+                onClick={() => run(unplanEntry, { entryId: plan.entryId })}
+                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-btn text-text-muted hover:bg-surface-2 hover:text-text"
+              >
+                <Trash2 size={16} aria-hidden />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }

@@ -24,6 +24,17 @@ export const KIND_LABELS: Record<CatalogKind, string> = {
   equipment: 'Equipment',
 };
 
+/** Singular kind names, e.g. for the Journal's plans. */
+export const KIND_NAMES: Record<CatalogKind, string> = {
+  spells: 'Spell',
+  classes: 'Class',
+  subclasses: 'Subclass',
+  races: 'Race',
+  backgrounds: 'Background',
+  feats: 'Feat',
+  equipment: 'Item',
+};
+
 export const TIER_LABELS: Record<ItemTier, string> = {
   mundane: 'Mundane',
   common: 'Common',
