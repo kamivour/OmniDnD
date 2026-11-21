@@ -130,7 +130,8 @@ test('equipped weapon attacks spend one action, warn on another, and retain dura
     ...initial.live,
     combat: {
       ...initial.live.combat!,
-      economy: { ...initial.live.combat!.economy, actionUsed: true },
+      // Weapon attacks also count toward Extra Attack.
+      economy: { ...initial.live.combat!.economy, actionUsed: true, attacksMade: 1 },
     },
   });
   expect(first.events.map((event) => event.command)).toEqual(['takeCombatAction']);

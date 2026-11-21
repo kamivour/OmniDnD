@@ -107,9 +107,14 @@ function FindSheet({
     ];
     const found = searchFind(fixed, query).map((result) => result.entry);
     const skip = new Set(characterItems.map((entry) => entry.id));
-    return [...found, ...ruleEntries(query, books, skip)].sort(
-      (a, b) => FIND_GROUPS.indexOf(a.group) - FIND_GROUPS.indexOf(b.group),
-    );
+    // An exact app title match goes first, so Enter on "long rest" opens Long rest, not a page
+    // that mentions it. Rule titles do not jump ahead: "jump" still opens Movement and body.
+    const typed = query.trim().toLowerCase();
+    const hit = found.find((entry) => entry.title.toLowerCase() === typed);
+    const all = [...found, ...ruleEntries(query, books, skip)];
+    const rank = (entry: FindEntry) =>
+      entry === hit ? -2 : entry.group === hit?.group ? -1 : FIND_GROUPS.indexOf(entry.group);
+    return all.sort((a, b) => rank(a) - rank(b));
   }, [query, characterItems, books, hasCharacter]);
   const current = Math.min(active, results.length - 1);
 
@@ -134,10 +139,11 @@ function FindSheet({
     }
   };
 
-  const groups = FIND_GROUPS.map((group) => ({
+  // Groups follow the result order, so the exact match's group shows first and arrows move top to bottom.
+  const groups = [...new Set(results.map((entry) => entry.group))].map((group) => ({
     group,
     rows: results.filter((entry) => entry.group === group),
-  })).filter(({ rows }) => rows.length > 0);
+  }));
 
   return (
     <Sheet

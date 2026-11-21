@@ -91,6 +91,8 @@ test('every standard action reaches a real logged command and preserves manual o
       const expected = structuredClone(initial.live);
       expected.combat!.economy.actionUsed = true;
       if (name === 'Dash') expected.combat!.economy.dashCount = 1;
+      // Attack counts toward Extra Attack.
+      if (['Attack', 'Grapple', 'Shove'].includes(name)) expected.combat!.economy.attacksMade = 1;
       expect(applied.build).toEqual(initial.build);
       expect(applied.live).toEqual(expected);
       expect(applied.events).toHaveLength(before.events.length + 1);

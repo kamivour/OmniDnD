@@ -348,10 +348,10 @@ test('tablet pinned detail stays live when reopened as a phone sheet', async ({ 
   // Phones have no Details toggle (M44 T4); tapping the spell opens its sheet.
   await expect(page.getByRole('button', { name: 'Open details', exact: true })).toHaveCount(0);
   await row(page, 'Healing Word').click();
-  await expect(drawer).toContainText('Healing Word');
-  await expect(slot(drawer, 1)).toContainText('1 left');
-  await expect(slot(drawer, 1)).toHaveAttribute('aria-pressed', 'true');
-  await expect(drawer.getByRole('button', { name: 'Cast Healing Word (L1)' })).toBeEnabled();
+  const sheet = page.getByRole('dialog', { name: 'Healing Word', exact: true });
+  await expect(slot(sheet, 1)).toContainText('1 left');
+  await expect(slot(sheet, 1)).toHaveAttribute('aria-pressed', 'true');
+  await expect(sheet.getByRole('button', { name: 'Cast Healing Word (L1)' })).toBeEnabled();
   await expectNoOverflow(page);
   await page.screenshot({
     path: info.outputPath('live-pinned-preview-375.png'),
