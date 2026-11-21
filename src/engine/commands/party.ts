@@ -150,3 +150,74 @@ export const keepOutOfSharing: ManagementCommand<z.infer<typeof KeepPrivateSchem
     return `Keep ${count} character${count === 1 ? '' : 's'} private when sharing ${campaign.name}`;
   },
 };
+
+const BenchSchema = z.strictObject({
+  characterId: z.string().min(1),
+  /** Used only when this device has no Bench yet. */
+  benchId: z.string().min(1),
+});
+
+/** The device's Bench campaign, if it has one. */
+export function findBench(campaigns: Record<string, Campaign>): Campaign | undefined {
+  return Object.values(campaigns).find((campaign) => campaign.bench);
+}
+
+/**
+ * Moves one of your characters to the Bench, a private holding place for characters not in a
+ * campaign yet. The first Bench copies the source campaign's rules; later moves add the source's
+ * books, so a benched character never loses an allowed choice.
+ */
+export const moveToBench: ManagementCommand<z.infer<typeof BenchSchema>> = {
+  name: 'moveToBench',
+  check: (ctx, input) => {
+    const parsed = BenchSchema.safeParse(input);
+    if (!parsed.success) return [{ level: 'block', reason: 'Character move details are invalid' }];
+    const { characterId, benchId } = parsed.data;
+    const record = Object.hasOwn(ctx.characters, characterId)
+      ? ctx.characters[characterId]
+      : undefined;
+    if (!record || record.build.partyOwner || record.build.playedBy === 'dm')
+      return [{ level: 'block', reason: 'Choose one of your own player characters' }];
+    const bench = findBench(ctx.campaigns);
+    if (!bench && Object.hasOwn(ctx.campaigns, benchId))
+      return [{ level: 'block', reason: `Campaign "${benchId}" already exists` }];
+    if (bench?.id === record.build.campaignId)
+      return [{ level: 'block', reason: `${record.build.name} is already on the Bench` }];
+    const source = ctx.campaigns[record.build.campaignId];
+    return source?.shared
+      ? [{ level: 'warn', reason: `${source.name}'s members will no longer see this character.` }]
+      : [];
+  },
+  apply: (draft, { characterId, benchId }, ctx) => {
+    const record = draft.characters[characterId]!;
+    const source = ctx.campaigns[record.build.campaignId];
+    let bench = findBench(draft.campaigns as Record<string, Campaign>);
+    if (!bench) {
+      const base = structuredClone(source ?? Object.values(ctx.campaigns)[0]!);
+      delete base.shared;
+      delete base.role;
+      bench = { ...base, id: benchId, name: 'Bench', bench: true };
+      draft.campaigns[benchId] = bench;
+    } else if (source) {
+      widenBooks(bench, source);
+    }
+    record.build.campaignId = bench.id;
+    return `Move ${record.build.name} to the Bench`;
+  },
+};
+
+/** Adds the source campaign's books and book parts to the Bench, never removing any. */
+function widenBooks(bench: Campaign, source: Campaign) {
+  for (const book of source.sources) {
+    const parts = source.sourceParts?.[book];
+    if (!bench.sources.includes(book)) {
+      bench.sources.push(book);
+      if (parts) bench.sourceParts = { ...bench.sourceParts, [book]: [...parts] };
+      continue;
+    }
+    const current = bench.sourceParts?.[book];
+    if (!current) continue;
+    if (!parts) delete bench.sourceParts![book];
+    else bench.sourceParts![book] = [...new Set([...current, ...parts])];
+  }
+}

@@ -86,6 +86,21 @@ export const PLACES: readonly FindEntry[] = [
     synonyms: ['change campaign', 'transfer character', 'copy to campaign', 'move to campaign'],
     target: { kind: 'go', path: '/' },
   },
+  {
+    id: 'go.bench',
+    group: 'go',
+    title: 'Bench',
+    detail: 'On Campaigns, Move a character to the Bench to keep it out of every campaign',
+    synonyms: [
+      'archive',
+      'archived characters',
+      'spare characters',
+      'unassigned',
+      'no campaign',
+      'reserve',
+    ],
+    target: { kind: 'go', path: '/' },
+  },
   // Screens
   {
     id: 'go.home',

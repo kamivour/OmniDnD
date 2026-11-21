@@ -46,6 +46,8 @@ export const CampaignSchema = z.strictObject({
   role: CampaignRoleSchema.optional(),
   /** True while this campaign is shared with a party (M24). Mirrors the cloud; not undoable. */
   shared: z.boolean().optional(),
+  /** The local Bench: characters not in any campaign yet. Never shared. */
+  bench: z.literal(true).optional(),
 });
 
 const HpEntrySchema = z.strictObject({

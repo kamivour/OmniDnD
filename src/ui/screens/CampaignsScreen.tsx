@@ -1,7 +1,17 @@
 import { lazy, Suspense, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { Link } from 'react-router';
-import { Copy, Download, MoveRight, Plus, Settings2, Trash2, Undo2, Users } from 'lucide-react';
+import {
+  Armchair,
+  Copy,
+  Download,
+  MoveRight,
+  Plus,
+  Settings2,
+  Trash2,
+  Undo2,
+  Users,
+} from 'lucide-react';
 import { registry } from '../../data/registry';
 import { freshSampleFile } from '../../data/seed';
 import { computeSheet } from '../../engine/calc/sheet';
@@ -11,7 +21,12 @@ import {
   duplicateCharacter,
   importCharacter,
 } from '../../engine/commands/management';
-import { copyToCampaign, moveToCampaign } from '../../engine/commands/party';
+import {
+  copyToCampaign,
+  findBench,
+  moveToBench,
+  moveToCampaign,
+} from '../../engine/commands/party';
 import type { Campaign } from '../../engine/schema';
 import { characterState, characterStore, type CharacterRecord } from '../../state/character-store';
 import { HpBar } from '../components/HpBar';
@@ -38,6 +53,8 @@ const ShareCampaign = import.meta.env.VITE_SUPABASE_URL
   : null;
 
 const path = (id: string) => encodeURIComponent(id);
+/** Move-sheet value for a Bench this device does not have yet. */
+const NEW_BENCH = '__new-bench__';
 /** Your own player characters can be copied or moved into other campaigns. */
 const movable = (record: CharacterRecord) =>
   !record.build.partyOwner && record.build.playedBy !== 'dm';
@@ -71,7 +88,11 @@ export function CampaignsScreen() {
   const doomedCount = Object.values(state.characters).filter(
     (record) => record.build.campaignId === deletingCampaign,
   ).length;
-  const campaigns = Object.values(state.campaigns);
+  // The Bench always sits last, after every real campaign.
+  const campaigns = Object.values(state.campaigns).sort(
+    (a, b) => Number(a.bench ?? false) - Number(b.bench ?? false),
+  );
+  const bench = findBench(state.campaigns);
   const duplicateRecord = duplicate ? state.characters[duplicate] : undefined;
   const moveChoices = campaigns.filter(
     (campaign) => moving && campaign.id !== state.characters[moving]?.build.campaignId,
@@ -131,7 +152,7 @@ export function CampaignsScreen() {
           </button>
         </div>
       )}
-      {Object.values(state.campaigns).map((campaign) => (
+      {campaigns.map((campaign) => (
         <CampaignCard
           key={campaign.id}
           campaign={campaign}
@@ -149,7 +170,10 @@ export function CampaignsScreen() {
           onMove={(id) => {
             opener.current = document.activeElement as HTMLElement;
             setMoving(id);
-            setMoveTarget(campaigns.find((other) => other.id !== campaign.id)?.id ?? '');
+            setMoveTarget(
+              campaigns.find((other) => other.id !== campaign.id)?.id ??
+                (campaign.bench ? '' : NEW_BENCH),
+            );
           }}
           onDelete={(id) => {
             opener.current = document.activeElement as HTMLElement;
@@ -240,14 +264,15 @@ export function CampaignsScreen() {
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            if (moving && moveTarget)
-              run(moveToCampaign, { characterId: moving, campaignId: moveTarget }, () =>
-                setMoving(null),
-              );
+            if (!moving || !moveTarget) return;
+            const close = () => setMoving(null);
+            if (moveTarget === NEW_BENCH || moveTarget === bench?.id)
+              run(moveToBench, { characterId: moving, benchId: crypto.randomUUID() }, close);
+            else run(moveToCampaign, { characterId: moving, campaignId: moveTarget }, close);
           }}
           className="flex flex-col gap-3"
         >
-          {moveChoices.length > 0 ? (
+          {moveChoices.length > 0 || !bench ? (
             <label className="flex flex-col gap-2">
               Move to campaign
               <select
@@ -260,8 +285,10 @@ export function CampaignsScreen() {
                   <option key={campaign.id} value={campaign.id}>
                     {campaign.name}
                     {campaign.shared ? ' · shared' : ''}
+                    {campaign.bench ? ' · not in a campaign' : ''}
                   </option>
                 ))}
+                {!bench && <option value={NEW_BENCH}>Bench · not in a campaign</option>}
               </select>
             </label>
           ) : (
@@ -374,7 +401,8 @@ function CampaignCard({
     <article aria-labelledby={headingId} className="rounded-card border border-border bg-surface">
       <header className="flex flex-wrap items-start gap-x-3 gap-y-2 border-b border-border p-4">
         <div className="min-w-0 grow basis-60">
-          <h2 id={headingId} className="font-display text-lg">
+          <h2 id={headingId} className="flex items-center gap-2 font-display text-lg">
+            {campaign.bench && <Armchair size={18} aria-hidden className="text-text-muted" />}
             {campaign.name}
             {campaign.shared && (
               <span className="ml-2 rounded-btn bg-surface-2 px-2 py-0.5 align-middle font-sans text-xs text-text-muted">
@@ -382,7 +410,14 @@ function CampaignCard({
               </span>
             )}
           </h2>
-          <p className="text-xs text-text-muted">{rulesSummary(campaign)}</p>
+          {campaign.bench ? (
+            <p className="text-xs text-text-muted">
+              Characters not in a campaign yet. Only on this device and never shared. Use Move to
+              send one to a campaign.
+            </p>
+          ) : (
+            <p className="text-xs text-text-muted">{rulesSummary(campaign)}</p>
+          )}
           {campaign.shared && <DmLine campaignId={campaign.id} />}
         </div>
         {campaign.shared && (
@@ -401,7 +436,7 @@ function CampaignCard({
           <Settings2 size={16} aria-hidden />
           Campaign settings
         </Link>
-        {ShareCampaign && syncConfig && (
+        {ShareCampaign && syncConfig && !campaign.bench && (
           <Suspense fallback={null}>
             <ShareCampaign campaign={campaign} />
           </Suspense>

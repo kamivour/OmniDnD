@@ -416,6 +416,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-21 — Bench: Move a character to a private, never-shared Bench to keep it out of every campaign; undoable; Find "archive".
 - 2026-11-21 — Update banner: open apps check for new versions and offer Update now, so devices no longer stay on old builds.
 - 2026-11-21 — M45 T5: browser checks at 375 and 1440 px cover tier and type filters, both themes, Plan this with Undo, and offline class, race, feat and spell pages.
 - 2026-11-21 — M45 T4: "Plan this" in the character compendium adds entries to a new Journal Plans tab; logged, undoable, learns nothing.

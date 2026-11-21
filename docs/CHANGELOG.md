@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 17:27 — Bench for spare characters
+
+- On Campaigns, **Move** a character to the **Bench** to keep it out of every campaign. The Bench is always last, stays on this device and is never shared.
+- Move a character from the Bench into any campaign when you need it. Undo management works.
+- Find "bench" or "archive" to get there.
+- Checks pass.
+
 ## 2026-11-21 17:23 — Update now banner
 
 - When a new version is out, a banner says so with **Update now**. Before, phones that kept the app open could stay on an old version for days.

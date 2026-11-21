@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { seedFile } from '../../data/seed';
-import { copyToCampaign, keepOutOfSharing, moveToCampaign } from './party';
+import { copyToCampaign, findBench, keepOutOfSharing, moveToBench, moveToCampaign } from './party';
 import { runManagement, undoManagement } from './management';
 
 it('bringing an owned character preserves the original and undoes exactly after JSON reload', () => {
@@ -138,4 +138,59 @@ it('copies into a private campaign under a new name and warns about books it lac
     META,
   );
   expect(moved.reasons.join(' ')).toContain('Table does not allow:');
+});
+
+it('the Bench holds characters outside any campaign and widens its books, never shrinks them', () => {
+  const state = workspace();
+  const fool = Object.keys(state.characters)[0]!;
+  const sourceId = state.characters[fool]!.build.campaignId;
+  const first = runManagement(
+    moveToBench,
+    state,
+    { characterId: fool, benchId: 'bench' },
+    registry,
+    META,
+  );
+  if (first.result !== 'ok') throw new Error(first.reasons.join());
+  const bench = findBench(first.next.campaigns)!;
+  expect(bench).toMatchObject({ id: 'bench', name: 'Bench', bench: true });
+  expect(bench.shared).toBeUndefined();
+  expect(bench.sources).toEqual(state.campaigns[sourceId]!.sources);
+  expect(first.next.characters[fool]!.build.campaignId).toBe('bench');
+  expect(first.event.text).toBe(`Move ${state.characters[fool]!.build.name} to the Bench`);
+
+  // A second character from a campaign with another book adds that book to the Bench.
+  const wider = structuredClone(first.next);
+  wider.campaigns.table!.sources = [...wider.campaigns.table!.sources, 'DMG'];
+  wider.characters.other!.build.campaignId = 'table';
+  const blocked = runManagement(
+    moveToBench,
+    wider,
+    { characterId: 'other', benchId: 'x' },
+    registry,
+    META,
+  );
+  expect(blocked).toMatchObject({ result: 'warn' });
+  const second = runManagement(
+    moveToBench,
+    wider,
+    { characterId: 'other', benchId: 'x' },
+    registry,
+    {
+      ...META,
+      force: true,
+    },
+  );
+  if (second.result !== 'ok') throw new Error(second.reasons.join());
+  expect(Object.keys(second.next.campaigns)).not.toContain('x');
+  expect(second.next.campaigns.bench!.sources).toContain('DMG');
+
+  expect(
+    runManagement(moveToBench, first.next, { characterId: fool, benchId: 'bench' }, registry, META),
+  ).toMatchObject({ result: 'blocked' });
+  const restored = undoManagement(first.next, [first.event], registry, {
+    ...META,
+    eventId: 'undo',
+  });
+  expect(restored).toMatchObject({ result: 'ok', next: state });
 });
