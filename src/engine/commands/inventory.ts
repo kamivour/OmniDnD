@@ -1,4 +1,6 @@
 import { sourceAllows } from '../calc/campaign-rules';
+import { containerLoads } from '../calc/inventory-weight';
+import { characterRegistry } from '../registry';
 import type { Draft } from 'immer';
 import { z } from 'zod';
 import {
@@ -86,6 +88,96 @@ function containerChecks(
   return [];
 }
 
+type StorageChange = {
+  instanceId: string;
+  container: string | null | undefined;
+  quantity: number;
+  /** A new record: its catalogue id, and a custom definition when it is being created. */
+  added?: { itemId: string; custom?: ItemDef };
+};
+
+/** Containers above an item, nearest first; stops at a broken or cyclic link. */
+function ancestors(items: CharacterData['build']['items'], instanceId: string): string[] {
+  const byId = new Map(items.map((item) => [item.instanceId, item]));
+  const result: string[] = [];
+  let current = byId.get(instanceId)?.container;
+  while (current && !result.includes(current) && current !== instanceId && byId.has(current)) {
+    result.push(current);
+    current = byId.get(current)!.container;
+  }
+  return result;
+}
+
+/**
+ * Warnings only (D246): an overloaded magic container and an extradimensional container put
+ * inside another one are the DM's call, so nothing is destroyed here.
+ */
+function storageWarnings(ctx: CommandContext, change: StorageChange): Check[] {
+  const { instanceId, container, quantity, added } = change;
+  const items = added
+    ? [
+        ...ctx.build.items,
+        { instanceId, itemId: added.itemId, ...(container ? { container } : {}) },
+      ]
+    : ctx.build.items.map((item) => {
+        if (item.instanceId !== instanceId || container === undefined) return item;
+        const rest = { ...item };
+        delete rest.container;
+        return container ? { ...rest, container } : rest;
+      });
+  const next = {
+    build: {
+      ...ctx.build,
+      items,
+      ...(added?.custom ? { customItems: [...(ctx.build.customItems ?? []), added.custom] } : {}),
+    },
+    live: {
+      ...ctx.live,
+      items: {
+        ...ctx.live.items,
+        [instanceId]: {
+          ...(ctx.live.items[instanceId] ?? { equipped: false, attuned: false }),
+          qty: quantity,
+        },
+      },
+    },
+  };
+  const registry = characterRegistry(ctx.registry, next.build);
+  const defOf = (id: string) => {
+    const owned = items.find((item) => item.instanceId === id);
+    const def = owned && registry.entries.get(owned.itemId);
+    return def?.kind === 'item' ? def : undefined;
+  };
+  const above = ancestors(items, instanceId);
+  const checks: Check[] = [];
+  const moved = added !== undefined || container !== undefined;
+  if (moved) {
+    const outer = above.map(defOf).find((def) => def?.storage?.extradimensional);
+    const inner = [instanceId, ...items.map((item) => item.instanceId)]
+      .filter((id) => id === instanceId || ancestors(items, id).includes(instanceId))
+      .map(defOf)
+      .find((def) => def?.storage?.extradimensional);
+    if (outer && inner)
+      checks.push(
+        warn(
+          `Putting ${inner.name} inside ${outer.name} destroys both and opens a one-way gate to the Astral Plane. Ask your DM; nothing is removed automatically.`,
+        ),
+      );
+  }
+  const before = new Map(containerLoads(ctx, ctx.registry).map((load) => [load.instanceId, load]));
+  for (const load of containerLoads(next, registry)) {
+    if (!load.overCapacity || !above.includes(load.instanceId)) continue;
+    const old = before.get(load.instanceId);
+    if (old?.overCapacity && old.pounds === load.pounds) continue;
+    checks.push(
+      warn(
+        `${load.name} would hold ${load.pounds} lb, over its ${load.capacityPounds} lb limit. An overloaded ${load.name} can rupture; ask your DM. Nothing is removed automatically.`,
+      ),
+    );
+  }
+  return checks;
+}
+
 /** A legacy constructor key must not become an intermediate Immer inverse-patch path. */
 function changeQuantity(
   draft: Draft<CharacterData>,
@@ -118,6 +210,15 @@ export const addInventoryItem: Command<AddInventoryItemPayload> = {
     const def = ctx.registry.entries.get(itemId);
     if (!def || def.kind !== 'item') return [block('That catalogue item is unavailable')];
     const checks = containerChecks(ctx, instanceId, container);
+    if (checks.length === 0)
+      checks.push(
+        ...storageWarnings(ctx, {
+          instanceId,
+          container,
+          quantity: parsed.data.quantity,
+          added: { itemId },
+        }),
+      );
     // DMG magic items are awarded by the DM, not chosen from campaign books (D116).
     // Custom items belong to the character, not to a book.
     if (
@@ -156,8 +257,16 @@ export const editInventoryItem: Command<EditInventoryItemPayload> = {
     const target = ownedItem(ctx, instanceId);
     if (!target) return [block('That item instance is unavailable')];
     const checks = baselineChecks(target, expected);
-    if (container !== undefined && (container ?? undefined) !== target.item.container)
-      checks.push(...containerChecks(ctx, instanceId, container));
+    const changed = container !== undefined && (container ?? undefined) !== target.item.container;
+    if (changed) checks.push(...containerChecks(ctx, instanceId, container));
+    if (checks.length === 0)
+      checks.push(
+        ...storageWarnings(ctx, {
+          instanceId,
+          container: changed ? container : undefined,
+          quantity: parsed.data.quantity,
+        }),
+      );
     return checks;
   },
   apply: (draft, { instanceId, quantity, container, notes }, ctx) => {
@@ -268,7 +377,15 @@ export const createCustomItem: Command<CreateCustomItemPayload> = {
       Object.hasOwn(ctx.live.items, instanceId)
     )
       return [block('That item instance id already exists')];
-    return containerChecks(ctx, instanceId, container);
+    const checks = containerChecks(ctx, instanceId, container);
+    return checks.length > 0
+      ? checks
+      : storageWarnings(ctx, {
+          instanceId,
+          container,
+          quantity: parsed.data.quantity,
+          added: { itemId: item.id, custom: item },
+        });
   },
   apply: (draft, { item, instanceId, quantity, container, notes }) => {
     const def = CustomItemSchema.parse(item);

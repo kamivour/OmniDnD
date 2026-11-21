@@ -625,3 +625,68 @@ describe('inventory command boundaries and history', () => {
     expect(session.state).toEqual(before);
   });
 });
+
+describe('magic containers', () => {
+  function bags(): CharacterState {
+    const state = inventoryState();
+    state.build.items.push(
+      { instanceId: 'holding', itemId: 'item.bag-of-holding' },
+      { instanceId: 'haversack', itemId: 'item.handy-haversack' },
+    );
+    state.live.items.holding = { qty: 1, equipped: false, attuned: false };
+    state.live.items.haversack = { qty: 1, equipped: false, attuned: false };
+    return state;
+  }
+
+  it('moves items into a Bag of Holding without warnings while it has room', () => {
+    const session = new Session(bags());
+    expect(
+      session.preview(editInventoryItem, { instanceId: 'bag', quantity: 1, container: 'holding' }),
+    ).toEqual({ result: 'ok', reasons: [] });
+  });
+
+  it('warns about the Astral gate, and moving still needs the player to confirm', () => {
+    const state = bags();
+    const session = new Session(state);
+    const payload = { instanceId: 'holding', quantity: 1, container: 'haversack' };
+    const preview = session.preview(editInventoryItem, payload);
+    expect(preview.result).toBe('warn');
+    expect(preview.reasons?.[0]).toMatch(
+      /^Putting Bag of Holding inside Handy Haversack destroys both .*Astral Plane/,
+    );
+    session.run(editInventoryItem, payload, true);
+    expect(session.state.live.items.holding?.qty).toBe(1);
+    expect(session.state.live.items.haversack?.qty).toBe(1);
+    session.undo();
+    expect(session.state).toEqual(state);
+    // A bag nested in an ordinary container still counts.
+    session.run(editInventoryItem, { instanceId: 'holding', quantity: 1, container: 'bag' });
+    expect(
+      session.preview(editInventoryItem, { instanceId: 'bag', quantity: 1, container: 'haversack' })
+        .result,
+    ).toBe('warn');
+  });
+
+  it('warns that an overloaded bag can rupture and destroys nothing', () => {
+    const session = new Session(bags());
+    const add = {
+      instanceId: 'ration-pile',
+      itemId: 'item.rations-1-day',
+      quantity: 61,
+      container: 'haversack',
+    };
+    const preview = session.preview(addInventoryItem, add);
+    expect(preview).toEqual({
+      result: 'warn',
+      reasons: [
+        'Handy Haversack would hold 122 lb, over its 120 lb limit. An overloaded Handy Haversack can rupture; ask your DM. Nothing is removed automatically.',
+      ],
+    });
+    session.run(addInventoryItem, add, true);
+    expect(session.state.live.items['ration-pile']?.qty).toBe(61);
+    // Taking some out raises no new warning.
+    expect(
+      session.preview(editInventoryItem, { instanceId: 'ration-pile', quantity: 60 }).result,
+    ).toBe('ok');
+  });
+});

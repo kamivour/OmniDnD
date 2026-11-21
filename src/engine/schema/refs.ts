@@ -551,6 +551,26 @@ export const ItemDefSchema = z
     cost: z.strictObject({ amount: z.number().min(0), unit: z.enum(CURRENCY_UNITS) }).optional(),
     /** Cost and weight are for this many (Arrows: 20). */
     bundle: z.int().min(2).optional(),
+    /** What one counts as, for items the player measures ("liter of water"); weight is per unit. */
+    unit: z.string().trim().min(1).max(40).optional(),
+    /** How much a container holds. Contents of an extradimensional one add no carried weight. */
+    storage: z
+      .strictObject({
+        pounds: z.number().positive().optional(),
+        cubicFeet: z.number().positive().optional(),
+        extradimensional: z.literal(true).optional(),
+        /** Separate spaces (Handy Haversack pouches); pounds and cubicFeet are their totals. */
+        spaces: z
+          .array(
+            z.strictObject({
+              name: z.string().min(1),
+              pounds: z.number().positive(),
+              cubicFeet: z.number().positive(),
+            }),
+          )
+          .optional(),
+      })
+      .optional(),
     weapon: z
       .strictObject({
         category: z.enum(['simple', 'martial']),
@@ -591,6 +611,10 @@ export const ItemDefSchema = z
   .refine((item) => (item.category === 'armor') === (item.armor !== undefined), {
     message: 'Armor, and only armor, has armor stats',
     path: ['armor'],
+  })
+  .refine((item) => item.storage === undefined || item.category === 'container', {
+    message: 'Only containers hold other items',
+    path: ['storage'],
   });
 
 /** Id prefix for a character's own items. Bundled packs never use it. */

@@ -9,7 +9,7 @@ import { Icon } from '../components/Icon';
 import { useCharacter } from '../hooks/useCharacter';
 import { ItemChargeControls } from './InventoryCharges';
 import { ItemUseControls } from './InventoryUse';
-import { inventoryItem, regainText, type InventoryItem } from './inventory-model';
+import { inventoryItem, itemCountText, regainText, type InventoryItem } from './inventory-model';
 
 const button =
   'grid min-h-11 min-w-11 place-items-center rounded-btn border border-border text-text hover:bg-surface-2 disabled:opacity-40';
@@ -39,7 +39,7 @@ export function InventoryItemCard({ item }: { item: InventoryItem }) {
       {item.notes && <p className="whitespace-pre-line wrap-anywhere">{item.notes}</p>}
       <dl className="grid grid-cols-2 gap-x-3 gap-y-2">
         <dt className="text-text-muted">Quantity</dt>
-        <dd>{item.quantity}</dd>
+        <dd>{itemCountText(item.quantity, def)}</dd>
         <dt className="text-text-muted">Equipment</dt>
         <dd>
           {item.equipped
@@ -52,7 +52,7 @@ export function InventoryItemCard({ item }: { item: InventoryItem }) {
         <dd>
           {def.weight === undefined
             ? 'Not recorded'
-            : `${def.weight} lb${def.bundle ? ` per ${def.bundle}` : ''}`}
+            : `${def.weight} lb${def.bundle ? ` per ${def.bundle}` : def.unit ? ` per ${def.unit}` : ''}`}
         </dd>
         {def.armor && (
           <>
@@ -144,7 +144,7 @@ export function InventoryItemControls({ instanceId }: { instanceId: string }) {
           aria-label={`Quantity: ${item.def.name}`}
           className="min-w-0 text-center text-sm tabular-nums wrap-anywhere"
         >
-          {item.quantity}
+          {itemCountText(item.quantity, item.def)}
         </output>
         <button
           type="button"

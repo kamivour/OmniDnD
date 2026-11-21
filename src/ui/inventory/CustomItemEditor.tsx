@@ -244,7 +244,20 @@ export function CustomItemEditor({
                   ))}
                 </select>
               </Field>
-              <Field label="Weight (lb)" htmlFor={`${prefix}-weight`}>
+              <Field label="Unit" htmlFor={`${prefix}-unit`}>
+                <input
+                  id={`${prefix}-unit`}
+                  value={fields.unit}
+                  maxLength={40}
+                  placeholder="Blank: each item"
+                  onChange={(event) => set('unit', event.target.value)}
+                  className={inputClass}
+                />
+              </Field>
+              <Field
+                label={fields.unit.trim() ? 'Weight per unit (lb)' : 'Weight (lb)'}
+                htmlFor={`${prefix}-weight`}
+              >
                 <input
                   id={`${prefix}-weight`}
                   inputMode="decimal"

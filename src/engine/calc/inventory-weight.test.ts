@@ -4,7 +4,7 @@ import { seedFile } from '../../data/seed';
 import { buildRegistry } from '../registry';
 import type { ItemDef } from '../schema';
 import { computeSheet, type CharacterState } from './sheet';
-import { coinWeight, inventoryWeight } from './inventory-weight';
+import { coinWeight, containerLoads, inventoryWeight } from './inventory-weight';
 
 interface Entry {
   id: string;
@@ -13,6 +13,7 @@ interface Entry {
   quantity?: number;
   container?: string;
   category?: ItemDef['category'];
+  storage?: ItemDef['storage'];
 }
 
 function world(...entries: Entry[]) {
@@ -26,17 +27,20 @@ function world(...entries: Entry[]) {
     entries.map(({ id, quantity = 1 }) => [id, { qty: quantity, equipped: false, attuned: false }]),
   );
   state.live.currency = { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
-  const definitions: ItemDef[] = entries.map(({ id, weight, bundle, category = 'gear' }) => ({
-    kind: 'item',
-    id: `item.${id}`,
-    name: `Recorded ${id}`,
-    ruleset: '5e-2014',
-    source: 'HB',
-    srd: false,
-    category,
-    ...(weight === undefined ? {} : { weight }),
-    ...(bundle === undefined ? {} : { bundle }),
-  }));
+  const definitions: ItemDef[] = entries.map(
+    ({ id, weight, bundle, category = 'gear', storage }) => ({
+      kind: 'item',
+      id: `item.${id}`,
+      name: `Recorded ${id}`,
+      ruleset: '5e-2014',
+      source: 'HB',
+      srd: false,
+      category,
+      ...(weight === undefined ? {} : { weight }),
+      ...(bundle === undefined ? {} : { bundle }),
+      ...(storage === undefined ? {} : { storage }),
+    }),
+  );
   return { state, references: buildRegistry([definitions], [], []) };
 }
 
@@ -98,6 +102,7 @@ describe('inventoryWeight', () => {
         },
       ],
       unknown: [],
+      stowed: [],
       complete: true,
       overCapacity: false,
     });
@@ -304,4 +309,74 @@ describe('inventoryWeight', () => {
       expect(() => inventoryWeight(state, references, capacity)).toThrow('finite nonnegative');
     },
   );
+});
+
+describe('extradimensional containers', () => {
+  const bag = { pounds: 500, cubicFeet: 64, extradimensional: true as const };
+  it('lists contents of a bag as stowed and counts only the bag itself', () => {
+    const { state, references } = world(
+      { id: 'bag', category: 'container', weight: 15, storage: bag },
+      { id: 'pouch', category: 'container', weight: 1, container: 'bag' },
+      { id: 'gold', weight: 2, quantity: 10, container: 'pouch' },
+      { id: 'rope', weight: 10 },
+    );
+    const weight = inventoryWeight(state, references);
+    expect(weight.itemPounds).toBe('25');
+    expect(weight.stowed.map((item) => [item.instanceId, item.containerId])).toEqual([
+      ['pouch', 'bag'],
+      ['gold', 'bag'],
+    ]);
+    expect(containerLoads(state, references)).toEqual([
+      {
+        instanceId: 'bag',
+        name: 'Recorded bag',
+        pounds: '21',
+        approximate: false,
+        unknown: 0,
+        capacityPounds: 500,
+        cubicFeet: 64,
+        extradimensional: true,
+        overCapacity: false,
+      },
+    ]);
+  });
+
+  it('flags an overloaded bag and counts an inner bag by its own weight only', () => {
+    const { state, references } = world(
+      { id: 'sack', category: 'container', weight: 5, storage: { ...bag, pounds: 20 } },
+      { id: 'bag', category: 'container', weight: 15, storage: bag, container: 'sack' },
+      { id: 'anvil', weight: 400, container: 'bag' },
+      { id: 'brick', weight: 6, container: 'sack' },
+      { id: 'mystery', container: 'sack' },
+    );
+    const loads = containerLoads(state, references);
+    expect(
+      loads.map((load) => [load.instanceId, load.pounds, load.unknown, load.overCapacity]),
+    ).toEqual([
+      ['sack', '21', 1, true],
+      ['bag', '400', 0, false],
+    ]);
+    expect(inventoryWeight(state, references).itemPounds).toBe('5');
+  });
+
+  it('keeps counting contents of ordinary containers and of broken paths', () => {
+    const { state, references } = world(
+      { id: 'backpack', category: 'container', weight: 5 },
+      { id: 'rope', weight: 10, container: 'backpack' },
+      { id: 'lost', weight: 3, container: 'nowhere' },
+    );
+    expect(inventoryWeight(state, references).itemPounds).toBe('18');
+    expect(containerLoads(state, references)).toEqual([]);
+  });
+
+  it('gives the bundled magic containers own-words capacities', () => {
+    const def = (id: string) => registry.get('item', id);
+    expect([def('item.bag-of-holding').weight, def('item.bag-of-holding').storage?.pounds]).toEqual(
+      [15, 500],
+    );
+    expect(def('item.handy-haversack').storage?.spaces?.map((space) => space.pounds)).toEqual([
+      20, 20, 80,
+    ]);
+    expect(def('item.portable-hole').storage?.extradimensional).toBe(true);
+  });
 });

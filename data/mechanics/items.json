@@ -423,5 +423,51 @@
     "use": {
       "activation": "special"
     }
+  },
+  {
+    "id": "item.bag-of-holding",
+    "category": "container",
+    "weight": 15,
+    "storage": {
+      "pounds": 500,
+      "cubicFeet": 64,
+      "extradimensional": true
+    }
+  },
+  {
+    "id": "item.handy-haversack",
+    "category": "container",
+    "weight": 5,
+    "storage": {
+      "pounds": 120,
+      "cubicFeet": 12,
+      "extradimensional": true,
+      "spaces": [
+        {
+          "name": "Side pouch",
+          "pounds": 20,
+          "cubicFeet": 2
+        },
+        {
+          "name": "Side pouch",
+          "pounds": 20,
+          "cubicFeet": 2
+        },
+        {
+          "name": "Central pouch",
+          "pounds": 80,
+          "cubicFeet": 8
+        }
+      ]
+    }
+  },
+  {
+    "id": "item.portable-hole",
+    "category": "container",
+    "weight": 0,
+    "storage": {
+      "cubicFeet": 282,
+      "extradimensional": true
+    }
   }
 ]

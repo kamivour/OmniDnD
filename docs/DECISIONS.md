@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D246 | 2026-11-21 | Items inside an extradimensional container add no carried weight. Overfilling or nesting magic containers only warns; the Haversack is tracked as one 120 lb total with its pouches listed as text, and volume is shown as text only. | The DM rules on ruptures and Astral gates; per-pouch and volume tracking would make the player type numbers for little gain. |
 | D245 | 2026-11-21 | Sorting spells by Name, School or Castable shows one flat list with the slot pips in a row above it; Level keeps the level sections. Filters and sort are view state and reset when you leave. | Level sections only make sense when sorted by level; view choices must never change the character. |
 | D244 | 2026-11-21 | Spare characters live on a Bench: a local campaign that is never shared and always listed last. The first Bench copies the source campaign's rules; later moves only add books, so a benched character keeps its allowed choices. | Characters need a campaign's rules to compute; a Bench keeps them valid without a separate archived state. |
 | D243 | 2026-11-21 | A new version shows an "Update now" banner instead of waiting for every window to close; the app checks on start, on return to the foreground and every 30 minutes. It never reloads by itself. | Installed phone apps rarely close fully, so friends stayed on old versions; a forced reload could interrupt a turn. |

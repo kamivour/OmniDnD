@@ -45,6 +45,11 @@ function resolveItem(owned: OwnedItem, state: InventoryState, registry: Registry
   };
 }
 
+/** Quantity with the custom unit when one is recorded, for example "40 × liter of water". */
+export function itemCountText(quantity: number, def: Pick<ItemDef, 'unit'>): string {
+  return def.unit ? `${quantity} × ${def.unit}` : String(quantity);
+}
+
 /** Resolve current item fields without rebuilding container groups for each live control. */
 export function inventoryItem(
   state: InventoryState,

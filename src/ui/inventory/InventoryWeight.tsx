@@ -1,4 +1,4 @@
-import { registry } from '../../data/registry';
+import { registry, registryFor } from '../../data/registry';
 import { currencyTotals } from '../../engine/calc/currency';
 import { inventoryWeight } from '../../engine/calc/inventory-weight';
 import { sheetBreakdowns } from '../../engine/calc/sheet-breakdowns';
@@ -15,6 +15,10 @@ export function InventoryWeight() {
   const notes = new Map(state.build.items.map((item) => [item.instanceId, item.notes]));
   const coins = currencyTotals(state.live.currency).coins.toString();
   const load = sheet.encumbrance;
+  const holderName = (instanceId: string) => {
+    const owned = state.build.items.find((item) => item.instanceId === instanceId);
+    return owned ? registryFor(state.build).get('item', owned.itemId).name : 'a container';
+  };
   return (
     <section
       aria-label="Carried weight"
@@ -115,6 +119,13 @@ export function InventoryWeight() {
           <li className="wrap-anywhere">
             {coins} coins at 50 coins per pound: {pounds(weight.coinPounds)}
           </li>
+          {weight.stowed.map((item) => (
+            <li key={item.instanceId} className="wrap-anywhere text-text-muted">
+              {item.name} ×{item.quantity}
+              {notes.get(item.instanceId) ? ` · ${notes.get(item.instanceId)}` : ''}: in{' '}
+              {holderName(item.containerId)}, no carried weight
+            </li>
+          ))}
         </ul>
       </details>
       <p className="text-xs text-text-muted">

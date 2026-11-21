@@ -4,6 +4,7 @@ import { useStore } from 'zustand';
 import { useTourAutostart } from '../tutorial/useTour';
 import { registry } from '../../data/registry';
 import { storageStatusStore } from '../../state/persistence';
+import { ContainerStorage } from '../inventory/ContainerStorage';
 import { armorEquipmentNotes } from '../../engine/calc/equipment';
 import { Icon } from '../components/Icon';
 import { Preview } from '../components/Preview';
@@ -137,6 +138,7 @@ export function InventoryScreen() {
                   )}
                   {item.locationNote && <p className="text-sm text-warn">{item.locationNote}</p>}
                   <InventoryItemControls instanceId={item.instanceId} />
+                  {item.def.storage && <ContainerStorage instanceId={item.instanceId} />}
                   <button
                     type="button"
                     aria-label={`Edit: ${item.def.name}`}

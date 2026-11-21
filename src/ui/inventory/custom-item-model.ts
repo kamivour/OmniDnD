@@ -14,8 +14,10 @@ export type CustomItemFields = {
   category: ItemDef['category'];
   /** Weapons and armor copy their stats from this catalogue item. */
   baseItemId: string;
-  /** Blank: the base item's weight, or none. */
+  /** Blank: the base item's weight, or none. With a unit, the weight of one unit. */
   weight: string;
+  /** Blank: counted in whole items. Otherwise what one quantity means, like "liter of water". */
+  unit: string;
   /** Gold pieces; blank for no recorded cost. */
   cost: string;
   rarity: ItemRarity | '';
@@ -42,6 +44,7 @@ export function emptyCustomItemFields(): CustomItemFields {
     category: 'magic',
     baseItemId: '',
     weight: '',
+    unit: '',
     cost: '',
     rarity: '',
     attunement: false,
@@ -66,6 +69,7 @@ export function customItemFields(def: ItemDef): CustomItemFields {
     category: def.category,
     baseItemId: def.baseItemId ?? '',
     weight: def.weight === undefined ? '' : String(def.weight),
+    unit: def.unit ?? '',
     cost: def.cost?.unit === 'gp' ? String(def.cost.amount) : '',
     rarity: def.rarity ?? '',
     attunement: def.attunement ?? false,
@@ -135,6 +139,8 @@ export function buildCustomItem(
   if (statsFrom && !base) errors.push(`Choose which ${fields.category} it is based on.`);
   const weight = number(fields.weight);
   if (Number.isNaN(weight)) errors.push('Weight must be zero or more.');
+  const unit = fields.unit.trim();
+  if (unit.length > 40) errors.push('Keep the unit to 40 characters or fewer.');
   const cost = number(fields.cost);
   if (Number.isNaN(cost)) errors.push('Cost must be zero or more.');
   const description = fields.description.trim();
@@ -187,6 +193,7 @@ export function buildCustomItem(
     ...(description ? { summary: { effect: description } } : {}),
     ...(fields.rarity ? { rarity: fields.rarity } : {}),
     ...((weight ?? base?.weight) !== undefined ? { weight: weight ?? base!.weight! } : {}),
+    ...(unit ? { unit } : {}),
     ...(cost !== undefined ? { cost: { amount: cost, unit: 'gp' as const } } : {}),
     ...(base?.weapon ? { weapon: structuredClone(base.weapon) } : {}),
     ...(base?.armor ? { armor: structuredClone(base.armor) } : {}),

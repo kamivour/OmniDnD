@@ -358,7 +358,7 @@ Follow [PLAN.md](PLAN.md#m44--phone-navigation-and-screen-cleanup) after M43. On
 - [x] T3: Hide the Game Clock behind a Settings switch
 - [x] T4: Remove the empty Details button where details open as a sheet
 - [x] T5: Put spell filters behind one Filter button and add Sort
-- [ ] T6: Weightless magic containers with capacity, contents and unit-based custom items
+- [x] T6: Weightless magic containers with capacity, contents and unit-based custom items
 - [ ] T7: Verify at both widths and across themes
 
 ### M42 — Recognizable icons and creation cards (planned)
@@ -416,6 +416,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-21 — M44 T6: Bag of Holding, Handy Haversack and Portable Hole show fill and Put in…; contents add no carried weight. Custom items take a unit.
 - 2026-11-21 — M44 T5: Spellbook search, Filter and Sort share one row; filters open in a sheet or popover with removable chips; non-Level sorts show one flat list.
 - 2026-11-21 — M44 T4: Details toggle only on wide screens with the side panel; an empty panel now shows a short hint.
 - 2026-11-21 — M44 T3: Game Clock card hidden on Home and Explore by default; Settings "Show game clock" brings it back; time still runs.

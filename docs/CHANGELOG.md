@@ -4,6 +4,14 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-21 18:11 — Magic containers and item units
+
+- Bag of Holding, Handy Haversack and Portable Hole show how full they are, with a Put in… button to move items inside.
+- Items inside them no longer count toward carried weight; the weight breakdown lists them separately.
+- Overfilling one, or putting one magic bag inside another, warns you and asks you to check with your DM. Nothing is destroyed automatically.
+- Custom items can have a unit (for example "liter of water"); weight is then per unit.
+- Checks pass.
+
 ## 2026-11-21 17:57 — Compact spell filters and Sort
 
 - The spellbook top now has one row: search, a Filter button and a Sort menu.

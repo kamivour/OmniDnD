@@ -8,6 +8,7 @@ import {
   emptyCustomItemFields,
   newCustomItemId,
 } from './custom-item-model';
+import { itemCountText } from './inventory-model';
 
 const id = 'item.custom.test';
 
@@ -82,6 +83,24 @@ describe('buildCustomItem', () => {
     expect(potion.use?.potion).toBe(true);
     expect(customItemFields(potion).potion).toBe(true);
     expect(buildCustomItem(customItemFields(potion), id, registry).item).toEqual(potion);
+  });
+
+  it('records a counting unit with a weight per unit', () => {
+    const water = buildCustomItem(
+      {
+        ...emptyCustomItemFields(),
+        name: 'Water',
+        category: 'gear',
+        unit: ' liter of water ',
+        weight: '2.2',
+      },
+      id,
+      registry,
+    ).item!;
+    expect([water.unit, water.weight]).toEqual(['liter of water', 2.2]);
+    expect(customItemFields(water).unit).toBe('liter of water');
+    expect(itemCountText(40, water)).toBe('40 × liter of water');
+    expect(itemCountText(3, { unit: undefined })).toBe('3');
   });
 
   it('lists what to fix', () => {
