@@ -668,9 +668,9 @@ test('prepared-caster review opens the existing manager on the first prepared cl
   await apply(page).click();
   await expect(rest(page)).toBeHidden();
   await expect(manage(page)).toBeVisible();
-  await expect(
-    manage(page).getByRole('combobox', { name: 'Casting class', exact: true }),
-  ).toHaveValue('class.cleric');
+  const castingClass = manage(page).getByRole('combobox', { name: 'Casting class', exact: true });
+  const search = manage(page).getByRole('searchbox', { name: 'Search available spells' });
+  await expect(castingClass).toHaveValue('class.cleric');
   await expect(manage(page).locator('[aria-label="Spell selection counts"]')).toContainText(
     '1 / 4 prepared',
   );
@@ -692,9 +692,23 @@ test('prepared-caster review opens the existing manager on the first prepared cl
     expect(available.y).toBeCloseTo(selected.y);
     await expect(manage(page).getByRole('region', { name: 'Available spells' })).toBeInViewport();
   }
-  await expect(manage(page).getByRole('button', { name: 'Done', exact: true })).toBeInViewport({
+  await manage(page)
+    .getByText('Change spell types (optional)', { exact: true })
+    .scrollIntoViewIfNeeded();
+  await expect(castingClass).not.toBeInViewport();
+  await expect(search).not.toBeInViewport();
+  const done = manage(page).getByRole('button', { name: 'Done', exact: true });
+  await expect(done).toBeInViewport({ ratio: 1 });
+  await expect(manage(page).getByRole('button', { name: 'Undo last command' })).toBeInViewport({
     ratio: 1,
   });
+  await manage(page).getByRole('button', { name: 'Replace prepared Bless' }).click();
+  await expect(search).toBeFocused();
+  await expect(search).toBeInViewport();
+  await search.fill('Aid');
+  await expect(manage(page).getByRole('button', { name: 'Choose Aid', exact: true })).toBeVisible();
+  await manage(page).getByRole('button', { name: 'Cancel replacement', exact: true }).click();
+  await castingClass.scrollIntoViewIfNeeded();
   await expect
     .poll(() => manage(page).evaluate((element) => element.contains(document.activeElement)))
     .toBe(true);

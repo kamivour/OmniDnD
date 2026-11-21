@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 03:13 — Scroll the full spell review
+
+- The casting class, search and spell lists scroll together. Undo and Done stay visible.
+- Choose Replace to bring the search box back into view and type a spell name. Checks pass.
+
 ## 2026-11-22 03:10 — More room to prepare spells after a long rest
 
 - On desktop, Manage spells opens wider and shows selected and available spells side by side.

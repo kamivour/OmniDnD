@@ -277,7 +277,7 @@ export function SpellManage({
       )}
     >
       {details ? (
-        <>
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
           <Field label="Casting class" htmlFor={classInputId}>
             <select
               id={classInputId}
@@ -361,7 +361,7 @@ export function SpellManage({
           </Field>
           <div
             className={cx(
-              'flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto pr-1',
+              'flex min-w-0 shrink-0 flex-col gap-4',
               desktopWide && 'lg:grid lg:grid-cols-2 lg:content-start lg:items-start',
             )}
           >
@@ -517,7 +517,7 @@ export function SpellManage({
               </>
             )}
           </div>
-        </>
+        </div>
       ) : (
         <p className="text-sm text-text-muted">This character has no spellcasting class.</p>
       )}
