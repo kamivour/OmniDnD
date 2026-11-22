@@ -18,10 +18,12 @@ test('known infusion picker searches and learns separate replica recipes at the 
   const row = page.getByRole('listitem').filter({ hasText: 'Infusions: pick 3' });
   await row.getByRole('button', { name: 'Choose', exact: true }).click();
   await expect(row.getByText(/Artificer 2 · 1\/4 infusions known/)).toBeVisible();
-  await row.getByText('Already known (1)', { exact: true }).click();
-  await expect(row.getByText('Infusion: Enhanced Weapon', { exact: true })).toBeVisible();
   const standard = row.getByRole('group', { name: 'Standard infusions', exact: true });
   const recipes = row.getByRole('group', { name: 'Replicate Magic Item', exact: true });
+  const weapon = standard.getByRole('checkbox', { name: 'Infusion: Enhanced Weapon', exact: true });
+  await expect(weapon).toBeChecked();
+  await expect(weapon).toBeDisabled();
+  await expect(standard.getByText('Already known', { exact: true })).toBeVisible();
   await expect(
     standard.getByRole('checkbox', { name: 'Infusion: Homunculus Servant', exact: true }),
   ).toBeVisible();
@@ -49,10 +51,13 @@ test('known infusion picker searches and learns separate replica recipes at the 
   await page.reload();
   const remaining = page.getByRole('listitem').filter({ hasText: 'Infusions: pick 1' });
   await remaining.getByRole('button', { name: 'Choose', exact: true }).click();
-  await remaining.getByText('Already known (3)', { exact: true }).click();
-  const learnedRecipes = remaining.getByRole('group', { name: 'Known Replicate Magic Item' });
-  await expect(learnedRecipes.getByText('Bag of Holding', { exact: true })).toBeVisible();
-  await expect(learnedRecipes.getByText('Sending Stones', { exact: true })).toBeVisible();
+  await expect(remaining.getByText(/3\/4 infusions known · 1 open/)).toBeVisible();
+  const learnedRecipes = remaining.getByRole('group', {
+    name: 'Replicate Magic Item',
+    exact: true,
+  });
+  await expect(learnedRecipes.getByRole('checkbox', { name: 'Bag of Holding' })).toBeChecked();
+  await expect(learnedRecipes.getByRole('checkbox', { name: 'Sending Stones' })).toBeChecked();
   expect((await reviewState(page, file.build.id)).build.featureIds).toEqual([
     ...file.build.featureIds,
     'feature.artificer.infusion-replicate-magic-item-bag-of-holding',
@@ -71,6 +76,60 @@ test('known infusion picker searches and learns separate replica recipes at the 
   await saved(page);
   await page.goto(`/characters/${file.build.id}/todo`);
   await expect(page.getByText('Infusions: pick 3', { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('Artificer can mix four infusions at level 2 and replace one at level 3', async ({ page }) => {
+  const file = reviewFile('level-up-infusions');
+  const classId = 'class.artificer';
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.campaign.hpMethod = 'average';
+  file.build.classes = [{ classId, level: 1 }];
+  file.build.hpEntries = [{ classId, level: 1, method: 'max', value: 8 }];
+  file.build.spells = [];
+  file.build.proficiencyPicks = {};
+  file.build.featureIds = [];
+  await importReview(page, file, 'sheet');
+  const open = page.getByRole('button', { name: 'Level up', exact: true });
+  const form = page.getByRole('form', { name: 'Level up character' });
+  const apply = form.getByRole('button', { name: 'Apply level up', exact: true });
+  await open.click();
+  await expect(form.getByText(/0\/4 infusions known · 4 open/)).toBeVisible();
+  for (const name of [
+    'Infusion: Enhanced Weapon',
+    'Infusion: Returning Weapon',
+    'Bag of Holding',
+    'Sending Stones',
+  ]) {
+    await form.getByRole('checkbox', { name, exact: true }).check();
+  }
+  await expect(form.getByRole('checkbox', { name: 'Alchemy Jug', exact: true })).toBeDisabled();
+  await apply.click();
+  await expect(form).toBeHidden();
+  await saved(page);
+  const before = (await reviewState(page, file.build.id)).build.featureIds;
+  expect(before).toHaveLength(4);
+  const weapon = 'feature.artificer.infusion-enhanced-weapon';
+  expect(before).toContain(weapon);
+  await open.click();
+  await form
+    .getByRole('combobox', { name: 'Infusion to replace', exact: true })
+    .selectOption(weapon);
+  await expect(apply).toBeDisabled();
+  await form
+    .getByRole('combobox', { name: 'Replacement infusion', exact: true })
+    .selectOption({ label: 'Alchemy Jug' });
+  await apply.click();
+  await expect(form).toBeHidden();
+  await saved(page);
+  expect((await reviewState(page, file.build.id)).build.featureIds).toEqual([
+    ...before.map((id) =>
+      id === weapon ? 'feature.artificer.infusion-replicate-magic-item-alchemy-jug' : id,
+    ),
+  ]);
+  await page.getByRole('button', { name: 'Undo last command', exact: true }).click();
+  await saved(page);
+  expect((await reviewState(page, file.build.id)).build.featureIds).toEqual(before);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 

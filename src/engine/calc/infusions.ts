@@ -1,10 +1,12 @@
 import replicas from '../../../data/content/infusion-replicas.json' with { type: 'json' };
-import type { CharacterBuild, LiveState, ItemDef, FeatureDefenses } from '../schema';
+import type { Campaign, CharacterBuild, LiveState, ItemDef, FeatureDefenses } from '../schema';
 import type { DamageType } from '../rules2014';
 import type { Registry } from '../registry';
+import { sourceAllows } from './campaign-rules';
 
 export const INFUSION_PREFIX = 'feature.artificer.infusion-';
 export const REPLICATE_INFUSION = `${INFUSION_PREFIX}replicate-magic-item`;
+export const COMMON_REPLICA_PREFIX = `${REPLICATE_INFUSION}-common-`;
 
 /** Tasha's named tables. Each item is a separate known infusion. */
 export const REPLICATE_RECIPES = Object.entries(replicas).flatMap(([level, names]) =>
@@ -17,7 +19,7 @@ export const REPLICATE_RECIPES = Object.entries(replicas).flatMap(([level, names
 const recipeLevels = new Map(REPLICATE_RECIPES.map(({ id, level }) => [id, level]));
 
 export const isReplicateInfusion = (id: string) =>
-  id === REPLICATE_INFUSION || recipeLevels.has(id);
+  id === REPLICATE_INFUSION || recipeLevels.has(id) || id.startsWith(COMMON_REPLICA_PREFIX);
 export const RESISTANT_ARMOR_TYPES = [
   'acid',
   'cold',
@@ -44,6 +46,24 @@ export const infusionsKnownAt = (level: number) =>
   INFUSIONS_KNOWN.reduce((total, [from, count]) => (level >= from ? count : total), 0);
 export const infusionMinimumLevel = (id: string) =>
   recipeLevels.get(id) ?? INFUSIONS[infusionKey(id)]?.level ?? 2;
+
+export function infusionOptionIds(registry: Registry, campaign: Campaign, level: number) {
+  return [...registry.entries.values()]
+    .filter((entry) => {
+      if (
+        entry.kind !== 'feature' ||
+        !entry.id.startsWith(INFUSION_PREFIX) ||
+        infusionMinimumLevel(entry.id) > level ||
+        !sourceAllows(campaign, entry)
+      )
+        return false;
+      if (!entry.id.startsWith(COMMON_REPLICA_PREFIX)) return true;
+      const itemId = `item.${entry.id.slice(COMMON_REPLICA_PREFIX.length)}`;
+      const item = registry.entries.get(itemId);
+      return item?.kind === 'item' && sourceAllows(campaign, item);
+    })
+    .map(({ id }) => id);
+}
 type Gear =
   | 'weapon'
   | 'thrown'

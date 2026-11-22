@@ -23,9 +23,11 @@ import srdRaces from '../../data/srd/races.json';
 import srdSpells from '../../data/srd/spells.json';
 import srdSubclasses from '../../data/srd/subclasses.json';
 import { buildRegistry, characterRegistry } from '../engine/registry';
-import { REPLICATE_RECIPES } from '../engine/calc/infusions';
+import { COMMON_REPLICA_PREFIX, REPLICATE_RECIPES } from '../engine/calc/infusions';
+import { itemType } from '../engine/catalog';
 import {
   type CharacterBuild,
+  ItemDefSchema,
   MechanicsOverlayPackSchema,
   RefPackSchema,
   SummaryOverlayPackSchema,
@@ -45,6 +47,16 @@ export const srdPacks = {
   subclasses: srdSubclasses,
 };
 
+const commonReplicaRecipes = [...srdMagicItems, ...contentItems, ...tashaItems, ...xanatharItems]
+  .filter((item) => 'rarity' in item && item.rarity === 'common')
+  .map((item) => ItemDefSchema.parse(item))
+  .filter((item) => !['potion', 'scroll'].includes(itemType(item)))
+  .map(({ id, name }) => ({
+    id: `${COMMON_REPLICA_PREFIX}${id.slice('item.'.length)}`,
+    name,
+    level: 2,
+  }));
+
 /** Non-SRD entries in our own words (DATA.md §2). */
 export const contentPacks = {
   backgrounds: contentBackgrounds,
@@ -56,7 +68,7 @@ export const contentPacks = {
   races: contentRaces,
   spells: contentSpells,
   subclasses: contentSubclasses,
-  infusionRecipes: REPLICATE_RECIPES.map(({ id, name, level }) => ({
+  infusionRecipes: [...REPLICATE_RECIPES, ...commonReplicaRecipes].map(({ id, name, level }) => ({
     kind: 'feature',
     id,
     name: `Replicate Magic Item: ${name}`,

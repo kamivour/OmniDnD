@@ -7,6 +7,7 @@ import { infuseItem, endInfusion } from './infusions';
 import { resolveChoices } from './resolve-choices';
 import { pendingChoices } from '../calc/pending-choices';
 import {
+  COMMON_REPLICA_PREFIX,
   INFUSION_PREFIX,
   infusionLimit,
   activeInfusions,
@@ -224,7 +225,10 @@ describe('learning replicate recipes', () => {
     state.campaign.sources = ['PHB', 'TCE'];
     state.build.featureIds = [];
     const ids = picks(state)?.optionIds ?? [];
-    expect(ids.filter((id) => id.startsWith(`${REPLICATE_INFUSION}-`))).toHaveLength(count);
+    const tableIds = ids.filter(
+      (id) => id.startsWith(`${REPLICATE_INFUSION}-`) && !id.startsWith(COMMON_REPLICA_PREFIX),
+    );
+    expect(tableIds).toHaveLength(count);
   });
 
   it('learns two separate level-2 recipes, keeps the legacy slot and undoes them together', () => {

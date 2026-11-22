@@ -130,6 +130,15 @@ export const PLACES: readonly FindEntry[] = [
     needsCharacter: true,
   },
   {
+    id: 'go.advancement',
+    group: 'go',
+    title: 'Level up',
+    detail: 'Sheet: advance a class or replace an Artificer infusion',
+    synonyms: ['advance', 'advancement', 'replace infusion', 'swap infusion'],
+    target: { kind: 'go', path: 'sheet', anchor: 'advancement' },
+    needsCharacter: true,
+  },
+  {
     id: 'go.spells',
     group: 'go',
     title: 'Spells',

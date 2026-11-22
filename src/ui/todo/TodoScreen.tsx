@@ -4,16 +4,15 @@ import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { chooseFeatSpells, featSpellCandidates, resolveChoices } from '../../engine/commands';
 import type { Ability } from '../../engine/calc/abilities';
-import { artificerLevel, INFUSION_PREFIX, infusionsKnownAt } from '../../engine/calc/infusions';
+import { artificerLevel, INFUSION_PREFIX } from '../../engine/calc/infusions';
 import type { PendingChoice } from '../../engine/calc/pending-choices';
 import { computeSheet, type CharacterState } from '../../engine/calc/sheet';
 import type { Skill } from '../../engine/rules2014';
 import { deviceStore } from '../../state/device-settings';
 import { OptionGuide } from '../components/OptionGuide';
-import { inputClass } from '../components/fields';
 import { SectionLabel } from '../components/SectionLabel';
 import { useCommand } from '../commands/command-context';
-import { groupInfusionOptions } from '../features/infusion-options';
+import { InfusionPicker } from '../features/InfusionPicker';
 import { AsiPick, SubclassPick } from '../level/LevelUpChoices';
 import {
   emptyPicks,
@@ -172,7 +171,6 @@ function ChoiceForm({
   const hints = useStore(deviceStore, (settings) => settings.beginnerHints);
   const [picks, setPicks] = useState<LevelPicks>(emptyPicks);
   const [chosen, setChosen] = useState<string[]>([]);
-  const [query, setQuery] = useState('');
   const set = (patch: Partial<LevelPicks>) => setPicks({ ...picks, ...patch });
   const toggle = (id: string) =>
     setChosen(
@@ -187,8 +185,9 @@ function ChoiceForm({
   const feats = featOptions(state, registry);
   const sheet = computeSheet(state, registry);
   const owned = new Set(state.build.featureIds);
+  const infusions = item.prefix === INFUSION_PREFIX;
   const options =
-    item.kind === 'option'
+    item.kind === 'option' && !infusions
       ? (item.optionIds ?? [])
           .filter((id) => !owned.has(id))
           .map((id) => ({ id, name: registry.get('feature', id).name }))
@@ -209,33 +208,6 @@ function ChoiceForm({
           : item.kind === 'option'
             ? { features: chosen }
             : { expertise: chosen as Skill[] };
-  const infusions = item.prefix === INFUSION_PREFIX;
-  const level = infusions ? artificerLevel(state.build) : 0;
-  const known = infusions
-    ? state.build.featureIds.filter((id) => id.startsWith(INFUSION_PREFIX))
-    : [];
-  const visibleOptions = infusions
-    ? options.filter(
-        ({ id, name }) =>
-          chosen.includes(id) || name.toLowerCase().includes(query.trim().toLowerCase()),
-      )
-    : options;
-  const renderOptions = (rows: typeof options) =>
-    rows.map((option) => (
-      <label
-        key={option.id}
-        className="flex min-h-11 items-center gap-2 text-sm capitalize text-text"
-      >
-        <input
-          type="checkbox"
-          checked={chosen.includes(option.id)}
-          disabled={!chosen.includes(option.id) && chosen.length >= item.count}
-          onChange={() => toggle(option.id)}
-          className="size-4 shrink-0 accent-(--omni-accent)"
-        />
-        {option.name}
-      </label>
-    ));
 
   return (
     <div className="flex flex-col gap-3">
@@ -256,72 +228,37 @@ function ChoiceForm({
         <AsiPick feats={feats} picks={picks} set={set} campaign={state.campaign} />
       )}
       {infusions && (
-        <div className="flex flex-col gap-2 text-sm">
-          <p className="text-text-muted">
-            Artificer {level} · {known.length}/{infusionsKnownAt(level)} infusions known. Each
-            standard infusion or Replicate Magic Item recipe uses one pick from this limit.
-          </p>
-          {known.length > 0 && (
-            <details>
-              <summary className="min-h-11 cursor-pointer py-3">
-                Already known ({known.length})
-              </summary>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {groupInfusionOptions(known.map((id) => ({ id, name: nameOf(id) }))).map(
-                  (group) => (
-                    <div key={group.label} role="group" aria-label={`Known ${group.label}`}>
-                      <p className="font-semibold text-text">{group.label}</p>
-                      <ul className="list-disc pl-5">
-                        {group.options.map(({ id, name }) => (
-                          <li key={id}>{name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ),
-                )}
-              </div>
-            </details>
-          )}
-          <label className="flex flex-col gap-1">
-            Search infusions
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              className={inputClass}
-            />
-          </label>
-        </div>
+        <InfusionPicker
+          level={artificerLevel(state.build)}
+          count={item.count}
+          known={state.build.featureIds.filter((id) => id.startsWith(INFUSION_PREFIX))}
+          options={item.optionIds ?? []}
+          chosen={chosen}
+          onChange={setChosen}
+        />
       )}
-      {options.length > 0 && (
+      {!infusions && options.length > 0 && (
         <fieldset className="flex flex-col">
           <legend className="mb-1 text-sm text-text">
             Pick {item.count} ({chosen.length} chosen)
           </legend>
-          {infusions ? (
-            <div className="grid min-w-0 gap-3 sm:grid-cols-2">
-              {groupInfusionOptions(visibleOptions).map((group) => (
-                <div
-                  key={group.label}
-                  role="group"
-                  aria-label={group.label}
-                  className="min-w-0 rounded-btn border border-border px-3 py-2"
-                >
-                  <p className="text-sm font-semibold text-text">{group.label}</p>
-                  <div className="max-h-44 overflow-y-auto sm:max-h-72">
-                    {renderOptions(group.options)}
-                  </div>
-                </div>
-              ))}
-              {visibleOptions.length === 0 && (
-                <p className="text-sm text-text-muted">No infusions match your search.</p>
-              )}
-            </div>
-          ) : (
-            <div className="grid max-h-72 gap-1 overflow-y-auto sm:grid-cols-2">
-              {renderOptions(visibleOptions)}
-            </div>
-          )}
+          <div className="grid max-h-72 gap-1 overflow-y-auto sm:grid-cols-2">
+            {options.map(({ id, name }) => (
+              <label
+                key={id}
+                className="flex min-h-11 items-center gap-2 text-sm capitalize text-text"
+              >
+                <input
+                  type="checkbox"
+                  checked={chosen.includes(id)}
+                  disabled={!chosen.includes(id) && chosen.length >= item.count}
+                  onChange={() => toggle(id)}
+                  className="size-4 shrink-0 accent-(--omni-accent)"
+                />
+                {name}
+              </label>
+            ))}
+          </div>
         </fieldset>
       )}
       <div>

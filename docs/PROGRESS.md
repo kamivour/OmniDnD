@@ -332,6 +332,7 @@ Details in [PLAN.md](PLAN.md).
 - [x] Check phone and desktop layouts
 - [x] Restrict newly learned infusions by Artificer level and known limit in To do, creation and level-up
 - [x] List each Tasha’s replica recipe at its Artificer level and show known infusions in To do
+- [x] Show learned and open infusion slots together, add eligible common recipes, and support one replacement per Artificer level-up
 - [x] Add the three cannon forms, audit all bundled companion templates and compute spell-summon forms and upcasting
 - [ ] Reproduce the friend's missing Artificer using his actual campaign settings and deployed app
 
@@ -426,6 +427,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-22 — Artificers can learn and replace infusions during Level up, see previously learned choices, and choose eligible common magic-item recipes.
 - 2026-11-22 — Separated standard infusions from Replicate Magic Item recipes in the Artificer picker and rest review. Each recipe uses one known slot.
 - 2026-11-22 — Level up offers prepared-spell picks separately from subclass grants. Battle Smith gains Warding Bond at level 5.
 - 2026-11-22 — Compendium finds Rhythm-Maker’s Drum with straight, curly or omitted apostrophes and hyphens.

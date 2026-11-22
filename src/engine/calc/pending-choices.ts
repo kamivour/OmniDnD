@@ -1,5 +1,5 @@
 import { optionalRules, sourceAllows } from './campaign-rules';
-import { INFUSIONS_KNOWN, infusionMinimumLevel, INFUSION_PREFIX } from './infusions';
+import { INFUSIONS_KNOWN, infusionOptionIds, INFUSION_PREFIX } from './infusions';
 import type { Registry } from '../registry';
 import { featSpellSources } from './feat-spells';
 import { openProficiencyPicks } from './proficiencies';
@@ -269,16 +269,15 @@ export function familyOptionIds(
   campaign: CharacterState['campaign'],
   classLevel?: number,
 ): string[] {
+  if (family.prefix === INFUSION_PREFIX)
+    return infusionOptionIds(registry, campaign, classLevel ?? 20);
   const tasha = optionalRules(campaign).optionalClassFeatures ? (family.tasha ?? []) : [];
   return [...registry.entries.values()]
     .filter(
       (row) =>
         row.kind === 'feature' &&
         (row.id.startsWith(family.prefix) || tasha.includes(row.id)) &&
-        sourceAllows(campaign, row) &&
-        (family.prefix !== INFUSION_PREFIX ||
-          classLevel === undefined ||
-          infusionMinimumLevel(row.id) <= classLevel),
+        sourceAllows(campaign, row),
     )
     .map((row) => row.id);
 }
@@ -349,7 +348,9 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
       const allowance = classTotal + featAllowance(family.prefix);
       const open = Math.min(
         Math.max(0, Math.min(classTotal, allowance - taken)),
-        options.length - taken,
+        family.prefix === INFUSION_PREFIX
+          ? options.filter((id) => !build.featureIds.includes(id)).length
+          : options.length - taken,
       );
       if (open > 0)
         items.push({

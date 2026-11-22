@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D254 | 2026-11-22 | Artificers may replace one known infusion during an Artificer level-up. The replaced infusion ends on any tracked equipment. | Keep learning, replacement and Undo together |
 | D253 | 2026-11-22 | Prepared casters can fill open preparation slots in Level up or later in Spells. Always-prepared spells use none of those slots. | Put both kinds of spell gains where players review the new level |
 | D252 | 2026-11-22 | Use the printed 2014-edition expansion rules and their errata when listing metadata differs. In Xanathar’s, Boots of False Tracks need no attunement and Ersatz Eye does. | Keep the Compendium consistent with the books used at the table |
 | D250 | 2026-11-22 | Compendium reads verified equipment bases for reference. A magic item with several possible bases offers a preview picker that stays on the library page. | Show the correct profile for the chosen base and preserve existing character mechanics |

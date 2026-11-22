@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 11:05 — Learn and replace Artificer infusions
+
+- Check how many choices are open and see already-known infusions like Enhanced Weapon in the same list.
+- Learn from both lists during Level up or in To do. Replicate Magic Item also lists eligible common items from your campaign books.
+- Replace one known infusion when gaining an Artificer level. Its tracked item infusion ends and Undo restores it. Checks pass.
+
 ## 2026-11-22 10:20 — Group Artificer infusion choices
 
 - Pick standard infusions or choose a specific item under Replicate Magic Item.

@@ -7,6 +7,13 @@ import { levelUp } from './level';
 import { freshState, Session } from './test-utils';
 import { pendingChoices } from '../calc/pending-choices';
 import { resolveChoices } from './resolve-choices';
+import {
+  COMMON_REPLICA_PREFIX,
+  INFUSION_PREFIX,
+  infusionLimit,
+  infusionOptionIds,
+  isReplicateInfusion,
+} from '../calc/infusions';
 
 function artificer(level: number, subclassId?: string): CharacterState {
   const state = structuredClone(freshState);
@@ -76,6 +83,145 @@ describe('Artificer', () => {
       (item) => item.prefix === 'feature.artificer.infusion-',
     );
     expect(row?.count ?? 0).toBe(count);
+  });
+
+  it('offers all standard Tasha infusions by Artificer level', () => {
+    const state = artificer(2);
+    const standardNames = [
+      [
+        'armor-of-magical-strength',
+        'enhanced-arcane-focus',
+        'enhanced-defense',
+        'enhanced-weapon',
+        'homunculus-servant',
+        'mind-sharpener',
+        'repeating-shot',
+        'returning-weapon',
+      ],
+      [
+        'boots-of-the-winding-path',
+        'radiant-weapon',
+        'repulsion-shield',
+        'resistant-armor',
+        'spell-refueling-ring',
+      ],
+      ['helm-of-awareness'],
+      ['arcane-propulsion-armor'],
+    ];
+    for (const [index, level] of [2, 6, 10, 14].entries()) {
+      const choices = infusionOptionIds(registry, state.campaign, level);
+      expect(choices.filter((id) => !isReplicateInfusion(id)).sort()).toEqual(
+        standardNames
+          .slice(0, index + 1)
+          .flat()
+          .map((suffix) => INFUSION_PREFIX + suffix)
+          .sort(),
+      );
+    }
+    expect([1, 2, 6, 10, 14, 18].map((level) => infusionLimit(artificer(level).build))).toEqual([
+      0, 2, 3, 4, 5, 6,
+    ]);
+  });
+
+  it('offers enabled common catalog recipes at level 2, excluding potions, scrolls and uncommon items', () => {
+    const { campaign } = artificer(2);
+    const clockwork = COMMON_REPLICA_PREFIX + 'clockwork-amulet';
+    const tattoo = COMMON_REPLICA_PREFIX + 'spellwrought-tattoo-level-1';
+    const current = infusionOptionIds(registry, campaign, 2);
+    expect(current).toContain(tattoo);
+    expect(current).not.toContain(clockwork);
+    expect(
+      infusionOptionIds(registry, { ...campaign, sources: ['PHB', 'TCE', 'XGE'] }, 2),
+    ).toContain(clockwork);
+    expect(
+      infusionOptionIds(registry, { ...campaign, sourceParts: { TCE: ['options'] } }, 2),
+    ).not.toContain(tattoo);
+    for (const suffix of [
+      'potion-of-healing-common',
+      'spell-scroll-cantrip',
+      'spellwrought-tattoo-level-2',
+    ])
+      expect(registry.entries.has(COMMON_REPLICA_PREFIX + suffix)).toBe(false);
+  });
+
+  it('fills remaining shared picks from either list and cannot learn a duplicate', () => {
+    const state = artificer(2);
+    state.build.featureIds = [
+      'enhanced-weapon',
+      'enhanced-defense',
+      'replicate-magic-item-bag-of-holding',
+    ].map((name) => INFUSION_PREFIX + name);
+    const session = new Session(state);
+    const learn = (...names: string[]) => ({
+      classId: 'class.artificer',
+      choices: { features: names.map((name) => INFUSION_PREFIX + name) },
+    });
+    const row = pendingChoices(state, registry).find(({ prefix }) => prefix === INFUSION_PREFIX);
+    expect(row?.count).toBe(1);
+    expect(session.preview(resolveChoices, learn('enhanced-weapon')).result).toBe('blocked');
+    expect(
+      session.preview(
+        resolveChoices,
+        learn('returning-weapon', 'replicate-magic-item-sending-stones'),
+      ).result,
+    ).toBe('blocked');
+    session.run(resolveChoices, learn('replicate-magic-item-sending-stones'));
+    expect(session.state.build.featureIds).toHaveLength(4);
+  });
+
+  it('replaces one known infusion at an Artificer level and ends its application with Undo', () => {
+    const state = artificer(5, 'subclass.artificer.artillerist');
+    const remove = INFUSION_PREFIX + 'repeating-shot';
+    const add = INFUSION_PREFIX + 'replicate-magic-item-boots-of-elvenkind';
+    state.build.featureIds = [
+      remove,
+      ...['enhanced-weapon', 'mind-sharpener', 'returning-weapon'].map(
+        (name) => INFUSION_PREFIX + name,
+      ),
+    ];
+    state.build.items = [{ instanceId: 'bow', itemId: 'item.crossbow-light' }];
+    state.live.items = { bow: { qty: 1, equipped: true, attuned: true } };
+    state.live.infusions = [{ instanceId: 'bow', featureId: remove }];
+    const session = new Session(state);
+    const before = structuredClone(state);
+    const classId = 'class.artificer';
+    const infusionSwap = { remove, add };
+    expect(
+      session.preview(levelUp, {
+        classId,
+        infusionSwap: { remove, add: INFUSION_PREFIX + 'helm-of-awareness' },
+      }).result,
+    ).toBe('blocked');
+    expect(
+      session.preview(levelUp, {
+        classId,
+        infusionSwap: { remove, add: INFUSION_PREFIX + 'enhanced-weapon' },
+      }).result,
+    ).toBe('blocked');
+    expect(
+      session.preview(levelUp, {
+        classId,
+        infusionSwap: { remove, add: 'feature.artificer.infuse-item' },
+      }).result,
+    ).toBe('blocked');
+    expect(
+      session.preview(resolveChoices, { classId, choices: { infusionSwap } } as never).result,
+    ).toBe('blocked');
+    const log = session.run(levelUp, {
+      classId,
+      infusionSwap,
+      choices: {
+        features: [INFUSION_PREFIX + 'radiant-weapon', INFUSION_PREFIX + 'spell-refueling-ring'],
+      },
+    });
+    expect(log).toContain('Replace Infusion: Repeating Shot');
+    expect(session.state.build.featureIds).toHaveLength(6);
+    expect(session.state.build.featureIds).toContain(add);
+    expect(session.state.build.featureIds).not.toContain(remove);
+    expect(session.state.live.infusions).toEqual([]);
+    expect(session.state.live.items.bow?.attuned).toBe(false);
+    session.undo();
+    expect(session.state).toEqual(before);
   });
   it('uses Artificer levels for eligibility rather than the multiclass total', () => {
     const state = artificer(2);

@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { advancementDetails } from '../../engine/calc/advancement';
+import { INFUSION_PREFIX, infusionOptionIds, infusionsKnownAt } from '../../engine/calc/infusions';
 import { computeSheet } from '../../engine/calc/sheet';
 import { levelUp, type LevelUpPayload } from '../../engine/commands/level';
 import { characterStore } from '../../state/character-store';
@@ -9,6 +10,7 @@ import { useCommand } from '../commands/command-context';
 import { Field, inputClass } from '../components/fields';
 import { SectionLabel } from '../components/SectionLabel';
 import { OverrideMarker } from '../components/StatChip';
+import { InfusionPicker, InfusionReplacement } from '../features/InfusionPicker';
 import { useCharacter } from '../hooks/useCharacter';
 import { levelChoiceNeeds } from '../../engine/calc/level-choices';
 import { Caution } from '../components/Caution';
@@ -26,6 +28,7 @@ import {
 } from './level-up-model';
 
 const button = 'min-h-11 rounded-btn border border-border px-3 text-sm disabled:opacity-40';
+const emptySwap = { remove: '', add: '' };
 
 /** Only this character's recorded classes advance; the shared frame keeps its one Undo. */
 export function LevelUpControl() {
@@ -47,6 +50,7 @@ export function LevelUpControl() {
     <section
       ref={container}
       tabIndex={-1}
+      id="advancement"
       aria-label="Advancement"
       className="flex min-w-0 flex-col gap-3 rounded-card border border-border bg-surface p-3"
     >
@@ -118,6 +122,8 @@ function LevelUpForm({
   const stale =
     JSON.stringify(state) !== JSON.stringify(reviewed.state) || automation !== reviewed.automation;
   const [picks, setPicks] = useState<LevelPicks>(emptyPicks);
+  const [infusionPicks, setInfusionPicks] = useState<string[]>([]);
+  const [infusionSwap, setInfusionSwap] = useState(emptySwap);
   const setPick = (patch: Partial<LevelPicks>) => setPicks((now) => ({ ...now, ...patch }));
   const newClasses = newClassOptions(reviewed.state, registry);
   const newClass = newClasses.find((entry) => entry.classId === classId);
@@ -126,7 +132,24 @@ function LevelUpForm({
   const pickClass = (id: string) => {
     setClassId(id);
     setPicks(emptyPicks);
+    setInfusionPicks([]);
+    setInfusionSwap(emptySwap);
   };
+  const artificerLevel = classId === 'class.artificer' && chosen ? chosen.level + 1 : 0;
+  const knownInfusions = reviewed.state.build.featureIds.filter((id) =>
+    id.startsWith(INFUSION_PREFIX),
+  );
+  const infusionOptions =
+    artificerLevel >= 2 ? infusionOptionIds(registry, reviewed.state.campaign, artificerLevel) : [];
+  const newInfusions = infusionOptions.filter((id) => !knownInfusions.includes(id));
+  const infusionRoom = Math.max(0, infusionsKnownAt(artificerLevel) - knownInfusions.length);
+  const infusionCount = Math.min(
+    infusionRoom,
+    newInfusions.filter((id) => id !== infusionSwap.add).length,
+  );
+  const canSwapInfusion =
+    artificerLevel > 2 && knownInfusions.length > 0 && newInfusions.length > 0;
+  const swapComplete = !infusionSwap.remove || Boolean(infusionSwap.add);
   const faces = chosen ? Number(chosen.hitDie.slice(1)) : 0;
   const rollNumber = roll.trim() === '' ? NaN : Number(roll);
   const validRoll =
@@ -158,9 +181,14 @@ function LevelUpForm({
             .slice(0, spellInfo.gains.spells),
         }
       : picks;
+  const readyPicks = picksToPayload(availablePicks, needs, newClass !== undefined);
   const payload: LevelUpPayload = {
     ...basePayload,
-    ...picksToPayload(availablePicks, needs, newClass !== undefined),
+    ...readyPicks,
+    ...(infusionPicks.length > 0 && {
+      choices: { ...readyPicks.choices, features: infusionPicks },
+    }),
+    ...(canSwapInfusion && infusionSwap.remove && infusionSwap.add && { infusionSwap }),
   };
   const subclasses = needs.subclass ? subclassOptions(reviewed.state, registry, classId) : [];
   const feats = needs.asi ? featOptions(reviewed.state, registry) : [];
@@ -176,6 +204,7 @@ function LevelUpForm({
     chosen !== undefined &&
     !chosen.ambiguous &&
     validRoll &&
+    swapComplete &&
     preview.result === 'ok';
   useEffect(() => {
     if (!warningOpen) attempted.current = false;
@@ -314,6 +343,34 @@ function LevelUpForm({
       {needs.asi && (
         <AsiPick feats={feats} picks={picks} set={setPick} campaign={reviewed.state.campaign} />
       )}
+      {(infusionCount > 0 || canSwapInfusion) && (
+        <div className="flex min-w-0 flex-col gap-3 rounded-card border border-border p-3">
+          <p className="text-sm font-semibold text-text">Infusions Known</p>
+          {infusionCount > 0 && (
+            <InfusionPicker
+              level={artificerLevel}
+              count={infusionCount}
+              known={knownInfusions}
+              options={infusionOptions.filter((id) => id !== infusionSwap.add)}
+              chosen={infusionPicks}
+              onChange={setInfusionPicks}
+            />
+          )}
+          {canSwapInfusion && (
+            <InfusionReplacement
+              known={knownInfusions}
+              options={newInfusions.filter((id) => !infusionPicks.includes(id))}
+              swap={infusionSwap}
+              active={
+                reviewed.state.live.infusions?.some(
+                  ({ featureId }) => featureId === infusionSwap.remove,
+                ) ?? false
+              }
+              onChange={setInfusionSwap}
+            />
+          )}
+        </div>
+      )}
       {spellInfo &&
         (spellInfo.gains.cantrips > 0 ||
           spellInfo.gains.spells > 0 ||
@@ -334,6 +391,8 @@ function LevelUpForm({
             type="button"
             onClick={() => {
               setReviewed({ state: structuredClone(state), automation });
+              setInfusionPicks([]);
+              setInfusionSwap(emptySwap);
               setErrors([]);
               requestAnimationFrame(() => {
                 previewContainer.current?.focus({ preventScroll: true });

@@ -4,6 +4,7 @@ import { applyLevelChoices, LevelChoicesSchema } from '../calc/level-choices';
 import { applyLevelSpells, LevelSpellsSchema } from '../calc/level-spells';
 import { optionalRules } from '../calc/campaign-rules';
 import { averageHpRoll, type HitDie } from '../calc/hp';
+import { INFUSION_PREFIX, infusionOptionIds } from '../calc/infusions';
 import { MULTICLASS_RULES, meetsMinimum, minimumText } from '../calc/multiclass';
 import { computeSheet } from '../calc/sheet';
 import {
@@ -26,6 +27,7 @@ const LevelUpPayloadSchema = z.strictObject({
   /** Multiclass only: the skill and instrument a new class lets you pick. */
   choices: LevelChoicesSchema.optional(),
   spells: LevelSpellsSchema.optional(),
+  infusionSwap: z.strictObject({ remove: refId('feature'), add: refId('feature') }).optional(),
   skill: SkillSchema.optional(),
   tool: refId('item').optional(),
   expected: z
@@ -106,7 +108,7 @@ function multiclassGrants(
 function prepare(ctx: CommandContext, input: LevelUpPayload) {
   const parsed = LevelUpPayloadSchema.safeParse(input);
   if (!parsed.success) return { checks: [block('Level-up details are invalid')] };
-  const { classId, roll, skill, tool, expected, choices, spells } = parsed.data;
+  const { classId, roll, skill, tool, expected, choices, spells, infusionSwap } = parsed.data;
   const current = { campaign: ctx.campaign, build: ctx.build, live: ctx.live };
   if (expected !== undefined && !equalData(expected, current))
     return {
@@ -125,6 +127,50 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
   const def = ctx.registry.entries.get(classId);
   if (def?.kind !== 'class')
     return { checks: [block('The selected class reference is unavailable')] };
+  const classLevel = (entries[0]?.level ?? 0) + 1;
+  const learningInfusions = (choices?.features ?? []).filter((id) =>
+    id.startsWith(INFUSION_PREFIX),
+  );
+  const infusionNotes: string[] = [];
+  let featureIds = ctx.build.featureIds;
+  let currentLive = ctx.live;
+  if (infusionSwap || learningInfusions.length > 0) {
+    if (classId !== 'class.artificer' || classLevel < 2)
+      return {
+        checks: [block('Infusion choices require gaining an Artificer level of 2 or higher')],
+      };
+    const eligible = infusionOptionIds(ctx.registry, ctx.campaign, classLevel);
+    if (learningInfusions.some((id) => !eligible.includes(id)))
+      return {
+        checks: [block('That infusion is unavailable at this Artificer level or in this campaign')],
+      };
+    if (infusionSwap) {
+      const { remove, add } = infusionSwap;
+      if (classLevel < 3)
+        return { checks: [block('Learn your first infusions at Artificer level 2')] };
+      if (!remove.startsWith(INFUSION_PREFIX) || !featureIds.includes(remove))
+        return { checks: [block('Choose a known infusion to replace')] };
+      if (!eligible.includes(add) || featureIds.includes(add) || learningInfusions.includes(add))
+        return { checks: [block('Choose a different eligible infusion to learn')] };
+      if (learningInfusions.includes(remove))
+        return { checks: [block('An infusion replaced at this level cannot also be learned')] };
+      featureIds = featureIds.map((id) => (id === remove ? add : id));
+      const name = (id: string) => ctx.registry.entries.get(id)?.name ?? id;
+      infusionNotes.push(`Replace ${name(remove)} with ${name(add)}`);
+      const applications = ctx.live.infusions?.filter((entry) => entry.featureId === remove) ?? [];
+      if (applications.length > 0) {
+        currentLive = structuredClone(ctx.live);
+        currentLive.infusions = currentLive.infusions!.filter(
+          (entry) => entry.featureId !== remove,
+        );
+        for (const { instanceId } of applications) {
+          const item = currentLive.items[instanceId];
+          if (item) item.attuned = false;
+        }
+        infusionNotes.push('Replaced infusion ended on its item');
+      }
+    }
+  }
   const die = faces(def.hitDie);
   if (roll !== undefined) {
     const invalidRoll = rangeCheck('Hit Die roll', roll, 1, die);
@@ -151,6 +197,7 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
   };
   const build = {
     ...ctx.build,
+    featureIds,
     proficiencies,
     classes:
       entries.length === 0
@@ -166,21 +213,24 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
     registry: ctx.registry,
     score: (ability) => ctx.sheet.abilities[ability].score.value,
     classId,
-    newLevel: (entries[0]?.level ?? 0) + 1,
+    newLevel: classLevel,
     choices: choices ?? {},
     granted: ctx.sheet.proficiencies,
   });
   if ('blocked' in applied) return { checks: [block(applied.blocked)] };
   let finalBuild: CharacterBuild = applied.build;
-  const summary = [...applied.summary];
+  const summary = [...applied.summary, ...infusionNotes];
   if (spells) {
     try {
-      const sheet = computeSheet({ ...current, build: finalBuild }, ctx.registry);
+      const sheet = computeSheet(
+        { ...current, build: finalBuild, live: currentLive },
+        ctx.registry,
+      );
       const picked = applyLevelSpells(
         {
           campaign: ctx.campaign,
           build: finalBuild,
-          live: ctx.live,
+          live: currentLive,
           sheet,
           registry: ctx.registry,
         },
@@ -198,7 +248,10 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
   if (!CharacterBuildSchema.safeParse(finalBuild).success)
     return { checks: [block('This level would leave invalid class or HP records')] };
   try {
-    const nextSheet = computeSheet({ ...current, build: finalBuild }, ctx.registry);
+    const nextSheet = computeSheet(
+      { ...current, build: finalBuild, live: currentLive },
+      ctx.registry,
+    );
     const before = ctx.sheet.maxHp.value;
     const after = nextSheet.maxHp.value;
     if (!Number.isSafeInteger(before) || !safeCalculatedNumbers(nextSheet))
@@ -206,7 +259,7 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
     // D60: preserve damage taken, clamp a living character to 1..new max, and never revive 0 HP.
     const hp =
       ctx.live.hp > 0 ? Math.min(after, Math.max(1, ctx.live.hp + (after - before))) : ctx.live.hp;
-    const live = { ...ctx.live, hp };
+    const live = { ...currentLive, hp };
     if (!LiveStateSchema.safeParse(live).success)
       return { checks: [block('This level produces invalid current HP')] };
     return {
@@ -215,7 +268,7 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
       summary,
       live,
       name: def.name,
-      classLevel: (entries[0]?.level ?? 0) + 1,
+      classLevel,
       before,
       after,
     };
@@ -240,6 +293,10 @@ export const levelUp: Command<LevelUpPayload> = {
     draft.build.featureIds = next.build.featureIds;
     draft.build.spells = next.build.spells;
     draft.live.hp = next.live.hp;
+    if (next.live.infusions !== ctx.live.infusions) {
+      draft.live.infusions = next.live.infusions;
+      draft.live.items = next.live.items;
+    }
     return withNotes(
       `Level up: ${next.name} ${next.classLevel} (max HP ${next.before} → ${next.after})`,
       [
