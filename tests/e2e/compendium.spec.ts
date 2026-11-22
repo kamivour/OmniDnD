@@ -213,6 +213,21 @@ test('compendium lists Xanathar’s wands and the 2014 stats for Tasha’s Moon 
   await noOverflow(page);
 });
 
+test('equipment finds Rhythm-Maker’s Drum when pasted with a curly apostrophe', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto('/compendium?kind=equipment');
+  await page.getByRole('searchbox', { name: 'Search equipment' }).fill('Rhythm-Maker’s Drum');
+  const drums = page.getByRole('button', { name: /^Rhythm-Maker's Drum, \+\d/ });
+  await expect(drums).toHaveCount(3);
+  await drums.filter({ hasText: '+1' }).click();
+  const panel = entryPanel(page, isMobile);
+  await expect(panel.getByText('Uncommon', { exact: true })).toBeVisible();
+  await expect(panel.getByText('Attunement required · Bard')).toBeVisible();
+  await noOverflow(page);
+});
+
 test('compendium: Plan this adds to the Journal plans and Undo removes it', async ({
   page,
   isMobile,

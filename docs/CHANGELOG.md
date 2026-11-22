@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 10:13 — Find Rhythm-Maker’s Drum
+
+- Search Equipment for “Rhythm-Maker’s Drum” or “rhythm makers drum” to find all three variants.
+- Open the +1 drum to check its Uncommon tier and Bard attunement. Checks pass.
+
 ## 2026-11-22 09:38 — Xanathar’s and Tasha’s magic items
 
 - Browse both books’ magic-item lists in Equipment, with rarity variants and links to the book entries.

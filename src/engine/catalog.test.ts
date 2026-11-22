@@ -183,4 +183,16 @@ describe('compendium catalog', () => {
     expect(item('item.prosthetic-limb').attunement).toBeUndefined();
     expect(item('item.bell-branch').attunementBy).toBe('Druid or Warlock');
   });
+
+  it.each(["Rhythm-Maker's Drum", 'Rhythm-Maker’s Drum', 'rhythm makers drum'])(
+    'finds all three Rhythm-Maker’s Drums for %s',
+    (query) => {
+      const drums = searchCatalog(registry, 'equipment', { text: query, books: ['TCE'] });
+      expect(drums.map(({ id }) => id)).toEqual([
+        'item.rhythm-makers-drum-1',
+        'item.rhythm-makers-drum-2',
+        'item.rhythm-makers-drum-3',
+      ]);
+    },
+  );
 });

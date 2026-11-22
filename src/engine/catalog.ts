@@ -150,7 +150,13 @@ export function campaignAllows(
   return sourceAllows(campaign, entry);
 }
 
-const fold = (text: string) => text.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '');
+const fold = (text: string) =>
+  text
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/['’‘]/g, '')
+    .replace(/(?<=\p{L})[-‐‑‒–—](?=\p{L})/gu, ' ');
 
 export function matchesFilter(
   entry: CatalogEntry,
