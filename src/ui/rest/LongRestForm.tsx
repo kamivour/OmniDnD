@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { artificerLevel } from '../../engine/calc/infusions';
-import { completeLongRest, wizardRestCantrips } from '../../engine/commands';
+import { completeLongRest, wizardRestCantrips, type LongRestChoices } from '../../engine/commands';
 import { restDurations } from '../../engine/calc/rests';
 import { formatDuration } from '../../engine/clock';
 import { characterStore } from '../../state/character-store';
@@ -10,6 +10,7 @@ import { useCommand, type CommandFocusTarget } from '../commands/command-context
 import { useCharacter } from '../hooks/useCharacter';
 import { preparedRestClassIds, previewLongRest, restChanges } from './rest-model';
 import { RestPreview } from './RestPreview';
+import { DedicatedWeaponSelect } from './DedicatedWeaponSelect';
 
 export function LongRestForm({
   onClose,
@@ -28,9 +29,16 @@ export function LongRestForm({
   const [reviewPrepared, setReviewPrepared] = useState(true);
   const [cantripOut, setCantripOut] = useState('');
   const [cantripIn, setCantripIn] = useState('');
+  const [dedicatedWeaponId, setDedicatedWeaponId] = useState('');
   const container = useRef<HTMLDivElement>(null);
   const formulas = wizardRestCantrips({ ...state, sheet, registry });
-  const choices = cantripOut ? { cantripSwap: { remove: cantripOut, add: cantripIn } } : null;
+  const choices: LongRestChoices | null =
+    cantripOut || dedicatedWeaponId
+      ? {
+          ...(cantripOut ? { cantripSwap: { remove: cantripOut, add: cantripIn } } : {}),
+          ...(dedicatedWeaponId ? { dedicatedWeaponId } : {}),
+        }
+      : null;
   const preview = previewLongRest(state, registry, automation, choices);
   const changes = preview.result === 'ok' ? restChanges(state, preview.next, registry) : [];
   return (
@@ -89,6 +97,12 @@ export function LongRestForm({
           )}
         </fieldset>
       )}
+      <DedicatedWeaponSelect
+        state={state}
+        sheet={sheet}
+        value={dedicatedWeaponId}
+        onChange={setDedicatedWeaponId}
+      />
       <RestPreview
         duration={formatDuration(durations.long)}
         result={preview}

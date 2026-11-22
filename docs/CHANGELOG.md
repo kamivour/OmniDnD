@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 03:10 — Monk Dedicated Weapon
+
+- Enable Tasha’s Optional Class Features and choose a proficient weapon during a Monk’s rest.
+- Check the weapon’s attack and damage in Combat. The choice stays until you designate another weapon. Checks pass.
+
 ## 2026-11-23 03:05 — Divine Soul, psionic dice and spell schools
 
 - Divine Soul can choose an affinity spell in To do and replace it with a Cleric spell when leveling.

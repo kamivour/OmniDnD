@@ -1,5 +1,13 @@
 import { characterRegistry, type Registry } from '../registry';
 import { entryCasting } from './casting';
+import {
+  DEDICATED_WEAPON,
+  MARTIAL_ARTS,
+  canDedicateWeapon,
+  isMonkWeapon,
+  monkWeaponDamage,
+  weaponProficient,
+} from './monk-weapons';
 import { BLADESONG, SONG_OF_VICTORY, bladesongRestriction, hasBladesong } from './bladesong';
 import { attunedItems } from './attunement';
 import { wornInfusions, infusionKey, infusionBonus, magicalItem } from './infusions';
@@ -479,11 +487,27 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     ({ def }) => def.id === 'feature.artificer.battle-smith-battle-ready',
   );
   const infusedItems = wornInfusions(build, live, registry);
+  const martialArts = features.find(({ def }) => def.id === MARTIAL_ARTS)?.die;
+  const dedicated = featureIds.has(DEDICATED_WEAPON) ? live.dedicatedWeaponId : undefined;
+  const usesMartialArts =
+    martialArts &&
+    !equipped.some(({ instanceId, def }) => {
+      const isDedicated = instanceId === dedicated && canDedicateWeapon(def, profs.weapons);
+      return def.armor || (def.weapon && !isMonkWeapon(def, isDedicated));
+    });
   const attacks = equipped.flatMap(({ instanceId, def }) => {
     if (!def.weapon) return [];
     const infusion = infusedItems.find((entry) => entry.instanceId === instanceId);
     const useInt = battleReady && (magicalItem(def) || infusion !== undefined);
-    const attack = weaponAttack(instanceId, def, profs, mods, proficiencyPart, useInt);
+    const attack = weaponAttack(
+      instanceId,
+      def,
+      profs,
+      mods,
+      proficiencyPart,
+      useInt,
+      usesMartialArts ? martialArts : undefined,
+    );
     if (archery && attack.type === 'ranged') {
       attack.toHit = sumParts([
         ...attack.toHit.parts,
@@ -514,7 +538,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         overridePath('attacks', instanceId, 'damage', 'bonus'),
         `${def.name} damage bonus`,
         attack.damage.bonus + (attack.type === 'melee' ? victoryBonus : 0),
-        typeof def.weapon.damage === 'number' ? { min: 0 } : {},
+        !attack.damage.dice ? { min: 0 } : {},
       );
     const extra: NonNullable<WeaponAttack['extraDamage']> = features.flatMap(({ def: feature }) =>
       feature.meleeDamage && attack.type === 'melee'
@@ -922,19 +946,19 @@ function weaponAttack(
   mods: Record<Ability, number>,
   proficiencyPart: Part,
   useInt: boolean,
+  martialArts?: string,
 ): WeaponAttack {
   const weapon = def.weapon!;
-  const normalAbility: Ability = weapon.properties.includes('finesse')
-    ? mods.DEX > mods.STR
-      ? 'DEX'
-      : 'STR'
-    : weapon.type === 'ranged'
-      ? 'DEX'
-      : 'STR';
+  const normalAbility: Ability =
+    (martialArts && weapon.type === 'melee') || weapon.properties.includes('finesse')
+      ? mods.DEX > mods.STR
+        ? 'DEX'
+        : 'STR'
+      : weapon.type === 'ranged'
+        ? 'DEX'
+        : 'STR';
   const ability = useInt && mods.INT > mods[normalAbility] ? 'INT' : normalAbility;
-  const proficient = profs.weapons.some(
-    (entry) => entry === weapon.category || entry === def.id || entry === def.baseItemId,
-  );
+  const proficient = weaponProficient(def, profs.weapons);
   const abilityPart = { label: ability, value: mods[ability] };
   const attack: WeaponAttack = {
     instanceId,
@@ -947,10 +971,11 @@ function weaponAttack(
     properties: weapon.properties,
   };
   if (weapon.damage !== undefined && weapon.damageType) {
+    const damage = martialArts ? monkWeaponDamage(weapon.damage, martialArts) : weapon.damage;
     attack.damage =
-      typeof weapon.damage === 'number'
-        ? { bonus: Math.max(0, weapon.damage + mods[ability]), type: weapon.damageType }
-        : { dice: weapon.damage, bonus: mods[ability], type: weapon.damageType };
+      typeof damage === 'number'
+        ? { bonus: Math.max(0, damage + mods[ability]), type: weapon.damageType }
+        : { dice: damage, bonus: mods[ability], type: weapon.damageType };
   }
   if (weapon.versatile) attack.versatile = weapon.versatile;
   if (weapon.range) attack.range = weapon.range;

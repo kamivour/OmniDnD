@@ -1,6 +1,48 @@
 import { expect, test } from './fixtures';
 import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
+test('Monk designates an eligible weapon during Short Rest', async ({ page }) => {
+  const file = reviewFile('monk-dedicated-weapon');
+  const classId = 'class.monk';
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.campaign.optionalRules.optionalClassFeatures = true;
+  file.build.classes = [{ classId, level: 2 }];
+  file.build.hpEntries = [
+    { level: 1, classId, method: 'max', value: 8 },
+    { level: 2, classId, method: 'average', value: 5 },
+  ];
+  file.build.spells = [];
+  file.build.proficiencies.weapons = ['item.longsword', 'item.greatsword'];
+  file.build.items = [
+    { instanceId: 'sword', itemId: 'item.longsword' },
+    { instanceId: 'heavy', itemId: 'item.greatsword' },
+  ];
+  file.live.items = {
+    sword: { qty: 1, equipped: true, attuned: false },
+    heavy: { qty: 1, equipped: false, attuned: false },
+  };
+  await importReview(page, file, 'combat');
+  if (page.viewportSize()!.width < 640) {
+    await page.getByRole('button', { name: 'More', exact: true }).click();
+    await page
+      .getByRole('dialog', { name: 'More', exact: true })
+      .getByRole('button', { name: 'Short Rest', exact: true })
+      .click();
+  } else
+    await page
+      .getByRole('button', { name: 'Short Rest', exact: true })
+      .filter({ visible: true })
+      .click();
+  const rest = page.getByRole('dialog', { name: 'Short Rest', exact: true });
+  const weapon = rest.getByLabel('Dedicated Weapon');
+  await expect(weapon.getByRole('option', { name: 'Greatsword' })).toHaveCount(0);
+  await weapon.selectOption('sword');
+  await rest.getByRole('button', { name: 'Apply Short Rest', exact: true }).click();
+  await expect(rest).toBeHidden();
+  await saved(page);
+  expect((await reviewState(page, file.build.id)).live.dedicatedWeaponId).toBe('sword');
+});
+
 test('Divine Soul chooses Law affinity and sees Bless in Spellbook', async ({ page }) => {
   const file = reviewFile('divine-soul-affinity');
   const classId = 'class.sorcerer';

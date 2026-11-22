@@ -640,6 +640,39 @@ describe('class audit', () => {
     ).toBeUndefined();
   });
 
+  it('dedicates one proficient weapon at rest and derives its Martial Arts attack', () => {
+    const session = character('class.monk', 17, 'subclass.monk.open-hand');
+    session.state.build.abilityScores.base.DEX = 18;
+    session.state.build.abilityScores.base.STR = 10;
+    session.state.build.abilityScores.bonuses = [];
+    session.state.build.proficiencies.weapons.push('item.longsword', 'item.greatsword');
+    session.state.build.items = [
+      { instanceId: 'sword', itemId: 'item.longsword' },
+      { instanceId: 'heavy', itemId: 'item.greatsword' },
+    ];
+    session.state.live.items = {
+      sword: { qty: 1, equipped: true, attuned: false },
+      heavy: { qty: 1, equipped: false, attuned: false },
+    };
+    expect(session.sheet.attacks[0]).toMatchObject({ ability: 'STR', damage: { dice: '1d8' } });
+    expect(session.preview(completeLongRest, { dedicatedWeaponId: 'heavy' }).result).toBe(
+      'blocked',
+    );
+    expect(session.run(completeShortRest, { dedicatedWeaponId: 'sword' })).toContain(
+      'Dedicated Weapon',
+    );
+    expect(session.sheet.attacks[0]).toMatchObject({
+      ability: 'DEX',
+      damage: { dice: '1d10', bonus: 4 },
+    });
+    session.run(completeLongRest, null);
+    expect(session.live.dedicatedWeaponId).toBe('sword');
+    session.undo();
+    session.undo();
+    expect(session.live.dedicatedWeaponId).toBeUndefined();
+    expect(session.sheet.attacks[0]?.ability).toBe('STR');
+  });
+
   it('adds Remarkable Athlete to initiative and physical checks without stacking Jack of All Trades', () => {
     const session = character('class.fighter', 7, 'subclass.fighter.champion');
     session.state.build.classes.push({ classId: 'class.bard', level: 2 });

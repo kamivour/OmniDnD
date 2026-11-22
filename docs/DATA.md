@@ -202,6 +202,7 @@ interface LiveState {
   currency: { cp: number; sp: number; ep: number; gp: number; pp: number };
   clock: { seconds: number };                      // game seconds since Day 1 00:00 (D46); 1 round = 6 s
   lastLongRestEnd?: number;                        // game seconds
+  dedicatedWeaponId?: string;                      // selected weapon instance for a Monk
   combat?: {
     round: number;                                 // Start Turn advances it; the tracker's Next turn does when one runs
     turnActive: boolean;                           // between Start Turn and End Turn

@@ -17,6 +17,7 @@ import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
 import { previewShortRest, restChanges } from './rest-model';
 import { RestPreview } from './RestPreview';
+import { DedicatedWeaponSelect } from './DedicatedWeaponSelect';
 
 const field = 'min-h-11 w-full rounded-btn border border-border bg-surface px-3 text-text';
 
@@ -32,6 +33,7 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
   const [songSource, setSongSource] = useState<'self' | 'other'>(ownSong ? 'self' : 'other');
   const [songRoll, setSongRoll] = useState('');
   const [slotPicks, setSlotPicks] = useState<Record<number, number>>({});
+  const [dedicatedWeaponId, setDedicatedWeaponId] = useState('');
   const nextId = useRef(1);
   const focusRoll = useRef<number | null>(null);
   const addButton = useRef<HTMLButtonElement>(null);
@@ -58,7 +60,11 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
       )
     : [];
   const levelsSpent = recoveredSlots.reduce((sum, level) => sum + level, 0);
-  const base: ShortRestPayload = { hitDice: dice, arcaneRecovery: recoveredSlots };
+  const base: ShortRestPayload = {
+    hitDice: dice,
+    arcaneRecovery: recoveredSlots,
+    ...(dedicatedWeaponId ? { dedicatedWeaponId } : {}),
+  };
   const payload: ShortRestPayload = songEnabled
     ? {
         ...base,
@@ -279,6 +285,12 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
           ))}
         </fieldset>
       )}
+      <DedicatedWeaponSelect
+        state={state}
+        sheet={sheet}
+        value={dedicatedWeaponId}
+        onChange={setDedicatedWeaponId}
+      />
       <RestPreview
         duration={formatDuration(restDurations(state.campaign).short)}
         result={preview}

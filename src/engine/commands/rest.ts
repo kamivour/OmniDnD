@@ -3,6 +3,7 @@ import { restDurations } from '../calc/rests';
 import { featureResource, writeFeatureResource } from '../calc/features';
 import { MYSTIC_ARCANUM } from '../calc/feat-spells';
 import { spellSelectionDetails } from '../calc/spell-selections';
+import { dedicatedWeaponOptions } from '../calc/monk-weapons';
 import { LONG_REST_INTERVAL_SECONDS } from '../rules2014';
 import type { HitDieName } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
@@ -86,6 +87,7 @@ export interface ShortRestPayload {
   songOfRestSource?: 'self' | 'other';
   /** Slot levels chosen for Arcane Recovery, one entry per expended slot. */
   arcaneRecovery?: number[];
+  dedicatedWeaponId?: string;
 }
 
 /**
@@ -94,7 +96,10 @@ export interface ShortRestPayload {
  */
 export const completeShortRest: Command<ShortRestPayload> = {
   name: 'completeShortRest',
-  check: (ctx, { hitDice = [], songOfRest, songOfRestSource, arcaneRecovery = [] }) => {
+  check: (
+    ctx,
+    { hitDice = [], songOfRest, songOfRestSource, arcaneRecovery = [], dedicatedWeaponId },
+  ) => {
     const checks = restChecks(ctx);
     const counts = new Map<HitDieName, number>();
     for (const { die, roll } of hitDice) {
@@ -145,9 +150,14 @@ export const completeShortRest: Command<ShortRestPayload> = {
         checks.push(block(`Arcane Recovery restores up to ${options.budget} combined slot levels`));
     }
     checks.push(...timeRangeChecks(ctx.live.clock.seconds, restDurations(ctx.campaign).short));
+    checks.push(...dedicatedWeaponChecks(ctx, dedicatedWeaponId));
     return checks;
   },
-  apply: ({ live }, { hitDice = [], songOfRest, songOfRestSource, arcaneRecovery = [] }, ctx) => {
+  apply: (
+    { live },
+    { hitDice = [], songOfRest, songOfRestSource, arcaneRecovery = [], dedicatedWeaponId },
+    ctx,
+  ) => {
     const duration = restDurations(ctx.campaign).short;
     const notes: (string | undefined)[] = passTime(live, duration, ctx);
     notes.push(...endTriggeredEffects(live, (on) => on.event === 'short-rest'));
@@ -190,6 +200,7 @@ export const completeShortRest: Command<ShortRestPayload> = {
       restored.push(`Arcane Recovery: slots at levels ${arcaneRecovery.join(', ')}`);
     }
     if (restored.length > 0) notes.push(`restored ${restored.join(', ')}`);
+    notes.push(dedicateWeapon(live, ctx, dedicatedWeaponId));
     notes.push(...rechargeItems(live, ctx, ctx.live.items, ['short']));
     return withNotes(`Short rest (${formatDuration(duration)})`, notes);
   },
@@ -201,6 +212,29 @@ export const completeShortRest: Command<ShortRestPayload> = {
  */
 export interface LongRestChoices {
   cantripSwap?: { remove: string; add: string };
+  dedicatedWeaponId?: string;
+}
+
+function dedicatedWeaponChecks(ctx: CommandContext, instanceId?: string) {
+  if (instanceId === undefined) return [];
+  return dedicatedWeaponOptions(ctx.build, ctx.live, ctx.sheet, ctx.registry).some(
+    (weapon) => weapon.instanceId === instanceId,
+  )
+    ? []
+    : [block('Choose a proficient weapon without the heavy or special property')];
+}
+
+function dedicateWeapon(
+  live: Pick<CommandContext['live'], 'dedicatedWeaponId'>,
+  ctx: CommandContext,
+  instanceId?: string,
+) {
+  if (instanceId === undefined || live.dedicatedWeaponId === instanceId) return undefined;
+  const weapon = dedicatedWeaponOptions(ctx.build, ctx.live, ctx.sheet, ctx.registry).find(
+    (row) => row.instanceId === instanceId,
+  );
+  live.dedicatedWeaponId = instanceId;
+  return `Dedicated Weapon: ${weapon?.name ?? instanceId}`;
 }
 
 export const completeLongRest: Command<LongRestChoices | null> = {
@@ -223,6 +257,7 @@ export const completeLongRest: Command<LongRestChoices | null> = {
         );
     }
     checks.push(...timeRangeChecks(live.clock.seconds, duration));
+    checks.push(...dedicatedWeaponChecks(ctx, choices?.dedicatedWeaponId));
     return checks;
   },
   apply: ({ live, build }, choices, ctx) => {
@@ -288,6 +323,7 @@ export const completeLongRest: Command<LongRestChoices | null> = {
     if (recovered > 0) notes.push(`${recovered} Hit ${recovered === 1 ? 'Die' : 'Dice'} back`);
 
     live.lastLongRestEnd = live.clock.seconds;
+    notes.push(dedicateWeapon(live, ctx, choices?.dedicatedWeaponId));
     if (choices?.cantripSwap) {
       const { remove, add } = choices.cantripSwap;
       for (const list of build.spells) {

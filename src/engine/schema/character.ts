@@ -411,6 +411,8 @@ export const LiveStateSchema = z
     /** Keyed by build companion id. Absent in older saves. */
     companions: z.record(z.string(), CompanionLiveSchema).optional(),
     lastLongRestEnd: GameSeconds.optional(),
+    /** Weapon instance designated by the optional Monk feature. */
+    dedicatedWeaponId: z.string().min(1).optional(),
     combat: z
       .strictObject({
         /** No initiative or turn order (D42). Start Turn advances the round. */

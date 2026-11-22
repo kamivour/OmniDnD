@@ -12065,5 +12065,23 @@
         }
       ]
     }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.monk-dedicated-weapon",
+    "name": "Dedicated Weapon",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a rest, designate one simple or martial weapon you know how to use. It counts as a Monk weapon until you designate another. The weapon cannot be heavy or special."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.monk",
+      "level": 2
+    }
   }
 ]

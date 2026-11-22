@@ -405,6 +405,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 - [x] Add Wizard Cantrip Formulas, Spell Mastery, Signature Spells and Stars Druid’s free Guiding Bolt castings.
 - [x] Track active Bladesong and Champion weapon critical thresholds.
 - [x] Add Divine Soul affinity, shared psionic actions and recovery, and third-caster school limits.
+- [x] Add Monk Dedicated Weapon during rest and apply Martial Arts to eligible equipped weapons.
 - [ ] Add the remaining class choices and tracked feature uses listed in the class audit.
 - [x] Add Vortex Warp for Artificer, Sorcerer and Wizard under the optional Strixhaven source
 - [x] Add catalogue items and create custom contents directly from magic containers
@@ -437,6 +438,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Added Dedicated Weapon to Monk rests and derived Martial Arts weapon attacks from the equipped gear.
 - 2026-11-23 — Added Divine Soul affinity, psionic spending and recovery, and Eldritch Knight and Arcane Trickster spell-school checks.
 - 2026-11-23 — Tracked Bladesong bonuses and ending conditions, plus Champion’s expanded critical range on weapon rolls.
 - 2026-11-23 — Added Wizard cantrip replacement and spellbook choices, plus Star Map’s slot-free Guiding Bolt in Spellbook.
