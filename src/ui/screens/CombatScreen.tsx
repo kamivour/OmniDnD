@@ -174,6 +174,7 @@ export function CombatScreen() {
               ? 'No direct damage'
               : `${attack.damage} ${attack.damageType}${attack.extraDamage ? ` + ${attack.extraDamage}` : ''}`,
             ...(attack.powerAttack ? [attack.powerAttack] : []),
+            ...(sheet.weaponCriticalAt ? [`Crit ${sheet.weaponCriticalAt}–20`] : []),
             attack.notes,
           ].join(' · ')}
           <OverrideMarker override={attack.toHitOverride} />
@@ -184,7 +185,7 @@ export function CombatScreen() {
         <span className="flex items-center gap-1">
           <RollButton
             label={`${attack.name} to hit`}
-            spec={{ kind: 'd20', bonus: attack.toHit }}
+            spec={{ kind: 'd20', bonus: attack.toHit, criticalAt: sheet.weaponCriticalAt }}
             text="Hit"
           />
           {attack.damage !== undefined && parseDice(attack.damage) && (

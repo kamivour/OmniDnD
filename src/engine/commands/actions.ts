@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { endBladesong } from '../calc/bladesong';
 import type { Command, CommandContext } from './runner';
 import {
   block,
@@ -123,6 +124,7 @@ const TakeCombatActionPayloadSchema = z.union([
     action: z.literal('weapon-attack'),
     instanceId: z.string().min(1),
     reaction: z.boolean().optional(),
+    twoHanded: z.boolean().optional(),
   }),
 ]);
 export type TakeCombatActionPayload = z.infer<typeof TakeCombatActionPayloadSchema>;
@@ -158,6 +160,8 @@ export const takeCombatAction: Command<TakeCombatActionPayload> = {
     if (choice.action === 'weapon-attack') {
       const weapon = ctx.sheet.attacks.find((attack) => attack.instanceId === choice.instanceId);
       if (!weapon) checks.push(block('That weapon is not equipped or available'));
+      else if (choice.twoHanded && !weapon.versatile && !weapon.properties.includes('two-handed'))
+        checks.push(block('That weapon cannot be wielded with two hands'));
       else if (reaction && weapon.type !== 'melee')
         checks.push(warn(`${weapon.name} is not a melee weapon for an opportunity attack`));
     }
@@ -196,7 +200,16 @@ export const takeCombatAction: Command<TakeCombatActionPayload> = {
     const notes = attacks ? endSelfInvisibility(live, 'attack') : [];
     if (choice.action === 'weapon-attack') {
       const weapon = ctx.sheet.attacks.find((attack) => attack.instanceId === choice.instanceId)!;
-      return withNotes(`${reaction ? 'Reaction attack' : `Attack${count}`}: ${weapon.name}`, notes);
+      const twoHanded = choice.twoHanded || weapon.properties.includes('two-handed');
+      if (twoHanded) {
+        const ended = endBladesong(live, 'two-handed weapon attack');
+        if (ended) notes.push(ended);
+      }
+      const grip = choice.twoHanded && weapon.versatile ? ' (two hands)' : '';
+      return withNotes(
+        `${reaction ? 'Reaction attack' : `Attack${count}`}: ${weapon.name}${grip}`,
+        notes,
+      );
     }
     return withNotes(
       `Action: ${STANDARD_ACTIONS.find((action) => action.id === choice.action)!.name}${count}`,

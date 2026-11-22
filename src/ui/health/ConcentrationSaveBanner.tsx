@@ -8,7 +8,7 @@ import { useCharacter } from '../hooks/useCharacter';
 
 /** One durable, route-independent queue view. Arrival never steals focus or opens a dialog. */
 export function ConcentrationSaveBanner() {
-  const { state, events } = useCharacter();
+  const { state, sheet, events } = useCharacter();
   const { run } = useCommand();
   const automation = useStore(characterStore, (store) => store.automation);
   const [review, setReview] = useState(false);
@@ -49,6 +49,11 @@ export function ConcentrationSaveBanner() {
             <p className="text-xs text-text-muted">
               {pending.length} pending. Enter the result you resolved at the table.
             </p>
+            {sheet.bladesong && (
+              <p className="text-xs text-text-muted">
+                Bladesong adds +{sheet.bladesong.concentrationBonus} to concentration saves.
+              </p>
+            )}
           </div>
           <div className="grid grid-cols-2 gap-2">
             {(['pass', 'fail'] as const).map((outcome) => (

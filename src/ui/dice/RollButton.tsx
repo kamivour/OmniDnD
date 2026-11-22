@@ -5,7 +5,7 @@ import { deviceStore } from '../../state/device-settings';
 import { describeRoll } from './dice-format';
 
 type RollSpec =
-  | { kind: 'd20'; bonus: number; mode?: D20Mode }
+  | { kind: 'd20'; bonus: number; mode?: D20Mode; criticalAt?: 18 | 19 | 20 }
   | { kind: 'dice'; expression: string; critical?: boolean };
 
 /**
@@ -28,10 +28,12 @@ export function RollButton({
 
   const roll = () => {
     if (spec.kind === 'd20') {
-      const result = rollD20(spec.bonus, spec.mode ?? 'normal');
+      const result = rollD20(spec.bonus, spec.mode ?? 'normal', undefined, spec.criticalAt);
       const natural =
         result.natural === 'critical'
-          ? 'Natural 20'
+          ? result.kept === 20
+            ? 'Natural 20'
+            : `Critical hit (natural ${result.kept})`
           : result.natural === 'fumble'
             ? 'Natural 1'
             : '';

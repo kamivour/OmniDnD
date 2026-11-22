@@ -1,6 +1,40 @@
 import { expect, test } from './fixtures';
 import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
+test('Bladesinger starts Bladesong from Combat and can undo it', async ({ page }) => {
+  const file = reviewFile('bladesong-audit');
+  const classId = 'class.wizard';
+  const featureId = 'feature.wizard.bladesinging-bladesong';
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.build.classes = [{ classId, level: 2, subclassId: 'subclass.wizard.bladesinging' }];
+  file.build.hpEntries = [1, 2].map((level) => ({
+    level,
+    classId,
+    method: level === 1 ? 'max' : 'average',
+    value: level === 1 ? 6 : 4,
+  }));
+  file.build.spells = [];
+  await importReview(page, file, 'combat');
+  const main = page.getByRole('main');
+  await main.getByRole('tab', { name: 'Bonus', exact: true }).click();
+  const song = main.getByRole('listitem').filter({ hasText: 'Bladesong' });
+  await song.getByRole('button', { name: /^Use/ }).click();
+  await saved(page);
+  const beforeUndo = (await reviewState(page, file.build.id)).live;
+  expect(beforeUndo.featureUsesSpent[featureId]).toBe(1);
+  expect(beforeUndo.effects).toContainEqual(
+    expect.objectContaining({
+      sourceId: featureId,
+      endsAt: beforeUndo.clock.seconds + 60,
+    }),
+  );
+  await page.getByRole('button', { name: 'Undo last command', exact: true }).click();
+  await saved(page);
+  const afterUndo = (await reviewState(page, file.build.id)).live;
+  expect(afterUndo.featureUsesSpent[featureId]).toBeUndefined();
+  expect(afterUndo.effects.some((entry) => entry.sourceId === featureId)).toBe(false);
+});
+
 test('Wizard replaces one cantrip during a long rest', async ({ page }) => {
   const file = reviewFile('wizard-cantrip-formulas');
   const classId = 'class.wizard';

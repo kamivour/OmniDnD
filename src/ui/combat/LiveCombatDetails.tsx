@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { registry } from '../../data/registry';
 import { takeCombatAction, useFeature } from '../../engine/commands';
 import { useCommand } from '../commands/command-context';
@@ -24,6 +24,8 @@ export function LiveWeaponDetail({
   const { state, sheet } = useCharacter();
   const { run } = useCommand();
   const container = useRef<HTMLDivElement>(null);
+  const [twoHanded, setTwoHanded] = useState(false);
+  const versatile = sheet.attacks.find((attack) => attack.instanceId === instanceId)?.versatile;
   const entry = combatModel(state, sheet, registry).weapons.find(
     (weapon) => weapon.instanceId === instanceId,
   );
@@ -34,6 +36,17 @@ export function LiveWeaponDetail({
       <p className="text-xs text-text-muted">
         Resolve attack rolls, targets and damage at the table.
       </p>
+      {versatile && (
+        <label className="flex min-h-11 items-center gap-2 text-sm text-text">
+          <input
+            type="checkbox"
+            className="accent-(--omni-accent)"
+            checked={twoHanded}
+            onChange={(event) => setTwoHanded(event.target.checked)}
+          />
+          Attack with two hands ({versatile})
+        </label>
+      )}
       {!state.live.combat && (
         <p className="text-sm text-text-muted">Start combat to use this attack.</p>
       )}
@@ -45,7 +58,12 @@ export function LiveWeaponDetail({
           event.currentTarget.focus();
           run(
             takeCombatAction,
-            { action: 'weapon-attack', instanceId, ...(reaction ? { reaction: true } : {}) },
+            {
+              action: 'weapon-attack',
+              instanceId,
+              ...(reaction ? { reaction: true } : {}),
+              ...(versatile && twoHanded ? { twoHanded: true } : {}),
+            },
             returnFocusTo ?? container.current ?? undefined,
             onApplied,
           );

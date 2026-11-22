@@ -59,8 +59,15 @@ export function SkillList({ sheet }: { sheet: Sheet }) {
             />
             <RollButton
               label={`${skillName(skill)} check`}
-              spec={{ kind: 'd20', bonus: stat.value }}
+              spec={{
+                kind: 'd20',
+                bonus: stat.value,
+                mode: skill === 'acrobatics' && sheet.bladesong ? 'advantage' : 'normal',
+              }}
             />
+            {skill === 'acrobatics' && sheet.bladesong && (
+              <span className="text-xs text-text-muted">Adv.</span>
+            )}
           </li>
         ))}
       </ul>

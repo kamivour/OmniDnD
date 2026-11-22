@@ -1,5 +1,6 @@
 import { characterRegistry, type Registry } from '../registry';
 import { entryCasting } from './casting';
+import { BLADESONG, SONG_OF_VICTORY, bladesongRestriction, hasBladesong } from './bladesong';
 import { attunedItems } from './attunement';
 import { wornInfusions, infusionKey, infusionBonus, magicalItem } from './infusions';
 import { recordedLevel, xpForLevel } from './advancement';
@@ -101,6 +102,8 @@ export interface Sheet {
   initiative: Stat;
   ac: Stat;
   speed: Stat;
+  bladesong?: { concentrationBonus: number };
+  weaponCriticalAt?: 18 | 19;
   darkvision?: number;
   maxHp: Stat;
   hitDice: { die: HitDieName; max: number }[];
@@ -248,17 +251,20 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     }
     return result;
   });
+  const activeBladesong = hasBladesong(live) && !bladesongRestriction(build, live, registry);
   const sources: { label: string; modifiers: readonly Modifier[]; level: number }[] = [
     ...features.map(({ def, level }) => ({
       label: def.name,
       modifiers: def.modifiers ?? [],
       level,
     })),
-    ...live.effects.map((effect) => ({
-      label: effect.name,
-      modifiers: effect.modifiers,
-      level: 0,
-    })),
+    ...live.effects
+      .filter(({ sourceId }) => sourceId !== BLADESONG || activeBladesong)
+      .map((effect) => ({
+        label: effect.name,
+        modifiers: effect.modifiers,
+        level: 0,
+      })),
   ];
   const modifierParts = (...targets: Modifier['target'][]): Part[] =>
     sources.flatMap(({ label, modifiers, level }) =>
@@ -268,6 +274,13 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     );
 
   const featureIds = new Set(features.map(({ def }) => def.id));
+  const songBonus = activeBladesong ? Math.max(1, mods.INT) : 0;
+  const victoryBonus = featureIds.has(SONG_OF_VICTORY) ? songBonus : 0;
+  const weaponCriticalAt = featureIds.has('feature.fighter.superior-critical')
+    ? 18
+    : featureIds.has('feature.fighter.improved-critical')
+      ? 19
+      : undefined;
   const remarkableAthlete = featureIds.has('feature.fighter.remarkable-athlete');
   const unproficientCheckParts = (ability: Ability): Part[] => {
     const halfProficiency = modifierParts('unproficient-checks');
@@ -500,7 +513,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       attack.damage.bonus = scalar(
         overridePath('attacks', instanceId, 'damage', 'bonus'),
         `${def.name} damage bonus`,
-        attack.damage.bonus,
+        attack.damage.bonus + (attack.type === 'melee' ? victoryBonus : 0),
         typeof def.weapon.damage === 'number' ? { min: 0 } : {},
       );
     const extra: NonNullable<WeaponAttack['extraDamage']> = features.flatMap(({ def: feature }) =>
@@ -543,6 +556,8 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     level,
     proficiency,
     abilities,
+    ...(songBonus > 0 ? { bladesong: { concentrationBonus: songBonus } } : {}),
+    ...(weaponCriticalAt === undefined ? {} : { weaponCriticalAt }),
     saves,
     skills,
     passives: {

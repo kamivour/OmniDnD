@@ -1,5 +1,6 @@
 import { applyPatches, enablePatches, produceWithPatches, type Draft } from 'immer';
 import { computeSheet, type CharacterState, type Sheet } from '../calc/sheet';
+import { bladesongRestriction, endBladesong, hasBladesong } from '../calc/bladesong';
 import { retainCounterCorrections } from '../calc/value-overrides';
 import { characterRegistry, type Registry } from '../registry';
 import {
@@ -90,10 +91,21 @@ export function runCommand<Payload>(
   if (warnings.length > 0 && !force) return { result: 'warn', reasons: warnings };
 
   let text = '';
+  const oldSongRestriction = hasBladesong(state.live)
+    ? bladesongRestriction(state.build, state.live, scoped)
+    : undefined;
   const [next, patches, inversePatches] = produceWithPatches(
     { build: state.build, live: state.live },
     (draft) => {
       text = command.apply(draft, payload, { ...ctx, eventId, automation });
+      if (hasBladesong(draft.live)) {
+        const restriction =
+          oldSongRestriction ?? bladesongRestriction(draft.build, draft.live, scoped);
+        if (restriction) {
+          const ended = endBladesong(draft.live, restriction);
+          if (ended) text += ` · ${ended}`;
+        }
+      }
       const retained = retainCounterCorrections(
         draft.build,
         draft.live,

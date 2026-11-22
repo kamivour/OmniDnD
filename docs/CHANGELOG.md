@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 02:59 — Bladesong and Champion weapon rolls
+
+- Use Bladesong to see the active AC, movement and concentration bonuses. Roll Acrobatics with advantage while the song lasts.
+- Check that the song ends when you equip a shield, make a two-handed weapon attack, become incapacitated or run out of time.
+- Champion weapon rolls show their expanded critical range. Checks pass.
+
 ## 2026-11-23 02:54 — Wizard spellbook choices and Star Map
 
 - A Wizard with Cantrip Formulas can replace one cantrip during Long Rest.

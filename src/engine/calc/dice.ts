@@ -77,7 +77,12 @@ export interface D20Roll extends DiceRoll {
 }
 
 /** A d20 check, attack or save with a flat bonus. */
-export function rollD20(bonus: number, mode: D20Mode = 'normal', rng: Rng = Math.random): D20Roll {
+export function rollD20(
+  bonus: number,
+  mode: D20Mode = 'normal',
+  rng: Rng = Math.random,
+  criticalAt: 18 | 19 | 20 = 20,
+): D20Roll {
   const first = die(20, rng);
   const second = mode === 'normal' ? undefined : die(20, rng);
   const kept =
@@ -93,7 +98,7 @@ export function rollD20(bonus: number, mode: D20Mode = 'normal', rng: Rng = Math
     total: kept + bonus,
     mode,
     kept,
-    natural: kept === 20 ? 'critical' : kept === 1 ? 'fumble' : undefined,
+    natural: kept >= criticalAt ? 'critical' : kept === 1 ? 'fumble' : undefined,
   };
 }
 

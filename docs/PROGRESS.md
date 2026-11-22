@@ -403,6 +403,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 - [x] Audit all 12 classes across the 2014 PHB, Xanathar's and Tasha's. Restore missing subclasses, spells, picks and verified class mechanics.
 - [x] Add Bard Magical Secrets, Warlock Mystic Arcanum by tier and Wizard Arcane Recovery.
 - [x] Add Wizard Cantrip Formulas, Spell Mastery, Signature Spells and Stars Druid’s free Guiding Bolt castings.
+- [x] Track active Bladesong and Champion weapon critical thresholds.
 - [ ] Add the remaining class choices and tracked feature uses listed in the class audit.
 - [x] Add Vortex Warp for Artificer, Sorcerer and Wizard under the optional Strixhaven source
 - [x] Add catalogue items and create custom contents directly from magic containers
@@ -435,6 +436,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Tracked Bladesong bonuses and ending conditions, plus Champion’s expanded critical range on weapon rolls.
 - 2026-11-23 — Added Wizard cantrip replacement and spellbook choices, plus Star Map’s slot-free Guiding Bolt in Spellbook.
 - 2026-11-23 — Added Bard Magical Secrets, separate Mystic Arcanum castings and Wizard slot recovery during Short Rest.
 - 2026-11-23 — Audited all classes, restored three subclasses and two spells, corrected class spell choices and resources, and recorded the remaining manual mechanics.

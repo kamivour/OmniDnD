@@ -29,6 +29,23 @@ describe('dice', () => {
     expect(rollD20(0, 'normal', sequence(0))).toMatchObject({ natural: 'fumble' });
   });
 
+  it('classifies the kept die using the attack’s critical threshold', () => {
+    expect(rollD20(5, 'normal', sequence(0.925))).toMatchObject({ kept: 19, natural: undefined });
+    expect(rollD20(5, 'advantage', sequence(0.875, 0.925), 19)).toMatchObject({
+      kept: 19,
+      natural: 'critical',
+    });
+    expect(rollD20(5, 'disadvantage', sequence(0.875, 0.925), 19)).toMatchObject({
+      kept: 18,
+      natural: undefined,
+    });
+    expect(rollD20(5, 'normal', sequence(0.875), 18)).toMatchObject({
+      kept: 18,
+      natural: 'critical',
+    });
+    expect(rollD20(5, 'normal', sequence(0), 18)).toMatchObject({ kept: 1, natural: 'fumble' });
+  });
+
   it('doubles the dice on a critical, not the bonus', () => {
     expect(criticalDice('1d8+3')).toBe('2d8+3');
     expect(criticalDice('2d6+1d4')).toBe('4d6+2d4');

@@ -1,4 +1,10 @@
 import { featureResource, writeFeatureResource, type CharacterFeature } from '../calc/features';
+import {
+  BLADESONG,
+  BLADESONG_SECONDS,
+  bladesongRestriction,
+  hasBladesong,
+} from '../calc/bladesong';
 import type { Die, FeatureDef, Recharge } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
 import {
@@ -12,6 +18,8 @@ import {
   removeCondition,
   resetDeathSaves,
   spendEconomy,
+  timeRangeChecks,
+  uniqueEffectId,
   usesLeft,
   type EconomySlot,
 } from './shared';
@@ -91,6 +99,8 @@ export function featureUseDetails(
   else if (isDead(ctx.live)) unavailableReason = 'You are dead';
   else if (feature.def.activation === 'passive')
     unavailableReason = `${feature.def.name} is passive`;
+  else if (featureId === BLADESONG && hasBladesong(ctx.live))
+    unavailableReason = 'Bladesong is already active';
   else if ((feature.def.usesFrom && !pool?.uses) || (alsoId && !also))
     unavailableReason = `${feature.def.name}'s required resource pool is unavailable`;
   else if (uses?.remaining === 0) unavailableReason = `No ${pool!.def.name} uses left`;
@@ -141,6 +151,11 @@ export const useFeature: Command<UseFeaturePayload> = {
     )
       return [block(`Choose an expended slot of level ${restoreSlotCap(ctx)} or lower`)];
     const checks: Check[] = [];
+    if (featureId === BLADESONG) {
+      const restriction = bladesongRestriction(ctx.build, ctx.live, ctx.registry);
+      if (restriction) checks.push(block(`Cannot start Bladesong while ${restriction}`));
+      checks.push(...timeRangeChecks(ctx.live.clock.seconds, BLADESONG_SECONDS));
+    }
     if (feature.def.concentration && ctx.live.concentration)
       checks.push(
         warn(
@@ -182,6 +197,21 @@ export const useFeature: Command<UseFeaturePayload> = {
     const slot = feature && ECONOMY_BY_ACTIVATION[feature.def.activation];
     if (slot) spendEconomy(live, slot);
     const notes: string[] = [];
+    if (featureId === BLADESONG) {
+      live.effects.push({
+        id: uniqueEffectId(live, BLADESONG),
+        name,
+        sourceId: BLADESONG,
+        endsAt: live.clock.seconds + BLADESONG_SECONDS,
+        concentration: false,
+        conditions: [],
+        modifiers: [
+          { target: 'ac', value: { abilityMod: 'INT', min: 1 } },
+          { target: 'speed', value: 10 },
+        ],
+      });
+      notes.push('active for 1 min');
+    }
     if (feature?.def.dropToOne) {
       live.hp = 1;
       resetDeathSaves(live);

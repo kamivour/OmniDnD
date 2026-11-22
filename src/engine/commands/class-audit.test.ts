@@ -5,14 +5,17 @@ import { pendingChoices } from '../calc/pending-choices';
 import { featSpellCandidates } from '../calc/feat-spells';
 import { spellSelectionDetails } from '../calc/spell-selections';
 import { startCombat, startTurn } from './combat';
+import { takeCombatAction } from './actions';
 import { chooseFeatSpells } from './feat-spells';
 import { adjustFeatureUses, featureUseDetails, useFeature } from './features';
+import { equipItem } from './items';
 import { levelUp } from './level';
 import { chooseProficiencies } from './proficiency-picks';
 import { completeLongRest, completeShortRest } from './rest';
 import { resolveChoices } from './resolve-choices';
 import { spellCastDetails } from './spell-options';
 import { castSpell } from './spells';
+import { advanceTime } from './time';
 import { freshState, Session } from './test-utils';
 
 function character(classId: string, level: number, subclassId?: string) {
@@ -502,6 +505,62 @@ describe('class audit', () => {
     ).toBe(2);
     session.undo();
     expect(session.sheet.proficiencies.weapons).not.toContain('item.rapier');
+  });
+
+  it('applies Bladesong and Song of Victory and ends them on shield, weapon grip or time', () => {
+    const session = character('class.wizard', 14, 'subclass.wizard.bladesinging');
+    const featureId = 'feature.wizard.bladesinging-bladesong';
+    session.state.build.abilityScores.base.INT = 18;
+    session.state.build.abilityScores.bonuses = [];
+    session.state.build.items = [
+      { itemId: 'item.longsword', instanceId: 'sword' },
+      { itemId: 'item.shield', instanceId: 'shield' },
+    ];
+    session.state.live.items = {
+      sword: { qty: 1, equipped: true, attuned: false },
+      shield: { qty: 1, equipped: false, attuned: false },
+    };
+    const before = session.sheet;
+    session.run(useFeature, { featureId });
+    expect(session.sheet.bladesong).toEqual({ concentrationBonus: 4 });
+    expect(session.sheet.ac.value).toBe(before.ac.value + 4);
+    expect(session.sheet.speed.value).toBe(before.speed.value + 10);
+    expect(session.sheet.saves.CON.value).toBe(before.saves.CON.value);
+    expect(session.sheet.attacks[0]?.damage?.bonus).toBe(before.attacks[0]!.damage!.bonus + 4);
+    expect(session.live.featureUsesSpent[featureId]).toBe(1);
+    expect(session.run(advanceTime, { seconds: 60 })).toContain('Bladesong');
+    expect(session.sheet.bladesong).toBeUndefined();
+    session.undo();
+    expect(session.run(equipItem, { instanceId: 'shield', equipped: true }, true)).toContain(
+      'Bladesong ended',
+    );
+    expect(session.sheet.bladesong).toBeUndefined();
+    expect(session.preview(useFeature, { featureId }).result).toBe('blocked');
+    session.undo();
+    expect(session.sheet.bladesong?.concentrationBonus).toBe(4);
+    session.run(startCombat, null);
+    session.run(startTurn, null);
+    expect(
+      session.run(takeCombatAction, {
+        action: 'weapon-attack',
+        instanceId: 'sword',
+        twoHanded: true,
+      }),
+    ).toContain('two-handed weapon attack');
+    expect(session.sheet.bladesong).toBeUndefined();
+    session.undo();
+    expect(session.sheet.bladesong?.concentrationBonus).toBe(4);
+  });
+
+  it('derives Champion critical thresholds from Fighter levels', () => {
+    const classId = 'class.fighter';
+    const champion = 'subclass.fighter.champion';
+    expect(character(classId, 3, champion).sheet.weaponCriticalAt).toBe(19);
+    expect(character(classId, 14, champion).sheet.weaponCriticalAt).toBe(19);
+    expect(character(classId, 15, champion).sheet.weaponCriticalAt).toBe(18);
+    expect(
+      character(classId, 20, 'subclass.fighter.battle-master').sheet.weaponCriticalAt,
+    ).toBeUndefined();
   });
 
   it('adds Remarkable Athlete to initiative and physical checks without stacking Jack of All Trades', () => {
