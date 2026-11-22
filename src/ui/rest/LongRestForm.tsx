@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { artificerLevel } from '../../engine/calc/infusions';
-import { completeLongRest } from '../../engine/commands';
+import { completeLongRest, wizardRestCantrips } from '../../engine/commands';
 import { restDurations } from '../../engine/calc/rests';
 import { formatDuration } from '../../engine/clock';
 import { characterStore } from '../../state/character-store';
@@ -20,14 +20,18 @@ export function LongRestForm({
   onApplied: (preparedClassId?: string, infusions?: boolean) => void;
   returnFocusTo?: CommandFocusTarget;
 }) {
-  const { state } = useCharacter();
+  const { state, sheet } = useCharacter();
   const { run } = useCommand();
   const automation = useStore(characterStore, (store) => store.automation);
   const preparedClasses = preparedRestClassIds(state, registry);
   const durations = restDurations(state.campaign);
   const [reviewPrepared, setReviewPrepared] = useState(true);
+  const [cantripOut, setCantripOut] = useState('');
+  const [cantripIn, setCantripIn] = useState('');
   const container = useRef<HTMLDivElement>(null);
-  const preview = previewLongRest(state, registry, automation);
+  const formulas = wizardRestCantrips({ ...state, sheet, registry });
+  const choices = cantripOut ? { cantripSwap: { remove: cantripOut, add: cantripIn } } : null;
+  const preview = previewLongRest(state, registry, automation, choices);
   const changes = preview.result === 'ok' ? restChanges(state, preview.next, registry) : [];
   return (
     <div ref={container} tabIndex={-1} className="flex min-w-0 flex-col gap-4">
@@ -44,6 +48,46 @@ export function LongRestForm({
           Epic rests change duration only. Spell slots recover normally; extra spell-recovery limits
           are a separate DM choice. The 24-hour rest reminder still applies.
         </p>
+      )}
+      {formulas && formulas.known.length > 0 && formulas.available.length > 0 && (
+        <fieldset className="grid gap-2">
+          <legend className="text-sm font-semibold text-text">Cantrip Formulas</legend>
+          <label className="grid gap-1 text-sm text-text">
+            Wizard cantrip to replace
+            <select
+              value={cantripOut}
+              onChange={(event) => {
+                setCantripOut(event.target.value);
+                setCantripIn('');
+              }}
+              className="min-w-0 min-h-11 rounded-btn border border-border bg-surface px-2 text-text"
+            >
+              <option value="">Keep all cantrips</option>
+              {formulas.known.map((id) => (
+                <option key={id} value={id}>
+                  {registry.get('spell', id).name}
+                </option>
+              ))}
+            </select>
+          </label>
+          {cantripOut && (
+            <label className="grid gap-1 text-sm text-text">
+              New Wizard cantrip
+              <select
+                value={cantripIn}
+                onChange={(event) => setCantripIn(event.target.value)}
+                className="min-w-0 min-h-11 rounded-btn border border-border bg-surface px-2 text-text"
+              >
+                <option value="">Choose a cantrip</option>
+                {formulas.available.map((id) => (
+                  <option key={id} value={id}>
+                    {registry.get('spell', id).name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+        </fieldset>
       )}
       <RestPreview
         duration={formatDuration(durations.long)}
@@ -75,7 +119,7 @@ export function LongRestForm({
           disabled={preview.result !== 'ok'}
           onClick={(event) => {
             event.currentTarget.focus();
-            run(completeLongRest, null, returnFocusTo ?? container.current ?? undefined, () =>
+            run(completeLongRest, choices, returnFocusTo ?? container.current ?? undefined, () =>
               onApplied(
                 reviewPrepared ? preparedClasses[0] : undefined,
                 artificerLevel(state.build) >= 2,

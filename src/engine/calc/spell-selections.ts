@@ -179,7 +179,11 @@ export function spellSelectionDetails(
   // A granted spell never uses up a pick, even if it was also chosen by hand.
   const counted = (id: string) => !grantedIds.has(id) && !spell(ctx, id)?.retired;
   const cantripIds = selection.known.filter((id) => spell(ctx, id)?.level === 0 && counted(id));
-  const knownIds = selection.known.filter((id) => (spell(ctx, id)?.level ?? 0) > 0 && counted(id));
+  const knownIds = selection.known.filter(
+    (id) =>
+      (spell(ctx, id)?.level ?? 0) > 0 &&
+      (mode === 'spellbook' ? !spell(ctx, id)?.retired : counted(id)),
+  );
   const preparedCount = selection.prepared.filter(
     (id) => (spell(ctx, id)?.level ?? 0) > 0 && counted(id),
   ).length;

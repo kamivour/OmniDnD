@@ -7,6 +7,7 @@ import {
   runCommand,
   spellSelectionDetails,
   type Automation,
+  type LongRestChoices,
   type ShortRestPayload,
 } from '../../engine/commands';
 import type { Registry } from '../../engine/registry';
@@ -34,15 +35,16 @@ export function previewLongRest(
   state: CharacterState,
   registry: Registry,
   automation: Automation = 'assisted',
+  choices: LongRestChoices | null = null,
 ) {
   const options = {
     eventId: 'preview.long-rest',
     realTime: '1970-01-01T00:00:00.000Z',
     automation,
   };
-  const checked = runCommand(completeLongRest, state, null, registry, options);
+  const checked = runCommand(completeLongRest, state, choices, registry, options);
   if (checked.result !== 'warn') return { ...checked, warnings: [] as string[] };
-  const projected = runCommand(completeLongRest, state, null, registry, {
+  const projected = runCommand(completeLongRest, state, choices, registry, {
     ...options,
     force: true,
   });

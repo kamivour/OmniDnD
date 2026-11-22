@@ -6978,12 +6978,24 @@
       "effect": "Gain a star map for guidance and guiding bolt. Cast guiding bolt without a slot, uses equal your proficiency bonus per long rest."
     },
     "origin": "subclass",
-    "activation": "special",
+    "activation": "passive",
     "uses": {
       "max": {
         "proficiency": "full"
       },
       "recharge": "long"
+    },
+    "spells": {
+      "castingClassId": "class.druid",
+      "ability": "WIS",
+      "slots": false,
+      "freeUsesFromSelf": true,
+      "fixed": [
+        {
+          "spellId": "spell.guiding-bolt",
+          "free": "long"
+        }
+      ]
     }
   },
   {

@@ -16,6 +16,8 @@ export interface SpellbookEntry {
   attack?: number;
   /** Learned from a feat or racial trait; `classId` then holds that feature's id. */
   feat?: SpellbookFeat;
+  /** A feat can add a free casting to the ordinary class spell. */
+  classFree?: SpellbookFeat & { featureId: string };
 }
 
 export interface SpellbookFeat {
@@ -25,6 +27,7 @@ export interface SpellbookFeat {
   free?: FreeCast;
   /** Free castings left before the next rest; Infinity at will. */
   freeLeft: number;
+  freeMax?: number;
   /** Spell level of the free casting, when it is higher than the spell's own. */
   castLevel?: number;
   /** The feat or trait also allows casting the spell with your spell slots. */
@@ -118,21 +121,33 @@ export function spellbookModel(
   }
 
   for (const source of featSpellSources({ registry, build: state.build, sheet })) {
-    if (source.grant.castingClassId) continue;
     for (const feat of source.spells) {
       const def = registry.get('spell', feat.spellId);
+      if (def.retired) continue;
+      const detail: SpellbookFeat = {
+        name: source.name,
+        ...(source.classId ? { classId: source.classId } : {}),
+        ...(feat.free ? { free: feat.free } : {}),
+        freeLeft: featFreeLeft(state.live, source.featureId, feat, sheet),
+        ...(feat.useFeaturePool
+          ? { freeMax: sheet.features.find(({ def }) => def.id === source.featureId)?.uses?.max }
+          : {}),
+        ...(feat.castLevel ? { castLevel: feat.castLevel } : {}),
+        slots: source.grant.slots,
+      };
+      if (source.grant.castingClassId) {
+        if (!feat.free) continue;
+        const entry = entries.find(
+          (row) => row.classId === source.grant.castingClassId && row.spell.id === def.id,
+        );
+        if (entry) entry.classFree = { ...detail, featureId: source.featureId };
+        continue;
+      }
       entries.push({
         spell: spellView(def, state.build.spellTags?.[def.id]),
         classId: source.featureId,
         ...(source.dc === undefined ? {} : { dc: source.dc, attack: source.attack! }),
-        feat: {
-          name: source.name,
-          ...(source.classId ? { classId: source.classId } : {}),
-          ...(feat.free ? { free: feat.free } : {}),
-          freeLeft: featFreeLeft(state.live, source.featureId, feat, sheet),
-          ...(feat.castLevel ? { castLevel: feat.castLevel } : {}),
-          slots: source.grant.slots,
-        },
+        feat: detail,
       });
     }
   }
@@ -232,7 +247,7 @@ export function castingLabel(
 
 /** No way to cast a leveled spell right now: no slot (or ritual) and no free casting left. */
 export function spellUnavailable(
-  entry: Pick<SpellbookEntry, 'spell' | 'feat'>,
+  entry: Pick<SpellbookEntry, 'spell' | 'feat' | 'classFree'>,
   slots: SpellbookModel['slots'],
   ritualAvailable = false,
 ): boolean {
@@ -240,5 +255,6 @@ export function spellUnavailable(
   if (spell.level === 0) return false;
   const slotLeft = slots.some((slot) => slot.level >= spell.level && slot.used < slot.max);
   if (feat) return feat.freeLeft <= 0 && !(feat.slots && slotLeft) && !ritualAvailable;
+  if ((entry.classFree?.freeLeft ?? 0) > 0) return false;
   return !slotLeft && !ritualAvailable;
 }

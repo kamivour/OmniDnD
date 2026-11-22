@@ -141,6 +141,114 @@ describe('class audit', () => {
     expect(session.preview(castSpell, payload).result).toBe('blocked');
   });
 
+  it('changes only the Wizard cantrip selected with Cantrip Formulas at a long rest', () => {
+    const classId = 'class.wizard';
+    const session = character(classId, 3, 'subclass.wizard.evocation');
+    session.state.build.spells = [
+      { classId, known: ['spell.light', 'spell.fire-bolt'] },
+      { classId: 'class.bard', known: ['spell.light'] },
+    ];
+    const payload = { cantripSwap: { remove: 'spell.light', add: 'spell.ray-of-frost' } };
+    session.state.campaign.optionalRules.optionalClassFeatures = false;
+    expect(session.preview(completeLongRest, payload).result).toBe('blocked');
+    session.state.campaign.optionalRules.optionalClassFeatures = true;
+    expect(
+      session.preview(completeLongRest, {
+        cantripSwap: { ...payload.cantripSwap, add: 'spell.fire-bolt' },
+      }).result,
+    ).toBe('blocked');
+    expect(session.run(completeLongRest, payload)).toContain('Cantrip Formulas');
+    expect(session.state.build.spells.map(({ known }) => known)).toEqual([
+      ['spell.ray-of-frost', 'spell.fire-bolt'],
+      ['spell.light'],
+    ]);
+    session.undo();
+    expect(session.state.build.spells[0]?.known).toEqual(['spell.light', 'spell.fire-bolt']);
+  });
+
+  it('requires prepared spellbook picks for Spell Mastery and keeps Signature Spells always prepared', () => {
+    const classId = 'class.wizard';
+    const session = character(classId, 20, 'subclass.wizard.evocation');
+    const mastery = 'feature.wizard.spell-mastery';
+    const signature = 'feature.wizard.signature-spell';
+    const known = [
+      'spell.magic-missile',
+      'spell.shield',
+      'spell.misty-step',
+      'spell.fireball',
+      'spell.counterspell',
+    ];
+    session.state.build.spells = [{ classId, known, prepared: ['spell.magic-missile'] }];
+    expect(
+      session.preview(chooseFeatSpells, {
+        featureId: mastery,
+        spellIds: ['spell.mage-armor', 'spell.misty-step'],
+      }).result,
+    ).toBe('blocked');
+    session.run(chooseFeatSpells, {
+      featureId: mastery,
+      spellIds: ['spell.magic-missile', 'spell.misty-step'],
+    });
+    expect(
+      session.preview(castSpell, { featureId: mastery, spellId: 'spell.misty-step', free: true })
+        .result,
+    ).toBe('blocked');
+    session.run(
+      castSpell,
+      { featureId: mastery, spellId: 'spell.magic-missile', free: true },
+      true,
+    );
+    expect(session.live.slotsUsed[1]).toBe(0);
+    const clock = session.live.clock.seconds;
+    session.run(chooseFeatSpells, {
+      featureId: mastery,
+      spellIds: ['spell.shield', 'spell.misty-step'],
+    });
+    expect(session.live.clock.seconds).toBe(clock + 8 * 3600);
+    session.undo();
+    expect(session.live.clock.seconds).toBe(clock);
+    session.run(chooseFeatSpells, {
+      featureId: signature,
+      spellIds: ['spell.fireball', 'spell.counterspell'],
+    });
+    const details = spellSelectionDetails(
+      { ...session.state, registry, sheet: session.sheet },
+      classId,
+    );
+    expect(details.known.count).toBe(5);
+    expect(details.prepared.count).toBe(1);
+    expect(details.granted.map(({ id }) => id)).toEqual(['spell.fireball', 'spell.counterspell']);
+    const fireball = { featureId: signature, spellId: 'spell.fireball', free: true };
+    const counterspell = { ...fireball, spellId: 'spell.counterspell' };
+    session.run(castSpell, fireball, true);
+    expect(session.preview(castSpell, fireball).result).toBe('blocked');
+    session.run(castSpell, counterspell, true);
+    session.run(completeShortRest, {});
+    expect(session.preview(castSpell, fireball).result).not.toBe('blocked');
+    session.undo();
+    expect(session.preview(castSpell, counterspell).result).toBe('blocked');
+  });
+
+  it('spends the existing Star Map pool for free Guiding Bolt and preserves Druid slot casts', () => {
+    const classId = 'class.druid';
+    const session = character(classId, 2, 'subclass.druid.stars');
+    const featureId = 'feature.druid.stars-star-map';
+    const spellId = 'spell.guiding-bolt';
+    session.live.featureUsesSpent[featureId] = 1;
+    expect(session.preview(castSpell, { spellId, classId, free: true }).result).toBe('blocked');
+    const payload = { featureId, spellId, free: true };
+    session.run(castSpell, payload, true);
+    expect(session.live.featureUsesSpent[featureId]).toBe(2);
+    expect(session.live.slotsUsed[1]).toBe(0);
+    expect(session.preview(castSpell, payload).result).toBe('blocked');
+    session.run(castSpell, { classId, spellId, slotLevel: 1 }, true);
+    expect(session.live.slotsUsed[1]).toBe(1);
+    session.run(completeLongRest, null);
+    expect(session.preview(castSpell, payload).result).not.toBe('blocked');
+    session.undo();
+    expect(session.preview(castSpell, payload).result).toBe('blocked');
+  });
+
   it('uses Arcane Recovery during a short rest, based on Wizard level and the game clock', () => {
     const session = character('class.wizard', 5, 'subclass.wizard.evocation');
     const id = 'feature.wizard.arcane-recovery';

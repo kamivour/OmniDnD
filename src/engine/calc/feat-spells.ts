@@ -15,6 +15,7 @@ import type { Sheet } from './sheet';
 
 type SpellPick = NonNullable<FeatureSpells['picks']>[number];
 export const MYSTIC_ARCANUM = 'feature.warlock.mystic-arcanum';
+export const SIGNATURE_SPELLS = 'feature.wizard.signature-spell';
 const includesLevel = (pick: SpellPick, level: number) =>
   level >= pick.level && level <= (pick.maxLevel ?? pick.level);
 
@@ -24,6 +25,8 @@ export interface FeatSpell {
   free?: FreeCast;
   /** Spell level of the free casting, when it is above the spell's own level. */
   castLevel?: number;
+  /** This spell uses the feature's tracked pool in place of its own one-use counter. */
+  useFeaturePool?: true;
 }
 
 /** A feat or racial trait that teaches spells, with its derived casting numbers. */
@@ -52,6 +55,14 @@ export interface FeatSpellContext {
 /** Key for a free casting in `live.featSpellsUsed`. */
 export const freeUseKey = (featureId: string, spellId: string) => `${featureId}|${spellId}`;
 
+export function wizardSpellbook(build: Pick<CharacterBuild, 'spells'>) {
+  const lists = build.spells.filter(({ classId }) => classId === 'class.wizard');
+  return {
+    known: new Set(lists.flatMap((row) => row.known)),
+    prepared: new Set(lists.flatMap((row) => row.prepared ?? [])),
+  };
+}
+
 function abilityFor(ctx: FeatSpellContext, def: FeatureDef, grant: FeatureSpells) {
   const stored = ctx.build.featSpells?.[def.id];
   if (grant.ability === 'class') {
@@ -77,20 +88,26 @@ export function featSpellSources(ctx: FeatSpellContext): FeatSpellSource[] {
       return [];
     const stored = ctx.build.featSpells?.[def.id];
     const ability = abilityFor(ctx, def, grant);
+    const book = grant.spellbook ? wizardSpellbook(ctx.build) : undefined;
     const fixed = (grant.fixed ?? [])
       .filter((row) => (row.minLevel ?? 1) <= (grant.castingClassId ? level : ctx.sheet.level))
       .map(({ spellId, free, castLevel }) => ({
         spellId,
         ...(free ? { free } : {}),
         ...(castLevel ? { castLevel } : {}),
+        ...(free && grant.freeUsesFromSelf ? { useFeaturePool: true as const } : {}),
       }));
     const picked = (stored?.spellIds ?? []).flatMap((spellId): FeatSpell[] => {
       const spell = ctx.registry.entries.get(spellId);
-      if (spell?.kind !== 'spell') return [];
+      if (spell?.kind !== 'spell' || (book && !book.known.has(spellId))) return [];
       const free = grant.picks?.find((row) => includesLevel(row, spell.level))?.free;
       return [{ spellId, ...(free ? { free } : {}) }];
     });
     const wanted = (grant.picks ?? []).reduce((sum, row) => sum + row.count, 0);
+    const readablePicks =
+      grant.spellbook === 'prepared'
+        ? picked.filter(({ spellId }) => book?.prepared.has(spellId))
+        : picked;
     const needs: FeatSpellSource['needs'] = [];
     if (grant.classOptions && !stored?.classId) needs.push('class');
     if (grant.ability === 'raised' && !ability) needs.push('ability');
@@ -105,7 +122,7 @@ export function featSpellSources(ctx: FeatSpellContext): FeatSpellSource[] {
         ...(mod === undefined
           ? {}
           : { dc: 8 + ctx.sheet.proficiency + mod, attack: ctx.sheet.proficiency + mod }),
-        spells: [...fixed, ...picked],
+        spells: [...fixed, ...readablePicks],
         open: Math.max(0, wanted - picked.length),
         needs,
       },
@@ -153,6 +170,7 @@ export function featSpellCandidates(
 export function otherClassSpells(registry: Registry, build: CharacterBuild, def: FeatureDef) {
   const classId = def.spells?.castingClassId;
   if (!classId) return new Set<string>();
+  if (def.spells?.spellbook) return new Set<string>();
   const featSpells = { ...build.featSpells };
   delete featSpells[def.id];
   const spells = featSpellReassignmentClass(def) ? [] : build.spells;
@@ -182,9 +200,12 @@ export function featSpellPickProblem(
   choice: { classId?: string; ability?: Ability; spellIds: string[] },
   subclassId?: string,
   retained: readonly string[] = [],
+  book?: ReadonlySet<string>,
 ): string | undefined {
   const grant = def.spells;
   if (!grant) return `${def.name} teaches no spells to pick`;
+  if (grant.spellbook && choice.spellIds.some((id) => !book?.has(id)))
+    return 'Choose spells that are in your Wizard spellbook';
   if (grant.classOptions) {
     if (!choice.classId || !grant.classOptions.includes(choice.classId))
       return `Choose a class for ${def.name}`;

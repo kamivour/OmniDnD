@@ -2,6 +2,7 @@ import type { Draft } from 'immer';
 import { computeSheet, type Sheet } from '../calc/sheet';
 import type { Registry } from '../registry';
 import { crossesDawn } from '../clock';
+import { SIGNATURE_SPELLS } from '../calc/feat-spells';
 import {
   DEATH_SAVES_NEEDED,
   INCAPACITATING_CONDITIONS,
@@ -191,6 +192,10 @@ export function removeCondition(live: Live, condition: Condition) {
 /** Clears spent uses of features with one of these recharges. Returns the features' names. */
 export function restoreFeatures(live: Live, sheet: Sheet, recharges: readonly Recharge[]) {
   const names: string[] = [];
+  if (recharges.includes('short') && live.featureUsesSpent[SIGNATURE_SPELLS]) {
+    delete live.featureUsesSpent[SIGNATURE_SPELLS];
+    names.push('Signature Spells');
+  }
   for (const { def, uses } of sheet.features) {
     if (!uses || !recharges.includes(uses.recharge)) continue;
     if ((live.featureUsesSpent[def.id] ?? 0) === 0) continue;

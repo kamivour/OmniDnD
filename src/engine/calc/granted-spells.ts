@@ -11,7 +11,7 @@ export interface GrantedSpell {
 
 type SpellList = CharacterBuild['spells'][number];
 type GrantBuild = Pick<CharacterBuild, 'classes'> &
-  Partial<Pick<CharacterBuild, 'featureIds' | 'featSpells'>>;
+  Partial<Pick<CharacterBuild, 'featureIds' | 'featSpells' | 'spells'>>;
 
 /**
  * Subclass spells (domain, oath, circle, ...) unlocked by the class level reached.
@@ -48,12 +48,20 @@ export function grantedSpells(registry: Registry, build: GrantBuild): GrantedSpe
     for (const id of featureIds) {
       const feature = registry.entries.get(id);
       if (feature?.kind !== 'feature' || feature.spells?.castingClassId !== classId) continue;
+      if (feature.spells.spellbook === 'prepared') continue;
       if (feature.spells.requiredSubclassId && feature.spells.requiredSubclassId !== subclassId)
         continue;
       for (const row of feature.spells.fixed ?? []) {
         if ((row.minLevel ?? 1) <= level) add(row.spellId, feature.name);
       }
-      for (const spellId of build.featSpells?.[id]?.spellIds ?? []) add(spellId, feature.name);
+      for (const spellId of build.featSpells?.[id]?.spellIds ?? []) {
+        if (
+          feature.spells.spellbook &&
+          !build.spells?.some((row) => row.classId === classId && row.known.includes(spellId))
+        )
+          continue;
+        add(spellId, feature.name);
+      }
     }
   }
   return granted;

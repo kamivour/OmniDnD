@@ -289,10 +289,9 @@ describe('full caster slots and pools', () => {
     }
   });
 
-  it('tracks two Signature Spell uses', () => {
-    expect(feature('class.wizard', 20, 'wizard.signature-spell')?.uses).toEqual({
-      max: 2,
-      recharge: 'short',
-    });
+  it('lets a level 20 Wizard choose two Signature Spells with independent short-rest uses', () => {
+    expect(feature('class.wizard', 20, 'wizard.signature-spell')?.def.spells?.picks).toMatchObject([
+      { level: 3, count: 2, free: 'short' },
+    ]);
   });
 });

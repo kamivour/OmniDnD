@@ -4,10 +4,12 @@ import {
   featSpellReassignmentClass,
   freeUseKey,
   otherClassSpells,
+  wizardSpellbook,
 } from '../calc/feat-spells';
 import { AbilitySchema, refId } from '../schema';
 import type { Command, CommandContext } from './runner';
-import { block } from './shared';
+import { block, passTime, timeRangeChecks, withNotes } from './shared';
+import { SECONDS_PER_HOUR } from '../rules2014';
 
 const ChooseFeatSpellsPayloadSchema = z.strictObject({
   featureId: refId('feature'),
@@ -33,39 +35,48 @@ function prepare(ctx: CommandContext, input: ChooseFeatSpellsPayload) {
     choice,
     subclass,
     ctx.build.featSpells?.[choice.featureId]?.spellIds,
+    owned.def.spells?.spellbook ? wizardSpellbook(ctx.build).known : undefined,
   );
   const other = otherClassSpells(ctx.registry, ctx.build, owned.def);
   if (!problem && choice.spellIds.some((id) => other.has(id)))
     return { problem: 'The class already knows one of these spells' };
-  return problem ? { problem } : { choice, def: owned.def };
+  const previous = ctx.build.featSpells?.[choice.featureId]?.spellIds;
+  const study =
+    owned.def.spells?.spellbook === 'prepared' &&
+    previous?.some(
+      (id) => wizardSpellbook(ctx.build).known.has(id) && !choice.spellIds.includes(id),
+    )
+      ? 8 * SECONDS_PER_HOUR
+      : 0;
+  return problem ? { problem } : { choice, def: owned.def, study };
 }
 
 /** Records the spells (and class or ability) picked for a feat or racial trait. */
 export const chooseFeatSpells: Command<ChooseFeatSpellsPayload> = {
   name: 'chooseFeatSpells',
   check: (ctx, input) => {
-    const { problem } = prepare(ctx, input);
-    return problem ? [block(problem)] : [];
+    const { problem, study } = prepare(ctx, input);
+    if (problem) return [block(problem)];
+    if (study && ctx.live.combat) return [block('End combat before studying your spellbook')];
+    return study ? timeRangeChecks(ctx.live.clock.seconds, study) : [];
   },
   apply: (draft, input, ctx) => {
-    const { choice, def } = prepare(ctx, input);
+    const { choice, def, study } = prepare(ctx, input);
     if (!choice || !def) throw new Error('Invalid feat spells reached Apply');
     const { featureId, ...stored } = choice;
     // A correction must not restore a spent free casting, such as an Arcanum.
     const previous = draft.build.featSpells?.[featureId]?.spellIds ?? [];
     const picked = def.spells?.picks ?? [];
     const used = draft.live.featSpellsUsed;
-    if (
-      used &&
-      picked.length === 1 &&
-      picked[0]?.count === 1 &&
-      picked[0].free !== 'will' &&
-      picked[0].free
-    ) {
-      for (const [index, spellId] of previous.entries()) {
+    if (used && picked.length === 1 && picked[0]?.free && picked[0].free !== 'will') {
+      const removed = previous.filter((id) => !stored.spellIds.includes(id));
+      const added = stored.spellIds.filter((id) => !previous.includes(id));
+      let next = 0;
+      for (const spellId of removed) {
         const oldKey = freeUseKey(featureId, spellId);
-        const nextId = stored.spellIds[index];
-        if (nextId === undefined || nextId === spellId || !used[oldKey]) continue;
+        if (!used[oldKey]) continue;
+        const nextId = added[next++];
+        if (nextId === undefined) continue;
         used[freeUseKey(featureId, nextId)] = used[oldKey]!;
         delete used[oldKey];
       }
@@ -81,6 +92,7 @@ export const chooseFeatSpells: Command<ChooseFeatSpellsPayload> = {
       }
     }
     const spells = choice.spellIds.map((id) => ctx.registry.get('spell', id).name);
-    return `${def.name}: chose ${spells.length > 0 ? spells.join(', ') : 'options'}`;
+    const summary = `${def.name}: chose ${spells.length > 0 ? spells.join(', ') : 'options'}`;
+    return study ? withNotes(summary, ['8 h study', ...passTime(draft.live, study, ctx)]) : summary;
   },
 };

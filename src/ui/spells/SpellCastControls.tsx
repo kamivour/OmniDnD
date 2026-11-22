@@ -37,6 +37,8 @@ export function SpellCastControls({
   const entryFeat = entry?.feat;
   // Feat and racial-trait spells carry the feature id in `classId`.
   const via = entryFeat ? { featureId: classId } : { classId };
+  const viaFor = (freeCast: boolean) =>
+    freeCast && entry?.classFree ? { featureId: entry.classFree.featureId } : via;
   const base = spellCastDetails(context, { spellId, ...via });
   const carried = state.build.items.filter(
     (item) => (state.live.items[item.instanceId]?.qty ?? 0) > 0,
@@ -65,16 +67,17 @@ export function SpellCastControls({
           },
         );
   const slots = entryFeat && !entryFeat.slots ? [] : model.slots;
-  const free = entryFeat?.free
+  const freeSource = entryFeat ?? entry?.classFree;
+  const free = freeSource?.free
     ? {
         label:
-          entryFeat.free === 'will'
+          freeSource.free === 'will'
             ? 'At will'
-            : entryFeat.free === 'short'
-              ? '1/short rest'
-              : '1/long rest',
-        left: entryFeat.freeLeft,
-        level: entryFeat.castLevel ?? definition.level,
+            : freeSource.freeMax !== undefined && freeSource.freeMax > 1
+              ? `${freeSource.freeLeft}/${freeSource.freeMax} left per ${freeSource.free} rest`
+              : `1/${freeSource.free} rest`,
+        left: freeSource.freeLeft,
+        level: freeSource.castLevel ?? definition.level,
       }
     : undefined;
   const [applyToMe, setApplyToMe] = useState(false);
@@ -97,7 +100,7 @@ export function SpellCastControls({
       renderChoices={({ level, ritual, free: freeCast }) => {
         const options = {
           spellId,
-          ...via,
+          ...viaFor(freeCast),
           ...(level > 0 && !ritual ? { slotLevel: level } : {}),
           ...(ritual ? { ritual: true } : {}),
         };
@@ -132,6 +135,9 @@ export function SpellCastControls({
                   : '. Spell slots cannot be used for this spell'}
                 .
               </p>
+            )}
+            {freeCast && entry?.classFree && (
+              <p className="text-xs text-text-muted">Free casting from {entry.classFree.name}.</p>
             )}
             {!entryFeat && definition.ritual && !base.ritualEligible && (
               <p className="text-xs text-text-muted">{base.ritualReason}</p>
@@ -228,7 +234,7 @@ export function SpellCastControls({
         setError(null);
         const payload: CastSpellPayload = {
           spellId,
-          ...via,
+          ...viaFor(freeCast),
           ...(freeCast ? { free: true } : {}),
           ...(entry.spell.level > 0 && !ritual && !freeCast ? { slotLevel: level } : {}),
           ...(ritual ? { ritual: true } : {}),

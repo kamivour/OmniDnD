@@ -3,7 +3,11 @@ import { Link, useSearchParams } from 'react-router';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { chooseFeatSpells, featSpellCandidates, resolveChoices } from '../../engine/commands';
-import { featSpellPickLabel, otherClassSpells } from '../../engine/calc/feat-spells';
+import {
+  featSpellPickLabel,
+  otherClassSpells,
+  wizardSpellbook,
+} from '../../engine/calc/feat-spells';
 import type { Ability } from '../../engine/calc/abilities';
 import { artificerLevel, INFUSION_PREFIX } from '../../engine/calc/infusions';
 import type { PendingChoice } from '../../engine/calc/pending-choices';
@@ -313,6 +317,7 @@ function FeatSpellsForm({
   if (!grant) return null;
 
   const other = otherClassSpells(registry, state.build, def);
+  const book = grant.spellbook ? wizardSpellbook(state.build).known : undefined;
   const picks = (grant.picks ?? []).map((pick) => {
     const options = featSpellCandidates(
       registry,
@@ -320,7 +325,7 @@ function FeatSpellsForm({
       pick,
       classId,
       state.build.classes.find((row) => row.classId === pick.spellList)?.subclassId,
-    ).filter(({ id }) => !other.has(id));
+    ).filter(({ id }) => !other.has(id) && (!book || book.has(id)));
     if (pick.maxLevel !== undefined) {
       for (const id of stored?.spellIds ?? []) {
         const spell = registry.entries.get(id);
@@ -445,7 +450,10 @@ function FeatSpellsForm({
           }
           className="min-h-11 rounded-btn bg-accent px-4 font-semibold text-bg disabled:opacity-40"
         >
-          Save choice
+          {grant.spellbook === 'prepared' &&
+          stored?.spellIds.some((id) => book?.has(id) && !chosen.includes(id))
+            ? 'Study 8 hours and save'
+            : 'Save choice'}
         </button>
       </div>
     </div>

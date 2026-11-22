@@ -1291,15 +1291,45 @@
   },
   {
     "id": "feature.wizard.signature-spell",
-    "activation": "special",
-    "uses": {
-      "max": 2,
-      "recharge": "short"
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.wizard",
+      "ability": "INT",
+      "slots": false,
+      "spellbook": "known",
+      "picks": [
+        {
+          "level": 3,
+          "count": 2,
+          "free": "short",
+          "spellList": "class.wizard"
+        }
+      ]
     }
   },
   {
     "id": "feature.wizard.spell-mastery",
-    "activation": "passive"
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.wizard",
+      "ability": "INT",
+      "slots": false,
+      "spellbook": "prepared",
+      "picks": [
+        {
+          "level": 1,
+          "count": 1,
+          "free": "will",
+          "spellList": "class.wizard"
+        },
+        {
+          "level": 2,
+          "count": 1,
+          "free": "will",
+          "spellList": "class.wizard"
+        }
+      ]
+    }
   },
   {
     "id": "feature.wizard.spellcasting",

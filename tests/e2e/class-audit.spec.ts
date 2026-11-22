@@ -1,6 +1,83 @@
 import { expect, test } from './fixtures';
 import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
+test('Wizard replaces one cantrip during a long rest', async ({ page }) => {
+  const file = reviewFile('wizard-cantrip-formulas');
+  const classId = 'class.wizard';
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.campaign.optionalRules.optionalClassFeatures = true;
+  file.build.classes = [{ classId, level: 3, subclassId: 'subclass.wizard.evocation' }];
+  file.build.hpEntries = [1, 2, 3].map((level) => ({
+    level,
+    classId,
+    method: level === 1 ? 'max' : 'average',
+    value: level === 1 ? 6 : 4,
+  }));
+  file.build.spells = [{ classId, known: ['spell.light', 'spell.fire-bolt'] }];
+  await importReview(page, file, 'combat');
+  if (page.viewportSize()!.width < 640) {
+    await page.getByRole('button', { name: 'More', exact: true }).click();
+    await page
+      .getByRole('dialog', { name: 'More', exact: true })
+      .getByRole('button', { name: 'Long Rest', exact: true })
+      .click();
+  } else
+    await page
+      .getByRole('button', { name: 'Long Rest', exact: true })
+      .filter({ visible: true })
+      .click();
+  const dialog = page.getByRole('dialog', { name: 'Long Rest', exact: true });
+  await dialog.getByLabel('Wizard cantrip to replace').selectOption('spell.light');
+  await dialog.getByLabel('New Wizard cantrip').selectOption('spell.ray-of-frost');
+  await dialog.getByRole('checkbox', { name: 'Review prepared spells after resting' }).uncheck();
+  await dialog.getByRole('button', { name: 'Apply Long Rest', exact: true }).click();
+  await expect(dialog).toBeHidden();
+  await saved(page);
+  expect((await reviewState(page, file.build.id)).build.spells[0]?.known).toEqual([
+    'spell.ray-of-frost',
+    'spell.fire-bolt',
+  ]);
+});
+
+test('Stars Druid casts Guiding Bolt from Star Map or with a slot from one Spellbook row', async ({
+  page,
+}) => {
+  const file = reviewFile('stars-star-map');
+  const classId = 'class.druid';
+  const featureId = 'feature.druid.stars-star-map';
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.build.classes = [{ classId, level: 2, subclassId: 'subclass.druid.stars' }];
+  file.build.hpEntries = [1, 2].map((level) => ({
+    level,
+    classId,
+    method: level === 1 ? 'max' : 'average',
+    value: level === 1 ? 8 : 5,
+  }));
+  file.build.spells = [];
+  file.live.slotsUsed = file.live.slotsUsed.map(() => 0);
+  await importReview(page, file, 'spells');
+  const main = page.getByRole('main');
+  const spell = main.getByRole('button', { name: /^Guiding Bolt\b/ });
+  await expect(spell).toHaveCount(1);
+  const row = spell.locator('..');
+  await row.getByRole('button', { name: 'Cast', exact: true }).click();
+  const cast = page.getByRole('dialog', { name: 'Cast Guiding Bolt', exact: true });
+  await cast.getByRole('button', { name: 'Cast Guiding Bolt (free)', exact: true }).click();
+  await expect(cast).toBeHidden();
+  await saved(page);
+  const afterFree = (await reviewState(page, file.build.id)).live;
+  expect(afterFree.featureUsesSpent[featureId]).toBe(1);
+  expect(afterFree.slotsUsed[1]).toBe(0);
+  await row.getByRole('button', { name: 'Cast', exact: true }).click();
+  await cast.getByRole('button', { name: /^L1\b/ }).click();
+  await cast.getByRole('button', { name: 'Cast Guiding Bolt (L1)', exact: true }).click();
+  await expect(cast).toBeHidden();
+  await saved(page);
+  const afterSlot = (await reviewState(page, file.build.id)).live;
+  expect(afterSlot.featureUsesSpent[featureId]).toBe(1);
+  expect(afterSlot.slotsUsed[1]).toBe(1);
+});
+
 test('Lore Bard learns two bonus spells and finds them in Spellbook', async ({ page }) => {
   const file = reviewFile('lore-bard-magical-secrets');
   const classId = 'class.bard';

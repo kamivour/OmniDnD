@@ -200,6 +200,10 @@ export const FeatureSpellsSchema = z.strictObject({
   castingClassId: refId('class').optional(),
   /** This feature reserves picks in the class's Spells Known table. */
   countsTowardKnown: z.literal(true).optional(),
+  /** Picks come from the Wizard's spellbook. A prepared spell is required for mastery. */
+  spellbook: z.enum(['known', 'prepared']).optional(),
+  /** Slot-free casts spend the feature's existing use pool (Star Map). */
+  freeUsesFromSelf: z.literal(true).optional(),
   requiredSubclassId: refId('subclass').optional(),
   /** A fixed ability, the ability the feat raised, or the spellcasting ability of the picked class. */
   ability: z.union([AbilitySchema, z.enum(['raised', 'class'])]),

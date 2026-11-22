@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 02:54 — Wizard spellbook choices and Star Map
+
+- A Wizard with Cantrip Formulas can replace one cantrip during Long Rest.
+- Spell Mastery and Signature Spells use spells from your spellbook. Review the free cast option on the spell’s normal row.
+- Stars Druid can cast Guiding Bolt from Star Map or spend a spell slot. Both choices use the same spell row. Checks pass.
+
 ## 2026-11-23 02:46 — Magical Secrets, Mystic Arcanum and Arcane Recovery
 
 - Lore Bard can choose two bonus spells at level 6 in To do. Regular Magical Secrets reserve picks at Bard levels 10, 14 and 18.

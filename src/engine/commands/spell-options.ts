@@ -1,11 +1,13 @@
 import type { SpellcastingStats } from '../calc/sheet';
 import type { Ability } from '../calc/abilities';
 import { elementalAffinity } from '../calc/ancestry';
+import { featureResource } from '../calc/features';
 import { entryCasting } from '../calc/casting';
 import {
   featSpellSources,
   freeUseKey,
   MYSTIC_ARCANUM,
+  SIGNATURE_SPELLS,
   type FeatSpell,
   type FeatSpellSource,
 } from '../calc/feat-spells';
@@ -202,7 +204,16 @@ export function featFreeLeft(
   sheet?: Pick<SpellOptionsContext['sheet'], 'features'>,
 ): number {
   if (!feat?.free) return 0;
+  if (feat.useFeaturePool)
+    return sheet ? (featureResource(sheet.features, live, featureId)?.remaining ?? 0) : 0;
   if (feat.free === 'will') return Infinity;
+  if (featureId === SIGNATURE_SPELLS) {
+    const legacy = live.featureUsesSpent[SIGNATURE_SPELLS] ?? 0;
+    const tracked = Object.entries(live.featSpellsUsed ?? {}).filter(
+      ([key, spent]) => key.startsWith(`${SIGNATURE_SPELLS}|`) && spent > 0,
+    ).length;
+    if (legacy + tracked >= 2) return 0;
+  }
   const legacySpent = live.featureUsesSpent[MYSTIC_ARCANUM] ?? 0;
   if (sheet && legacySpent > 0 && featureId.startsWith(MYSTIC_ARCANUM)) {
     const tiers = sheet.features

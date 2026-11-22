@@ -2,6 +2,7 @@ import { crossesDawn, formatDuration } from '../clock';
 import { restDurations } from '../calc/rests';
 import { featureResource, writeFeatureResource } from '../calc/features';
 import { MYSTIC_ARCANUM } from '../calc/feat-spells';
+import { spellSelectionDetails } from '../calc/spell-selections';
 import { LONG_REST_INTERVAL_SECONDS } from '../rules2014';
 import type { HitDieName } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
@@ -28,6 +29,20 @@ const SONG_OF_REST = 'feature.bard.song-of-rest';
 const FONT_OF_MAGIC = 'feature.sorcerer.font-of-magic';
 const SORCEROUS_RESTORATION = 'feature.sorcerer.sorcerous-restoration';
 const ARCANE_RECOVERY = 'feature.wizard.arcane-recovery';
+const WIZARD = 'class.wizard';
+const CANTRIP_FORMULAS = 'feature.tce.wizard-cantrip-formulas';
+
+export function wizardRestCantrips(
+  ctx: Pick<CommandContext, 'sheet' | 'build' | 'campaign' | 'registry' | 'live'>,
+) {
+  if (!ctx.sheet.features.some(({ def }) => def.id === CANTRIP_FORMULAS)) return undefined;
+  const details = spellSelectionDetails(ctx, WIZARD);
+  const learned = new Set(details.selection.known);
+  return {
+    known: details.cantrips.ids,
+    available: details.candidates.cantrips.filter((id) => !learned.has(id)),
+  };
+}
 
 export function arcaneRecoveryOptions({
   campaign,
@@ -184,9 +199,13 @@ export const completeShortRest: Command<ShortRestPayload> = {
  * Campaign-length long rest. Needs at least 1 HP at the start. One per 24 hours: the warning
  * compares this rest's end with the last one's (start to start, so a nightly rest is fine).
  */
-export const completeLongRest: Command<null> = {
+export interface LongRestChoices {
+  cantripSwap?: { remove: string; add: string };
+}
+
+export const completeLongRest: Command<LongRestChoices | null> = {
   name: 'completeLongRest',
-  check: (ctx) => {
+  check: (ctx, choices) => {
     const checks = restChecks(ctx);
     const { live } = ctx;
     const duration = restDurations(ctx.campaign).long;
@@ -195,10 +214,18 @@ export const completeLongRest: Command<null> = {
     if (last !== undefined && live.clock.seconds + duration - last < LONG_REST_INTERVAL_SECONDS) {
       checks.push(warn('Less than 24 h since last long rest'));
     }
+    if (choices?.cantripSwap) {
+      const { remove, add } = choices.cantripSwap;
+      const formulas = wizardRestCantrips(ctx);
+      if (!formulas?.known.includes(remove) || !formulas.available.includes(add))
+        checks.push(
+          block('Cantrip Formulas needs a known Wizard cantrip and an available replacement'),
+        );
+    }
     checks.push(...timeRangeChecks(live.clock.seconds, duration));
     return checks;
   },
-  apply: ({ live }, _payload, ctx) => {
+  apply: ({ live, build }, choices, ctx) => {
     const duration = restDurations(ctx.campaign).long;
     const notes: (string | undefined)[] = passTime(live, duration, ctx);
     notes.push(
@@ -261,6 +288,16 @@ export const completeLongRest: Command<null> = {
     if (recovered > 0) notes.push(`${recovered} Hit ${recovered === 1 ? 'Die' : 'Dice'} back`);
 
     live.lastLongRestEnd = live.clock.seconds;
+    if (choices?.cantripSwap) {
+      const { remove, add } = choices.cantripSwap;
+      for (const list of build.spells) {
+        if (list.classId === WIZARD)
+          list.known = list.known.map((id) => (id === remove ? add : id));
+      }
+      notes.push(
+        `Cantrip Formulas: ${ctx.registry.get('spell', remove).name} → ${ctx.registry.get('spell', add).name}`,
+      );
+    }
     return withNotes(`Long rest (${formatDuration(duration)})`, notes);
   },
 };

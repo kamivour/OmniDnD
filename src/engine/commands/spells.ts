@@ -1,6 +1,7 @@
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from '../rules2014';
 import { wornArmor } from '../calc/equipment';
 import { featSpellSources, freeUseKey } from '../calc/feat-spells';
+import { featureResource, writeFeatureResource } from '../calc/features';
 import { spellListsWithGrants } from '../calc/granted-spells';
 import type { SpellDef } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
@@ -78,6 +79,7 @@ function castLevel(ctx: CommandContext, spell: SpellDef, payload: CastSpellPaylo
 function slotChecks(ctx: CommandContext, spell: SpellDef, payload: CastSpellPayload): Check[] {
   const { sheet, live } = ctx;
   if (payload.free) {
+    if (!payload.featureId) return [block('Choose the feature that grants the free casting')];
     return payload.slotLevel !== undefined || payload.pact || payload.ritual
       ? [block('A free casting uses no spell slot')]
       : [];
@@ -252,7 +254,11 @@ export const castSpell: Command<CastSpellPayload> = {
       ? featSpellSources(ctx).find((row) => row.featureId === payload.featureId)
       : undefined;
     if (payload.free && feat) {
-      if (feat.spells.find((row) => row.spellId === spell.id)?.free !== 'will') {
+      const free = feat.spells.find((row) => row.spellId === spell.id);
+      if (free?.useFeaturePool) {
+        const spent = featureResource(ctx.sheet.features, live, feat.featureId)?.spent ?? 0;
+        writeFeatureResource(ctx.sheet.features, live, feat.featureId, spent + 1);
+      } else if (free?.free !== 'will') {
         const key = freeUseKey(feat.featureId, spell.id);
         live.featSpellsUsed = {
           ...live.featSpellsUsed,
