@@ -307,6 +307,8 @@ export interface LevelPicks {
   spells: string[];
   swapOut: string;
   swapIn: string;
+  cantripOut: string;
+  cantripIn: string;
 }
 
 export const emptyPicks: LevelPicks = {
@@ -324,6 +326,8 @@ export const emptyPicks: LevelPicks = {
   spells: [],
   swapOut: '',
   swapIn: '',
+  cantripOut: '',
+  cantripIn: '',
 };
 
 /** Turns the wizard's picks into the `levelUp` payload fields. Spells are left out when `withSpells` is false. */
@@ -357,6 +361,8 @@ export function picksToPayload(
   const spells: NonNullable<LevelUpPayload['spells']> = {};
   if (add.length > 0) spells.add = add;
   if (picks.swapOut && picks.swapIn) spells.swap = { remove: picks.swapOut, add: picks.swapIn };
+  if (picks.cantripOut && picks.cantripIn)
+    spells.cantripSwap = { remove: picks.cantripOut, add: picks.cantripIn };
   return {
     ...(Object.keys(choices).length > 0 ? { choices } : {}),
     ...(withSpells && Object.keys(spells).length > 0 ? { spells } : {}),
@@ -453,6 +459,7 @@ export function levelSpellInfo(
   const selected = prepares ? new Set(details.selection.prepared) : known;
   return {
     gains,
+    className: details.name,
     cantrips: details.candidates.cantrips.filter((id) => !known.has(id)),
     spells: leveled.filter((id) => !selected.has(id)),
     knownSpells: details.known.ids,

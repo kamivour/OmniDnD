@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 01:19 — 2014 class rules audit
+
+- Look for Bladesinging, Circle of Dreams, Circle of the Shepherd, Druid Grove and Find Greater Steed.
+- Rune Knights can pick runes, Arcane Archers can pick shots, and Pact of the Tome offers its three cantrips.
+- Enable Tasha’s Optional Class Features to try the expanded spell lists and eligible cantrip swaps at level-up.
+- Check the class audit for features that still need manual tracking. Checks pass.
+
 ## 2026-11-22 18:45 — Artificer rules audit
 
 - Look for Thorn Whip, Skywrite and six other restored Artificer spells. You can swap one Artificer cantrip when leveling up.

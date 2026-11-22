@@ -400,6 +400,8 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 ## Review fixes
 
+- [x] Audit all 12 classes across the 2014 PHB, Xanathar's and Tasha's. Restore missing subclasses, spells, picks and verified class mechanics.
+- [ ] Add the remaining class choices and tracked feature uses listed in the class audit.
 - [x] Add Vortex Warp for Artificer, Sorcerer and Wizard under the optional Strixhaven source
 - [x] Add catalogue items and create custom contents directly from magic containers
 - [x] Group standard Artificer infusions and Replicate Magic Item recipes under a shared known limit
@@ -424,13 +426,14 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 - Later DM ideas (after M25): map import, monsters and NPCs, rewards, DM level-ups, ambient sounds, party rests and clock, notes and handouts, shared encounter tracker
 - Later: spell import from user-pasted text
 - Later: connect companion creation costs and concentration directly; current companion records follow actions already recorded through Features/Spells.
-- Later: Remarkable Athlete half proficiency on STR/DEX/CON checks, Observant +5 passives, Dual Wielder AC (apply by hand for now)
+- Later: Observant +5 passives and Dual Wielder AC (apply by hand for now)
 - Later: session recap generated from the event log
 
 ## Session log
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Audited all classes, restored three subclasses and two spells, corrected class spell choices and resources, and recorded the remaining manual mechanics.
 - 2026-11-22 — Audited Artificer and restored its spell list, cantrip swaps, focus reminders, tool expertise, Battle Ready and subclass resources.
 - 2026-11-22 — Added Vortex Warp with an optional Strixhaven campaign source and verified Artificer preparation from level 5.
 - 2026-11-22 — Put in… adds catalogue or custom contents directly to a magic container, including water by the liter and borrowed equipment.

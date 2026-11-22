@@ -8,6 +8,7 @@ import {
   type ChooseProficienciesPayload,
 } from '../../engine/commands';
 import { computeSheet, type CharacterState } from '../../engine/calc/sheet';
+import type { Proficiencies } from '../../engine/calc/proficiencies';
 import type { ProficiencyChoice } from '../../engine/schema';
 import type { Skill } from '../../engine/rules2014';
 import { useCommand } from '../commands/command-context';
@@ -26,6 +27,7 @@ const KIND_NOUN: Record<ProficiencyChoice['kinds'][number], string> = {
   skill: 'skill',
   expertise: 'skill expertise',
   tool: 'tool',
+  weapon: 'weapon',
   language: 'language',
   darkvision: 'darkvision',
 };
@@ -35,10 +37,7 @@ function rowTitle(row: ProficiencyChoice) {
   return `Pick ${row.count} ${nouns}${row.expertise ? ' (with expertise)' : ''}`;
 }
 
-function rowOptions(
-  row: ProficiencyChoice,
-  have: { skills: string[]; tools: string[]; languages: string[]; expertise: string[] },
-): Option[] {
+function rowOptions(row: ProficiencyChoice, have: Proficiencies): Option[] {
   const options: Option[] = [];
   for (const kind of row.kinds) {
     if (kind === 'skill' || kind === 'expertise')
@@ -59,6 +58,13 @@ function rowOptions(
           token: `tool:${id}`,
           label: registry.entries.get(id)?.name ?? id,
           ...(have.tools.includes(id) ? { note: 'proficient' } : {}),
+        });
+    if (kind === 'weapon')
+      for (const id of row.weapons ?? [])
+        options.push({
+          token: `weapon:${id}`,
+          label: registry.entries.get(id)?.name ?? id,
+          ...(have.weapons.includes(id) ? { note: 'proficient' } : {}),
         });
     if (kind === 'language')
       for (const language of choiceLanguages)
@@ -82,6 +88,7 @@ function initialRows(
     ...(saved?.skills ?? []).map((value) => `skill:${value}`),
     ...(saved?.expertise ?? []).map((value) => `expertise:${value}`),
     ...(saved?.tools ?? []).map((value) => `tool:${value}`),
+    ...(saved?.weapons ?? []).map((value) => `weapon:${value}`),
     ...(saved?.languages ?? []).map((value) => `language:${value}`),
     ...(saved?.darkvision ? ['darkvision:60'] : []),
   ];
@@ -105,12 +112,14 @@ function toPayload(featureId: string, tokens: Token[]): ChooseProficienciesPaylo
   const skills = of('skill') as Skill[];
   const expertise = of('expertise') as Skill[];
   const tools = of('tool');
+  const weapons = of('weapon');
   const languages = of('language');
   return {
     featureId,
     ...(skills.length > 0 ? { skills } : {}),
     ...(expertise.length > 0 ? { expertise } : {}),
     ...(tools.length > 0 ? { tools } : {}),
+    ...(weapons.length > 0 ? { weapons } : {}),
     ...(languages.length > 0 ? { languages } : {}),
     ...(tokens.includes('darkvision:60') ? { darkvision: true as const } : {}),
   };

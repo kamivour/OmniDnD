@@ -65,6 +65,7 @@ const HpEntrySchema = z.strictObject({
 export const ProficiencyPicksSchema = z.strictObject({
   skills: z.array(SkillSchema).optional(),
   tools: z.array(refId('item')).optional(),
+  weapons: z.array(refId('item')).optional(),
   languages: z.array(z.string().trim().min(1)).optional(),
   expertise: z.array(SkillSchema).optional(),
   darkvision: z.literal(true).optional(),

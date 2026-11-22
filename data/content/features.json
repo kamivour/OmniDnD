@@ -773,7 +773,7 @@
     "source": "TCE",
     "srd": false,
     "summary": {
-      "effect": "Gain one extra skill proficiency from the barbarian skill list. While raging you may use STR for some checks of those skills."
+      "effect": "Choose a proficiency from the Barbarian skill list. Choose another at Barbarian level 10."
     },
     "summaryReviewed": false,
     "origin": "class",
@@ -804,19 +804,19 @@
   {
     "kind": "feature",
     "id": "feature.tce.bard-additional-magical-secrets",
-    "name": "Additional Magical Secrets",
+    "name": "Additional Bard Spells",
     "ruleset": "5e-2014",
     "source": "TCE",
     "srd": false,
     "summary": {
-      "effect": "Learn two spells of your choice from any class. They count as bard spells."
+      "effect": "Tasha adds more choices to the Bard spell list, including Command and Mirror Image."
     },
     "summaryReviewed": false,
     "origin": "class",
     "activation": "passive",
     "optional": {
       "classId": "class.bard",
-      "level": 6
+      "level": 1
     }
   },
   {
@@ -889,7 +889,8 @@
     "optional": {
       "classId": "class.druid",
       "level": 2
-    }
+    },
+    "usesFrom": "feature.druid.wild-shape"
   },
   {
     "kind": "feature",
@@ -1063,15 +1064,25 @@
     "source": "TCE",
     "srd": false,
     "summary": {
-      "effect": "Cast a few nature spells, such as speak with animals, once per long rest without a slot as you level."
+      "effect": "Learn Speak with Animals and cast it once per long rest without a slot. More spells unlock at Ranger levels 5, 9, 13 and 17."
     },
     "summaryReviewed": false,
     "origin": "class",
-    "activation": "special",
+    "activation": "passive",
     "optional": {
       "classId": "class.ranger",
       "level": 3,
       "replaces": "feature.ranger.primeval-awareness"
+    },
+    "spells": {
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.speak-with-animals",
+          "free": "long"
+        }
+      ]
     }
   },
   {
@@ -1154,7 +1165,7 @@
     "source": "TCE",
     "srd": false,
     "summary": {
-      "effect": "When you gain an Ability Score Improvement you may swap a cantrip, an Invocation, or a Mystic Arcanum spell."
+      "effect": "At a Warlock ASI, replace one Warlock cantrip or change your Pact Boon. From Warlock level 12, you can instead replace a Mystic Arcanum spell with one of the same level."
     },
     "summaryReviewed": false,
     "origin": "class",
@@ -2189,14 +2200,10 @@
     "summaryReviewed": false,
     "source": "XGE",
     "summary": {
-      "effect": "After moving at least 10 feet straight at a creature and hitting it, force a STR save (DC 8 + proficiency + STR) or it is knocked prone. Once per short or long rest."
+      "effect": "Once on each of your turns, move at least 10 feet in a straight line before hitting a creature. It makes a STR save (DC 8 + proficiency + STR) or falls prone."
     },
     "origin": "subclass",
-    "activation": "special",
-    "uses": {
-      "max": 1,
-      "recharge": "short"
-    }
+    "activation": "special"
   },
   {
     "kind": "feature",
@@ -2516,10 +2523,22 @@
     "summaryReviewed": false,
     "source": "TCE",
     "summary": {
-      "effect": "A pool of psionic dice, twice your proficiency bonus in number, regained on a long rest. The die is d6, then d8, d10 and d12 at levels 5, 11 and 17. Spend dice to power the features below."
+      "effect": "You have twice your proficiency bonus in psionic dice. A long rest restores the pool. Once per short or long rest, you can use a bonus action to regain one die."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "uses": {
+      "max": {
+        "proficiency": "double"
+      },
+      "recharge": "long"
+    },
+    "die": {
+      "3": "d6",
+      "5": "d8",
+      "11": "d10",
+      "17": "d12"
+    }
   },
   {
     "kind": "feature",
@@ -2590,7 +2609,10 @@
       "effect": "Resistance to psychic damage. At the start of your turn, spend a die to end a charm or fright effect on you."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "defenses": {
+      "resistances": ["psychic"]
+    }
   },
   {
     "kind": "feature",
@@ -3810,7 +3832,8 @@
     },
     "origin": "subclass",
     "activation": "action",
-    "usesFrom": "feature.monk.ki"
+    "usesFrom": "feature.monk.ki",
+    "cost": 2
   },
   {
     "kind": "feature",
@@ -5233,7 +5256,8 @@
     "origin": "subclass",
     "activation": "reaction",
     "usesFrom": "feature.sorcerer.font-of-magic",
-    "trigger": "A creature you can see makes an attack roll, ability check or saving throw"
+    "trigger": "A creature you can see makes an attack roll, ability check or saving throw",
+    "cost": 2
   },
   {
     "kind": "feature",
@@ -5327,7 +5351,10 @@
     },
     "origin": "subclass",
     "activation": "reaction",
-    "trigger": "A creature tries to charm you"
+    "trigger": "A creature tries to charm you",
+    "defenses": {
+      "conditionImmunities": ["charmed"]
+    }
   },
   {
     "kind": "feature",
@@ -5406,7 +5433,10 @@
       "effect": "Your thoughts cannot be read by telepathy. You resist psychic damage, and a creature that deals psychic damage to you takes the same amount."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "defenses": {
+      "resistances": ["psychic"]
+    }
   },
   {
     "kind": "feature",
@@ -5854,7 +5884,10 @@
       "effect": "You resist necrotic damage, and your hit point maximum cannot be reduced."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "defenses": {
+      "resistances": ["necrotic"]
+    }
   },
   {
     "kind": "feature",
@@ -6487,10 +6520,10 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Bonus action: touch a creature to give it a d3 on checks and attacks for 10 minutes, or to restore a spent spell slot. Uses equal your proficiency bonus per long rest."
+      "effect": "Touch a creature to add 1d3 to its attacks and ability checks for 10 minutes, or restore a spent slot of level 1d3 or lower. The slot benefit can affect each creature once per long rest."
     },
     "origin": "subclass",
-    "activation": "bonus",
+    "activation": "action",
     "uses": {
       "max": {
         "proficiency": "full"
@@ -6535,11 +6568,10 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When you give Bardic Inspiration, a mote also appears. It boosts the ability check, attack or save when used, with an extra effect."
+      "effect": "A mote appears when you give Bardic Inspiration. Its benefit depends on whether the recipient spends the die on a check, attack or save."
     },
     "origin": "subclass",
-    "activation": "special",
-    "usesFrom": "feature.bard.bardic-inspiration"
+    "activation": "passive"
   },
   {
     "kind": "feature",
@@ -7261,17 +7293,10 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Each of your Flurry of Blows strikes can instead be Hand of Healing for free, up to WIS modifier uses. Hand of Harm applies once per flurry for free."
+      "effect": "Replace either or both Flurry attacks with Hand of Healing at no extra Ki cost. Apply Hand of Harm to one Flurry hit per turn at no extra cost."
     },
     "origin": "subclass",
-    "activation": "special",
-    "uses": {
-      "max": {
-        "abilityMod": "WIS",
-        "min": 1
-      },
-      "recharge": "long"
-    }
+    "activation": "passive"
   },
   {
     "kind": "feature",
@@ -7286,7 +7311,8 @@
     },
     "origin": "subclass",
     "activation": "action",
-    "usesFrom": "feature.monk.ki"
+    "usesFrom": "feature.monk.ki",
+    "cost": 5
   },
   {
     "kind": "feature",
@@ -7345,7 +7371,8 @@
     },
     "origin": "subclass",
     "activation": "bonus",
-    "usesFrom": "feature.monk.ki"
+    "usesFrom": "feature.monk.ki",
+    "cost": 5
   },
   {
     "kind": "feature",
@@ -7794,10 +7821,22 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Psionic dice equal twice your proficiency bonus: d6, rising to d8, d10, d12 at levels 5, 11, 17. Add one to a failed proficient check (spent only on success), or use telepathy. Bonus action: regain one die per short rest."
+      "effect": "You have twice your proficiency bonus in psionic dice. A long rest restores the pool. Once per short or long rest, you can use a bonus action to regain one die."
     },
     "origin": "subclass",
-    "activation": "special"
+    "activation": "passive",
+    "uses": {
+      "max": {
+        "proficiency": "double"
+      },
+      "recharge": "long"
+    },
+    "die": {
+      "3": "d6",
+      "5": "d8",
+      "11": "d10",
+      "17": "d12"
+    }
   },
   {
     "kind": "feature",
@@ -7808,7 +7847,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When you take the Attack action, attack with a psychic blade: 1d6 psychic, finesse, thrown 60/120 ft. Then, with the other hand free, a bonus-action attack with a second blade deals 1d4."
+      "effect": "Attack with a finesse psychic blade, thrown up to 60 feet. It deals 1d6 + the attack ability modifier. With your other hand free, make another blade attack as a bonus action using a d4."
     },
     "origin": "subclass",
     "activation": "special"
@@ -7918,7 +7957,11 @@
       "effect": "You have resistance to psychic damage and advantage on saves against charm and fright."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "defenses": {
+      "resistances": ["psychic"],
+      "saveAdvantages": ["charmed", "frightened"]
+    }
   },
   {
     "kind": "feature",
@@ -7976,14 +8019,13 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When a creature within 60 feet is about to roll with advantage or disadvantage, cancel that effect as a reaction. Uses equal your CHA modifier per long rest."
+      "effect": "When a visible creature within 60 feet is about to roll with advantage or disadvantage, use your reaction to cancel both. Proficiency bonus uses per long rest."
     },
     "origin": "subclass",
     "activation": "reaction",
     "uses": {
       "max": {
-        "abilityMod": "CHA",
-        "min": 1
+        "proficiency": "full"
       },
       "recharge": "long"
     }
@@ -8085,7 +8127,10 @@
       "effect": "You resist cold damage and can talk to creatures that breathe water."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "defenses": {
+      "resistances": ["cold"]
+    }
   },
   {
     "kind": "feature",
@@ -8194,13 +8239,13 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Action: get the effect of any spell of 6th level or lower with a casting time of 1 action, ignoring its requirements and costly components. Afterward it returns only after 1d4 long rests; track that by hand."
+      "effect": "Request the effect of a spell of level 6 or lower with a one-action casting time, without supplying its components. Roll 1d4 long rests before manually restoring the use."
     },
     "origin": "subclass",
     "activation": "action",
     "uses": {
       "max": 1,
-      "recharge": "long"
+      "recharge": "none"
     }
   },
   {
@@ -9055,8 +9100,14 @@
       "effect": "When you hit with a weapon, spend a Bardic Inspiration die for extra psychic damage, once per turn."
     },
     "origin": "subclass",
-    "activation": "passive",
-    "usesFrom": "feature.bard.bardic-inspiration"
+    "activation": "free",
+    "usesFrom": "feature.bard.bardic-inspiration",
+    "dice": {
+      "3": "2d6",
+      "5": "3d6",
+      "10": "5d6",
+      "15": "8d6"
+    }
   },
   {
     "kind": "feature",
@@ -9323,7 +9374,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Choose two magical shot options. Once per turn on a hit, use one to add damage and a rider effect. Twice per short rest."
+      "effect": "Use one of your chosen shots when you fire a shortbow or longbow as part of the Attack action. Use a shot once per turn. The save DC is 8 + proficiency + INT."
     },
     "origin": "subclass",
     "activation": "special",
@@ -9522,7 +9573,8 @@
     },
     "origin": "subclass",
     "activation": "special",
-    "usesFrom": "feature.monk.ki"
+    "usesFrom": "feature.monk.ki",
+    "cost": 2
   },
   {
     "kind": "feature",
@@ -9605,11 +9657,10 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Make a ranged spell attack within 30 feet for radiant damage, using a monk weapon rolls. Spend ki to make extra bolts."
+      "effect": "Replace attacks in your Attack action with ranged spell attacks up to 30 feet. Each deals your Martial Arts die plus DEX in radiant damage."
     },
     "origin": "subclass",
-    "activation": "action",
-    "usesFrom": "feature.monk.ki"
+    "activation": "action"
   },
   {
     "kind": "feature",
@@ -10245,7 +10296,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Make a Persuasion check against a creature’s Insight. Charm a hostile or taunt a foe into attacking only you."
+      "effect": "Win a Persuasion contest against Insight. Hostile targets have disadvantage on attacks against others and cannot make opportunity attacks against them. Nonhostile targets are charmed by you. Either effect lasts up to 1 minute."
     },
     "origin": "subclass",
     "activation": "action"
@@ -10406,7 +10457,8 @@
     },
     "origin": "subclass",
     "activation": "bonus",
-    "usesFrom": "feature.sorcerer.font-of-magic"
+    "usesFrom": "feature.sorcerer.font-of-magic",
+    "cost": 3
   },
   {
     "kind": "feature",
@@ -10435,7 +10487,8 @@
     },
     "origin": "subclass",
     "activation": "bonus",
-    "usesFrom": "feature.sorcerer.font-of-magic"
+    "usesFrom": "feature.sorcerer.font-of-magic",
+    "cost": 6
   },
   {
     "kind": "feature",
@@ -10477,7 +10530,10 @@
       "effect": "Resist lightning and thunder. When you cast a 1st-level or higher lightning or thunder spell, chosen creatures within 10 feet take lightning or thunder damage equal to half your sorcerer level."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "passive",
+    "defenses": {
+      "resistances": ["lightning", "thunder"]
+    }
   },
   {
     "kind": "feature",
@@ -10523,6 +10579,9 @@
     "uses": {
       "max": 1,
       "recharge": "short"
+    },
+    "defenses": {
+      "immunities": ["lightning", "thunder"]
     }
   },
   {
@@ -10766,5 +10825,717 @@
       "max": 1,
       "recharge": "long"
     }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.barbarian-primal-knowledge-10",
+    "name": "Primal Knowledge (level 10)",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Choose another proficiency from the Barbarian skill list."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.barbarian",
+      "level": 10
+    },
+    "proficiencies": {
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["skill"],
+          "skills": [
+            "animal-handling",
+            "athletics",
+            "intimidation",
+            "nature",
+            "perception",
+            "survival"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.ranger-primal-awareness-beast-sense",
+    "name": "Primal Awareness: Beast Sense",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn Beast Sense and cast it once per long rest without a slot."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.ranger",
+      "level": 5
+    },
+    "spells": {
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.beast-sense",
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.ranger-primal-awareness-speak-with-plants",
+    "name": "Primal Awareness: Speak with Plants",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn Speak with Plants and cast it once per long rest without a slot."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.ranger",
+      "level": 9
+    },
+    "spells": {
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.speak-with-plants",
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.ranger-primal-awareness-locate-creature",
+    "name": "Primal Awareness: Locate Creature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn Locate Creature and cast it once per long rest without a slot."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.ranger",
+      "level": 13
+    },
+    "spells": {
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.locate-creature",
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.ranger-primal-awareness-commune-with-nature",
+    "name": "Primal Awareness: Commune with Nature",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn Commune with Nature and cast it once per long rest without a slot."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "optional": {
+      "classId": "class.ranger",
+      "level": 17
+    },
+    "spells": {
+      "ability": "WIS",
+      "slots": true,
+      "fixed": [
+        {
+          "spellId": "spell.commune-with-nature",
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.tce.ranger-natures-veil",
+    "name": "Nature's Veil",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Turn invisible, along with your equipment, until the start of your next turn. Track the invisibility at the table."
+    },
+    "origin": "class",
+    "activation": "bonus",
+    "optional": {
+      "classId": "class.ranger",
+      "level": 10,
+      "replaces": "feature.ranger.hide-in-plain-sight"
+    },
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.monk.sun-soul-bonus-bolts",
+    "name": "Radiant Sun Bolt (extra bolts)",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After using a sun bolt in the Attack action, spend 1 Ki to fire two more."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.monk.ki"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.dreams-balm-of-the-summer-court",
+    "name": "Balm of the Summer Court",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Heal a visible creature within 120 feet. Spend up to half your Druid level in d6s and give it 1 temporary HP for each die. Choose and record the healing and dice spent."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "perLevel": 1
+      },
+      "recharge": "long"
+    },
+    "die": {
+      "2": "d6"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.dreams-hearth-of-moonlight-and-shadow",
+    "name": "Hearth of Moonlight and Shadow",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "At the start of a rest, shelter a 30-foot area. Creatures inside get +5 to Stealth and Perception checks, and firelight is obscured from outside."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.dreams-hidden-paths",
+    "name": "Hidden Paths",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Teleport yourself up to 60 feet as a bonus action or a willing creature you touch up to 30 feet as an action. Both modes share the same uses."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": {
+        "abilityMod": "WIS",
+        "min": 1
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.dreams-walker-in-dreams",
+    "name": "Walker in Dreams",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After a rest, use Dream as the messenger, Scrying, or Teleportation Circle to your most recent long rest on this plane. This use requires neither a slot nor material components."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.shepherd-speech-of-the-woods",
+    "name": "Speech of the Woods",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "You learn Sylvan. You can make yourself understood to beasts and interpret their sounds and movements."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "proficiencies": {
+      "languages": ["Sylvan"]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.shepherd-spirit-totem",
+    "name": "Spirit Totem",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Summon a Bear, Hawk or Unicorn spirit within 60 feet. Its aura extends 30 feet for 1 minute. Move the spirit with a bonus action and resolve its aura at the table."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.shepherd-mighty-summoner",
+    "name": "Mighty Summoner",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Beasts and fey conjured by your spells gain 2 maximum HP per Hit Die. Their natural weapons count as magical."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.shepherd-guardian-spirit",
+    "name": "Guardian Spirit",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A beast or fey you conjured regains HP equal to half your Druid level when it ends its turn in your Spirit Totem aura."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.druid.shepherd-faithful-summons",
+    "name": "Faithful Summons",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When dropped to 0 HP or involuntarily incapacitated, summon four beasts of CR 2 or lower within 20 feet. The effect lasts 1 hour without a slot or concentration."
+    },
+    "origin": "subclass",
+    "activation": "special",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.bladesinging-training",
+    "name": "Training in War and Song",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain light armor and Performance proficiency. Choose proficiency with one type of one-handed melee weapon."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "proficiencies": {
+      "armor": ["light"],
+      "skills": ["performance"],
+      "choose": [
+        {
+          "count": 1,
+          "kinds": ["weapon"],
+          "weapons": [
+            "item.club",
+            "item.dagger",
+            "item.handaxe",
+            "item.javelin",
+            "item.light-hammer",
+            "item.mace",
+            "item.quarterstaff",
+            "item.sickle",
+            "item.spear",
+            "item.battleaxe",
+            "item.flail",
+            "item.longsword",
+            "item.morningstar",
+            "item.rapier",
+            "item.scimitar",
+            "item.shortsword",
+            "item.trident",
+            "item.war-pick",
+            "item.warhammer",
+            "item.whip"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.bladesinging-bladesong",
+    "name": "Bladesong",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Sing for 1 minute. Add INT to AC and concentration saves (minimum +1), add 10 feet to walking speed and gain advantage on Acrobatics. Medium or heavy armor, a shield, incapacitation or a two-handed weapon attack ends the song."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "proficiency": "full"
+      },
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.bladesinging-extra-attack",
+    "name": "Extra Attack",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Attack twice with the Attack action. You may cast a cantrip instead of one attack."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "attacks": {
+      "6": 2
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.bladesinging-song-of-defense",
+    "name": "Song of Defense",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While Bladesong is active, spend a slot in reaction to damage. Reduce the damage by five times the slot level."
+    },
+    "origin": "subclass",
+    "activation": "reaction"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.wizard.bladesinging-song-of-victory",
+    "name": "Song of Victory",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While Bladesong is active, add your INT modifier (minimum +1) to melee weapon damage."
+    },
+    "origin": "subclass",
+    "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-inscribed-cloud",
+    "name": "Cloud Rune",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While carried, you have advantage on Sleight of Hand and Deception. On a hit within 30 feet, use your reaction to redirect that attack to another eligible creature."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "byLevel": {
+          "3": 1,
+          "15": 2
+        }
+      },
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-inscribed-fire",
+    "name": "Fire Rune",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Double proficiency on checks using tools you know. On a weapon hit, deal extra 2d6 fire and attempt to restrain the target with fiery shackles."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "uses": {
+      "max": {
+        "byLevel": {
+          "3": 1,
+          "15": 2
+        }
+      },
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-inscribed-frost",
+    "name": "Frost Rune",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While carried, you have advantage on Animal Handling and Intimidation. Invoke for +2 to STR and CON checks and saves for 10 minutes."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "byLevel": {
+          "3": 1,
+          "15": 2
+        }
+      },
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-inscribed-stone",
+    "name": "Stone Rune",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While carried, you have advantage on Insight and 120-foot darkvision. React to a creature ending its turn within 30 feet to try to charm and incapacitate it."
+    },
+    "origin": "subclass",
+    "activation": "reaction",
+    "uses": {
+      "max": {
+        "byLevel": {
+          "3": 1,
+          "15": 2
+        }
+      },
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-inscribed-hill",
+    "name": "Hill Rune",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While carried, resist poison damage and gain advantage against being poisoned. Invoke to resist bludgeoning, piercing and slashing damage for 1 minute."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "byLevel": {
+          "3": 1,
+          "15": 2
+        }
+      },
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.rune-knight-inscribed-storm",
+    "name": "Storm Rune",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While carried, gain advantage on Arcana and cannot be surprised while conscious. Invoke for 1 minute, then use reactions to grant advantage or disadvantage on rolls within 60 feet."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": {
+        "byLevel": {
+          "3": 1,
+          "15": 2
+        }
+      },
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-shot-banishing",
+    "name": "Banishing Arrow",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "On a hit, the target makes a CHA save or briefly vanishes to the Feywild. At Fighter 18, the hit adds 2d6 force damage."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.fighter.arcane-archer-arcane-shot"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-shot-beguiling",
+    "name": "Beguiling Arrow",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "On a hit, add psychic damage. A failed WIS save charms the target with respect to an ally you choose."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.fighter.arcane-archer-arcane-shot"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-shot-bursting",
+    "name": "Bursting Arrow",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "On a hit, the target and other creatures within 10 feet take force damage."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.fighter.arcane-archer-arcane-shot"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-shot-enfeebling",
+    "name": "Enfeebling Arrow",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "On a hit, add necrotic damage. A failed CON save halves the damage of the target’s weapon attacks for a turn."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.fighter.arcane-archer-arcane-shot"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-shot-grasping",
+    "name": "Grasping Arrow",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "On a hit, add poison damage and wrap the target in brambles that slow and damage it. An Athletics check against your shot DC removes the brambles."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.fighter.arcane-archer-arcane-shot"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-shot-piercing",
+    "name": "Piercing Arrow",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Instead of an attack roll, fire through a 30-foot line. Each creature in it makes a DEX save against the arrow’s damage plus piercing damage."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.fighter.arcane-archer-arcane-shot"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-shot-seeking",
+    "name": "Seeking Arrow",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Instead of an attack roll, seek a target seen in the past minute. If it is in range and there is a path, it makes a DEX save against the arrow’s damage plus force damage."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.fighter.arcane-archer-arcane-shot"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.arcane-archer-shot-shadow",
+    "name": "Shadow Arrow",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "On a hit, add psychic damage. A failed WIS save restricts the target’s sight to 5 feet for a turn."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.fighter.arcane-archer-arcane-shot"
   }
 ]

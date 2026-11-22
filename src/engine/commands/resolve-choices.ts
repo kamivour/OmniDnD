@@ -72,7 +72,13 @@ function prepare(ctx: CommandContext, input: ResolveChoicesPayload) {
     campaign: ctx.campaign,
     build: ctx.build,
     registry: ctx.registry,
-    score: (ability) => ctx.sheet.abilities[ability].score.value,
+    score: (ability) => {
+      const score = ctx.sheet.abilities[ability].score;
+      // A deferred ASI still applies to the score earned before Primal Champion.
+      return (
+        score.value - (score.parts.find(({ label }) => label === 'Primal Champion')?.value ?? 0)
+      );
+    },
     classId,
     newLevel,
     choices,

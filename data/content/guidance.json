@@ -2460,5 +2460,32 @@
       "Needs DM approval and usually an evil character",
       "Aura also boosts enemy fiends and undead"
     ]
+  },
+  {
+    "id": "subclass.druid.dreams",
+    "kind": "subclass",
+    "pitch": "Heal allies with fey magic and bring the party to safety.",
+    "difficulty": "medium",
+    "mainAbilities": ["WIS"],
+    "strengths": ["Bonus-action healing", "Teleport allies"],
+    "weaknesses": ["Limited Balm dice"]
+  },
+  {
+    "id": "subclass.druid.shepherd",
+    "kind": "subclass",
+    "pitch": "Strengthen creatures you summon and aid the party with different spirit auras.",
+    "difficulty": "hard",
+    "mainAbilities": ["WIS"],
+    "strengths": ["Flexible spirit auras", "Durable summons"],
+    "weaknesses": ["Summoned creatures add decisions in combat"]
+  },
+  {
+    "id": "subclass.wizard.bladesinging",
+    "kind": "subclass",
+    "pitch": "Combine a one-handed weapon with Wizard spellcasting.",
+    "difficulty": "hard",
+    "mainAbilities": ["INT", "DEX"],
+    "strengths": ["Bladesong improves defense", "Cantrip during the Attack action at level 6"],
+    "weaknesses": ["Limited songs between long rests"]
   }
 ]

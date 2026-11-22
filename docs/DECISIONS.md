@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D259 | 2026-11-23 | Tasha's additional class spell lists require both its class content and Optional Class Features. Existing spell picks stay saved and the Compendium labels optional class memberships. | Keep class eligibility aligned with the campaign and preserve older characters |
 | D258 | 2026-11-22 | Keep the retired 2024 cauldron ID so old saves can remove it in Manage spells. It cannot be selected or cast. | Enforce the 2014 ruleset and preserve saved data |
 | D257 | 2026-11-22 | Battle Ready uses INT when it gives a better attack and damage bonus with a magic weapon. The existing attack overrides cover table choices. | Match the sheet’s handling of flexible weapon abilities |
 | D256 | 2026-11-22 | Strixhaven is opt-in per campaign. Its first bundled entry is Vortex Warp, available to its printed class lists. | Keep spell access tied to the correct sourcebook |
@@ -313,6 +314,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q47 | Should Homunculus Servant and Replicate Magic Item get dedicated creation and active-limit tracking? | After M41 | Learn named recipes in To do. Use Companions and Inventory to record creation and count these applications manually. | User |
 | Q48 | How should Armorer's armor components be represented for its two extra armor-only infusions? | After M41 | Standard active limit only, with a visible reminder; do not grant two unrestricted slots or invent separate equipment | User |
 | Q49 | Should the already-bundled Summon Draconic Spirit move from the Tasha filter to a separate Fizban's book option? | Next source review | Preserve existing spell visibility; identify Fizban's 2014 source on its companion card | User |
+| Q52 | How strictly should the app enforce subclass spell schools, discipline prerequisites and situational limits? | Class mechanics follow-up | Keep existing picks. Warn about verified limits and let the DM confirm exceptions. | User / DM |
 
 ## How to add an entry
 

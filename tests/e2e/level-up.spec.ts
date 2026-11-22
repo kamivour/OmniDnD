@@ -236,6 +236,34 @@ function friendFile(
   });
 }
 
+test('Bard swaps a cantrip and a leveled spell independently at an ASI', async ({ page }) => {
+  const classId = 'class.bard';
+  const file = friendFile('bard-versatility', { classId, level: 3 });
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.campaign.hpMethod = 'average';
+  file.campaign.optionalRules.optionalClassFeatures = true;
+  file.build.classes = [{ classId, level: 3, subclassId: 'subclass.bard.lore' }];
+  const known = ['spell.vicious-mockery', 'spell.minor-illusion', 'spell.healing-word'];
+  file.build.spells = [{ classId, known }];
+
+  await importFile(page, file);
+  await goSheet(page, file.build.id);
+  await openLevelUp(page);
+  const wizard = form(page);
+  await wizard.getByLabel('Swap out a known spell').selectOption('spell.healing-word');
+  await wizard.getByLabel('Learn instead', { exact: true }).selectOption('spell.cure-wounds');
+  await wizard.getByLabel('Swap out a Bard cantrip').selectOption('spell.vicious-mockery');
+  await wizard.getByLabel('Learn this cantrip instead').selectOption('spell.mage-hand');
+  await noOverflow(page);
+  await applyLevelUp(page);
+  expect((await readSaved(page, file.build.id)).build.spells[0]?.known).toEqual(
+    expect.arrayContaining(['spell.minor-illusion', 'spell.mage-hand', 'spell.cure-wounds']),
+  );
+  await undo(page).click();
+  await saved(page);
+  expect((await readSaved(page, file.build.id)).build.spells[0]?.known).toEqual(known);
+});
+
 test('Artillerist prepares class spells at level-up in addition to automatic subclass spells', async ({
   page,
 }) => {

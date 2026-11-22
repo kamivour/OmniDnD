@@ -442,5 +442,9 @@
       { "level": 7, "spellIds": ["spell.freedom-of-movement", "spell.summon-construct"] },
       { "level": 9, "spellIds": ["spell.greater-restoration", "spell.wall-of-force"] }
     ]
+  },
+  {
+    "id": "subclass.sorcerer.shadow-magic",
+    "grantedSpells": [{ "level": 3, "spellIds": ["spell.darkness"] }]
   }
 ]

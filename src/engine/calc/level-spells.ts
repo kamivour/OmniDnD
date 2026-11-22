@@ -1,12 +1,15 @@
 import { z } from 'zod';
 import type { CharacterBuild } from '../schema';
 import { refId } from '../schema';
+import { asiLevels } from './level-choices';
+import { sourceAllows } from './campaign-rules';
 import { spellSelectionDetails, type SpellSelectionContext } from './spell-selections';
 
 /** Spells picked while levelling: cantrips, known or prepared spells, and one swap for known casters. */
 export const LevelSpellsSchema = z.strictObject({
   add: z.array(refId('spell')).optional(),
   swap: z.strictObject({ remove: refId('spell'), add: refId('spell') }).optional(),
+  cantripSwap: z.strictObject({ remove: refId('spell'), add: refId('spell') }).optional(),
 });
 
 export type LevelSpells = z.infer<typeof LevelSpellsSchema>;
@@ -14,6 +17,14 @@ export type LevelSpells = z.infer<typeof LevelSpellsSchema>;
 /** PHB 2014: a Wizard copies two spells per level and starts with six in the spellbook. */
 const WIZARD_LEVEL_SPELLS = 2;
 const WIZARD_FIRST_SPELLS = 6;
+
+const CANTRIP_VERSATILITY: Record<string, string> = {
+  'class.bard': 'feature.tce.bard-bardic-versatility',
+  'class.cleric': 'feature.tce.cleric-cantrip-versatility',
+  'class.druid': 'feature.tce.druid-cantrip-versatility',
+  'class.sorcerer': 'feature.tce.sorcerer-sorcerous-versatility',
+  'class.warlock': 'feature.tce.warlock-eldritch-versatility',
+};
 
 export interface LevelSpellGains {
   mode: 'known' | 'prepared' | 'spellbook' | 'unsupported';
@@ -48,7 +59,13 @@ export function levelSpellGains(
             : WIZARD_LEVEL_SPELLS
           : room(details.prepared),
     canSwap: details.mode === 'known' && !firstLevel,
-    canSwapCantrip: classId === 'class.artificer' && !firstLevel,
+    canSwapCantrip:
+      !firstLevel &&
+      (classId === 'class.artificer' ||
+        (asiLevels(classId).includes(details.classLevel) &&
+          ctx.sheet.features.some(
+            ({ def }) => def.id === CANTRIP_VERSATILITY[classId] && sourceAllows(ctx.campaign, def),
+          ))),
   };
 }
 
@@ -64,7 +81,7 @@ export function applyLevelSpells(
   const build = structuredClone(ctx.build);
   const summary: string[] = [];
   const add = picks.add ?? [];
-  if (add.length === 0 && !picks.swap) return { build, summary };
+  if (add.length === 0 && !picks.swap && !picks.cantripSwap) return { build, summary };
   const details = spellSelectionDetails(ctx, classId);
   const gains = levelSpellGains(ctx, classId, firstLevel);
   if (gains.mode === 'unsupported')
@@ -103,22 +120,38 @@ export function applyLevelSpells(
         : `${details.name} learns ${gains.spells} more spell(s) at this level`,
     };
 
-  if (picks.swap) {
-    const { remove, add: replacement } = picks.swap;
-    const cantripSwap = gains.canSwapCantrip;
-    if (!gains.canSwap && !cantripSwap)
-      return { blocked: `${details.name} cannot swap a spell at this level` };
-    const oldChoices = cantripSwap ? details.cantrips.ids : details.known.ids;
-    const newChoices = cantripSwap ? details.candidates.cantrips : details.candidates.known;
-    if (!oldChoices.includes(remove))
-      return {
-        blocked: cantripSwap
-          ? 'Swap out an Artificer cantrip you know'
-          : 'Swap out a leveled spell you know',
-      };
-    if (!cantripSwap && (level(replacement) ?? 0) === 0)
-      return { blocked: 'Swap in a leveled spell' };
-    if (!newChoices.includes(replacement) || known.has(replacement) || add.includes(replacement))
+  // Earlier Artificer callers used the single swap field for cantrips.
+  const cantripSwap = picks.cantripSwap ?? (classId === 'class.artificer' ? picks.swap : undefined);
+  const spellSwap = classId === 'class.artificer' ? undefined : picks.swap;
+  if (classId === 'class.artificer' && picks.cantripSwap && picks.swap)
+    return { blocked: 'Choose only one cantrip replacement' };
+  if (spellSwap) {
+    const { remove, add: replacement } = spellSwap;
+    if (!gains.canSwap) return { blocked: `${details.name} cannot swap a spell at this level` };
+    if (!details.known.ids.includes(remove))
+      return { blocked: 'Swap out a leveled spell you know' };
+    if ((level(replacement) ?? 0) === 0) return { blocked: 'Swap in a leveled spell' };
+    if (
+      !details.candidates.known.includes(replacement) ||
+      known.has(replacement) ||
+      add.includes(replacement)
+    )
+      return { blocked: `${nameOf(replacement)} is not available to swap in` };
+    known.delete(remove);
+    known.add(replacement);
+    summary.push(`Swap ${nameOf(remove)} for ${nameOf(replacement)}`);
+  }
+  if (cantripSwap) {
+    const { remove, add: replacement } = cantripSwap;
+    if (!gains.canSwapCantrip)
+      return { blocked: `${details.name} cannot swap a cantrip at this level` };
+    if (!details.cantrips.ids.includes(remove))
+      return { blocked: 'Swap out a class cantrip you know' };
+    if (
+      !details.candidates.cantrips.includes(replacement) ||
+      known.has(replacement) ||
+      add.includes(replacement)
+    )
       return { blocked: `${nameOf(replacement)} is not available to swap in` };
     known.delete(remove);
     known.add(replacement);

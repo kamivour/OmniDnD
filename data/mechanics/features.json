@@ -819,7 +819,11 @@
   },
   {
     "id": "feature.monk.purity-of-body",
-    "activation": "passive"
+    "activation": "passive",
+    "defenses": {
+      "immunities": ["poison"],
+      "conditionImmunities": ["poisoned"]
+    }
   },
   {
     "id": "feature.monk.slow-fall",
@@ -1185,7 +1189,7 @@
   },
   {
     "id": "feature.sorcerer.sorcerous-restoration",
-    "activation": "special"
+    "activation": "passive"
   },
   {
     "id": "feature.sorcerer.spellcasting",
@@ -1949,6 +1953,17 @@
           "skills": ["arcana", "nature"]
         }
       ]
+    },
+    "spells": {
+      "ability": "INT",
+      "slots": false,
+      "picks": [
+        {
+          "level": 0,
+          "count": 1,
+          "spellIds": ["spell.druidcraft", "spell.prestidigitation"]
+        }
+      ]
     }
   },
   {
@@ -2619,6 +2634,38 @@
       "ability": "INT",
       "classId": "class.wizard",
       "school": "evocation"
+    }
+  },
+  {
+    "id": "feature.bard.peerless-skill",
+    "activation": "special",
+    "usesFrom": "feature.bard.bardic-inspiration"
+  },
+  {
+    "id": "feature.warlock.pact-of-the-chain",
+    "spells": {
+      "ability": "CHA",
+      "slots": true,
+      "ritual": true,
+      "fixed": [
+        {
+          "spellId": "spell.find-familiar"
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.warlock.pact-of-the-tome",
+    "spells": {
+      "castingClassId": "class.warlock",
+      "ability": "CHA",
+      "slots": false,
+      "picks": [
+        {
+          "level": 0,
+          "count": 3
+        }
+      ]
     }
   }
 ]

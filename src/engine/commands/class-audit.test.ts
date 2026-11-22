@@ -2,13 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { grantedSpells } from '../calc/granted-spells';
 import { pendingChoices } from '../calc/pending-choices';
+import { featSpellCandidates } from '../calc/feat-spells';
 import { spellSelectionDetails } from '../calc/spell-selections';
 import { startCombat, startTurn } from './combat';
 import { chooseFeatSpells } from './feat-spells';
 import { adjustFeatureUses, featureUseDetails, useFeature } from './features';
-import { completeShortRest } from './rest';
+import { levelUp } from './level';
+import { chooseProficiencies } from './proficiency-picks';
+import { completeLongRest, completeShortRest } from './rest';
 import { resolveChoices } from './resolve-choices';
 import { spellCastDetails } from './spell-options';
+import { castSpell } from './spells';
 import { freshState, Session } from './test-utils';
 
 function character(classId: string, level: number, subclassId?: string) {
@@ -30,6 +34,248 @@ function character(classId: string, level: number, subclassId?: string) {
 }
 
 describe('class audit', () => {
+  const subclasses = [...registry.entries.values()].filter((entry) => entry.kind === 'subclass');
+
+  it.each(subclasses)('$name grants its recorded features at their class levels', (subclass) => {
+    const firstLevel = registry.get('class', subclass.classId).subclassLevel;
+    const levels = new Set([firstLevel, 20, ...subclass.features.map(({ level }) => level)]);
+    for (const level of levels) {
+      const session = character(subclass.classId, level, subclass.id);
+      session.state.campaign.optionalRules.optionalClassFeatures = false;
+      const owned = new Set(session.sheet.features.map(({ def }) => def.id));
+      for (const row of subclass.features)
+        expect(owned.has(row.featureId)).toBe(
+          subclass.features.some(
+            (step) => step.featureId === row.featureId && step.level <= level,
+          ) ||
+            registry
+              .get('class', subclass.classId)
+              .features.some((step) => step.featureId === row.featureId && step.level <= level),
+        );
+    }
+  });
+
+  it.each([
+    ['bard', 'mirror-image'],
+    ['cleric', 'sunbeam'],
+    ['druid', 'divination'],
+    ['paladin', 'warding-bond'],
+    ['ranger', 'summon-elemental'],
+    ['sorcerer', 'grease'],
+    ['warlock', 'mislead'],
+    ['wizard', 'speak-with-dead'],
+  ])('%s adds %s only with the Tasha class options', (className, spellName) => {
+    const id = `class.${className}`;
+    const spell = `spell.${spellName}`;
+    const session = character(id, 20);
+    const details = () =>
+      spellSelectionDetails({ ...session.state, registry, sheet: session.sheet }, id);
+    const allowed = () => [...details().candidates.known, ...details().candidates.prepared];
+    expect(allowed()).toContain(spell);
+    session.state.campaign.sourceParts = { TCE: ['spells'] };
+    expect(allowed()).not.toContain(spell);
+    session.state.campaign.sourceParts = undefined;
+    session.state.campaign.optionalRules.optionalClassFeatures = false;
+    expect(allowed()).not.toContain(spell);
+  });
+
+  it('keeps normal class lists and subclass spell grants distinct', () => {
+    const session = character('class.cleric', 17, 'subclass.cleric.tempest');
+    session.state.campaign.optionalRules.optionalClassFeatures = false;
+    const ctx = { ...session.state, registry, sheet: session.sheet };
+    const cleric = spellSelectionDetails(ctx, 'class.cleric');
+    expect(cleric.candidates.prepared).toContain('spell.divination');
+    expect(cleric.candidates.prepared).not.toContain('spell.arcane-eye');
+    expect(cleric.granted).toContainEqual({ id: 'spell.destructive-wave', from: 'Tempest Domain' });
+  });
+
+  it('lets a Bard swap a cantrip at an ASI and a leveled spell independently', () => {
+    const session = character('class.bard', 3, 'subclass.bard.lore');
+    const before = ['spell.vicious-mockery', 'spell.minor-illusion', 'spell.healing-word'];
+    session.state.campaign.hpMethod = 'average';
+    session.state.build.spells = [{ classId: 'class.bard', known: before }];
+    const payload = {
+      classId: 'class.bard',
+      spells: {
+        cantripSwap: { remove: before[0]!, add: 'spell.mage-hand' },
+        swap: { remove: before[2]!, add: 'spell.cure-wounds' },
+      },
+    };
+    session.state.campaign.optionalRules.optionalClassFeatures = false;
+    expect(session.preview(levelUp, payload).result).toBe('blocked');
+    session.state.campaign.optionalRules.optionalClassFeatures = true;
+    session.run(levelUp, payload);
+    expect(session.state.build.spells[0]?.known).toEqual(
+      expect.arrayContaining(['spell.mage-hand', 'spell.cure-wounds', 'spell.minor-illusion']),
+    );
+    expect(
+      session.preview(levelUp, {
+        classId: 'class.bard',
+        spells: { cantripSwap: { remove: 'spell.mage-hand', add: 'spell.vicious-mockery' } },
+      }).result,
+    ).toBe('blocked');
+    session.undo();
+    expect(session.state.build.spells[0]?.known).toEqual(before);
+  });
+
+  it('offers six runes with the right level gates and reads Master of Runes at Fighter 15', () => {
+    const classId = 'class.fighter';
+    const subclassId = 'subclass.fighter.rune-knight';
+    const session = character(classId, 3, subclassId);
+    const options = () =>
+      pendingChoices(session.state, registry).find(({ label }) => label.startsWith('Runes:'));
+    const rune = (name: string) => `feature.fighter.rune-knight-inscribed-${name}`;
+    expect(options()).toMatchObject({
+      count: 2,
+      optionIds: ['cloud', 'fire', 'frost', 'stone'].map(rune),
+    });
+    expect(
+      session.preview(resolveChoices, {
+        classId,
+        choices: { features: [rune('hill')] },
+      }).result,
+    ).toBe('blocked');
+    session.run(resolveChoices, { classId, choices: { features: [rune('cloud'), rune('frost')] } });
+    session.state.build = {
+      ...session.state.build,
+      classes: [
+        { classId, subclassId, level: 14 },
+        { classId: 'class.bard', level: 1 },
+      ],
+    };
+    expect(featureUseDetails(session, rune('cloud')).uses).toMatchObject({ max: 1 });
+    session.state.build.classes = [{ classId, subclassId, level: 15 }];
+    expect(options()?.optionIds).toHaveLength(6);
+    expect(featureUseDetails(session, rune('cloud')).uses).toMatchObject({ max: 2 });
+  });
+
+  it('offers all Arcane Shots and two lore cantrips, with a single shot pool', () => {
+    const classId = 'class.fighter';
+    const session = character(classId, 3, 'subclass.fighter.arcane-archer');
+    const shot = pendingChoices(session.state, registry).find(({ label }) =>
+      label.startsWith('Arcane Shots:'),
+    );
+    expect(shot?.count).toBe(2);
+    expect(shot?.optionIds).toHaveLength(8);
+    const ids = shot!.optionIds!.slice(0, 2);
+    session.run(resolveChoices, { classId, choices: { features: ids } });
+    session.run(useFeature, { featureId: ids[0]! });
+    expect(featureUseDetails(session, ids[1]!).uses?.remaining).toBe(1);
+    session.undo();
+    expect(featureUseDetails(session, ids[1]!).uses?.remaining).toBe(2);
+    const def = registry.get('feature', 'feature.fighter.arcane-archer-arcane-archer-lore');
+    const pick = def.spells!.picks![0]!;
+    expect(
+      featSpellCandidates(registry, session.state.campaign, pick, undefined).map(({ id }) => id),
+    ).toEqual(['spell.druidcraft', 'spell.prestidigitation']);
+  });
+
+  it('gives Primal Awareness spells separate free uses without learning ordinary Ranger spells', () => {
+    const session = character('class.ranger', 5, 'subclass.ranger.hunter');
+    const payload = {
+      spellId: 'spell.beast-sense',
+      featureId: 'feature.tce.ranger-primal-awareness-beast-sense',
+      free: true,
+    };
+    const ctx = () => ({ ...session.state, registry, sheet: session.sheet });
+    expect(spellSelectionDetails(ctx(), 'class.ranger').known.count).toBe(0);
+    expect(spellCastDetails(ctx(), payload).feat).toMatchObject({ freeLeft: 1 });
+    session.run(castSpell, payload, true);
+    expect(spellCastDetails(ctx(), payload).feat).toMatchObject({ freeLeft: 0 });
+    session.run(completeLongRest, null);
+    expect(spellCastDetails(ctx(), payload).feat).toMatchObject({ freeLeft: 1 });
+    session.undo();
+    expect(spellCastDetails(ctx(), payload).feat).toMatchObject({ freeLeft: 0 });
+  });
+
+  it('keeps Pact Tome cantrips and Pact Chain Find Familiar outside normal known picks', () => {
+    const classId = 'class.warlock';
+    const session = character(classId, 3, 'subclass.warlock.fiend');
+    const tome = 'feature.warlock.pact-of-the-tome';
+    const chain = 'feature.warlock.pact-of-the-chain';
+    const tomeSpells = ['spell.guidance', 'spell.fire-bolt', 'spell.vicious-mockery'];
+    const ctx = () => ({ ...session.state, registry, sheet: session.sheet });
+    session.run(resolveChoices, { classId, choices: { features: [tome] } });
+    session.run(chooseFeatSpells, { featureId: tome, spellIds: tomeSpells });
+    expect(spellSelectionDetails(ctx(), classId).cantrips.count).toBe(0);
+    for (const spellId of tomeSpells)
+      expect(spellCastDetails(ctx(), { spellId, classId })).toMatchObject({
+        selected: true,
+        casting: { ability: 'CHA' },
+      });
+    session.undo();
+    session.undo();
+    session.run(resolveChoices, { classId, choices: { features: [chain] } });
+    expect(
+      spellCastDetails(ctx(), { spellId: 'spell.find-familiar', featureId: chain }),
+    ).toMatchObject({
+      ritualEligible: true,
+      feat: { source: { grant: { slots: true } } },
+    });
+  });
+
+  it('grants Shadow Magic Darkness and restores four spent points to a level 20 Sorcerer', () => {
+    const classId = 'class.sorcerer';
+    const session = character(classId, 20, 'subclass.sorcerer.shadow-magic');
+    expect(grantedSpells(registry, session.state.build)).toContainEqual({
+      spellId: 'spell.darkness',
+      classId,
+      from: 'Shadow Magic',
+    });
+    const pool = 'feature.sorcerer.font-of-magic';
+    session.run(useFeature, { featureId: 'feature.sorcerer.shadow-magic-umbral-form' });
+    expect(session.live.featureUsesSpent[pool]).toBe(6);
+    session.run(completeShortRest, {});
+    expect(session.live.featureUsesSpent[pool]).toBe(2);
+    session.undo();
+    expect(session.live.featureUsesSpent[pool]).toBe(6);
+  });
+
+  it('adds Primal Champion to Strength and Constitution and derives the extra HP', () => {
+    const session = character('class.barbarian', 19, 'subclass.barbarian.berserker');
+    session.state.campaign.hpMethod = 'average';
+    const { maxHp, abilities } = session.sheet;
+    session.run(levelUp, { classId: 'class.barbarian' });
+    for (const ability of ['STR', 'CON'] as const)
+      expect(session.sheet.abilities[ability].score.value).toBe(abilities[ability].score.value + 4);
+    expect(session.sheet.maxHp.value).toBe(maxHp.value + 7 + abilities.CON.mod + 40);
+    session.undo();
+    expect(session.sheet.maxHp.value).toBe(maxHp.value);
+  });
+
+  it('lets a Bladesinger choose a one-handed melee weapon and gains Extra Attack at Wizard 6', () => {
+    const session = character('class.wizard', 6, 'subclass.wizard.bladesinging');
+    const featureId = 'feature.wizard.bladesinging-training';
+    session.state.build.proficiencies.weapons = [];
+    expect(session.sheet.proficiencies.armor).toContain('light');
+    expect(session.sheet.proficiencies.skills).toContain('performance');
+    expect(
+      session.preview(chooseProficiencies, { featureId, weapons: ['item.longbow'] }).result,
+    ).toBe('blocked');
+    session.run(chooseProficiencies, { featureId, weapons: ['item.rapier'] });
+    expect(session.sheet.proficiencies.weapons).toContain('item.rapier');
+    expect(
+      session.sheet.features.find(
+        ({ def }) => def.id === 'feature.wizard.bladesinging-extra-attack',
+      )?.attacks,
+    ).toBe(2);
+    session.undo();
+    expect(session.sheet.proficiencies.weapons).not.toContain('item.rapier');
+  });
+
+  it('adds Remarkable Athlete to initiative and physical checks without stacking Jack of All Trades', () => {
+    const session = character('class.fighter', 7, 'subclass.fighter.champion');
+    session.state.build.classes.push({ classId: 'class.bard', level: 2 });
+    session.state.build.proficiencies.skills = ['acrobatics'];
+    session.state.build.proficiencies.expertise = [];
+    const { initiative, skills } = session.sheet;
+    expect(initiative.parts).toContainEqual({ label: 'Remarkable Athlete', value: 2 });
+    expect(initiative.parts.map(({ label }) => label)).not.toContain('Jack of All Trades');
+    expect(skills.athletics.parts).toContainEqual({ label: 'Remarkable Athlete', value: 2 });
+    expect(skills.acrobatics.parts.map(({ label }) => label)).not.toContain('Remarkable Athlete');
+    expect(skills.arcana.parts).toContainEqual({ label: 'Jack of All Trades', value: 2 });
+  });
+
   it.each([
     ['paladin', 'blessed-warrior', 'CHA', ['spell.sacred-flame', 'spell.guidance']],
     ['ranger', 'druidic-warrior', 'WIS', ['spell.shillelagh', 'spell.guidance']],

@@ -2629,6 +2629,10 @@
         "featureId": "feature.monk.sun-soul-radiant-sun-bolt"
       },
       {
+        "level": 3,
+        "featureId": "feature.monk.sun-soul-bonus-bolts"
+      },
+      {
         "level": 6,
         "featureId": "feature.monk.sun-soul-searing-arc-strike"
       },
@@ -3141,6 +3145,107 @@
       {
         "level": 20,
         "featureId": "feature.paladin.oathbreaker-dread-lord"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.druid.dreams",
+    "name": "Circle of Dreams",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Fey magic that heals allies, shelters rests and opens paths through dreams."
+    },
+    "classId": "class.druid",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.druid.dreams-balm-of-the-summer-court"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.druid.dreams-hearth-of-moonlight-and-shadow"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.druid.dreams-hidden-paths"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.druid.dreams-walker-in-dreams"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.druid.shepherd",
+    "name": "Circle of the Shepherd",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Call spirits and strengthen conjured beasts and fey."
+    },
+    "classId": "class.druid",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.druid.shepherd-speech-of-the-woods"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.druid.shepherd-spirit-totem"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.druid.shepherd-mighty-summoner"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.druid.shepherd-guardian-spirit"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.druid.shepherd-faithful-summons"
+      }
+    ]
+  },
+  {
+    "kind": "subclass",
+    "id": "subclass.wizard.bladesinging",
+    "name": "Bladesinging",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Blend swordplay and spellcasting through an arcane song."
+    },
+    "classId": "class.wizard",
+    "features": [
+      {
+        "level": 2,
+        "featureId": "feature.wizard.bladesinging-training"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.wizard.bladesinging-bladesong"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.wizard.bladesinging-extra-attack"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.wizard.bladesinging-song-of-defense"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.wizard.bladesinging-song-of-victory"
       }
     ]
   }

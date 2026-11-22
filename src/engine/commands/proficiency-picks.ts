@@ -82,6 +82,7 @@ export const chooseProficiencies: Command<ChooseProficienciesPayload> = {
       ...(picks.skills ?? []),
       ...(picks.expertise ?? []).map((skill) => `${skill} expertise`),
       ...(picks.tools ?? []),
+      ...(picks.weapons ?? []),
       ...(picks.languages ?? []),
       ...(picks.darkvision ? ['darkvision'] : []),
     ].map((value) => label(value, ctx));

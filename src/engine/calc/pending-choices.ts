@@ -51,6 +51,8 @@ interface OptionFamily {
   prefix: string;
   /** Tasha optional class features that join this list when the campaign uses them. */
   tasha?: string[];
+  /** Options that first become available at a later class level. */
+  minLevels?: Record<string, number>;
   /** [class level, total picks from that level on], PHB 2014. */
   totals: [number, number][];
 }
@@ -152,6 +154,35 @@ export const OPTION_FAMILIES: OptionFamily[] = [
       [7, 5],
       [10, 7],
       [15, 9],
+    ],
+  },
+  {
+    classId: 'class.fighter',
+    subclassId: 'subclass.fighter.arcane-archer',
+    label: 'Arcane Shots',
+    prefix: 'feature.fighter.arcane-archer-shot-',
+    totals: [
+      [3, 2],
+      [7, 3],
+      [10, 4],
+      [15, 5],
+      [18, 6],
+    ],
+  },
+  {
+    classId: 'class.fighter',
+    subclassId: 'subclass.fighter.rune-knight',
+    label: 'Runes',
+    prefix: 'feature.fighter.rune-knight-inscribed-',
+    minLevels: {
+      'feature.fighter.rune-knight-inscribed-hill': 7,
+      'feature.fighter.rune-knight-inscribed-storm': 7,
+    },
+    totals: [
+      [3, 2],
+      [7, 3],
+      [10, 4],
+      [15, 5],
     ],
   },
   {
@@ -277,6 +308,7 @@ export function familyOptionIds(
       (row) =>
         row.kind === 'feature' &&
         (row.id.startsWith(family.prefix) || tasha.includes(row.id)) &&
+        (classLevel ?? 20) >= (family.minLevels?.[row.id] ?? 1) &&
         sourceAllows(campaign, row),
     )
     .map((row) => row.id);

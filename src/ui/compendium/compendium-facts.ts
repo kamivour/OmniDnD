@@ -1,4 +1,5 @@
 import { itemTier, itemType, type CatalogEntry } from '../../engine/catalog';
+import { optionalTashaSpellClasses } from '../../engine/calc/class-spell-lists';
 import type { Registry } from '../../engine/registry';
 import type { ItemDef, SpellDef } from '../../engine/schema';
 import { skillName } from '../format';
@@ -181,7 +182,8 @@ export function entryFacts(
 ): EntryFacts {
   const name = (id: string) => registry.entries.get(id)?.name ?? id;
   switch (entry.kind) {
-    case 'spell':
+    case 'spell': {
+      const optionalClasses = optionalTashaSpellClasses(entry);
       return {
         facts: [
           [
@@ -203,10 +205,21 @@ export function entryFacts(
           ...(entry.attack
             ? ([['Attack', `${titleWord(entry.attack)} spell attack`]] as Fact[])
             : []),
-          ['Classes', entry.classes.map(name).sort().join(', ') || 'None'],
+          [
+            'Classes',
+            entry.classes
+              .filter((id) => !optionalClasses.includes(id))
+              .map(name)
+              .sort()
+              .join(', ') || 'None',
+          ],
+          ...(optionalClasses.length > 0
+            ? [['Classes with Tasha options', optionalClasses.map(name).sort().join(', ')] as Fact]
+            : []),
         ],
         lists: [],
       };
+    }
     case 'class': {
       const facts: Fact[] = [
         ['Hit die', entry.hitDie],

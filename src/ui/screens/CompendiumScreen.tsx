@@ -112,10 +112,11 @@ export function CompendiumScreen() {
             e,
             filter,
             bases.map(({ name }) => name),
+            scope,
           );
         })
         .sort(compareEntries),
-    [all, filter],
+    [all, filter, scope],
   );
   const books = useMemo(
     () => (Object.keys(SOURCE_NAMES) as Source[]).filter((b) => all.some((e) => e.source === b)),

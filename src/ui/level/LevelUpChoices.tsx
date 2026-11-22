@@ -379,6 +379,64 @@ function SpellChecks({
   );
 }
 
+function SpellSwap({
+  label,
+  incomingLabel,
+  oldIds,
+  newIds,
+  out,
+  next,
+  setOut,
+  setNext,
+  registry,
+}: {
+  label: string;
+  incomingLabel: string;
+  oldIds: string[];
+  newIds: string[];
+  out: string;
+  next: string;
+  setOut: (id: string) => void;
+  setNext: (id: string) => void;
+  registry: Registry;
+}) {
+  const id = useId();
+  const options = (ids: string[]) =>
+    ids.map((spell) => (
+      <option key={spell} value={spell}>
+        {optionName(registry, spell)}
+      </option>
+    ));
+  return (
+    <>
+      <Field label={label} htmlFor={`${id}-out`}>
+        <select
+          id={`${id}-out`}
+          value={out}
+          onChange={(event) => setOut(event.target.value)}
+          className={inputClass}
+        >
+          <option value="">Keep all</option>
+          {options(oldIds)}
+        </select>
+      </Field>
+      {out && (
+        <Field label={incomingLabel} htmlFor={`${id}-in`}>
+          <select
+            id={`${id}-in`}
+            value={next}
+            onChange={(event) => setNext(event.target.value)}
+            className={inputClass}
+          >
+            <option value="">Choose a spell</option>
+            {options(newIds)}
+          </select>
+        </Field>
+      )}
+    </>
+  );
+}
+
 export function SpellPicks({
   info,
   picks,
@@ -388,13 +446,9 @@ export function SpellPicks({
   registry: Registry;
   info: ReturnType<typeof levelSpellInfo>;
 }) {
-  const id = useId();
   const { gains } = info;
   const wizard = gains.mode === 'spellbook';
   const prepares = gains.mode === 'prepared';
-  const swapOut = gains.canSwapCantrip ? info.knownCantrips : info.knownSpells;
-  const swapIn = gains.canSwapCantrip ? info.cantrips : info.spells;
-  const learned = gains.canSwapCantrip ? picks.cantrips : picks.spells;
   return (
     <div className={group}>
       <p className="text-sm font-semibold text-text">
@@ -417,9 +471,7 @@ export function SpellPicks({
       {gains.cantrips > 0 && (
         <SpellChecks
           legend="Cantrips"
-          ids={
-            gains.canSwapCantrip ? info.cantrips.filter((id) => id !== picks.swapIn) : info.cantrips
-          }
+          ids={info.cantrips.filter((id) => id !== picks.cantripIn)}
           chosen={picks.cantrips}
           limit={gains.cantrips}
           registry={registry}
@@ -435,55 +487,38 @@ export function SpellPicks({
                 ? 'Spells to copy into your spellbook'
                 : 'Spells known'
           }
-          ids={info.spells}
+          ids={info.spells.filter((id) => id !== picks.swapIn)}
           chosen={picks.spells}
           limit={gains.spells}
           registry={registry}
           onChange={(spells) => set({ spells })}
         />
       )}
-      {(gains.canSwap || gains.canSwapCantrip) && swapOut.length > 0 && (
-        <>
-          <Field
-            label={
-              gains.canSwapCantrip ? 'Swap out an Artificer cantrip' : 'Swap out a known spell'
-            }
-            htmlFor={`${id}-out`}
-          >
-            <select
-              id={`${id}-out`}
-              value={picks.swapOut}
-              onChange={(event) => set({ swapOut: event.target.value })}
-              className={inputClass}
-            >
-              <option value="">Keep all</option>
-              {swapOut.map((spell) => (
-                <option key={spell} value={spell}>
-                  {optionName(registry, spell)}
-                </option>
-              ))}
-            </select>
-          </Field>
-          {picks.swapOut && (
-            <Field label="Learn instead" htmlFor={`${id}-in`}>
-              <select
-                id={`${id}-in`}
-                value={picks.swapIn}
-                onChange={(event) => set({ swapIn: event.target.value })}
-                className={inputClass}
-              >
-                <option value="">Choose a spell</option>
-                {swapIn
-                  .filter((spell) => !learned.includes(spell))
-                  .map((spell) => (
-                    <option key={spell} value={spell}>
-                      {optionName(registry, spell)}
-                    </option>
-                  ))}
-              </select>
-            </Field>
-          )}
-        </>
+      {gains.canSwap && info.knownSpells.length > 0 && (
+        <SpellSwap
+          label="Swap out a known spell"
+          incomingLabel="Learn instead"
+          oldIds={info.knownSpells}
+          newIds={info.spells.filter((id) => !picks.spells.includes(id))}
+          out={picks.swapOut}
+          next={picks.swapIn}
+          setOut={(id) => set({ swapOut: id, swapIn: '' })}
+          setNext={(id) => set({ swapIn: id })}
+          registry={registry}
+        />
+      )}
+      {gains.canSwapCantrip && info.knownCantrips.length > 0 && (
+        <SpellSwap
+          label={`Swap out ${info.className === 'Artificer' ? 'an' : 'a'} ${info.className} cantrip`}
+          incomingLabel={gains.canSwap ? 'Learn this cantrip instead' : 'Learn instead'}
+          oldIds={info.knownCantrips}
+          newIds={info.cantrips.filter((id) => !picks.cantrips.includes(id))}
+          out={picks.cantripOut}
+          next={picks.cantripIn}
+          setOut={(id) => set({ cantripOut: id, cantripIn: '' })}
+          setNext={(id) => set({ cantripIn: id })}
+          registry={registry}
+        />
       )}
     </div>
   );

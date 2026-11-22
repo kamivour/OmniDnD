@@ -30,7 +30,10 @@ describe('M37 Xanathar’s subclasses, part 1', () => {
   });
 
   it('shared pools are linked', () => {
-    expect(registry.get('feature', 'feature.monk.sun-soul-radiant-sun-bolt').usesFrom).toBe(
+    expect(
+      registry.get('feature', 'feature.monk.sun-soul-radiant-sun-bolt').usesFrom,
+    ).toBeUndefined();
+    expect(registry.get('feature', 'feature.monk.sun-soul-bonus-bolts').usesFrom).toBe(
       'feature.monk.ki',
     );
     expect(registry.get('feature', 'feature.cleric.grave-path-to-the-grave').usesFrom).toBe(

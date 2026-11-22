@@ -1,5 +1,6 @@
 import { formatDuration } from '../clock';
 import { restDurations } from '../calc/rests';
+import { featureResource, writeFeatureResource } from '../calc/features';
 import { LONG_REST_INTERVAL_SECONDS } from '../rules2014';
 import type { HitDieName } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
@@ -23,6 +24,8 @@ import {
 } from './shared';
 
 const SONG_OF_REST = 'feature.bard.song-of-rest';
+const FONT_OF_MAGIC = 'feature.sorcerer.font-of-magic';
+const SORCEROUS_RESTORATION = 'feature.sorcerer.sorcerous-restoration';
 
 function restChecks(ctx: CommandContext): Check[] {
   return [...deadCheck(ctx), ...(ctx.live.combat ? [block('End combat before resting')] : [])];
@@ -115,6 +118,14 @@ export const completeShortRest: Command<ShortRestPayload> = {
     if (live.pactSlotsUsed) {
       delete live.pactSlotsUsed;
       restored.push('pact slots');
+    }
+    if (ctx.sheet.features.some(({ def }) => def.id === SORCEROUS_RESTORATION)) {
+      const spent = featureResource(ctx.sheet.features, live, FONT_OF_MAGIC)?.spent ?? 0;
+      const recovered = Math.min(4, spent);
+      if (recovered > 0) {
+        writeFeatureResource(ctx.sheet.features, live, FONT_OF_MAGIC, spent - recovered);
+        restored.push(`${recovered} sorcery points`);
+      }
     }
     if (restored.length > 0) notes.push(`restored ${restored.join(', ')}`);
     notes.push(...rechargeItems(live, ctx, ctx.live.items, ['short']));

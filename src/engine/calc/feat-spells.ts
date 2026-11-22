@@ -9,6 +9,7 @@ import type {
 } from '../schema';
 import type { Ability } from './abilities';
 import { sourceAllows } from './campaign-rules';
+import { classSpellAllows } from './class-spell-lists';
 import type { Sheet } from './sheet';
 
 type SpellPick = NonNullable<FeatureSpells['picks']>[number];
@@ -111,7 +112,7 @@ export function featSpellSources(ctx: FeatSpellContext): FeatSpellSource[] {
 /** The spells one pick can come from in this campaign. */
 export function featSpellCandidates(
   registry: Registry,
-  campaign: Pick<Campaign, 'ruleset'> & Parameters<typeof sourceAllows>[0],
+  campaign: Pick<Campaign, 'ruleset' | 'optionalRules'> & Parameters<typeof sourceAllows>[0],
   pick: SpellPick,
   classId: string | undefined,
 ): SpellDef[] {
@@ -123,8 +124,10 @@ export function featSpellCandidates(
         sourceAllows(campaign, entry) &&
         entry.level === pick.level &&
         (!pick.schools || pick.schools.includes(entry.school)) &&
-        (!pick.fromClass || (classId !== undefined && entry.classes.includes(classId))) &&
-        (!pick.classes || pick.classes.some((id) => entry.classes.includes(id))) &&
+        (!pick.spellIds || pick.spellIds.includes(entry.id)) &&
+        (!pick.fromClass ||
+          (classId !== undefined && classSpellAllows(campaign, classId, entry))) &&
+        (!pick.classes || pick.classes.some((id) => classSpellAllows(campaign, id, entry))) &&
         (!pick.attack || entry.attack !== undefined) &&
         (!pick.ritual || entry.ritual),
     )

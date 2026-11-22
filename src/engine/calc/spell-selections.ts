@@ -1,4 +1,5 @@
 import { sourceAllows } from './campaign-rules';
+import { classSpellAllows } from './class-spell-lists';
 import { entryCasting } from './casting';
 import { grantedSpells } from './granted-spells';
 import type { Registry } from '../registry';
@@ -68,10 +69,10 @@ function onClassSpellList(ctx: SpellSelectionContext, classId: string) {
   const subclass = entry?.subclassId ? ctx.registry.entries.get(entry.subclassId) : undefined;
   const base = entry ? (entryCasting(ctx.registry, entry)?.spellList ?? classId) : classId;
   return (spell: SpellDef) =>
-    spell.classes.includes(base) ||
+    classSpellAllows(ctx.campaign, base, spell) ||
     (subclass?.kind === 'subclass' &&
       (subclass.expandedSpellIds?.includes(spell.id) ||
-        subclass.additionalSpellLists?.some((id) => spell.classes.includes(id))));
+        subclass.additionalSpellLists?.some((id) => classSpellAllows(ctx.campaign, id, spell))));
 }
 
 /** Retained selections are reported rather than repaired or silently removed. */

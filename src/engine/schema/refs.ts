@@ -165,11 +165,12 @@ const ArmorCategorySchema = z.enum(['light', 'medium', 'heavy', 'shield']);
 export const ProficiencyChoiceSchema = z.strictObject({
   count: z.int().positive(),
   /** What each pick may be; with several kinds the player picks any mix (Samurai: a skill or a language). */
-  kinds: z.array(z.enum(['skill', 'tool', 'language', 'expertise', 'darkvision'])).min(1),
+  kinds: z.array(z.enum(['skill', 'tool', 'language', 'expertise', 'darkvision', 'weapon'])).min(1),
   /** Skill picks (and expertise picks) come from these skills; absent means any skill. */
   skills: z.array(SkillSchema).optional(),
   /** Tool picks come from these tools, or a tool group. */
   tools: z.union([z.array(refId('item')), z.enum(['artisan', 'gaming', 'any'])]).optional(),
+  weapons: z.array(refId('item')).optional(),
   /** Picked skills also get double proficiency (Blessings of Knowledge). */
   expertise: z.boolean().optional(),
 });
@@ -204,7 +205,7 @@ export const FeatureSpellsSchema = z.strictObject({
   classOptions: z.array(refId('class')).optional(),
   /** The spells can also be cast with spell slots of the right level. */
   slots: z.boolean(),
-  /** The spells can be cast only as rituals (Ritual Caster). */
+  /** The spells can be cast as rituals. If slots are disabled, ritual casting is the only mode. */
   ritual: z.literal(true).optional(),
   fixed: z
     .array(
@@ -224,6 +225,7 @@ export const FeatureSpellsSchema = z.strictObject({
       z.strictObject({
         count: z.int().positive(),
         level: z.int().min(0).max(9),
+        spellIds: z.array(refId('spell')).optional(),
         schools: z.array(SchoolSchema).optional(),
         /** From the picked class's spell list. */
         fromClass: z.boolean().optional(),

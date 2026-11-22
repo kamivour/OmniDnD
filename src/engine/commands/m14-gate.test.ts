@@ -45,7 +45,8 @@ function levelOnce(session: Session, classId: string, extras: Record<string, unk
     );
     if (sub) choices.subclassId = sub.id;
   }
-  if (needs.asi) choices.asi = { kind: 'abilities', increases: [{ ability: 'CON', value: 2 }] };
+  if (needs.asi && session.sheet.abilities.CON.score.value <= 18)
+    choices.asi = { kind: 'abilities', increases: [{ ability: 'CON', value: 2 }] };
   session.run(levelUp, { classId, choices, ...extras });
 }
 
@@ -86,14 +87,16 @@ describe('M14 gate', () => {
     expect(sheet.spellcasting).toBeDefined();
   });
 
-  it.each(CLASS_IDS)('%s reaches level 5 with a computable sheet', (classId) => {
+  it.each(CLASS_IDS)('%s reaches level 20 with a computable sheet and Undo', (classId) => {
     const session = create(classId, { STR: 15, DEX: 14, CON: 14, INT: 13, WIS: 13, CHA: 13 });
-    for (let level = 2; level <= 5; level += 1) levelOnce(session, classId);
-    expect(recordedLevel(session.state.build)).toBe(5);
+    for (let level = 2; level <= 20; level += 1) {
+      levelOnce(session, classId);
+      expect(recordedLevel(session.state.build)).toBe(level);
+    }
     const sheet = computeSheet(session.state, registry);
     expect(sheet.maxHp.value).toBeGreaterThan(20);
     expect(Number.isFinite(sheet.ac.value)).toBe(true);
     session.undo();
-    expect(recordedLevel(session.state.build)).toBe(4);
+    expect(recordedLevel(session.state.build)).toBe(19);
   });
 });

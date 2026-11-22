@@ -291,7 +291,7 @@
     "name": "Healing Spirit",
     "source": "XGE",
     "summary": {
-      "effect": "Call a spirit in a 5-foot space within range. Bonus action: move it 30 feet. When a creature enters or starts its turn near it, it heals that creature, up to your spellcasting modifier times per turn.",
+      "effect": "Heal a chosen creature for 1d6 when it starts its turn in the spirit's space or first enters it that turn. The spirit ends after 1 + casting modifier heals (minimum 2). Move it 30 feet as a bonus action.",
       "upcast": "+1d6 per slot level above 2."
     },
     "level": 2,
@@ -2785,7 +2785,7 @@
       "seconds": 60
     },
     "save": "WIS",
-    "classes": ["class.bard", "class.sorcerer", "class.warlock", "class.wizard"],
+    "classes": ["class.warlock", "class.wizard"],
     "tags": ["debuff"]
   },
   {
@@ -3031,7 +3031,7 @@
     "kind": "spell",
     "id": "spell.cordon-of-arrows",
     "ruleset": "5e-2014",
-    "source": "XGE",
+    "source": "PHB",
     "srd": false,
     "summaryReviewed": false,
     "ritual": false,
@@ -3213,8 +3213,8 @@
     "ritual": false,
     "name": "Mind Spike",
     "summary": {
-      "effect": "Psychic spike hits a creature you can see. It makes a WIS save. You know where it is while the spell lasts and you can see it, even through barriers.",
-      "fail": "3d8 psychic.",
+      "effect": "A visible creature makes a Wisdom save against a spike of psychic energy.",
+      "fail": "3d8 psychic. For the spell’s duration, you know where it is on the same plane. It cannot hide from you or benefit from invisibility against you.",
       "success": "Half damage.",
       "upcast": "+1d8 per slot level above 2."
     },
@@ -3404,7 +3404,7 @@
       "concentration": true,
       "seconds": 600
     },
-    "classes": ["class.druid", "class.sorcerer", "class.wizard"],
+    "classes": ["class.druid", "class.sorcerer", "class.wizard", "class.bard"],
     "tags": ["control"]
   },
   {
@@ -4938,7 +4938,7 @@
       "concentration": false,
       "seconds": 28800
     },
-    "classes": ["class.wizard"],
+    "classes": ["class.wizard", "class.warlock"],
     "tags": ["utility"]
   },
   {
@@ -5402,5 +5402,69 @@
     "classes": ["class.artificer", "class.druid"],
     "tags": ["damage", "control"],
     "damage": { "dice": "1d6", "type": "piercing", "cantripScaling": true }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.find-greater-steed",
+    "name": "Find Greater Steed",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Summon a loyal spirit mount, such as a griffon or pegasus. You can communicate with it telepathically and share spells that target only you while mounted. Only one steed can be bound through either Find Steed spell."
+    },
+    "level": 4,
+    "school": "conjuration",
+    "casting": {
+      "cost": "minutes",
+      "amount": 10
+    },
+    "range": "30 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instantaneous",
+      "concentration": false
+    },
+    "ritual": false,
+    "classes": ["class.paladin"],
+    "tags": ["utility"],
+    "url": "https://www.dndbeyond.com/spells/14871-find-greater-steed"
+  },
+  {
+    "kind": "spell",
+    "id": "spell.druid-grove",
+    "name": "Druid Grove",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Ward a grove with fog, obstructing undergrowth, guardian trees and other protective effects. Choose who can pass unhindered. Repeating the spell on the same area daily for one year makes it last until dispelled."
+    },
+    "level": 6,
+    "school": "abjuration",
+    "casting": {
+      "cost": "minutes",
+      "amount": 10
+    },
+    "range": "Touch",
+    "components": {
+      "v": true,
+      "s": true,
+      "m": "Mistletoe harvested with a golden sickle during a full moon (consumed)"
+    },
+    "duration": {
+      "text": "24 hours",
+      "concentration": false,
+      "seconds": 86400
+    },
+    "ritual": false,
+    "classes": ["class.druid"],
+    "tags": ["utility"],
+    "url": "https://www.dndbeyond.com/spells/14834-druid-grove"
   }
 ]

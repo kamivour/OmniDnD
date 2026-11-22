@@ -42,6 +42,7 @@ export function savedChoices(
       summary: [
         ...(pick.skills ?? []).map(skillName),
         ...(pick.tools ?? []).map(nameOf),
+        ...(pick.weapons ?? []).map(nameOf),
         ...(pick.languages ?? []),
         ...(pick.expertise ?? []).map((skill) => `${skillName(skill)} expertise`),
         ...(pick.darkvision ? ['Darkvision 60 ft'] : []),

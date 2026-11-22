@@ -168,7 +168,7 @@ interface CharacterBuild {
   spellTags?: Record<string, SpellType[]>;         // per-character tag override, edited in Manage (M4)
   favorites: string[];
   featSpells?: Record<string, { classId?: string; ability?: Ability; spellIds: string[] }>;  // picks for feature spells (D207)
-  proficiencyPicks?: Record<string, { skills?; tools?; languages?; expertise?; darkvision?: true }>;  // picks for feature proficiencies (D208)
+  proficiencyPicks?: Record<string, { skills?; tools?; weapons?: string[]; languages?; expertise?; darkvision?: true }>;  // picks for feature proficiencies (D208)
   featureIds: string[];                            // extras only (feats, DM grants, homebrew); granted features are derived (D48)
   choices: Record<string, unknown>;
   items: { instanceId: string; itemId: string; container?: string; notes?: string }[];

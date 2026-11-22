@@ -114,7 +114,14 @@ export function characterFeatures(
       if (row.level <= level) granted.push({ featureId: row.featureId, level });
     }
   }
-  build.featureIds.forEach(atCharacterLevel);
+  const runeKnight = build.classes.find(
+    ({ subclassId }) => subclassId === 'subclass.fighter.rune-knight',
+  );
+  for (const featureId of build.featureIds) {
+    if (featureId.startsWith('feature.fighter.rune-knight-inscribed-') && runeKnight)
+      granted.push({ featureId, level: runeKnight.level });
+    else atCharacterLevel(featureId);
+  }
 
   // Tasha optional class features: added by class level, and they replace the feature they name.
   const replaced = new Set<string>();

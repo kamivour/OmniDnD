@@ -169,7 +169,7 @@ function featChecks(
   const checks: Check[] = [];
   if (payload.ritual && !source.grant.ritual)
     checks.push(warn(`${source.name} does not grant ritual casting`));
-  else if (!payload.ritual && source.grant.ritual)
+  else if (!payload.ritual && source.grant.ritual && !source.grant.slots)
     checks.push(warn(`${source.name} casts its spells only as rituals`));
   else if (!payload.ritual && spell.level > 0 && !source.grant.slots)
     checks.push(warn(`${source.name} does not let you cast ${spell.name} with a spell slot`));

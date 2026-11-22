@@ -27,7 +27,7 @@ import type {
 } from '../schema';
 import { ABILITIES, abilityModifier, type Ability } from './abilities';
 import { byLevel, characterFeatures, resolveFormula, type CharacterFeature } from './features';
-import { optionalRules } from './campaign-rules';
+import { bookParts, optionalRules } from './campaign-rules';
 import { levelHp, maxHp } from './hp';
 import { proficiencyBonus } from './proficiency';
 import { breathWeapon, type BreathWeapon } from './ancestry';
@@ -189,18 +189,26 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     min: 0,
   });
   const proficiencyPart: Part = { label: 'Proficiency', value: proficiency };
+  const primalChampion = build.classes.some(
+    ({ classId, level }) => classId === 'class.barbarian' && level === 20,
+  );
 
   const abilities = Object.fromEntries(
     ABILITIES.map((ability) => {
+      const parts = [
+        { label: 'Base', value: build.abilityScores.base[ability] },
+        ...build.abilityScores.bonuses
+          .filter((bonus) => bonus.ability === ability)
+          .map((bonus) => ({ label: sourceLabel(bonus.source, registry), value: bonus.value })),
+      ];
+      if (primalChampion && (ability === 'STR' || ability === 'CON')) {
+        const increase = Math.min(4, 24 - sumParts(parts).value);
+        if (increase > 0) parts.push({ label: 'Primal Champion', value: increase });
+      }
       const score = value(
         overridePath('abilities', ability, 'score'),
         `${ability} score`,
-        sumParts([
-          { label: 'Base', value: build.abilityScores.base[ability] },
-          ...build.abilityScores.bonuses
-            .filter((bonus) => bonus.ability === ability)
-            .map((bonus) => ({ label: sourceLabel(bonus.source, registry), value: bonus.value })),
-        ]),
+        sumParts(parts),
         { min: 0 },
       );
       const mod = scalar(
@@ -222,7 +230,7 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     registry,
     ctx,
     level,
-    optionalRules(campaign).optionalClassFeatures,
+    bookParts(campaign, 'TCE').includes('options') && optionalRules(campaign).optionalClassFeatures,
   ).map((feature) => {
     const path = overridePath('features', feature.def.id);
     const result = { ...feature };
@@ -260,6 +268,16 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     );
 
   const featureIds = new Set(features.map(({ def }) => def.id));
+  const remarkableAthlete = featureIds.has('feature.fighter.remarkable-athlete');
+  const unproficientCheckParts = (ability: Ability): Part[] => {
+    const halfProficiency = modifierParts('unproficient-checks');
+    if (!remarkableAthlete || (ability !== 'STR' && ability !== 'DEX' && ability !== 'CON'))
+      return halfProficiency;
+    return [
+      ...halfProficiency.filter(({ label }) => label !== 'Jack of All Trades'),
+      { label: 'Remarkable Athlete', value: Math.ceil(proficiency / 2) },
+    ];
+  };
   const owned = featureProficiencies(build, features);
   const profs = owned.proficiencies;
   // Class armor and weapons are fixed grants, so they count even when a blank build or an
@@ -314,7 +332,8 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         modPart(SKILL_ABILITY[skill]),
         ...(kind === 'expertise' ? [{ label: 'Expertise', value: proficiency * 2 }] : []),
         ...(kind === 'proficient' ? [proficiencyPart] : []),
-        ...modifierParts('checks', ...(kind === 'none' ? (['unproficient-checks'] as const) : [])),
+        ...modifierParts('checks'),
+        ...(kind === 'none' ? unproficientCheckParts(SKILL_ABILITY[skill]) : []),
       ];
       return [
         skill,
@@ -535,7 +554,11 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     initiative: value(
       '/initiative',
       'Initiative',
-      sumParts([modPart('DEX'), ...modifierParts('initiative', 'checks', 'unproficient-checks')]),
+      sumParts([
+        modPart('DEX'),
+        ...modifierParts('initiative', 'checks'),
+        ...unproficientCheckParts('DEX'),
+      ]),
     ),
     ac: value(
       '/ac',

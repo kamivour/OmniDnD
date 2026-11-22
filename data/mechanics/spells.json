@@ -21,7 +21,7 @@
   },
   {
     "id": "spell.arcane-eye",
-    "classes": ["class.cleric", "class.wizard", "class.artificer"]
+    "classes": ["class.wizard", "class.artificer"]
   },
   {
     "id": "spell.arcane-lock",
@@ -41,7 +41,7 @@
   },
   {
     "id": "spell.create-food-and-water",
-    "classes": ["class.cleric", "class.druid", "class.paladin", "class.artificer"]
+    "classes": ["class.cleric", "class.paladin", "class.artificer"]
   },
   {
     "id": "spell.creation",
@@ -364,5 +364,17 @@
   {
     "id": "spell.arcane-hand",
     "classes": ["class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.destructive-wave",
+    "classes": ["class.paladin"]
+  },
+  {
+    "id": "spell.divination",
+    "classes": ["class.cleric"]
+  },
+  {
+    "id": "spell.meld-into-stone",
+    "classes": ["class.cleric", "class.druid"]
   }
 ]

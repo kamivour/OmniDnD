@@ -1,6 +1,40 @@
 import { expect, test } from './fixtures';
 import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
+test('Rune Knight learns two eligible runes from To do', async ({ page }) => {
+  const classId = 'class.fighter';
+  const file = reviewFile('audit-rune-knight');
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.build.classes = [{ classId, level: 3, subclassId: 'subclass.fighter.rune-knight' }];
+  file.build.hpEntries = [1, 2, 3].map((level) => ({
+    level,
+    classId,
+    method: level === 1 ? 'max' : 'average',
+    value: level === 1 ? 10 : 6,
+  }));
+  file.build.featureIds = [];
+  file.build.spells = [];
+  await importReview(page, file, 'todo');
+
+  const runes = page.getByRole('main').getByRole('listitem').filter({ hasText: 'Runes: pick 2' });
+  await runes.getByRole('button', { name: 'Choose', exact: true }).click();
+  await expect(runes.getByRole('checkbox')).toHaveCount(4);
+  await runes.getByRole('checkbox', { name: 'Cloud Rune', exact: true }).check();
+  await runes.getByRole('checkbox', { name: 'Frost Rune', exact: true }).check();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await runes.getByRole('button', { name: 'Save choice', exact: true }).click();
+  await saved(page);
+  expect((await reviewState(page, file.build.id)).build.featureIds).toEqual(
+    expect.arrayContaining([
+      'feature.fighter.rune-knight-inscribed-cloud',
+      'feature.fighter.rune-knight-inscribed-frost',
+    ]),
+  );
+  await page.reload();
+  await saved(page);
+  await expect(runes).toHaveCount(0);
+});
+
 test('Paladin learns Blessed Warrior cantrips and sees both Glory Channel Divinity options', async ({
   page,
 }) => {

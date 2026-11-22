@@ -52,6 +52,7 @@ export function featureProficiencies(
     if (!picks || !grant.choose) continue;
     add('skills', picks.skills, def.name);
     add('tools', picks.tools, def.name);
+    add('weapons', picks.weapons, def.name);
     add('languages', picks.languages, def.name);
     add('expertise', picks.expertise, def.name);
     // Skills picked for an expertise row (Blessings of Knowledge) are doubled too.
@@ -89,6 +90,7 @@ export const pickCount = (choose: readonly ProficiencyChoice[]) =>
 export const pickedCount = (picks: ProficiencyPicks | undefined) =>
   (picks?.skills?.length ?? 0) +
   (picks?.tools?.length ?? 0) +
+  (picks?.weapons?.length ?? 0) +
   (picks?.languages?.length ?? 0) +
   (picks?.expertise?.length ?? 0) +
   (picks?.darkvision ? 1 : 0);
@@ -109,7 +111,7 @@ export const choiceLanguages: readonly string[] = LANGUAGES;
 
 type Token =
   | { kind: 'skill' | 'expertise'; value: Skill }
-  | { kind: 'tool' | 'language'; value: string }
+  | { kind: 'tool' | 'language' | 'weapon'; value: string }
   | { kind: 'darkvision' };
 
 /**
@@ -124,13 +126,14 @@ export function proficiencyPickProblem(
 ): string | undefined {
   const choose = def.proficiencies?.choose;
   if (!choose) return `${def.name} has nothing to pick`;
-  const lists = [picks.skills, picks.tools, picks.languages, picks.expertise];
+  const lists = [picks.skills, picks.tools, picks.weapons, picks.languages, picks.expertise];
   if (lists.some((list) => list && new Set(list).size !== list.length))
     return 'Pick each option once';
   const tokens: Token[] = [
     ...(picks.skills ?? []).map((value) => ({ kind: 'skill' as const, value })),
     ...(picks.expertise ?? []).map((value) => ({ kind: 'expertise' as const, value })),
     ...(picks.tools ?? []).map((value) => ({ kind: 'tool' as const, value })),
+    ...(picks.weapons ?? []).map((value) => ({ kind: 'weapon' as const, value })),
     ...(picks.languages ?? []).map((value) => ({ kind: 'language' as const, value })),
     ...(picks.darkvision ? [{ kind: 'darkvision' as const }] : []),
   ];
@@ -139,6 +142,7 @@ export function proficiencyPickProblem(
     if (token.kind === 'skill' || token.kind === 'expertise')
       return choiceSkills(row).includes(token.value);
     if (token.kind === 'tool') return choiceTools(row, registry).includes(token.value);
+    if (token.kind === 'weapon') return row.weapons?.includes(token.value) ?? false;
     if (token.kind === 'language') return token.value.trim().length > 0;
     return true;
   };

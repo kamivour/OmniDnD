@@ -1,4 +1,9 @@
 import { sourceAllows } from './calc/campaign-rules';
+import {
+  classSpellAllows,
+  optionalTashaSpellClasses,
+  type SpellListCampaign,
+} from './calc/class-spell-lists';
 import type { Registry } from './registry';
 import type {
   BackgroundDef,
@@ -162,6 +167,7 @@ export function matchesFilter(
   entry: CatalogEntry,
   filter: CatalogFilter,
   aliases: readonly string[] = [],
+  campaign?: SpellListCampaign,
 ): boolean {
   if (filter.books?.length && !filter.books.includes(entry.source)) return false;
   if (filter.text) {
@@ -172,7 +178,13 @@ export function matchesFilter(
   if (entry.kind === 'spell') {
     if (filter.levels?.length && !filter.levels.includes(entry.level)) return false;
     if (filter.schools?.length && !filter.schools.includes(entry.school)) return false;
-    if (filter.classId && !entry.classes.includes(filter.classId)) return false;
+    if (filter.classId) {
+      const allowed = campaign
+        ? classSpellAllows(campaign, filter.classId, entry)
+        : entry.classes.includes(filter.classId) ||
+          optionalTashaSpellClasses(entry).includes(filter.classId);
+      if (!allowed) return false;
+    }
   }
   if (entry.kind === 'subclass' && filter.parentClassId && entry.classId !== filter.parentClassId)
     return false;
