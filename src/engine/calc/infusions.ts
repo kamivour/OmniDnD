@@ -1,4 +1,4 @@
-import replicas from '../../../data/content/infusion-replicas.json';
+import replicas from '../../../data/content/infusion-replicas.json' with { type: 'json' };
 import type { CharacterBuild, LiveState, ItemDef, FeatureDefenses } from '../schema';
 import type { DamageType } from '../rules2014';
 import type { Registry } from '../registry';

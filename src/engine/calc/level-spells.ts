@@ -3,7 +3,7 @@ import type { CharacterBuild } from '../schema';
 import { refId } from '../schema';
 import { spellSelectionDetails, type SpellSelectionContext } from './spell-selections';
 
-/** Spells picked while levelling: new cantrips and spells, and one swap for known casters. */
+/** Spells picked while levelling: cantrips, known or prepared spells, and one swap for known casters. */
 export const LevelSpellsSchema = z.strictObject({
   add: z.array(refId('spell')).optional(),
   swap: z.strictObject({ remove: refId('spell'), add: refId('spell') }).optional(),
@@ -18,7 +18,7 @@ const WIZARD_FIRST_SPELLS = 6;
 export interface LevelSpellGains {
   mode: 'known' | 'prepared' | 'spellbook' | 'unsupported';
   cantrips: number;
-  /** New leveled spells to learn (known casters) or copy (Wizard). */
+  /** Leveled spells to learn, copy into a spellbook, or prepare. */
   spells: number;
   /** Known casters may swap one leveled spell for another. */
   canSwap: boolean;
@@ -45,14 +45,14 @@ export function levelSpellGains(
           ? firstLevel
             ? WIZARD_FIRST_SPELLS
             : WIZARD_LEVEL_SPELLS
-          : 0,
+          : room(details.prepared),
     canSwap: details.mode === 'known' && !firstLevel,
   };
 }
 
 export type SpellResult = { blocked: string } | { build: CharacterBuild; summary: string[] };
 
-/** Adds the picked spells to the class's known list. Never exceeds the class table; picks stay optional. */
+/** Records optional spell picks within the class's available limits. */
 export function applyLevelSpells(
   ctx: SpellSelectionContext,
   classId: string,
@@ -73,15 +73,20 @@ export function applyLevelSpells(
     return entry?.kind === 'spell' ? entry.level : undefined;
   };
 
+  const prepares = gains.mode === 'prepared';
   const known = new Set(details.selection.known);
+  const prepared = new Set(details.selection.prepared);
+  const leveledCandidates = prepares ? details.candidates.prepared : details.candidates.known;
   if (new Set(add).size !== add.length) return { blocked: 'The same spell is picked twice' };
   let cantrips = 0;
   let spells = 0;
   for (const id of add) {
     const spellLevel = level(id);
     if (spellLevel === undefined) return { blocked: `Unknown spell ${id}` };
-    if (known.has(id)) return { blocked: `${nameOf(id)} is already known` };
-    const allowed = spellLevel === 0 ? details.candidates.cantrips : details.candidates.known;
+    const prepare = prepares && spellLevel > 0;
+    if ((prepare ? prepared : known).has(id))
+      return { blocked: `${nameOf(id)} is already ${prepare ? 'prepared' : 'known'}` };
+    const allowed = spellLevel === 0 ? details.candidates.cantrips : leveledCandidates;
     if (!allowed.includes(id))
       return { blocked: `${nameOf(id)} is not available to ${details.name} at this level` };
     if (spellLevel === 0) cantrips++;
@@ -90,9 +95,12 @@ export function applyLevelSpells(
   if (cantrips > gains.cantrips)
     return { blocked: `${details.name} learns ${gains.cantrips} more cantrip(s) at this level` };
   if (spells > gains.spells)
-    return { blocked: `${details.name} learns ${gains.spells} more spell(s) at this level` };
+    return {
+      blocked: prepares
+        ? `${details.name} can prepare ${gains.spells} more spell(s)`
+        : `${details.name} learns ${gains.spells} more spell(s) at this level`,
+    };
 
-  const next = new Set(known);
   if (picks.swap) {
     const { remove, add: replacement } = picks.swap;
     if (!gains.canSwap) return { blocked: `${details.name} cannot swap a spell at this level` };
@@ -100,19 +108,29 @@ export function applyLevelSpells(
       return { blocked: 'Swap out a leveled spell you know' };
     if (level(replacement) === undefined || (level(replacement) ?? 0) === 0)
       return { blocked: 'Swap in a leveled spell' };
-    if (!details.candidates.known.includes(replacement) || next.has(replacement))
+    if (!details.candidates.known.includes(replacement) || known.has(replacement))
       return { blocked: `${nameOf(replacement)} is not available to swap in` };
-    next.delete(remove);
-    next.add(replacement);
+    known.delete(remove);
+    known.add(replacement);
     summary.push(`Swap ${nameOf(remove)} for ${nameOf(replacement)}`);
   }
   for (const id of add) {
-    next.add(id);
-    summary.push(`Learn ${nameOf(id)}`);
+    if (prepares && level(id)! > 0) {
+      prepared.add(id);
+      summary.push(`Prepare ${nameOf(id)}`);
+    } else {
+      known.add(id);
+      summary.push(`Learn ${nameOf(id)}`);
+    }
   }
 
   const record = build.spells.find((row) => row.classId === classId);
-  if (record) record.known = [...next];
-  else build.spells.push({ classId, known: [...next] });
+  const next = {
+    classId,
+    known: [...known],
+    ...(prepares && spells > 0 ? { prepared: [...prepared] } : {}),
+  };
+  if (record) Object.assign(record, next);
+  else build.spells.push(next);
   return { build, summary };
 }

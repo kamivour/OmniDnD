@@ -236,6 +236,45 @@ function friendFile(
   });
 }
 
+test('Artillerist prepares class spells at level-up in addition to automatic subclass spells', async ({
+  page,
+}) => {
+  const file = friendFile('artillerist-preparation', { level: 4 });
+  const classId = 'class.artificer';
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.build.classes = [{ classId, level: 4, subclassId: 'subclass.artificer.artillerist' }];
+  file.build.hpEntries = file.build.hpEntries.map((entry) => ({
+    ...entry,
+    classId,
+    value: entry.level === 1 ? 8 : 5,
+  }));
+  file.build.abilityScores.base.INT = 16;
+  file.build.abilityScores.bonuses = [];
+  file.build.spells = [{ classId, known: ['spell.mending', 'spell.fire-bolt'], prepared: [] }];
+
+  await importFile(page, file);
+  await goSheet(page, file.build.id);
+  await openLevelUp(page);
+  const wizard = form(page);
+  await expect(wizard.getByText(/Always prepared.*Scorching Ray, Shatter/)).toBeVisible();
+  const picks = wizard.getByRole('group', { name: 'Spells to prepare (0 / 5)' });
+  await expect(picks.getByRole('checkbox', { name: 'Shatter', exact: true })).toHaveCount(0);
+  await picks.getByRole('checkbox', { name: 'Web', exact: true }).check();
+  await expect(wizard.getByRole('group', { name: 'Spells to prepare (1 / 5)' })).toBeVisible();
+  await noOverflow(page);
+  await applyLevelUp(page);
+  expect((await readSaved(page, file.build.id)).build.spells).toEqual([
+    { classId, known: ['spell.mending', 'spell.fire-bolt'], prepared: ['spell.web'] },
+  ]);
+
+  await page.goto(`/characters/${file.build.id}/spells`);
+  await main(page).getByRole('button', { name: 'Manage', exact: true }).click();
+  const manage = page.getByRole('dialog', { name: 'Manage spells', exact: true });
+  await expect(manage.getByText(/Always prepared.*Scorching Ray, Shatter/)).toBeVisible();
+  await expect(manage.locator('[aria-label="Spell selection counts"]')).toContainText(/1 \/ 5/);
+  await expect(manage.getByRole('checkbox', { name: 'Prepare Cure Wounds' })).toBeVisible();
+});
+
 test('The Fool previews a rolled fifth HP result, cancels without a command and applies one exact undoable level', async ({
   page,
 }) => {

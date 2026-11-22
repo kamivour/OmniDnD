@@ -437,7 +437,7 @@ export function featOptions(
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-/** What the new level lets this class learn. `next` is the character after the level, before any spell picks. */
+/** What the class can learn or prepare after the level, before any spell picks. */
 export function levelSpellInfo(
   next: CharacterState,
   registry: Registry,
@@ -448,10 +448,14 @@ export function levelSpellInfo(
   const gains = levelSpellGains(ctx, classId, firstLevel);
   const details = spellSelectionDetails(ctx, classId);
   const known = new Set(details.selection.known);
+  const prepares = gains.mode === 'prepared';
+  const leveled = prepares ? details.candidates.prepared : details.candidates.known;
+  const selected = prepares ? new Set(details.selection.prepared) : known;
   return {
     gains,
     cantrips: details.candidates.cantrips.filter((id) => !known.has(id)),
-    spells: details.candidates.known.filter((id) => !known.has(id)),
+    spells: leveled.filter((id) => !selected.has(id)),
     knownSpells: details.known.ids,
+    granted: prepares ? details.granted.map(({ id }) => id) : [],
   };
 }

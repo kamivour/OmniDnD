@@ -58,6 +58,22 @@ describe('grantedSpells', () => {
     expect(ids(character('class.cleric', 5))).toEqual([]);
   });
 
+  it.each([
+    ['alchemist', ['spell.flaming-sphere', 'spell.acid-arrow']],
+    ['armorer', ['spell.mirror-image', 'spell.shatter']],
+    ['artillerist', ['spell.scorching-ray', 'spell.shatter']],
+    ['battle-smith', ['spell.branding-smite', 'spell.warding-bond']],
+  ])('grants the %s spell pairs at the five Artificer subclass milestones', (subclass, fifth) => {
+    const at = (level: number) =>
+      ids(character('class.artificer', level, `subclass.artificer.${subclass}`));
+    const milestones = [3, 5, 9, 13, 17];
+    for (const [index, level] of milestones.entries()) {
+      expect(at(level - 1)).toHaveLength(index * 2);
+      expect(at(level)).toHaveLength((index + 1) * 2);
+    }
+    expect(at(5).slice(2)).toEqual(fifth);
+  });
+
   it('adds grants as prepared for prepared casters and as known for known casters', () => {
     const cleric = spellListsWithGrants(
       registry,

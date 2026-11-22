@@ -140,10 +140,6 @@ function LevelUpForm({
     expected: reviewed.state,
     ...picksToPayload(picks, needs, newClass !== undefined, false),
   };
-  const payload: LevelUpPayload = {
-    ...basePayload,
-    ...picksToPayload(picks, needs, newClass !== undefined),
-  };
   // Spell choices depend on the character after this level, before any spell picks.
   const base = chosen
     ? previewLevelUp(reviewed.state, registry, basePayload, reviewed.automation)
@@ -152,6 +148,20 @@ function LevelUpForm({
     base?.result === 'ok'
       ? levelSpellInfo(base.next, registry, classId, newClass !== undefined)
       : undefined;
+  // A subclass or ability pick can change which spells still fit the prepared list.
+  const availablePicks =
+    spellInfo?.gains.mode === 'prepared'
+      ? {
+          ...picks,
+          spells: picks.spells
+            .filter((spell) => spellInfo.spells.includes(spell))
+            .slice(0, spellInfo.gains.spells),
+        }
+      : picks;
+  const payload: LevelUpPayload = {
+    ...basePayload,
+    ...picksToPayload(availablePicks, needs, newClass !== undefined),
+  };
   const subclasses = needs.subclass ? subclassOptions(reviewed.state, registry, classId) : [];
   const feats = needs.asi ? featOptions(reviewed.state, registry) : [];
   const preview = previewLevelUp(reviewed.state, registry, payload, reviewed.automation);
@@ -305,8 +315,11 @@ function LevelUpForm({
         <AsiPick feats={feats} picks={picks} set={setPick} campaign={reviewed.state.campaign} />
       )}
       {spellInfo &&
-        (spellInfo.gains.cantrips > 0 || spellInfo.gains.spells > 0 || spellInfo.gains.canSwap) && (
-          <SpellPicks info={spellInfo} picks={picks} set={setPick} registry={registry} />
+        (spellInfo.gains.cantrips > 0 ||
+          spellInfo.gains.spells > 0 ||
+          spellInfo.gains.canSwap ||
+          spellInfo.granted.length > 0) && (
+          <SpellPicks info={spellInfo} picks={availablePicks} set={setPick} registry={registry} />
         )}
       {stale && (
         <div

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { registry } from '../../data/registry';
 import { computeSheet, type CharacterState } from '../calc/sheet';
+import { spellSelectionDetails } from '../calc/spell-selections';
 import { CharacterBuildSchema, type ActiveEffect } from '../schema';
 import { asiLevels, levelChoiceNeeds } from '../calc/level-choices';
 import { levelUp, type LevelUpPayload } from './level';
@@ -874,6 +875,51 @@ describe('levelUp spells', () => {
         spells: { swap: { remove: cantrip, add: replacement! } },
       }).reasons,
     ).toEqual(['Swap out a leveled spell you know']);
+  });
+
+  it('prepares Artificer class spells separately from Artillerist grants at level 5', () => {
+    const state = atLevel(4);
+    const classId = 'class.artificer';
+    state.build.classes = [{ classId, level: 4, subclassId: 'subclass.artificer.artillerist' }];
+    for (const hp of state.build.hpEntries) hp.classId = classId;
+    state.build.abilityScores.base.INT = 16;
+    state.build.abilityScores.bonuses = [];
+    state.build.spells = [{ classId, known: ['spell.mending'], prepared: ['spell.cure-wounds'] }];
+    const session = new Session(state);
+    const before = structuredClone(session.state);
+    const payload = (add: string[]) => ({ classId, roll: 5, spells: { add } });
+    expect(session.preview(levelUp, payload(['spell.shatter'])).result).toBe('blocked');
+    expect(session.preview(levelUp, payload(['spell.haste'])).result).toBe('blocked');
+    expect(session.preview(levelUp, payload(['spell.cure-wounds'])).result).toBe('blocked');
+    expect(
+      session.preview(
+        levelUp,
+        payload(['spell.grease', 'spell.feather-fall', 'spell.identify', 'spell.aid', 'spell.web']),
+      ).reasons,
+    ).toEqual(['Artificer can prepare 4 more spell(s)']);
+    const log = session.run(levelUp, payload(['spell.fire-bolt', 'spell.aid', 'spell.web']));
+    expect(log).toContain('Prepare Web');
+    expect(session.state.build.spells).toEqual([
+      {
+        classId,
+        known: ['spell.mending', 'spell.fire-bolt'],
+        prepared: ['spell.cure-wounds', 'spell.aid', 'spell.web'],
+      },
+    ]);
+    const details = spellSelectionDetails(
+      { ...session.state, sheet: session.sheet, registry },
+      classId,
+    );
+    expect(details.prepared).toMatchObject({ count: 3, limit: 5 });
+    expect(details.granted.map(({ id }) => id)).toEqual([
+      'spell.shield',
+      'spell.thunderwave',
+      'spell.scorching-ray',
+      'spell.shatter',
+    ]);
+    expect(session.events).toHaveLength(1);
+    session.undo();
+    expect(session.state).toEqual(before);
   });
 
   it('gives a new Wizard a six-spell spellbook, no more', () => {

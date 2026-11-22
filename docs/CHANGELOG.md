@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 10:14 — Prepare spells while leveling up
+
+- Fill open preparation slots during Level up or later under Spells → Manage.
+- Check Artillerist at level 5. Scorching Ray and Shatter are always prepared and use none of your preparation slots.
+- Battle Smith now gains Warding Bond at level 5. Checks pass.
+
 ## 2026-11-22 10:13 — Find Rhythm-Maker’s Drum
 
 - Search Equipment for “Rhythm-Maker’s Drum” or “rhythm makers drum” to find all three variants.

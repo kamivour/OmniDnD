@@ -340,7 +340,7 @@
     "id": "subclass.artificer.battle-smith",
     "grantedSpells": [
       { "level": 3, "spellIds": ["spell.heroism", "spell.shield"] },
-      { "level": 5, "spellIds": ["spell.branding-smite", "spell.warding-wind"] },
+      { "level": 5, "spellIds": ["spell.branding-smite", "spell.warding-bond"] },
       { "level": 9, "spellIds": ["spell.aura-of-vitality", "spell.conjure-barrage"] },
       { "level": 13, "spellIds": ["spell.aura-of-purity", "spell.fire-shield"] },
       { "level": 17, "spellIds": ["spell.banishing-smite", "spell.mass-cure-wounds"] }

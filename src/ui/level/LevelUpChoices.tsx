@@ -10,7 +10,12 @@ import { cx } from '../cx';
 import { Icon } from '../components/Icon';
 import { Field, inputClass } from '../components/fields';
 import { SpellInfoName } from '../spells/SpellInfoName';
-import { optionName, type LevelPicks, type NewClassOption } from './level-up-model';
+import {
+  optionName,
+  type LevelPicks,
+  type NewClassOption,
+  type levelSpellInfo,
+} from './level-up-model';
 
 interface PickProps {
   picks: LevelPicks;
@@ -381,23 +386,31 @@ export function SpellPicks({
   registry,
 }: PickProps & {
   registry: Registry;
-  info: {
-    gains: { mode: string; cantrips: number; spells: number; canSwap: boolean };
-    cantrips: string[];
-    spells: string[];
-    knownSpells: string[];
-  };
+  info: ReturnType<typeof levelSpellInfo>;
 }) {
   const id = useId();
   const { gains } = info;
   const wizard = gains.mode === 'spellbook';
+  const prepares = gains.mode === 'prepared';
   return (
     <div className={group}>
-      <p className="text-sm font-semibold text-text">New spells</p>
-      <p className="text-sm text-text-muted">
-        Pick now or add them later on the Spells screen. Prepared spells are set there too. Tap or
-        hover a spell name to read it.
+      <p className="text-sm font-semibold text-text">
+        {prepares ? 'Prepare spells' : 'New spells'}
       </p>
+      <p className="text-sm text-text-muted">
+        {prepares
+          ? 'Fill open preparation slots now or manage your list later on the Spells screen.'
+          : 'Pick now or add them later on the Spells screen.'}{' '}
+        Tap or hover a spell name to read it.
+      </p>
+      {info.granted.length > 0 && (
+        <p className="text-sm text-text-muted">
+          <strong className="text-text">Always prepared</strong>
+          {' · '}
+          {info.granted.map((spell) => optionName(registry, spell)).join(', ')}. These spells use
+          none of your preparation slots.
+        </p>
+      )}
       {gains.cantrips > 0 && (
         <SpellChecks
           legend="Cantrips"
@@ -410,7 +423,13 @@ export function SpellPicks({
       )}
       {gains.spells > 0 && (
         <SpellChecks
-          legend={wizard ? 'Spells to copy into your spellbook' : 'Spells known'}
+          legend={
+            prepares
+              ? 'Spells to prepare'
+              : wizard
+                ? 'Spells to copy into your spellbook'
+                : 'Spells known'
+          }
           ids={info.spells}
           chosen={picks.spells}
           limit={gains.spells}
