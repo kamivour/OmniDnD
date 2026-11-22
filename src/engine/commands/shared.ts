@@ -1,12 +1,11 @@
 import type { Draft } from 'immer';
 import { computeSheet, type Sheet } from '../calc/sheet';
 import type { Registry } from '../registry';
+import { crossesDawn } from '../clock';
 import {
-  DAWN_SECONDS,
   DEATH_SAVES_NEEDED,
   INCAPACITATING_CONDITIONS,
   MAX_EXHAUSTION,
-  SECONDS_PER_DAY,
   type Condition,
 } from '../rules2014';
 import type { ActiveEffect, Economy, LiveState, Recharge } from '../schema';
@@ -365,8 +364,7 @@ export function passTime(live: Live, seconds: number, ctx: CommandContext) {
   }
   notes.push(...expired.map((name) => `${name} ended`));
   notes.push(...expireCompanions(live, ctx.build, end).map((name) => `${name} expired`));
-  const dawn = (time: number) => Math.floor((time - DAWN_SECONDS) / SECONDS_PER_DAY);
-  if (dawn(end) > dawn(start)) {
+  if (crossesDawn(start, end)) {
     const restored = restoreFeatures(live, sheet, ['dawn']);
     if (restored.length > 0) notes.push(`dawn restored ${restored.join(', ')}`);
     notes.push(...rechargeItems(live, ctx, ctx.live.items, ['dawn']));

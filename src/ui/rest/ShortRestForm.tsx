@@ -1,6 +1,10 @@
 import { useRef, useState } from 'react';
 import { registry } from '../../data/registry';
-import { completeShortRest, type ShortRestPayload } from '../../engine/commands';
+import {
+  arcaneRecoveryOptions,
+  completeShortRest,
+  type ShortRestPayload,
+} from '../../engine/commands';
 import { restDurations } from '../../engine/calc/rests';
 import { formatDuration } from '../../engine/clock';
 import type { HitDieName } from '../../engine/schema';
@@ -27,6 +31,7 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
   const [songEnabled, setSongEnabled] = useState(false);
   const [songSource, setSongSource] = useState<'self' | 'other'>(ownSong ? 'self' : 'other');
   const [songRoll, setSongRoll] = useState('');
+  const [slotPicks, setSlotPicks] = useState<Record<number, number>>({});
   const nextId = useRef(1);
   const focusRoll = useRef<number | null>(null);
   const addButton = useRef<HTMLButtonElement>(null);
@@ -46,7 +51,14 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
     die,
     roll: roll.trim() === '' ? NaN : Number(roll),
   }));
-  const base: ShortRestPayload = { hitDice: dice };
+  const recovery = arcaneRecoveryOptions({ ...state, sheet });
+  const recoveredSlots = recovery?.available
+    ? recovery.expended.flatMap(({ level, count }) =>
+        Array.from({ length: Math.min(slotPicks[level] ?? 0, count) }, () => level),
+      )
+    : [];
+  const levelsSpent = recoveredSlots.reduce((sum, level) => sum + level, 0);
+  const base: ShortRestPayload = { hitDice: dice, arcaneRecovery: recoveredSlots };
   const payload: ShortRestPayload = songEnabled
     ? {
         ...base,
@@ -234,6 +246,39 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
         )}
       </section>
 
+      {recovery?.available && recovery.expended.length > 0 && (
+        <fieldset className="grid gap-2">
+          <legend className="text-sm font-semibold text-text">Arcane Recovery</legend>
+          <p className="text-sm text-text-muted">
+            {levelsSpent} / {recovery.budget} slot levels selected
+          </p>
+          {recovery.expended.map(({ level, count }) => (
+            <label key={level} className="flex items-center gap-2 text-sm text-text">
+              <span className="grow">Level {level} slots to recover</span>
+              <select
+                value={Math.min(count, slotPicks[level] ?? 0)}
+                onChange={(event) =>
+                  setSlotPicks({ ...slotPicks, [level]: Number(event.target.value) })
+                }
+                className="min-h-11 rounded-btn border border-border bg-surface px-3 text-text"
+              >
+                {Array.from({ length: count + 1 }, (_, amount) => (
+                  <option
+                    key={amount}
+                    value={amount}
+                    disabled={
+                      levelsSpent - (slotPicks[level] ?? 0) * level + amount * level >
+                      recovery.budget
+                    }
+                  >
+                    {amount}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
+        </fieldset>
+      )}
       <RestPreview
         duration={formatDuration(restDurations(state.campaign).short)}
         result={preview}

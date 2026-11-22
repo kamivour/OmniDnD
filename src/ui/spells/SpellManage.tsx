@@ -345,7 +345,10 @@ export function SpellManage({
               {details.granted
                 .map((entry) => registry.entries.get(entry.id)?.name ?? entry.id)
                 .join(', ')}
-              . These never count toward your limits.
+              .{' '}
+              {details.reservedKnown
+                ? `${details.reservedKnown} of your total spells known are reserved for Magical Secrets.`
+                : 'These never count toward your limits.'}
             </p>
           )}
           <Field label="Search available spells" htmlFor={searchInputId}>

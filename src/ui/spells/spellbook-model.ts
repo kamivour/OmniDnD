@@ -129,7 +129,7 @@ export function spellbookModel(
           name: source.name,
           ...(source.classId ? { classId: source.classId } : {}),
           ...(feat.free ? { free: feat.free } : {}),
-          freeLeft: featFreeLeft(state.live, source.featureId, feat),
+          freeLeft: featFreeLeft(state.live, source.featureId, feat, sheet),
           ...(feat.castLevel ? { castLevel: feat.castLevel } : {}),
           slots: source.grant.slots,
         },

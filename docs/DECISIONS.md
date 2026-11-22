@@ -6,6 +6,8 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D261 | 2026-11-23 | Arcane Recovery refreshes at 06:00 on the game clock. The Wizard can choose which expended spell slots to restore at the end of a short rest. | Use the existing daily recharge rule for a feature that is available once per day |
+| D260 | 2026-11-23 | Keep earlier Bard spell picks and show any excess when reserving Magical Secrets. Old Mystic Arcanum spending counts against the total number of available castings until a long rest. | Preserve imported characters when their old saves could not label these spells |
 | D259 | 2026-11-23 | Tasha's additional class spell lists require both its class content and Optional Class Features. Existing spell picks stay saved and the Compendium labels optional class memberships. | Keep class eligibility aligned with the campaign and preserve older characters |
 | D258 | 2026-11-22 | Keep the retired 2024 cauldron ID so old saves can remove it in Manage spells. It cannot be selected or cast. | Enforce the 2014 ruleset and preserve saved data |
 | D257 | 2026-11-22 | Battle Ready uses INT when it gives a better attack and damage bonus with a magic weapon. The existing attack overrides cover table choices. | Match the sheet’s handling of flexible weapon abilities |

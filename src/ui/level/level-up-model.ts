@@ -1,6 +1,6 @@
 import type { Ability } from '../../engine/calc/abilities';
 import { optionalRules, sourceAllows } from '../../engine/calc/campaign-rules';
-import { levelSpellGains } from '../../engine/calc/level-spells';
+import { levelSpellGains, swappableLevelSpells } from '../../engine/calc/level-spells';
 import { featureResource } from '../../engine/calc/features';
 import { MULTICLASS_RULES, type MulticlassRule } from '../../engine/calc/multiclass';
 import { averageHpRoll, type HitDie } from '../../engine/calc/hp';
@@ -462,7 +462,7 @@ export function levelSpellInfo(
     className: details.name,
     cantrips: details.candidates.cantrips.filter((id) => !known.has(id)),
     spells: leveled.filter((id) => !selected.has(id)),
-    knownSpells: details.known.ids,
+    knownSpells: swappableLevelSpells(ctx, details),
     knownCantrips: details.cantrips.ids,
     granted: prepares ? details.granted.map(({ id }) => id) : [],
   };

@@ -34,6 +34,139 @@ function character(classId: string, level: number, subclassId?: string) {
 }
 
 describe('class audit', () => {
+  it('lets Lore Bard 6 learn two bonus secrets from any class and cast them as Bard spells', () => {
+    const classId = 'class.bard';
+    const session = character(classId, 5, 'subclass.bard.lore');
+    session.state.campaign.hpMethod = 'average';
+    const featureId = 'feature.bard.additional-magical-secrets';
+    const spellIds = ['spell.counterspell', 'spell.revivify'];
+    session.state.build.spells = [{ classId, known: ['spell.counterspell'] }];
+    const ctx = () => ({ ...session.state, registry, sheet: session.sheet });
+    expect(session.preview(chooseFeatSpells, { featureId, spellIds }).result).toBe('blocked');
+    session.run(levelUp, { classId });
+    expect(pendingChoices(session.state, registry)).toContainEqual(
+      expect.objectContaining({ featureId, count: 2 }),
+    );
+    expect(
+      session.preview(chooseFeatSpells, {
+        featureId,
+        spellIds: ['spell.counterspell', 'spell.banishment'],
+      }).result,
+    ).toBe('blocked');
+    session.run(chooseFeatSpells, { featureId, spellIds });
+    const details = spellSelectionDetails(ctx(), classId);
+    expect(details.known).toMatchObject({ count: 0, limit: 9 });
+    expect(session.state.build.spells[0]?.known).toEqual([]);
+    expect(details.granted.map(({ id }) => id)).toEqual(spellIds);
+    expect(spellCastDetails(ctx(), { spellId: 'spell.counterspell', classId })).toMatchObject({
+      selected: true,
+      casting: { ability: 'CHA' },
+    });
+    session.run(levelUp, {
+      classId,
+      spells: { swap: { remove: 'spell.counterspell', add: 'spell.greater-invisibility' } },
+    });
+    expect(spellSelectionDetails(ctx(), classId).granted.map(({ id }) => id)).toEqual([
+      'spell.greater-invisibility',
+      'spell.revivify',
+    ]);
+    session.undo();
+    expect(spellSelectionDetails(ctx(), classId).granted.map(({ id }) => id)).toEqual(spellIds);
+    session.undo();
+    expect(spellSelectionDetails(ctx(), classId).granted).toEqual([]);
+  });
+
+  it.each([
+    [10, 12],
+    [14, 14],
+    [18, 16],
+  ])(
+    'reserves regular Magical Secrets within the %s Bard known-spell cap',
+    (level, ordinaryLimit) => {
+      const classId = 'class.bard';
+      const session = character(classId, level, 'subclass.bard.valor');
+      const ctx = () => ({ ...session.state, registry, sheet: session.sheet });
+      const featureId =
+        level === 10 ? 'feature.bard.magical-secrets' : `feature.bard.magical-secrets-${level}`;
+      expect(spellSelectionDetails(ctx(), classId).known.limit).toBe(ordinaryLimit);
+      session.run(chooseFeatSpells, {
+        featureId,
+        spellIds: ['spell.guidance', 'spell.counterspell'],
+      });
+      const details = spellSelectionDetails(ctx(), classId);
+      expect(details.granted.map(({ id }) => id)).toEqual(['spell.guidance', 'spell.counterspell']);
+      expect(details.known.limit).toBe(ordinaryLimit);
+      expect(details.cantrips.count).toBe(0);
+    },
+  );
+
+  it('casts Arcanum spells once per tier and restores them only on a long rest', () => {
+    const session = character('class.warlock', 17, 'subclass.warlock.genie');
+    const sixth = {
+      featureId: 'feature.warlock.mystic-arcanum',
+      spellId: 'spell.circle-of-death',
+      free: true,
+    };
+    const ninth = {
+      featureId: 'feature.warlock.mystic-arcanum-9',
+      spellId: 'spell.wish',
+      free: true,
+    };
+    for (const { featureId, spellId } of [sixth, ninth]) {
+      session.run(chooseFeatSpells, { featureId, spellIds: [spellId] });
+    }
+    session.run(castSpell, sixth, true);
+    expect(session.preview(castSpell, sixth).result).toBe('blocked');
+    expect(session.live.pactSlotsUsed ?? 0).toBe(0);
+    session.run(castSpell, ninth, true);
+    session.run(completeShortRest, {});
+    expect(session.preview(castSpell, ninth).result).toBe('blocked');
+    session.run(completeLongRest, null);
+    expect(session.preview(castSpell, ninth).result).not.toBe('blocked');
+    session.undo();
+    expect(session.preview(castSpell, sixth).result).toBe('blocked');
+  });
+
+  it('keeps legacy Arcanum spending until the next long rest', () => {
+    const session = character('class.warlock', 11, 'subclass.warlock.fiend');
+    const featureId = 'feature.warlock.mystic-arcanum';
+    const spellId = 'spell.circle-of-death';
+    session.state.live.featureUsesSpent[featureId] = 1;
+    session.run(chooseFeatSpells, { featureId, spellIds: [spellId] });
+    const payload = { featureId, spellId, free: true };
+    expect(session.preview(castSpell, payload).result).toBe('blocked');
+    session.run(completeLongRest, null);
+    expect(session.preview(castSpell, payload).result).not.toBe('blocked');
+    session.undo();
+    expect(session.preview(castSpell, payload).result).toBe('blocked');
+  });
+
+  it('uses Arcane Recovery during a short rest, based on Wizard level and the game clock', () => {
+    const session = character('class.wizard', 5, 'subclass.wizard.evocation');
+    const id = 'feature.wizard.arcane-recovery';
+    session.state.live.slotsUsed = session.live.slotsUsed.map(
+      (_, level) => [0, 2, 1, 1][level] ?? 0,
+    );
+    expect(session.preview(completeShortRest, { arcaneRecovery: [2, 2] }).result).toBe('blocked');
+    expect(session.preview(completeShortRest, { arcaneRecovery: [3, 1] }).result).toBe('blocked');
+    expect(session.preview(completeShortRest, { arcaneRecovery: [6] }).result).toBe('blocked');
+    session.run(completeShortRest, { arcaneRecovery: [2, 1] });
+    expect(session.state.live.slotsUsed.slice(1, 4)).toEqual([1, 0, 1]);
+    expect(session.live.featureUsesSpent[id]).toBe(1);
+    expect(session.preview(completeShortRest, { arcaneRecovery: [1] }).result).toBe('blocked');
+    session.undo();
+    expect(session.state.live.slotsUsed.slice(1, 4)).toEqual([2, 1, 1]);
+    expect(session.live.featureUsesSpent[id]).toBeUndefined();
+    session.state.live = {
+      ...session.live,
+      clock: { seconds: 5 * 3600 + 30 * 60 },
+      featureUsesSpent: { [id]: 1 },
+    };
+    session.run(completeShortRest, { arcaneRecovery: [3] });
+    expect(session.state.live.slotsUsed[3]).toBe(0);
+    expect(session.live.featureUsesSpent[id]).toBe(1);
+  });
+
   const subclasses = [...registry.entries.values()].filter((entry) => entry.kind === 'subclass');
 
   it.each(subclasses)('$name grants its recorded features at their class levels', (subclass) => {

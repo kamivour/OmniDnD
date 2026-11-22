@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { chooseFeatSpells, featSpellCandidates, resolveChoices } from '../../engine/commands';
+import { featSpellPickLabel, otherClassSpells } from '../../engine/calc/feat-spells';
 import type { Ability } from '../../engine/calc/abilities';
 import { artificerLevel, INFUSION_PREFIX } from '../../engine/calc/infusions';
 import type { PendingChoice } from '../../engine/calc/pending-choices';
@@ -308,15 +309,31 @@ function FeatSpellsForm({
   const askAbility = grant?.ability === 'raised' && !raised && raisedOptions.length > 0;
   const [ability, setAbility] = useState<Ability | undefined>(stored?.ability ?? raisedOptions[0]);
   const [chosen, setChosen] = useState<string[]>(stored?.spellIds ?? []);
+  const [spellSearch, setSpellSearch] = useState('');
   if (!grant) return null;
 
-  const picks = (grant.picks ?? []).map((pick) => ({
-    pick,
-    options: featSpellCandidates(registry, state.campaign, pick, classId),
-  }));
+  const other = otherClassSpells(registry, state.build, def);
+  const picks = (grant.picks ?? []).map((pick) => {
+    const options = featSpellCandidates(
+      registry,
+      state.campaign,
+      pick,
+      classId,
+      state.build.classes.find((row) => row.classId === pick.spellList)?.subclassId,
+    ).filter(({ id }) => !other.has(id));
+    if (pick.maxLevel !== undefined) {
+      for (const id of stored?.spellIds ?? []) {
+        const spell = registry.entries.get(id);
+        if (spell?.kind === 'spell' && !options.some((option) => option.id === id))
+          options.push(spell);
+      }
+    }
+    return { pick, options };
+  });
   const inPick = (options: { id: string }[]) =>
     chosen.filter((id) => options.some((option) => option.id === id));
   const complete = picks.every(({ pick, options }) => inPick(options).length === pick.count);
+  const searchable = picks.some(({ options }) => options.length > 20);
 
   return (
     <div className="flex flex-col gap-3">
@@ -355,17 +372,33 @@ function FeatSpellsForm({
           </select>
         </label>
       )}
+      {searchable && (
+        <label className="flex flex-col gap-1 text-sm text-text">
+          Search spells
+          <input
+            type="search"
+            value={spellSearch}
+            onChange={(event) => setSpellSearch(event.target.value)}
+            className="min-h-11 rounded-btn border border-border bg-surface px-2 text-text"
+          />
+        </label>
+      )}
       {picks.map(({ pick, options }) => {
         const taken = inPick(options);
-        const noun = pick.level === 0 ? 'cantrip' : `level ${pick.level} spell`;
+        const query = spellSearch.trim().toLowerCase();
+        const visible = options.filter(
+          ({ id, name }) => chosen.includes(id) || name.toLowerCase().includes(query),
+        );
         return (
           <fieldset key={pick.level} className="flex flex-col">
             <legend className="mb-1 text-sm text-text">
-              Pick {pick.count} {noun}
-              {pick.count > 1 ? 's' : ''} ({taken.length} chosen)
+              Pick {pick.count} {featSpellPickLabel(pick)} ({taken.length} chosen)
             </legend>
             <div className="grid max-h-72 gap-1 overflow-y-auto sm:grid-cols-2">
-              {options.map((option) => {
+              {visible.length === 0 && (
+                <p className="text-sm text-text-muted">No matching spells.</p>
+              )}
+              {visible.map((option) => {
                 const checked = chosen.includes(option.id);
                 return (
                   <label

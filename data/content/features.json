@@ -11537,5 +11537,137 @@
     "origin": "subclass",
     "activation": "free",
     "usesFrom": "feature.fighter.arcane-archer-arcane-shot"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.magical-secrets-14",
+    "name": "Magical Secrets (Bard 14)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Choose two spells from any class up to spell level 7. They count toward your Bard spells known."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.bard",
+      "ability": "CHA",
+      "slots": true,
+      "countsTowardKnown": true,
+      "picks": [
+        {
+          "count": 2,
+          "level": 0,
+          "maxLevel": 7
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.bard.magical-secrets-18",
+    "name": "Magical Secrets (Bard 18)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Choose two spells from any class up to spell level 9. They count toward your Bard spells known."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.bard",
+      "ability": "CHA",
+      "slots": true,
+      "countsTowardKnown": true,
+      "picks": [
+        {
+          "count": 2,
+          "level": 0,
+          "maxLevel": 9
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.mystic-arcanum-7",
+    "name": "Mystic Arcanum (spell level 7)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Choose a Warlock spell of level 7. Cast that spell once without a slot per long rest."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "spells": {
+      "ability": "CHA",
+      "slots": false,
+      "picks": [
+        {
+          "count": 1,
+          "level": 7,
+          "spellList": "class.warlock",
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.mystic-arcanum-8",
+    "name": "Mystic Arcanum (spell level 8)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Choose a Warlock spell of level 8. Cast that spell once without a slot per long rest."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "spells": {
+      "ability": "CHA",
+      "slots": false,
+      "picks": [
+        {
+          "count": 1,
+          "level": 8,
+          "spellList": "class.warlock",
+          "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.warlock.mystic-arcanum-9",
+    "name": "Mystic Arcanum (spell level 9)",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Choose a Warlock spell of level 9. Cast that spell once without a slot per long rest."
+    },
+    "origin": "class",
+    "activation": "passive",
+    "spells": {
+      "ability": "CHA",
+      "slots": false,
+      "picks": [
+        {
+          "count": 1,
+          "level": 9,
+          "spellList": "class.warlock",
+          "free": "long"
+        }
+      ]
+    }
   }
 ]

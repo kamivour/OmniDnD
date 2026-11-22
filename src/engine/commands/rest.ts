@@ -1,6 +1,7 @@
-import { formatDuration } from '../clock';
+import { crossesDawn, formatDuration } from '../clock';
 import { restDurations } from '../calc/rests';
 import { featureResource, writeFeatureResource } from '../calc/features';
+import { MYSTIC_ARCANUM } from '../calc/feat-spells';
 import { LONG_REST_INTERVAL_SECONDS } from '../rules2014';
 import type { HitDieName } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
@@ -26,6 +27,31 @@ import {
 const SONG_OF_REST = 'feature.bard.song-of-rest';
 const FONT_OF_MAGIC = 'feature.sorcerer.font-of-magic';
 const SORCEROUS_RESTORATION = 'feature.sorcerer.sorcerous-restoration';
+const ARCANE_RECOVERY = 'feature.wizard.arcane-recovery';
+
+export function arcaneRecoveryOptions({
+  campaign,
+  sheet,
+  live,
+}: Pick<CommandContext, 'campaign' | 'sheet' | 'live'>) {
+  const feature = sheet.features.find(({ def }) => def.id === ARCANE_RECOVERY);
+  if (!feature) return undefined;
+  const start = live.clock.seconds;
+  const uses = featureResource(sheet.features, live, ARCANE_RECOVERY);
+  const available = Boolean(
+    uses &&
+    uses.max > 0 &&
+    (uses.remaining > 0 || crossesDawn(start, start + restDurations(campaign).short)),
+  );
+  const budget = Math.ceil(feature.level / 2);
+  const expended = sheet.slots.max.flatMap((max, level) => {
+    if (level < 1 || level > 5) return [];
+    const used = live.slotsUsed[level] ?? 0;
+    const count = Math.min(max, used, Math.floor(budget / level));
+    return count > 0 ? [{ level, count }] : [];
+  });
+  return { budget, available, expended };
+}
 
 function restChecks(ctx: CommandContext): Check[] {
   return [...deadCheck(ctx), ...(ctx.live.combat ? [block('End combat before resting')] : [])];
@@ -43,6 +69,8 @@ export interface ShortRestPayload {
   songOfRest?: number;
   /** Defaults to your own feature when available, otherwise another bard's unknown die. */
   songOfRestSource?: 'self' | 'other';
+  /** Slot levels chosen for Arcane Recovery, one entry per expended slot. */
+  arcaneRecovery?: number[];
 }
 
 /**
@@ -51,7 +79,7 @@ export interface ShortRestPayload {
  */
 export const completeShortRest: Command<ShortRestPayload> = {
   name: 'completeShortRest',
-  check: (ctx, { hitDice = [], songOfRest, songOfRestSource }) => {
+  check: (ctx, { hitDice = [], songOfRest, songOfRestSource, arcaneRecovery = [] }) => {
     const checks = restChecks(ctx);
     const counts = new Map<HitDieName, number>();
     for (const { die, roll } of hitDice) {
@@ -87,10 +115,24 @@ export const completeShortRest: Command<ShortRestPayload> = {
         ),
       );
     }
+    if (arcaneRecovery.length > 0) {
+      const options = arcaneRecoveryOptions(ctx);
+      if (!options?.available) checks.push(block('Arcane Recovery is unavailable until dawn'));
+      else if (arcaneRecovery.some((level) => !options.expended.some((row) => row.level === level)))
+        checks.push(block('Choose expended spell slots of level 1–5'));
+      else if (
+        options.expended.some(
+          ({ level, count }) => arcaneRecovery.filter((value) => value === level).length > count,
+        )
+      )
+        checks.push(block('Choose only the number of slots expended at each level'));
+      else if (arcaneRecovery.reduce((total, level) => total + level, 0) > options.budget)
+        checks.push(block(`Arcane Recovery restores up to ${options.budget} combined slot levels`));
+    }
     checks.push(...timeRangeChecks(ctx.live.clock.seconds, restDurations(ctx.campaign).short));
     return checks;
   },
-  apply: ({ live }, { hitDice = [], songOfRest, songOfRestSource }, ctx) => {
+  apply: ({ live }, { hitDice = [], songOfRest, songOfRestSource, arcaneRecovery = [] }, ctx) => {
     const duration = restDurations(ctx.campaign).short;
     const notes: (string | undefined)[] = passTime(live, duration, ctx);
     notes.push(...endTriggeredEffects(live, (on) => on.event === 'short-rest'));
@@ -126,6 +168,11 @@ export const completeShortRest: Command<ShortRestPayload> = {
         writeFeatureResource(ctx.sheet.features, live, FONT_OF_MAGIC, spent - recovered);
         restored.push(`${recovered} sorcery points`);
       }
+    }
+    if (arcaneRecovery.length > 0) {
+      for (const level of arcaneRecovery) live.slotsUsed[level] = (live.slotsUsed[level] ?? 0) - 1;
+      writeFeatureResource(ctx.sheet.features, live, ARCANE_RECOVERY, 1);
+      restored.push(`Arcane Recovery: slots at levels ${arcaneRecovery.join(', ')}`);
     }
     if (restored.length > 0) notes.push(`restored ${restored.join(', ')}`);
     notes.push(...rechargeItems(live, ctx, ctx.live.items, ['short']));
@@ -189,6 +236,10 @@ export const completeLongRest: Command<null> = {
       restored.push('pact slots');
     }
     restored.push(...restoreFeatures(live, ctx.sheet, ['short', 'long']));
+    if (live.featureUsesSpent[MYSTIC_ARCANUM]) {
+      delete live.featureUsesSpent[MYSTIC_ARCANUM];
+      if (!restored.includes('Mystic Arcanum')) restored.push('Mystic Arcanum');
+    }
     restored.push(...restoreCompanionUses(live, ctx.build, ['short', 'long']));
     if (restored.length > 0) notes.push(`restored ${restored.join(', ')}`);
     notes.push(...rechargeItems(live, ctx, ctx.live.items, ['short', 'long']));

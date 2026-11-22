@@ -9,10 +9,14 @@ import type {
 } from '../schema';
 import type { Ability } from './abilities';
 import { sourceAllows } from './campaign-rules';
-import { classSpellAllows } from './class-spell-lists';
+import { classSpellAllows, optionalTashaSpellClasses } from './class-spell-lists';
+import { spellListsWithGrants } from './granted-spells';
 import type { Sheet } from './sheet';
 
 type SpellPick = NonNullable<FeatureSpells['picks']>[number];
+export const MYSTIC_ARCANUM = 'feature.warlock.mystic-arcanum';
+const includesLevel = (pick: SpellPick, level: number) =>
+  level >= pick.level && level <= (pick.maxLevel ?? pick.level);
 
 export interface FeatSpell {
   spellId: string;
@@ -83,7 +87,7 @@ export function featSpellSources(ctx: FeatSpellContext): FeatSpellSource[] {
     const picked = (stored?.spellIds ?? []).flatMap((spellId): FeatSpell[] => {
       const spell = ctx.registry.entries.get(spellId);
       if (spell?.kind !== 'spell') return [];
-      const free = grant.picks?.find((row) => row.level === spell.level)?.free;
+      const free = grant.picks?.find((row) => includesLevel(row, spell.level))?.free;
       return [{ spellId, ...(free ? { free } : {}) }];
     });
     const wanted = (grant.picks ?? []).reduce((sum, row) => sum + row.count, 0);
@@ -115,23 +119,59 @@ export function featSpellCandidates(
   campaign: Pick<Campaign, 'ruleset' | 'optionalRules'> & Parameters<typeof sourceAllows>[0],
   pick: SpellPick,
   classId: string | undefined,
+  subclassId?: string,
 ): SpellDef[] {
+  const subclass = subclassId ? registry.entries.get(subclassId) : undefined;
+  const spellList = pick.spellList ?? (pick.fromClass ? classId : undefined);
   return [...registry.entries.values()]
     .filter(
       (entry): entry is SpellDef =>
         entry.kind === 'spell' &&
         entry.ruleset === campaign.ruleset &&
         sourceAllows(campaign, entry) &&
-        entry.level === pick.level &&
+        includesLevel(pick, entry.level) &&
+        (pick.maxLevel === undefined ||
+          [...entry.classes, ...optionalTashaSpellClasses(entry)].some((id) =>
+            classSpellAllows(campaign, id, entry),
+          )) &&
         (!pick.schools || pick.schools.includes(entry.school)) &&
         (!pick.spellIds || pick.spellIds.includes(entry.id)) &&
-        (!pick.fromClass ||
-          (classId !== undefined && classSpellAllows(campaign, classId, entry))) &&
+        ((!pick.fromClass && !pick.spellList) ||
+          (spellList !== undefined &&
+            (classSpellAllows(campaign, spellList, entry) ||
+              (subclass?.kind === 'subclass' &&
+                subclass.classId === spellList &&
+                subclass.expandedSpellIds?.includes(entry.id) === true)))) &&
         (!pick.classes || pick.classes.some((id) => classSpellAllows(campaign, id, entry))) &&
         (!pick.attack || entry.attack !== undefined) &&
         (!pick.ritual || entry.ritual),
     )
     .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/** Other spells already learned by the class a feature adds spells to. */
+export function otherClassSpells(registry: Registry, build: CharacterBuild, def: FeatureDef) {
+  const classId = def.spells?.castingClassId;
+  if (!classId) return new Set<string>();
+  const featSpells = { ...build.featSpells };
+  delete featSpells[def.id];
+  const spells = featSpellReassignmentClass(def) ? [] : build.spells;
+  return new Set(
+    spellListsWithGrants(registry, { ...build, featSpells, spells })
+      .filter((row) => row.classId === classId)
+      .flatMap((row) => [...row.known, ...(row.prepared ?? [])]),
+  );
+}
+
+/** Let existing characters explicitly move earlier manual spell records to their feature. */
+export function featSpellReassignmentClass(def: FeatureDef): string | undefined {
+  if (def.id.startsWith(MYSTIC_ARCANUM)) return 'class.warlock';
+  if (
+    def.spells?.castingClassId === 'class.bard' &&
+    def.spells.picks?.some((pick) => pick.maxLevel !== undefined)
+  )
+    return 'class.bard';
+  return undefined;
 }
 
 /** Why these picks do not fit the feature, or undefined when they do. */
@@ -140,6 +180,8 @@ export function featSpellPickProblem(
   campaign: Parameters<typeof featSpellCandidates>[1],
   def: FeatureDef,
   choice: { classId?: string; ability?: Ability; spellIds: string[] },
+  subclassId?: string,
+  retained: readonly string[] = [],
 ): string | undefined {
   const grant = def.spells;
   if (!grant) return `${def.name} teaches no spells to pick`;
@@ -154,26 +196,37 @@ export function featSpellPickProblem(
   }
   if (new Set(choice.spellIds).size !== choice.spellIds.length)
     return 'Each spell can be picked once';
-  for (const pick of grant.picks ?? []) {
+  const picks = grant.picks ?? [];
+  const unassigned = new Set(choice.spellIds);
+  for (const pick of picks) {
     const allowed = new Set(
-      featSpellCandidates(registry, campaign, pick, choice.classId).map((spell) => spell.id),
+      featSpellCandidates(registry, campaign, pick, choice.classId, subclassId).map(
+        (spell) => spell.id,
+      ),
     );
     const level = choice.spellIds.filter(
       (id) =>
         registry.entries.get(id)?.kind === 'spell' &&
-        registry.get('spell', id).level === pick.level,
+        (includesLevel(pick, registry.get('spell', id).level) ||
+          (pick.maxLevel !== undefined && retained.includes(id))),
     );
     if (level.length !== pick.count)
-      return `${def.name}: pick ${pick.count} ${pick.level === 0 ? 'cantrip' : `level ${pick.level} spell`}${pick.count > 1 ? 's' : ''}`;
-    const wrong = level.find((id) => !allowed.has(id));
+      return `${def.name}: pick ${pick.count} ${featSpellPickLabel(pick)}`;
+    const wrong = level.find(
+      (id) => !allowed.has(id) && !(pick.maxLevel !== undefined && retained.includes(id)),
+    );
     if (wrong) return `${registry.get('spell', wrong).name} is not an option for ${def.name}`;
+    level.forEach((id) => unassigned.delete(id));
   }
-  const levels = new Set((grant.picks ?? []).map((pick) => pick.level));
-  const extra = choice.spellIds.find(
-    (id) =>
-      registry.entries.get(id)?.kind !== 'spell' || !levels.has(registry.get('spell', id).level),
-  );
+  const extra = unassigned.values().next().value;
   if (extra)
     return `${registry.entries.get(extra)?.name ?? extra} is not an option for ${def.name}`;
   return undefined;
+}
+
+export function featSpellPickLabel(pick: SpellPick) {
+  const noun = pick.level === 0 && pick.maxLevel === undefined ? 'cantrip' : 'spell';
+  const plural = pick.count === 1 ? noun : noun + 's';
+  if (pick.maxLevel !== undefined) return `${plural} up to level ${pick.maxLevel}`;
+  return pick.level === 0 ? plural : `level ${pick.level} ${plural}`;
 }

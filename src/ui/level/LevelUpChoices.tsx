@@ -462,7 +462,9 @@ export function SpellPicks({
       </p>
       {info.granted.length > 0 && (
         <p className="text-sm text-text-muted">
-          <strong className="text-text">Always prepared</strong>
+          <strong className="text-text">
+            {gains.mode === 'known' ? 'Learned from features' : 'Always prepared'}
+          </strong>
           {' · '}
           {info.granted.map((spell) => optionName(registry, spell)).join(', ')}. These spells use
           none of your preparation slots.

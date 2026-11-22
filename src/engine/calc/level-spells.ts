@@ -26,6 +26,29 @@ const CANTRIP_VERSATILITY: Record<string, string> = {
   'class.warlock': 'feature.tce.warlock-eldritch-versatility',
 };
 
+function bardSecrets(ctx: SpellSelectionContext, classId: string) {
+  if (classId !== 'class.bard') return [];
+  return ctx.sheet.features.flatMap(({ def }) =>
+    def.id === 'feature.bard.additional-magical-secrets' ||
+    def.id.startsWith('feature.bard.magical-secrets')
+      ? (ctx.build.featSpells?.[def.id]?.spellIds ?? []).map((id) => ({ id, featureId: def.id }))
+      : [],
+  );
+}
+
+export function swappableLevelSpells(
+  ctx: SpellSelectionContext,
+  details: ReturnType<typeof spellSelectionDetails>,
+): string[] {
+  return [
+    ...details.known.ids,
+    ...bardSecrets(ctx, details.classId).flatMap(({ id }) => {
+      const spell = ctx.registry.entries.get(id);
+      return spell?.kind === 'spell' && !spell.retired && spell.level > 0 ? [id] : [];
+    }),
+  ];
+}
+
 export interface LevelSpellGains {
   mode: 'known' | 'prepared' | 'spellbook' | 'unsupported';
   cantrips: number;
@@ -128,7 +151,7 @@ export function applyLevelSpells(
   if (spellSwap) {
     const { remove, add: replacement } = spellSwap;
     if (!gains.canSwap) return { blocked: `${details.name} cannot swap a spell at this level` };
-    if (!details.known.ids.includes(remove))
+    if (!swappableLevelSpells(ctx, details).includes(remove))
       return { blocked: 'Swap out a leveled spell you know' };
     if ((level(replacement) ?? 0) === 0) return { blocked: 'Swap in a leveled spell' };
     if (
@@ -137,8 +160,12 @@ export function applyLevelSpells(
       add.includes(replacement)
     )
       return { blocked: `${nameOf(replacement)} is not available to swap in` };
+    const secret = bardSecrets(ctx, classId).find(({ id }) => id === remove);
     known.delete(remove);
-    known.add(replacement);
+    if (secret) {
+      const source = build.featSpells?.[secret.featureId];
+      if (source) source.spellIds = source.spellIds.map((id) => (id === remove ? replacement : id));
+    } else known.add(replacement);
     summary.push(`Swap ${nameOf(remove)} for ${nameOf(replacement)}`);
   }
   if (cantripSwap) {

@@ -274,11 +274,22 @@ describe('full caster slots and pools', () => {
     expect(uses('class.druid', 2, 'druid.wild-shape')).toBe(2);
   });
 
-  it('Mystic Arcanum and Signature Spell are limited pools', () => {
-    const arcanum = [10, 11, 13, 15, 17].map(
-      (l) => feature('class.warlock', l, 'warlock.mystic-arcanum')?.uses?.max,
-    );
-    expect(arcanum).toEqual([undefined, 1, 2, 3, 4]);
+  it('Mystic Arcanum unlocks one distinct free casting every two Warlock levels from 11', () => {
+    for (const [level, tier] of [
+      [11, 6],
+      [13, 7],
+      [15, 8],
+      [17, 9],
+    ] as const) {
+      const id = tier === 6 ? 'warlock.mystic-arcanum' : `warlock.mystic-arcanum-${tier}`;
+      expect(feature('class.warlock', level - 1, id)).toBeUndefined();
+      expect(feature('class.warlock', level, id)?.def.spells?.picks).toMatchObject([
+        { level: tier, count: 1, free: 'long' },
+      ]);
+    }
+  });
+
+  it('tracks two Signature Spell uses', () => {
     expect(feature('class.wizard', 20, 'wizard.signature-spell')?.uses).toEqual({
       max: 2,
       recharge: 'short',

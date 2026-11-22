@@ -528,7 +528,20 @@
   },
   {
     "id": "feature.bard.magical-secrets",
-    "activation": "passive"
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.bard",
+      "ability": "CHA",
+      "slots": true,
+      "countsTowardKnown": true,
+      "picks": [
+        {
+          "count": 2,
+          "level": 0,
+          "maxLevel": 5
+        }
+      ]
+    }
   },
   {
     "id": "feature.bard.song-of-rest",
@@ -1226,17 +1239,18 @@
   },
   {
     "id": "feature.warlock.mystic-arcanum",
-    "activation": "special",
-    "uses": {
-      "max": {
-        "byLevel": {
-          "11": 1,
-          "13": 2,
-          "15": 3,
-          "17": 4
+    "activation": "passive",
+    "spells": {
+      "ability": "CHA",
+      "slots": false,
+      "picks": [
+        {
+          "count": 1,
+          "level": 6,
+          "spellList": "class.warlock",
+          "free": "long"
         }
-      },
-      "recharge": "long"
+      ]
     }
   },
   {
@@ -1261,10 +1275,10 @@
   },
   {
     "id": "feature.wizard.arcane-recovery",
-    "activation": "special",
+    "activation": "passive",
     "uses": {
       "max": 1,
-      "recharge": "long"
+      "recharge": "dawn"
     }
   },
   {
@@ -2664,6 +2678,22 @@
         {
           "level": 0,
           "count": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature.bard.additional-magical-secrets",
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.bard",
+      "ability": "CHA",
+      "slots": true,
+      "picks": [
+        {
+          "count": 2,
+          "level": 0,
+          "maxLevel": 3
         }
       ]
     }

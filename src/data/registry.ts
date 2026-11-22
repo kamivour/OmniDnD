@@ -8,6 +8,7 @@ import contentSubclasses from '../../data/content/subclasses.json';
 import summaries from '../../data/content/summaries.json';
 import tashaItems from '../../data/content/tasha-items.json';
 import xanatharItems from '../../data/content/xanathar-items.json';
+import classMechanics from '../../data/mechanics/classes.json';
 import featureMechanics from '../../data/mechanics/features.json';
 import itemMechanics from '../../data/mechanics/items.json';
 import spellMechanics from '../../data/mechanics/spells.json';
@@ -85,6 +86,7 @@ export const contentPacks = {
 };
 
 export const mechanicsPacks = {
+  classes: classMechanics,
   features: featureMechanics,
   items: itemMechanics,
   spells: spellMechanics,

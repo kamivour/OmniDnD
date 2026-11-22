@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 02:46 — Magical Secrets, Mystic Arcanum and Arcane Recovery
+
+- Lore Bard can choose two bonus spells at level 6 in To do. Regular Magical Secrets reserve picks at Bard levels 10, 14 and 18.
+- Warlock picks one Mystic Arcanum spell at each unlocked tier and casts each once per long rest.
+- Wizard can choose which expended slots to restore in Short Rest. Check the recovery budget and Undo. Checks pass.
+
 ## 2026-11-23 01:19 — 2014 class rules audit
 
 - Look for Bladesinging, Circle of Dreams, Circle of the Shepherd, Druid Grove and Find Greater Steed.

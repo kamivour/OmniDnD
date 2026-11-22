@@ -292,6 +292,7 @@ export const levelUp: Command<LevelUpPayload> = {
     draft.build.abilityScores.bonuses = next.build.abilityScores.bonuses;
     draft.build.featureIds = next.build.featureIds;
     draft.build.spells = next.build.spells;
+    if (next.build.featSpells) draft.build.featSpells = next.build.featSpells;
     draft.live.hp = next.live.hp;
     if (next.live.infusions !== ctx.live.infusions) {
       draft.live.infusions = next.live.infusions;

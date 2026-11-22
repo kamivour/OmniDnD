@@ -27,6 +27,8 @@ export interface SpellSelectionDetails {
   selection: { known: string[]; prepared: string[] };
   /** Subclass spells that are always ready and never counted (domain, oath, ...). */
   granted: { id: string; from: string }[];
+  /** Slots from the overall known-spell cap reserved for a class feature. */
+  reservedKnown?: number;
   cantrips: SpellSelectionCount;
   known: SpellSelectionCount;
   prepared: SpellSelectionCount;
@@ -198,6 +200,11 @@ export function spellSelectionDetails(
     mode === 'known'
       ? (effective?.spellsKnown ?? casting?.spellsKnown?.[classLevel - 1])
       : undefined;
+  const reservedKnown = ctx.sheet.features.reduce((sum, { def: feature }) => {
+    const grant = feature.spells;
+    if (!grant?.countsTowardKnown || grant.castingClassId !== classId) return sum;
+    return sum + (grant.picks ?? []).reduce((picks, row) => picks + row.count, 0);
+  }, 0);
   const preparedLimit =
     mode === 'prepared' || mode === 'spellbook'
       ? (ctx.sheet.values[overridePath('spellcasting', classId, 'preparedLimit')]?.stat.override
@@ -230,6 +237,7 @@ export function spellSelectionDetails(
     maxSpellLevel: maximum,
     selection,
     granted,
+    ...(reservedKnown > 0 ? { reservedKnown } : {}),
     cantrips: {
       ids: cantripIds,
       count: cantripIds.length,
@@ -238,7 +246,7 @@ export function spellSelectionDetails(
     known: {
       ids: knownIds,
       count: knownIds.length,
-      ...(knownLimit === undefined ? {} : { limit: knownLimit }),
+      ...(knownLimit === undefined ? {} : { limit: Math.max(0, knownLimit - reservedKnown) }),
     },
     prepared: {
       ids: [...selection.prepared],

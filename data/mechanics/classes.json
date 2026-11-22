@@ -1,0 +1,184 @@
+[
+  {
+    "id": "class.bard",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.bard.spellcasting"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.bard.bardic-inspiration"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.bard.jack-of-all-trades"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.bard.song-of-rest"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.bard.expertise"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.bard.college"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.bard.ability-score-improvement"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.bard.bardic-inspiration"
+      },
+      {
+        "level": 5,
+        "featureId": "feature.bard.font-of-inspiration"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.bard.countercharm"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.bard.college-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.bard.ability-score-improvement"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.bard.song-of-rest"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.bard.expertise"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.bard.bardic-inspiration"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.bard.magical-secrets"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.bard.ability-score-improvement"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.bard.song-of-rest"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.bard.magical-secrets-14"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.bard.college-improvement"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.bard.bardic-inspiration"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.bard.ability-score-improvement"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.bard.song-of-rest"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.bard.magical-secrets-18"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.bard.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.bard.superior-inspiration"
+      }
+    ]
+  },
+  {
+    "id": "class.warlock",
+    "features": [
+      {
+        "level": 1,
+        "featureId": "feature.warlock.otherworldly-patron"
+      },
+      {
+        "level": 1,
+        "featureId": "feature.warlock.pact-magic"
+      },
+      {
+        "level": 2,
+        "featureId": "feature.warlock.eldritch-invocations"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.warlock.pact-boon"
+      },
+      {
+        "level": 4,
+        "featureId": "feature.warlock.ability-score-improvement"
+      },
+      {
+        "level": 6,
+        "featureId": "feature.warlock.otherworldly-patron-improvement"
+      },
+      {
+        "level": 8,
+        "featureId": "feature.warlock.ability-score-improvement"
+      },
+      {
+        "level": 10,
+        "featureId": "feature.warlock.otherworldly-patron-improvement"
+      },
+      {
+        "level": 11,
+        "featureId": "feature.warlock.mystic-arcanum"
+      },
+      {
+        "level": 12,
+        "featureId": "feature.warlock.ability-score-improvement"
+      },
+      {
+        "level": 13,
+        "featureId": "feature.warlock.mystic-arcanum-7"
+      },
+      {
+        "level": 14,
+        "featureId": "feature.warlock.otherworldly-patron-improvement"
+      },
+      {
+        "level": 15,
+        "featureId": "feature.warlock.mystic-arcanum-8"
+      },
+      {
+        "level": 16,
+        "featureId": "feature.warlock.ability-score-improvement"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.warlock.mystic-arcanum-9"
+      },
+      {
+        "level": 19,
+        "featureId": "feature.warlock.ability-score-improvement"
+      },
+      {
+        "level": 20,
+        "featureId": "feature.warlock.eldritch-master"
+      }
+    ]
+  }
+]

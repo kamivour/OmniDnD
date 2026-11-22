@@ -1,4 +1,9 @@
-import { SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './rules2014';
+import { DAWN_SECONDS, SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './rules2014';
+
+export function crossesDawn(start: number, end: number): boolean {
+  const day = (time: number) => Math.floor((time - DAWN_SECONDS) / SECONDS_PER_DAY);
+  return day(end) > day(start);
+}
 
 /** Game clock as the UI shows it: "Day 1, 08:00" (D46). */
 export function formatClock(seconds: number): string {

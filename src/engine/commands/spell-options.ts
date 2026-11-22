@@ -5,6 +5,7 @@ import { entryCasting } from '../calc/casting';
 import {
   featSpellSources,
   freeUseKey,
+  MYSTIC_ARCANUM,
   type FeatSpell,
   type FeatSpellSource,
 } from '../calc/feat-spells';
@@ -198,9 +199,23 @@ export function featFreeLeft(
   live: SpellOptionsContext['live'],
   featureId: string,
   feat: FeatSpell | undefined,
+  sheet?: Pick<SpellOptionsContext['sheet'], 'features'>,
 ): number {
   if (!feat?.free) return 0;
   if (feat.free === 'will') return Infinity;
+  const legacySpent = live.featureUsesSpent[MYSTIC_ARCANUM] ?? 0;
+  if (sheet && legacySpent > 0 && featureId.startsWith(MYSTIC_ARCANUM)) {
+    const tiers = sheet.features
+      .map(({ def }) => def.id)
+      .filter((id) => id.startsWith(MYSTIC_ARCANUM));
+    const spentTiers = new Set(
+      Object.entries(live.featSpellsUsed ?? {})
+        .filter(([, spent]) => spent > 0)
+        .map(([key]) => key.split('|')[0])
+        .filter((id) => id !== undefined && tiers.includes(id)),
+    );
+    if (legacySpent + spentTiers.size >= tiers.length) return 0;
+  }
   return (live.featSpellsUsed?.[freeUseKey(featureId, feat.spellId)] ?? 0) > 0 ? 0 : 1;
 }
 
@@ -224,7 +239,7 @@ function featCastDetails(
           feat: {
             source,
             ...(feat ? { spell: feat } : {}),
-            freeLeft: featFreeLeft(ctx.live, source.featureId, feat),
+            freeLeft: featFreeLeft(ctx.live, source.featureId, feat, ctx.sheet),
           },
         }
       : {}),

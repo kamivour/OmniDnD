@@ -1,6 +1,75 @@
 import { expect, test } from './fixtures';
 import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
+test('Lore Bard learns two bonus spells and finds them in Spellbook', async ({ page }) => {
+  const file = reviewFile('lore-bard-magical-secrets');
+  const classId = 'class.bard';
+  const featureId = 'feature.bard.additional-magical-secrets';
+  file.build.classes = [{ classId, level: 6, subclassId: 'subclass.bard.lore' }];
+  file.build.hpEntries = Array.from({ length: 6 }, (_, index) => ({
+    level: index + 1,
+    classId,
+    method: index === 0 ? 'max' : 'average',
+    value: index === 0 ? 8 : 5,
+  }));
+  await importReview(page, file, 'todo');
+  const group = page
+    .getByRole('listitem')
+    .filter({ hasText: 'Additional Magical Secrets: choose spells' });
+  await group.getByRole('button', { name: 'Choose', exact: true }).click();
+  const search = group.getByRole('searchbox', { name: 'Search spells' });
+  await search.fill('Counterspell');
+  await group.getByRole('checkbox', { name: 'Counterspell', exact: true }).check();
+  await search.fill('Revivify');
+  await group.getByRole('checkbox', { name: 'Revivify', exact: true }).check();
+  await group.getByRole('button', { name: 'Save choice', exact: true }).click();
+  await saved(page);
+  expect((await reviewState(page, file.build.id)).build.featSpells?.[featureId]?.spellIds).toEqual([
+    'spell.counterspell',
+    'spell.revivify',
+  ]);
+  await page.goto(`/characters/${file.build.id}/spells`);
+  const main = page.getByRole('main');
+  await expect(main.getByRole('button', { name: /^Counterspell\b/ })).toBeVisible();
+  await expect(main.getByRole('button', { name: /^Revivify\b/ })).toBeVisible();
+});
+
+test('Wizard recovers chosen slots at short rest and Undo restores spending', async ({ page }) => {
+  const file = reviewFile('wizard-arcane-recovery');
+  const classId = 'class.wizard';
+  file.build.classes = [{ classId, level: 4, subclassId: 'subclass.wizard.evocation' }];
+  file.build.hpEntries = Array.from({ length: 4 }, (_, index) => ({
+    level: index + 1,
+    classId,
+    method: index === 0 ? 'max' : 'average',
+    value: index === 0 ? 6 : 4,
+  }));
+  file.build.spells = [];
+  file.live.slotsUsed = file.live.slotsUsed.map((_, level) => [0, 2, 1][level] ?? 0);
+  await importReview(page, file, 'combat');
+  if (page.viewportSize()!.width < 640) {
+    await page.getByRole('button', { name: 'More', exact: true }).click();
+    await page
+      .getByRole('dialog', { name: 'More', exact: true })
+      .getByRole('button', { name: 'Short Rest', exact: true })
+      .click();
+  } else
+    await page
+      .getByRole('button', { name: 'Short Rest', exact: true })
+      .filter({ visible: true })
+      .click();
+  const dialog = page.getByRole('dialog', { name: 'Short Rest', exact: true });
+  await dialog.getByLabel('Level 2 slots to recover').selectOption('1');
+  await expect(dialog.getByText('2 / 2 slot levels selected')).toBeVisible();
+  await dialog.getByRole('button', { name: 'Apply Short Rest', exact: true }).click();
+  await expect(dialog).toBeHidden();
+  await saved(page);
+  expect((await reviewState(page, file.build.id)).live.slotsUsed.slice(1, 3)).toEqual([2, 0]);
+  await page.getByRole('button', { name: 'Undo last command', exact: true }).click();
+  await saved(page);
+  expect((await reviewState(page, file.build.id)).live.slotsUsed.slice(1, 3)).toEqual([2, 1]);
+});
+
 test('Rune Knight learns two eligible runes from To do', async ({ page }) => {
   const classId = 'class.fighter';
   const file = reviewFile('audit-rune-knight');

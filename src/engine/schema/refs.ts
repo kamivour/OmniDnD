@@ -198,6 +198,8 @@ export const FreeCastSchema = z.enum(['long', 'short', 'will']);
 export const FeatureSpellsSchema = z.strictObject({
   /** Class-list grants use the owning class's casting stats and leave its normal limits intact. */
   castingClassId: refId('class').optional(),
+  /** This feature reserves picks in the class's Spells Known table. */
+  countsTowardKnown: z.literal(true).optional(),
   requiredSubclassId: refId('subclass').optional(),
   /** A fixed ability, the ability the feat raised, or the spellcasting ability of the picked class. */
   ability: z.union([AbilitySchema, z.enum(['raised', 'class'])]),
@@ -225,10 +227,14 @@ export const FeatureSpellsSchema = z.strictObject({
       z.strictObject({
         count: z.int().positive(),
         level: z.int().min(0).max(9),
+        /** The pick may be any spell from level through maxLevel. */
+        maxLevel: z.int().min(0).max(9).optional(),
         spellIds: z.array(refId('spell')).optional(),
         schools: z.array(SchoolSchema).optional(),
         /** From the picked class's spell list. */
         fromClass: z.boolean().optional(),
+        /** From this class's list, including the owning subclass's expanded spells. */
+        spellList: refId('class').optional(),
         /** From one of these class lists. */
         classes: z.array(refId('class')).optional(),
         /** Only spells that make an attack roll (Spell Sniper). */
