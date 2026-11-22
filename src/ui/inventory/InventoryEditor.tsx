@@ -20,7 +20,7 @@ import { catalogueItems, containerOptions } from './inventory-editor-model';
 import { parseWholeCount } from './whole-count';
 
 export type InventoryEditorRequest =
-  { kind: 'add'; instanceId: string } | { kind: 'edit'; instanceId: string };
+  { kind: 'add'; instanceId: string; container?: string } | { kind: 'edit'; instanceId: string };
 
 const button = 'min-h-11 rounded-btn border border-border px-3 text-sm disabled:opacity-40';
 const categories: ItemDef['category'][] = [
@@ -66,7 +66,9 @@ export function InventoryEditor({
   const [choosing, setChoosing] = useState(request.kind === 'add');
   const [quantity, setQuantity] = useState(String(baseline?.live.qty ?? 1));
   const quantityTouched = useRef(false);
-  const [container, setContainer] = useState(baseline?.item.container ?? '');
+  const [container, setContainer] = useState(
+    request.kind === 'add' ? (request.container ?? '') : (baseline?.item.container ?? ''),
+  );
   const [notes, setNotes] = useState(baseline?.item.notes ?? '');
   const [removing, setRemoving] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);

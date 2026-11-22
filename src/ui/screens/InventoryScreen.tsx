@@ -138,7 +138,20 @@ export function InventoryScreen() {
                   )}
                   {item.locationNote && <p className="text-sm text-warn">{item.locationNote}</p>}
                   <InventoryItemControls instanceId={item.instanceId} />
-                  {item.def.storage && <ContainerStorage instanceId={item.instanceId} />}
+                  {item.def.storage && (
+                    <ContainerStorage
+                      instanceId={item.instanceId}
+                      onAdd={(kind, button) => {
+                        opener.current = button;
+                        const location = {
+                          instanceId: crypto.randomUUID(),
+                          container: item.instanceId,
+                        };
+                        if (kind === 'catalogue') setEditor({ kind: 'add', ...location });
+                        else setCustom({ kind: 'create', ...location });
+                      }}
+                    />
+                  )}
                   <button
                     type="button"
                     aria-label={`Edit: ${item.def.name}`}

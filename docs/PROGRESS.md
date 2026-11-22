@@ -398,6 +398,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 ## Review fixes
 
+- [x] Add catalogue items and create custom contents directly from magic containers
 - [x] Group standard Artificer infusions and Replicate Magic Item recipes under a shared known limit
 - [x] Offer open prepared-spell picks during level-up and show automatic Artificer subclass spells separately
 - [x] Find all Rhythm-Maker’s Drum variants with common apostrophe and hyphen spellings
@@ -427,6 +428,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-22 — Put in… adds catalogue or custom contents directly to a magic container, including water by the liter and borrowed equipment.
 - 2026-11-22 — Artificers can learn and replace infusions during Level up, see previously learned choices, and choose eligible common magic-item recipes.
 - 2026-11-22 — Separated standard infusions from Replicate Magic Item recipes in the Artificer picker and rest review. Each recipe uses one known slot.
 - 2026-11-22 — Level up offers prepared-spell picks separately from subclass grants. Battle Smith gains Warding Bond at level 5.

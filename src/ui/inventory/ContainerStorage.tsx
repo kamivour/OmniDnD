@@ -11,12 +11,19 @@ import { containerOptions } from './inventory-editor-model';
 import { inventoryItem, itemCountText } from './inventory-model';
 
 /** Fill level, contents and "Put in…" for a container with a recorded capacity (M44 T6). */
-export function ContainerStorage({ instanceId }: { instanceId: string }) {
+export function ContainerStorage({
+  instanceId,
+  onAdd,
+}: {
+  instanceId: string;
+  onAdd: (kind: 'catalogue' | 'custom', opener: HTMLButtonElement) => void;
+}) {
   const { state } = useCharacter();
   const { run, warningOpen } = useCommand();
   const conflict = useStore(storageStatusStore, (status) => status.conflict);
   const [open, setOpen] = useState(false);
   const button = useRef<HTMLButtonElement>(null);
+  const switchingEditor = useRef(false);
   const load = containerLoads(state, registry).find((entry) => entry.instanceId === instanceId);
   const self = inventoryItem(state, registry, instanceId);
   if (!load || !self) return null;
@@ -32,6 +39,14 @@ export function ContainerStorage({ instanceId }: { instanceId: string }) {
         return item && fits ? [item] : [];
       })
     : [];
+  const canAdd =
+    open && containerOptions(state, registry).some(({ value }) => value === instanceId);
+  const add = (kind: 'catalogue' | 'custom') => {
+    if (!button.current || !canAdd) return;
+    switchingEditor.current = true;
+    setOpen(false);
+    onAdd(kind, button.current);
+  };
   const filled =
     load.capacityPounds === undefined
       ? 0
@@ -95,8 +110,33 @@ export function ContainerStorage({ instanceId }: { instanceId: string }) {
         open={open}
         onOpenChange={setOpen}
         title={`Put in ${self.def.name}`}
-        description="Pick an item to move inside."
+        description="Move an inventory item or record new contents directly here."
+        onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          if (!switchingEditor.current) button.current?.focus();
+          switchingEditor.current = false;
+        }}
       >
+        {canAdd && (
+          <div className="mb-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={conflict || warningOpen}
+              onClick={() => add('catalogue')}
+              className="min-h-11 rounded-btn border border-border px-3 text-sm text-accent disabled:opacity-40"
+            >
+              Add from catalogue
+            </button>
+            <button
+              type="button"
+              disabled={conflict || warningOpen}
+              onClick={() => add('custom')}
+              className="min-h-11 rounded-btn border border-border px-3 text-sm disabled:opacity-40"
+            >
+              Create custom item
+            </button>
+          </div>
+        )}
         {candidates.length === 0 ? (
           <p className="text-sm text-text-muted">No other items can go inside.</p>
         ) : (

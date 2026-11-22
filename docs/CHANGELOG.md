@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 18:28 — Add items directly to magic containers
+
+- Open Put in… on a Bag of Holding, Handy Haversack or Portable Hole. Add a catalogue item or create a custom item with the container selected.
+- Try adding water by the liter or record borrowed gear in Notes. The container fill updates and Undo removes the added record. Checks pass.
+
 ## 2026-11-22 11:05 — Learn and replace Artificer infusions
 
 - Check how many choices are open and see already-known infusions like Enhanced Weapon in the same list.

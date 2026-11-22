@@ -26,7 +26,7 @@ import { containerOptions } from './inventory-editor-model';
 import { parseWholeCount } from './whole-count';
 
 export type CustomItemRequest =
-  { kind: 'create'; instanceId: string } | { kind: 'edit'; itemId: string };
+  { kind: 'create'; instanceId: string; container?: string } | { kind: 'edit'; itemId: string };
 
 const button = 'min-h-11 rounded-btn border border-border px-3 text-sm disabled:opacity-40';
 const categories: ItemDef['category'][] = [
@@ -70,7 +70,9 @@ export function CustomItemEditor({
     original ? customItemFields(original) : emptyCustomItemFields(),
   );
   const [quantity, setQuantity] = useState('1');
-  const [container, setContainer] = useState('');
+  const [container, setContainer] = useState(
+    request.kind === 'create' ? (request.container ?? '') : '',
+  );
   const [deleting, setDeleting] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [showErrors, setShowErrors] = useState(false);
@@ -115,6 +117,8 @@ export function CustomItemEditor({
   const bases = baseItemOptions(registry, fields.category);
   const hasCharges = fields.charges.trim() !== '';
   const options = containerOptions(state, registry);
+  const missingContainer =
+    Boolean(container) && !options.some((option) => option.value === container);
 
   const submit = () => {
     if (busy) return;
@@ -437,6 +441,7 @@ export function CustomItemEditor({
                         {option.label}
                       </option>
                     ))}
+                    {missingContainer && <option value={container}>Unavailable container</option>}
                   </select>
                 </Field>
               </div>

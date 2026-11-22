@@ -55,3 +55,62 @@ test('a Bag of Holding shows its fill and its contents add no carried weight', a
   await expect(bag).toContainText('Holds 0 of 500 lb');
   await expect(itemWeight).toHaveText(`${before} lb`);
 });
+
+test('a Bag of Holding records new catalogue items and custom contents directly', async ({
+  page,
+}) => {
+  await importWithBag(page);
+  const bag = page.getByRole('article', { name: 'Bag of Holding', exact: true });
+  const put = bag.getByRole('button', { name: 'Put in Bag of Holding', exact: true });
+  const picker = page.getByRole('dialog', { name: 'Put in Bag of Holding', exact: true });
+  const contents = page.getByRole('region', { name: 'Bag of Holding', exact: true });
+  const carriedWeight = page
+    .getByRole('region', { name: 'Carried weight' })
+    .getByText('Known item weight', { exact: true })
+    .locator('..')
+    .locator('dd');
+  const before = await carriedWeight.textContent();
+
+  await put.click();
+  await picker.getByRole('button', { name: 'Create custom item', exact: true }).click();
+  const custom = page.getByRole('form', { name: 'Create custom item', exact: true });
+  await expect(custom.getByRole('combobox', { name: 'Container' })).toHaveValue('bag-1');
+  await expect(custom.getByLabel('Name', { exact: true })).toBeFocused();
+  await custom.getByLabel('Name', { exact: true }).fill('Water');
+  await custom.getByLabel('Type', { exact: true }).selectOption('gear');
+  await custom.getByLabel('Unit', { exact: true }).fill('liter');
+  await custom.getByLabel('Weight per unit (lb)').fill('2.2');
+  await custom.getByLabel('Quantity', { exact: true }).fill('40');
+  await custom.getByRole('button', { name: 'Create item', exact: true }).click();
+  await expect(custom).toBeHidden();
+  await saved(page);
+  await expect(put).toBeFocused();
+  await expect(contents.getByRole('article', { name: 'Water', exact: true })).toBeVisible();
+  await expect(bag).toContainText('Holds 88 of 500 lb');
+  await expect(carriedWeight).toHaveText(before!);
+
+  await put.click();
+  await picker.getByRole('button', { name: 'Add from catalogue', exact: true }).click();
+  const add = page.getByRole('dialog', { name: 'Add item', exact: true });
+  const search = add.getByRole('searchbox', { name: 'Search items', exact: true });
+  await expect(search).toBeFocused();
+  await search.fill('dagger');
+  await add.getByRole('button', { name: 'Select Dagger', exact: true }).click();
+  await expect(add.getByRole('combobox', { name: 'Container' })).toHaveValue('bag-1');
+  await add.getByLabel('Notes', { exact: true }).fill('Borrowed from a party member');
+  await add.getByRole('button', { name: 'Add item', exact: true }).click();
+  await expect(add).toBeHidden();
+  await saved(page);
+  await expect(contents.getByRole('article', { name: 'Dagger', exact: true })).toContainText(
+    'Borrowed from a party member',
+  );
+  await expect(bag).toContainText('Holds 89 of 500 lb');
+  await expect(carriedWeight).toHaveText(before!);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+
+  await page.reload();
+  await expect(bag).toContainText('Holds 89 of 500 lb');
+  await page.getByRole('button', { name: 'Undo last command', exact: true }).click();
+  await saved(page);
+  await expect(bag).toContainText('Holds 88 of 500 lb');
+});
