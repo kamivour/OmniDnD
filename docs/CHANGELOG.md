@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 09:17 — Amulet of the Devout
+
+- Find the +1, +2 and +3 Amulets of the Devout under Equipment in Compendium.
+- Each shows its rarity, attunement requirement and extra Channel Divinity use. Checks pass.
+
 ## 2026-11-22 04:05 — Compendium redesign
 
 - Check damage, range, properties and armor stats on equipment. Preview the base of a magic item such as Flame Tongue.

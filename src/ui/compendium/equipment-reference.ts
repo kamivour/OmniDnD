@@ -41,6 +41,7 @@ const shield = { bases: ['item.shield'] };
 const dragonScale = { bases: ['item.scale-mail'], armorBonus: 1 };
 const ammunition = { ammunition: true, fit: 'Any ammunition' } as const;
 const anyWeapon = { fit: 'Any weapon' };
+const devoutAmulet = { attunement: 'Cleric or Paladin' };
 
 /** 2014 reference metadata only. Equipping these IDs continues to use the existing registry. */
 export const equipmentReferences: Partial<Record<string, EquipmentReference>> = {
@@ -51,6 +52,9 @@ export const equipmentReferences: Partial<Record<string, EquipmentReference>> = 
   'item.ammunition-1': { ...ammunition, weaponBonus: 1 },
   'item.ammunition-2': { ...ammunition, weaponBonus: 2 },
   'item.ammunition-3': { ...ammunition, weaponBonus: 3 },
+  'item.amulet-of-the-devout-1': devoutAmulet,
+  'item.amulet-of-the-devout-2': devoutAmulet,
+  'item.amulet-of-the-devout-3': devoutAmulet,
   'item.animated-shield': shield,
   'item.armor-1': { ...anyArmor, armorBonus: 1 },
   'item.armor-2': { ...anyArmor, armorBonus: 2 },

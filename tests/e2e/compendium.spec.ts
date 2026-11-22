@@ -171,6 +171,24 @@ test('compendium shows a meaningful icon when a local illustration cannot load',
   await expect(panel.locator('[data-icon="catalog.target"] svg')).toBeVisible();
 });
 
+test('compendium lists all three Amulets of the Devout with Tasha’s details', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto('/compendium?kind=equipment&q=amulet+of+devout');
+  await expect(page.getByRole('button', { name: /^Amulet of the Devout/ })).toHaveCount(3);
+  await page
+    .getByRole('group', { name: 'Tier', exact: true })
+    .getByRole('button', { name: 'Rare', exact: true })
+    .click();
+  await expect(page.getByRole('button', { name: /^Amulet of the Devout/ })).toHaveCount(1);
+  await page.getByRole('button', { name: /^Amulet of the Devout, \+2/ }).click();
+  const panel = entryPanel(page, isMobile);
+  await expect(panel.getByText('Attunement required · Cleric or Paladin')).toBeVisible();
+  await expect(panel.getByText(/add \+2 to spell attacks/)).toBeVisible();
+  await expect(panel.getByText('At dawn', { exact: true })).toBeVisible();
+});
+
 test('compendium: Plan this adds to the Journal plans and Undo removes it', async ({
   page,
   isMobile,

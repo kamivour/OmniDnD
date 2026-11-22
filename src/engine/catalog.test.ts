@@ -112,4 +112,35 @@ describe('compendium catalog', () => {
       bag.source !== 'DMG',
     );
   });
+
+  it('finds the three Tasha’s Amulets of the Devout in their own rarity tiers', () => {
+    const amulets = searchCatalog(registry, 'equipment', {
+      text: 'amulet of devout',
+      books: ['TCE'],
+      types: ['wondrous'],
+    });
+    expect(amulets.map((entry) => entry.name)).toEqual([
+      'Amulet of the Devout, +1',
+      'Amulet of the Devout, +2',
+      'Amulet of the Devout, +3',
+    ]);
+    expect(amulets.map((entry) => itemTier(item(entry.id)))).toEqual([
+      'uncommon',
+      'rare',
+      'very-rare',
+    ]);
+    expect(
+      amulets.every((entry) =>
+        campaignAllows({ sources: ['TCE'], sourceParts: { TCE: ['items'] } }, entry),
+      ),
+    ).toBe(true);
+    expect(
+      amulets.some((entry) =>
+        campaignAllows({ sources: ['TCE'], sourceParts: { TCE: ['spells'] } }, entry),
+      ),
+    ).toBe(false);
+    expect(amulets.map((entry) => item(entry.id).charges)).toEqual(
+      Array.from({ length: 3 }, () => ({ max: 1, recharge: 'dawn', regain: 'all' })),
+    );
+  });
 });
