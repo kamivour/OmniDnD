@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 03:05 — Divine Soul, psionic dice and spell schools
+
+- Divine Soul can choose an affinity spell in To do and replace it with a Cleric spell when leveling.
+- Psi Warrior and Soulknife can spend their own dice and recover one through their bonus action.
+- Eldritch Knight and Arcane Trickster show their outside-school spell allowance. Check that earlier picks stay saved. Checks pass.
+
 ## 2026-11-23 02:59 — Bladesong and Champion weapon rolls
 
 - Use Bladesong to see the active AC, movement and concentration bonuses. Roll Acrobatics with advantage while the song lasts.

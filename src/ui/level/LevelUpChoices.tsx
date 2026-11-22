@@ -454,6 +454,12 @@ export function SpellPicks({
       <p className="text-sm font-semibold text-text">
         {prepares ? 'Prepare spells' : 'New spells'}
       </p>
+      {info.schoolLimits && (
+        <p className="text-sm text-text-muted">
+          {info.schoolLimits.used} / {info.schoolLimits.unrestricted} spells outside{' '}
+          {info.schoolLimits.schools.join(' and ')}.
+        </p>
+      )}
       <p className="text-sm text-text-muted">
         {prepares
           ? 'Fill open preparation slots now or manage your list later on the Spells screen.'

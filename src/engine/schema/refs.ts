@@ -204,6 +204,8 @@ export const FeatureSpellsSchema = z.strictObject({
   spellbook: z.enum(['known', 'prepared']).optional(),
   /** Slot-free casts spend the feature's existing use pool (Star Map). */
   freeUsesFromSelf: z.literal(true).optional(),
+  /** The class can replace its fixed bonus spell on level-up with a spell from this list. */
+  replaceFromClass: refId('class').optional(),
   requiredSubclassId: refId('subclass').optional(),
   /** A fixed ability, the ability the feat raised, or the spellcasting ability of the picked class. */
   ability: z.union([AbilitySchema, z.enum(['raised', 'class'])]),
@@ -268,6 +270,8 @@ export const FeatureDefSchema = z
       .optional(),
     /** Spends another feature's uses (Cutting Words spends Bardic Inspiration). */
     usesFrom: refId('feature').optional(),
+    /** Restore one spent use of this pool (a psionic die). */
+    restoresUseOf: refId('feature').optional(),
     /** Pool uses spent per activation (Quickened Healing: 2 ki). */
     cost: z.int().min(2).optional(),
     /** Also spends one use of this feature's pool (Harness Divine Power spends Channel Divinity). */

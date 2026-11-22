@@ -87,6 +87,10 @@ export function featureUseDetails(
   const alsoFeature = alsoId ? ctx.sheet.features.find(({ def }) => def.id === alsoId) : undefined;
   const alsoUses = alsoFeature && featureResource(ctx.sheet.features, ctx.live, alsoFeature.def.id);
   const also = alsoFeature && alsoUses ? { feature: alsoFeature, uses: alsoUses } : undefined;
+  const restores = feature?.def.restoresUseOf;
+  const restoreSpent = restores
+    ? featureResource(ctx.sheet.features, ctx.live, restores)?.spent
+    : undefined;
   const die = feature?.die ?? pool?.die;
   const bonusDef = feature?.def.dieBonus;
   const dieBonus = bonusDef === 'proficiency' ? ctx.sheet.proficiency : bonusDef;
@@ -107,6 +111,7 @@ export function featureUseDetails(
   else if (uses && uses.remaining < cost)
     unavailableReason = `Needs ${cost} ${pool!.def.name}; ${uses.remaining} left`;
   else if (also?.uses.remaining === 0) unavailableReason = `No ${also.feature.def.name} uses left`;
+  else if (restores && !restoreSpent) unavailableReason = 'No spent use to recover';
   else if (feature.def.restoreSlot && restorableSlots(ctx).length === 0)
     unavailableReason = `No expended spell slot of level ${restoreSlotCap(ctx)} or lower`;
   else if (feature.def.dropToOne && ctx.live.hp > 0)
@@ -137,6 +142,9 @@ function restoredLevel(ctx: Pick<CommandContext, 'live' | 'sheet'>, slotLevel?: 
 }
 
 const ACTION_SURGE = 'feature.fighter.action-surge';
+const GUARDED_MIND = 'feature.fighter.psi-warrior-guarded-mind-end';
+const endsWithGuardedMind = (condition: string) =>
+  condition === 'charmed' || condition === 'frightened';
 
 export const useFeature: Command<UseFeaturePayload> = {
   name: 'useFeature',
@@ -151,6 +159,8 @@ export const useFeature: Command<UseFeaturePayload> = {
     )
       return [block(`Choose an expended slot of level ${restoreSlotCap(ctx)} or lower`)];
     const checks: Check[] = [];
+    if (featureId === GUARDED_MIND && !ctx.sheet.conditions.some(endsWithGuardedMind))
+      checks.push(block('You are neither charmed nor frightened'));
     if (featureId === BLADESONG) {
       const restriction = bladesongRestriction(ctx.build, ctx.live, ctx.registry);
       if (restriction) checks.push(block(`Cannot start Bladesong while ${restriction}`));
@@ -197,6 +207,11 @@ export const useFeature: Command<UseFeaturePayload> = {
     const slot = feature && ECONOMY_BY_ACTIVATION[feature.def.activation];
     if (slot) spendEconomy(live, slot);
     const notes: string[] = [];
+    if (featureId === GUARDED_MIND) {
+      live.conditions = live.conditions.filter((condition) => !endsWithGuardedMind(condition));
+      live.effects = live.effects.filter((effect) => !effect.conditions.some(endsWithGuardedMind));
+      notes.push('charm and fear ended');
+    }
     if (featureId === BLADESONG) {
       live.effects.push({
         id: uniqueEffectId(live, BLADESONG),
@@ -239,6 +254,12 @@ export const useFeature: Command<UseFeaturePayload> = {
       const level = restoredLevel(ctx, slotLevel)!;
       live.slotsUsed[level] = Math.max(0, (live.slotsUsed[level] ?? 0) - 1);
       notes.push(`regained a level ${level} slot`);
+    }
+    const restores = feature?.def.restoresUseOf;
+    if (restores) {
+      const spent = featureResource(ctx.sheet.features, live, restores)?.spent ?? 0;
+      writeFeatureResource(ctx.sheet.features, live, restores, spent - 1);
+      notes.push(`recovered one use of ${featureName(ctx, restores)}`);
     }
     // Action Surge grants one more action this turn, with a fresh Attack action.
     if (featureId === ACTION_SURGE && live.combat?.economy.actionUsed) {

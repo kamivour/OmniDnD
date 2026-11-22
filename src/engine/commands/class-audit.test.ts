@@ -362,6 +362,83 @@ describe('class audit', () => {
     expect(session.state.build.spells[0]?.known).toEqual(before);
   });
 
+  it('offers a Divine Soul affinity spell outside ordinary known picks and restricts its replacement to Cleric spells', () => {
+    const classId = 'class.sorcerer';
+    const session = character(classId, 1, 'subclass.sorcerer.divine-soul');
+    session.state.campaign.sources.push('SCC');
+    session.state.campaign.hpMethod = 'average';
+    const featureId = 'feature.sorcerer.divine-affinity-law';
+    const pending = pendingChoices(session.state, registry).find(({ optionIds }) =>
+      optionIds?.includes(featureId),
+    );
+    expect(pending?.optionIds).toHaveLength(5);
+    session.run(resolveChoices, { classId, choices: { features: [featureId] } });
+    const details = () =>
+      spellSelectionDetails({ ...session.state, registry, sheet: session.sheet }, classId);
+    expect(details().granted.map(({ id }) => id)).toEqual(['spell.bless']);
+    expect(details().known.count).toBe(0);
+    const payload = {
+      classId,
+      spells: { swap: { remove: 'spell.bless', add: 'spell.magic-missile' } },
+    };
+    expect(session.preview(levelUp, payload).result).toBe('blocked');
+    session.run(levelUp, {
+      classId,
+      spells: { swap: { remove: 'spell.bless', add: 'spell.healing-word' } },
+    });
+    expect(details().granted.map(({ id }) => id)).toEqual(['spell.healing-word']);
+    session.undo();
+    expect(details().granted.map(({ id }) => id)).toEqual(['spell.bless']);
+  });
+
+  it.each([
+    ['class.fighter', 'subclass.fighter.eldritch-knight', ['spell.shield', 'spell.magic-missile']],
+    [
+      'class.rogue',
+      'subclass.rogue.arcane-trickster',
+      ['spell.charm-person', 'spell.disguise-self'],
+    ],
+  ])('respects third-caster school allowances for %s', (classId, subclassId, onSchool) => {
+    const session = character(classId, 2);
+    session.state.campaign.hpMethod = 'average';
+    const payload = {
+      classId,
+      choices: { subclassId },
+      spells: { add: [onSchool[0]!, 'spell.grease', 'spell.feather-fall'] },
+    };
+    expect(session.preview(levelUp, payload).result).toBe('blocked');
+    session.run(levelUp, { ...payload, spells: { add: [...onSchool, 'spell.grease'] } });
+    expect(
+      spellSelectionDetails({ ...session.state, registry, sheet: session.sheet }, classId)
+        .schoolLimits,
+    ).toMatchObject({ used: 1, unrestricted: 1 });
+  });
+
+  it.each([
+    ['fighter', 'psi-warrior', 'protective-field'],
+    ['rogue', 'soulknife', 'psi-bolstered-knack'],
+  ])(
+    'spends and recovers a psionic die for %s without refilling the whole pool on short rest',
+    (className, subclassName, ability) => {
+      const session = character(`class.${className}`, 5, `subclass.${className}.${subclassName}`);
+      const base = `feature.${className}.${subclassName}-`;
+      const pool = base + 'psionic-power';
+      const recovery = { featureId: base + 'psionic-recovery' };
+      expect(session.preview(useFeature, recovery).result).toBe('blocked');
+      session.run(useFeature, { featureId: base + ability });
+      expect(session.live.featureUsesSpent[pool]).toBe(1);
+      session.run(useFeature, recovery);
+      expect(session.live.featureUsesSpent[pool]).toBeUndefined();
+      session.run(useFeature, { featureId: base + ability });
+      expect(session.preview(useFeature, recovery).result).toBe('blocked');
+      session.run(completeShortRest, {});
+      expect(session.live.featureUsesSpent[pool]).toBe(1);
+      session.run(useFeature, recovery);
+      session.undo();
+      expect(session.live.featureUsesSpent[pool]).toBe(1);
+    },
+  );
+
   it('offers six runes with the right level gates and reads Master of Runes at Fighter 15', () => {
     const classId = 'class.fighter';
     const subclassId = 'subclass.fighter.rune-knight';

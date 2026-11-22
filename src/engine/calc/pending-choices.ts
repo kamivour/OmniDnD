@@ -133,6 +133,13 @@ export const OPTION_FAMILIES: OptionFamily[] = [
     ],
   },
   {
+    classId: 'class.sorcerer',
+    subclassId: 'subclass.sorcerer.divine-soul',
+    label: 'Divine Magic affinity',
+    prefix: 'feature.sorcerer.divine-affinity-',
+    totals: [[1, 1]],
+  },
+  {
     classId: 'class.warlock',
     label: 'Pact Boon',
     prefix: 'feature.warlock.pact-of-the-',

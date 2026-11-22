@@ -51,10 +51,13 @@ export function grantedSpells(registry: Registry, build: GrantBuild): GrantedSpe
       if (feature.spells.spellbook === 'prepared') continue;
       if (feature.spells.requiredSubclassId && feature.spells.requiredSubclassId !== subclassId)
         continue;
-      for (const row of feature.spells.fixed ?? []) {
-        if ((row.minLevel ?? 1) <= level) add(row.spellId, feature.name);
+      const chosen = build.featSpells?.[id]?.spellIds ?? [];
+      if (!feature.spells.replaceFromClass || chosen.length === 0) {
+        for (const row of feature.spells.fixed ?? []) {
+          if ((row.minLevel ?? 1) <= level) add(row.spellId, feature.name);
+        }
       }
-      for (const spellId of build.featSpells?.[id]?.spellIds ?? []) {
+      for (const spellId of chosen) {
         if (
           feature.spells.spellbook &&
           !build.spells?.some((row) => row.classId === classId && row.known.includes(spellId))

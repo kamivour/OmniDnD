@@ -25,7 +25,9 @@ export function savedChoices(
   const openIds = new Set(open.map((item) => `${item.kind}:${item.featureId}`));
   const nameOf = (id: string) => registry.entries.get(id)?.name ?? id;
   const rows: SavedChoice[] = [];
-  for (const [featureId, pick] of Object.entries(state.build.featSpells ?? {}))
+  for (const [featureId, pick] of Object.entries(state.build.featSpells ?? {})) {
+    const feature = registry.entries.get(featureId);
+    if (feature?.kind === 'feature' && feature.spells?.replaceFromClass) continue;
     rows.push({
       id: `feat-spells:${featureId}`,
       kind: 'feat-spells',
@@ -33,6 +35,7 @@ export function savedChoices(
       name: nameOf(featureId),
       summary: pick.spellIds.map(nameOf).join(', '),
     });
+  }
   for (const [featureId, pick] of Object.entries(state.build.proficiencyPicks ?? {}))
     rows.push({
       id: `proficiencies:${featureId}`,

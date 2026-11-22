@@ -346,6 +346,10 @@
       },
       {
         "level": 3,
+        "featureId": "feature.fighter.psi-warrior-psionic-recovery"
+      },
+      {
+        "level": 3,
         "featureId": "feature.fighter.psi-warrior-protective-field"
       },
       {
@@ -357,20 +361,44 @@
         "featureId": "feature.fighter.psi-warrior-telekinetic-movement"
       },
       {
+        "level": 3,
+        "featureId": "feature.fighter.psi-warrior-telekinetic-movement-paid"
+      },
+      {
         "level": 7,
         "featureId": "feature.fighter.psi-warrior-telekinetic-adept"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.fighter.psi-warrior-psi-powered-leap"
+      },
+      {
+        "level": 7,
+        "featureId": "feature.fighter.psi-warrior-psi-powered-leap-paid"
       },
       {
         "level": 10,
         "featureId": "feature.fighter.psi-warrior-guarded-mind"
       },
       {
+        "level": 10,
+        "featureId": "feature.fighter.psi-warrior-guarded-mind-end"
+      },
+      {
         "level": 15,
         "featureId": "feature.fighter.psi-warrior-bulwark-of-force"
       },
       {
+        "level": 15,
+        "featureId": "feature.fighter.psi-warrior-bulwark-of-force-paid"
+      },
+      {
         "level": 18,
         "featureId": "feature.fighter.psi-warrior-telekinetic-master"
+      },
+      {
+        "level": 18,
+        "featureId": "feature.fighter.psi-warrior-telekinetic-master-paid"
       }
     ]
   },
@@ -2008,6 +2036,22 @@
       },
       {
         "level": 3,
+        "featureId": "feature.rogue.soulknife-psionic-recovery"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.soulknife-psi-bolstered-knack"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.soulknife-psychic-whispers"
+      },
+      {
+        "level": 3,
+        "featureId": "feature.rogue.soulknife-psychic-whispers-paid"
+      },
+      {
+        "level": 3,
         "featureId": "feature.rogue.soulknife-psychic-blades"
       },
       {
@@ -2015,12 +2059,28 @@
         "featureId": "feature.rogue.soulknife-soul-blades"
       },
       {
+        "level": 9,
+        "featureId": "feature.rogue.soulknife-homing-strikes"
+      },
+      {
+        "level": 9,
+        "featureId": "feature.rogue.soulknife-psychic-teleportation"
+      },
+      {
         "level": 13,
         "featureId": "feature.rogue.soulknife-psychic-veil"
       },
       {
+        "level": 13,
+        "featureId": "feature.rogue.soulknife-psychic-veil-paid"
+      },
+      {
         "level": 17,
         "featureId": "feature.rogue.soulknife-rend-mind"
+      },
+      {
+        "level": 17,
+        "featureId": "feature.rogue.soulknife-rend-mind-paid"
       }
     ]
   },

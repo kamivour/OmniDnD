@@ -2542,6 +2542,25 @@
   },
   {
     "kind": "feature",
+    "id": "feature.fighter.psi-warrior-psionic-recovery",
+    "name": "Psionic Recovery (Psi Warrior)",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Regain one spent Psi Warrior psionic die. Use once per short or long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    },
+    "restoresUseOf": "feature.fighter.psi-warrior-psionic-power"
+  },
+  {
+    "kind": "feature",
     "id": "feature.fighter.psi-warrior-protective-field",
     "name": "Protective Field",
     "ruleset": "5e-2014",
@@ -2549,11 +2568,12 @@
     "summaryReviewed": false,
     "source": "TCE",
     "summary": {
-      "effect": "Reaction when you or a creature within 30 feet takes damage: spend a die and reduce the damage by the roll plus your INT modifier."
+      "effect": "Spend a die when you or a creature you see within 30 feet takes damage. Reduce the damage by the roll plus your INT modifier, with a minimum reduction of 1."
     },
     "origin": "subclass",
     "activation": "reaction",
-    "trigger": "You or another creature you can see within 30 ft takes damage"
+    "trigger": "You or another creature you can see within 30 ft takes damage",
+    "usesFrom": "feature.fighter.psi-warrior-psionic-power"
   },
   {
     "kind": "feature",
@@ -2564,10 +2584,11 @@
     "summaryReviewed": false,
     "source": "TCE",
     "summary": {
-      "effect": "Once per turn, when you hit with a weapon, spend a die to add force damage equal to the roll plus your INT modifier."
+      "effect": "Once on your turn, after a weapon hit damages a target within 30 feet, spend a die to deal extra force damage equal to the roll plus your INT modifier."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "free",
+    "usesFrom": "feature.fighter.psi-warrior-psionic-power"
   },
   {
     "kind": "feature",
@@ -2578,10 +2599,29 @@
     "summaryReviewed": false,
     "source": "TCE",
     "summary": {
-      "effect": "Action: move a loose object or willing creature up to 30 feet within 30 feet of you. Once per short or long rest, or by spending a die."
+      "effect": "Move a visible loose object up to Large or willing creature other than yourself within 30 feet up to 30 feet. A Tiny object can move to or from your hand. One free use per short or long rest."
     },
     "origin": "subclass",
-    "activation": "action"
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-telekinetic-movement-paid",
+    "name": "Telekinetic Movement (Spend a Die)",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend one psionic die to use Telekinetic Movement after its free use."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.fighter.psi-warrior-psionic-power"
   },
   {
     "kind": "feature",
@@ -2592,10 +2632,43 @@
     "summaryReviewed": false,
     "source": "TCE",
     "summary": {
-      "effect": "Leap: bonus action, fly at twice your speed until turn end (once per rest, or spend a die). Thrust: Psionic Strike adds a STR save (DC 8 + proficiency + INT) or the target is prone or pushed 10 feet."
+      "effect": "Learn Psi-Powered Leap. When your Psionic Strike damages a target, Telekinetic Thrust can force a STR save (DC 8 + proficiency + INT). On failure, knock it prone or move it horizontally up to 10 feet."
     },
     "origin": "subclass",
     "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-psi-powered-leap",
+    "name": "Psi-Powered Leap",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain a flying speed twice your walking speed until this turn ends. One free use per short or long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-psi-powered-leap-paid",
+    "name": "Psi-Powered Leap (Spend a Die)",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend one psionic die to use Psi-Powered Leap after its free use."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.fighter.psi-warrior-psionic-power"
   },
   {
     "kind": "feature",
@@ -2606,13 +2679,28 @@
     "summaryReviewed": false,
     "source": "TCE",
     "summary": {
-      "effect": "Resistance to psychic damage. At the start of your turn, spend a die to end a charm or fright effect on you."
+      "effect": "You resist psychic damage. If you start your turn charmed or frightened, spend one die to end every effect causing those conditions on you."
     },
     "origin": "subclass",
     "activation": "passive",
     "defenses": {
       "resistances": ["psychic"]
     }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-guarded-mind-end",
+    "name": "Guarded Mind (End Effects)",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "At the start of your turn, spend one psionic die to end every effect that charms or frightens you. Remove the affected conditions after the table resolves it."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.fighter.psi-warrior-psionic-power"
   },
   {
     "kind": "feature",
@@ -2623,10 +2711,29 @@
     "summaryReviewed": false,
     "source": "TCE",
     "summary": {
-      "effect": "Bonus action: up to your INT modifier creatures you choose within 30 feet (you included) gain half cover for 1 minute. Once per long rest, or by spending a die."
+      "effect": "Grant half cover to visible creatures within 30 feet, yourself included, up to your INT modifier (minimum one). Cover lasts 1 minute or until you are incapacitated. One free use per long rest."
     },
     "origin": "subclass",
-    "activation": "bonus"
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-bulwark-of-force-paid",
+    "name": "Bulwark of Force (Spend a Die)",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend one psionic die to use Bulwark of Force after its free use."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.fighter.psi-warrior-psionic-power"
   },
   {
     "kind": "feature",
@@ -2637,10 +2744,29 @@
     "summaryReviewed": false,
     "source": "TCE",
     "summary": {
-      "effect": "Cast telekinesis using INT, once per long rest. While concentrating on it you can make a weapon attack as a bonus action."
+      "effect": "Cast Telekinesis using INT without components. During its concentration, make one weapon attack as a bonus action on each of your turns, including the casting turn. One free cast per long rest."
     },
     "origin": "subclass",
-    "activation": "passive"
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.fighter.psi-warrior-telekinetic-master-paid",
+    "name": "Telekinetic Master (Spend a Die)",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend one psionic die to cast component-free Telekinesis with INT after the free cast. The same bonus-action attack applies while you concentrate on it."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.fighter.psi-warrior-psionic-power"
   },
   {
     "kind": "feature",
@@ -7852,6 +7978,73 @@
   },
   {
     "kind": "feature",
+    "id": "feature.rogue.soulknife-psionic-recovery",
+    "name": "Psionic Recovery (Soulknife)",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Regain one spent Soulknife psionic die. Use once per short or long rest."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": {
+      "max": 1,
+      "recharge": "short"
+    },
+    "restoresUseOf": "feature.rogue.soulknife-psionic-power"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.soulknife-psi-bolstered-knack",
+    "name": "Psi-Bolstered Knack",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After failing a check with a skill or tool you know, add a psionic die to the roll. Record spending the die only if the new total succeeds."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.rogue.soulknife-psionic-power"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.soulknife-psychic-whispers",
+    "name": "Psychic Whispers",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Link with up to your proficiency bonus in visible creatures. They can speak telepathically with you within 1 mile for a psionic die roll in hours. One free use per long rest."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "uses": {
+      "max": 1,
+      "recharge": "long"
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.soulknife-psychic-whispers-paid",
+    "name": "Psychic Whispers (Spend a Die)",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend one psionic die to use Psychic Whispers after its free use. Use the roll to determine how many hours the link lasts."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.rogue.soulknife-psionic-power"
+  },
+  {
+    "kind": "feature",
     "id": "feature.rogue.soulknife-psychic-blades",
     "name": "Psychic Blades",
     "ruleset": "5e-2014",
@@ -7859,7 +8052,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Attack with a finesse psychic blade, thrown up to 60 feet. It deals 1d6 + the attack ability modifier. With your other hand free, make another blade attack as a bonus action using a d4."
+      "effect": "On your Attack action, form a finesse psychic blade in a free hand (1d6 + ability modifier, thrown 60 feet). After attacking, use your other free hand to attack with a d4 blade as a bonus action."
     },
     "origin": "subclass",
     "activation": "special"
@@ -7873,10 +8066,40 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Homing Strikes adds a psionic die to a missed attack roll. Psychic Teleportation sends a thrown blade away with you."
+      "effect": "Learn Homing Strikes and Psychic Teleportation, which both draw from your Soulknife psionic dice."
     },
     "origin": "subclass",
     "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.soulknife-homing-strikes",
+    "name": "Homing Strikes",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "After missing with a psychic blade, add a psionic die to the attack roll. Record spending the die only if the new total hits."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.rogue.soulknife-psionic-power"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.soulknife-psychic-teleportation",
+    "name": "Psychic Teleportation",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend and roll one psionic die. Throw a psychic blade to a visible empty space up to 10 times the roll in feet. Teleport there, and the blade disappears."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "usesFrom": "feature.rogue.soulknife-psionic-power"
   },
   {
     "kind": "feature",
@@ -7887,7 +8110,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Action: become invisible for 1 hour. It ends right after you deal damage to a creature or force one to make a save. Once per long rest, or spend a psionic die to use it again."
+      "effect": "Become invisible for up to 1 hour. It ends early if you dismiss it, damage a creature, or force a creature to make a saving throw. One free use per long rest."
     },
     "origin": "subclass",
     "activation": "action",
@@ -7898,6 +8121,21 @@
   },
   {
     "kind": "feature",
+    "id": "feature.rogue.soulknife-psychic-veil-paid",
+    "name": "Psychic Veil (Spend a Die)",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend one psionic die to use Psychic Veil after its free use."
+    },
+    "origin": "subclass",
+    "activation": "action",
+    "usesFrom": "feature.rogue.soulknife-psionic-power"
+  },
+  {
+    "kind": "feature",
     "id": "feature.rogue.soulknife-rend-mind",
     "name": "Rend Mind",
     "ruleset": "5e-2014",
@@ -7905,14 +8143,30 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When you hit with a psychic blade, force a WIS save or stun the target for 1 minute. Once per long rest, or spend 3 psionic dice."
+      "effect": "When a psychic blade deals Sneak Attack damage, a failed WIS save (DC 8 + proficiency + DEX) stuns the target for 1 minute. It repeats the save each turn’s end. One free use per long rest."
     },
     "origin": "subclass",
-    "activation": "special",
+    "activation": "free",
     "uses": {
       "max": 1,
       "recharge": "long"
     }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.rogue.soulknife-rend-mind-paid",
+    "name": "Rend Mind (Spend Three Dice)",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend three psionic dice to use Rend Mind after its free use."
+    },
+    "origin": "subclass",
+    "activation": "free",
+    "usesFrom": "feature.rogue.soulknife-psionic-power",
+    "cost": 3
   },
   {
     "kind": "feature",
@@ -11678,6 +11932,136 @@
           "level": 9,
           "spellList": "class.warlock",
           "free": "long"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.divine-affinity-good",
+    "name": "Divine Affinity: Good",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn Cure Wounds as an extra Sorcerer spell. During a Sorcerer level-up, a Cleric spell can replace it."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.sorcerer",
+      "ability": "CHA",
+      "slots": true,
+      "requiredSubclassId": "subclass.sorcerer.divine-soul",
+      "replaceFromClass": "class.cleric",
+      "fixed": [
+        {
+          "spellId": "spell.cure-wounds"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.divine-affinity-evil",
+    "name": "Divine Affinity: Evil",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn Inflict Wounds as an extra Sorcerer spell. During a Sorcerer level-up, a Cleric spell can replace it."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.sorcerer",
+      "ability": "CHA",
+      "slots": true,
+      "requiredSubclassId": "subclass.sorcerer.divine-soul",
+      "replaceFromClass": "class.cleric",
+      "fixed": [
+        {
+          "spellId": "spell.inflict-wounds"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.divine-affinity-law",
+    "name": "Divine Affinity: Law",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn Bless as an extra Sorcerer spell. During a Sorcerer level-up, a Cleric spell can replace it."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.sorcerer",
+      "ability": "CHA",
+      "slots": true,
+      "requiredSubclassId": "subclass.sorcerer.divine-soul",
+      "replaceFromClass": "class.cleric",
+      "fixed": [
+        {
+          "spellId": "spell.bless"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.divine-affinity-chaos",
+    "name": "Divine Affinity: Chaos",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn Bane as an extra Sorcerer spell. During a Sorcerer level-up, a Cleric spell can replace it."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.sorcerer",
+      "ability": "CHA",
+      "slots": true,
+      "requiredSubclassId": "subclass.sorcerer.divine-soul",
+      "replaceFromClass": "class.cleric",
+      "fixed": [
+        {
+          "spellId": "spell.bane"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "feature",
+    "id": "feature.sorcerer.divine-affinity-neutrality",
+    "name": "Divine Affinity: Neutrality",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Learn Protection from Evil and Good as an extra Sorcerer spell. During a Sorcerer level-up, a Cleric spell can replace it."
+    },
+    "origin": "subclass",
+    "activation": "passive",
+    "spells": {
+      "castingClassId": "class.sorcerer",
+      "ability": "CHA",
+      "slots": true,
+      "requiredSubclassId": "subclass.sorcerer.divine-soul",
+      "replaceFromClass": "class.cleric",
+      "fixed": [
+        {
+          "spellId": "spell.protection-from-evil-and-good"
         }
       ]
     }

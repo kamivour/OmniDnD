@@ -3,7 +3,12 @@ import type { CharacterBuild } from '../schema';
 import { refId } from '../schema';
 import { asiLevels } from './level-choices';
 import { sourceAllows } from './campaign-rules';
-import { spellSelectionDetails, type SpellSelectionContext } from './spell-selections';
+import { classSpellAllows } from './class-spell-lists';
+import {
+  countOffSchool,
+  spellSelectionDetails,
+  type SpellSelectionContext,
+} from './spell-selections';
 
 /** Spells picked while levelling: cantrips, known or prepared spells, and one swap for known casters. */
 export const LevelSpellsSchema = z.strictObject({
@@ -26,14 +31,21 @@ const CANTRIP_VERSATILITY: Record<string, string> = {
   'class.warlock': 'feature.tce.warlock-eldritch-versatility',
 };
 
-function bardSecrets(ctx: SpellSelectionContext, classId: string) {
-  if (classId !== 'class.bard') return [];
-  return ctx.sheet.features.flatMap(({ def }) =>
-    def.id === 'feature.bard.additional-magical-secrets' ||
-    def.id.startsWith('feature.bard.magical-secrets')
-      ? (ctx.build.featSpells?.[def.id]?.spellIds ?? []).map((id) => ({ id, featureId: def.id }))
-      : [],
-  );
+function levelSwapGrants(ctx: SpellSelectionContext, classId: string) {
+  return ctx.sheet.features.flatMap(({ def }) => {
+    const grant = def.spells;
+    if (grant?.castingClassId !== classId) return [];
+    const chosen = ctx.build.featSpells?.[def.id]?.spellIds;
+    if (grant.replaceFromClass)
+      return (chosen ?? grant.fixed?.map(({ spellId }) => spellId) ?? []).map((id) => ({
+        id,
+        featureId: def.id,
+        replacesFrom: grant.replaceFromClass,
+      }));
+    if (classId === 'class.bard' && grant.picks?.some((pick) => pick.maxLevel !== undefined))
+      return (chosen ?? []).map((id) => ({ id, featureId: def.id, replacesFrom: undefined }));
+    return [];
+  });
 }
 
 export function swappableLevelSpells(
@@ -42,7 +54,7 @@ export function swappableLevelSpells(
 ): string[] {
   return [
     ...details.known.ids,
-    ...bardSecrets(ctx, details.classId).flatMap(({ id }) => {
+    ...levelSwapGrants(ctx, details.classId).flatMap(({ id }) => {
       const spell = ctx.registry.entries.get(id);
       return spell?.kind === 'spell' && !spell.retired && spell.level > 0 ? [id] : [];
     }),
@@ -160,11 +172,22 @@ export function applyLevelSpells(
       add.includes(replacement)
     )
       return { blocked: `${nameOf(replacement)} is not available to swap in` };
-    const secret = bardSecrets(ctx, classId).find(({ id }) => id === remove);
+    const granted = levelSwapGrants(ctx, classId).find(({ id }) => id === remove);
+    if (granted?.replacesFrom) {
+      const def = ctx.registry.get('spell', replacement);
+      if (!classSpellAllows(ctx.campaign, granted.replacesFrom, def))
+        return { blocked: 'Replace the affinity spell with a spell from the Cleric list' };
+    }
     known.delete(remove);
-    if (secret) {
-      const source = build.featSpells?.[secret.featureId];
-      if (source) source.spellIds = source.spellIds.map((id) => (id === remove ? replacement : id));
+    if (granted) {
+      const choices = (build.featSpells ??= {});
+      const prior = choices[granted.featureId];
+      choices[granted.featureId] = {
+        ...prior,
+        spellIds: prior
+          ? prior.spellIds.map((id) => (id === remove ? replacement : id))
+          : [replacement],
+      };
     } else known.add(replacement);
     summary.push(`Swap ${nameOf(remove)} for ${nameOf(replacement)}`);
   }
@@ -192,6 +215,19 @@ export function applyLevelSpells(
       known.add(id);
       summary.push(`Learn ${nameOf(id)}`);
     }
+  }
+  if (details.schoolLimits) {
+    const { schools, unrestricted, used } = details.schoolLimits;
+    const granted = new Set(details.granted.map(({ id }) => id));
+    const outside = countOffSchool(
+      ctx.registry,
+      [...known].filter((id) => !granted.has(id)),
+      schools,
+    );
+    if (outside > Math.max(unrestricted, used))
+      return {
+        blocked: `${details.name} can know ${unrestricted} spell(s) outside ${schools.join(' and ')}`,
+      };
   }
 
   const record = build.spells.find((row) => row.classId === classId);

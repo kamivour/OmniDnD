@@ -336,6 +336,12 @@ export function SpellManage({
               />
             )}
           </div>
+          {details.schoolLimits && (
+            <p className="text-sm text-text-muted">
+              {details.schoolLimits.used} / {details.schoolLimits.unrestricted} spells outside{' '}
+              {details.schoolLimits.schools.join(' and ')}.
+            </p>
+          )}
           {details.granted.length > 0 && (
             <p className="text-sm text-text-muted">
               <span className="font-semibold text-text">

@@ -460,6 +460,7 @@ export function levelSpellInfo(
   return {
     gains,
     className: details.name,
+    schoolLimits: details.schoolLimits,
     cantrips: details.candidates.cantrips.filter((id) => !known.has(id)),
     spells: leveled.filter((id) => !selected.has(id)),
     knownSpells: swappableLevelSpells(ctx, details),

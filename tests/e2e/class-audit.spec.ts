@@ -1,6 +1,26 @@
 import { expect, test } from './fixtures';
 import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
+test('Divine Soul chooses Law affinity and sees Bless in Spellbook', async ({ page }) => {
+  const file = reviewFile('divine-soul-affinity');
+  const classId = 'class.sorcerer';
+  file.campaign.sources = ['PHB', 'XGE'];
+  file.build.classes = [{ classId, level: 1, subclassId: 'subclass.sorcerer.divine-soul' }];
+  file.build.hpEntries = [{ level: 1, classId, method: 'max', value: 6 }];
+  file.build.featureIds = [];
+  file.build.spells = [];
+  await importReview(page, file, 'todo');
+  const main = page.getByRole('main');
+  const affinity = main.getByRole('listitem').filter({ hasText: 'Divine Magic affinity: pick 1' });
+  await affinity.getByRole('button', { name: 'Choose', exact: true }).click();
+  await expect(affinity.getByRole('checkbox')).toHaveCount(5);
+  await affinity.getByRole('checkbox', { name: 'Divine Affinity: Law', exact: true }).check();
+  await affinity.getByRole('button', { name: 'Save choice', exact: true }).click();
+  await saved(page);
+  await page.goto(`/characters/${file.build.id}/spells`);
+  await expect(main.getByRole('button', { name: /^Bless\b/ })).toBeVisible();
+});
+
 test('Bladesinger starts Bladesong from Combat and can undo it', async ({ page }) => {
   const file = reviewFile('bladesong-audit');
   const classId = 'class.wizard';

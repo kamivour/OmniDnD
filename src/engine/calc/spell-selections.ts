@@ -29,6 +29,7 @@ export interface SpellSelectionDetails {
   granted: { id: string; from: string }[];
   /** Slots from the overall known-spell cap reserved for a class feature. */
   reservedKnown?: number;
+  schoolLimits?: { schools: readonly SpellDef['school'][]; unrestricted: number; used: number };
   cantrips: SpellSelectionCount;
   known: SpellSelectionCount;
   prepared: SpellSelectionCount;
@@ -64,6 +65,27 @@ function spell(ctx: SpellSelectionContext, id: string): SpellDef | undefined {
   return entry?.kind === 'spell' ? entry : undefined;
 }
 
+const THIRD_CASTER_SCHOOLS: Record<string, readonly SpellDef['school'][]> = {
+  'subclass.fighter.eldritch-knight': ['abjuration', 'evocation'],
+  'subclass.rogue.arcane-trickster': ['enchantment', 'illusion'],
+};
+
+export function countOffSchool(
+  registry: Registry,
+  ids: Iterable<string>,
+  schools: readonly SpellDef['school'][],
+): number {
+  return [...new Set(ids)].filter((id) => {
+    const spell = registry.entries.get(id);
+    return (
+      spell?.kind === 'spell' &&
+      !spell.retired &&
+      spell.level > 0 &&
+      !schools.includes(spell.school)
+    );
+  }).length;
+}
+
 const unique = (ids: readonly string[]): string[] => [...new Set(ids)];
 
 function onClassSpellList(ctx: SpellSelectionContext, classId: string) {
@@ -87,6 +109,11 @@ export function spellSelectionRuleWarnings(
   const onList = onClassSpellList(ctx, classId);
   const granted = new Set(details.granted.map(({ id }) => id));
   const classDef = ctx.registry.entries.get(classId);
+  const school = details.schoolLimits;
+  if (school && school.used > school.unrestricted)
+    warnings.push(
+      `${name}: ${school.used}/${school.unrestricted} spells outside ${school.schools.join(' and ')}.`,
+    );
   if (mode === 'unsupported') warnings.push(`${name} spell selection is not supported.`);
   if (classDef?.kind === 'class' && !sourceAllows(ctx.campaign, classDef))
     warnings.push(`${name}'s source is not enabled in this campaign.`);
@@ -184,6 +211,15 @@ export function spellSelectionDetails(
       (spell(ctx, id)?.level ?? 0) > 0 &&
       (mode === 'spellbook' ? !spell(ctx, id)?.retired : counted(id)),
   );
+  const schools = THIRD_CASTER_SCHOOLS[casterEntry?.subclassId ?? ''];
+  const schoolLimits =
+    schools && classLevel >= 3
+      ? {
+          schools,
+          unrestricted: [3, 8, 14, 20].filter((level) => level <= classLevel).length,
+          used: countOffSchool(ctx.registry, knownIds, schools),
+        }
+      : undefined;
   const preparedCount = selection.prepared.filter(
     (id) => (spell(ctx, id)?.level ?? 0) > 0 && counted(id),
   ).length;
@@ -242,6 +278,7 @@ export function spellSelectionDetails(
     selection,
     granted,
     ...(reservedKnown > 0 ? { reservedKnown } : {}),
+    ...(schoolLimits ? { schoolLimits } : {}),
     cantrips: {
       ids: cantripIds,
       count: cantripIds.length,
