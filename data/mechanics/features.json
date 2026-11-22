@@ -1298,14 +1298,28 @@
     }
   },
   {
-    "id": "feature.artificer.spell-storing-item",
-    "uses": {
-      "max": {
-        "abilityMod": "INT",
-        "min": 1
-      },
-      "recharge": "long"
+    "id": "feature.artificer.alchemist-restorative-reagents",
+    "uses": { "max": { "abilityMod": "INT", "min": 1 }, "recharge": "long" },
+    "needsItem": "item.alchemists-supplies",
+    "useNote": "Cast Lesser Restoration without spending a spell slot. Resolve the target at the table."
+  },
+  {
+    "id": "feature.artificer.alchemist-chemical-mastery",
+    "defenses": { "resistances": ["acid", "poison"], "conditionImmunities": ["poisoned"] },
+    "spells": {
+      "ability": "INT",
+      "slots": false,
+      "fixed": [
+        { "spellId": "spell.greater-restoration", "free": "long" },
+        { "spellId": "spell.heal", "free": "long" }
+      ]
     }
+  },
+  {
+    "id": "feature.artificer.battle-smith-arcane-jolt",
+    "uses": { "max": { "abilityMod": "INT", "min": 1 }, "recharge": "long" },
+    "dice": { "9": "2d6", "15": "4d6" },
+    "useNote": "Choose force damage or healing after a qualifying hit. Once per turn."
   },
   {
     "id": "feature.stout-resilience",

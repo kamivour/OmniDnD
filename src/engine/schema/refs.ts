@@ -119,6 +119,8 @@ export const SpellDefSchema = z
       concentration: z.boolean(),
     }),
     ritual: z.boolean(),
+    /** Reference retained for older saves after removing an incompatible spell from play. */
+    retired: z.literal(true).optional(),
     save: AbilitySchema.optional(),
     attack: z.enum(['melee', 'ranged']).optional(),
     classes: z.array(refId('class')),
@@ -757,6 +759,7 @@ export const RefPackSchema = z.array(RefEntrySchema).superRefine(uniqueIds);
 /** `data/content/summaries.json`: own-words text for entries the SRD import created (DATA.md §7). */
 export const SummaryOverlaySchema = z.strictObject({
   id: AnyRefIdSchema,
+  name: z.string().min(1).optional(),
   summary: SummarySchema,
   summaryReviewed: z.boolean().optional(),
   url: z.url().optional(),

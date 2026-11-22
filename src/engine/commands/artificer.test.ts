@@ -3,10 +3,15 @@ import { registry } from '../../data/registry';
 import { computeSheet, type CharacterState } from '../calc/sheet';
 import { spellSelectionDetails } from '../calc/spell-selections';
 import { spellSlots } from '../calc/slots';
+import { featSpellSources } from '../calc/feat-spells';
+import { searchCatalog } from '../catalog';
 import { levelUp } from './level';
 import { freshState, Session } from './test-utils';
 import { pendingChoices } from '../calc/pending-choices';
 import { resolveChoices } from './resolve-choices';
+import { castSpell } from './spells';
+import { featFreeLeft } from './spell-options';
+import { changeSpellSelection } from './spell-selection';
 import {
   COMMON_REPLICA_PREFIX,
   INFUSION_PREFIX,
@@ -35,6 +40,154 @@ function artificer(level: number, subclassId?: string): CharacterState {
 }
 
 describe('Artificer', () => {
+  it('lists the published Tasha Artificer spells by tier, including the Xanathar options', () => {
+    const state = artificer(20);
+    state.campaign.sources.push('XGE');
+    const details = spellSelectionDetails(
+      { ...state, sheet: computeSheet(state, registry), registry },
+      'class.artificer',
+    );
+    const spells = [...details.candidates.cantrips, ...details.candidates.prepared].map((id) =>
+      registry.get('spell', id),
+    );
+    expect(
+      Array.from(
+        { length: 6 },
+        (_, level) => spells.filter((spell) => spell.level === level).length,
+      ),
+    ).toEqual([23, 18, 21, 15, 11, 7]);
+    expect(
+      spells
+        .filter((spell) => spell.source === 'XGE')
+        .map((spell) => spell.name)
+        .sort(),
+    ).toEqual([
+      'Absorb Elements',
+      'Catapult',
+      'Catnap',
+      'Create Bonfire',
+      'Elemental Bane',
+      'Flame Arrows',
+      'Frostbite',
+      'Magic Stone',
+      'Pyrotechnics',
+      'Skill Empowerment',
+      'Skywrite',
+      'Snare',
+      'Thunderclap',
+      'Tiny Servant',
+      'Transmute Rock',
+    ]);
+    expect(spells.map((spell) => spell.name)).toEqual(
+      expect.arrayContaining([
+        'Dancing Lights',
+        'Thorn Whip',
+        'Skywrite',
+        "Bigby's Hand",
+        "Leomund's Secret Chest",
+        "Mordenkainen's Faithful Hound",
+        "Mordenkainen's Private Sanctum",
+        "Otiluke's Resilient Sphere",
+      ]),
+    );
+  });
+
+  it('keeps the retired spell removable from old saves but blocks preparation and casting', () => {
+    const state = artificer(20);
+    const classId = 'class.artificer';
+    const spellId = 'spell.tashas-bubbling-cauldron';
+    state.build.spells = [{ classId, known: [], prepared: [spellId] }];
+    const session = new Session(state);
+    expect(searchCatalog(registry, 'spells', { text: 'bubbling cauldron' })).toEqual([]);
+    expect(
+      spellSelectionDetails({ ...state, sheet: session.sheet, registry }, classId).prepared.count,
+    ).toBe(0);
+    expect(session.preview(castSpell, { spellId, classId, slotLevel: 6 }).result).toBe('blocked');
+    const change = { classId, spellId, list: 'prepared' } as const;
+    session.run(changeSpellSelection, { ...change, action: 'remove' });
+    expect(session.preview(changeSpellSelection, { ...change, action: 'add' }).result).toBe(
+      'blocked',
+    );
+    session.undo();
+    expect(session.state).toEqual(state);
+  });
+
+  it('replaces one known Artificer cantrip on level-up while keeping its count', () => {
+    const classId = 'class.artificer';
+    const state = artificer(4);
+    state.build.spells = [
+      { classId, known: ['spell.mending', 'spell.fire-bolt'], prepared: ['spell.cure-wounds'] },
+    ];
+    const session = new Session(state);
+    const level = (remove: string, add: string) => ({ classId, spells: { swap: { remove, add } } });
+    expect(session.preview(levelUp, level('spell.cure-wounds', 'spell.thorn-whip')).result).toBe(
+      'blocked',
+    );
+    expect(session.preview(levelUp, level('spell.mending', 'spell.cure-wounds')).result).toBe(
+      'blocked',
+    );
+    session.run(levelUp, level('spell.mending', 'spell.thorn-whip'));
+    expect(session.state.build.spells).toEqual([
+      { classId, known: ['spell.fire-bolt', 'spell.thorn-whip'], prepared: ['spell.cure-wounds'] },
+    ]);
+    session.undo();
+    expect(session.state).toEqual(state);
+  });
+
+  it('uses Intelligence with an infused weapon but keeps the normal ability for a mundane weapon', () => {
+    const state = artificer(6, 'subclass.artificer.battle-smith');
+    const featureId = INFUSION_PREFIX + 'enhanced-weapon';
+    state.build.featureIds = [featureId];
+    state.build.items = ['plain', 'infused'].map((instanceId) => ({
+      instanceId,
+      itemId: 'item.shortsword',
+    }));
+    state.live.items = {
+      plain: { qty: 1, equipped: true, attuned: false },
+      infused: { qty: 1, equipped: true, attuned: false },
+    };
+    state.live.infusions = [{ featureId, instanceId: 'infused' }];
+    const sheet = computeSheet(state, registry);
+    expect(sheet.attacks).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          instanceId: 'plain',
+          ability: 'DEX',
+          damage: expect.objectContaining({ bonus: 1 }),
+        }),
+        expect.objectContaining({
+          instanceId: 'infused',
+          ability: 'INT',
+          damage: expect.objectContaining({ bonus: 4 }),
+          toHit: expect.objectContaining({ value: 7 }),
+        }),
+      ]),
+    );
+    expect(sheet.proficiencies.expertise).toContain('item.smiths-tools');
+    expect(sheet.proficiencies.expertise).not.toContain('item.woodcarvers-tools');
+  });
+
+  it('grants Chemical Mastery defenses and separate free casts without spending slots', () => {
+    const state = artificer(15, 'subclass.artificer.alchemist');
+    const session = new Session(state);
+    const featureId = 'feature.artificer.alchemist-chemical-mastery';
+    const getSource = () =>
+      featSpellSources({ registry, build: session.state.build, sheet: session.sheet }).find(
+        (source) => source.featureId === featureId,
+      )!;
+    const heal = getSource().spells.find((spell) => spell.spellId === 'spell.heal')!;
+    const restoration = getSource().spells.find(
+      (spell) => spell.spellId === 'spell.greater-restoration',
+    )!;
+    expect(
+      session.sheet.features.find(({ def }) => def.id === featureId)?.def.defenses,
+    ).toMatchObject({ resistances: ['acid', 'poison'], conditionImmunities: ['poisoned'] });
+    expect(featFreeLeft(session.state.live, featureId, heal)).toBe(1);
+    session.run(castSpell, { spellId: heal.spellId, featureId, free: true });
+    expect(featFreeLeft(session.state.live, featureId, heal)).toBe(0);
+    expect(featFreeLeft(session.state.live, featureId, restoration)).toBe(1);
+    expect(session.state.live.slotsUsed).toEqual(state.live.slotsUsed);
+  });
   it('offers only level-eligible infusions and keeps the known limit separate from active items', () => {
     const state = artificer(2);
     const row = pendingChoices(state, registry).find(

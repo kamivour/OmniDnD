@@ -130,3 +130,20 @@ The Progress, Changelog, Decisions and Data notes reflect the changes above. Slo
 - To do already hid learned recipes and recipes above the character’s Artificer level. At level 2, the old nine-option pool would show six choices after three picks.
 - The generic Replicate Magic Item entry missed individual recipes. The selector now offers all 49 named Tasha’s recipes at their required levels and shows the character’s known picks. Existing general picks still count toward the limit.
 - Resistant Armor also accepts force and psychic. Replica creation stays in Inventory under Q47.
+
+## 2026-11-22 · Artificer rules and play audit
+
+Scope is the Tasha Artificer from levels 1–20, its four specialists, their spells and infusions, and the Xanathar spells in the Artificer list. Xanathar supplies spells and replica candidates. Tasha supplies the class and its subclasses. See [Tasha’s class entries](https://www.dndbeyond.com/sources/dnd/tcoe), [the publisher’s Artificer spell reference](https://www.dndbeyond.com/spells/class/252717-artificer) and [the 2020 Artificer errata](https://media.wizards.com/2020/dnd/downloads/ERftLW-Errata.pdf).
+
+| Area | Checked or corrected | Still handled at the table |
+|---|---|---|
+| Levels 1–2 | INT casting, prepared limits, rituals, cantrip progression and replacement, multiclass slots, and focus reminders for every Artificer spell. All 15 standard infusions and 49 named replica recipes are present. Common replicas follow enabled books. | Magical Tinkering effects and physical focus use. Replica or Homunculus creation and active limits (Q47). |
+| Levels 3–10 | Subclass at 3, ASIs, double proficiency on proficient tools at 6, Flash of Genius reaction and uses at 7, fourth attunement at 10. | The Right Tool for the Job, Flash of Genius targets and item crafting. |
+| Levels 11–20 | Fifth and sixth attunements at 14 and 18. Soul of Artifice adds one to all saves per attuned item. Corrected the Spell-Storing Item rules and removed its misleading daily counter. | Store a spell on a specific item, track its uses and resolve its holder’s concentration. Apply Savant exceptions and Soul of Artifice’s infusion sacrifice at the table. |
+| All specialists | Automatic prepared pairs at 3, 5, 9, 13 and 17 sit outside the class preparation limit. The first tool proficiency is granted. | Choose an alternate artisan tool when you already know the one your subclass grants (D208). |
+| Alchemist | Corrected Alchemical Savant’s eligible rolls. Restorative Reagents has a long-rest counter. Chemical Mastery tracks defenses and separate free uses of Heal and Greater Restoration. | Creating and drinking Experimental Elixirs, calculating their temporary HP and applying Alchemical Savant to the chosen roll. |
+| Armorer | Heavy armor training, subclass spells and Extra Attack are tracked. | Arcane Armor and its focus, Guardian and Infiltrator model effects, Perfected Armor and the two armor-only infusion slots (Q48). |
+| Artillerist | All cannon forms, damage scaling and the level 15 cannon limit are covered. Corrected the Artificer spell requirement for Arcane Firearm. | Marking a particular focus as the firearm and applying its bonus, cannon explosion outcomes and Fortified Position cover. |
+| Battle Smith | Battle Ready can use INT with magic weapons. Extra Attack, Steel Defender stat scaling and the level 15 AC upgrade are tracked. Arcane Jolt has its own long-rest counter and dice scaling. | Qualifying hits, the once-per-turn Jolt limit, healing or damage targets, and Defender reaction outcomes. |
+
+Eight class-list gaps were restored. A regression test covers the 95 spells in Tasha’s class list, including all 15 Xanathar spells, across all spell levels. Vortex Warp remains a separate Strixhaven option. Wrath of Nature was moved to Xanathar. The 2024 Bubbling Cauldron entry was retired so old saves can remove it without enabling it in play. The Fizban source for Summon Draconic Spirit remains Q49.

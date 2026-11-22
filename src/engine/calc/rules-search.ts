@@ -38,6 +38,7 @@ export function searchRules(
   if (!needle) return [];
   const hits: (RulesSearchHit & { rank: number })[] = [];
   for (const entry of registry.entries.values()) {
+    if (entry.kind === 'spell' && entry.retired) continue;
     if (sources && entry.source !== 'PHB' && !sources.includes(entry.source)) continue;
     const name = entry.name.toLowerCase();
     const at = name.indexOf(needle);

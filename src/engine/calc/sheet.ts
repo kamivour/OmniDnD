@@ -1,7 +1,7 @@
 import { characterRegistry, type Registry } from '../registry';
 import { entryCasting } from './casting';
 import { attunedItems } from './attunement';
-import { wornInfusions, infusionKey, infusionBonus } from './infusions';
+import { wornInfusions, infusionKey, infusionBonus, magicalItem } from './infusions';
 import { recordedLevel, xpForLevel } from './advancement';
 import { encumbrance, type Encumbrance } from './encumbrance';
 import {
@@ -443,16 +443,21 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       def.id,
     ),
   );
+  const battleReady = features.some(
+    ({ def }) => def.id === 'feature.artificer.battle-smith-battle-ready',
+  );
+  const infusedItems = wornInfusions(build, live, registry);
   const attacks = equipped.flatMap(({ instanceId, def }) => {
     if (!def.weapon) return [];
-    const attack = weaponAttack(instanceId, def, profs, mods, proficiencyPart);
+    const infusion = infusedItems.find((entry) => entry.instanceId === instanceId);
+    const useInt = battleReady && (magicalItem(def) || infusion !== undefined);
+    const attack = weaponAttack(instanceId, def, profs, mods, proficiencyPart, useInt);
     if (archery && attack.type === 'ranged') {
       attack.toHit = sumParts([
         ...attack.toHit.parts,
         { label: 'Archery (fighting style)', value: 2 },
       ]);
     }
-    const infusion = wornInfusions(build, live, registry).find((i) => i.instanceId === instanceId);
     if (
       infusion &&
       ['enhanced-weapon', 'returning-weapon', 'repeating-shot', 'radiant-weapon'].includes(
@@ -878,15 +883,17 @@ function weaponAttack(
   profs: Proficiencies,
   mods: Record<Ability, number>,
   proficiencyPart: Part,
+  useInt: boolean,
 ): WeaponAttack {
   const weapon = def.weapon!;
-  const ability: Ability = weapon.properties.includes('finesse')
+  const normalAbility: Ability = weapon.properties.includes('finesse')
     ? mods.DEX > mods.STR
       ? 'DEX'
       : 'STR'
     : weapon.type === 'ranged'
       ? 'DEX'
       : 'STR';
+  const ability = useInt && mods.INT > mods[normalAbility] ? 'INT' : normalAbility;
   const proficient = profs.weapons.some(
     (entry) => entry === weapon.category || entry === def.id || entry === def.baseItemId,
   );

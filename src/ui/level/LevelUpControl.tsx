@@ -375,6 +375,7 @@ function LevelUpForm({
         (spellInfo.gains.cantrips > 0 ||
           spellInfo.gains.spells > 0 ||
           spellInfo.gains.canSwap ||
+          (spellInfo.gains.canSwapCantrip && spellInfo.knownCantrips.length > 0) ||
           spellInfo.granted.length > 0) && (
           <SpellPicks info={spellInfo} picks={availablePicks} set={setPick} registry={registry} />
         )}

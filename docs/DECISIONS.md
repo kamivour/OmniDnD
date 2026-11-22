@@ -6,6 +6,8 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D258 | 2026-11-22 | Keep the retired 2024 cauldron ID so old saves can remove it in Manage spells. It cannot be selected or cast. | Enforce the 2014 ruleset and preserve saved data |
+| D257 | 2026-11-22 | Battle Ready uses INT when it gives a better attack and damage bonus with a magic weapon. The existing attack overrides cover table choices. | Match the sheet’s handling of flexible weapon abilities |
 | D256 | 2026-11-22 | Strixhaven is opt-in per campaign. Its first bundled entry is Vortex Warp, available to its printed class lists. | Keep spell access tied to the correct sourcebook |
 | D255 | 2026-11-22 | Adding received or borrowed gear directly to a container records it on the receiving character. The other player manages their own inventory. | Keep shared sheets view-only |
 | D254 | 2026-11-22 | Artificers may replace one known infusion during an Artificer level-up. The replaced infusion ends on any tracked equipment. | Keep learning, replacement and Undo together |

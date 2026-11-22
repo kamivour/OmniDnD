@@ -4,6 +4,39 @@ import { materialCover } from './focus';
 
 const spell = (id: string) => registry.get('spell', id);
 
+it('shows the Artificer focus requirement even on spells with no printed material', () => {
+  const classId = 'class.artificer';
+  const caster = {
+    proficientTools: ['item.alchemists-supplies'],
+    infusedItems: ['item.shortsword'],
+  };
+  expect(
+    materialCover(spell('spell.fire-bolt'), classId, ['item.component-pouch'], registry, caster)
+      .status,
+  ).toBe('uncovered');
+  expect(
+    materialCover(spell('spell.fire-bolt'), classId, ['item.woodcarvers-tools'], registry, caster)
+      .status,
+  ).toBe('uncovered');
+  expect(
+    materialCover(spell('spell.fire-bolt'), classId, ['item.alchemists-supplies'], registry, caster)
+      .status,
+  ).toBe('covered');
+  expect(
+    materialCover(spell('spell.fire-bolt'), classId, ['item.shortsword'], registry, caster).status,
+  ).toBe('covered');
+  const revivify = materialCover(
+    spell('spell.revivify'),
+    classId,
+    ['item.shortsword'],
+    registry,
+    caster,
+  );
+  expect(revivify.status).toBe('costly');
+  expect(revivify.note).toContain('300 gp');
+  expect(revivify.note).toContain('Artificer focus');
+});
+
 describe('material cover by focus', () => {
   it('lets a Bard flute cover Shatter', () => {
     const cover = materialCover(spell('spell.shatter'), 'class.bard', ['item.flute'], registry);

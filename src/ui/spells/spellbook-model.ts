@@ -101,6 +101,7 @@ export function spellbookModel(
       if (selected.has(key)) continue;
       selected.add(key);
       const def = registry.get('spell', id);
+      if (def.retired) continue;
       const spell: SpellView = {
         ...spellView(def, state.build.spellTags?.[id]),
         ...(derived?.saveDc.override ? { dcOverride: derived.saveDc.override } : {}),

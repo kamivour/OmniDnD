@@ -456,6 +456,7 @@ export function levelSpellInfo(
     cantrips: details.candidates.cantrips.filter((id) => !known.has(id)),
     spells: leveled.filter((id) => !selected.has(id)),
     knownSpells: details.known.ids,
+    knownCantrips: details.cantrips.ids,
     granted: prepares ? details.granted.map(({ id }) => id) : [],
   };
 }

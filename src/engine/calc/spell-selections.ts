@@ -94,6 +94,10 @@ export function spellSelectionRuleWarnings(
         warnings.push(`Unknown spell reference: ${id}`);
         continue;
       }
+      if (def.retired) {
+        warnings.push(`${def.name} is unavailable under the 2014 rules.`);
+        continue;
+      }
       if (!sourceAllows(ctx.campaign, def) || def.ruleset !== ctx.campaign.ruleset)
         warnings.push(`${def.name}'s source is not enabled in this campaign.`);
       if (!onList(def) && !granted.has(id))
@@ -170,7 +174,7 @@ export function spellSelectionDetails(
     .map(({ spellId, from }) => ({ id: spellId, from }));
   const grantedIds = new Set(granted.map((entry) => entry.id));
   // A granted spell never uses up a pick, even if it was also chosen by hand.
-  const counted = (id: string) => !grantedIds.has(id);
+  const counted = (id: string) => !grantedIds.has(id) && !spell(ctx, id)?.retired;
   const cantripIds = selection.known.filter((id) => spell(ctx, id)?.level === 0 && counted(id));
   const knownIds = selection.known.filter((id) => (spell(ctx, id)?.level ?? 0) > 0 && counted(id));
   const preparedCount = selection.prepared.filter(

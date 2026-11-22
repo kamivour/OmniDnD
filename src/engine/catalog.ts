@@ -122,7 +122,7 @@ export function catalogEntries(registry: Registry, kind: CatalogKind): CatalogEn
 export function entryKind(entry: RefEntry): CatalogKind | undefined {
   switch (entry.kind) {
     case 'spell':
-      return 'spells';
+      return entry.retired ? undefined : 'spells';
     case 'class':
       return 'classes';
     case 'subclass':

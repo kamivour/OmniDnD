@@ -241,7 +241,7 @@ test('Artillerist prepares class spells at level-up in addition to automatic sub
 }) => {
   const file = friendFile('artillerist-preparation', { level: 4 });
   const classId = 'class.artificer';
-  file.campaign.sources = ['PHB', 'TCE'];
+  file.campaign.sources = ['PHB', 'TCE', 'XGE'];
   file.build.classes = [{ classId, level: 4, subclassId: 'subclass.artificer.artillerist' }];
   file.build.hpEntries = file.build.hpEntries.map((entry) => ({
     ...entry,
@@ -251,28 +251,46 @@ test('Artillerist prepares class spells at level-up in addition to automatic sub
   file.build.abilityScores.base.INT = 16;
   file.build.abilityScores.bonuses = [];
   file.build.spells = [{ classId, known: ['spell.mending', 'spell.fire-bolt'], prepared: [] }];
+  file.build.proficiencies.tools.push('item.thieves-tools');
+  file.build.items.push({ instanceId: 'artificer-tools', itemId: 'item.thieves-tools' });
+  file.live.items['artificer-tools'] = { qty: 1, equipped: false, attuned: false };
 
   await importFile(page, file);
   await goSheet(page, file.build.id);
   await openLevelUp(page);
   const wizard = form(page);
   await expect(wizard.getByText(/Always prepared.*Scorching Ray, Shatter/)).toBeVisible();
+  await wizard.getByLabel('Swap out an Artificer cantrip').selectOption('spell.mending');
+  await wizard.getByLabel('Learn instead').selectOption('spell.thorn-whip');
   const picks = wizard.getByRole('group', { name: 'Spells to prepare (0 / 5)' });
   await expect(picks.getByRole('checkbox', { name: 'Shatter', exact: true })).toHaveCount(0);
   await picks.getByRole('checkbox', { name: 'Web', exact: true }).check();
-  await expect(wizard.getByRole('group', { name: 'Spells to prepare (1 / 5)' })).toBeVisible();
+  await wizard.getByRole('checkbox', { name: 'Skywrite', exact: true }).check();
+  await expect(wizard.getByRole('group', { name: 'Spells to prepare (2 / 5)' })).toBeVisible();
   await noOverflow(page);
   await applyLevelUp(page);
   expect((await readSaved(page, file.build.id)).build.spells).toEqual([
-    { classId, known: ['spell.mending', 'spell.fire-bolt'], prepared: ['spell.web'] },
+    {
+      classId,
+      known: ['spell.fire-bolt', 'spell.thorn-whip'],
+      prepared: ['spell.web', 'spell.skywrite'],
+    },
   ]);
 
   await page.goto(`/characters/${file.build.id}/spells`);
   await main(page).getByRole('button', { name: 'Manage', exact: true }).click();
   const manage = page.getByRole('dialog', { name: 'Manage spells', exact: true });
   await expect(manage.getByText(/Always prepared.*Scorching Ray, Shatter/)).toBeVisible();
-  await expect(manage.locator('[aria-label="Spell selection counts"]')).toContainText(/1 \/ 5/);
+  await expect(manage.locator('[aria-label="Spell selection counts"]')).toContainText(/2 \/ 5/);
   await expect(manage.getByRole('checkbox', { name: 'Prepare Cure Wounds' })).toBeVisible();
+  await manage.getByRole('button', { name: 'Done', exact: true }).click();
+  await main(page)
+    .getByRole('button', { name: /^Fire Bolt/ })
+    .locator('..')
+    .getByRole('button', { name: 'Cast', exact: true })
+    .click();
+  const cast = page.getByRole('dialog', { name: 'Cast Fire Bolt', exact: true });
+  await expect(cast.getByRole('note')).toContainText(/as your Artificer focus/);
 });
 
 test('The Fool previews a rolled fifth HP result, cancels without a command and applies one exact undoable level', async ({

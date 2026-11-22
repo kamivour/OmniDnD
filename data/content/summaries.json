@@ -260,5 +260,40 @@
       "upcast": "Concentration lasts 8 hours at slot 3-4, 24 hours at slot 5+."
     },
     "summaryReviewed": false
+  },
+  {
+    "id": "spell.arcane-hand",
+    "name": "Bigby's Hand",
+    "summary": {
+      "effect": "Create a large force hand that can strike, shove, grapple, or shield you. Move and command it with a bonus action on later turns."
+    }
+  },
+  {
+    "id": "spell.secret-chest",
+    "name": "Leomund's Secret Chest",
+    "summary": {
+      "effect": "Hide a chest on the Ethereal Plane and use its miniature to recall it. After 60 days, leaving it away can end the effect."
+    }
+  },
+  {
+    "id": "spell.faithful-hound",
+    "name": "Mordenkainen's Faithful Hound",
+    "summary": {
+      "effect": "An invisible watchdog alerts you to nearby intruders. At the start of your turn it attempts to bite one hostile creature next to it."
+    }
+  },
+  {
+    "id": "spell.private-sanctum",
+    "name": "Mordenkainen's Private Sanctum",
+    "summary": {
+      "effect": "Ward an area against selected forms of surveillance, travel, or both. Recast daily for a year to make it permanent."
+    }
+  },
+  {
+    "id": "spell.resilient-sphere",
+    "name": "Otiluke's Resilient Sphere",
+    "summary": {
+      "effect": "Enclose a Large or smaller creature or object in a force bubble. An unwilling creature can avoid it with a DEX save."
+    }
   }
 ]

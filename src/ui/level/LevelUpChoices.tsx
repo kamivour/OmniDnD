@@ -392,6 +392,9 @@ export function SpellPicks({
   const { gains } = info;
   const wizard = gains.mode === 'spellbook';
   const prepares = gains.mode === 'prepared';
+  const swapOut = gains.canSwapCantrip ? info.knownCantrips : info.knownSpells;
+  const swapIn = gains.canSwapCantrip ? info.cantrips : info.spells;
+  const learned = gains.canSwapCantrip ? picks.cantrips : picks.spells;
   return (
     <div className={group}>
       <p className="text-sm font-semibold text-text">
@@ -414,7 +417,9 @@ export function SpellPicks({
       {gains.cantrips > 0 && (
         <SpellChecks
           legend="Cantrips"
-          ids={info.cantrips}
+          ids={
+            gains.canSwapCantrip ? info.cantrips.filter((id) => id !== picks.swapIn) : info.cantrips
+          }
           chosen={picks.cantrips}
           limit={gains.cantrips}
           registry={registry}
@@ -437,9 +442,14 @@ export function SpellPicks({
           onChange={(spells) => set({ spells })}
         />
       )}
-      {gains.canSwap && info.knownSpells.length > 0 && (
+      {(gains.canSwap || gains.canSwapCantrip) && swapOut.length > 0 && (
         <>
-          <Field label="Swap out a known spell" htmlFor={`${id}-out`}>
+          <Field
+            label={
+              gains.canSwapCantrip ? 'Swap out an Artificer cantrip' : 'Swap out a known spell'
+            }
+            htmlFor={`${id}-out`}
+          >
             <select
               id={`${id}-out`}
               value={picks.swapOut}
@@ -447,7 +457,7 @@ export function SpellPicks({
               className={inputClass}
             >
               <option value="">Keep all</option>
-              {info.knownSpells.map((spell) => (
+              {swapOut.map((spell) => (
                 <option key={spell} value={spell}>
                   {optionName(registry, spell)}
                 </option>
@@ -463,8 +473,8 @@ export function SpellPicks({
                 className={inputClass}
               >
                 <option value="">Choose a spell</option>
-                {info.spells
-                  .filter((spell) => !picks.spells.includes(spell))
+                {swapIn
+                  .filter((spell) => !learned.includes(spell))
                   .map((spell) => (
                     <option key={spell} value={spell}>
                       {optionName(registry, spell)}

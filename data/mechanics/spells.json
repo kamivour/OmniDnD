@@ -340,5 +340,29 @@
   {
     "id": "spell.hunters-mark",
     "tags": ["buff", "damage"]
+  },
+  {
+    "id": "spell.dancing-lights",
+    "classes": ["class.bard", "class.sorcerer", "class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.secret-chest",
+    "classes": ["class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.faithful-hound",
+    "classes": ["class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.private-sanctum",
+    "classes": ["class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.resilient-sphere",
+    "classes": ["class.wizard", "class.artificer"]
+  },
+  {
+    "id": "spell.arcane-hand",
+    "classes": ["class.wizard", "class.artificer"]
   }
 ]

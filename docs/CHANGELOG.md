@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 18:45 — Artificer rules audit
+
+- Look for Thorn Whip, Skywrite and six other restored Artificer spells. You can swap one Artificer cantrip when leveling up.
+- Battle Ready can use INT with magic weapons. Tool Expertise and several Alchemist and Battle Smith uses now show on the sheet.
+- Spell casting shows the Artificer focus requirement. See the audit for features still tracked at the table. Checks pass.
+
 ## 2026-11-22 18:30 — Vortex Warp from Strixhaven
 
 - Enable Strixhaven in Campaign settings to use Vortex Warp, a level 2 spell for Artificers, Sorcerers and Wizards.

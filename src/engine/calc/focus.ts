@@ -2,9 +2,10 @@ import type { Registry } from '../registry';
 import type { SpellDef } from '../schema';
 import { FOCUS_IDS } from './class-start';
 import { classifyMaterial, type MaterialInfo } from './components';
+import { toolGroupOptions } from './background-choices';
 
 /** What a caster can use in place of a plain (no cost) material component. */
-type FocusRule = { ids: string[] } | { category: 'instrument' } | { tools: true };
+type FocusRule = { ids: string[] } | { category: 'instrument' };
 
 const POUCH = 'item.component-pouch';
 
@@ -16,8 +17,14 @@ const FOCUS_BY_CLASS: Record<string, FocusRule> = {
   'class.sorcerer': { ids: FOCUS_IDS['arcane-focus'] ?? [] },
   'class.warlock': { ids: FOCUS_IDS['arcane-focus'] ?? [] },
   'class.wizard': { ids: FOCUS_IDS['arcane-focus'] ?? [] },
-  'class.artificer': { tools: true },
 };
+
+interface ArtificerFocus {
+  proficientTools: readonly string[];
+  infusedItems: readonly string[];
+}
+
+const ARTIFICER_TOOLS = ['item.thieves-tools', ...toolGroupOptions('artisan', [])];
 
 export interface MaterialCover {
   info: MaterialInfo;
@@ -41,28 +48,46 @@ export function materialCover(
   classId: string,
   carriedItemIds: readonly string[],
   registry: Registry,
+  artificer?: ArtificerFocus,
 ): MaterialCover {
   const info = classifyMaterial(spell);
-  if (info.kind === 'none') return { info, status: 'none', note: '' };
+  const isArtificer = classId === 'class.artificer';
+  if (info.kind === 'none' && !isArtificer) return { info, status: 'none', note: '' };
+  const items = carriedItemIds.flatMap((id) => {
+    const entry = registry.entries.get(id);
+    return entry?.kind === 'item' ? [entry] : [];
+  });
+  const artFocus = isArtificer
+    ? items.find(
+        ({ id }) =>
+          artificer?.infusedItems.includes(id) ||
+          (ARTIFICER_TOOLS.includes(id) && artificer?.proficientTools.includes(id)),
+      )
+    : undefined;
+  const artNote = artFocus
+    ? `Hold ${artFocus.name} as your Artificer focus.`
+    : 'Artificer spells need a focus. Hold proficient artisan’s tools, thieves’ tools, or an infused item, or confirm a subclass focus at the table.';
   if (info.kind === 'costly') {
     const used = info.consumed ? ' (consumed)' : ' (not used up)';
     return {
       info,
       status: 'costly',
-      note: `Needs ${info.costGp} gp of material${used}: ${trimmed(info.text)}`,
+      note: `Needs ${info.costGp} gp of material${used}: ${trimmed(info.text)}${isArtificer ? `. ${artNote}` : ''}`,
     };
   }
+  if (isArtificer)
+    return {
+      info,
+      status: artFocus ? 'covered' : 'uncovered',
+      ...(artFocus ? { by: artFocus.name } : {}),
+      note: artNote,
+    };
   const rule = FOCUS_BY_CLASS[classId];
-  const items = carriedItemIds.flatMap((id) => {
-    const entry = registry.entries.get(id);
-    return entry?.kind === 'item' ? [entry] : [];
-  });
   const focus = items.find((item) => {
     if (item.id === POUCH) return true;
     if (!rule) return false;
     if ('ids' in rule) return rule.ids.includes(item.id);
-    if ('category' in rule) return item.category === rule.category;
-    return item.category === 'tool' && /tools$/i.test(item.name);
+    return item.category === rule.category;
   });
   if (focus)
     return {

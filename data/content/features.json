@@ -1314,7 +1314,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Touch a tiny nonmagical object to give it a minor effect for as long as you hold it: light, a recorded message, a smell or sound, or a visual. Number of objects equals your INT modifier."
+      "effect": "Use your tools to give a Tiny mundane object light, a message, a sound, an odor, or a visual mark. Keep up to your INT modifier (minimum one). The oldest effect ends if you exceed that limit."
     },
     "origin": "class",
     "activation": "action"
@@ -1427,10 +1427,11 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "After a long rest, store a 1st or 2nd level artificer spell in a weapon or spellcasting focus. A holder can cast it a number of times equal to twice your INT modifier before it empties."
+      "effect": "After a long rest, store a level 1–2 Artificer spell with a one-action cast time, even if unprepared. The holder activates it with an action and concentrates if required. Uses equal twice INT (minimum two).",
+      "scaling": "A simple or martial weapon or usable focus can hold the spell. Its uses last until spent or replaced. Track the spell and uses on the item at the table."
     },
     "origin": "class",
-    "activation": "special"
+    "activation": "passive"
   },
   {
     "kind": "feature",
@@ -1539,7 +1540,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Using alchemists supplies as a focus, add your INT modifier (minimum +1) to one die of damage or healing from a spell you cast."
+      "effect": "When casting through alchemist’s supplies, add INT (minimum +1) to one healing roll or one acid, fire, necrotic, or poison damage roll."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -1553,7 +1554,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Elixirs also give temporary HP of 2d6 plus INT modifier. Cast lesser restoration without a slot a number of times per long rest equal to your INT modifier."
+      "effect": "Drinking your elixir also gives 2d6 + INT temporary HP (minimum 1). With alchemist’s supplies as focus, cast Lesser Restoration without a slot INT times (minimum one) per long rest."
     },
     "origin": "subclass",
     "activation": "action",
@@ -1574,7 +1575,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Resistance to acid and poison damage and immunity to the poisoned condition. Once each per long rest, cast greater restoration or heal without a slot or components."
+      "effect": "Resist acid and poison damage and ignore the poisoned condition. With alchemist’s supplies as focus, cast Heal and Greater Restoration once each per long rest without slots, preparation, or material components."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -1732,7 +1733,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Carve runes in a wand, staff or rod to make an arcane firearm. Add 1d8 damage to one damage roll of a spell cast through it."
+      "effect": "After a long rest, turn a wand, staff or rod into an arcane firearm. It focuses your Artificer spells and adds 1d8 to one damage roll when you cast one through it."
     },
     "origin": "subclass",
     "activation": "passive"
@@ -1844,7 +1845,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "When you or your steel defender hit with a magic weapon attack, deal 2d6 extra force damage or heal a creature within 30 feet for 2d6. Uses equal your INT modifier."
+      "effect": "On your magic weapon hit or your Steel Defender’s hit, add 2d6 force or heal a visible creature or object within 30 feet of the target for 2d6. Once per turn, INT uses per long rest (minimum one)."
     },
     "origin": "subclass",
     "activation": "special",
@@ -1865,7 +1866,7 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Arcane Jolt grows to 4d6. Steel defender gains +2 AC and its Deflect Attack deals 1d4 plus your INT modifier force damage."
+      "effect": "Arcane Jolt grows to 4d6. Steel Defender gains +2 AC and its Deflect Attack deals 1d4 plus your INT modifier force damage."
     },
     "origin": "subclass",
     "activation": "passive"

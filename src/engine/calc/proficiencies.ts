@@ -71,6 +71,13 @@ export function featureProficiencies(
     const list = merged[kind] as string[];
     if (!list.includes(value)) list.push(value);
   }
+  const toolExpertise = features.find(({ def }) => def.id === 'feature.artificer.tool-expertise');
+  if (toolExpertise) {
+    for (const tool of merged.tools) {
+      if (!merged.expertise.includes(tool)) merged.expertise.push(tool);
+      granted.push({ kind: 'expertise', value: tool, source: toolExpertise.def.name });
+    }
+  }
   return { proficiencies: merged, granted, darkvision };
 }
 

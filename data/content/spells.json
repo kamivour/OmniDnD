@@ -248,11 +248,11 @@
     "srd": false,
     "summaryReviewed": false,
     "ritual": false,
-    "name": "Caustic Brew",
+    "name": "Tasha's Caustic Brew",
     "source": "TCE",
     "summary": {
       "effect": "A 30-foot line of acid, 5 feet wide, springs from you. Creatures in it make a DEX save and keep taking damage each turn while the spell lasts.",
-      "fail": "2d4 acid now and at the start of each of their turns until they use an action to wipe it off.",
+      "fail": "2d4 acid at the start of each of its turns. It or another creature can use an action to scrape or wash off the acid.",
       "success": "No damage, and no lingering acid.",
       "upcast": "+2d4 per slot level above 1."
     },
@@ -1859,7 +1859,7 @@
   {
     "kind": "spell",
     "ruleset": "5e-2014",
-    "source": "TCE",
+    "source": "XGE",
     "srd": false,
     "summaryReviewed": false,
     "ritual": false,
@@ -1929,24 +1929,23 @@
       "cost": "action"
     },
     "name": "Tasha's Bubbling Cauldron",
+    "retired": true,
     "summary": {
-      "effect": "A cauldron fills with copies of one common or uncommon potion you choose, as many as your spellcasting modifier. A creature draws one as a bonus action. Drawn potions vanish if you cast this again."
+      "effect": "This 2024 spell was listed in error. Its ID is retained so older saves can remove it in Manage spells."
     },
     "level": 6,
     "school": "conjuration",
-    "range": "5 ft",
+    "range": "—",
     "components": {
-      "v": true,
-      "s": true,
-      "m": "a golden ladle worth at least 500 gp"
+      "v": false,
+      "s": false
     },
     "duration": {
-      "text": "10 min",
-      "seconds": 600,
+      "text": "—",
       "concentration": false
     },
-    "classes": ["class.artificer", "class.warlock", "class.wizard"],
-    "tags": ["utility", "buff"],
+    "classes": [],
+    "tags": [],
     "id": "spell.tashas-bubbling-cauldron"
   },
   {
@@ -3336,7 +3335,7 @@
       "concentration": true,
       "seconds": 3600
     },
-    "classes": ["class.bard", "class.druid", "class.wizard"],
+    "classes": ["class.artificer", "class.bard", "class.druid", "class.wizard"],
     "tags": ["utility"]
   },
   {
@@ -5377,5 +5376,31 @@
     "save": "CON",
     "classes": ["class.artificer", "class.sorcerer", "class.wizard"],
     "tags": ["control", "utility"]
+  },
+  {
+    "kind": "spell",
+    "id": "spell.thorn-whip",
+    "name": "Thorn Whip",
+    "ruleset": "5e-2014",
+    "source": "PHB",
+    "srd": false,
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/2309-thorn-whip",
+    "summary": {
+      "effect": "Make a melee spell attack against a creature within 30 feet.",
+      "hit": "Deal piercing damage. If the creature is Large or smaller, you can pull it up to 10 feet toward you.",
+      "scaling": "Roll 1d6, adding a die at character levels 5, 11 and 17."
+    },
+    "level": 0,
+    "school": "transmutation",
+    "casting": { "cost": "action" },
+    "range": "30 ft",
+    "components": { "v": true, "s": true, "m": "a thorny plant stem" },
+    "duration": { "text": "Instant", "concentration": false },
+    "ritual": false,
+    "attack": "melee",
+    "classes": ["class.artificer", "class.druid"],
+    "tags": ["damage", "control"],
+    "damage": { "dice": "1d6", "type": "piercing", "cantripScaling": true }
   }
 ]

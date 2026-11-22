@@ -109,9 +109,9 @@ export function bookParts(campaign: SourceRules, source: Source): readonly Sourc
 /** True when the campaign's books, and the parts it uses from them, include this entry. */
 export function sourceAllows(
   campaign: SourceRules,
-  entry: Pick<RefEntry, 'kind' | 'source'> & { origin?: string },
+  entry: Pick<RefEntry, 'kind' | 'source'> & { origin?: string; retired?: boolean },
 ): boolean {
-  if (!campaign.sources.includes(entry.source)) return false;
+  if (entry.retired || !campaign.sources.includes(entry.source)) return false;
   const part = entryPart(entry);
   return part === undefined || bookParts(campaign, entry.source).includes(part);
 }

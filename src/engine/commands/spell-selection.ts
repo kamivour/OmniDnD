@@ -76,6 +76,9 @@ export const changeSpellSelection: Command<ChangeSpellSelectionPayload> = {
       choice.action === 'replace' ? [choice.spellId, choice.replacementId] : [choice.spellId];
     if (ids.some((id) => ctx.registry.entries.get(id)?.kind !== 'spell'))
       return [block('Choose spells from the reference library')];
+    const newId = choice.action === 'replace' ? choice.replacementId : choice.spellId;
+    if (choice.action !== 'remove' && ctx.registry.get('spell', newId).retired)
+      return [block('That spell is unavailable under the 2014 rules')];
     const before = spellSelectionDetails(ctx, choice.classId);
     if (choice.action !== 'add' && !before.selection[choice.list].includes(choice.spellId))
       return [block('That spell is not selected in this list')];

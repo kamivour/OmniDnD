@@ -188,6 +188,7 @@ export const castSpell: Command<CastSpellPayload> = {
   name: 'castSpell',
   check: (ctx, payload) => {
     const spell = ctx.registry.get('spell', payload.spellId);
+    if (spell.retired) return [block(`${spell.name} is unavailable under the 2014 rules`)];
     const details = spellCastDetails(ctx, {
       ...payload,
       slotLevel: castLevel(ctx, spell, payload),

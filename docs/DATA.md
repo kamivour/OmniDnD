@@ -20,7 +20,7 @@ The data model supports many campaigns and characters, including future friends'
 | SRD 5.1 from [5e-bits/5e-database](https://github.com/5e-bits/5e-database) (`src/2014/en`, the data behind the [D&D 5e API](https://www.dnd5eapi.co/)), pinned to one commit | Import **once at build time** with `npm run import:srd` (`scripts/import-srd.ts`) → `data/srd/*.json` (committed). Mapping rules: D50 | CC BY 4.0. Attribution required (below). |
 | [Open5e](https://open5e.com/) | Backup / cross-check for SRD data | Check license per document |
 | `data/content/<kind>.json` | Non-SRD entries the app needs (PHB-only, Xanathar's, Tasha's): name, metadata, **own-words** summary (≤ 40 words), URL. **No copied text.** | Committed (repo is public). Mechanics and names only, expressed in our words. |
-| `data/content/summaries.json` | Own-words `summary`, `summaryReviewed`, `url` for SRD entries, merged onto the entry by id | Our own work |
+| `data/content/summaries.json` | Own-words `summary`, `summaryReviewed`, `url`, and optional 2014 book name for SRD entries, merged by id | Our own work |
 | `data/private/` | Anything copied or pasted from books, personal notes | **Gitignored.** Never committed. |
 | `data/mechanics/<kind>.json` | Machine-readable mechanics the text lacks (activation, uses, recharge, dice, modifiers, tags, effect templates), merged onto the entry by id. Text fields are rejected | Our own work |
 | External links | Full text: D&D Beyond, 5e.tools (2014) | Link only |

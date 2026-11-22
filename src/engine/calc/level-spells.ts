@@ -22,6 +22,7 @@ export interface LevelSpellGains {
   spells: number;
   /** Known casters may swap one leveled spell for another. */
   canSwap: boolean;
+  canSwapCantrip: boolean;
 }
 
 /** `ctx` already holds the character at its new level in `classId`; `firstLevel` is true when the class is new. */
@@ -32,7 +33,7 @@ export function levelSpellGains(
 ): LevelSpellGains {
   const details = spellSelectionDetails(ctx, classId);
   if (details.mode === 'unsupported')
-    return { mode: 'unsupported', cantrips: 0, spells: 0, canSwap: false };
+    return { mode: 'unsupported', cantrips: 0, spells: 0, canSwap: false, canSwapCantrip: false };
   const room = (list: { count: number; limit?: number }) =>
     list.limit === undefined ? 0 : Math.max(0, list.limit - list.count);
   return {
@@ -47,6 +48,7 @@ export function levelSpellGains(
             : WIZARD_LEVEL_SPELLS
           : room(details.prepared),
     canSwap: details.mode === 'known' && !firstLevel,
+    canSwapCantrip: classId === 'class.artificer' && !firstLevel,
   };
 }
 
@@ -103,12 +105,20 @@ export function applyLevelSpells(
 
   if (picks.swap) {
     const { remove, add: replacement } = picks.swap;
-    if (!gains.canSwap) return { blocked: `${details.name} cannot swap a spell at this level` };
-    if (!known.has(remove) || (level(remove) ?? 0) === 0)
-      return { blocked: 'Swap out a leveled spell you know' };
-    if (level(replacement) === undefined || (level(replacement) ?? 0) === 0)
+    const cantripSwap = gains.canSwapCantrip;
+    if (!gains.canSwap && !cantripSwap)
+      return { blocked: `${details.name} cannot swap a spell at this level` };
+    const oldChoices = cantripSwap ? details.cantrips.ids : details.known.ids;
+    const newChoices = cantripSwap ? details.candidates.cantrips : details.candidates.known;
+    if (!oldChoices.includes(remove))
+      return {
+        blocked: cantripSwap
+          ? 'Swap out an Artificer cantrip you know'
+          : 'Swap out a leveled spell you know',
+      };
+    if (!cantripSwap && (level(replacement) ?? 0) === 0)
       return { blocked: 'Swap in a leveled spell' };
-    if (!details.candidates.known.includes(replacement) || known.has(replacement))
+    if (!newChoices.includes(replacement) || known.has(replacement) || add.includes(replacement))
       return { blocked: `${nameOf(replacement)} is not available to swap in` };
     known.delete(remove);
     known.add(replacement);

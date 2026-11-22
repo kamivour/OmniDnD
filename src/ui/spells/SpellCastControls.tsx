@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { registry } from '../../data/registry';
+import { registry, registryFor } from '../../data/registry';
 import {
   castSpell,
   previewSpellHealing,
@@ -7,6 +7,7 @@ import {
   type CastSpellPayload,
 } from '../../engine/commands';
 import { materialCover } from '../../engine/calc/focus';
+import { activeInfusions } from '../../engine/calc/infusions';
 import { useCommand } from '../commands/command-context';
 import { Related } from '../find/Related';
 import { CastFooter } from '../components/CastFooter';
@@ -37,10 +38,32 @@ export function SpellCastControls({
   // Feat and racial-trait spells carry the feature id in `classId`.
   const via = entryFeat ? { featureId: classId } : { classId };
   const base = spellCastDetails(context, { spellId, ...via });
-  const carried = state.build.items
-    .filter((item) => (state.live.items[item.instanceId]?.qty ?? 0) > 0)
-    .map((item) => item.itemId);
-  const material = materialCover(definition, entryFeat?.classId ?? classId, carried, registry);
+  const carried = state.build.items.filter(
+    (item) => (state.live.items[item.instanceId]?.qty ?? 0) > 0,
+  );
+  const materialClass = entryFeat?.classId ?? classId;
+  const infused =
+    materialClass === 'class.artificer' ? activeInfusions(state.build, state.live) : [];
+  const material =
+    classId === 'feature.artificer.alchemist-chemical-mastery'
+      ? {
+          status: carried.some(({ itemId }) => itemId === 'item.alchemists-supplies')
+            ? 'covered'
+            : 'uncovered',
+          note: 'Use alchemist’s supplies as your focus for this free cast.',
+        }
+      : materialCover(
+          definition,
+          materialClass,
+          carried.map(({ itemId }) => itemId),
+          registryFor(state.build),
+          {
+            proficientTools: sheet.proficiencies.tools,
+            infusedItems: carried
+              .filter(({ instanceId }) => infused.some((item) => item.instanceId === instanceId))
+              .map(({ itemId }) => itemId),
+          },
+        );
   const slots = entryFeat && !entryFeat.slots ? [] : model.slots;
   const free = entryFeat?.free
     ? {

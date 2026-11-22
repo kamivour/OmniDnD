@@ -19,10 +19,11 @@ const find = (kind: (typeof CATALOG_KINDS)[number], name: string) =>
   catalogEntries(registry, kind).find((e) => e.name === name);
 
 describe('compendium catalog', () => {
-  it('reaches every bundled class, subclass, race, background, feat, spell and item', () => {
+  it('reaches every active bundled class, subclass, race, background, feat, spell and item', () => {
     for (const entry of registry.entries.values()) {
       const wanted =
-        ['spell', 'class', 'subclass', 'race', 'background', 'item'].includes(entry.kind) ||
+        ['class', 'subclass', 'race', 'background', 'item'].includes(entry.kind) ||
+        (entry.kind === 'spell' && !entry.retired) ||
         (entry.kind === 'feature' && entry.origin === 'feat');
       expect(entryKind(entry) !== undefined, entry.id).toBe(wanted);
     }
