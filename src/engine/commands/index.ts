@@ -23,6 +23,7 @@ export * from './level';
 export * from './resolve-choices';
 export * from '../calc/pending-choices';
 export * from './rest';
+export * from './artificer-items';
 export * from './reset';
 export * from './smite';
 export * from './sorcery';

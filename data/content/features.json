@@ -1439,7 +1439,7 @@
     "summaryReviewed": false,
     "summary": {
       "effect": "After a long rest, store a level 1–2 Artificer spell with a one-action cast time, even if unprepared. The holder activates it with an action and concentrates if required. Uses equal twice INT (minimum two).",
-      "scaling": "A simple or martial weapon or usable focus can hold the spell. Its uses last until spent or replaced. Track the spell and uses on the item at the table."
+      "scaling": "A simple or martial weapon or usable focus can hold the spell. Its uses last until spent or replaced."
     },
     "origin": "class",
     "activation": "passive"

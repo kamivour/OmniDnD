@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 03:17 — Artificer stored spells and Arcane Firearm
+
+- Artificer 11 can store a spell in a weapon or focus from Features or the long-rest review.
+- Use the stored spell without a slot. The app tracks your action and concentration when you hold the item.
+- Artillerist can mark a wand, staff or rod and choose it when casting. Check for the extra damage die. Checks pass.
+
 ## 2026-11-23 03:10 — Monk Dedicated Weapon
 
 - Enable Tasha’s Optional Class Features and choose a proficient weapon during a Monk’s rest.

@@ -22,9 +22,14 @@ const FOCUS_BY_CLASS: Record<string, FocusRule> = {
 interface ArtificerFocus {
   proficientTools: readonly string[];
   infusedItems: readonly string[];
+  subclassFocusId?: string;
 }
 
 const ARTIFICER_TOOLS = ['item.thieves-tools', ...toolGroupOptions('artisan', [])];
+
+export function isArtificerFocusTool(id: string, proficientTools: readonly string[]): boolean {
+  return ARTIFICER_TOOLS.includes(id) && proficientTools.includes(id);
+}
 
 export interface MaterialCover {
   info: MaterialInfo;
@@ -60,8 +65,9 @@ export function materialCover(
   const artFocus = isArtificer
     ? items.find(
         ({ id }) =>
+          id === artificer?.subclassFocusId ||
           artificer?.infusedItems.includes(id) ||
-          (ARTIFICER_TOOLS.includes(id) && artificer?.proficientTools.includes(id)),
+          isArtificerFocusTool(id, artificer?.proficientTools ?? []),
       )
     : undefined;
   const artNote = artFocus

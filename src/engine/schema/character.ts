@@ -413,6 +413,17 @@ export const LiveStateSchema = z
     lastLongRestEnd: GameSeconds.optional(),
     /** Weapon instance designated by the optional Monk feature. */
     dedicatedWeaponId: z.string().min(1).optional(),
+    /** Artificer spell stored in an identifiable item, independent of that item's own charges. */
+    storedSpellItem: z
+      .strictObject({
+        instanceId: z.string().min(1),
+        spellId: refId('spell'),
+        limit: z.int().min(2),
+        spent: NonNegativeInt,
+        restEnd: GameSeconds.optional(),
+      })
+      .optional(),
+    arcaneFirearmId: z.string().min(1).optional(),
     combat: z
       .strictObject({
         /** No initiative or turn order (D42). Start Turn advances the round. */

@@ -12,6 +12,8 @@ import { resolveChoices } from './resolve-choices';
 import { castSpell } from './spells';
 import { featFreeLeft } from './spell-options';
 import { changeSpellSelection } from './spell-selection';
+import { markArcaneFirearm, storeArtificerSpell, useArtificerStoredSpell } from './artificer-items';
+import { startCombat, startTurn } from './combat';
 import {
   COMMON_REPLICA_PREFIX,
   INFUSION_PREFIX,
@@ -40,6 +42,56 @@ function artificer(level: number, subclassId?: string): CharacterState {
 }
 
 describe('Artificer', () => {
+  it('stores an eligible unprepared spell and uses an object action without spending a slot', () => {
+    const state = artificer(11, 'subclass.artificer.artillerist');
+    state.build.spells = [];
+    state.build.items = [{ itemId: 'item.dagger', instanceId: 'dagger' }];
+    state.live.items = { dagger: { qty: 1, equipped: true, attuned: false } };
+    state.live.lastLongRestEnd = state.live.clock.seconds;
+    const session = new Session(state);
+    expect(
+      session.preview(storeArtificerSpell, { instanceId: 'dagger', spellId: 'spell.shield' })
+        .result,
+    ).toBe('blocked');
+    session.run(storeArtificerSpell, { instanceId: 'dagger', spellId: 'spell.web' });
+    expect(session.live.storedSpellItem).toMatchObject({
+      spellId: 'spell.web',
+      limit: 6,
+      spent: 0,
+    });
+    session.run(startCombat, null);
+    session.run(startTurn, null);
+    const before = [...session.live.slotsUsed];
+    session.run(useArtificerStoredSpell, { otherHolder: true });
+    expect(session.live.combat?.economy.actionUsed).toBe(false);
+    expect(session.live.concentration?.spellId).not.toBe('spell.web');
+    session.run(useArtificerStoredSpell, {});
+    expect(session.live.slotsUsed).toEqual(before);
+    expect(session.live.combat?.economy).toMatchObject({ actionUsed: true, otherSpellCast: false });
+    expect(session.live.concentration?.spellId).toBe('spell.web');
+    expect(session.live.storedSpellItem?.spent).toBe(2);
+    session.undo();
+    expect(session.live.storedSpellItem?.spent).toBe(1);
+    expect(session.live.combat?.economy.actionUsed).toBe(false);
+  });
+
+  it('logs Arcane Firearm damage only when an Artificer chooses a marked focus', () => {
+    const state = artificer(5, 'subclass.artificer.artillerist');
+    state.build.spells = [];
+    state.build.items = [{ itemId: 'item.wand', instanceId: 'wand' }];
+    state.live.items = { wand: { qty: 1, equipped: false, attuned: false } };
+    state.live.lastLongRestEnd = state.live.clock.seconds;
+    const session = new Session(state);
+    const cast = { classId: 'class.artificer', spellId: 'spell.thunderwave', slotLevel: 1 };
+    expect(session.preview(castSpell, { ...cast, useArcaneFirearm: true }).result).toBe('blocked');
+    session.run(markArcaneFirearm, { instanceId: 'wand' });
+    expect(session.run(castSpell, cast)).not.toContain('Arcane Firearm');
+    expect(session.run(castSpell, { ...cast, useArcaneFirearm: true })).toContain(
+      'Arcane Firearm adds 1d8',
+    );
+    session.undo();
+    expect(session.live.slotsUsed[1]).toBe(1);
+  });
   it('lists the published Tasha Artificer spells by tier, including the Xanathar options', () => {
     const state = artificer(20);
     state.campaign.sources.push('XGE');

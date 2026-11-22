@@ -6,6 +6,8 @@ import { spellListsWithGrants } from '../calc/granted-spells';
 import type { SpellDef } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
 import { previewSpellHealing, spellCastDetails, type SpellCastDetails } from './spell-options';
+import { applySpellEffects } from './spell-effects';
+import { arcaneFirearm } from './artificer-items';
 import {
   block,
   deadCheck,
@@ -15,10 +17,8 @@ import {
   info,
   passTime,
   rangeCheck,
-  restoreHp,
   spendEconomy,
   timeRangeChecks,
-  uniqueEffectId,
   warn,
   withNotes,
   type EconomySlot,
@@ -38,6 +38,7 @@ export interface CastSpellPayload {
   healRoll?: number;
   /** Class whose spellcasting ability applies. Default: the class that knows the spell. */
   classId?: string;
+  useArcaneFirearm?: boolean;
   /** Cast through this feat or racial trait (its ability and DC) instead of a class. */
   featureId?: string;
   /** Use the feat's or trait's free casting instead of a slot. Needs `featureId`. */
@@ -196,6 +197,14 @@ export const castSpell: Command<CastSpellPayload> = {
       slotLevel: castLevel(ctx, spell, payload),
     });
     const checks = [...deadCheck(ctx), ...slotChecks(ctx, spell, payload)];
+    if (
+      payload.useArcaneFirearm &&
+      (payload.classId !== 'class.artificer' ||
+        payload.featureId ||
+        !spell.damage ||
+        !arcaneFirearm(ctx))
+    )
+      checks.push(block('Use a carried Arcane Firearm for an Artificer spell that deals damage'));
     const armor = wornArmor(ctx, ctx.registry, ctx.sheet.proficiencies.armor).filter(
       (entry) => !entry.proficient,
     );
@@ -249,6 +258,7 @@ export const castSpell: Command<CastSpellPayload> = {
     const ritual = payload.ritual ?? false;
     const level = castLevel(ctx, spell, payload);
     const notes: (string | undefined)[] = endSelfInvisibility(live, 'cast');
+    if (payload.useArcaneFirearm) notes.push('Arcane Firearm adds 1d8 to one damage roll');
 
     const feat = payload.featureId
       ? featSpellSources(ctx).find((row) => row.featureId === payload.featureId)
@@ -280,45 +290,13 @@ export const castSpell: Command<CastSpellPayload> = {
     const extra = castingSeconds(spell, ritual);
     if (!live.combat && extra > 0) notes.push(...passTime(live, extra, ctx));
 
-    const now = live.clock.seconds;
-    const endsAt = spell.duration.seconds === undefined ? undefined : now + spell.duration.seconds;
-    if (spell.duration.concentration) {
-      const ended = dropConcentration(live, ctx.registry);
-      if (ended) notes.push(`concentration on ${ended} ended`);
-      live.concentration = {
-        spellId: spell.id,
-        ...(level === undefined ? {} : { slotLevel: level }),
-        ...(endsAt === undefined ? {} : { endsAt }),
-      };
-    }
-
-    const template = spell.effect;
-    if (template && (template.target === 'self' || payload.onSelf)) {
-      const id = uniqueEffectId(live, spell.id);
-      live.effects.push({
-        id,
-        name: spell.name,
-        sourceId: spell.id,
-        ...(endsAt === undefined ? {} : { endsAt }),
-        concentration: spell.duration.concentration,
-        conditions: [...(template.conditions ?? [])],
-        modifiers: [...(template.modifiers ?? [])],
-        ...(template.note === undefined ? {} : { note: template.note }),
-      });
-      if (spell.duration.concentration && live.concentration) live.concentration.effectId = id;
-      notes.push(`${spell.name} on you`);
-    }
-
-    if (payload.healRoll !== undefined && spell.heal) {
-      // Validation already proved the modifier and rolled total are available.
-      const { amount } = previewSpellHealing(
-        ctx,
-        { ...payload, slotLevel: level },
-        payload.healRoll,
-      )!;
-      const { before, after } = restoreHp(live, amount, ctx.sheet.maxHp.value);
-      notes.push(`healed ${amount} (HP ${before} → ${after})`);
-    }
+    const healAmount =
+      payload.healRoll === undefined
+        ? undefined
+        : previewSpellHealing(ctx, { ...payload, slotLevel: level }, payload.healRoll)?.amount;
+    notes.push(
+      ...applySpellEffects(live, spell, { level, onSelf: payload.onSelf, healAmount }, ctx),
+    );
 
     const how = payload.free
       ? `free, ${feat?.name ?? 'feat'}${level !== undefined && level > spell.level ? `, L${level}` : ''}`

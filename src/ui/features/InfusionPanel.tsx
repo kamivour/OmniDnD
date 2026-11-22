@@ -22,6 +22,7 @@ import { useCharacter } from '../hooks/useCharacter';
 import { useCommand } from '../commands/command-context';
 import { inputClass } from '../components/fields';
 import { groupInfusionOptions } from './infusion-options';
+import { ArtificerItemPanel } from './ArtificerItemPanel';
 
 const button = 'min-h-11 rounded-btn border border-border px-3 text-sm disabled:opacity-40';
 export function InfusionPanel({
@@ -229,6 +230,7 @@ export function InfusionPanel({
           </button>
         </>
       )}
+      <ArtificerItemPanel />
       {onDone && (
         <button type="button" className={button} onClick={onDone}>
           Done with infusions

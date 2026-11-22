@@ -334,7 +334,8 @@ Details in [PLAN.md](PLAN.md).
 - [x] List each Tasha’s replica recipe at its Artificer level and show known infusions in To do
 - [x] Show learned and open infusion slots together, add eligible common recipes, and support one replacement per Artificer level-up
 - [x] Audit the Tasha Artificer and Xanathar spell links. Correct missing spells, character calculations, limited uses and focus reminders
-- [ ] Add Spell-Storing Item tracking and Artificer model, elixir and focus workflows described in the Artificer audit
+- [x] Add Spell-Storing Item tracking and Arcane Firearm focus selection
+- [ ] Add Experimental Elixirs, Arcane Armor models and active replica and Homunculus tracking
 - [x] Add the three cannon forms, audit all bundled companion templates and compute spell-summon forms and upcasting
 - [ ] Reproduce the friend's missing Artificer using his actual campaign settings and deployed app
 
@@ -438,6 +439,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Added Spell-Storing Item and Arcane Firearm through Features and the long-rest review.
 - 2026-11-23 — Added Dedicated Weapon to Monk rests and derived Martial Arts weapon attacks from the equipped gear.
 - 2026-11-23 — Added Divine Soul affinity, psionic spending and recovery, and Eldritch Knight and Arcane Trickster spell-school checks.
 - 2026-11-23 — Tracked Bladesong bonuses and ending conditions, plus Champion’s expanded critical range on weapon rolls.

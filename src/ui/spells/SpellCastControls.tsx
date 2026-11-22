@@ -2,6 +2,7 @@ import { useId, useState } from 'react';
 import { registry, registryFor } from '../../data/registry';
 import {
   castSpell,
+  arcaneFirearm,
   previewSpellHealing,
   spellCastDetails,
   type CastSpellPayload,
@@ -44,6 +45,12 @@ export function SpellCastControls({
     (item) => (state.live.items[item.instanceId]?.qty ?? 0) > 0,
   );
   const materialClass = entryFeat?.classId ?? classId;
+  const firearm =
+    materialClass === 'class.artificer' && !entryFeat && definition.damage
+      ? arcaneFirearm(context)
+      : undefined;
+  const [firearmSelected, setFirearmSelected] = useState(false);
+  const useFirearm = !!firearm && firearmSelected;
   const infused =
     materialClass === 'class.artificer' ? activeInfusions(state.build, state.live) : [];
   const material =
@@ -64,6 +71,7 @@ export function SpellCastControls({
             infusedItems: carried
               .filter(({ instanceId }) => infused.some((item) => item.instanceId === instanceId))
               .map(({ itemId }) => itemId),
+            ...(useFirearm ? { subclassFocusId: firearm.def.id } : {}),
           },
         );
   const slots = entryFeat && !entryFeat.slots ? [] : model.slots;
@@ -126,6 +134,16 @@ export function SpellCastControls({
                 {details.damage.adept &&
                   ` ${details.damage.adept}: ignores resistance; count 1s on the dice as 2s.`}
               </p>
+            )}
+            {firearm && (
+              <label className="flex min-h-11 items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={useFirearm}
+                  onChange={(event) => setFirearmSelected(event.target.checked)}
+                />
+                Cast through {firearm.def.name} for +1d8 to one damage roll
+              </label>
             )}
             {entryFeat && (
               <p className="text-xs text-text-muted">
@@ -236,6 +254,7 @@ export function SpellCastControls({
           spellId,
           ...viaFor(freeCast),
           ...(freeCast ? { free: true } : {}),
+          ...(useFirearm ? { useArcaneFirearm: true } : {}),
           ...(entry.spell.level > 0 && !ritual && !freeCast ? { slotLevel: level } : {}),
           ...(ritual ? { ritual: true } : {}),
           ...(applyToMe && definition.effect?.target === 'any' ? { onSelf: true } : {}),
