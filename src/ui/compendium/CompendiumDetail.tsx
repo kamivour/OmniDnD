@@ -78,6 +78,16 @@ export function CompendiumDetail({
             {SOURCE_NAMES[entry.source]}
             {entry.srd ? ' · SRD 5.1' : ''}
           </p>
+          {entry.kind === 'item' && entry.url && (
+            <a
+              className="inline-flex min-h-11 items-center text-xs text-accent underline"
+              href={entry.url}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Book entry
+            </a>
+          )}
           {action}
         </div>
       </header>

@@ -1,0 +1,850 @@
+[
+  {
+    "kind": "item",
+    "id": "item.armor-of-gleaming",
+    "name": "Armor of Gleaming",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/36571-armor-of-gleaming",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Dirt does not stick to this armor."
+    },
+    "category": "magic",
+    "magicType": "armor",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.bead-of-nourishment",
+    "name": "Bead of Nourishment",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27022-bead-of-nourishment",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Swallow one bead to satisfy a day’s food needs."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.bead-of-refreshment",
+    "name": "Bead of Refreshment",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27023-bead-of-refreshment",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Drop the bead into up to a pint of harmless, nonmagical liquid to make drinking water. The bead dissolves."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.boots-of-false-tracks",
+    "name": "Boots of False Tracks",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27025-boots-of-false-tracks",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A humanoid can wear these boots and choose to leave prints resembling another kind of humanoid of the same size."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.candle-of-the-deep",
+    "name": "Candle of the Deep",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27026-candle-of-the-deep",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once lit, this candle keeps burning underwater and gives its usual light and warmth."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.cast-off-armor",
+    "name": "Cast-Off Armor",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/36589-cast-off-armor",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Take this armor off with one action."
+    },
+    "category": "magic",
+    "magicType": "armor",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.charlatans-die",
+    "name": "Charlatan's Die",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27039-charlatans-die",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "When rolling this six-sided die, choose which face ends up on top."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.cloak-of-billowing",
+    "name": "Cloak of Billowing",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27040-cloak-of-billowing",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use a bonus action to make the cloak flutter dramatically."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.cloak-of-many-fashions",
+    "name": "Cloak of Many Fashions",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27041-cloak-of-many-fashions",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Change the cloak’s style, colors and apparent quality with a bonus action."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.clockwork-amulet",
+    "name": "Clockwork Amulet",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27042-clockwork-amulet",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Once before the next dawn, use 10 instead of rolling the d20 for an attack. Add your normal attack modifiers."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.clothes-of-mending",
+    "name": "Clothes of Mending",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27043-clothes-of-mending",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "These clothes repair normal wear and tear on their own."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.dark-shard-amulet",
+    "name": "Dark Shard Amulet",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27044-dark-shard-amulet",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this as a warlock focus. Once per long rest, attempt a warlock cantrip you have not learned with a DC 10 Charisma (Arcana) check."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "attunement": true,
+    "attunementBy": "Warlock"
+  },
+  {
+    "kind": "item",
+    "id": "item.dread-helm",
+    "name": "Dread Helm",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27045-dread-helm",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "The wearer’s eyes appear to glow red."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.ear-horn-of-hearing",
+    "name": "Ear Horn of Hearing",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27046-ear-horn-of-hearing",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Hold the horn to your ear to hear through the deafened condition."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.enduring-spellbook",
+    "name": "Enduring Spellbook",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27047-enduring-spellbook",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "The book and its writing withstand fire, immersion and the passage of time."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.ersatz-eye",
+    "name": "Ersatz Eye",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27048-ersatz-eye",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This replacement eye lets you see normally. You control its removal after fitting it in the socket."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.hat-of-vermin",
+    "name": "Hat of Vermin",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27049-hat-of-vermin",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge to produce a bat, frog or rat. The creature is uncontrolled and disappears after an hour or at 0 HP."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.hat-of-wizardry",
+    "name": "Hat of Wizardry",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27050-hat-of-wizardry",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this as a wizard focus. Once per long rest, attempt a wizard cantrip you have not learned with a DC 10 Intelligence (Arcana) check."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "attunement": true,
+    "attunementBy": "Wizard"
+  },
+  {
+    "kind": "item",
+    "id": "item.hewards-handy-spice-pouch",
+    "name": "Heward's Handy Spice Pouch",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27063-hewards-handy-spice-pouch",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge to draw a pinch of a named nonmagical seasoning, enough for one meal."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "charges": {
+      "max": 10,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d6",
+        "bonus": 4
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.horn-of-silent-alarm",
+    "name": "Horn of Silent Alarm",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27064-horn-of-silent-alarm",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge so one chosen creature within 600 feet hears the horn. The signal cannot reach a deafened creature."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "charges": {
+      "max": 4,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d4"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.instrument-of-illusions",
+    "name": "Instrument of Illusions",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27065-instrument-of-illusions",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Playing produces harmless visual illusions around the instrument. Their radius is 5 feet, or 15 feet for a bard."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.instrument-of-scribing",
+    "name": "Instrument of Scribing",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27066-instrument-of-scribing",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge to write up to six words on a visible surface within 30 feet. A bard gets seven more words and may make them glow. The message fades in 24 hours."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "attunement": true,
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.lock-of-trickery",
+    "name": "Lock of Trickery",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27068-lock-of-trickery",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Attempts to pick this lock have disadvantage."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.moon-touched-sword",
+    "name": "Moon-Touched Sword",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/36822-moon-touched-sword",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Drawing this sword in darkness lights a 15-foot radius brightly, with dim light extending another 15 feet."
+    },
+    "category": "magic",
+    "magicType": "weapon",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.mystery-key",
+    "name": "Mystery Key",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27076-mystery-key",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Each lock has a 5 percent chance of being opened by this key. The key vanishes after a successful use."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.orb-of-direction",
+    "name": "Orb of Direction",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27077-orb-of-direction",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use an action to learn which way is north on the Material Plane."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.orb-of-time",
+    "name": "Orb of Time",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27078-orb-of-time",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use an action to tell whether it is morning, afternoon, evening or night on the Material Plane."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.perfume-of-bewitching",
+    "name": "Perfume of Bewitching",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27079-perfume-of-bewitching",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "For one hour after applying it, gain advantage on Charisma checks directed at humanoids of challenge rating 1 or lower."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.pipe-of-smoke-monsters",
+    "name": "Pipe of Smoke Monsters",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27082-pipe-of-smoke-monsters",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Shape a puff of smoke into a creature. The little image fades after one minute."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.pole-of-angling",
+    "name": "Pole of Angling",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27108-pole-of-angling",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Speak its command to switch between a 10-foot pole and fishing tackle."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.pole-of-collapsing",
+    "name": "Pole of Collapsing",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27112-pole-of-collapsing",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A command folds the 10-foot pole to one foot or extends it again."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.pot-of-awakening",
+    "name": "Pot of Awakening",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27113-pot-of-awakening",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A normal shrub grown in this pot for 30 days awakens and becomes friendly to you. The pot breaks in the process."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.rope-of-mending",
+    "name": "Rope of Mending",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27114-rope-of-mending",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Touch the cut ends of this rope together and speak its command to join them."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.ruby-of-the-war-mage",
+    "name": "Ruby of the War Mage",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27115-ruby-of-the-war-mage",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Attach the gem to a simple or martial weapon. You can use that weapon as a spellcasting focus."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "attunement": true,
+    "attunementBy": "Spellcaster"
+  },
+  {
+    "kind": "item",
+    "id": "item.shield-of-expression",
+    "name": "Shield of Expression",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27116-shield-of-expression",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use a bonus action to change the expression on the face decorating the shield."
+    },
+    "category": "magic",
+    "magicType": "armor",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.smoldering-armor",
+    "name": "Smoldering Armor",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/36837-smoldering-armor",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "The armor gives off harmless wisps of smoke while worn."
+    },
+    "category": "magic",
+    "magicType": "armor",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.staff-of-adornment",
+    "name": "Staff of Adornment",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27136-staff-of-adornment",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Float up to three small, light objects just above the staff’s tip."
+    },
+    "category": "magic",
+    "magicType": "staff",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.staff-of-birdcalls",
+    "name": "Staff of Birdcalls",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27137-staff-of-birdcalls",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge to imitate a birdcall out to 60 feet. After the last charge, a 1 on a d20 destroys the staff."
+    },
+    "category": "magic",
+    "magicType": "staff",
+    "rarity": "common",
+    "charges": {
+      "max": 10,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d6",
+        "bonus": 4
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.staff-of-flowers",
+    "name": "Staff of Flowers",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27139-staff-of-flowers",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge to sprout a chosen ordinary flower from nearby earth or from the staff. After the last charge, a 1 on a d20 destroys the staff."
+    },
+    "category": "magic",
+    "magicType": "staff",
+    "rarity": "common",
+    "charges": {
+      "max": 10,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d6",
+        "bonus": 4
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.talking-doll",
+    "name": "Talking Doll",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27140-talking-doll",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Teach the doll up to six short phrases. Assign an observable trigger to each phrase."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.tankard-of-sobriety",
+    "name": "Tankard of Sobriety",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27142-tankard-of-sobriety",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Alcohol drunk from this tankard does not intoxicate you."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.unbreakable-arrow",
+    "name": "Unbreakable Arrow",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/36838-unbreakable-arrow",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Only an antimagic field makes this arrow breakable."
+    },
+    "category": "magic",
+    "magicType": "weapon",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.veterans-cane",
+    "name": "Veteran's Cane",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27145-veterans-cane",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use its command to turn the cane permanently into a mundane longsword."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.walloping-ammunition",
+    "name": "Walloping Ammunition",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/36839-walloping-ammunition",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A creature hit by this ammunition must pass a DC 10 Strength save or fall prone."
+    },
+    "category": "magic",
+    "magicType": "weapon",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.wand-of-conducting",
+    "name": "Wand of Conducting",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27146-wand-of-conducting",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge to conduct audible orchestral music while you wave the wand. After the last charge, a 1 on a d20 destroys it."
+    },
+    "category": "magic",
+    "magicType": "wand",
+    "rarity": "common",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.wand-of-pyrotechnics",
+    "name": "Wand of Pyrotechnics",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27147-wand-of-pyrotechnics",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge for a harmless flash and bang at a visible point within 60 feet. After the last charge, a 1 on a d20 destroys it."
+    },
+    "category": "magic",
+    "magicType": "wand",
+    "rarity": "common",
+    "charges": {
+      "max": 7,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d6",
+        "bonus": 1
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.wand-of-scowls",
+    "name": "Wand of Scowls",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27148-wand-of-scowls",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge to make a humanoid within 30 feet scowl for one minute if it fails a DC 10 Charisma save. After the last charge, a 1 on a d20 turns it into the Wand of Smiles."
+    },
+    "category": "magic",
+    "magicType": "wand",
+    "rarity": "common",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.wand-of-smiles",
+    "name": "Wand of Smiles",
+    "ruleset": "5e-2014",
+    "source": "XGE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/27149-wand-of-smiles",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge to make a humanoid within 30 feet smile for one minute if it fails a DC 10 Charisma save. After the last charge, a 1 on a d20 turns it into the Wand of Scowls."
+    },
+    "category": "magic",
+    "magicType": "wand",
+    "rarity": "common",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  }
+]

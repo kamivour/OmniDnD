@@ -1,57 +1,6 @@
 [
   {
     "kind": "item",
-    "id": "item.amulet-of-the-devout-1",
-    "name": "Amulet of the Devout, +1",
-    "ruleset": "5e-2014",
-    "source": "TCE",
-    "srd": false,
-    "url": "https://www.dndbeyond.com/magic-items/2411830-amulet-of-the-devout",
-    "summaryReviewed": false,
-    "summary": {
-      "effect": "While worn and attuned, add +1 to spell attacks and your spells’ save DCs. The amulet lets you use Channel Divinity once without spending a class use. It regains that use at dawn."
-    },
-    "category": "magic",
-    "rarity": "uncommon",
-    "attunement": true,
-    "charges": { "max": 1, "recharge": "dawn", "regain": "all" }
-  },
-  {
-    "kind": "item",
-    "id": "item.amulet-of-the-devout-2",
-    "name": "Amulet of the Devout, +2",
-    "ruleset": "5e-2014",
-    "source": "TCE",
-    "srd": false,
-    "url": "https://www.dndbeyond.com/magic-items/2411830-amulet-of-the-devout",
-    "summaryReviewed": false,
-    "summary": {
-      "effect": "While worn and attuned, add +2 to spell attacks and your spells’ save DCs. The amulet lets you use Channel Divinity once without spending a class use. It regains that use at dawn."
-    },
-    "category": "magic",
-    "rarity": "rare",
-    "attunement": true,
-    "charges": { "max": 1, "recharge": "dawn", "regain": "all" }
-  },
-  {
-    "kind": "item",
-    "id": "item.amulet-of-the-devout-3",
-    "name": "Amulet of the Devout, +3",
-    "ruleset": "5e-2014",
-    "source": "TCE",
-    "srd": false,
-    "url": "https://www.dndbeyond.com/magic-items/2411830-amulet-of-the-devout",
-    "summaryReviewed": false,
-    "summary": {
-      "effect": "While worn and attuned, add +3 to spell attacks and your spells’ save DCs. The amulet lets you use Channel Divinity once without spending a class use. It regains that use at dawn."
-    },
-    "category": "magic",
-    "rarity": "very-rare",
-    "attunement": true,
-    "charges": { "max": 1, "recharge": "dawn", "regain": "all" }
-  },
-  {
-    "kind": "item",
     "id": "item.deck-of-marked-cards",
     "name": "Deck of marked cards",
     "ruleset": "5e-2014",

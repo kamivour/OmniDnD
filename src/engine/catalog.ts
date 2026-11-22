@@ -77,12 +77,13 @@ const MAGIC_TYPES: readonly [RegExp, ItemType][] = [
 ];
 
 /**
- * Mundane items use their category. Magic items read the type from the first line of their
- * SRD text ("Wondrous item, rare"), so a magic sword lists with weapons.
+ * Mundane items use their category. A magic item uses its published type where recorded,
+ * with the original SRD heading as a fallback for imported items.
  */
 export function itemType(
-  item: Pick<ItemDef, 'category' | 'rarity' | 'fullText' | 'weapon' | 'armor'>,
+  item: Pick<ItemDef, 'category' | 'rarity' | 'magicType' | 'fullText' | 'weapon' | 'armor'>,
 ): ItemType {
+  if (item.magicType) return item.magicType;
   if (item.category !== 'magic' && item.rarity === undefined) return item.category;
   const first =
     item.fullText

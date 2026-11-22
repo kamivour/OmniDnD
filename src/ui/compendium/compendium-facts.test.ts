@@ -86,6 +86,32 @@ describe('compendium facts', () => {
     expect(trident.weapon).toBeUndefined();
   });
 
+  it('shows 2014 expansion weapon and shield bases with published attunement', () => {
+    expect(facts('equipment', 'Moon Sickle, +2')).toMatchObject({
+      'Base item': 'Sickle',
+      Properties: 'Light',
+      Damage: '1d4',
+      'Damage Type': 'Slashing',
+      'Magic bonus': '+2 to attack and damage rolls',
+      Attunement: 'Required · Druid or Ranger',
+      Rarity: 'Rare',
+    });
+    expect(facts('equipment', "Devotee's Censer")).toMatchObject({
+      'Base item': 'Flail',
+      'Damage Type': 'Bludgeoning',
+      Attunement: 'Required · Cleric or Paladin',
+    });
+    expect(facts('equipment', 'Shield of Expression').AC).toBe('+2');
+    expect(facts('equipment', 'Walloping Ammunition')).toMatchObject({ Type: 'Ammunition' });
+    const gleaming = find('equipment', 'Armor of Gleaming');
+    expect(
+      Object.fromEntries(entryFacts(gleaming, registry, 'item.leather-armor').facts),
+    ).not.toHaveProperty('AC');
+    expect(Object.fromEntries(entryFacts(gleaming, registry, 'item.chain-mail').facts).AC).toBe(
+      '16',
+    );
+  });
+
   it('uses verified base variants and magic overrides without inventing damage', () => {
     const item = find('equipment', 'Flame Tongue');
     expect(Object.fromEntries(entryFacts(item, registry).facts)).toMatchObject({

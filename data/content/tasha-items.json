@@ -1,0 +1,1453 @@
+[
+  {
+    "kind": "item",
+    "id": "item.absorbing-tattoo",
+    "name": "Absorbing Tattoo",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2400459-absorbing-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Resist the tattoo’s assigned damage type. Once before dawn, react to negate one instance of that damage and heal for half the amount prevented."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "very-rare",
+    "attunement": true,
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.alchemical-compendium",
+    "name": "Alchemical Compendium",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2400596-alchemical-compendium",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A wizard focus and transmutation spellbook. Spend a charge to swap in a prepared transmutation spell from the book or transform a small nonmagical object into another."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Wizard",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d3"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.all-purpose-tool-1",
+    "name": "All-Purpose Tool, +1",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2400634-all-purpose-tool",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Transform this into a proficient artisan’s tool. While holding it, add +1 to artificer spell attacks and save DCs. Once before dawn, choose any unfamiliar cantrip to cast as an artificer for 8 hours."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": true,
+    "attunementBy": "Artificer",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.all-purpose-tool-2",
+    "name": "All-Purpose Tool, +2",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2400634-all-purpose-tool",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Transform this into a proficient artisan’s tool. While holding it, add +2 to artificer spell attacks and save DCs. Once before dawn, choose any unfamiliar cantrip to cast as an artificer for 8 hours."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Artificer",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.all-purpose-tool-3",
+    "name": "All-Purpose Tool, +3",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2400634-all-purpose-tool",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Transform this into a proficient artisan’s tool. While holding it, add +3 to artificer spell attacks and save DCs. Once before dawn, choose any unfamiliar cantrip to cast as an artificer for 8 hours."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "very-rare",
+    "attunement": true,
+    "attunementBy": "Artificer",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.amulet-of-the-devout-1",
+    "name": "Amulet of the Devout, +1",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2411830-amulet-of-the-devout",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While worn and attuned, add +1 to spell attacks and your spells’ save DCs. The amulet lets you use Channel Divinity once without spending a class use. It regains that use at dawn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": true,
+    "attunementBy": "Cleric or Paladin",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.amulet-of-the-devout-2",
+    "name": "Amulet of the Devout, +2",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2411830-amulet-of-the-devout",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While worn and attuned, add +2 to spell attacks and your spells’ save DCs. The amulet lets you use Channel Divinity once without spending a class use. It regains that use at dawn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Cleric or Paladin",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.amulet-of-the-devout-3",
+    "name": "Amulet of the Devout, +3",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2411830-amulet-of-the-devout",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While worn and attuned, add +3 to spell attacks and your spells’ save DCs. The amulet lets you use Channel Divinity once without spending a class use. It regains that use at dawn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "very-rare",
+    "attunement": true,
+    "attunementBy": "Cleric or Paladin",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.arcane-grimoire-1",
+    "name": "Arcane Grimoire, +1",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2411893-arcane-grimoire",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this grimoire as a spellbook and wizard focus. Add +1 to wizard spell attacks and save DCs while holding it. Arcane Recovery can restore one additional spell-slot level."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": true,
+    "attunementBy": "Wizard"
+  },
+  {
+    "kind": "item",
+    "id": "item.arcane-grimoire-2",
+    "name": "Arcane Grimoire, +2",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2411893-arcane-grimoire",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this grimoire as a spellbook and wizard focus. Add +2 to wizard spell attacks and save DCs while holding it. Arcane Recovery can restore one additional spell-slot level."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Wizard"
+  },
+  {
+    "kind": "item",
+    "id": "item.arcane-grimoire-3",
+    "name": "Arcane Grimoire, +3",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2411893-arcane-grimoire",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this grimoire as a spellbook and wizard focus. Add +3 to wizard spell attacks and save DCs while holding it. Arcane Recovery can restore one additional spell-slot level."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "very-rare",
+    "attunement": true,
+    "attunementBy": "Wizard"
+  },
+  {
+    "kind": "item",
+    "id": "item.astral-shard",
+    "name": "Astral Shard",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2374941-astral-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This focus can be held or worn. Applying Metamagic lets you teleport to a visible empty space up to 30 feet away."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.astromancy-archive",
+    "name": "Astromancy Archive",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2400685-astromancy-archive",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A wizard focus and divination spellbook. Spend a charge to exchange a prepared spell for one of its divinations. Alternatively, react to a nearby attack, save or check and alter it by 1d4."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Wizard",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d3"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.atlas-of-endless-horizons",
+    "name": "Atlas of Endless Horizons",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2400706-atlas-of-endless-horizons",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A wizard focus and conjuration spellbook. Spend a charge to swap in a prepared conjuration spell or react to a hit by teleporting up to 10 feet away."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Wizard",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d3"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.baba-yagas-mortar-and-pestle",
+    "name": "Baba Yaga's Mortar and Pestle",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2400730-baba-yagas-mortar-and-pestle",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A traveling mortar and a matching pestle from Baba Yaga. Their powers include grinding unusual ingredients and carrying riders to distant destinations or other planes."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "artifact",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.barrier-tattoo-uncommon",
+    "name": "Barrier Tattoo, Uncommon",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2411988-barrier-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While unarmored, your AC is 12 + Dexterity modifier. A shield can still add its bonus."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.barrier-tattoo-rare",
+    "name": "Barrier Tattoo, Rare",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2411988-barrier-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While unarmored, your AC is 15 + Dexterity modifier, capped at +2. A shield can still add its bonus."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.barrier-tattoo-very-rare",
+    "name": "Barrier Tattoo, Very Rare",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2411988-barrier-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While unarmored, your AC is 18. A shield can still add its bonus."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "very-rare",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.bell-branch",
+    "name": "Bell Branch",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2401130-bell-branch",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use the branch as a focus. Spend charges to sense certain supernatural creatures nearby or cast Protection from Evil and Good."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Druid or Warlock",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d3"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.blood-fury-tattoo",
+    "name": "Blood Fury Tattoo",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2401145-blood-fury-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge on a weapon hit for 4d6 extra necrotic damage and heal by the necrotic damage dealt. A charge can also buy a retaliatory melee attack with advantage as a reaction."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "legendary",
+    "attunement": true,
+    "charges": {
+      "max": 10,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.bloodwell-vial-1",
+    "name": "Bloodwell Vial, +1",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412091-bloodwell-vial",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this vial as a focus and add +1 to sorcerer spell attacks and save DCs. While wearing it, recover 5 sorcery points when Hit Dice restore your HP, once before dawn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": true,
+    "attunementBy": "Sorcerer",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.bloodwell-vial-2",
+    "name": "Bloodwell Vial, +2",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412091-bloodwell-vial",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this vial as a focus and add +2 to sorcerer spell attacks and save DCs. While wearing it, recover 5 sorcery points when Hit Dice restore your HP, once before dawn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.bloodwell-vial-3",
+    "name": "Bloodwell Vial, +3",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412091-bloodwell-vial",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this vial as a focus and add +3 to sorcerer spell attacks and save DCs. While wearing it, recover 5 sorcery points when Hit Dice restore your HP, once before dawn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "very-rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.cauldron-of-rebirth",
+    "name": "Cauldron of Rebirth",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2401168-cauldron-of-rebirth",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "The cauldron doubles as a focus. Its magic can produce greater healing potions or return a deceased creature to life through the cauldron’s ritual."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "very-rare",
+    "attunement": true,
+    "attunementBy": "Druid or Warlock"
+  },
+  {
+    "kind": "item",
+    "id": "item.coiling-grasp-tattoo",
+    "name": "Coiling Grasp Tattoo",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2401178-coiling-grasp-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Project ink tendrils up to 15 feet. A creature that fails a DC 14 Strength save takes 3d6 force damage and is grappled by the tattoo."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.crook-of-rao",
+    "name": "Crook of Rao",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2401219-crook-of-rao",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Rao’s artifact can ward against or banish fiends and cast protective and restorative spells. Its damaged magic can cause fiends to return."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "artifact",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.crystalline-chronicle",
+    "name": "Crystalline Chronicle",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2407470-crystalline-chronicle",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A crystal spellbook and wizard focus that grants Mage Hand, Mind Sliver and Message while held. Charges let you swap in a prepared spell or waive eligible material components."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "very-rare",
+    "attunement": true,
+    "attunementBy": "Wizard",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d3"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.demonomicon-of-iggwilv",
+    "name": "Demonomicon of Iggwilv",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2407504-demonomicon-of-iggwilv",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Iggwilv’s book holds lore about demons and the Abyss. Its magic can cast spells, protect the reader against fiends and imprison them in its pages."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "artifact",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.devotees-censer",
+    "name": "Devotee's Censer",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2407478-devotees-censer",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This flail adds 1d8 radiant damage on a hit. Once before dawn, release healing incense for one minute. A creature starting its turn within 10 feet regains 1d4 HP."
+    },
+    "category": "magic",
+    "magicType": "weapon",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Cleric or Paladin",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.duplicitous-manuscript",
+    "name": "Duplicitous Manuscript",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412157-duplicitous-manuscript",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A wizard focus and illusion spellbook. Spend a charge to swap in a prepared illusion spell or react to impose disadvantage on an attempt to investigate or save against your illusion."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Wizard",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d3"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.eldritch-claw-tattoo",
+    "name": "Eldritch Claw Tattoo",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412184-eldritch-claw-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Unarmed strikes become magical and gain +1 to hit and damage. Once before dawn, empower melee attacks for one minute to reach 15 feet and deal 1d6 extra force damage."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": true,
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.elemental-essence-shard-air",
+    "name": "Elemental Essence Shard, Air",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2407551-elemental-essence-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this shard as a focus while holding or wearing it. When you apply Metamagic, fly up to 60 feet without provoking opportunity attacks."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.elemental-essence-shard-earth",
+    "name": "Elemental Essence Shard, Earth",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2407551-elemental-essence-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this shard as a focus while holding or wearing it. When you apply Metamagic, gain resistance to a chosen damage type until your next turn starts."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.elemental-essence-shard-fire",
+    "name": "Elemental Essence Shard, Fire",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2407551-elemental-essence-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this shard as a focus while holding or wearing it. When you apply Metamagic, ignite a spell target you can see, dealing 2d10 fire damage at the start of its next turn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.elemental-essence-shard-water",
+    "name": "Elemental Essence Shard, Water",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2407551-elemental-essence-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this shard as a focus while holding or wearing it. When you apply Metamagic, deal 2d6 cold to visible creatures you choose within 10 feet. A failed Strength save pushes them 10 feet and knocks them prone."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.far-realm-shard",
+    "name": "Far Realm Shard",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412226-far-realm-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This focus can be held or worn. Applying Metamagic can strike a creature within 30 feet. On a failed Charisma save it takes 1d6 psychic damage and is briefly frightened."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.feywild-shard",
+    "name": "Feywild Shard",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412248-feywild-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This focus can trigger a Wild Magic Surge when you use Metamagic. A sorcerer outside the Wild Magic origin can trigger it once before the next dawn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.fulminating-treatise",
+    "name": "Fulminating Treatise",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412256-fulminating-treatise",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A wizard focus and evocation spellbook. Spend a charge to swap in a prepared evocation spell or add a burst of force to a target damaged by your evocation."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Wizard",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d3"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.ghost-step-tattoo",
+    "name": "Ghost Step Tattoo",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412269-ghost-step-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Spend a charge to become incorporeal until your next turn ends. Pass through creatures and objects, ignore grapples and restraints, and resist bludgeoning, piercing and slashing damage from nonmagical attacks."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "very-rare",
+    "attunement": true,
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.guardian-emblem",
+    "name": "Guardian Emblem",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412282-guardian-emblem",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Attach it to armor or a shield. Spend a charge and a reaction to turn a nearby critical hit against you or a creature you can see into a regular hit."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": true,
+    "attunementBy": "Cleric or Paladin",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.heart-weavers-primer",
+    "name": "Heart Weaver's Primer",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412288-heart-weavers-primer",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A wizard focus and enchantment spellbook. Spend a charge to swap in a prepared enchantment spell or give one target disadvantage on its first save against your enchantment."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Wizard",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d3"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.illuminators-tattoo",
+    "name": "Illuminator's Tattoo",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412346-illuminators-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Write with your fingertip without ink. Once before dawn, hide a written page from everyone except you and one named creature for up to 24 hours."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "attunement": true,
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.libram-of-souls-and-flesh",
+    "name": "Libram of Souls and Flesh",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412349-libram-of-souls-and-flesh",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A wizard focus and necromancy spellbook. Spend a charge to swap in a prepared necromancy spell or temporarily take on the appearance and protections of undeath."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Wizard",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d3"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.lifewell-tattoo",
+    "name": "Lifewell Tattoo",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2412368-lifewell-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain necrotic resistance. Once before dawn, stay at 1 HP when you would fall to 0."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "very-rare",
+    "attunement": true,
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.lubas-tarokka-of-souls",
+    "name": "Luba's Tarokka of Souls",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405238-lubas-tarokka-of-souls",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Luba’s deck holds trapped souls and offers divination magic. It can protect against bad luck or trap a monster’s soul. Its rules cover each effect and the risks."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "artifact",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.lyre-of-building",
+    "name": "Lyre of Building",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405289-lyre-of-building",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Cast Mending by playing the lyre. Its reaction can protect a nearby object or structure. Its construction spells include Fabricate, Move Earth, Passwall and Summon Construct."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Bard"
+  },
+  {
+    "kind": "item",
+    "id": "item.masquerade-tattoo",
+    "name": "Masquerade Tattoo",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405304-masquerade-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Change the tattoo’s appearance or hide it. Once before dawn, cast Disguise Self from the tattoo using save DC 13."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common",
+    "attunement": true,
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.mighty-servant-of-leuk-o",
+    "name": "Mighty Servant of Leuk-o",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405333-mighty-servant-of-leuk-o",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This enormous artifact is a piloted construct. Up to two operators can attune to its controls. Its movement, destructive fists and attunement hazards follow the construct’s own rules."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "artifact",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.moon-sickle-1",
+    "name": "Moon Sickle, +1",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405401-moon-sickle",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This sickle grants +1 to its attack and damage rolls and to druid or ranger spell attacks and save DCs. Use it as their focus and add 1d4 to healing from a spell you cast."
+    },
+    "category": "magic",
+    "magicType": "weapon",
+    "rarity": "uncommon",
+    "attunement": true,
+    "attunementBy": "Druid or Ranger"
+  },
+  {
+    "kind": "item",
+    "id": "item.moon-sickle-2",
+    "name": "Moon Sickle, +2",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405401-moon-sickle",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This sickle grants +2 to its attack and damage rolls and to druid or ranger spell attacks and save DCs. Use it as their focus and add 1d4 to healing from a spell you cast."
+    },
+    "category": "magic",
+    "magicType": "weapon",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Druid or Ranger"
+  },
+  {
+    "kind": "item",
+    "id": "item.moon-sickle-3",
+    "name": "Moon Sickle, +3",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405401-moon-sickle",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This sickle grants +3 to its attack and damage rolls and to druid or ranger spell attacks and save DCs. Use it as their focus and add 1d4 to healing from a spell you cast."
+    },
+    "category": "magic",
+    "magicType": "weapon",
+    "rarity": "very-rare",
+    "attunement": true,
+    "attunementBy": "Druid or Ranger"
+  },
+  {
+    "kind": "item",
+    "id": "item.natures-mantle",
+    "name": "Nature's Mantle",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405507-natures-mantle",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use the cloak as a focus. When lightly obscured, you can Hide as a bonus action even if a creature is watching you."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": true,
+    "attunementBy": "Druid or Ranger"
+  },
+  {
+    "kind": "item",
+    "id": "item.outer-essence-shard-lawful",
+    "name": "Outer Essence Shard, Lawful",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405522-outer-essence-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this shard as a focus while holding or wearing it. When you apply Metamagic, remove blindness, charm, deafness, fear, poison or stun from yourself or a creature you see within 30 feet."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.outer-essence-shard-chaotic",
+    "name": "Outer Essence Shard, Chaotic",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405522-outer-essence-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this shard as a focus while holding or wearing it. When you apply Metamagic, give a creature damaged by the spell disadvantage on attacks and checks until your next turn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.outer-essence-shard-good",
+    "name": "Outer Essence Shard, Good",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405522-outer-essence-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this shard as a focus while holding or wearing it. When you apply Metamagic, give yourself or a visible creature within 30 feet 3d6 temporary HP."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.outer-essence-shard-evil",
+    "name": "Outer Essence Shard, Evil",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405522-outer-essence-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use this shard as a focus while holding or wearing it. When you apply Metamagic, deal another 3d6 necrotic damage to one creature damaged by the spell."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.planecallers-codex",
+    "name": "Planecaller's Codex",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405636-planecallers-codex",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A wizard focus and conjuration spellbook. Spend a charge to swap in a prepared conjuration spell or empower a creature brought forth by one of your conjurations."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Wizard",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d3"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.prosthetic-limb",
+    "name": "Prosthetic Limb",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/1000601-prosthetic-limb",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This magical replacement works like the limb it replaces. Attach or remove it as an action. Other creatures cannot remove it against your will."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.protective-verses",
+    "name": "Protective Verses",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405662-protective-verses",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "A wizard focus and abjuration spellbook. Spend a charge to swap in a prepared abjuration spell or use a reaction to lessen damage to a nearby creature."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Wizard",
+    "charges": {
+      "max": 3,
+      "recharge": "dawn",
+      "regain": {
+        "dice": "1d3"
+      }
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.revelers-concertina",
+    "name": "Reveler's Concertina",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405691-revelers-concertina",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While holding the instrument, add +2 to the save DC of bard spells. It can cast Otto’s Irresistible Dance once before the next dawn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Bard",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.rhythm-makers-drum-1",
+    "name": "Rhythm-Maker's Drum, +1",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405713-rhythm-makers-drum",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While holding this drum, add +1 to bard spell attacks and save DCs. Play it as an action to recover one spent Bardic Inspiration use. The drum can do this once before dawn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": true,
+    "attunementBy": "Bard",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.rhythm-makers-drum-2",
+    "name": "Rhythm-Maker's Drum, +2",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405713-rhythm-makers-drum",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While holding this drum, add +2 to bard spell attacks and save DCs. Play it as an action to recover one spent Bardic Inspiration use. The drum can do this once before dawn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Bard",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.rhythm-makers-drum-3",
+    "name": "Rhythm-Maker's Drum, +3",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2405713-rhythm-makers-drum",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While holding this drum, add +3 to bard spell attacks and save DCs. Play it as an action to recover one spent Bardic Inspiration use. The drum can do this once before dawn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "very-rare",
+    "attunement": true,
+    "attunementBy": "Bard",
+    "charges": {
+      "max": 1,
+      "recharge": "dawn",
+      "regain": "all"
+    }
+  },
+  {
+    "kind": "item",
+    "id": "item.shadowfell-brand-tattoo",
+    "name": "Shadowfell Brand Tattoo",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2408226-shadowfell-brand-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Gain 60 feet of darkvision and advantage on Dexterity (Stealth) checks. Once before sunset, you can react to halve damage you take."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true
+  },
+  {
+    "kind": "item",
+    "id": "item.shadowfell-shard",
+    "name": "Shadowfell Shard",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2408242-shadowfell-shard",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This focus can be held or worn. Applying Metamagic lets you curse one spell target, imposing disadvantage on checks and saves using one ability until the end of your next turn."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare",
+    "attunement": true,
+    "attunementBy": "Sorcerer"
+  },
+  {
+    "kind": "item",
+    "id": "item.spellwrought-tattoo-cantrip",
+    "name": "Spellwrought Tattoo, Cantrip",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2408275-spellwrought-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This single-use tattoo contains a cantrip. Cast it without material components. The tattoo uses save DC 13 and a +5 attack bonus."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.spellwrought-tattoo-level-1",
+    "name": "Spellwrought Tattoo, 1st Level",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2408275-spellwrought-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This single-use tattoo contains a level 1 spell. Cast it without material components. The tattoo uses save DC 13 and a +5 attack bonus."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "common"
+  },
+  {
+    "kind": "item",
+    "id": "item.spellwrought-tattoo-level-2",
+    "name": "Spellwrought Tattoo, 2nd Level",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2408275-spellwrought-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This single-use tattoo contains a level 2 spell. Cast it without material components. The tattoo uses save DC 13 and a +5 attack bonus."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon"
+  },
+  {
+    "kind": "item",
+    "id": "item.spellwrought-tattoo-level-3",
+    "name": "Spellwrought Tattoo, 3rd Level",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2408275-spellwrought-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This single-use tattoo contains a level 3 spell. Cast it without material components. The tattoo uses save DC 15 and a +7 attack bonus."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon"
+  },
+  {
+    "kind": "item",
+    "id": "item.spellwrought-tattoo-level-4",
+    "name": "Spellwrought Tattoo, 4th Level",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2408275-spellwrought-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This single-use tattoo contains a level 4 spell. Cast it without material components. The tattoo uses save DC 15 and a +7 attack bonus."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare"
+  },
+  {
+    "kind": "item",
+    "id": "item.spellwrought-tattoo-level-5",
+    "name": "Spellwrought Tattoo, 5th Level",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2408275-spellwrought-tattoo",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This single-use tattoo contains a level 5 spell. Cast it without material components. The tattoo uses save DC 17 and a +9 attack bonus."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "rare"
+  },
+  {
+    "kind": "item",
+    "id": "item.teeth-of-dahlver-nar",
+    "name": "Teeth of Dahlver-Nar",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/2408620-teeth-of-dahlver-nar",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "This artifact’s teeth come from different stories. Sow one to summon its associated creatures, or implant it to gain its individual power and drawback."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "artifact",
+    "attunement": true
+  }
+]

@@ -189,6 +189,30 @@ test('compendium lists all three Amulets of the Devout with Tasha’s details', 
   await expect(panel.getByText('At dawn', { exact: true })).toBeVisible();
 });
 
+test('compendium lists Xanathar’s wands and the 2014 stats for Tasha’s Moon Sickle', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto('/compendium?kind=equipment&book=XGE&type=wand');
+  await expect(page.getByRole('button', { name: /^Wand of / })).toHaveCount(4);
+  await page.getByRole('button', { name: /^Wand of Smiles/ }).click();
+  const panel = entryPanel(page, isMobile);
+  await expect(panel.getByText('Wand', { exact: true })).toBeVisible();
+  await expect(panel.getByText('Common', { exact: true })).toBeVisible();
+  await expect(panel.getByRole('link', { name: 'Book entry' })).toHaveAttribute(
+    'href',
+    /magic-items\/.*wand-of-smiles/,
+  );
+  await page.goto('/compendium?kind=equipment&book=TCE&type=weapon&tier=rare&q=moon+sickle');
+  await expect(page.getByRole('button', { name: /^Moon Sickle/ })).toHaveCount(1);
+  await page.getByRole('button', { name: /^Moon Sickle, \+2/ }).click();
+  await expect(panel.getByText('Attunement required · Druid or Ranger')).toBeVisible();
+  await expect(panel.getByRole('button', { name: 'Light', exact: true })).toBeVisible();
+  await expect(panel.getByText('Slashing', { exact: true })).toBeVisible();
+  await expect(panel.getByText('+2 to attack and damage rolls', { exact: true })).toBeVisible();
+  await noOverflow(page);
+});
+
 test('compendium: Plan this adds to the Journal plans and Undo removes it', async ({
   page,
   isMobile,

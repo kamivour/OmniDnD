@@ -92,7 +92,9 @@ function itemFacts(item: ItemDef, registry: Registry, variantId?: string): Fact[
   if (item.attunement) {
     const header = item.fullText?.split('\n', 1)[0] ?? '';
     const condition =
-      reference?.attunement ?? header.match(/\(requires attunement (by [^)]+)\)/i)?.[1];
+      item.attunementBy ??
+      reference?.attunement ??
+      header.match(/\(requires attunement (by [^)]+)\)/i)?.[1];
     facts.push(['Attunement', condition ? `Required · ${condition}` : 'Required']);
   }
   if (base) facts.push(['Base item', base.name]);

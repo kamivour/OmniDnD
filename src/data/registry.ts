@@ -6,6 +6,8 @@ import contentRaces from '../../data/content/races.json';
 import contentSpells from '../../data/content/spells.json';
 import contentSubclasses from '../../data/content/subclasses.json';
 import summaries from '../../data/content/summaries.json';
+import tashaItems from '../../data/content/tasha-items.json';
+import xanatharItems from '../../data/content/xanathar-items.json';
 import featureMechanics from '../../data/mechanics/features.json';
 import itemMechanics from '../../data/mechanics/items.json';
 import spellMechanics from '../../data/mechanics/spells.json';
@@ -49,6 +51,8 @@ export const contentPacks = {
   classes: contentClasses,
   features: contentFeatures,
   items: contentItems,
+  tashaItems,
+  xanatharItems,
   races: contentRaces,
   spells: contentSpells,
   subclasses: contentSubclasses,

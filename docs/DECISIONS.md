@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D252 | 2026-11-22 | Use the printed 2014-edition expansion rules and their errata when listing metadata differs. In Xanathar’s, Boots of False Tracks need no attunement and Ersatz Eye does. | Keep the Compendium consistent with the books used at the table |
 | D250 | 2026-11-22 | Compendium reads verified equipment bases for reference. A magic item with several possible bases offers a preview picker that stays on the library page. | Show the correct profile for the chosen base and preserve existing character mechanics |
 | D251 | 2026-11-22 | Rarity colors run from gray and ivory through green, blue, purple, gold and red. Compendium uses credited artwork where available, then recognizable object or feat icons. | Make tier and category recognizable in lists, detail and offline |
 | D249 | 2026-11-22 | Each named Replicate Magic Item recipe uses one known infusion. The existing general pick remains available for eligible common items recorded at the table. | Follow Tasha’s recipe choices and preserve existing picks |

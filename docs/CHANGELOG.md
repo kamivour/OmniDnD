@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 09:38 — Xanathar’s and Tasha’s magic items
+
+- Browse both books’ magic-item lists in Equipment, with rarity variants and links to the book entries.
+- Try searching for Clockwork Amulet, Moon Sickle or Spellwrought Tattoo. Items show their attunement requirements and applicable base gear. Checks pass.
+
 ## 2026-11-22 09:17 — Amulet of the Devout
 
 - Find the +1, +2 and +3 Amulets of the Devout under Equipment in Compendium.

@@ -554,6 +554,10 @@ export const ItemDefSchema = z
       'magic',
     ]),
     rarity: ItemRaritySchema.optional(),
+    /** Published magic-item type for catalog filters, independent of the inventory category. */
+    magicType: z
+      .enum(['armor', 'potion', 'ring', 'rod', 'scroll', 'staff', 'wand', 'weapon', 'wondrous'])
+      .optional(),
     weight: z.number().min(0).optional(),
     cost: z.strictObject({ amount: z.number().min(0), unit: z.enum(CURRENCY_UNITS) }).optional(),
     /** Cost and weight are for this many (Arrows: 20). */
@@ -605,12 +609,18 @@ export const ItemDefSchema = z
       })
       .optional(),
     attunement: z.boolean().optional(),
+    /** Book's attunement prerequisite, for reference. */
+    attunementBy: z.string().trim().min(1).optional(),
     charges: ItemChargesSchema.optional(),
     use: ItemUseSchema.optional(),
     /** Catalogue item this one counts as for weapon proficiency (a custom +1 rapier is a rapier). */
     baseItemId: refId('item').optional(),
   })
   .refine(srdTextOnly, SRD_TEXT_ONLY)
+  .refine((item) => item.attunementBy === undefined || item.attunement === true, {
+    message: 'Only attuned items have an attunement prerequisite',
+    path: ['attunementBy'],
+  })
   .refine((item) => (item.category === 'weapon') === (item.weapon !== undefined), {
     message: 'Weapons, and only weapons, have weapon stats',
     path: ['weapon'],

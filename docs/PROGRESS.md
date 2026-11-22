@@ -397,6 +397,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 ## Review fixes
 
+- [x] Add the Xanathar’s and Tasha’s magic-item catalogs and variants to Compendium
 - [x] Add all three Amulet of the Devout variants to Compendium
 - [x] Complete the [Compendium redesign](COMPENDIUM_REDESIGN.md) for all seven tabs
 - [x] Scroll casting class, search and spell lists together in Manage spells
@@ -422,6 +423,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-22 — Added the Xanathar’s and Tasha’s magic-item catalogs with variants, book links, attunement, base gear and charges.
 - 2026-11-22 — Added all three Tasha’s Amulets of the Devout with rarity, attunement and dawn recharge in Compendium.
 - 2026-11-22 — Redesigned Compendium with verified equipment profiles, weapon tooltips, rarity colors, equipment artwork, feat icons, and layouts for all seven tabs.
 - 2026-11-22 — Wrote the Compendium redesign proposal for equipment facts, item and feat art, rarity colors and all seven tabs.

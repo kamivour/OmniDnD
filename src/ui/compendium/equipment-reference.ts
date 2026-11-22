@@ -41,7 +41,7 @@ const shield = { bases: ['item.shield'] };
 const dragonScale = { bases: ['item.scale-mail'], armorBonus: 1 };
 const ammunition = { ammunition: true, fit: 'Any ammunition' } as const;
 const anyWeapon = { fit: 'Any weapon' };
-const devoutAmulet = { attunement: 'Cleric or Paladin' };
+const sickle = { bases: ['item.sickle'] };
 
 /** 2014 reference metadata only. Equipping these IDs continues to use the existing registry. */
 export const equipmentReferences: Partial<Record<string, EquipmentReference>> = {
@@ -52,10 +52,8 @@ export const equipmentReferences: Partial<Record<string, EquipmentReference>> = 
   'item.ammunition-1': { ...ammunition, weaponBonus: 1 },
   'item.ammunition-2': { ...ammunition, weaponBonus: 2 },
   'item.ammunition-3': { ...ammunition, weaponBonus: 3 },
-  'item.amulet-of-the-devout-1': devoutAmulet,
-  'item.amulet-of-the-devout-2': devoutAmulet,
-  'item.amulet-of-the-devout-3': devoutAmulet,
   'item.animated-shield': shield,
+  'item.armor-of-gleaming': { bases: mediumOrHeavy, fit: 'Medium or heavy armor' },
   'item.armor-1': { ...anyArmor, armorBonus: 1 },
   'item.armor-2': { ...anyArmor, armorBonus: 2 },
   'item.armor-3': { ...anyArmor, armorBonus: 3 },
@@ -65,6 +63,7 @@ export const equipmentReferences: Partial<Record<string, EquipmentReference>> = 
   'item.arrow-catching-shield': { ...shield, note: '+2 additional AC against ranged attacks.' },
   'item.arrow-of-slaying': { ammunition: true, fit: 'Arrow' },
   'item.berserker-axe': { bases: axes, fit: 'Any axe', weaponBonus: 1 },
+  'item.cast-off-armor': anyArmor,
   'item.dagger-of-venom': { bases: ['item.dagger'], weaponBonus: 1 },
   'item.dancing-sword': anySword,
   'item.defender': {
@@ -77,6 +76,7 @@ export const equipmentReferences: Partial<Record<string, EquipmentReference>> = 
     armorBonus: 1,
     note: 'Clawed unarmed strikes use 1d8 slashing and gain +1 to attack and damage.',
   },
+  'item.devotees-censer': { bases: ['item.flail'] },
   'item.dragon-scale-mail-black': dragonScale,
   'item.dragon-scale-mail-blue': dragonScale,
   'item.dragon-scale-mail-brass': dragonScale,
@@ -129,12 +129,18 @@ export const equipmentReferences: Partial<Record<string, EquipmentReference>> = 
     ignoreArmorPenalties: true,
     note: 'Mithral removes the usual Strength requirement and Stealth disadvantage.',
   },
+  'item.moon-sickle-1': { ...sickle, weaponBonus: 1 },
+  'item.moon-sickle-2': { ...sickle, weaponBonus: 2 },
+  'item.moon-sickle-3': { ...sickle, weaponBonus: 3 },
+  'item.moon-touched-sword': anySword,
   'item.nine-lives-stealer': { ...anySword, weaponBonus: 2 },
   'item.oathbow': { bases: ['item.longbow'] },
   'item.plate-armor-of-etherealness': { bases: ['item.plate-armor'] },
   'item.scimitar-of-speed': { bases: ['item.scimitar'], weaponBonus: 2 },
+  'item.shield-of-expression': shield,
   'item.shield-of-missile-attraction': shield,
   'item.spellguard-shield': shield,
+  'item.smoldering-armor': { bases: [...bodyArmor, 'item.shield'], fit: 'Any armor' },
   'item.sun-blade': {
     bases: ['item.longsword'],
     weaponBonus: 2,
@@ -145,12 +151,14 @@ export const equipmentReferences: Partial<Record<string, EquipmentReference>> = 
   'item.sword-of-sharpness': { bases: slashingSwords, fit: 'Any sword that deals slashing damage' },
   'item.sword-of-wounding': anySword,
   'item.trident-of-fish-command': { bases: ['item.trident'] },
+  'item.unbreakable-arrow': { ammunition: true, fit: 'Arrow' },
   'item.vicious-weapon': anyWeapon,
   'item.vorpal-sword': {
     bases: slashingSwords,
     fit: 'Any sword that deals slashing damage',
     weaponBonus: 3,
   },
+  'item.walloping-ammunition': ammunition,
   'item.weapon-1': { ...anyWeapon, weaponBonus: 1 },
   'item.weapon-2': { ...anyWeapon, weaponBonus: 2 },
   'item.weapon-3': { ...anyWeapon, weaponBonus: 3 },

@@ -143,4 +143,44 @@ describe('compendium catalog', () => {
       Array.from({ length: 3 }, () => ({ max: 1, recharge: 'dawn', regain: 'all' })),
     );
   });
+
+  it.each([
+    ['XGE', 48, 48],
+    ['TCE', 72, 47],
+  ] as const)(
+    'covers the %s printed magic-item lists, including variants',
+    (book, entries, families) => {
+      const items = searchCatalog(registry, 'equipment', { books: [book] }).map((entry) =>
+        item(entry.id),
+      );
+      expect(items).toHaveLength(entries);
+      expect(new Set(items.map((entry) => entry.url)).size).toBe(families);
+      expect(
+        items.every(
+          (entry) => entry.summary && entry.url && !entry.srd && entry.rarity && entry.magicType,
+        ),
+      ).toBe(true);
+      expect(
+        items.every((entry) =>
+          campaignAllows({ sources: [book], sourceParts: { [book]: ['items'] } }, entry),
+        ),
+      ).toBe(true);
+      expect(
+        items.some((entry) =>
+          campaignAllows({ sources: [book], sourceParts: { [book]: ['options'] } }, entry),
+        ),
+      ).toBe(false);
+    },
+  );
+
+  it('uses the printed 2014 equipment kinds and attunement', () => {
+    expect(itemType(item('item.moon-touched-sword'))).toBe('weapon');
+    expect(itemType(item('item.shield-of-expression'))).toBe('armor');
+    expect(itemType(item('item.wand-of-smiles'))).toBe('wand');
+    expect(itemType(item('item.staff-of-flowers'))).toBe('staff');
+    expect(item('item.boots-of-false-tracks').attunement).toBeUndefined();
+    expect(item('item.ersatz-eye').attunement).toBe(true);
+    expect(item('item.prosthetic-limb').attunement).toBeUndefined();
+    expect(item('item.bell-branch').attunementBy).toBe('Druid or Warlock');
+  });
 });

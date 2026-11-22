@@ -240,6 +240,8 @@ interface LiveState {
 
 **Compendium equipment (M45):** `src/ui/compendium/equipment-reference.ts` links magic items to verified 2014 base item IDs and lists display-only exceptions. Item art in `public/compendium/` and Game-icons silhouettes work offline and are credited in Reference → Credits.
 
+**Expansion equipment:** `data/content/xanathar-items.json` and `data/content/tasha-items.json` hold the original books’ magic-item lists, with short original summaries and source links. Optional `magicType` and `attunementBy` describe published item types and prerequisites for the catalog.
+
 **Currency and weight (M9):** saved coin counts stay separate; value uses 2014 exchange rates and coins weigh 50 per pound. Weight counts each positive item instance once, divides purchase-bundle weights by bundle size, and marks missing weights as incomplete; capacity comes from the shared Sheet calculation.
 
 **Attunement (M9):** each owned instance's recorded bond counts toward the three-item limit, including depleted records, until explicitly ended. Recording a bond preserves time, equipment, resources and item properties; contact, focused rests, prerequisites, curses and ending conditions remain explicit table checks (D114, Q27).
