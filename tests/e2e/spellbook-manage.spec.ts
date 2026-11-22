@@ -111,6 +111,46 @@ async function openManage(page: Page) {
   await expect(manage(page)).toBeVisible();
 }
 
+test('an Artificer can prepare Vortex Warp after enabling Strixhaven', async ({ page }) => {
+  const file = importedSeed('vortex-artificer', 'class.artificer');
+  file.campaign.id = 'vortex-campaign';
+  file.campaign.name = 'Vortex Campaign';
+  file.build.campaignId = file.campaign.id;
+  file.build.classes[0]!.level = 5;
+  file.build.hpEntries.push(
+    ...[4, 5].map((level) => ({
+      classId: 'class.artificer',
+      level,
+      value: 5,
+      method: 'average' as const,
+    })),
+  );
+  await importCharacter(page, file);
+
+  await openManage(page);
+  const dialog = manage(page);
+  const search = dialog.getByRole('searchbox', { name: 'Search available spells' });
+  const spell = dialog.getByRole('checkbox', { name: 'Prepare Vortex Warp', exact: true });
+  await search.fill('Vortex Warp');
+  await expect(spell).toHaveCount(0);
+  await page.goto(`/campaigns/${file.campaign.id}/settings`);
+  await page.getByRole('checkbox', { name: /Strixhaven: A Curriculum of Chaos/ }).check();
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(page).toHaveURL('/');
+  await expectSaved(page);
+
+  await page.goto(`/characters/${file.build.id}/spells`);
+  await openManage(page);
+  await search.fill('Vortex Warp');
+  await spell.check();
+  await expect(dialog.getByRole('button', { name: 'Remove prepared Vortex Warp' })).toBeVisible();
+  await expectSaved(page);
+  expect((await readSavedCharacter(page, file.build.id)).build.spells[0]?.prepared).toContain(
+    'spell.vortex-warp',
+  );
+  await expectNoOverflow(page);
+});
+
 test('blank spell selections use class choices, save counts, and undo without changing play state', async ({
   page,
   isMobile,

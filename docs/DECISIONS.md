@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D256 | 2026-11-22 | Strixhaven is opt-in per campaign. Its first bundled entry is Vortex Warp, available to its printed class lists. | Keep spell access tied to the correct sourcebook |
 | D255 | 2026-11-22 | Adding received or borrowed gear directly to a container records it on the receiving character. The other player manages their own inventory. | Keep shared sheets view-only |
 | D254 | 2026-11-22 | Artificers may replace one known infusion during an Artificer level-up. The replaced infusion ends on any tracked equipment. | Keep learning, replacement and Undo together |
 | D253 | 2026-11-22 | Prepared casters can fill open preparation slots in Level up or later in Spells. Always-prepared spells use none of those slots. | Put both kinds of spell gains where players review the new level |

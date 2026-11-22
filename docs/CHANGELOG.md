@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 18:30 — Vortex Warp from Strixhaven
+
+- Enable Strixhaven in Campaign settings to use Vortex Warp, a level 2 spell for Artificers, Sorcerers and Wizards.
+- For an Artificer at level 5 or higher, check Spells → Manage. Checks pass.
+
 ## 2026-11-22 18:28 — Add items directly to magic containers
 
 - Open Put in… on a Bag of Holding, Handy Haversack or Portable Hole. Add a catalogue item or create a custom item with the container selected.

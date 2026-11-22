@@ -224,7 +224,7 @@ New campaign defaults (D40, D44): XP leveling, average HP, allow negative level 
 
 **Phase 2 — sources and optional rules:**
 - Ruleset locked to 5e 2014.
-- Sources: `[x] PHB (locked)` `[x] Xanathar's` `[x] Tasha's` `[ ] others (future)` `[ ] Homebrew`.
+- PHB is always on. Campaigns can enable the DMG, Xanathar’s, Tasha’s, Strixhaven and Homebrew.
 - Optional rules, each an explicit toggle: feats, multiclassing, Tasha optional class features, Tasha custom origin, encumbrance (off / standard / variant), potion as bonus action (house rule), rest variant (standard / gritty / epic).
 - Enabling a book never auto-enables its optional rules.
 - Changing settings never deletes character choices. Show conflicts and ask how to resolve.

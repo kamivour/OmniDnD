@@ -5344,5 +5344,38 @@
       "dice": "14d6",
       "type": "psychic"
     }
+  },
+  {
+    "kind": "spell",
+    "id": "spell.vortex-warp",
+    "name": "Vortex Warp",
+    "ruleset": "5e-2014",
+    "source": "SCC",
+    "srd": false,
+    "summaryReviewed": false,
+    "url": "https://www.dndbeyond.com/spells/1239805-vortex-warp",
+    "summary": {
+      "effect": "Another creature you see in range makes a CON save or chooses to fail.",
+      "fail": "Teleport it to a visible, empty spot in range on a supporting surface or liquid, without squeezing.",
+      "upcast": "Add 30 ft of range per slot above 2."
+    },
+    "level": 2,
+    "school": "conjuration",
+    "casting": {
+      "cost": "action"
+    },
+    "range": "90 ft",
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "text": "Instant",
+      "concentration": false
+    },
+    "ritual": false,
+    "save": "CON",
+    "classes": ["class.artificer", "class.sorcerer", "class.wizard"],
+    "tags": ["control", "utility"]
   }
 ]

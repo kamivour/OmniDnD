@@ -44,7 +44,7 @@ Subclass `expandedSpellIds` and `additionalSpellLists` add candidates to normal 
 - Stable kebab IDs with kind prefix: `spell.faerie-fire`, `feature.bard.cutting-words`, `item.rapier`, `condition.prone`.
 - SRD entries reuse API indexes, with class prefixes for features/subclasses and one combined entry for features split by level (D50). Non-SRD entries follow the same kebab style (D49).
 - `ruleset: '5e-2014'` on every entry. Loader rejects anything else.
-- `source: 'PHB' | 'XGE' | 'TCE' | 'HB'`. Separate `srd: boolean` (true → SRD text may be shown).
+- `source: 'PHB' | 'DMG' | 'XGE' | 'TCE' | 'SCC' | 'HB'`. `SCC` is Strixhaven. Separate `srd: boolean` (true → SRD text may be shown).
 - Campaign Setup filters by `source`.
 
 ## 4. Schemas
@@ -64,7 +64,7 @@ interface Summary {
 
 interface RefBase {
   id: string; kind: string; name: string;
-  ruleset: '5e-2014'; source: 'PHB' | 'XGE' | 'TCE' | 'HB'; srd: boolean;
+  ruleset: '5e-2014'; source: 'PHB' | 'DMG' | 'XGE' | 'TCE' | 'SCC' | 'HB'; srd: boolean;
   summary: Summary;
   summaryReviewed?: boolean;  // false until the user checks an agent-written summary
   fullText?: string;          // SRD entries only
@@ -145,7 +145,7 @@ interface Campaign {
   hpMethod: 'average' | 'rolled';
   hpLevelFloor: 'none' | 'one';                    // D44: 'none' (default) lets roll + CON go below 1
   abilityMethod: 'standard-array' | 'point-buy' | 'rolled';
-  sources: ('PHB' | 'DMG' | 'XGE' | 'TCE' | 'HB')[]; // add-only once saved (D202)
+  sources: ('PHB' | 'DMG' | 'XGE' | 'TCE' | 'SCC' | 'HB')[]; // add-only once saved (D202)
   sourceParts?: Partial<Record<Source, ('options' | 'feats' | 'spells' | 'items')[]>>; // books using only some parts; missing = every part
   optionalRules: Record<string, boolean | string>; // flags off unless enabled; encumbrance and rests hold an option name
 }

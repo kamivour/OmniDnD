@@ -6,7 +6,7 @@ import { CONDITIONS, DAMAGE_TYPES, SCHOOLS, SKILLS, WEAPON_PROPERTIES } from '..
 export const SCHEMA_VERSION = 1;
 
 export const RulesetSchema = z.literal('5e-2014');
-export const SourceSchema = z.enum(['PHB', 'DMG', 'XGE', 'TCE', 'HB']);
+export const SourceSchema = z.enum(['PHB', 'DMG', 'XGE', 'TCE', 'SCC', 'HB']);
 /** Parts of a book a campaign can enable on their own: character options (classes, subclasses, origins and their features), feats, spells, magic items. */
 export const SourcePartSchema = z.enum(['options', 'feats', 'spells', 'items']);
 export const AbilitySchema = z.enum(ABILITIES);

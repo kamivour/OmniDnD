@@ -96,6 +96,7 @@ export const SOURCE_OPTIONS: { value: Source; label: string; hint: string }[] = 
     label: SOURCE_NAMES.TCE,
     hint: 'The artificer, extra subclasses, spells and feats.',
   },
+  { value: 'SCC', label: SOURCE_NAMES.SCC, hint: 'Adds the Vortex Warp spell.' },
   { value: 'HB', label: SOURCE_NAMES.HB, hint: 'Items and features your table made.' },
 ];
 

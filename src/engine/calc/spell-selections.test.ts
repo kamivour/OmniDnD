@@ -68,6 +68,28 @@ describe('spellSelectionDetails', () => {
     expect(spellSelectionDetails(ctx, 'class.wizard').prepared.limit).toBe(1);
   });
 
+  it('offers Strixhaven Vortex Warp to the base classes when their own second-level spells unlock', () => {
+    const spellId = 'spell.vortex-warp';
+    for (const [classId, level, list] of [
+      ['class.artificer', 5, 'prepared'],
+      ['class.sorcerer', 3, 'known'],
+      ['class.wizard', 3, 'known'],
+    ] as const) {
+      const state = caster(classId, level);
+      expect(spellSelectionDetails(context(state), classId).candidates[list]).not.toContain(
+        spellId,
+      );
+      const campaign = { ...state.campaign, sources: [...state.campaign.sources, 'SCC' as const] };
+      expect(
+        spellSelectionDetails(context({ ...state, campaign }), classId).candidates[list],
+      ).toContain(spellId);
+      expect(
+        spellSelectionDetails(context({ ...caster(classId, level - 1), campaign }), classId)
+          .candidates[list],
+      ).not.toContain(spellId);
+    }
+  });
+
   it('uses the individual class maximum rather than the combined multiclass slot pool', () => {
     const state = caster('class.bard', 5);
     state.build = {

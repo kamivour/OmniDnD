@@ -64,6 +64,7 @@ export const SOURCE_NAMES: Record<Source, string> = {
   DMG: "Dungeon Master's Guide",
   XGE: "Xanathar's Guide to Everything",
   TCE: "Tasha's Cauldron of Everything",
+  SCC: 'Strixhaven: A Curriculum of Chaos',
   HB: 'Homebrew',
 };
 
