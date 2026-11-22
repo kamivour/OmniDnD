@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-22 10:20 — Group Artificer infusion choices
+
+- Pick standard infusions or choose a specific item under Replicate Magic Item.
+- Each selected recipe uses one Infusions Known slot. The picker and rest review show both groups. Checks pass.
+
 ## 2026-11-22 10:14 — Prepare spells while leveling up
 
 - Fill open preparation slots during Level up or later under Spells → Manage.

@@ -20,35 +20,56 @@ test('known infusion picker searches and learns separate replica recipes at the 
   await expect(row.getByText(/Artificer 2 · 1\/4 infusions known/)).toBeVisible();
   await row.getByText('Already known (1)', { exact: true }).click();
   await expect(row.getByText('Infusion: Enhanced Weapon', { exact: true })).toBeVisible();
+  const standard = row.getByRole('group', { name: 'Standard infusions', exact: true });
+  const recipes = row.getByRole('group', { name: 'Replicate Magic Item', exact: true });
   await expect(
-    row.getByRole('checkbox', { name: 'Infusion: Homunculus Servant', exact: true }),
+    standard.getByRole('checkbox', { name: 'Infusion: Homunculus Servant', exact: true }),
   ).toBeVisible();
-  await expect(
-    row.getByRole('checkbox', { name: 'Replicate Magic Item: Winged Boots', exact: true }),
-  ).toHaveCount(0);
+  await expect(recipes.getByRole('checkbox', { name: 'Winged Boots', exact: true })).toHaveCount(0);
+  await expect(standard.getByRole('checkbox', { name: 'Bag of Holding', exact: true })).toHaveCount(
+    0,
+  );
   const search = row.getByRole('searchbox', { name: 'Search infusions', exact: true });
   await search.fill('bag of holding');
-  const bag = row.getByRole('checkbox', {
-    name: 'Replicate Magic Item: Bag of Holding',
-    exact: true,
-  });
+  const bag = recipes.getByRole('checkbox', { name: 'Bag of Holding', exact: true });
   await bag.check();
   await search.fill('sending stones');
   await expect(bag).toBeChecked();
-  await row
-    .getByRole('checkbox', { name: 'Replicate Magic Item: Sending Stones', exact: true })
-    .check();
+  await recipes.getByRole('checkbox', { name: 'Sending Stones', exact: true }).check();
+  await search.clear();
+  const defense = standard.getByRole('checkbox', {
+    name: 'Infusion: Enhanced Defense',
+    exact: true,
+  });
+  await defense.check();
+  await expect(recipes.getByRole('checkbox', { name: 'Alchemy Jug', exact: true })).toBeDisabled();
+  await defense.uncheck();
   await row.getByRole('button', { name: 'Save choice', exact: true }).click();
   await saved(page);
   await page.reload();
-  await expect(page.getByText('Infusions: pick 1', { exact: true })).toBeVisible();
+  const remaining = page.getByRole('listitem').filter({ hasText: 'Infusions: pick 1' });
+  await remaining.getByRole('button', { name: 'Choose', exact: true }).click();
+  await remaining.getByText('Already known (3)', { exact: true }).click();
+  const learnedRecipes = remaining.getByRole('group', { name: 'Known Replicate Magic Item' });
+  await expect(learnedRecipes.getByText('Bag of Holding', { exact: true })).toBeVisible();
+  await expect(learnedRecipes.getByText('Sending Stones', { exact: true })).toBeVisible();
   expect((await reviewState(page, file.build.id)).build.featureIds).toEqual([
     ...file.build.featureIds,
     'feature.artificer.infusion-replicate-magic-item-bag-of-holding',
     'feature.artificer.infusion-replicate-magic-item-sending-stones',
   ]);
+  await page.goto(`/characters/${file.build.id}/features`);
+  const panel = page.getByRole('region', { name: 'Infused items', exact: true });
+  await expect(panel.getByText('Infusions known · 3/4', { exact: true })).toBeVisible();
+  const known = panel.getByRole('combobox', { name: 'Known infusion', exact: true });
+  await known.selectOption({ label: 'Bag of Holding' });
+  await expect(known.locator('optgroup[label="Replicate Magic Item"] option:checked')).toHaveText(
+    'Bag of Holding',
+  );
+  await expect(panel.getByText(/Record the replicated item in Inventory/)).toBeVisible();
   await page.getByRole('button', { name: 'Undo last command', exact: true }).click();
   await saved(page);
+  await page.goto(`/characters/${file.build.id}/todo`);
   await expect(page.getByText('Infusions: pick 3', { exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

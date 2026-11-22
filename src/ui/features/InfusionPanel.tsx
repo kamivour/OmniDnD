@@ -10,6 +10,8 @@ import {
   infusionFits,
   infusionKey,
   infusionLimit,
+  infusionMinimumLevel,
+  infusionsKnownAt,
   isReplicateInfusion,
   magicalItem,
   RESISTANT_ARMOR_TYPES,
@@ -19,6 +21,7 @@ import type { DamageType } from '../../engine/rules2014';
 import { useCharacter } from '../hooks/useCharacter';
 import { useCommand } from '../commands/command-context';
 import { inputClass } from '../components/fields';
+import { groupInfusionOptions } from './infusion-options';
 
 const button = 'min-h-11 rounded-btn border border-border px-3 text-sm disabled:opacity-40';
 export function InfusionPanel({
@@ -39,6 +42,9 @@ export function InfusionPanel({
   const refs = characterRegistry(registry, state.build);
   const active = activeInfusions(state.build, state.live);
   const known = state.build.featureIds.filter((id) => id.startsWith(INFUSION_PREFIX));
+  const knownGroups = groupInfusionOptions(
+    known.map((id) => ({ id, name: refs.get('feature', id).name })),
+  );
   const key = infusionKey(featureId),
     rule = INFUSIONS[key];
   const items = state.build.items.filter((item) => {
@@ -125,6 +131,9 @@ export function InfusionPanel({
       >
         Choose known infusions
       </Link>
+      <p className="text-text-muted">
+        Infusions known · {known.length}/{infusionsKnownAt(level)}
+      </p>
       <label className="flex flex-col gap-1">
         Known infusion
         <select
@@ -137,14 +146,14 @@ export function InfusionPanel({
           }}
         >
           <option value="">Choose an infusion</option>
-          {known.map((id) => (
-            <option
-              key={id}
-              value={id}
-              disabled={!!INFUSIONS[infusionKey(id)] && level < INFUSIONS[infusionKey(id)]!.level}
-            >
-              {refs.get('feature', id).name}
-            </option>
+          {knownGroups.map((group) => (
+            <optgroup key={group.label} label={group.label}>
+              {group.options.map(({ id, name }) => (
+                <option key={id} value={id} disabled={level < infusionMinimumLevel(id)}>
+                  {name}
+                </option>
+              ))}
+            </optgroup>
           ))}
         </select>
       </label>

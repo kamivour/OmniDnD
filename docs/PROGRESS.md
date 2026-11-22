@@ -397,6 +397,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 ## Review fixes
 
+- [x] Group standard Artificer infusions and Replicate Magic Item recipes under a shared known limit
 - [x] Offer open prepared-spell picks during level-up and show automatic Artificer subclass spells separately
 - [x] Find all Rhythm-Maker’s Drum variants with common apostrophe and hyphen spellings
 - [x] Add the Xanathar’s and Tasha’s magic-item catalogs and variants to Compendium
@@ -425,6 +426,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-22 — Separated standard infusions from Replicate Magic Item recipes in the Artificer picker and rest review. Each recipe uses one known slot.
 - 2026-11-22 — Level up offers prepared-spell picks separately from subclass grants. Battle Smith gains Warding Bond at level 5.
 - 2026-11-22 — Compendium finds Rhythm-Maker’s Drum with straight, curly or omitted apostrophes and hyphens.
 - 2026-11-22 — Added the Xanathar’s and Tasha’s magic-item catalogs with variants, book links, attunement, base gear and charges.

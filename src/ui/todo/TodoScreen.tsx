@@ -13,6 +13,7 @@ import { OptionGuide } from '../components/OptionGuide';
 import { inputClass } from '../components/fields';
 import { SectionLabel } from '../components/SectionLabel';
 import { useCommand } from '../commands/command-context';
+import { groupInfusionOptions } from '../features/infusion-options';
 import { AsiPick, SubclassPick } from '../level/LevelUpChoices';
 import {
   emptyPicks,
@@ -219,6 +220,22 @@ function ChoiceForm({
           chosen.includes(id) || name.toLowerCase().includes(query.trim().toLowerCase()),
       )
     : options;
+  const renderOptions = (rows: typeof options) =>
+    rows.map((option) => (
+      <label
+        key={option.id}
+        className="flex min-h-11 items-center gap-2 text-sm capitalize text-text"
+      >
+        <input
+          type="checkbox"
+          checked={chosen.includes(option.id)}
+          disabled={!chosen.includes(option.id) && chosen.length >= item.count}
+          onChange={() => toggle(option.id)}
+          className="size-4 shrink-0 accent-(--omni-accent)"
+        />
+        {option.name}
+      </label>
+    ));
 
   return (
     <div className="flex flex-col gap-3">
@@ -241,19 +258,28 @@ function ChoiceForm({
       {infusions && (
         <div className="flex flex-col gap-2 text-sm">
           <p className="text-text-muted">
-            Artificer {level} · {known.length}/{infusionsKnownAt(level)} infusions known. This list
-            shows recipes you can learn now. More unlock at levels 6, 10 and 14.
+            Artificer {level} · {known.length}/{infusionsKnownAt(level)} infusions known. Each
+            standard infusion or Replicate Magic Item recipe uses one pick from this limit.
           </p>
           {known.length > 0 && (
             <details>
               <summary className="min-h-11 cursor-pointer py-3">
                 Already known ({known.length})
               </summary>
-              <ul className="list-disc pl-5">
-                {known.map((id) => (
-                  <li key={id}>{nameOf(id)}</li>
-                ))}
-              </ul>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {groupInfusionOptions(known.map((id) => ({ id, name: nameOf(id) }))).map(
+                  (group) => (
+                    <div key={group.label} role="group" aria-label={`Known ${group.label}`}>
+                      <p className="font-semibold text-text">{group.label}</p>
+                      <ul className="list-disc pl-5">
+                        {group.options.map(({ id, name }) => (
+                          <li key={id}>{name}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ),
+                )}
+              </div>
             </details>
           )}
           <label className="flex flex-col gap-1">
@@ -272,26 +298,30 @@ function ChoiceForm({
           <legend className="mb-1 text-sm text-text">
             Pick {item.count} ({chosen.length} chosen)
           </legend>
-          <div className="grid max-h-72 gap-1 overflow-y-auto sm:grid-cols-2">
-            {visibleOptions.map((option) => (
-              <label
-                key={option.id}
-                className="flex min-h-11 items-center gap-2 text-sm capitalize text-text"
-              >
-                <input
-                  type="checkbox"
-                  checked={chosen.includes(option.id)}
-                  disabled={!chosen.includes(option.id) && chosen.length >= item.count}
-                  onChange={() => toggle(option.id)}
-                  className="size-4 accent-(--omni-accent)"
-                />
-                {option.name}
-              </label>
-            ))}
-            {visibleOptions.length === 0 && (
-              <p className="text-sm text-text-muted">No recipes match your search.</p>
-            )}
-          </div>
+          {infusions ? (
+            <div className="grid min-w-0 gap-3 sm:grid-cols-2">
+              {groupInfusionOptions(visibleOptions).map((group) => (
+                <div
+                  key={group.label}
+                  role="group"
+                  aria-label={group.label}
+                  className="min-w-0 rounded-btn border border-border px-3 py-2"
+                >
+                  <p className="text-sm font-semibold text-text">{group.label}</p>
+                  <div className="max-h-44 overflow-y-auto sm:max-h-72">
+                    {renderOptions(group.options)}
+                  </div>
+                </div>
+              ))}
+              {visibleOptions.length === 0 && (
+                <p className="text-sm text-text-muted">No infusions match your search.</p>
+              )}
+            </div>
+          ) : (
+            <div className="grid max-h-72 gap-1 overflow-y-auto sm:grid-cols-2">
+              {renderOptions(visibleOptions)}
+            </div>
+          )}
         </fieldset>
       )}
       <div>
