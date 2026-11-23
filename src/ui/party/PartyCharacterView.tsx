@@ -11,6 +11,7 @@ import { PARTY_READER_SECTIONS } from '../find/places';
 import { ViewOnlyBanner } from './ViewOnlyBanner';
 import { PartyReaderSheet } from './PartyReaderSheet';
 import { PartyReaderSpells } from './PartyReaderSpells';
+import { PartyReaderInventory } from './PartyReaderInventory';
 import { ReaderSection } from './ReaderSection';
 
 function subscribeOnline(onChange: () => void) {
@@ -135,22 +136,12 @@ export function PartyCharacterView() {
         <PartyReaderSheet key={build.id} sheet={sheet} />
       ) : tab === 'Spells' ? (
         <PartyReaderSpells key={build.id} state={state} sheet={sheet} references={references} />
+      ) : tab === 'Inventory' ? (
+        <PartyReaderInventory key={build.id} state={state} references={references} />
       ) : (
         <ReaderSection key={`${build.id}:${section.id}`} id={section.id} label={tab}>
           {() => (
             <>
-              {tab === 'Inventory' && (
-                <ul className="space-y-2">
-                  {build.items.map((item) => (
-                    <li key={item.instanceId} className="wrap-anywhere">
-                      {references.get('item', item.itemId).name} ×
-                      {live.items[item.instanceId]?.qty ?? 0}
-                      {live.items[item.instanceId]?.equipped ? ' · equipped' : ''}
-                      {live.items[item.instanceId]?.attuned ? ' · attuned' : ''}
-                    </li>
-                  ))}
-                </ul>
-              )}
               {tab === 'Features' &&
                 sheet.features.map(({ def }) => (
                   <details key={def.id}>

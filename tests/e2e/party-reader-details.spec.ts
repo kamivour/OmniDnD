@@ -7,6 +7,83 @@ function detail(page: Page, name: string) {
     : page.getByRole('complementary', { name: 'Pinned detail' });
 }
 
+test('shared inventory opens the right instance, weapon facts and nested custom gear', async ({
+  page,
+}) => {
+  const file = reviewFile('party-inventory');
+  file.build.partyOwner = { userId: 'friend', name: 'Ana' };
+  file.build.customItems = [
+    {
+      kind: 'item',
+      id: 'item.custom.tallies',
+      name: 'Carved tallies',
+      ruleset: '5e-2014',
+      source: 'HB',
+      srd: false,
+      category: 'gear',
+      summary: { effect: 'A set of carved counters to mark loans.' },
+    },
+  ];
+  file.build.items = [
+    { instanceId: 'trident', itemId: 'item.trident-of-fish-command' },
+    { instanceId: 'bag', itemId: 'item.bag-of-holding', notes: 'Private bag annotation' },
+    { instanceId: 'pouch', itemId: 'item.pouch', container: 'bag' },
+    { instanceId: 'tallies', itemId: 'item.custom.tallies', container: 'pouch' },
+    { instanceId: 'first', itemId: 'item.wand-of-magic-missiles' },
+    { instanceId: 'second', itemId: 'item.wand-of-magic-missiles', container: 'bag' },
+    { instanceId: 'empty', itemId: 'item.potion-of-healing-common' },
+  ];
+  file.live.items = Object.fromEntries(
+    file.build.items.map(({ instanceId }) => [
+      instanceId,
+      {
+        qty: instanceId === 'empty' ? 0 : 1,
+        equipped: instanceId === 'trident',
+        attuned: false,
+        ...(instanceId === 'first'
+          ? { charges: 2 }
+          : instanceId === 'second'
+            ? { charges: 5 }
+            : {}),
+      },
+    ]),
+  );
+  await importReview(page, file, 'inventory', false);
+  const before = await reviewState(page, file.build.id);
+  const inventory = page.getByRole('region', { name: 'Inventory', exact: true });
+  await inventory.getByRole('button', { name: 'Equipped', exact: true }).click();
+  await inventory.getByRole('button', { name: 'Trident of Fish Command', exact: true }).click();
+  const trident = detail(page, 'Trident of Fish Command');
+  await expect(trident.getByText('Piercing', { exact: true })).toBeVisible();
+  await expect(trident.getByRole('button', { name: 'Versatile' })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await inventory.getByRole('button', { name: 'Equipped', exact: true }).click();
+  const search = inventory.getByRole('searchbox', { name: 'Search inventory' });
+  await search.fill('wand of magic missiles');
+  const wands = inventory.getByRole('button', { name: 'Wand of Magic Missiles', exact: true });
+  await expect(wands).toHaveCount(2);
+  await wands.filter({ hasText: '5/7 charges' }).click();
+  await expect(detail(page, 'Wand of Magic Missiles').getByText('×1 · 5/7 charges')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await wands.filter({ hasText: '2/7 charges' }).click();
+  await expect(detail(page, 'Wand of Magic Missiles').getByText('×1 · 2/7 charges')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await search.fill('tallies');
+  const tallies = inventory.getByRole('button', { name: 'Carved tallies' });
+  await expect(tallies).toContainText('Bag of Holding › Pouch');
+  await tallies.click();
+  await expect(
+    detail(page, 'Carved tallies').getByText('A set of carved counters to mark loans.'),
+  ).toBeVisible();
+  await page.keyboard.press('Escape');
+  await search.fill('potion of healing');
+  await expect(
+    inventory.getByRole('button', { name: 'Potion of Healing', exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText('Private bag annotation', { exact: false })).toHaveCount(0);
+  expect(await reviewState(page, file.build.id)).toEqual(before);
+});
+
 test('shared spellbook separates Pact Magic and opens prepared and unprepared spells', async ({
   page,
 }) => {

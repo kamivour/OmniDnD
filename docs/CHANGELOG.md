@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 13:41 — Party inventory
+
+- Search a teammate’s equipment, including depleted items and gear inside bags.
+- Open any item for its rules, weapon properties and the charges on that particular copy. Checks pass.
+
 ## 2026-11-23 13:39 — Party spellbook
 
 - See regular spell slots, Pact Magic and free casts on a teammate’s Spells page.

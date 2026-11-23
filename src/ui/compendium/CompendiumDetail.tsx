@@ -153,12 +153,12 @@ export function CompendiumDetail({
 }
 
 /** Kind-specific facts, then lists such as features by level. */
-function CompendiumFacts({
+export function CompendiumFacts({
   facts,
   lists,
   onOpen,
 }: EntryFacts & {
-  onOpen: (id: string) => void;
+  onOpen?: (id: string) => void;
 }) {
   return (
     <>
@@ -201,7 +201,7 @@ function CompendiumFacts({
                 {item.level !== undefined && (
                   <span className="w-12 shrink-0 text-xs text-text-muted">Lv {item.level}</span>
                 )}
-                {item.id ? (
+                {item.id && onOpen ? (
                   <button
                     type="button"
                     onClick={() => onOpen(item.id!)}

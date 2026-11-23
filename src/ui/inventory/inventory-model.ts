@@ -61,7 +61,11 @@ export function inventoryItem(
 }
 
 /** Presentation only: keep recorded quantities, flags, notes and immediate container links. */
-export function inventoryGroups(state: InventoryState, registry: Registry): InventoryGroup[] {
+export function inventoryGroups(
+  state: InventoryState,
+  registry: Registry,
+  { includeNotes = true }: { includeNotes?: boolean } = {},
+): InventoryGroup[] {
   const entries: ResolvedItem[] = state.build.items.map((owned) => ({
     owned,
     item: resolveItem(owned, state, registry),
@@ -69,7 +73,7 @@ export function inventoryGroups(state: InventoryState, registry: Registry): Inve
   const byId = new Map(entries.map((entry) => [entry.owned.instanceId, entry]));
   const containers = entries.filter(({ item }) => item.def.category === 'container');
   const baseName = ({ owned, item }: ResolvedItem) =>
-    [item.def.name, owned.notes?.trim()].filter(Boolean).join(' · ');
+    [item.def.name, includeNotes && owned.notes?.trim()].filter(Boolean).join(' · ');
   const nameCounts = new Map<string, number>();
   for (const container of containers) {
     const name = baseName(container);
