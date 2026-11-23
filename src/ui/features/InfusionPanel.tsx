@@ -17,6 +17,7 @@ import {
   RESISTANT_ARMOR_TYPES,
 } from '../../engine/calc/infusions';
 import { infuseItem, endInfusion } from '../../engine/commands/infusions';
+import { replicaItem, replicaFits } from '../../engine/calc/infusion-replicas';
 import type { DamageType } from '../../engine/rules2014';
 import { useCharacter } from '../hooks/useCharacter';
 import { useCommand } from '../commands/command-context';
@@ -50,12 +51,13 @@ export function InfusionPanel({
   );
   const key = infusionKey(featureId),
     rule = INFUSIONS[key];
+  const replica = replicaItem(refs, featureId);
   const items = state.build.items.filter((item) => {
     const def = refs.get('item', item.itemId);
     return (
       state.live.items[item.instanceId]?.qty === 1 &&
       !magicalItem(def) &&
-      infusionFits(key, def) &&
+      (replica ? replicaFits(replica, def) : infusionFits(key, def)) &&
       !state.live.infusions?.some((i) => i.instanceId === item.instanceId)
     );
   });
@@ -68,10 +70,9 @@ export function InfusionPanel({
       <h2 className="font-display text-base">
         Infused items · {active.length}/{infusionLimit(state.build)}
       </h2>
-      {known.some((id) => !INFUSIONS[infusionKey(id)]) && (
+      {known.some((id) => !INFUSIONS[infusionKey(id)] && !replicaItem(refs, id)) && (
         <p className="text-warn">
-          This counter covers equipment assignments below. Count Replicate Magic Item and Homunculus
-          Servant against your limit at the table.
+          Count any table-only infusion selections against your active limit as well.
         </p>
       )}
       {level >= 9 &&
@@ -160,15 +161,20 @@ export function InfusionPanel({
           ))}
         </select>
       </label>
-      {featureId && !rule && (
+      {featureId && !rule && !replica && (
         <p>
           {isReplicateInfusion(featureId)
             ? 'Record the replicated item in Inventory and count it against your active infusion limit.'
             : 'Record your Homunculus Servant in Companions and count it against your active infusion limit.'}
         </p>
       )}
-      {rule && (
+      {(rule || replica) && (
         <>
+          {replica && (
+            <p>
+              Choose the nonmagical base object for {replica.name}. Confirm its type with the DM.
+            </p>
+          )}
           <label className="flex flex-col gap-1">
             Item to infuse
             <select
@@ -205,7 +211,7 @@ export function InfusionPanel({
               </select>
             </label>
           )}
-          {rule.attunement && (
+          {(rule?.attunement || replica?.attunement) && (
             <label className="flex min-h-11 items-center gap-2">
               <input
                 type="checkbox"

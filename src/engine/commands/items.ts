@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Draft } from 'immer';
 import { armorReplacements } from '../calc/equipment';
 import { attunedItems } from '../calc/attunement';
-import { activeInfusions, INFUSIONS, infusionKey } from '../calc/infusions';
+import { activeInfusions, INFUSIONS, infusionKey, isReplicaInstance } from '../calc/infusions';
 import { itemUseCost } from '../calc/item-use';
 import type { ItemDef } from '../schema';
 import type { CharacterData, Command, CommandContext } from './runner';
@@ -58,6 +58,8 @@ export const adjustItemQuantity: Command<AdjustItemQuantityPayload> = {
     const parsed = AdjustItemQuantityPayloadSchema.safeParse(input);
     if (!parsed.success)
       return [block('Item quantity must be a safe whole number of zero or more')];
+    if (parsed.data.quantity > 1 && isReplicaInstance(ctx.live, parsed.data.instanceId))
+      return [block('A replica infusion applies to one item')];
     return ownedItem(ctx, parsed.data.instanceId)
       ? []
       : [block('That item instance is unavailable')];

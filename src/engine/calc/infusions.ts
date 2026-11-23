@@ -135,16 +135,19 @@ export function infusionFits(key: string, item: ItemDef): boolean {
 export const magicalItem = (item: ItemDef) =>
   item.category === 'magic' || !!item.rarity || !!item.attunement;
 
+export const isReplicaInstance = (live: LiveState, instanceId: string) =>
+  live.infusions?.some((entry) => entry.instanceId === instanceId && entry.replicaBaseItemId);
+
 /** Saved applications survive rests; forgotten infusions and missing items give no bonuses. */
 export function activeInfusions(build: CharacterBuild, live: LiveState) {
   const seenItems = new Set<string>(),
     seenInfusions = new Set<string>();
   return (live.infusions ?? []).filter((entry) => {
-    const key = infusionKey(entry.featureId),
-      rule = INFUSIONS[key];
+    const rule = INFUSIONS[infusionKey(entry.featureId)];
+    const replica = entry.replicaBaseItemId && isReplicateInfusion(entry.featureId);
     const valid =
-      rule &&
-      artificerLevel(build) >= rule.level &&
+      (rule || replica) &&
+      artificerLevel(build) >= infusionMinimumLevel(entry.featureId) &&
       build.featureIds.includes(entry.featureId) &&
       !seenItems.has(entry.instanceId) &&
       !seenInfusions.has(entry.featureId);

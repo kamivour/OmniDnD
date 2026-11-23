@@ -5,6 +5,7 @@ import { applyLevelSpells, LevelSpellsSchema } from '../calc/level-spells';
 import { optionalRules } from '../calc/campaign-rules';
 import { averageHpRoll, type HitDie } from '../calc/hp';
 import { INFUSION_PREFIX, infusionOptionIds } from '../calc/infusions';
+import { endInfusionIn } from './infusions';
 import { MULTICLASS_RULES, meetsMinimum, minimumText } from '../calc/multiclass';
 import { computeSheet } from '../calc/sheet';
 import {
@@ -134,6 +135,7 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
   const infusionNotes: string[] = [];
   let featureIds = ctx.build.featureIds;
   let currentLive = ctx.live;
+  let currentBuild = ctx.build;
   if (infusionSwap || learningInfusions.length > 0) {
     if (classId !== 'class.artificer' || classLevel < 2)
       return {
@@ -159,15 +161,10 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
       infusionNotes.push(`Replace ${name(remove)} with ${name(add)}`);
       const applications = ctx.live.infusions?.filter((entry) => entry.featureId === remove) ?? [];
       if (applications.length > 0) {
-        currentLive = structuredClone(ctx.live);
-        currentLive.infusions = currentLive.infusions!.filter(
-          (entry) => entry.featureId !== remove,
-        );
-        for (const { instanceId } of applications) {
-          const item = currentLive.items[instanceId];
-          if (item) item.attuned = false;
-        }
+        ({ build: currentBuild, live: currentLive } = structuredClone(current));
         infusionNotes.push('Replaced infusion ended on its item');
+        for (const entry of applications)
+          infusionNotes.push(...endInfusionIn({ build: currentBuild, live: currentLive }, entry));
       }
     }
   }
@@ -196,7 +193,7 @@ function prepare(ctx: CommandContext, input: LevelUpPayload) {
     floor: ctx.campaign.hpLevelFloor,
   };
   const build = {
-    ...ctx.build,
+    ...currentBuild,
     featureIds,
     proficiencies,
     classes:
@@ -297,6 +294,7 @@ export const levelUp: Command<LevelUpPayload> = {
     if (next.live.infusions !== ctx.live.infusions) {
       draft.live.infusions = next.live.infusions;
       draft.live.items = next.live.items;
+      draft.build.items = next.build.items;
     }
     return withNotes(
       `Level up: ${next.name} ${next.classLevel} (max HP ${next.before} → ${next.after})`,

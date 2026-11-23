@@ -16,6 +16,8 @@ import {
   REPLICATE_RECIPES,
 } from '../calc/infusions';
 import { computeSheet } from '../calc/sheet';
+import { replicaItem } from '../calc/infusion-replicas';
+import { levelUp } from './level';
 
 function artificer(level = 2) {
   const state = structuredClone(freshState);
@@ -46,6 +48,49 @@ function artificer(level = 2) {
 }
 const weapon = { featureId: INFUSION_PREFIX + 'enhanced-weapon', instanceId: 'sword' };
 describe('infusing inventory', () => {
+  it('tracks a replica in its original inventory entry and ends it when the recipe is replaced', () => {
+    const state = artificer();
+    const featureId = `${REPLICATE_INFUSION}-bag-of-holding`;
+    state.campaign.sources = ['PHB', 'TCE'];
+    state.campaign.hpMethod = 'average';
+    state.build.featureIds.push(featureId);
+    state.build.items.push({ instanceId: 'bag', itemId: 'item.backpack' });
+    state.build.items.find(({ instanceId }) => instanceId === 'sword')!.container = 'bag';
+    state.live.items.bag = { qty: 1, equipped: false, attuned: false };
+    const session = new Session(state);
+    expect(session.try(infuseItem, { featureId, instanceId: 'shield' }).result).toBe('blocked');
+    session.run(infuseItem, { featureId, instanceId: 'bag' });
+    expect(session.state.build.items.at(-1)?.itemId).toBe('item.bag-of-holding');
+    expect(activeInfusions(session.state.build, session.live)).toContainEqual({
+      featureId,
+      instanceId: 'bag',
+      replicaBaseItemId: 'item.backpack',
+    });
+    const replicated = structuredClone(session.state);
+    session.run(levelUp, {
+      classId: 'class.artificer',
+      infusionSwap: { remove: featureId, add: `${INFUSION_PREFIX}returning-weapon` },
+    });
+    expect(session.state.build.items.at(-1)?.itemId).toBe('item.backpack');
+    expect(
+      session.state.build.items.find(({ instanceId }) => instanceId === 'sword')?.container,
+    ).toBeUndefined();
+    expect(session.live.infusions).toEqual([]);
+    session.undo();
+    expect(session.state).toEqual(replicated);
+    session.run(endInfusion, { instanceId: 'bag' }, true);
+    expect(session.state.build.items.at(-1)?.itemId).toBe('item.backpack');
+    session.undo();
+    expect(session.state).toEqual(replicated);
+  });
+
+  it('resolves every named and concrete common replica recipe', () => {
+    const ids = [
+      ...REPLICATE_RECIPES.map(({ id }) => id),
+      ...[...registry.entries.keys()].filter((id) => id.startsWith(COMMON_REPLICA_PREFIX)),
+    ];
+    expect(ids.filter((id) => !replicaItem(registry, id))).toEqual([]);
+  });
   it('computes weapon bonuses by artificer level, not total level; reload and Undo restore exactly', () => {
     const state = artificer();
     const session = new Session(state);

@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D264 | 2026-11-23 | A replica occupies the original item’s inventory entry and uses one active infusion slot. The player confirms that the base object matches the recipe; contents of a reverted container move to Carried. | Keep the item and contents recoverable when the magic ends. |
 | D263 | 2026-11-23 | Choose the first Arcane Armor model in Features and change a configured suit’s model during rest. The sheet uses INT for its weapon when that gives the better bonus. | Keep combat calculations consistent with Battle Ready. |
 | D262 | 2026-11-23 | Eldritch Knight and Arcane Trickster track the number of spells learned outside their usual schools. Level up follows the limit, and Manage warns on changes that exceed it. | Older saves lack the level where a specific spell was learned |
 | D261 | 2026-11-23 | Arcane Recovery refreshes at 06:00 on the game clock. The Wizard can choose which expended spell slots to restore at the end of a short rest. | Use the existing daily recharge rule for a feature that is available once per day |

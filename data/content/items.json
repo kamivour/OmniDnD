@@ -39,5 +39,74 @@
     },
     "category": "tool",
     "weight": 0
+  },
+  {
+    "kind": "item",
+    "id": "item.alchemy-jug",
+    "name": "Alchemy Jug",
+    "ruleset": "5e-2014",
+    "source": "DMG",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/5346-alchemy-jug",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use an action to name a supported liquid, then pour it at up to 2 gallons per minute. Until dawn, the jug produces only that liquid and only up to its listed amount."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": false,
+    "weight": 12
+  },
+  {
+    "kind": "item",
+    "id": "item.cap-of-water-breathing",
+    "name": "Cap of Water Breathing",
+    "ruleset": "5e-2014",
+    "source": "DMG",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/5345-cap-of-water-breathing",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "While wearing the cap underwater, use an action to speak its command word and form a bubble you can breathe in. The bubble ends if you repeat the word, remove the cap, or surface."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": false
+  },
+  {
+    "kind": "item",
+    "id": "item.gloves-of-thievery",
+    "name": "Gloves of Thievery",
+    "ruleset": "5e-2014",
+    "source": "DMG",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/5352-gloves-of-thievery",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "The gloves disappear from view while worn. Add +5 to Sleight of Hand checks and Dexterity checks to pick locks."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": false
+  },
+  {
+    "kind": "item",
+    "id": "item.sending-stones",
+    "name": "Sending Stones",
+    "ruleset": "5e-2014",
+    "source": "DMG",
+    "srd": false,
+    "url": "https://www.dndbeyond.com/magic-items/5402-sending-stones",
+    "summaryReviewed": false,
+    "summary": {
+      "effect": "Use an action while touching one stone to cast Sending to the other stone’s bearer. The pair shares one use per dawn, and destroying either stone leaves the other mundane."
+    },
+    "category": "magic",
+    "magicType": "wondrous",
+    "rarity": "uncommon",
+    "attunement": false
   }
 ]

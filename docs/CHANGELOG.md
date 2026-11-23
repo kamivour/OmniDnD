@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 12:25 — Artificer replica items
+
+- Apply learned Replicate Magic Item recipes to mundane gear. Each replica uses an active infusion slot.
+- Check that ending Bag of Holding returns the base bag and moves its contents to Carried. Checks pass.
+
 ## 2026-11-23 12:20 — Guardian and Infiltrator Arcane Armor
 
 - Configure an Armorer’s suit in Features and change its model during a rest.

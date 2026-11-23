@@ -1,5 +1,6 @@
 import { sourceAllows } from '../calc/campaign-rules';
 import { containerLoads } from '../calc/inventory-weight';
+import { isReplicaInstance } from '../calc/infusions';
 import { characterRegistry } from '../registry';
 import type { Draft } from 'immer';
 import { z } from 'zod';
@@ -94,6 +95,7 @@ type StorageChange = {
   quantity: number;
   /** A new record: its catalogue id, and a custom definition when it is being created. */
   added?: { itemId: string; custom?: ItemDef };
+  replacementId?: string;
 };
 
 /** Containers above an item, nearest first; stops at a broken or cyclic link. */
@@ -112,15 +114,17 @@ function ancestors(items: CharacterData['build']['items'], instanceId: string): 
  * Warnings only (D246): an overloaded magic container and an extradimensional container put
  * inside another one are the DM's call, so nothing is destroyed here.
  */
-function storageWarnings(ctx: CommandContext, change: StorageChange): Check[] {
-  const { instanceId, container, quantity, added } = change;
+export function storageWarnings(ctx: CommandContext, change: StorageChange): Check[] {
+  const { instanceId, container, quantity, added, replacementId } = change;
   const items = added
     ? [
         ...ctx.build.items,
         { instanceId, itemId: added.itemId, ...(container ? { container } : {}) },
       ]
     : ctx.build.items.map((item) => {
-        if (item.instanceId !== instanceId || container === undefined) return item;
+        if (item.instanceId !== instanceId) return item;
+        if (replacementId) return { ...item, itemId: replacementId };
+        if (container === undefined) return item;
         const rest = { ...item };
         delete rest.container;
         return container ? { ...rest, container } : rest;
@@ -150,7 +154,7 @@ function storageWarnings(ctx: CommandContext, change: StorageChange): Check[] {
   };
   const above = ancestors(items, instanceId);
   const checks: Check[] = [];
-  const moved = added !== undefined || container !== undefined;
+  const moved = added !== undefined || container !== undefined || replacementId !== undefined;
   if (moved) {
     const outer = above.map(defOf).find((def) => def?.storage?.extradimensional);
     const inner = [instanceId, ...items.map((item) => item.instanceId)]
@@ -163,10 +167,26 @@ function storageWarnings(ctx: CommandContext, change: StorageChange): Check[] {
           `Putting ${inner.name} inside ${outer.name} destroys both and opens a one-way gate to the Astral Plane. Ask your DM; nothing is removed automatically.`,
         ),
       );
+    if (replacementId && defOf(instanceId)?.storage?.extradimensional) {
+      const stored = items
+        .filter((item) => ancestors(items, item.instanceId).includes(instanceId))
+        .map(({ instanceId }) => defOf(instanceId))
+        .find((def) => def?.storage?.extradimensional);
+      if (stored)
+        checks.push(
+          warn(
+            `${stored.name} is inside the new ${defOf(instanceId)!.name}. Ask your DM about the extradimensional container interaction.`,
+          ),
+        );
+    }
   }
   const before = new Map(containerLoads(ctx, ctx.registry).map((load) => [load.instanceId, load]));
   for (const load of containerLoads(next, registry)) {
-    if (!load.overCapacity || !above.includes(load.instanceId)) continue;
+    if (
+      !load.overCapacity ||
+      (!above.includes(load.instanceId) && !(replacementId && load.instanceId === instanceId))
+    )
+      continue;
     const old = before.get(load.instanceId);
     if (old?.overCapacity && old.pounds === load.pounds) continue;
     checks.push(
@@ -253,9 +273,11 @@ export const editInventoryItem: Command<EditInventoryItemPayload> = {
   check: (ctx, input) => {
     const parsed = EditInventoryItemPayloadSchema.safeParse(input);
     if (!parsed.success) return [block('Item edits are invalid')];
-    const { instanceId, container, expected } = parsed.data;
+    const { instanceId, container, expected, quantity } = parsed.data;
     const target = ownedItem(ctx, instanceId);
     if (!target) return [block('That item instance is unavailable')];
+    if (quantity > 1 && isReplicaInstance(ctx.live, instanceId))
+      return [block('A replica infusion applies to one item')];
     const checks = baselineChecks(target, expected);
     const changed = container !== undefined && (container ?? undefined) !== target.item.container;
     if (changed) checks.push(...containerChecks(ctx, instanceId, container));

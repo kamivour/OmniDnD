@@ -14,6 +14,9 @@ test('known infusion picker searches and learns separate replica recipes at the 
   file.build.spells = [];
   file.build.proficiencyPicks = {};
   file.build.featureIds = ['feature.artificer.infusion-enhanced-weapon'];
+  file.build.items = [{ instanceId: 'pack', itemId: 'item.backpack' }];
+  file.live.items = { pack: { qty: 1, equipped: false, attuned: false } };
+  file.live.lastLongRestEnd = file.live.clock.seconds;
   await importReview(page, file, 'todo');
   const row = page.getByRole('listitem').filter({ hasText: 'Infusions: pick 3' });
   await row.getByRole('button', { name: 'Choose', exact: true }).click();
@@ -71,7 +74,19 @@ test('known infusion picker searches and learns separate replica recipes at the 
   await expect(known.locator('optgroup[label="Replicate Magic Item"] option:checked')).toHaveText(
     'Bag of Holding',
   );
-  await expect(panel.getByText(/Record the replicated item in Inventory/)).toBeVisible();
+  await expect(
+    panel.getByText(/Choose the nonmagical base object for Bag of Holding/),
+  ).toBeVisible();
+  await panel.getByLabel('Item to infuse').selectOption('pack');
+  await panel.getByRole('button', { name: 'Infuse item', exact: true }).click();
+  await expect(panel.getByRole('heading', { name: 'Infused items · 1/2' })).toBeVisible();
+  await saved(page);
+  expect((await reviewState(page, file.build.id)).build.items[0]?.itemId).toBe(
+    'item.bag-of-holding',
+  );
+  await page.getByRole('button', { name: 'Undo last command', exact: true }).click();
+  await saved(page);
+  expect((await reviewState(page, file.build.id)).build.items[0]?.itemId).toBe('item.backpack');
   await page.getByRole('button', { name: 'Undo last command', exact: true }).click();
   await saved(page);
   await page.goto(`/characters/${file.build.id}/todo`);
