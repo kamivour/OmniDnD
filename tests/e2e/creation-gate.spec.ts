@@ -1,3 +1,4 @@
+import { identityChoice } from './creation-helpers';
 import type { Page } from '@playwright/test';
 import { expect, test } from './fixtures';
 
@@ -15,12 +16,12 @@ test('a half-built character survives a reload', async ({ page }) => {
   await openNewCharacter(page);
   await page.getByLabel('Name', { exact: true }).fill('Reload Hero');
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.wizard');
+  await identityChoice(page, 'class.wizard').check();
   await page.getByLabel('Level', { exact: true }).fill('3');
   await page.reload();
   await expect(page.getByLabel('Name', { exact: true })).toHaveValue('Reload Hero');
   await expect(page.getByLabel('Race', { exact: true })).toHaveValue('race.human');
-  await expect(page.getByLabel('Class', { exact: true })).toHaveValue('class.wizard');
+  await expect(identityChoice(page, 'class.wizard')).toBeChecked();
   await expect(page.getByLabel('Level', { exact: true })).toHaveValue('3');
   await page.getByRole('button', { name: 'Start over', exact: true }).click();
   await expect(page.getByLabel('Name', { exact: true })).toHaveValue('');
@@ -37,7 +38,7 @@ test('a beginner builds a level 5 Wizard step by step', async ({ page }) => {
   await next.click();
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
   await next.click();
-  await page.getByLabel('Class', { exact: true }).selectOption('class.wizard');
+  await identityChoice(page, 'class.wizard').check();
   await expect(page.getByRole('article', { name: 'Wizard guide' })).toBeVisible();
   await next.click();
   await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
@@ -67,7 +68,7 @@ test('an expert builds a Fighter on one page with hints off', async ({ page }) =
   await openNewCharacter(page);
   await page.getByLabel('Name', { exact: true }).fill('Expert Fighter');
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.fighter');
+  await identityChoice(page, 'class.fighter').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
   await expect(page.getByRole('article', { name: /guide$/ })).toHaveCount(0);
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
@@ -89,7 +90,7 @@ test('a beginner Fighter at level 1 starts from suggested scores', async ({ page
     .click();
   await page.getByLabel('Name', { exact: true }).fill('Suggested Fighter');
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.fighter');
+  await identityChoice(page, 'class.fighter').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
   await page.getByRole('button', { name: 'Suggested scores', exact: true }).click();
   await expect(page.getByLabel('STR base', { exact: true })).toHaveValue('15');
@@ -117,7 +118,7 @@ for (const hero of [
     await openNewCharacter(page);
     await page.getByLabel('Name', { exact: true }).fill(`Later ${hero.name}`);
     await page.getByLabel('Race', { exact: true }).selectOption('race.human');
-    await page.getByLabel('Class', { exact: true }).selectOption(hero.classId);
+    await identityChoice(page, hero.classId).check();
     await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
     await page.getByLabel('Level', { exact: true }).fill(String(hero.level));
     for (const [ability, score] of Object.entries(scores)) {

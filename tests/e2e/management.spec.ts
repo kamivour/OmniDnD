@@ -1,3 +1,4 @@
+import { identityChoice } from './creation-helpers';
 import { readFile } from 'node:fs/promises';
 import seed from '../../data/characters/the-fool.json' with { type: 'json' };
 import {
@@ -400,7 +401,7 @@ test('new blank character validates racial choices and opens a saved HUD with co
   }
   await page.getByLabel('Name', { exact: true }).fill('First Verse');
   await page.getByLabel('Race', { exact: true }).selectOption('race.half-elf');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.bard');
+  await identityChoice(page, 'class.bard').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.charlatan');
   for (const [ability, score] of Object.entries({
     STR: 11,

@@ -1,3 +1,4 @@
+import { identityChoice } from './creation-helpers';
 import { expect, test, type Page } from './fixtures';
 
 async function chooseHumanLanguage(page: Page) {
@@ -17,7 +18,7 @@ test('skipped level choices wait on the To do list and clear when chosen', async
     .click();
   await page.getByLabel('Name', { exact: true }).fill('Todo Hero');
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.fighter');
+  await identityChoice(page, 'class.fighter').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
   await page.getByLabel('Level', { exact: true }).fill('3');
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
@@ -63,7 +64,7 @@ test("Tasha's fighting styles join the list when the campaign uses them", async 
   await campaign.getByRole('link', { name: 'New character', exact: true }).click();
   await page.getByLabel('Name', { exact: true }).fill('Style Hero');
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.fighter');
+  await identityChoice(page, 'class.fighter').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('12');

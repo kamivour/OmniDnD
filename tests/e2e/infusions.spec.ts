@@ -1,3 +1,4 @@
+import { identityChoice } from './creation-helpers';
 import { expect, test } from './fixtures';
 import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
@@ -269,7 +270,7 @@ test('changing Point Buy to Rolled preserves Tasha class availability', async ({
   file.campaign.abilityMethod = 'point-buy';
   await importReview(page, file, 'sheet');
   await page.goto('/campaigns/source-check/characters/new');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.artificer');
+  await identityChoice(page, 'class.artificer').check();
   await expect(page.getByLabel('STR base', { exact: true })).toHaveAttribute('min', '8');
   await page.goto('/campaigns/source-check/settings');
   await expect(
@@ -279,15 +280,11 @@ test('changing Point Buy to Rolled preserves Tasha class availability', async ({
   await page.getByRole('button', { name: 'Save', exact: true }).click();
   await saved(page);
   await page.goto('/campaigns/source-check/characters/new');
-  await expect(
-    page.getByLabel('Class', { exact: true }).locator('option[value="class.artificer"]'),
-  ).toHaveCount(1);
-  await page.getByLabel('Class', { exact: true }).selectOption('class.artificer');
+  await expect(identityChoice(page, 'class.artificer')).toHaveCount(1);
+  await identityChoice(page, 'class.artificer').check();
   await expect(page.getByLabel('STR base', { exact: true })).toHaveAttribute('min', '3');
   await page.reload();
-  await expect(
-    page.getByLabel('Class', { exact: true }).locator('option[value="class.artificer"]'),
-  ).toHaveCount(1);
+  await expect(identityChoice(page, 'class.artificer')).toHaveCount(1);
   await page.goto('/campaigns/source-check/settings');
   await expect(page.locator('input[name="abilities"][value="rolled"]')).toBeChecked();
   await expect(

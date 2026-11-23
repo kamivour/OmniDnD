@@ -1,3 +1,4 @@
+import { identityChoice } from './creation-helpers';
 import type { Page } from '@playwright/test';
 import { expect, test } from './fixtures';
 
@@ -61,7 +62,7 @@ test('Pending at level 1 lists first-level spells, not cantrips, until Show all'
   await openNewCharacter(page);
   await page.getByLabel('Name', { exact: true }).fill('Pending Wizard');
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.wizard');
+  await identityChoice(page, 'class.wizard').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('13');
@@ -107,7 +108,7 @@ test('a background with open choices asks for them and the sheet keeps them', as
   await openNewCharacter(page);
   await page.getByLabel('Name', { exact: true }).fill('Noble Sage');
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.wizard');
+  await identityChoice(page, 'class.wizard').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.noble');
   await page.getByLabel('Language', { exact: true }).selectOption('Dwarvish');
   await page.getByLabel('Tool', { exact: true }).selectOption('item.dice-set');
@@ -126,7 +127,7 @@ test('Steel Defender shows Stats on Features and on the Combat bonus tab', async
   await page.getByLabel('Level', { exact: true }).fill('3');
   await page.getByLabel('Name', { exact: true }).fill('Defender Smith');
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.artificer');
+  await identityChoice(page, 'class.artificer').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('13');

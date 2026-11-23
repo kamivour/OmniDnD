@@ -1,3 +1,4 @@
+import { identityChoice } from './creation-helpers';
 import { expect, test, type Page } from './fixtures';
 
 const campaign = (page: Page) => page.getByRole('article', { name: 'Campaign #273', exact: true });
@@ -31,7 +32,7 @@ test('new character points to the rule, then moves every racial increase', async
   await openNewCharacter(page);
   await page.getByLabel('Name', { exact: true }).fill('Moved Dwarf');
   await page.getByLabel('Race', { exact: true }).selectOption('race.hill-dwarf');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.wizard');
+  await identityChoice(page, 'class.wizard').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('13');

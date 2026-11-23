@@ -9,7 +9,15 @@ const DIFFICULTY: Record<Difficulty, string> = {
 };
 
 /** Pitch, difficulty, strengths and weaknesses for one option. */
-export function GuidanceCard({ name, guidance }: { name: string; guidance: Guidance }) {
+export function GuidanceCard({
+  name,
+  guidance,
+  showPitch = true,
+}: {
+  name: string;
+  guidance: Guidance;
+  showPitch?: boolean;
+}) {
   return (
     <article
       aria-label={`${name} guide`}
@@ -26,7 +34,7 @@ export function GuidanceCard({ name, guidance }: { name: string; guidance: Guida
           </span>
         )}
       </header>
-      <p className="text-text">{guidance.pitch}</p>
+      {showPitch && <p className="text-text">{guidance.pitch}</p>}
       <div className="grid gap-2 sm:grid-cols-2">
         <section aria-label="Strengths">
           <p className="text-xs font-semibold text-text-muted">Strengths</p>

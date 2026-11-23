@@ -1,3 +1,4 @@
+import { identityChoice } from './creation-helpers';
 import { expect, test } from './fixtures';
 
 test('step by step builds a level 1 Fighter and keeps entries when switching mode', async ({
@@ -20,7 +21,7 @@ test('step by step builds a level 1 Fighter and keeps entries when switching mod
   await expect(page.getByLabel('Name', { exact: true })).toHaveCount(0);
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
   await page.getByRole('button', { name: 'Next', exact: true }).click();
-  await page.getByLabel('Class', { exact: true }).selectOption('class.fighter');
+  await identityChoice(page, 'class.fighter').check();
   await page.getByRole('button', { name: 'Next', exact: true }).click();
   await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
   await page.getByRole('button', { name: 'Next', exact: true }).click();
@@ -59,15 +60,18 @@ test('choice cards show strengths and weaknesses, and can be switched off', asyn
     .getByRole('article', { name: 'Campaign #273', exact: true })
     .getByRole('link', { name: 'New character', exact: true })
     .click();
-  await page.getByLabel('Class', { exact: true }).selectOption('class.fighter');
+  await identityChoice(page, 'class.fighter').check();
   const card = page.getByRole('article', { name: 'Fighter guide' });
   await expect(card.getByRole('region', { name: 'Strengths' })).toBeVisible();
   await expect(card.getByRole('region', { name: 'Weaknesses' })).toBeVisible();
 
-  // Pick another class from the comparison list.
-  await page.getByText('Compare classes').click();
-  await page.getByRole('button', { name: /^Wizard/ }).click();
-  await expect(page.getByLabel('Class', { exact: true })).toHaveValue('class.wizard');
+  // Navigate the native radio group with the keyboard.
+  const fighter = page.getByRole('radio', { name: 'Fighter', exact: true });
+  await fighter.focus();
+  await fighter.press('ArrowRight');
+  await expect(page.getByRole('radio', { name: 'Monk', exact: true })).toBeChecked();
+  await page.getByRole('radio', { name: 'Wizard', exact: true }).check();
+  await expect(identityChoice(page, 'class.wizard')).toBeChecked();
   await expect(page.getByRole('article', { name: 'Wizard guide' })).toBeVisible();
 
   // The Settings switch hides the cards.
@@ -85,7 +89,7 @@ test('guided build tags recommended skills and spells with a reason', async ({ p
     .click();
   await page.getByLabel('Name', { exact: true }).fill('Tagged');
   await page.getByLabel('Race', { exact: true }).selectOption('race.half-elf');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.bard');
+  await identityChoice(page, 'class.bard').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.charlatan');
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('12');
@@ -113,7 +117,7 @@ test('a level 4 Fighter picks a subclass and an ability increase during creation
   await next.click();
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
   await next.click();
-  await page.getByLabel('Class', { exact: true }).selectOption('class.fighter');
+  await identityChoice(page, 'class.fighter').check();
   await next.click();
   await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
   await next.click();

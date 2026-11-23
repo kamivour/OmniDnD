@@ -375,7 +375,7 @@ Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M44. 
 
 - [x] T1: Produce the class-icon board and creation mockups at 375 px and 1440 px
 - [x] T2: Add shared class/subclass icons and character portrait fallbacks
-- [ ] T3: Replace the class picker with accessible selection cards in both creation modes
+- [x] T3: Replace the class picker with accessible selection cards in both creation modes
 - [ ] T4: Use subclass cards in creation, level-up and To do
 - [ ] T5: Extend cards to race and background choices with search for larger lists
 - [ ] T6: Refine guidance, review and navigation while preserving drafts
@@ -442,6 +442,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Switched both creation modes to class cards with keyboard selection and optional guidance.
 - 2026-11-23 — Added recognizable class silhouettes and subclass motifs shared by icons and portrait fallbacks.
 - 2026-11-23 — Reviewed class silhouettes and mocked up class and subclass cards at both widths.
 - 2026-11-23 — Added Homunculus creation, calculated stats, bonus-action commands and infusion cleanup.

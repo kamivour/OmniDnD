@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 12:40 — Class selection cards
+
+- Pick a class from icon cards in Step by step or One page. Arrow keys move between choices.
+- Check that a draft keeps its selection and that enabled campaign books still control which classes appear. Checks pass.
+
 ## 2026-11-23 12:36 — Class and subclass icons
 
 - Look for the Paladin hammer and shield, Barbarian axe, Monk fist, Ranger bow, Rogue dagger and Wizard spellbook.

@@ -1,3 +1,4 @@
+import { identityChoice } from './creation-helpers';
 import type { Locator } from '@playwright/test';
 import seed from '../../data/characters/the-fool.json' with { type: 'json' };
 import {
@@ -284,7 +285,7 @@ test('a newly created blank character computes its own values and inherits no Fo
   await saved(page);
   await page.getByLabel('Name', { exact: true }).fill('First dashboard');
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.bard');
+  await identityChoice(page, 'class.bard').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.charlatan');
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('10');

@@ -1,3 +1,4 @@
+import { identityChoice } from './creation-helpers';
 import { expect, test } from './fixtures';
 
 test('print view shows the sheet on light paper and offers Print / Save as PDF', async ({
@@ -10,7 +11,7 @@ test('print view shows the sheet on light paper and offers Print / Save as PDF',
     .click();
   await page.getByLabel('Name', { exact: true }).fill('Paper Wizard');
   await page.getByLabel('Race', { exact: true }).selectOption('race.human');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.wizard');
+  await identityChoice(page, 'class.wizard').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('13');

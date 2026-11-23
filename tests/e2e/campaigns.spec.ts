@@ -1,3 +1,4 @@
+import { identityChoice } from './creation-helpers';
 import seed from '../../data/characters/the-fool.json' with { type: 'json' };
 import {
   ExportFileSchema,
@@ -82,7 +83,7 @@ async function chooseAveragePointBuy(page: Page) {
 async function fillCharacterBasics(page: Page, name: string) {
   await page.getByLabel('Name', { exact: true }).fill(name);
   await page.getByLabel('Race', { exact: true }).selectOption('race.half-elf');
-  await page.getByLabel('Class', { exact: true }).selectOption('class.bard');
+  await identityChoice(page, 'class.bard').check();
   await page.getByLabel('Background', { exact: true }).selectOption('background.charlatan');
 }
 

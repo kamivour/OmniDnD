@@ -21,6 +21,7 @@ import { Field, inputClass } from '../components/fields';
 import { guidanceFor } from '../../data/guidance';
 import { suggestAbilityBases, synergyNotes } from '../../engine/calc/suggestions';
 import { OptionGuide } from '../components/OptionGuide';
+import { SelectionCards } from '../components/SelectionCards';
 import { AbilityBaseInput } from '../components/AbilityBaseInput';
 import { SectionLabel } from '../components/SectionLabel';
 import { ALIGNMENTS, alignmentLabel } from '../fixtures/new-character';
@@ -394,7 +395,7 @@ function NewCharacterForm({
           );
         }
       }}
-      className="mx-auto flex max-w-3xl flex-col gap-6"
+      className="mx-auto flex max-w-5xl flex-col gap-6"
     >
       <PlayedByDialog
         open={askRoles && !playedByAsked}
@@ -581,28 +582,19 @@ function NewCharacterForm({
             <OptionGuide noun="races" options={races} value={raceId} onChange={pickRace} />
           )}
           {show('class') && (
-            <Field
+            <SelectionCards
               label="Class"
-              htmlFor="nc-class"
-              hint={die === undefined ? undefined : `Hit die d${die}`}
-            >
-              <select
-                id="nc-class"
-                value={classId}
-                onChange={(e) => pickClass(e.target.value)}
-                required
-                className={inputClass}
-              >
-                <option value="" disabled>
-                  Choose…
-                </option>
-                {classes.map((entry) => (
-                  <option key={entry.id} value={entry.id}>
-                    {entry.name}
-                  </option>
-                ))}
-              </select>
-            </Field>
+              options={classes}
+              value={classId}
+              onChange={pickClass}
+              hints={hints}
+              detail={
+                die === undefined ? undefined : (
+                  <p className="px-1 text-xs text-text-muted">Hit die d{die}</p>
+                )
+              }
+              className="sm:col-span-2"
+            />
           )}
           {show('class') && !classes.some((entry) => entry.id === 'class.artificer') && (
             <p className="text-sm text-text-muted">
@@ -616,9 +608,6 @@ function NewCharacterForm({
               </Link>
               . Ability score method does not affect class availability.
             </p>
-          )}
-          {hints && show('class') && (
-            <OptionGuide noun="classes" options={classes} value={classId} onChange={pickClass} />
           )}
           {show('background') && (
             <Select
