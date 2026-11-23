@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { Pencil, Plus } from 'lucide-react';
 import { companionStats } from '../../engine/calc/companions';
+import { HOMUNCULUS_INFUSION } from '../../engine/calc/infusions';
 import {
   resolveCompanion,
   profileForSource,
@@ -38,7 +39,7 @@ const buttonClass =
   'inline-flex min-h-11 items-center justify-center rounded-btn bg-surface px-3 text-sm font-semibold text-text hover:bg-surface-2 disabled:opacity-40';
 
 export function CompanionsScreen() {
-  const { state, sheet } = useCharacter();
+  const { state, sheet, characterId } = useCharacter();
   const { run } = useCommand();
   const [params, setParams] = useSearchParams();
   // A Stats button elsewhere sends us here: show the creature it names, or open the add form.
@@ -87,6 +88,14 @@ export function CompanionsScreen() {
           Add companion
         </button>
       </header>
+      {state.build.featureIds.includes(HOMUNCULUS_INFUSION) && (
+        <Link
+          className="w-fit text-sm text-accent underline"
+          to={`/characters/${encodeURIComponent(characterId)}/inventory#artificer-infusions`}
+        >
+          Manage Homunculus infusion
+        </Link>
+      )}
 
       {combat && (
         <section aria-label="Your turn economy" className="rounded-card bg-surface p-3">
@@ -147,6 +156,7 @@ function CompanionCard({
   const value = parseWhole(amount) ?? -1;
   const valid = value >= 0;
   const active = live.status === 'active';
+  const homunculus = companion.sourceId === HOMUNCULUS_INFUSION;
   const speed = Object.entries(companion.speed)
     .filter(([, feet]) => feet)
     .map(([kind, feet]) => `${kind} ${feet} ft.`)
@@ -192,6 +202,13 @@ function CompanionCard({
           .map(([ability, score]) => `${ability} ${score}`)
           .join(' · ')}
       </p>
+      {homunculus && (
+        <p className="text-xs text-text-muted">
+          DEX save +{2 + sheet.proficiency} · Stealth +{2 + sheet.proficiency} · Perception +
+          {2 * sheet.proficiency} · Passive Perception {10 + 2 * sheet.proficiency} ·{' '}
+          {classLevel({ build: state.build, sheet }, 'class.artificer')}d4 Hit Dice
+        </p>
+      )}
 
       {stats.attacks.length > 0 && (
         <ul className="flex flex-col gap-1 text-sm">
@@ -433,7 +450,18 @@ function CompanionCard({
               className={inputClass}
             />
           </Field>
+          {homunculus && (
+            <button
+              type="button"
+              className={buttonClass}
+              disabled={!active}
+              onClick={() => run(commandCompanion, { id: companion.id, slot: 'bonus' })}
+            >
+              Command Homunculus · bonus action
+            </button>
+          )}
           {!companion.profile &&
+            !homunculus &&
             (['action', 'bonus', 'reaction'] as const).map((slot) => (
               <button
                 key={slot}
@@ -449,10 +477,12 @@ function CompanionCard({
       )}
 
       <div className="flex flex-wrap gap-2">
-        <button type="button" className={buttonClass} onClick={onEdit}>
-          <Pencil size={16} aria-hidden className="mr-1" />
-          Edit {name}
-        </button>
+        {!homunculus && (
+          <button type="button" className={buttonClass} onClick={onEdit}>
+            <Pencil size={16} aria-hidden className="mr-1" />
+            Edit {name}
+          </button>
+        )}
         {active ? (
           <button
             type="button"
@@ -461,7 +491,7 @@ function CompanionCard({
           >
             Dismiss {name}
           </button>
-        ) : (
+        ) : !homunculus ? (
           <button
             type="button"
             className={buttonClass}
@@ -469,7 +499,7 @@ function CompanionCard({
           >
             Resummon {name}
           </button>
-        )}
+        ) : null}
         <button
           type="button"
           className={buttonClass}

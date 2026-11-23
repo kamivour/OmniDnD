@@ -345,7 +345,7 @@ interface Guidance {
 
 ## 5. Commands and event log
 
-**Infusions (M41):** optional `live.infusions` stores `{ featureId, instanceId, damageType?, replicaBaseItemId?, replicaBaseCharges? }` in oldest-first order. A replica keeps its inventory instance and restores its mundane definition and charges when the infusion ends.
+**Infusions (M41):** optional `live.infusions` stores `{ featureId, instanceId, damageType?, replicaBaseItemId?, replicaBaseCharges?, companionId? }` in oldest-first order. A replica keeps its inventory instance, and a Homunculus links the gem instance to a companion.
 
 **Replica recipes:** `data/content/infusion-replicas.json` lists Tasha’s named items by minimum Artificer level. Common catalog items get their own recipe IDs and require their source book. The table choice keeps the original Replicate Magic Item ID.
 

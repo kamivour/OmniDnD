@@ -5,6 +5,7 @@ import {
   activeInfusions,
   artificerLevel,
   INFUSIONS,
+  HOMUNCULUS_INFUSION,
   infusionFits,
   infusionKey,
   infusionLimit,
@@ -13,17 +14,29 @@ import {
   magicalItem,
 } from '../calc/infusions';
 import { replicaFits, replicaItem } from '../calc/infusion-replicas';
+import { companionStats, freshCompanionLive } from '../calc/companions';
+import { homunculusServant } from '../calc/homunculus';
 import { storageWarnings } from './inventory';
-import { block, info, warn, withNotes } from './shared';
+import { block, deadCheck, info, warn, withNotes } from './shared';
 import type { CharacterData, Command, CommandContext } from './runner';
 
 type Application = NonNullable<CharacterData['live']['infusions']>[number];
 
 export function endInfusionIn({ build, live }: CharacterData, entry: Application): string[] {
-  const { instanceId, replicaBaseItemId } = entry;
+  const { instanceId, replicaBaseItemId, companionId } = entry;
   live.infusions = live.infusions?.filter((row) => row.instanceId !== instanceId);
   const state = live.items[instanceId];
   if (state) state.attuned = false;
+  if (companionId) {
+    const companion = live.companions?.[companionId];
+    if (companion?.status === 'active') {
+      companion.status = 'dismissed';
+      companion.conditions = [];
+      companion.tempHp = 0;
+      delete companion.endsAt;
+    }
+    return ['Homunculus vanished; its heart remains'];
+  }
   if (!replicaBaseItemId) return [];
   const replica = build.items.find((item) => item.instanceId === instanceId);
   if (replica) replica.itemId = replicaBaseItemId;
@@ -51,20 +64,22 @@ const Input = z.strictObject({
   instanceId: z.string(),
   damageType: DamageTypeSchema.optional(),
   attune: z.boolean().optional(),
+  materialConfirmed: z.boolean().optional(),
 });
 export const infuseItem: Command<z.infer<typeof Input>> = {
   name: 'infuseItem',
   check: (ctx, input) => {
     const parsed = Input.safeParse(input);
     if (!parsed.success) return [block('Infusion details are invalid')];
-    const { featureId, instanceId, damageType, attune } = parsed.data;
+    const { featureId, instanceId, damageType, attune, materialConfirmed } = parsed.data;
     if (['__proto__', 'constructor', 'prototype'].includes(instanceId))
       return [block('Use a new inventory entry for this item')];
     const key = infusionKey(featureId),
       rule = INFUSIONS[key];
     const replica = replicaItem(ctx.registry, featureId);
+    const homunculus = featureId === HOMUNCULUS_INFUSION;
     if (
-      (!rule && !replica) ||
+      (!rule && !replica && !homunculus) ||
       artificerLevel(ctx.build) < infusionMinimumLevel(featureId) ||
       !ctx.build.featureIds.includes(featureId)
     )
@@ -73,7 +88,7 @@ export const infuseItem: Command<z.infer<typeof Input>> = {
     if (
       !def ||
       ctx.live.items[instanceId]?.qty !== 1 ||
-      !(replica ? replicaFits(replica, def) : infusionFits(key, def))
+      !(replica ? replicaFits(replica, def) : homunculus || infusionFits(key, def))
     )
       return [
         block(
@@ -82,6 +97,8 @@ export const infuseItem: Command<z.infer<typeof Input>> = {
       ];
     if (magicalItem(def) || ctx.live.infusions?.some((i) => i.instanceId === instanceId))
       return [block('Infusions require a nonmagical item with no existing infusion')];
+    if (homunculus && !materialConfirmed)
+      return [block('Confirm that the heart is a gem or crystal worth at least 100 gp')];
     if (key === 'resistant-armor' && (!damageType || !isResistantArmorType(damageType)))
       return [block('Choose an eligible damage type for Resistant Armor')];
     if (damageType && key !== 'resistant-armor')
@@ -97,7 +114,7 @@ export const infuseItem: Command<z.infer<typeof Input>> = {
           'This infusion is already on an item. Record its ending before applying it elsewhere',
         ),
       ];
-    const checks = [];
+    const checks = homunculus ? [...deadCheck(ctx)] : [];
     if (
       ctx.live.lastLongRestEnd === undefined ||
       ctx.live.clock.seconds !== ctx.live.lastLongRestEnd
@@ -138,11 +155,26 @@ export const infuseItem: Command<z.infer<typeof Input>> = {
     const notes = ended ? ['oldest infusion ended', ...endInfusionIn(draft, ended)] : [];
     const item = build.items.find(({ instanceId }) => instanceId === input.instanceId)!;
     const replica = replicaItem(ctx.registry, input.featureId);
+    const homunculus = input.featureId === HOMUNCULUS_INFUSION;
     const baseId = item.itemId;
     const baseCharges = live.items[input.instanceId]?.charges;
     if (replica) {
       item.itemId = replica.id;
       delete live.items[input.instanceId]!.charges;
+    }
+    let companionId: string | undefined;
+    if (homunculus) {
+      const root = `homunculus:${ctx.eventId}`;
+      companionId = root;
+      let suffix = 2;
+      while (build.companions?.some(({ id }) => id === companionId))
+        companionId = `${root}:${suffix++}`;
+      const companion = homunculusServant(companionId);
+      const { maxHp } = companionStats(companion, ctx);
+      build.companions ??= [];
+      build.companions.push(companion);
+      live.companions ??= {};
+      live.companions[companionId] = freshCompanionLive(maxHp);
     }
     live.infusions = [
       ...(live.infusions ?? []),
@@ -152,6 +184,7 @@ export const infuseItem: Command<z.infer<typeof Input>> = {
         ...(input.damageType ? { damageType: input.damageType } : {}),
         ...(replica ? { replicaBaseItemId: baseId } : {}),
         ...(replica && baseCharges !== undefined ? { replicaBaseCharges: baseCharges } : {}),
+        ...(companionId ? { companionId } : {}),
       },
     ];
     const attunement = INFUSIONS[infusionKey(input.featureId)]?.attunement || replica?.attunement;

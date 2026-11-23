@@ -7,6 +7,7 @@ import {
   activeInfusions,
   INFUSION_PREFIX,
   INFUSIONS,
+  HOMUNCULUS_INFUSION,
   infusionFits,
   infusionKey,
   infusionLimit,
@@ -41,6 +42,7 @@ export function InfusionPanel({
   const [instanceId, setItem] = useState('');
   const [damageType, setDamageType] = useState<DamageType>('fire');
   const [attune, setAttune] = useState(false);
+  const [materialConfirmed, setMaterialConfirmed] = useState(false);
   const level = artificerLevel(state.build);
   if (level < 2) return null;
   const refs = characterRegistry(registry, state.build);
@@ -52,12 +54,13 @@ export function InfusionPanel({
   const key = infusionKey(featureId),
     rule = INFUSIONS[key];
   const replica = replicaItem(refs, featureId);
+  const homunculus = featureId === HOMUNCULUS_INFUSION;
   const items = state.build.items.filter((item) => {
     const def = refs.get('item', item.itemId);
     return (
       state.live.items[item.instanceId]?.qty === 1 &&
       !magicalItem(def) &&
-      (replica ? replicaFits(replica, def) : infusionFits(key, def)) &&
+      (replica ? replicaFits(replica, def) : homunculus || infusionFits(key, def)) &&
       !state.live.infusions?.some((i) => i.instanceId === item.instanceId)
     );
   });
@@ -70,7 +73,9 @@ export function InfusionPanel({
       <h2 className="font-display text-base">
         Infused items · {active.length}/{infusionLimit(state.build)}
       </h2>
-      {known.some((id) => !INFUSIONS[infusionKey(id)] && !replicaItem(refs, id)) && (
+      {known.some(
+        (id) => id !== HOMUNCULUS_INFUSION && !INFUSIONS[infusionKey(id)] && !replicaItem(refs, id),
+      ) && (
         <p className="text-warn">
           Count any table-only infusion selections against your active limit as well.
         </p>
@@ -118,6 +123,15 @@ export function InfusionPanel({
                 <p className="text-warn">Requires attunement; its benefits are not counted yet.</p>
               )}
             <p className="text-text-muted">{refs.entries.get(entry.featureId)?.summary?.effect}</p>
+            {entry.companionId && (
+              <Link
+                to={`/characters/${encodeURIComponent(characterId)}/companions#companion-${encodeURIComponent(entry.companionId)}`}
+                onClick={onNavigate}
+                className="w-fit text-accent underline"
+              >
+                View Homunculus Servant
+              </Link>
+            )}
             <button
               type="button"
               className={button}
@@ -147,6 +161,7 @@ export function InfusionPanel({
             setFeature(e.target.value);
             setItem('');
             setAttune(false);
+            setMaterialConfirmed(false);
           }}
         >
           <option value="">Choose an infusion</option>
@@ -161,14 +176,14 @@ export function InfusionPanel({
           ))}
         </select>
       </label>
-      {featureId && !rule && !replica && (
+      {featureId && !rule && !replica && !homunculus && (
         <p>
           {isReplicateInfusion(featureId)
             ? 'Record the replicated item in Inventory and count it against your active infusion limit.'
-            : 'Record your Homunculus Servant in Companions and count it against your active infusion limit.'}
+            : 'Record the infusion and its active slot at the table.'}
         </p>
       )}
-      {(rule || replica) && (
+      {(rule || replica || homunculus) && (
         <>
           {replica && (
             <p>
@@ -176,11 +191,14 @@ export function InfusionPanel({
             </p>
           )}
           <label className="flex flex-col gap-1">
-            Item to infuse
+            {homunculus ? 'Gem or crystal' : 'Item to infuse'}
             <select
               className={inputClass}
               value={instanceId}
-              onChange={(e) => setItem(e.target.value)}
+              onChange={(e) => {
+                setItem(e.target.value);
+                setMaterialConfirmed(false);
+              }}
             >
               <option value="">Choose an item</option>
               {items.map((i, index) => (
@@ -221,20 +239,33 @@ export function InfusionPanel({
               Attune myself when infusing
             </label>
           )}
+          {homunculus && (
+            <label className="flex min-h-11 items-center gap-2">
+              <input
+                type="checkbox"
+                checked={materialConfirmed}
+                onChange={(e) => setMaterialConfirmed(e.target.checked)}
+              />
+              This gem or crystal is worth at least 100 gp
+            </label>
+          )}
           <button
             type="button"
             className={`${button} text-accent`}
-            disabled={!items.some((i) => i.instanceId === instanceId)}
+            disabled={
+              !items.some((i) => i.instanceId === instanceId) || (homunculus && !materialConfirmed)
+            }
             onClick={() =>
               run(infuseItem, {
                 featureId,
                 instanceId,
                 attune,
+                ...(homunculus ? { materialConfirmed } : {}),
                 ...(key === 'resistant-armor' ? { damageType } : {}),
               })
             }
           >
-            Infuse item
+            {homunculus ? 'Create Homunculus Servant' : 'Infuse item'}
           </button>
         </>
       )}

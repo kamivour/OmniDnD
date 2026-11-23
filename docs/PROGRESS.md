@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M41 review: infusion limits, replica recipes and companion forms fixed; reported Artificer disappearance still under investigation.
-**Next up:** Reproduce the Artificer disappearance with the friend's exported campaign settings. M43 awaits live account verification, M44 and M45 are complete, and M42's broader overhaul is planned. See [AUDIT_REPORT.md](AUDIT_REPORT.md) for class fixes and remaining gaps.
+**Next up:** M42 creation cards. The deployed Artificer report needs the affected campaign export, and M43 needs a disposable Supabase project for live account checks. See [AUDIT_REPORT.md](AUDIT_REPORT.md) for class fixes.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -338,7 +338,7 @@ Details in [PLAN.md](PLAN.md).
 - [x] Add Experimental Elixirs and Restorative Reagents
 - [x] Add Guardian and Infiltrator Arcane Armor
 - [x] Track active Replicate Magic Item infusions
-- [ ] Track the Homunculus Servant infusion
+- [x] Track the Homunculus Servant infusion
 - [x] Add the three cannon forms, audit all bundled companion templates and compute spell-summon forms and upcasting
 - [ ] Reproduce the friend's missing Artificer using his actual campaign settings and deployed app
 
@@ -442,6 +442,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Added Homunculus creation, calculated stats, bonus-action commands and infusion cleanup.
 - 2026-11-23 — Applied replica recipes to actual inventory items and restored base objects when their infusions end.
 - 2026-11-23 — Added Guardian and Infiltrator Arcane Armor, Defensive Field and rest-based model changes.
 - 2026-11-23 — Added Experimental Elixir brewing, use, effects and expiration for Alchemists.

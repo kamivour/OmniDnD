@@ -295,6 +295,7 @@ export const levelUp: Command<LevelUpPayload> = {
       draft.live.infusions = next.live.infusions;
       draft.live.items = next.live.items;
       draft.build.items = next.build.items;
+      draft.live.companions = next.live.companions;
     }
     return withNotes(
       `Level up: ${next.name} ${next.classLevel} (max HP ${next.before} → ${next.after})`,

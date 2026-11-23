@@ -1,6 +1,46 @@
 import { expect, test } from './fixtures';
 import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
+test('create a Homunculus from an infusion and use its calculated companion stats', async ({
+  page,
+}) => {
+  const file = reviewFile('homunculus-infusion');
+  const classId = 'class.artificer';
+  const featureId = 'feature.artificer.infusion-homunculus-servant';
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.build.classes = [{ classId, level: 2 }];
+  file.build.hpEntries = [
+    { level: 1, classId, method: 'max', value: 8 },
+    { level: 2, classId, method: 'average', value: 5 },
+  ];
+  file.build.spells = [];
+  file.build.abilityScores.bonuses = [];
+  file.build.abilityScores.base.INT = 16;
+  file.build.featureIds = [featureId];
+  file.build.items = [{ instanceId: 'heart', itemId: 'item.crystal', notes: '100 gp gem' }];
+  file.live.items = { heart: { qty: 1, equipped: false, attuned: false } };
+  file.live.lastLongRestEnd = file.live.clock.seconds;
+  await importReview(page, file, 'inventory');
+  const panel = page.getByRole('region', { name: 'Infused items', exact: true });
+  await panel.getByLabel('Known infusion').selectOption(featureId);
+  await panel.getByRole('combobox', { name: /^Gem or crystal/ }).selectOption('heart');
+  const create = panel.getByRole('button', { name: 'Create Homunculus Servant' });
+  await expect(create).toBeDisabled();
+  await panel.getByRole('checkbox', { name: /worth at least 100 gp/ }).check();
+  await create.click();
+  await saved(page);
+  await expect(panel.getByRole('heading', { name: 'Infused items · 1/2' })).toBeVisible();
+  await panel.getByRole('link', { name: 'View Homunculus Servant' }).click();
+  const card = page.getByRole('region', { name: 'Companion: Homunculus Servant' });
+  await expect(card.getByText(/AC 13 · HP 6\/6/)).toBeVisible();
+  await expect(card.getByText(/Force Strike \+5.*1d4\+2 force/)).toBeVisible();
+  await card.getByLabel('Amount').fill('6');
+  await card.getByRole('button', { name: 'Damage Homunculus Servant', exact: true }).click();
+  await saved(page);
+  await expect(card.getByText(/Tiny construct · destroyed/)).toBeVisible();
+  expect((await reviewState(page, file.build.id)).live.infusions).toEqual([]);
+});
+
 test('known infusion picker searches and learns separate replica recipes at the right level', async ({
   page,
 }) => {

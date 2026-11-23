@@ -1,10 +1,12 @@
 import { z } from 'zod';
 import { companionStats, freshCompanionLive } from '../calc/companions';
+import { HOMUNCULUS_INFUSION } from '../calc/infusions';
 import { profileError, resolveCompanion } from '../calc/companion-profiles';
 import type { Condition } from '../rules2014';
 import { CompanionSchema, ConditionSchema, type Companion } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
 import { block, economyChecks, info, spendEconomy, warn, withNotes } from './shared';
+import { endInfusionIn } from './infusions';
 
 /** Commands for pets, mounts, familiars, summons and sidekicks. Their HP and conditions never touch the owner's. */
 
@@ -28,6 +30,11 @@ type CommandSlot = 'action' | 'bonus' | 'reaction';
 
 const find = (ctx: Pick<CommandContext, 'build'>, id: string) =>
   ctx.build.companions?.find((companion) => companion.id === id);
+
+function endCompanionInfusion(draft: Parameters<typeof endInfusionIn>[0], id: string) {
+  const infusion = draft.live.infusions?.find(({ companionId }) => companionId === id);
+  return infusion ? endInfusionIn(draft, infusion) : [];
+}
 
 /** Resolves the companion and its live entry, or a block check. */
 function target<S extends z.ZodType<{ id: string }>>(
@@ -62,6 +69,8 @@ export const addCompanion: Command<AddCompanionPayload> = {
     });
     const error = companion.profile && profileError(companion.profile);
     if (error) return [block(error)];
+    if (companion.sourceId === HOMUNCULUS_INFUSION)
+      return [block('Create a Homunculus Servant through Infused items')];
     if (find(ctx, companion.id)) return [block('A companion with this id already exists')];
     const limit = companion.limit;
     if (!limit) return [];
@@ -98,6 +107,11 @@ export const updateCompanion: Command<UpdateCompanionPayload> = {
     const error = parsed.data.companion.profile && profileError(parsed.data.companion.profile);
     if (error) return [block(error)];
     const old = find(ctx, parsed.data.companion.id)?.profile;
+    if (
+      find(ctx, parsed.data.companion.id)?.sourceId === HOMUNCULUS_INFUSION ||
+      parsed.data.companion.sourceId === HOMUNCULUS_INFUSION
+    )
+      return [block('A Homunculus Servant’s stat block comes from its infusion')];
     const next = parsed.data.companion.profile;
     if (
       old &&
@@ -135,10 +149,11 @@ export const removeCompanion: Command<{ id: string }> = {
   name: 'removeCompanion',
   check: (ctx, input) => target(ctx, input, IdPayloadSchema).checks,
   apply: (draft, { id }) => {
+    const notes = endCompanionInfusion(draft, id);
     const index = draft.build.companions!.findIndex((companion) => companion.id === id);
     const [removed] = draft.build.companions!.splice(index, 1);
     delete draft.live.companions![id];
-    return `Remove companion: ${removed!.name}`;
+    return withNotes(`Remove companion: ${removed!.name}`, notes);
   },
 };
 
@@ -153,7 +168,7 @@ export const dismissCompanion: Command<{ id: string }> = {
     const state = draft.live.companions![id]!;
     state.status = 'dismissed';
     delete state.endsAt;
-    return `Dismiss ${find(draft, id)!.name}`;
+    return withNotes(`Dismiss ${find(draft, id)!.name}`, endCompanionInfusion(draft, id));
   },
 };
 
@@ -163,6 +178,8 @@ export const resummonCompanion: Command<{ id: string }> = {
   check: (ctx, input) => {
     const { checks, companion, state } = target(ctx, input, IdPayloadSchema);
     if (!companion || !state) return checks;
+    if (companion.sourceId === HOMUNCULUS_INFUSION)
+      return [block('Use Infused items to create a Homunculus Servant again')];
     if (state.status === 'active') return [warn(`${companion.name} is already active`)];
     const limit = resolveCompanion(companion, { build: ctx.build, sheet: ctx.sheet }).limit;
     const active = (ctx.build.companions ?? []).filter(
@@ -206,6 +223,7 @@ export const damageCompanion: Command<{ id: string; amount: number }> = {
       delete state.endsAt;
       state.conditions = [];
       notes.push('destroyed');
+      notes.push(...endCompanionInfusion(draft, id));
     }
     return withNotes(`${companion.name} takes ${amount} damage (HP ${state.hp})`, notes);
   },
@@ -299,6 +317,15 @@ export const commandCompanion: Command<{ id: string; slot: CommandSlot; order?: 
   check: (ctx, input) => {
     const { checks, companion, state, data } = target(ctx, input, CommandPayloadSchema);
     if (!companion || !state) return checks;
+    if (companion.sourceId === HOMUNCULUS_INFUSION) {
+      if (
+        state.status !== 'active' ||
+        !ctx.live.infusions?.some(({ companionId }) => companionId === companion.id)
+      )
+        return [block('The Homunculus Servant infusion is inactive')];
+      if (data.slot !== 'bonus')
+        return [block('Commanding your Homunculus Servant costs a bonus action')];
+    }
     const result: Check[] = [];
     if (state.status !== 'active') result.push(warn(`${companion.name} is ${state.status}`));
     const blocking = state.conditions.find(

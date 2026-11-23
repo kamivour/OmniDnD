@@ -387,6 +387,7 @@ export const LiveStateSchema = z
           damageType: DamageTypeSchema.optional(),
           replicaBaseItemId: refId('item').optional(),
           replicaBaseCharges: NonNegativeInt.optional(),
+          companionId: z.string().min(1).optional(),
         }),
       )
       .optional(),

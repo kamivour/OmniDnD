@@ -8,6 +8,7 @@ import { resolveChoices } from './resolve-choices';
 import { pendingChoices } from '../calc/pending-choices';
 import {
   COMMON_REPLICA_PREFIX,
+  HOMUNCULUS_INFUSION,
   INFUSION_PREFIX,
   infusionLimit,
   activeInfusions,
@@ -18,6 +19,9 @@ import {
 import { computeSheet } from '../calc/sheet';
 import { replicaItem } from '../calc/infusion-replicas';
 import { levelUp } from './level';
+import { commandCompanion, damageCompanion } from './companions';
+import { startCombat, startTurn } from './combat';
+import { companionStats } from '../calc/companions';
 
 function artificer(level = 2) {
   const state = structuredClone(freshState);
@@ -48,6 +52,46 @@ function artificer(level = 2) {
 }
 const weapon = { featureId: INFUSION_PREFIX + 'enhanced-weapon', instanceId: 'sword' };
 describe('infusing inventory', () => {
+  it('uses one slot for a Homunculus, scales its stats and releases the slot on destruction', () => {
+    const state = artificer(5);
+    state.build.featureIds.push(HOMUNCULUS_INFUSION);
+    state.build.abilityScores.bonuses = [];
+    state.build.abilityScores.base.INT = 16;
+    state.build.items.push({ instanceId: 'heart', itemId: 'item.crystal' });
+    state.live.items.heart = { qty: 1, equipped: false, attuned: false };
+    const session = new Session(state);
+    const infusion = { featureId: HOMUNCULUS_INFUSION, instanceId: 'heart' };
+    expect(session.try(infuseItem, infusion).result).toBe('blocked');
+    session.run(infuseItem, { ...infusion, materialConfirmed: true });
+    const companion = session.state.build.companions![0]!;
+    expect(activeInfusions(session.state.build, session.live)).toEqual([
+      { ...infusion, companionId: companion.id },
+    ]);
+    expect(
+      companionStats(companion, { build: session.state.build, sheet: session.sheet }),
+    ).toMatchObject({
+      ac: 13,
+      maxHp: 9,
+      attacks: [
+        { name: 'Force Strike', bonus: 6, damage: { dice: '1d4', bonus: 3, type: 'force' } },
+      ],
+    });
+    session.run(startCombat, null);
+    session.run(startTurn, null);
+    expect(session.try(commandCompanion, { id: companion.id, slot: 'action' }).result).toBe(
+      'blocked',
+    );
+    session.run(commandCompanion, { id: companion.id, slot: 'bonus' });
+    expect(session.live.combat?.economy).toMatchObject({ actionUsed: false, bonusUsed: true });
+    session.run(damageCompanion, { id: companion.id, amount: 9 });
+    expect(session.live.infusions).toEqual([]);
+    expect(session.live.items.heart?.qty).toBe(1);
+    expect(session.live.companions?.[companion.id]).toMatchObject({ status: 'destroyed', hp: 0 });
+    session.undo();
+    expect(session.live.companions?.[companion.id]).toMatchObject({ status: 'active', hp: 9 });
+    expect(session.live.infusions).toHaveLength(1);
+  });
+
   it('tracks a replica in its original inventory entry and ends it when the recipe is replaced', () => {
     const state = artificer();
     const featureId = `${REPLICATE_INFUSION}-bag-of-holding`;

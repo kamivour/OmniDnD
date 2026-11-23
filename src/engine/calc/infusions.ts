@@ -5,6 +5,7 @@ import type { Registry } from '../registry';
 import { sourceAllows } from './campaign-rules';
 
 export const INFUSION_PREFIX = 'feature.artificer.infusion-';
+export const HOMUNCULUS_INFUSION = `${INFUSION_PREFIX}homunculus-servant`;
 export const REPLICATE_INFUSION = `${INFUSION_PREFIX}replicate-magic-item`;
 export const COMMON_REPLICA_PREFIX = `${REPLICATE_INFUSION}-common-`;
 
@@ -145,8 +146,9 @@ export function activeInfusions(build: CharacterBuild, live: LiveState) {
   return (live.infusions ?? []).filter((entry) => {
     const rule = INFUSIONS[infusionKey(entry.featureId)];
     const replica = entry.replicaBaseItemId && isReplicateInfusion(entry.featureId);
+    const homunculus = entry.companionId && entry.featureId === HOMUNCULUS_INFUSION;
     const valid =
-      (rule || replica) &&
+      (rule || replica || homunculus) &&
       artificerLevel(build) >= infusionMinimumLevel(entry.featureId) &&
       build.featureIds.includes(entry.featureId) &&
       !seenItems.has(entry.instanceId) &&

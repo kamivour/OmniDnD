@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D265 | 2026-11-23 | Create a Homunculus from a gem the player confirms is worth 100 gp or more. Its death releases the infusion slot and preserves the gem; new creation uses the infusion again. | Keep the gem, companion and active limit in one record (Q47). |
 | D264 | 2026-11-23 | A replica occupies the original item’s inventory entry and uses one active infusion slot. The player confirms that the base object matches the recipe; contents of a reverted container move to Carried. | Keep the item and contents recoverable when the magic ends. |
 | D263 | 2026-11-23 | Choose the first Arcane Armor model in Features and change a configured suit’s model during rest. The sheet uses INT for its weapon when that gives the better bonus. | Keep combat calculations consistent with Battle Ready. |
 | D262 | 2026-11-23 | Eldritch Knight and Arcane Trickster track the number of spells learned outside their usual schools. Level up follows the limit, and Manage warns on changes that exceed it. | Older saves lack the level where a specific spell was learned |
@@ -316,7 +317,6 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q44 | ~~Are D&D place names fine as theme labels?~~ Answered → D192 | — | — | — |
 | Q45 | ~~Water ripple on phones too?~~ Answered → D193 | — | — | — |
 | Q46 | ~~Theme per campaign?~~ Answered → D194 | — | — | — |
-| Q47 | Should Homunculus Servant and Replicate Magic Item get dedicated creation and active-limit tracking? | After M41 | Learn named recipes in To do. Use Companions and Inventory to record creation and count these applications manually. | User |
 | Q48 | How should Armorer's armor components be represented for its two extra armor-only infusions? | After M41 | Standard active limit only, with a visible reminder; do not grant two unrestricted slots or invent separate equipment | User |
 | Q49 | Should the already-bundled Summon Draconic Spirit move from the Tasha filter to a separate Fizban's book option? | Next source review | Preserve existing spell visibility; identify Fizban's 2014 source on its companion card | User |
 | Q52 | How strictly should the app enforce subclass spell schools, discipline prerequisites and situational limits? | Class mechanics follow-up | Keep existing picks. Warn about verified limits and let the DM confirm exceptions. | User / DM |

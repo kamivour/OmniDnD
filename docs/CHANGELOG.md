@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 12:31 — Homunculus Servant
+
+- Infuse a gem or crystal to create a Homunculus with stats calculated from your Artificer.
+- Manage its HP and spend a bonus action to command it from Companions. Check that its infusion slot frees when it is destroyed. Checks pass.
+
 ## 2026-11-23 12:25 — Artificer replica items
 
 - Apply learned Replicate Magic Item recipes to mundane gear. Each replica uses an active infusion slot.

@@ -137,7 +137,7 @@ Scope is the Tasha Artificer from levels 1–20, its four specialists, their spe
 
 | Area | Checked or corrected | Still handled at the table |
 |---|---|---|
-| Levels 1–2 | Tracks casting, preparation, cantrips, multiclass slots and focus reminders. Named and concrete common replicas apply to inventory and count toward the active limit. | Magical Tinkering effects, physical focus use, table-choice replicas and Homunculus creation (Q47). |
+| Levels 1–2 | Tracks casting, preparation, cantrips, slots and focus reminders. Named and concrete common replicas and Homunculus Servant share the active infusion limit. | Magical Tinkering effects, physical focus use, table-choice replicas and Homunculus touch-spell targets. |
 | Levels 3–10 | Subclass at 3, ASIs, double proficiency on proficient tools at 6, Flash of Genius reaction and uses at 7, fourth attunement at 10. | The Right Tool for the Job, Flash of Genius targets and item crafting. |
 | Levels 11–20 | Fifth and sixth attunements at 14 and 18. Soul of Artifice adds saves per attuned item. Spell-Storing Item tracks a distinct item, uses and the owner's concentration when activated. | Resolve another holder’s concentration, Savant exceptions and Soul of Artifice’s infusion sacrifice at the table. |
 | All specialists | Automatic prepared pairs at 3, 5, 9, 13 and 17 sit outside the class preparation limit. The first tool proficiency is granted. | Choose an alternate artisan tool when you already know the one your subclass grants (D208). |

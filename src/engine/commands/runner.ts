@@ -5,6 +5,7 @@ import { arcaneArmor, wornSuit } from '../calc/arcane-armor';
 import { retainCounterCorrections } from '../calc/value-overrides';
 import { characterRegistry, type Registry } from '../registry';
 import { isDead } from './shared';
+import { endInfusionIn } from './infusions';
 import {
   CharacterBuildSchema,
   LiveStateSchema,
@@ -100,6 +101,12 @@ export function runCommand<Payload>(
     { build: state.build, live: state.live },
     (draft) => {
       text = command.apply(draft, payload, { ...ctx, eventId, automation });
+      if (isDead(draft.live)) {
+        for (const entry of draft.live.infusions ?? []) {
+          if (!entry.companionId) continue;
+          text += ` · ${endInfusionIn(draft, entry).join(' · ')}`;
+        }
+      }
       if (draft.live.arcaneArmor) {
         const suit = wornSuit(draft.build, draft.live, scoped);
         if (isDead(draft.live) || (suit && suit.instanceId !== draft.live.arcaneArmor.instanceId)) {

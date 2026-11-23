@@ -1961,10 +1961,10 @@
     "srd": false,
     "summaryReviewed": false,
     "summary": {
-      "effect": "Artificer level 2+. Create a tiny homunculus servant in an item of at least 100 gp that obeys you."
+      "effect": "Infuse a gem or crystal worth at least 100 gp to create a tiny construct. It acts after you and can use its reaction to deliver your touch spells."
     },
     "origin": "class",
-    "activation": "special"
+    "activation": "passive"
   },
   {
     "kind": "feature",
