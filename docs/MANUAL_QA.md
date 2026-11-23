@@ -354,6 +354,12 @@ Use two test accounts on a phone and a desktop, after running the three new migr
 - [ ] Judge whether the selected guide and Decide later make the subclass choice clear.
 - [ ] Compare the class and subclass shown on Review with the character you intended to create.
 
+## M46 — Combat design review
+
+- [ ] Judge whether the preview makes mixed damage, resistance and temporary HP easy to follow.
+- [ ] Decide whether the concentration and condition prompts match how you resolve hits at the table.
+- [ ] Read Effects on me on a phone and judge whether each effect's impact and ending are clear.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

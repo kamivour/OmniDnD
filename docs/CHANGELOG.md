@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 12:58 — Took a hit design preview
+
+- Try the combat mockup to enter mixed damage, preview HP and record a concentration save or condition.
+- Compare the phone and desktop layouts and review the flow before implementation. Checks pass.
+
 ## 2026-11-23 12:57 — Creation cards verified
 
 - Checked icon readability, keyboard selection and the draft flow on phone and desktop.

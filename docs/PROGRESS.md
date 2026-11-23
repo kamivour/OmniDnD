@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M41 review: infusion limits, replica recipes and companion forms fixed; reported Artificer disappearance still under investigation.
-**Next up:** M46 combat design review. M43 needs a disposable Supabase project for live account checks. The older Artificer report still needs the affected campaign export.
+**Next up:** Review the [M46 combat design](COMBAT_HIT_DESIGN.md). M43 needs a disposable Supabase project for live account checks. The older Artificer report still needs the affected campaign export.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -391,11 +391,11 @@ Follow [PLAN.md](PLAN.md#m45--compendium). Started before M42 at the owner's req
 - [x] T4: "Plan this" wishlist notes in the Journal
 - [x] T5: Verify at both widths, offline and across themes
 
-### M46 — Combat around "I got hit" (direction only)
+### M46 — Combat around "I got hit" (design ready for review)
 
 Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews the design before building.
 
-- [ ] T1: Design review of Took a hit, follow-ups and Effects on me
+- [ ] T1: Owner review of the [Took a hit mockup](COMBAT_HIT_DESIGN.md), follow-ups and Effects on me
 - [ ] T2: Typed damage with resistance, immunity and vulnerability
 - [ ] T3: Follow-up suggestions to confirm or dismiss
 - [ ] T4: Effects on me with impact and end condition
@@ -442,6 +442,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Prepared the M46 hit, follow-up and effects mockup for review at both widths.
 - 2026-11-23 — Checked creation cards at both widths and confirmed Artificer survives switching to Rolled locally and on Cloudflare.
 - 2026-11-23 — Kept Back and Next visible in the wizard and made wizard progress and review easier to scan.
 - 2026-11-23 — Added searchable race and background cards that keep the current selection visible.

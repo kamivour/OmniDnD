@@ -374,7 +374,7 @@ The [Compendium redesign](COMPENDIUM_REDESIGN.md) covers equipment facts, artwor
 
 ## M46 — Combat around "I got hit"
 
-Direction only, requested 2026-11-19. Write the detailed design and get the owner's review before building; build after M45.
+Requested 2026-11-19. The [detailed design and mockups](COMBAT_HIT_DESIGN.md) are ready for owner review before implementation.
 
 Today Combat centers on a Start combat button, and damage is a bare number: `applyDamage` takes an amount and a critical flag, with no damage type. The new direction starts from what happened to the character, and the app works out what follows.
 
@@ -382,7 +382,7 @@ Today Combat centers on a Start combat button, and damage is a bare number: `app
 
 1. **Took a hit** on Home and Combat: amount, one or more damage types, critical, and an optional source (a creature, spell or free text).
 2. The app applies what it can derive: resistance, immunity and vulnerability from race, class features, items and active effects; temporary HP first; then HP.
-3. It lists follow-ups to confirm: a concentration save with its DC, death-save failures at 0 HP, and the effects a known source carries, such as a condition or a save at the end of each turn.
+3. Preview the existing 0 HP rules. After logging, show concentration and source effects that still need a player-entered result.
 4. **Effects on me:** confirmed conditions appear with what they change (for example disadvantage on attacks) and how they end. Ending one is a tap.
 5. Combat starts on its own when the player logs a hit or rolls initiative; there is no separate start step.
 

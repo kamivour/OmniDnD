@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Took a hit · OmniDnD design</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #101521;
+        --surface: #1a2332;
+        --surface-2: #222d40;
+        --text: #e6e8ee;
+        --muted: #a4afc1;
+        --border: #3a4963;
+        --accent: #e4c387;
+        --danger: #f0959d;
+        --heal: #9bd2a8;
+        --magic: #83dadc;
+        font:
+          15px/1.5 system-ui,
+          sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body,
+      h1,
+      h2,
+      h3,
+      p,
+      dl,
+      dd {
+        margin: 0;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+        color: inherit;
+      }
+      button,
+      select,
+      input {
+        min-height: 44px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--bg);
+      }
+      button {
+        padding: 0 13px;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.53;
+        cursor: default;
+      }
+      button:not(:disabled):hover {
+        border-color: var(--accent);
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      input,
+      select {
+        width: 100%;
+        padding: 0 9px;
+      }
+      input[type='checkbox'] {
+        width: 1.1rem;
+        accent-color: var(--accent);
+      }
+      label {
+        display: grid;
+        gap: 4px;
+        font-size: 0.875rem;
+      }
+      .check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .strap {
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+      }
+      .strap div {
+        max-width: 1056px;
+        margin: auto;
+        padding: 11px 18px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 16px;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+      .strap strong {
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      main {
+        max-width: 1056px;
+        margin: auto;
+        padding: 25px 18px 32px;
+      }
+      header {
+        display: grid;
+        gap: 4px;
+        margin-bottom: 18px;
+      }
+      header h1 {
+        font:
+          700 clamp(1.9rem, 4vw, 2.6rem)/1.16 Georgia,
+          serif;
+      }
+      h2 {
+        font-size: 1.18rem;
+      }
+      h3 {
+        font-size: 1rem;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .body {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+        gap: 14px;
+        align-items: start;
+      }
+      .stack {
+        display: grid;
+        gap: 12px;
+      }
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+      }
+      .line {
+        display: grid;
+        grid-template-columns: 6rem minmax(0, 1fr) 44px;
+        gap: 8px;
+        align-items: end;
+      }
+      .line button {
+        padding: 0;
+      }
+      .heading,
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+      .heading {
+        justify-content: space-between;
+      }
+      .actions {
+        justify-content: flex-end;
+      }
+      .primary {
+        background: var(--accent);
+        color: var(--bg);
+        border-color: var(--accent);
+        font-weight: 700;
+      }
+      .preview {
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+      }
+      .numbers {
+        display: grid;
+        gap: 4px;
+        font-variant-numeric: tabular-nums;
+      }
+      .numbers div {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .numbers dd {
+        font-weight: 650;
+        text-align: right;
+      }
+      .hp {
+        font-weight: 700;
+      }
+      .hp strong {
+        color: var(--danger);
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px 8px;
+        align-items: center;
+      }
+      .effect {
+        background: var(--surface-2);
+        border-left: 2px solid var(--magic);
+        border-radius: 6px;
+        padding: 10px;
+        display: grid;
+        gap: 6px;
+      }
+      .effect p + p {
+        margin-top: 3px;
+      }
+      .result {
+        color: var(--heal);
+      }
+      [hidden] {
+        display: none !important;
+      }
+      @media (max-width: 700px) {
+        .body {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        main {
+          padding: 18px 12px 24px;
+        }
+        .panel {
+          padding: 12px;
+        }
+        .line {
+          grid-template-columns: 5rem minmax(0, 1fr) 44px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="strap">
+      <div><strong>OmniDnD</strong><span class="muted">Combat design preview</span></div>
+    </div>
+    <main>
+      <header>
+        <h1>Took a hit</h1>
+        <p class="hp">
+          Mira Vale · <strong id="hp">38 / 38 HP</strong> · <span id="temp">5 temporary HP</span>
+        </p>
+        <p class="muted" id="defenses">Fire resistance · concentrating on Bless</p>
+      </header>
+
+      <div class="body">
+        <form id="hit" class="panel stack" aria-labelledby="hit-title">
+          <div class="heading">
+            <h2 id="hit-title">Damage received</h2>
+            <button id="add" type="button">Add damage type</button>
+          </div>
+          <div id="damage-entry" class="stack">
+            <div id="parts" class="stack"></div>
+            <label class="check"><input id="critical" type="checkbox" /> Critical hit</label>
+            <label
+              >Source or note <input id="source" maxlength="120" placeholder="Optional"
+            /></label>
+          </div>
+          <div class="preview stack" aria-live="polite">
+            <h3 id="preview-title">Before logging</h3>
+            <p id="hit-note" class="muted" hidden></p>
+            <dl id="numbers" class="numbers"></dl>
+          </div>
+          <div class="actions">
+            <button id="undo" type="button" disabled>Undo</button>
+            <button id="log" type="submit" class="primary">Log hit</button>
+          </div>
+        </form>
+
+        <div class="stack">
+          <section class="panel stack" aria-labelledby="follow-title">
+            <h2 id="follow-title" tabindex="-1">Follow-ups</h2>
+            <p id="waiting" class="muted">Log a hit to see any follow-ups.</p>
+            <div id="concentration" class="effect" hidden>
+              <h3>Concentration save</h3>
+              <p id="save-note" class="muted"></p>
+              <div class="tags">
+                <button type="button" data-save="passed">Passed</button>
+                <button type="button" data-save="failed">Failed</button>
+              </div>
+              <p id="save-result" class="result" aria-live="polite" hidden></p>
+            </div>
+            <div id="extra" class="effect" hidden>
+              <h3>Condition from the hit</h3>
+              <p class="muted">Add it if the table confirmed the condition.</p>
+              <label
+                >Condition
+                <select id="condition">
+                  <option value="poisoned">Poisoned</option>
+                  <option value="prone">Prone</option>
+                  <option value="restrained">Restrained</option>
+                </select></label
+              >
+              <div><button id="add-effect" type="button">Record condition</button></div>
+            </div>
+          </section>
+          <section class="panel stack" aria-labelledby="effects-title">
+            <h2 id="effects-title">Effects on me</h2>
+            <div id="bless" class="effect">
+              <h3>Bless</h3>
+              <p>+1d4 to attack rolls and saving throws.</p>
+              <p class="muted">Ends with concentration or after one minute.</p>
+            </div>
+            <div id="condition-effect" class="effect" hidden>
+              <h3 id="condition-name"></h3>
+              <p id="condition-impact"></p>
+              <p class="muted">Record when the table says it ends.</p>
+              <div><button id="clear-effect" type="button">End condition</button></div>
+            </div>
+            <p id="inactive" class="muted" hidden>No effects.</p>
+          </section>
+        </div>
+      </div>
+    </main>
+    <script>
+      const types = [
+        'Acid',
+        'Bludgeoning',
+        'Cold',
+        'Fire',
+        'Force',
+        'Lightning',
+        'Necrotic',
+        'Piercing',
+        'Poison',
+        'Psychic',
+        'Radiant',
+        'Slashing',
+        'Thunder',
+        'Untyped',
+      ];
+      const effects = {
+        poisoned: ['Poisoned', 'Disadvantage on attack rolls and ability checks.'],
+        prone: ['Prone', 'Disadvantage on your attacks. Nearby attackers have advantage.'],
+        restrained: ['Restrained', 'Speed is 0. Your attacks and DEX saves have disadvantage.'],
+      };
+      const find = (id) => document.getElementById(id);
+      const parts = find('parts');
+      const form = find('hit');
+      const baseHp = 38;
+      const baseTemp = 5;
+      let state = {};
+      const history = [];
+      let sequence = 0;
+
+      function addPart(amount = '', type = 'Untyped') {
+        const row = document.createElement('div');
+        row.className = 'line';
+        const index = ++sequence;
+        row.innerHTML =
+          '<label>Amount <input type="number" inputmode="numeric" min="0" max="999" required></label><label>Type <select></select></label><button type="button">×</button>';
+        const input = row.querySelector('input');
+        input.value = amount;
+        input.setAttribute('aria-label', `Damage amount ${index}`);
+        const select = row.querySelector('select');
+        select.setAttribute('aria-label', `Damage type ${index}`);
+        select.replaceChildren(...types.map((name) => new Option(name, name)));
+        select.value = type;
+        const remove = row.querySelector('button');
+        remove.setAttribute('aria-label', `Remove damage row ${index}`);
+        remove.addEventListener('click', () => {
+          row.remove();
+          update();
+          parts.querySelector('input')?.focus();
+        });
+        parts.append(row);
+        update();
+        return input;
+      }
+
+      function calculation() {
+        const totals = new Map();
+        for (const row of parts.children) {
+          const amount = Math.max(0, Number(row.querySelector('input').value) || 0);
+          const type = row.querySelector('select').value;
+          totals.set(type, (totals.get(type) ?? 0) + amount);
+        }
+        const raw = [...totals.values()].reduce((sum, amount) => sum + amount, 0);
+        const fire = totals.get('Fire') ?? 0;
+        const adjusted = raw - fire + Math.floor(fire / 2);
+        const absorbed = Math.min(baseTemp, adjusted);
+        const hp = Math.max(0, baseHp - (adjusted - absorbed));
+        const partsSummary = [...totals]
+          .filter(([, amount]) => amount > 0)
+          .map(([type, amount]) => `${amount} ${type.toLowerCase()}`)
+          .join(' + ');
+        return { raw, fire, adjusted, absorbed, hp, partsSummary };
+      }
+
+      function breakdown(label, value) {
+        const row = document.createElement('div');
+        const term = document.createElement('dt');
+        term.textContent = label;
+        const number = document.createElement('dd');
+        number.textContent = value;
+        row.append(term, number);
+        return row;
+      }
+
+      function update() {
+        const { logged, save, condition } = state;
+        const preview = logged ?? calculation();
+        const { raw, fire, adjusted, absorbed, hp } = preview;
+        const hasBless = hp > 0 || !logged;
+        find('bless').hidden = !hasBless || save === 'failed';
+        find('defenses').textContent = find('bless').hidden
+          ? 'Fire resistance'
+          : 'Fire resistance · concentrating on Bless';
+        find('condition-effect').hidden = !condition;
+        if (condition) {
+          const [name, impact] = effects[condition];
+          find('condition-name').textContent = name;
+          find('condition-impact').textContent = impact;
+        }
+        find('numbers').replaceChildren(
+          breakdown('Incoming damage', raw),
+          ...(fire > 0 ? [breakdown('Fire resistance', `${fire} → ${Math.floor(fire / 2)}`)] : []),
+          breakdown('Damage after resistance', adjusted),
+          breakdown('Absorbed by temporary HP', absorbed),
+          breakdown('HP after hit', `${hp} / ${baseHp}`),
+        );
+        find('hp').textContent = `${logged ? hp : baseHp} / ${baseHp} HP`;
+        find('temp').textContent = `${baseTemp - (logged ? absorbed : 0)} temporary HP`;
+        find('preview-title').textContent = logged ? 'Hit logged' : 'Before logging';
+        const note =
+          logged &&
+          [logged.critical ? 'Critical hit' : '', logged.source, logged.partsSummary]
+            .filter(Boolean)
+            .join(' · ');
+        find('hit-note').textContent = note || '';
+        find('hit-note').hidden = !note;
+        find('waiting').hidden = Boolean(logged);
+        find('concentration').hidden = !logged || adjusted === 0 || hp === 0;
+        find('save-note').textContent =
+          `CON DC ${Math.max(10, Math.floor(adjusted / 2))} from ${adjusted} damage. Record the result from the table.`;
+        find('save-result').textContent =
+          save === 'passed' ? 'Save passed. Bless continues.' : 'Save failed. Bless ended.';
+        find('save-result').hidden = !save;
+        for (const button of document.querySelectorAll('[data-save]'))
+          button.disabled = Boolean(save);
+        find('extra').hidden = !logged;
+        find('undo').disabled = history.length === 0;
+        find('log').hidden = Boolean(logged);
+        find('log').disabled = adjusted === 0;
+        find('add').hidden = Boolean(logged);
+        find('damage-entry').hidden = Boolean(logged);
+        for (const button of parts.querySelectorAll('button'))
+          button.disabled = parts.children.length <= 1;
+        find('inactive').hidden = !find('bless').hidden || !find('condition-effect').hidden;
+      }
+
+      function record(change) {
+        history.push(state);
+        state = { ...state, ...change };
+        update();
+      }
+
+      find('add').addEventListener('click', () => addPart().focus());
+      form.addEventListener('input', update);
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (state.logged) return;
+        record({
+          logged: {
+            ...calculation(),
+            critical: find('critical').checked,
+            source: find('source').value.trim(),
+          },
+        });
+        find('follow-title').focus();
+      });
+      for (const button of document.querySelectorAll('[data-save]')) {
+        button.addEventListener('click', () => record({ save: button.dataset.save }));
+      }
+      find('add-effect').addEventListener('click', () => {
+        record({ condition: find('condition').value });
+      });
+      find('clear-effect').addEventListener('click', () => {
+        record({ condition: undefined });
+        find('add-effect').focus();
+      });
+      find('undo').addEventListener('click', () => {
+        if (history.length === 0) return;
+        state = history.pop();
+        update();
+        if (!state.logged) find('log').focus();
+      });
+      addPart(14, 'Slashing');
+      addPart(10, 'Fire');
+    </script>
+  </body>
+</html>
