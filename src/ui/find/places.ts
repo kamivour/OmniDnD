@@ -1,6 +1,29 @@
 import type { FindEntry } from '../../engine/calc/find';
 import { VISIBLE_THEMES } from '../../theme/themes';
 
+export const PARTY_READER_SECTIONS = [
+  { id: 'sheet', label: 'Sheet', synonyms: ['abilities', 'character stats'] },
+  { id: 'spells', label: 'Spells', synonyms: ['spellbook', 'spell slots', 'pact magic'] },
+  { id: 'inventory', label: 'Inventory', synonyms: ['equipment', 'gear', 'items'] },
+  { id: 'features', label: 'Features', synonyms: ['traits', 'class abilities'] },
+  { id: 'companions', label: 'Companions', synonyms: ['familiar', 'pet', 'summon'] },
+] as const;
+
+export function partyReaderPlaces(characterId: string): FindEntry[] {
+  return PARTY_READER_SECTIONS.map(({ id, label, synonyms }) => ({
+    id: `go.party-reader-${id}`,
+    group: 'go',
+    title: label,
+    detail: 'Shared character',
+    synonyms: [...synonyms],
+    target: {
+      kind: 'go',
+      path: `/characters/${encodeURIComponent(characterId)}?view=${id}`,
+      anchor: `party-reader-${id}`,
+    },
+  }));
+}
+
 /** Campaign sections need the actual campaign route, independent of the character base. */
 export function campaignPlaces(campaignId: string): FindEntry[] {
   return [

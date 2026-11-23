@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { NAV } from '../layout/nav';
-import { PLACES, campaignPlaces } from './places';
+import { PLACES, campaignPlaces, partyReaderPlaces } from './places';
 
 /** Routes that are not in the side nav but must still be findable. */
 const EXTRA_ROUTES = [
@@ -49,5 +49,21 @@ describe('PLACES', () => {
     const find = (id: string) => PLACES.find((place) => place.id === id);
     expect(find('do.long-rest')?.target).toEqual({ kind: 'action', action: 'long-rest' });
     expect(find('go.movement-body')?.synonyms).toContain('jump');
+  });
+
+  it('registers reader sections on the shared character route', () => {
+    const entries = partyReaderPlaces('party:friend/hero');
+    expect(entries.map(({ title }) => title)).toEqual([
+      'Sheet',
+      'Spells',
+      'Inventory',
+      'Features',
+      'Companions',
+    ]);
+    expect(entries[1]?.target).toEqual({
+      kind: 'go',
+      path: '/characters/party%3Afriend%2Fhero?view=spells',
+      anchor: 'party-reader-spells',
+    });
   });
 });

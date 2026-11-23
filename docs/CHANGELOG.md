@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 13:36 — Compact party character sheet
+
+- Open a teammate’s character to see its portrait, HP, AC and a compact read-only Sheet.
+- Use Find to jump between sections. Open an attack to see its details on phone or desktop. Checks pass.
+
 ## 2026-11-23 13:12 — Party character viewer plan
 
 - Review the phone and desktop layouts for viewing a fellow campaign member’s character.

@@ -19,7 +19,7 @@ import { navPath } from '../layout/nav';
 import { RestContext } from '../rest/rest-context';
 import { scrollToAnchor } from './anchor';
 import { TOOL_ENTRIES, characterEntries, ruleEntries } from './entries';
-import { PLACES, campaignPlaces } from './places';
+import { PLACES, campaignPlaces, partyReaderPlaces } from './places';
 
 const isTyping = (target: EventTarget | null) =>
   target instanceof HTMLElement &&
@@ -65,30 +65,35 @@ export function FindLauncher({ withCharacter }: { withCharacter: boolean }) {
 
 function CharacterFind({ onClose }: { onClose: () => void }) {
   const { characterId, state, sheet } = useCharacter();
+  const reader = Boolean(state.build.partyOwner);
   const base = useCharacterBase();
   const items = useMemo(
     () => [
-      ...characterEntries(state.build, sheet),
+      ...(reader ? partyReaderPlaces(characterId) : characterEntries(state.build, sheet)),
       ...(state.campaign.shared ? campaignPlaces(state.build.campaignId) : []),
     ],
-    [state.build, state.campaign.shared, sheet],
+    [characterId, reader, state.build, state.campaign.shared, sheet],
   );
   const books = useStore(
     characterStore,
     (store) => characterState(store, characterId)?.campaign.sources,
   );
-  return <FindSheet characterItems={items} books={books} base={base} onClose={onClose} />;
+  return (
+    <FindSheet characterItems={items} books={books} base={base} reader={reader} onClose={onClose} />
+  );
 }
 
 function FindSheet({
   characterItems,
   books,
   base,
+  reader = false,
   onClose,
 }: {
   characterItems: readonly FindEntry[];
   books: readonly string[] | undefined;
   base: string;
+  reader?: boolean;
   onClose: () => void;
 }) {
   const navigate = useNavigate();
@@ -101,7 +106,7 @@ function FindSheet({
 
   const results = useMemo(() => {
     const fixed = [
-      ...PLACES.filter((place) => hasCharacter || !place.needsCharacter),
+      ...PLACES.filter((place) => (hasCharacter && !reader) || !place.needsCharacter),
       ...characterItems,
       ...TOOL_ENTRIES,
     ];
@@ -115,7 +120,7 @@ function FindSheet({
     const rank = (entry: FindEntry) =>
       entry === hit ? -2 : entry.group === hit?.group ? -1 : FIND_GROUPS.indexOf(entry.group);
     return all.sort((a, b) => rank(a) - rank(b));
-  }, [query, characterItems, books, hasCharacter]);
+  }, [query, characterItems, books, hasCharacter, reader]);
   const current = Math.min(active, results.length - 1);
 
   const choose = (entry: FindEntry) => {

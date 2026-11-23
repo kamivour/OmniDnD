@@ -71,7 +71,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M42 | Recognizable icons and creation cards | 10 | done | Class, subclass, race and background use selection cards. Portraits, draft choices and campaign filters are preserved. |
 | M45 | Compendium | 5 | done | Browse and read spells, classes, subclasses, races, backgrounds and feats to plan characters; see [PLAN.md](PLAN.md) |
 | M46 | Combat around "I got hit" | 6 | todo | Log a hit with damage types; the app applies resistances and suggests saves and effects to confirm; design review first; see [PLAN.md](PLAN.md) |
-| M47 | Party character viewer | 5 | todo | Inspect slots, gear, spells, features and companions in a compact read-only layout. See [viewer plan](PARTY_READER_PLAN.md). |
+| M47 | Party character viewer | 5 | doing | Inspect slots, gear, spells, features and companions in a compact read-only layout. See [viewer plan](PARTY_READER_PLAN.md). |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -403,11 +403,11 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 - [ ] T5: Combat starts from a logged hit or initiative
 - [ ] T6: Verify at both widths
 
-### M47 — Party character viewer (planned)
+### M47 — Party character viewer
 
 Follow the [viewer plan](PARTY_READER_PLAN.md), one task per commit.
 
-- [ ] T1: Add the reader frame, compact Sheet and details layout.
+- [x] T1: Add the reader frame, compact Sheet and details layout.
 - [ ] T2: Show spell pools and clickable spell descriptions.
 - [ ] T3: Add inventory search, containers and item details.
 - [ ] T4: Add feature details and companion stat blocks.
@@ -453,6 +453,7 @@ Follow the [viewer plan](PARTY_READER_PLAN.md), one task per commit.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Added the party reader header, section links and compact Sheet with attack details.
 - 2026-11-23 — Planned the compact party character viewer, clickable details, resource displays and verification.
 - 2026-11-23 — Prepared the M46 hit, follow-up and effects mockup for review at both widths.
 - 2026-11-23 — Checked creation cards at both widths and confirmed Artificer survives switching to Rolled locally and on Cloudflare.

@@ -1,4 +1,4 @@
-import { Copy } from 'lucide-react';
+import { Copy, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { duplicateCharacter } from '../../engine/commands/management';
 import { useManagement } from '../commands/useManagement';
@@ -25,16 +25,19 @@ export function ViewOnlyBanner({
     <div
       role="note"
       aria-label="View only"
-      className="flex flex-wrap items-center gap-2 border-b border-border bg-surface px-4 py-2 text-sm"
+      className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-sm"
     >
-      <p className="min-w-0 flex-1 text-text-muted">
-        View only. This is {ownerName || 'another player'}&apos;s character.
+      <p className="flex min-w-0 flex-1 flex-wrap items-center gap-2 text-text-muted">
+        <span className="inline-flex items-center gap-1 rounded-btn border border-border px-2 py-0.5 text-xs font-medium text-accent">
+          <Eye size={13} aria-hidden /> View only
+        </span>
+        <span className="wrap-anywhere">{ownerName || 'Another player'}</span>
       </p>
       <button
         type="button"
         onClick={copy}
         disabled={pending}
-        className="inline-flex min-h-11 items-center gap-2 rounded-btn border border-border px-3 hover:bg-surface-2 disabled:opacity-40"
+        className="inline-flex min-h-11 items-center gap-1.5 rounded-btn px-2 text-xs text-text-muted hover:bg-surface-2 hover:text-text disabled:opacity-40"
       >
         <Copy size={16} aria-hidden /> Duplicate to play
       </button>
