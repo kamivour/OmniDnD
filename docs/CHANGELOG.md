@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 12:36 — Class and subclass icons
+
+- Look for the Paladin hammer and shield, Barbarian axe, Monk fist, Ranger bow, Rogue dagger and Wizard spellbook.
+- Compendium subclasses show distinct motifs. Uploaded portraits and The Fool’s artwork take priority on character screens. Checks pass.
+
 ## 2026-11-23 12:33 — Creation card mockups
 
 - Compare all 13 class icons at the two sizes used in the app.
