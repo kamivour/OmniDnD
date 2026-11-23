@@ -1,5 +1,5 @@
 import { sourceAllows } from '../../engine/calc/campaign-rules';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { Link, useNavigate } from 'react-router';
 import { ZodError } from 'zod';
@@ -21,6 +21,8 @@ import { Field, inputClass } from '../components/fields';
 import { guidanceFor } from '../../data/guidance';
 import { suggestAbilityBases, synergyNotes } from '../../engine/calc/suggestions';
 import { SelectionCards } from '../components/SelectionCards';
+import { Icon } from '../components/Icon';
+import { cx } from '../cx';
 import { AbilityBaseInput } from '../components/AbilityBaseInput';
 import { SectionLabel } from '../components/SectionLabel';
 import { ALIGNMENTS, alignmentLabel } from '../fixtures/new-character';
@@ -163,6 +165,7 @@ function NewCharacterForm({
   const steps = STEPS.filter((entry) => entry.id !== 'levels' || pickRows.length > 0);
   const at = Math.max(0, Math.min(stepIndex, steps.length - 1));
   const step: StepId = steps[at]!.id;
+  const progressHeading = useRef<HTMLHeadingElement>(null);
   const levelChoices = pickRows.flatMap((row) => {
     const { choices } = picksToPayload(levelPicks[row.level] ?? emptyPicks, row, false, false);
     return choices ? [{ level: row.level, choices }] : [];
@@ -319,6 +322,7 @@ function NewCharacterForm({
   const goTo = (index: number) => {
     setStepErrors([]);
     setStepIndex(Math.max(0, Math.min(steps.length - 1, index)));
+    requestAnimationFrame(() => progressHeading.current?.focus());
   };
   const pickBackground = (id: string) => {
     setBackgroundId(id);
@@ -415,16 +419,18 @@ function NewCharacterForm({
             Campaign settings
           </Link>
         </p>
-        <p className="mt-2 text-sm text-text-muted">
-          Played by: {PLAYED_BY_OPTIONS.find((option) => option.value === playedBy)?.label}
-          <button
-            type="button"
-            onClick={() => setPlayedByAsked(false)}
-            className="ml-2 min-h-11 rounded-btn px-2 text-accent"
-          >
-            Change
-          </button>
-        </p>
+        {show('name') && (
+          <p className="mt-2 text-sm text-text-muted">
+            Played by: {PLAYED_BY_OPTIONS.find((option) => option.value === playedBy)?.label}
+            <button
+              type="button"
+              onClick={() => setPlayedByAsked(false)}
+              className="ml-2 min-h-11 rounded-btn px-2 text-accent"
+            >
+              Change
+            </button>
+          </p>
+        )}
         {draft && (
           <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-text-muted">
             Picked up where you left off.
@@ -439,7 +445,7 @@ function NewCharacterForm({
         )}
       </header>
 
-      <SampleCharacterOffer campaign={campaign} run={run} pending={pending} />
+      {show('name') && <SampleCharacterOffer campaign={campaign} run={run} pending={pending} />}
 
       <div className="flex flex-wrap items-center gap-2 text-sm">
         <span className="text-text-muted">Mode:</span>
@@ -465,10 +471,18 @@ function NewCharacterForm({
       </div>
 
       {stepped && (
-        <nav aria-label="Steps">
-          <ol className="flex flex-wrap gap-1 text-xs">
+        <nav aria-label="Steps" className="min-w-0">
+          <h2
+            id="nc-step-progress"
+            ref={progressHeading}
+            tabIndex={-1}
+            className="mb-1 text-sm font-semibold text-text focus-visible:outline-accent"
+          >
+            Step {at + 1} of {steps.length} · {steps[at]!.label}
+          </h2>
+          <ol className="flex min-w-0 gap-1 overflow-x-auto pb-1 text-xs sm:flex-wrap">
             {steps.map((entry, index) => (
-              <li key={entry.id}>
+              <li key={entry.id} className="shrink-0">
                 <button
                   type="button"
                   aria-current={index === at ? 'step' : undefined}
@@ -482,7 +496,7 @@ function NewCharacterForm({
                         : 'text-text-muted'
                   }`}
                 >
-                  {index + 1}. {entry.label}
+                  {entry.label}
                 </button>
               </li>
             ))}
@@ -517,7 +531,7 @@ function NewCharacterForm({
       )}
 
       <section
-        aria-labelledby="nc-basics"
+        aria-labelledby={stepped ? 'nc-step-progress' : 'nc-basics'}
         hidden={stepped && !['name', 'race', 'class', 'background', 'level'].includes(step)}
         className="flex flex-col gap-3"
       >
@@ -575,6 +589,7 @@ function NewCharacterForm({
               onChange={pickRace}
               hints={hints}
               searchLabel="Search races"
+              required
               className="sm:col-span-2"
             />
           )}
@@ -591,6 +606,7 @@ function NewCharacterForm({
                 )
               }
               className="sm:col-span-2"
+              required
             />
           )}
           {show('class') && !classes.some((entry) => entry.id === 'class.artificer') && (
@@ -614,6 +630,7 @@ function NewCharacterForm({
               onChange={pickBackground}
               hints={hints}
               searchLabel="Search backgrounds"
+              required
               className="sm:col-span-2"
             />
           )}
@@ -934,13 +951,26 @@ function NewCharacterForm({
           <SectionLabel>
             <span id="nc-review">Review</span>
           </SectionLabel>
-          <p className="text-sm text-text">
-            {name || 'Unnamed'}: {race?.name} {classDef?.name}, level {level}
-            {registry.entries.get(backgroundId)?.name
-              ? `, ${registry.entries.get(backgroundId)?.name}`
-              : ''}
-            {alignment ? `, ${alignment}` : ''}
-          </p>
+          <div className="flex items-center gap-3 rounded-card border border-border bg-surface p-3">
+            <Icon id={classId} size={40} className="text-accent" />
+            <div className="min-w-0 space-y-1 text-sm text-text">
+              <p className="wrap-anywhere font-semibold">
+                {name || 'Unnamed'}: {race?.name} {classDef?.name}, level {level}
+                {registry.entries.get(backgroundId)?.name
+                  ? `, ${registry.entries.get(backgroundId)?.name}`
+                  : ''}
+                {alignment ? `, ${alignment}` : ''}
+              </p>
+              {levelChoices.map(
+                ({ level, choices }) =>
+                  choices.subclassId && (
+                    <p key={level} className="text-xs text-text-muted">
+                      {registry.get('subclass', choices.subclassId).name}
+                    </p>
+                  ),
+              )}
+            </div>
+          </div>
           {review ? (
             <dl className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
               {[
@@ -968,7 +998,12 @@ function NewCharacterForm({
         </section>
       )}
 
-      <div className="flex justify-end gap-2 border-t border-border pt-4">
+      <div
+        className={cx(
+          'flex justify-end gap-2 border-t border-border',
+          stepped ? 'sticky bottom-0 z-10 bg-bg py-2' : 'pt-4',
+        )}
+      >
         <Link
           to="/"
           className="inline-flex min-h-11 items-center rounded-btn px-4 text-sm text-text-muted hover:text-text"

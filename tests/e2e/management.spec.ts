@@ -396,8 +396,11 @@ test('new blank character validates racial choices and opens a saved HUD with co
     })
     .click();
   await expect(page).toHaveURL(/\/campaigns\/campaign-273\/characters\/new$/);
-  for (const label of ['Name', 'Race', 'Class', 'Background']) {
-    await expect(page.getByLabel(label, { exact: true })).toHaveAttribute('required', '');
+  await expect(page.getByLabel('Name', { exact: true })).toHaveAttribute('required', '');
+  for (const name of ['Race', 'Class', 'Background']) {
+    await expect(
+      page.getByRole('group', { name, exact: true }).getByRole('radio').first(),
+    ).toHaveAttribute('required', '');
   }
   await page.getByLabel('Name', { exact: true }).fill('First Verse');
   await identityChoice(page, 'race.half-elf').check();

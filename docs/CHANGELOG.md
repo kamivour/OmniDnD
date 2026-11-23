@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 12:56 — Creation progress and review
+
+- Back and Next stay within reach while you scroll through creation choices.
+- Check the current step and review the class icon and subclass before saving. Checks pass.
+
 ## 2026-11-23 12:46 — Searchable origin cards
 
 - Pick a race or background from cards with icons. Search by name while keeping your current choice visible.

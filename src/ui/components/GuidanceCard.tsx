@@ -20,7 +20,7 @@ export function GuidanceCard({
   return (
     <article
       aria-label={`${name} guide`}
-      className="flex flex-col gap-2 rounded-card border border-border bg-surface p-3 text-sm"
+      className="@container flex flex-col gap-2 rounded-card border border-border bg-surface p-3 text-sm"
     >
       <header className="flex flex-wrap items-baseline gap-x-2">
         <h3 className="font-semibold text-text">{name}</h3>
@@ -34,7 +34,7 @@ export function GuidanceCard({
         )}
       </header>
       {showPitch && <p className="text-text">{guidance.pitch}</p>}
-      <div className="grid gap-2 sm:grid-cols-2">
+      <div className="grid gap-2 @min-[30rem]:grid-cols-2">
         <section aria-label="Strengths">
           <p className="text-xs font-semibold text-text-muted">Strengths</p>
           <ul className="list-disc pl-5 text-text">

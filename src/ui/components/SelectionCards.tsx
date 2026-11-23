@@ -21,6 +21,7 @@ export function SelectionCards({
   detail,
   emblem,
   searchLabel,
+  required,
   className,
 }: {
   label: string;
@@ -31,6 +32,7 @@ export function SelectionCards({
   detail?: ReactNode;
   emblem?: string;
   searchLabel?: string;
+  required?: boolean;
   className?: string;
 }) {
   const group = useId();
@@ -97,6 +99,7 @@ export function SelectionCards({
                   name={group}
                   value={option.id}
                   checked={selected}
+                  required={required}
                   onChange={() => onChange(option.id)}
                   aria-label={option.name}
                   aria-describedby={pitch ? pitchId : undefined}

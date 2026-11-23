@@ -16,6 +16,7 @@ test('step by step builds a level 1 Fighter and keeps entries when switching mod
   await expect(page.getByRole('alert')).toContainText('Enter a name.');
   await page.getByLabel('Name', { exact: true }).fill('Step Hero');
   await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(page.getByRole('heading', { name: /^Step 2 of .*Race$/ })).toBeFocused();
 
   await expect(page.getByRole('group', { name: 'Race', exact: true })).toBeVisible();
   await expect(page.getByLabel('Name', { exact: true })).toHaveCount(0);
