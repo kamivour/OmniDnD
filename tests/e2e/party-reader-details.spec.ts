@@ -1,11 +1,81 @@
 import { expect, test, type Page } from './fixtures';
 import { importReview, reviewFile, reviewState } from './review-fixtures';
+import type { Companion } from '../../src/engine/schema';
 
 function detail(page: Page, name: string) {
   return page.viewportSize()!.width < 1024
     ? page.getByRole('dialog', { name, exact: true })
     : page.getByRole('complementary', { name: 'Pinned detail' });
 }
+
+test('shared features and companions show uses, scaled attacks and status without commands', async ({
+  page,
+}) => {
+  const file = reviewFile('party-companion');
+  file.build.partyOwner = { userId: 'friend', name: 'Ana' };
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.build.classes = [
+    { classId: 'class.artificer', level: 9, subclassId: 'subclass.artificer.artillerist' },
+  ];
+  file.build.abilityScores.base.INT = 16;
+  file.build.abilityScores.bonuses = [];
+  file.build.spells = [];
+  file.build.hpEntries = Array.from({ length: 9 }, (_, index) => ({
+    level: index + 1,
+    classId: 'class.artificer',
+    method: index ? 'average' : 'max',
+    value: index ? 5 : 8,
+  }));
+  const cannon: Omit<Companion, 'id'> = {
+    name: 'Eldritch Cannon',
+    type: 'summon',
+    ac: 18,
+    maxHp: 1,
+    speed: {},
+    abilities: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 },
+    attacks: [],
+    traits: [],
+    uses: [],
+    sourceId: 'feature.artificer.artillerist-eldritch-cannon',
+    profile: { family: 'eldritch-cannon', form: 'Force Ballista', size: 'Small', legs: true },
+  };
+  file.build.companions = [
+    { ...cannon, id: 'cannon' },
+    { ...cannon, id: 'old-cannon', name: 'Old cannon' },
+  ];
+  file.live.companions = {
+    cannon: {
+      status: 'active',
+      hp: 27,
+      tempHp: 3,
+      conditions: ['prone'],
+      usesSpent: {},
+      endsAt: file.live.clock.seconds + 1800,
+    },
+    'old-cannon': { status: 'destroyed', hp: 0, tempHp: 0, conditions: [], usesSpent: {} },
+  };
+  file.live.featureUsesSpent['feature.artificer.flash-of-genius'] = 1;
+  await importReview(page, file, 'features', false);
+  const before = await reviewState(page, file.build.id);
+  const flash = page.getByRole('button', { name: 'Flash of Genius', exact: true });
+  await expect(flash).toContainText('Reaction · 2/3 left');
+  await flash.click();
+  await expect(
+    detail(page, 'Flash of Genius').getByText('Recharge · Long rest', { exact: true }),
+  ).toBeVisible();
+  await page.keyboard.press('Escape');
+  await page.getByRole('link', { name: 'Companions', exact: true }).click();
+  const list = page.getByRole('region', { name: 'Companions', exact: true });
+  await expect(list.getByRole('button', { name: 'Old cannon' })).toContainText('destroyed');
+  await list.getByRole('button', { name: 'Eldritch Cannon', exact: true }).click();
+  const companion = detail(page, 'Eldritch Cannon');
+  await expect(companion.getByText('HP 27/45 · +3 temp · AC 18', { exact: false })).toBeVisible();
+  await expect(companion.getByText(/Force Ballista · \+7 to hit · 3d8 force/)).toBeVisible();
+  await expect(companion.getByText(/Owner bonus action/)).toBeVisible();
+  await expect(companion.getByText('Expires in 30 min on the owner’s game clock.')).toBeVisible();
+  await expect(companion.getByRole('button', { name: /Activate|Damage|Heal|Edit/ })).toHaveCount(0);
+  expect(await reviewState(page, file.build.id)).toEqual(before);
+});
 
 test('shared inventory opens the right instance, weapon facts and nested custom gear', async ({
   page,

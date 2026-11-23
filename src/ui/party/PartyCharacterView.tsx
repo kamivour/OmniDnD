@@ -12,7 +12,8 @@ import { ViewOnlyBanner } from './ViewOnlyBanner';
 import { PartyReaderSheet } from './PartyReaderSheet';
 import { PartyReaderSpells } from './PartyReaderSpells';
 import { PartyReaderInventory } from './PartyReaderInventory';
-import { ReaderSection } from './ReaderSection';
+import { PartyReaderFeatures } from './PartyReaderFeatures';
+import { PartyReaderCompanions } from './PartyReaderCompanions';
 
 function subscribeOnline(onChange: () => void) {
   window.addEventListener('online', onChange);
@@ -35,7 +36,6 @@ export function PartyCharacterView() {
   const references = characterRegistry(registry, build);
   const route = params.get('view') ?? pathname.split('/')[3];
   const section = PARTY_READER_SECTIONS.find(({ id }) => id === route) ?? PARTY_READER_SECTIONS[0];
-  const tab = section.label;
   const base = '/characters/' + encodeURIComponent(build.id);
   const statuses = [
     ...sheet.conditions,
@@ -132,33 +132,18 @@ export function PartyCharacterView() {
           </Link>
         ))}
       </nav>
-      {tab === 'Sheet' ? (
-        <PartyReaderSheet key={build.id} sheet={sheet} />
-      ) : tab === 'Spells' ? (
+      {section.id === 'sheet' && <PartyReaderSheet key={build.id} sheet={sheet} />}
+      {section.id === 'spells' && (
         <PartyReaderSpells key={build.id} state={state} sheet={sheet} references={references} />
-      ) : tab === 'Inventory' ? (
+      )}
+      {section.id === 'inventory' && (
         <PartyReaderInventory key={build.id} state={state} references={references} />
-      ) : (
-        <ReaderSection key={`${build.id}:${section.id}`} id={section.id} label={tab}>
-          {() => (
-            <>
-              {tab === 'Features' &&
-                sheet.features.map(({ def }) => (
-                  <details key={def.id}>
-                    <summary className="min-h-11 cursor-pointer">{def.name}</summary>
-                    <p>{def.summary?.effect ?? 'See the rule source for details.'}</p>
-                  </details>
-                ))}
-              {tab === 'Companions' && (
-                <ul>
-                  {build.companions?.map((companion) => (
-                    <li key={companion.id}>{companion.name}</li>
-                  ))}
-                </ul>
-              )}
-            </>
-          )}
-        </ReaderSection>
+      )}
+      {section.id === 'features' && (
+        <PartyReaderFeatures key={build.id} state={state} sheet={sheet} references={references} />
+      )}
+      {section.id === 'companions' && (
+        <PartyReaderCompanions key={build.id} state={state} sheet={sheet} references={references} />
       )}
     </main>
   );

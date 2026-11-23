@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 13:44 — Party features and companions
+
+- Open a feature to read what it does, how many uses remain and when it recharges.
+- Open a companion for its HP, attacks, traits, action costs and remaining time. Checks pass.
+
 ## 2026-11-23 13:41 — Party inventory
 
 - Search a teammate’s equipment, including depleted items and gear inside bags.
