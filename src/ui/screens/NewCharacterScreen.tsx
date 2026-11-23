@@ -936,7 +936,6 @@ function NewCharacterForm({
           level={level}
           picks={levelPicks}
           onChange={setLevelPicks}
-          hints={hints}
         />
       )}
 

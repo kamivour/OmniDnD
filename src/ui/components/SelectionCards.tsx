@@ -1,5 +1,5 @@
 import { useId, type ReactNode } from 'react';
-import { Check } from 'lucide-react';
+import { Check, Clock3 } from 'lucide-react';
 import { guidanceFor } from '../../data/guidance';
 import { cx } from '../cx';
 import { GuidanceCard } from './OptionGuide';
@@ -18,6 +18,7 @@ export function SelectionCards({
   onChange,
   hints,
   detail,
+  emblem,
   className,
 }: {
   label: string;
@@ -26,6 +27,7 @@ export function SelectionCards({
   onChange: (id: string) => void;
   hints: boolean;
   detail?: ReactNode;
+  emblem?: string;
   className?: string;
 }) {
   const group = useId();
@@ -38,7 +40,12 @@ export function SelectionCards({
   const hasSidebar = Boolean(detail || guide);
   return (
     <fieldset className={cx('@container min-w-0 rounded-card border border-border p-3', className)}>
-      <legend className="px-1 font-semibold text-text">{label}</legend>
+      <legend className="px-1 font-semibold text-text">
+        <span className="inline-flex items-center gap-2">
+          {emblem && <Icon id={emblem} size={20} className="text-accent" />}
+          {label}
+        </span>
+      </legend>
       <div
         className={cx(
           'grid min-w-0 items-start gap-3',
@@ -68,7 +75,16 @@ export function SelectionCards({
                   aria-describedby={pitch ? pitchId : undefined}
                   className="absolute top-3 right-3 size-5 opacity-0"
                 />
-                <Icon id={option.id} fallback={option.fallback} size={40} className="text-accent" />
+                {option.id ? (
+                  <Icon
+                    id={option.id}
+                    fallback={option.fallback}
+                    size={40}
+                    className="text-accent"
+                  />
+                ) : (
+                  <Clock3 size={36} aria-hidden="true" className="text-text-muted" />
+                )}
                 <span className="grid min-w-0 gap-1">
                   <span className="flex min-w-0 flex-wrap items-baseline gap-x-2">
                     <span className="wrap-anywhere font-semibold text-text">{option.name}</span>

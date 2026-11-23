@@ -1,6 +1,5 @@
 import { registry } from '../../data/registry';
 import type { Campaign } from '../../engine/schema';
-import { OptionGuide } from '../components/OptionGuide';
 import { SectionLabel } from '../components/SectionLabel';
 import { AsiPick, SubclassPick } from '../level/LevelUpChoices';
 import { emptyPicks, featOptions, subclassOptions, type LevelPicks } from '../level/level-up-model';
@@ -13,14 +12,12 @@ export function LevelChoicesSection({
   level,
   picks,
   onChange,
-  hints,
 }: {
   campaign: Campaign;
   classId: string;
   level: number;
   picks: Record<number, LevelPicks>;
   onChange: (next: Record<number, LevelPicks>) => void;
-  hints: boolean;
 }) {
   const rows = levelPickRows(registry, classId, level);
   const subclasses = subclassOptions({ campaign }, registry, classId);
@@ -41,17 +38,7 @@ export function LevelChoicesSection({
           <fieldset key={row.level} className="flex flex-col gap-3">
             <legend className="text-sm font-semibold text-text">Level {row.level}</legend>
             {row.subclass && subclasses.length > 0 && (
-              <>
-                <SubclassPick options={subclasses} picks={current} set={set} />
-                {hints && (
-                  <OptionGuide
-                    noun="subclasses"
-                    options={subclasses}
-                    value={current.subclassId}
-                    onChange={(id) => set({ subclassId: id })}
-                  />
-                )}
-              </>
+              <SubclassPick options={subclasses} picks={current} set={set} />
             )}
             {row.asi && <AsiPick feats={feats} picks={current} set={set} campaign={campaign} />}
           </fieldset>

@@ -415,7 +415,7 @@ export function subclassOptions(
         entry.classId === classId &&
         sourceAllows(state.campaign, entry),
     )
-    .map((entry) => ({ id: entry.id, name: entry.name }))
+    .map((entry) => ({ id: entry.id, name: entry.name, classId: entry.classId }))
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 

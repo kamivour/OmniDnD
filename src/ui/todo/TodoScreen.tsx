@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
-import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { chooseFeatSpells, featSpellCandidates, resolveChoices } from '../../engine/commands';
 import {
@@ -13,8 +12,6 @@ import { artificerLevel, INFUSION_PREFIX } from '../../engine/calc/infusions';
 import type { PendingChoice } from '../../engine/calc/pending-choices';
 import { computeSheet, type CharacterState } from '../../engine/calc/sheet';
 import type { Skill } from '../../engine/rules2014';
-import { deviceStore } from '../../state/device-settings';
-import { OptionGuide } from '../components/OptionGuide';
 import { SectionLabel } from '../components/SectionLabel';
 import { useCommand } from '../commands/command-context';
 import { InfusionPicker } from '../features/InfusionPicker';
@@ -173,7 +170,6 @@ function ChoiceForm({
   onDone: () => void;
 }) {
   const { run } = useCommand();
-  const hints = useStore(deviceStore, (settings) => settings.beginnerHints);
   const [picks, setPicks] = useState<LevelPicks>(emptyPicks);
   const [chosen, setChosen] = useState<string[]>([]);
   const set = (patch: Partial<LevelPicks>) => setPicks({ ...picks, ...patch });
@@ -216,19 +212,7 @@ function ChoiceForm({
 
   return (
     <div className="flex flex-col gap-3">
-      {item.kind === 'subclass' && (
-        <>
-          <SubclassPick options={subclasses} picks={picks} set={set} />
-          {hints && (
-            <OptionGuide
-              noun="subclasses"
-              options={subclasses}
-              value={picks.subclassId}
-              onChange={(id) => set({ subclassId: id })}
-            />
-          )}
-        </>
-      )}
+      {item.kind === 'subclass' && <SubclassPick options={subclasses} picks={picks} set={set} />}
       {item.kind === 'asi' && (
         <AsiPick feats={feats} picks={picks} set={set} campaign={state.campaign} />
       )}
