@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 12:33 — Creation card mockups
+
+- Compare all 13 class icons at the two sizes used in the app.
+- Review the proposed class and subclass cards on phone and desktop in the design guide. Checks pass.
+
 ## 2026-11-23 12:31 — Homunculus Servant
 
 - Infuse a gem or crystal to create a Homunculus with stats calculated from your Artificer.
