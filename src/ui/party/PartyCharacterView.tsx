@@ -3,8 +3,6 @@ import { ChevronLeft } from 'lucide-react';
 import { Link, useLocation, useSearchParams } from 'react-router';
 import { registry } from '../../data/registry';
 import { characterRegistry } from '../../engine/registry';
-import { spellListsWithGrants } from '../../engine/calc/granted-spells';
-import { featSpellSources } from '../../engine/calc/feat-spells';
 import { useCharacter } from '../hooks/useCharacter';
 import { CharacterPortrait } from '../components/CharacterPortrait';
 import { HpBar } from '../components/HpBar';
@@ -12,6 +10,7 @@ import { FindLauncher } from '../find/FindLauncher';
 import { PARTY_READER_SECTIONS } from '../find/places';
 import { ViewOnlyBanner } from './ViewOnlyBanner';
 import { PartyReaderSheet } from './PartyReaderSheet';
+import { PartyReaderSpells } from './PartyReaderSpells';
 import { ReaderSection } from './ReaderSection';
 
 function subscribeOnline(onChange: () => void) {
@@ -134,49 +133,12 @@ export function PartyCharacterView() {
       </nav>
       {tab === 'Sheet' ? (
         <PartyReaderSheet key={build.id} sheet={sheet} />
+      ) : tab === 'Spells' ? (
+        <PartyReaderSpells key={build.id} state={state} sheet={sheet} references={references} />
       ) : (
         <ReaderSection key={`${build.id}:${section.id}`} id={section.id} label={tab}>
           {() => (
             <>
-              {tab === 'Spells' && (
-                <>
-                  {spellListsWithGrants(references, build).map((entry) => (
-                    <div key={entry.classId}>
-                      <h3 className="font-semibold">
-                        {references.get('class', entry.classId).name}
-                      </h3>
-                      <ul>
-                        {[...new Set([...entry.known, ...(entry.prepared ?? [])])].map((id) => (
-                          <li key={id}>
-                            {references.get('spell', id).name}
-                            {entry.prepared?.includes(id) ? ' · prepared' : ''}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                  {featSpellSources({ registry: references, build, sheet }).map((source) => (
-                    <div key={source.featureId}>
-                      <h3 className="font-semibold">{source.name}</h3>
-                      <ul>
-                        {source.spells.map((spell) => (
-                          <li key={spell.spellId}>{references.get('spell', spell.spellId).name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                  <p>
-                    Slots remaining:{' '}
-                    {sheet.slots.max
-                      .flatMap((max, level) =>
-                        max && level
-                          ? [`L${level}: ${Math.max(0, max - (live.slotsUsed[level] ?? 0))}/${max}`]
-                          : [],
-                      )
-                      .join(' · ') || 'None'}
-                  </p>
-                </>
-              )}
               {tab === 'Inventory' && (
                 <ul className="space-y-2">
                   {build.items.map((item) => (

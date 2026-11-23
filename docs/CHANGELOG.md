@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 13:39 — Party spellbook
+
+- See regular spell slots, Pact Magic and free casts on a teammate’s Spells page.
+- Search and open spells for their rules and casting details, including spells in an unprepared Wizard spellbook. Checks pass.
+
 ## 2026-11-23 13:36 — Compact party character sheet
 
 - Open a teammate’s character to see its portrait, HP, AC and a compact read-only Sheet.

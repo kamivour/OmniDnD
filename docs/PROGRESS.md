@@ -408,7 +408,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 Follow the [viewer plan](PARTY_READER_PLAN.md), one task per commit.
 
 - [x] T1: Add the reader frame, compact Sheet and details layout.
-- [ ] T2: Show spell pools and clickable spell descriptions.
+- [x] T2: Show spell pools and clickable spell descriptions.
 - [ ] T3: Add inventory search, containers and item details.
 - [ ] T4: Add feature details and companion stat blocks.
 - [ ] T5: Verify permissions, sync, offline use and both widths.
@@ -453,6 +453,7 @@ Follow the [viewer plan](PARTY_READER_PLAN.md), one task per commit.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Added clickable spells, preparation labels and separate spell slot and Pact Magic pools to the party reader.
 - 2026-11-23 — Added the party reader header, section links and compact Sheet with attack details.
 - 2026-11-23 — Planned the compact party character viewer, clickable details, resource displays and verification.
 - 2026-11-23 — Prepared the M46 hit, follow-up and effects mockup for review at both widths.
