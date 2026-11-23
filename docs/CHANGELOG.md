@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 13:12 — Party character viewer plan
+
+- Review the phone and desktop layouts for viewing a fellow campaign member’s character.
+- Check the proposed spell slots, item and spell descriptions, and companion stat blocks. Checks pass.
+
 ## 2026-11-23 12:58 — Took a hit design preview
 
 - Try the combat mockup to enter mixed damage, preview HP and record a concentration save or condition.

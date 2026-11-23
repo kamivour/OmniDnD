@@ -10,6 +10,7 @@ Proposed 2026-11-09. User answers to the open questions are recorded as D168–D
 | M25 | DM party overview | M24 | The DM sees the whole party's key numbers at a glance |
 | M26 | Friend-testing fixes | M25 | A new player on a phone creates a character without confusion, finds sign-up, and starts with no sample character |
 | M40 | Campaign sharing and join requests | M24 | Share links, review campaign-ID requests and read others' characters without editing them |
+| M47 | Party character viewer | M40 | Scan live resources and open spell, equipment, feature and companion details in a compact reader |
 
 The tutorial comes before party play because friends are testing now, and it builds the tour system that M24 and M25 add their own steps to.
 
@@ -400,6 +401,10 @@ Today Combat centers on a Start combat button, and damage is a bare number: `app
 ### Boundaries
 
 DM outcomes stay manual: the player enters hits, saves and rulings, and every suggestion needs a tap. No 2024 rules.
+
+## M47 — Party character viewer
+
+Use the [detailed viewer plan](PARTY_READER_PLAN.md) to add a compact Sheet, Spells, Inventory, Features and Companions reader. Start with the reader frame, then deliver each section in order and verify with shared character fixtures at 375 px and 1440 px.
 
 ## Risks
 - **Free hosting limits:** Supabase allows 200 live connections and 500 MB of storage; records are capped at 5 MB (our limit). Long event logs grow records; a later fix is a snapshot plus trimmed history.
