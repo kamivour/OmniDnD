@@ -14,6 +14,8 @@ import { featFreeLeft } from './spell-options';
 import { changeSpellSelection } from './spell-selection';
 import { markArcaneFirearm, storeArtificerSpell, useArtificerStoredSpell } from './artificer-items';
 import { startCombat, startTurn } from './combat';
+import { brewExperimentalElixir, useExperimentalElixir } from './experimental-elixirs';
+import { completeLongRest } from './rest';
 import {
   COMMON_REPLICA_PREFIX,
   INFUSION_PREFIX,
@@ -42,6 +44,38 @@ function artificer(level: number, subclassId?: string): CharacterState {
 }
 
 describe('Artificer', () => {
+  it('rolls free Alchemist elixirs at rest, brews with slots and expires unused elixirs', () => {
+    const state = artificer(9, 'subclass.artificer.alchemist');
+    state.build.items = [{ itemId: 'item.alchemists-supplies', instanceId: 'supplies' }];
+    state.live.items = { supplies: { qty: 1, equipped: false, attuned: false } };
+    state.campaign.optionalRules.potionBonusAction = true;
+    const session = new Session(state);
+    expect(session.preview(completeLongRest, { elixirRolls: [1, 2, 3] }).result).toBe('blocked');
+    session.run(completeLongRest, { elixirRolls: [2, 3] });
+    expect(session.live.experimentalElixirs?.map(({ result }) => result)).toEqual([
+      'swiftness',
+      'resilience',
+    ]);
+    session.run(brewExperimentalElixir, { result: 'healing', slot: 1 });
+    expect(session.live.slotsUsed[1]).toBe(1);
+    const swiftness = session.live.experimentalElixirs![0]!.id;
+    const speed = session.sheet.speed.value;
+    session.run(startCombat, null);
+    session.run(startTurn, null);
+    session.run(useExperimentalElixir, { id: swiftness, mode: 'self', tempHpRoll: 7 });
+    expect(session.live.combat?.economy).toMatchObject({ actionUsed: true, bonusUsed: false });
+    expect(session.sheet.speed.value).toBe(speed + 10);
+    expect(session.live.tempHp).toBe(10);
+    session.undo();
+    expect(session.sheet.speed.value).toBe(speed);
+    expect(session.live.experimentalElixirs?.length).toBe(3);
+    session.undo();
+    session.undo();
+    session.run(completeLongRest, { elixirRolls: [5] }, true);
+    expect(session.live.experimentalElixirs?.map(({ result }) => result)).toEqual(['flight']);
+    session.undo();
+    expect(session.live.experimentalElixirs?.length).toBe(3);
+  });
   it('stores an eligible unprepared spell and uses an object action without spending a slot', () => {
     const state = artificer(11, 'subclass.artificer.artillerist');
     state.build.spells = [];

@@ -205,6 +205,7 @@ interface LiveState {
   dedicatedWeaponId?: string;                      // selected weapon instance for a Monk
   storedSpellItem?: { instanceId: string; spellId: string; limit: number; spent: number; restEnd?: number };
   arcaneFirearmId?: string;                         // Artillerist focus instance
+  experimentalElixirs?: { id: string; result: ElixirResult }[]; // expires at long rest
   combat?: {
     round: number;                                 // Start Turn advances it; the tracker's Next turn does when one runs
     turnActive: boolean;                           // between Start Turn and End Turn

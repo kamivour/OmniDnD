@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 12:14 — Alchemist Experimental Elixirs
+
+- Roll elixirs during Long Rest or brew a chosen elixir with a spell slot.
+- Drink an elixir from Features or Inventory. Check its effect and the temporary HP from Restorative Reagents. Checks pass.
+
 ## 2026-11-23 03:17 — Artificer stored spells and Arcane Firearm
 
 - Artificer 11 can store a spell in a weapon or focus from Features or the long-rest review.

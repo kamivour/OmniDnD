@@ -24,6 +24,7 @@ export * from './resolve-choices';
 export * from '../calc/pending-choices';
 export * from './rest';
 export * from './artificer-items';
+export * from './experimental-elixirs';
 export * from './reset';
 export * from './smite';
 export * from './sorcery';

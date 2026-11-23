@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { artificerLevel } from '../../engine/calc/infusions';
+import { ELIXIR_DETAILS, ELIXIR_RESULTS, elixirRestLimit } from '../../engine/calc/elixirs';
 import { completeLongRest, wizardRestCantrips, type LongRestChoices } from '../../engine/commands';
 import { restDurations } from '../../engine/calc/rests';
 import { formatDuration } from '../../engine/clock';
@@ -30,13 +31,19 @@ export function LongRestForm({
   const [cantripOut, setCantripOut] = useState('');
   const [cantripIn, setCantripIn] = useState('');
   const [dedicatedWeaponId, setDedicatedWeaponId] = useState('');
+  const [elixirRolls, setElixirRolls] = useState<Record<number, string>>({});
   const container = useRef<HTMLDivElement>(null);
   const formulas = wizardRestCantrips({ ...state, sheet, registry });
+  const elixirs = elixirRestLimit(sheet.features);
+  const recordedRolls = Array.from({ length: elixirs }, (_, index) => elixirRolls[index])
+    .filter(Boolean)
+    .map(Number);
   const choices: LongRestChoices | null =
-    cantripOut || dedicatedWeaponId
+    cantripOut || dedicatedWeaponId || recordedRolls.length
       ? {
           ...(cantripOut ? { cantripSwap: { remove: cantripOut, add: cantripIn } } : {}),
           ...(dedicatedWeaponId ? { dedicatedWeaponId } : {}),
+          ...(recordedRolls.length ? { elixirRolls: recordedRolls } : {}),
         }
       : null;
   const preview = previewLongRest(state, registry, automation, choices);
@@ -103,6 +110,33 @@ export function LongRestForm({
         value={dedicatedWeaponId}
         onChange={setDedicatedWeaponId}
       />
+      {elixirs > 0 && (
+        <fieldset className="grid gap-2">
+          <legend className="font-semibold text-text">Experimental Elixirs</legend>
+          <p className="text-sm text-text-muted">
+            Roll a d6 for each elixir you make. Unused elixirs from the previous rest expire.
+          </p>
+          {Array.from({ length: elixirs }, (_, index) => (
+            <label className="grid gap-1 text-sm text-text" key={index}>
+              Elixir roll {index + 1}
+              <select
+                className="min-h-11 min-w-0 rounded-btn border border-border bg-surface px-2 text-text"
+                value={elixirRolls[index] ?? ''}
+                onChange={(event) =>
+                  setElixirRolls({ ...elixirRolls, [index]: event.target.value })
+                }
+              >
+                <option value="">Skip this elixir</option>
+                {ELIXIR_RESULTS.map((result, index) => (
+                  <option key={result} value={index + 1}>
+                    {index + 1} · {ELIXIR_DETAILS[result].name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
+        </fieldset>
+      )}
       <RestPreview
         duration={formatDuration(durations.long)}
         result={preview}

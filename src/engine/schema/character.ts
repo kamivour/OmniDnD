@@ -424,6 +424,21 @@ export const LiveStateSchema = z
       })
       .optional(),
     arcaneFirearmId: z.string().min(1).optional(),
+    experimentalElixirs: z
+      .array(
+        z.strictObject({
+          id: z.string().min(1),
+          result: z.enum([
+            'healing',
+            'swiftness',
+            'resilience',
+            'boldness',
+            'flight',
+            'transformation',
+          ]),
+        }),
+      )
+      .optional(),
     combat: z
       .strictObject({
         /** No initiative or turn order (D42). Start Turn advances the round. */

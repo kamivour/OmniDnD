@@ -1,6 +1,51 @@
 import { expect, test } from './fixtures';
 import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
+test('Alchemist makes a rolled elixir in Long Rest and uses it in Features', async ({ page }) => {
+  const file = reviewFile('alchemist-experimental-elixir');
+  const classId = 'class.artificer';
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.build.classes = [{ classId, level: 3, subclassId: 'subclass.artificer.alchemist' }];
+  file.build.hpEntries = [1, 2, 3].map((level) => ({
+    level,
+    classId,
+    method: level === 1 ? 'max' : 'average',
+    value: level === 1 ? 8 : 5,
+  }));
+  file.build.spells = [];
+  file.build.items = [{ itemId: 'item.alchemists-supplies', instanceId: 'supplies' }];
+  file.live.items = { supplies: { qty: 1, equipped: false, attuned: false } };
+  await importReview(page, file, 'combat');
+  if (page.viewportSize()!.width < 640) {
+    await page.getByRole('button', { name: 'More', exact: true }).click();
+    await page
+      .getByRole('dialog', { name: 'More', exact: true })
+      .getByRole('button', { name: 'Long Rest', exact: true })
+      .click();
+  } else
+    await page
+      .getByRole('button', { name: 'Long Rest', exact: true })
+      .filter({ visible: true })
+      .click();
+  const rest = page.getByRole('dialog', { name: 'Long Rest', exact: true });
+  await rest.getByLabel('Elixir roll 1').selectOption('3');
+  await rest.getByRole('checkbox', { name: 'Review prepared spells after resting' }).uncheck();
+  await rest.getByRole('button', { name: 'Apply Long Rest', exact: true }).click();
+  const review = page.getByRole('dialog', { name: 'Review infusions', exact: true });
+  await review.getByRole('button', { name: 'Done with infusions', exact: true }).click();
+  await page.goto(`/characters/${file.build.id}/features`);
+  await saved(page);
+  const panel = page.getByRole('region', { name: 'Experimental Elixirs', exact: true });
+  await panel.getByLabel(/Available elixirs/).selectOption({ label: '1. Resilience' });
+  await panel.getByRole('button', { name: 'Use elixir', exact: true }).click();
+  await saved(page);
+  const live = (await reviewState(page, file.build.id)).live;
+  expect(live.experimentalElixirs).toEqual([]);
+  expect(live.effects).toContainEqual(
+    expect.objectContaining({ name: 'Resilience elixir', endsAt: live.clock.seconds + 600 }),
+  );
+});
+
 test('Artificer stores and uses a spell, then casts through an Arcane Firearm', async ({
   page,
 }) => {

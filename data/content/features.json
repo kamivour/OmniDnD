@@ -1540,7 +1540,7 @@
       "effect": "After a long rest, create elixirs in empty flasks (one at 3rd level, two at 6th, three at 15th), each with a random effect. Spend a spell slot to make one more any time."
     },
     "origin": "subclass",
-    "activation": "special"
+    "activation": "passive"
   },
   {
     "kind": "feature",

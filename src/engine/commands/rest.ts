@@ -4,6 +4,7 @@ import { featureResource, writeFeatureResource } from '../calc/features';
 import { MYSTIC_ARCANUM } from '../calc/feat-spells';
 import { spellSelectionDetails } from '../calc/spell-selections';
 import { dedicatedWeaponOptions } from '../calc/monk-weapons';
+import { elixirRestChecks, restElixirs } from './experimental-elixirs';
 import { LONG_REST_INTERVAL_SECONDS } from '../rules2014';
 import type { HitDieName } from '../schema';
 import type { Check, Command, CommandContext } from './runner';
@@ -213,6 +214,7 @@ export const completeShortRest: Command<ShortRestPayload> = {
 export interface LongRestChoices {
   cantripSwap?: { remove: string; add: string };
   dedicatedWeaponId?: string;
+  elixirRolls?: number[];
 }
 
 function dedicatedWeaponChecks(ctx: CommandContext, instanceId?: string) {
@@ -258,6 +260,7 @@ export const completeLongRest: Command<LongRestChoices | null> = {
     }
     checks.push(...timeRangeChecks(live.clock.seconds, duration));
     checks.push(...dedicatedWeaponChecks(ctx, choices?.dedicatedWeaponId));
+    checks.push(...elixirRestChecks(ctx, choices?.elixirRolls));
     return checks;
   },
   apply: ({ live, build }, choices, ctx) => {
@@ -323,6 +326,7 @@ export const completeLongRest: Command<LongRestChoices | null> = {
     if (recovered > 0) notes.push(`${recovered} Hit ${recovered === 1 ? 'Die' : 'Dice'} back`);
 
     live.lastLongRestEnd = live.clock.seconds;
+    notes.push(...restElixirs(live, ctx.eventId, choices?.elixirRolls));
     notes.push(dedicateWeapon(live, ctx, choices?.dedicatedWeaponId));
     if (choices?.cantripSwap) {
       const { remove, add } = choices.cantripSwap;

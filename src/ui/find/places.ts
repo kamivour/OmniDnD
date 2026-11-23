@@ -81,6 +81,15 @@ export const PLACES: readonly FindEntry[] = [
     needsCharacter: true,
   },
   {
+    id: 'go.experimental-elixirs',
+    group: 'go',
+    title: 'Experimental Elixirs',
+    detail: 'Features · brew or use an Alchemist elixir',
+    synonyms: ['experimental elixir', 'brew elixir', 'alchemist potion'],
+    target: { kind: 'go', path: 'features', anchor: 'experimental-elixirs' },
+    needsCharacter: true,
+  },
+  {
     id: 'go.join-campaign',
     group: 'go',
     title: 'Join a campaign',
