@@ -1,9 +1,10 @@
-import { useId, type ReactNode } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { Check, Clock3 } from 'lucide-react';
 import { guidanceFor } from '../../data/guidance';
 import { cx } from '../cx';
-import { GuidanceCard } from './OptionGuide';
+import { GuidanceCard } from './GuidanceCard';
 import { Icon } from './Icon';
+import { inputClass } from './fields';
 
 export interface SelectionOption {
   id: string;
@@ -19,6 +20,7 @@ export function SelectionCards({
   hints,
   detail,
   emblem,
+  searchLabel,
   className,
 }: {
   label: string;
@@ -28,10 +30,15 @@ export function SelectionCards({
   hints: boolean;
   detail?: ReactNode;
   emblem?: string;
+  searchLabel?: string;
   className?: string;
 }) {
   const group = useId();
+  const [search, setSearch] = useState('');
+  const query = search.trim().toLocaleLowerCase();
+  const matches = options.filter(({ name }) => name.toLocaleLowerCase().includes(query));
   const chosen = options.find((option) => option.id === value);
+  const visible = chosen && !matches.includes(chosen) ? [chosen, ...matches] : matches;
   const chosenGuidance = hints && guidanceFor(chosen?.id);
   const guide =
     chosen && chosenGuidance ? (
@@ -46,6 +53,26 @@ export function SelectionCards({
           {label}
         </span>
       </legend>
+      {searchLabel && (
+        <label className="mb-3 grid gap-1 text-sm text-text-muted" htmlFor={`${group}-search`}>
+          {searchLabel}
+          <input
+            id={`${group}-search`}
+            type="search"
+            className={inputClass}
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') event.preventDefault();
+            }}
+          />
+        </label>
+      )}
+      {query && matches.length === 0 && (
+        <p role="status" className="mb-3 text-sm text-text-muted">
+          No matches{chosen ? '. Your current choice is shown below.' : '.'}
+        </p>
+      )}
       <div
         className={cx(
           'grid min-w-0 items-start gap-3',
@@ -53,7 +80,7 @@ export function SelectionCards({
         )}
       >
         <div className="grid min-w-0 gap-2 @min-[29rem]:grid-cols-2 @min-[44rem]:grid-cols-3">
-          {options.map((option, index) => {
+          {visible.map((option, index) => {
             const selected = option.id === value;
             const pitch = hints && guidanceFor(option.id)?.pitch;
             const pitchId = `${group}-pitch-${index}`;

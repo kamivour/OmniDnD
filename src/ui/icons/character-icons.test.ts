@@ -5,6 +5,8 @@ import { iconGlyph } from './character-icons';
 it('provides a visible class glyph and a distinct motif for every bundled subclass', () => {
   for (const entry of registry.entries.values()) {
     if (entry.kind === 'class') expect(iconGlyph(entry.id), entry.id).toBeDefined();
+    if (entry.kind === 'race' || entry.kind === 'background')
+      expect(iconGlyph(entry.id), entry.id).toBeDefined();
     if (entry.kind !== 'subclass') continue;
     const motif = iconGlyph(entry.id);
     expect(motif, entry.id).toBeDefined();

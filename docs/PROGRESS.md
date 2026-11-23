@@ -377,7 +377,7 @@ Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M44. 
 - [x] T2: Add shared class/subclass icons and character portrait fallbacks
 - [x] T3: Replace the class picker with accessible selection cards in both creation modes
 - [x] T4: Use subclass cards in creation, level-up and To do
-- [ ] T5: Extend cards to race and background choices with search for larger lists
+- [x] T5: Extend cards to race and background choices with search for larger lists
 - [ ] T6: Refine guidance, review and navigation while preserving drafts
 - [ ] T7: Verify recognition, accessibility, themes and unchanged character results at both widths
 
@@ -442,6 +442,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Added searchable race and background cards that keep the current selection visible.
 - 2026-11-23 — Shared subclass cards across creation, Level up and To do, preserving Decide later.
 - 2026-11-23 — Switched both creation modes to class cards with keyboard selection and optional guidance.
 - 2026-11-23 — Added recognizable class silhouettes and subclass motifs shared by icons and portrait fallbacks.

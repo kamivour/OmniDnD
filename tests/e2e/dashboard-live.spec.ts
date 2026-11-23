@@ -284,9 +284,9 @@ test('a newly created blank character computes its own values and inherits no Fo
   await page.goto('/campaigns/campaign-273/characters/new');
   await saved(page);
   await page.getByLabel('Name', { exact: true }).fill('First dashboard');
-  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await identityChoice(page, 'race.human').check();
   await identityChoice(page, 'class.bard').check();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.charlatan');
+  await identityChoice(page, 'background.charlatan').check();
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('10');
   }

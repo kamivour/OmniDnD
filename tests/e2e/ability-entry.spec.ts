@@ -1,3 +1,4 @@
+import { identityChoice } from './creation-helpers';
 import { readFile } from 'node:fs/promises';
 import type { Locator } from '@playwright/test';
 import seed from '../../data/characters/the-fool.json' with { type: 'json' };
@@ -484,7 +485,7 @@ test('combined race and base choices preview exact bonuses while preserving expl
   await goSheet(page, file.build.id);
   const before = await readSaved(page, file.build.id);
   await openEdit(page);
-  await form(page).getByLabel('Race', { exact: true }).selectOption('race.human');
+  await identityChoice(form(page), 'race.human').check();
   await base(page, 'STR').fill('14');
   await base(page, 'CHA').fill('16');
   await expect(preview(page, 'STR', 'score')).toContainText('15');

@@ -400,9 +400,9 @@ test('new blank character validates racial choices and opens a saved HUD with co
     await expect(page.getByLabel(label, { exact: true })).toHaveAttribute('required', '');
   }
   await page.getByLabel('Name', { exact: true }).fill('First Verse');
-  await page.getByLabel('Race', { exact: true }).selectOption('race.half-elf');
+  await identityChoice(page, 'race.half-elf').check();
   await identityChoice(page, 'class.bard').check();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.charlatan');
+  await identityChoice(page, 'background.charlatan').check();
   for (const [ability, score] of Object.entries({
     STR: 11,
     DEX: 14,

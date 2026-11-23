@@ -82,9 +82,9 @@ async function chooseAveragePointBuy(page: Page) {
 
 async function fillCharacterBasics(page: Page, name: string) {
   await page.getByLabel('Name', { exact: true }).fill(name);
-  await page.getByLabel('Race', { exact: true }).selectOption('race.half-elf');
+  await identityChoice(page, 'race.half-elf').check();
   await identityChoice(page, 'class.bard').check();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.charlatan');
+  await identityChoice(page, 'background.charlatan').check();
 }
 
 test('new campaign saves the 2014 defaults and standard-array creation validates assignments', async ({

@@ -1,11 +1,50 @@
 import { GAME_ICONS, type GameIconId } from './game-icons';
 
-const classIcons: Partial<Record<string, GameIconId>> = {
-  barbarian: 'catalog.axe',
-  monk: 'catalog.fist',
-  ranger: 'catalog.bow',
-  rogue: 'catalog.dagger',
-  wizard: 'catalog.book',
+const identityIcons: Partial<Record<string, GameIconId>> = {
+  'class.barbarian': 'catalog.axe',
+  'class.monk': 'catalog.fist',
+  'class.ranger': 'catalog.bow',
+  'class.rogue': 'catalog.dagger',
+  'class.wizard': 'catalog.book',
+  'race.custom-lineage': 'catalog.mask',
+  'race.dragonborn': 'catalog.dragon',
+  'race.drow': 'catalog.moon',
+  'race.dwarf': 'catalog.hammer',
+  'race.elf': 'catalog.tree',
+  'race.forest-gnome': 'spell.faerie-fire',
+  'race.gnome': 'catalog.tool',
+  'race.half-elf': 'catalog.amulet',
+  'race.half-orc': 'catalog.axe',
+  'race.halfling': 'catalog.pack',
+  'race.high-elf': 'catalog.wand',
+  'race.hill-dwarf': 'catalog.mace',
+  'race.human': 'catalog.helmet',
+  'race.lightfoot-halfling': 'catalog.boots',
+  'race.mountain-dwarf': 'catalog.shield',
+  'race.rock-gnome': 'class.artificer',
+  'race.stout-halfling': 'catalog.food',
+  'race.tiefling': 'catalog.fire',
+  'race.variant-human': 'catalog.medal',
+  'race.wood-elf': 'class.druid',
+  'background.acolyte': 'class.cleric',
+  'background.charlatan': 'catalog.dice',
+  'background.criminal': 'catalog.dagger',
+  'background.custom': 'catalog.scroll',
+  'background.entertainer': 'catalog.instrument',
+  'background.folk-hero': 'catalog.target',
+  'background.gladiator': 'catalog.sword',
+  'background.guild-artisan': 'catalog.tool',
+  'background.guild-merchant': 'catalog.chest',
+  'background.hermit': 'catalog.lantern',
+  'background.knight': 'catalog.shield',
+  'background.noble': 'catalog.medal',
+  'background.outlander': 'catalog.tree',
+  'background.pirate': 'school.necromancy',
+  'background.sage': 'catalog.book',
+  'background.sailor': 'catalog.net',
+  'background.soldier': 'catalog.helmet',
+  'background.spy': 'catalog.mask',
+  'background.urchin': 'catalog.cloak',
 };
 
 // Reuse the attributed glyphs for subclass motifs. The remaining names have dedicated icons.
@@ -122,12 +161,11 @@ export function iconGlyph(id: string, fallback?: string): GameIconId | undefined
   const [kind, className, subclass] = id.split('.');
   const subclasses =
     className && Object.hasOwn(subclassIcons, className) ? subclassIcons[className] : undefined;
-  const identity =
-    kind === 'class' && className && Object.hasOwn(classIcons, className)
-      ? classIcons[className]
-      : kind === 'subclass' && subclasses && subclass && Object.hasOwn(subclasses, subclass)
-        ? subclasses[subclass]
-        : undefined;
+  const identity = Object.hasOwn(identityIcons, id)
+    ? identityIcons[id]
+    : kind === 'subclass' && subclasses && subclass && Object.hasOwn(subclasses, subclass)
+      ? subclasses[subclass]
+      : undefined;
   if (identity) return identity;
   if (Object.hasOwn(GAME_ICONS, id)) return id as GameIconId;
   if (fallback && fallback !== id) return iconGlyph(fallback);

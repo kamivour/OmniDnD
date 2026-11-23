@@ -17,13 +17,13 @@ test('step by step builds a level 1 Fighter and keeps entries when switching mod
   await page.getByLabel('Name', { exact: true }).fill('Step Hero');
   await page.getByRole('button', { name: 'Next', exact: true }).click();
 
-  await expect(page.getByLabel('Race', { exact: true })).toBeVisible();
+  await expect(page.getByRole('group', { name: 'Race', exact: true })).toBeVisible();
   await expect(page.getByLabel('Name', { exact: true })).toHaveCount(0);
-  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await identityChoice(page, 'race.human').check();
   await page.getByRole('button', { name: 'Next', exact: true }).click();
   await identityChoice(page, 'class.fighter').check();
   await page.getByRole('button', { name: 'Next', exact: true }).click();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
+  await identityChoice(page, 'background.acolyte').check();
   await page.getByRole('button', { name: 'Next', exact: true }).click();
   await page.getByRole('button', { name: 'Next', exact: true }).click();
 
@@ -88,9 +88,9 @@ test('guided build tags recommended skills and spells with a reason', async ({ p
     .getByRole('link', { name: 'New character', exact: true })
     .click();
   await page.getByLabel('Name', { exact: true }).fill('Tagged');
-  await page.getByLabel('Race', { exact: true }).selectOption('race.half-elf');
+  await identityChoice(page, 'race.half-elf').check();
   await identityChoice(page, 'class.bard').check();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.charlatan');
+  await identityChoice(page, 'background.charlatan').check();
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('12');
   }
@@ -115,11 +115,11 @@ test('a level 4 Fighter picks a subclass and an ability increase during creation
   const next = page.getByRole('button', { name: 'Next', exact: true });
   await page.getByLabel('Name', { exact: true }).fill('Leveled Hero');
   await next.click();
-  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await identityChoice(page, 'race.human').check();
   await next.click();
   await identityChoice(page, 'class.fighter').check();
   await next.click();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
+  await identityChoice(page, 'background.acolyte').check();
   await next.click();
   await page.getByLabel('Level', { exact: true }).fill('4');
   await next.click();

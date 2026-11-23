@@ -20,7 +20,6 @@ import { useManagement } from '../commands/useManagement';
 import { Field, inputClass } from '../components/fields';
 import { guidanceFor } from '../../data/guidance';
 import { suggestAbilityBases, synergyNotes } from '../../engine/calc/suggestions';
-import { OptionGuide } from '../components/OptionGuide';
 import { SelectionCards } from '../components/SelectionCards';
 import { AbilityBaseInput } from '../components/AbilityBaseInput';
 import { SectionLabel } from '../components/SectionLabel';
@@ -569,17 +568,15 @@ function NewCharacterForm({
             </Field>
           )}
           {show('race') && (
-            <Select
-              id="nc-race"
+            <SelectionCards
               label="Race"
               options={races}
               value={raceId}
               onChange={pickRace}
-              required
+              hints={hints}
+              searchLabel="Search races"
+              className="sm:col-span-2"
             />
-          )}
-          {hints && show('race') && (
-            <OptionGuide noun="races" options={races} value={raceId} onChange={pickRace} />
           )}
           {show('class') && (
             <SelectionCards
@@ -610,13 +607,14 @@ function NewCharacterForm({
             </p>
           )}
           {show('background') && (
-            <Select
-              id="nc-background"
+            <SelectionCards
               label="Background"
               options={backgrounds}
               value={backgroundId}
               onChange={pickBackground}
-              required
+              hints={hints}
+              searchLabel="Search backgrounds"
+              className="sm:col-span-2"
             />
           )}
           {show('background') && backgroundDef && openSlots(backgroundDef) > 0 && (
@@ -625,14 +623,6 @@ function NewCharacterForm({
               picks={backgroundPicks}
               taken={{ skills: backgroundDef.skills, languages: race?.languages ?? [] }}
               onChange={setBackgroundPicks}
-            />
-          )}
-          {hints && show('background') && (
-            <OptionGuide
-              noun="backgrounds"
-              options={backgrounds}
-              value={backgroundId}
-              onChange={pickBackground}
             />
           )}
           {show('name') && (

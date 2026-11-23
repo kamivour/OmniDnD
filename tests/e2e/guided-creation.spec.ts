@@ -10,9 +10,9 @@ test('guided build picks class skills, kit and spells, then opens the saved shee
     .getByRole('link', { name: 'New character', exact: true })
     .click();
   await page.getByLabel('Name', { exact: true }).fill('Guided Verse');
-  await page.getByLabel('Race', { exact: true }).selectOption('race.half-elf');
+  await identityChoice(page, 'race.half-elf').check();
   await identityChoice(page, 'class.bard').check();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.charlatan');
+  await identityChoice(page, 'background.charlatan').check();
   for (const [ability, score] of Object.entries({
     STR: 11,
     DEX: 14,

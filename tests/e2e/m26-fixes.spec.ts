@@ -61,9 +61,9 @@ test('Pending at level 1 lists first-level spells, not cantrips, until Show all'
 }) => {
   await openNewCharacter(page);
   await page.getByLabel('Name', { exact: true }).fill('Pending Wizard');
-  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await identityChoice(page, 'race.human').check();
   await identityChoice(page, 'class.wizard').check();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
+  await identityChoice(page, 'background.acolyte').check();
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('13');
   }
@@ -107,9 +107,9 @@ test('new character offers the sample character in this campaign', async ({ page
 test('a background with open choices asks for them and the sheet keeps them', async ({ page }) => {
   await openNewCharacter(page);
   await page.getByLabel('Name', { exact: true }).fill('Noble Sage');
-  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await identityChoice(page, 'race.human').check();
   await identityChoice(page, 'class.wizard').check();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.noble');
+  await identityChoice(page, 'background.noble').check();
   await page.getByLabel('Language', { exact: true }).selectOption('Dwarvish');
   await page.getByLabel('Tool', { exact: true }).selectOption('item.dice-set');
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
@@ -126,9 +126,9 @@ test('Steel Defender shows Stats on Features and on the Combat bonus tab', async
   await openNewCharacter(page);
   await page.getByLabel('Level', { exact: true }).fill('3');
   await page.getByLabel('Name', { exact: true }).fill('Defender Smith');
-  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await identityChoice(page, 'race.human').check();
   await identityChoice(page, 'class.artificer').check();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
+  await identityChoice(page, 'background.acolyte').check();
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('13');
   }

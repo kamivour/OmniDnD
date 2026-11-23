@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 12:46 — Searchable origin cards
+
+- Pick a race or background from cards with icons. Search by name while keeping your current choice visible.
+- Check that the skills, languages and origin choices still appear after picking. Checks pass.
+
 ## 2026-11-23 12:44 — Subclass selection cards
 
 - Choose a subclass using the same cards during creation, Level up or To do.

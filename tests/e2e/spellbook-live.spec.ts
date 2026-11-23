@@ -196,9 +196,9 @@ test('a blank bard shows derived stats and slots without inheriting the Fool spe
   await page.goto('/campaigns/campaign-273/characters/new');
   await expectSaved(page);
   await page.getByLabel('Name', { exact: true }).fill('First Verse');
-  await page.getByLabel('Race', { exact: true }).selectOption('race.human');
+  await identityChoice(page, 'race.human').check();
   await identityChoice(page, 'class.bard').check();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.charlatan');
+  await identityChoice(page, 'background.charlatan').check();
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('10');
   }

@@ -21,7 +21,7 @@ async function openNewCharacter(page: Page) {
 
 test('new character points to the rule, then moves every racial increase', async ({ page }) => {
   await openNewCharacter(page);
-  await page.getByLabel('Race', { exact: true }).selectOption('race.hill-dwarf');
+  await identityChoice(page, 'race.hill-dwarf').check();
   await expect(page.getByRole('link', { name: 'Campaign settings' }).last()).toHaveAttribute(
     'href',
     /\/campaigns\/.+\/settings$/,
@@ -31,9 +31,9 @@ test('new character points to the rule, then moves every racial increase', async
   await turnOnCustomOrigin(page);
   await openNewCharacter(page);
   await page.getByLabel('Name', { exact: true }).fill('Moved Dwarf');
-  await page.getByLabel('Race', { exact: true }).selectOption('race.hill-dwarf');
+  await identityChoice(page, 'race.hill-dwarf').check();
   await identityChoice(page, 'class.wizard').check();
-  await page.getByLabel('Background', { exact: true }).selectOption('background.acolyte');
+  await identityChoice(page, 'background.acolyte').check();
   for (const ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']) {
     await page.getByLabel(`${ability} base`, { exact: true }).fill('13');
   }
