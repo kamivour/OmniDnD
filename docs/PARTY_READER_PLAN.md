@@ -2,7 +2,7 @@
 
 Give a campaign member’s character the same visual language as an owned character sheet. The reader should answer two questions quickly at the table. What does this character have left, and what does this spell, item or companion do?
 
-Today the reader has five sections with basic lists. Its spell slot text covers ordinary slots, and companions show names. The existing reader entry already separates other members’ characters from the playable character frame. Build on that separation and reuse the app’s presentation components. [Current reader](../src/ui/party/PartyCharacterView.tsx), [character frame](../src/ui/layout/AppFrame.tsx)
+M47 expands the original five basic lists into a compact reader with shared sheet components and clickable details. The reader keeps the existing separation between party snapshots and playable characters. [Current reader](../src/ui/party/PartyCharacterView.tsx), [character frame](../src/ui/layout/AppFrame.tsx)
 
 ## Layout and navigation
 

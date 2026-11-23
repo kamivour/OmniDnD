@@ -360,6 +360,12 @@ Use two test accounts on a phone and a desktop, after running the three new migr
 - [ ] Decide whether the concentration and condition prompts match how you resolve hits at the table.
 - [ ] Read Effects on me on a phone and judge whether each effect's impact and ending are clear.
 
+## M47 — Party character viewer
+
+- [ ] At 375 px and 1440 px, judge whether the header, section links and opening or closing details feel natural during play.
+- [ ] Compare spell pools, charged gear and a scaled companion with the owner's sheet. Judge whether you can tell how many uses remain and what each entry does.
+- [ ] With the disposable two-account setup from M43, read a teammate's sheet as DM while the owner updates an open detail. Judge whether the change and subsequent cached view are clear.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

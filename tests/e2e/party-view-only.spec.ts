@@ -1,5 +1,5 @@
 import { expect, test } from './fixtures';
-import { importReview, reviewFile, reviewState } from './review-fixtures';
+import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
 test('Find reaches Join a campaign from an owned character', async ({ page }) => {
   await page.goto('/characters/the-fool');
@@ -54,5 +54,24 @@ test('party characters use a separate reader on every character route, including
   await page.reload();
   await expect(page.getByRole('note', { name: 'View only' })).toBeVisible();
   await expect(page.getByText('Offline · cached copy')).toBeVisible();
+  await page.getByRole('link', { name: 'Spells', exact: true }).click();
+  await page.getByRole('button', { name: 'Vicious Mockery', exact: true }).click();
+  await expect(page.getByText('WIS save DC 15', { exact: true })).toBeVisible();
+  expect(await reviewState(page, file.build.id)).toEqual(before);
+});
+
+test('duplicating a shared reader creates a separate playable character', async ({ page }) => {
+  const file = reviewFile('copy-from-reader');
+  file.build.partyOwner = { userId: 'friend', name: 'Ana' };
+  await importReview(page, file, 'sheet', false);
+  const before = await reviewState(page, file.build.id);
+  await page.getByRole('button', { name: 'Duplicate to play', exact: true }).click();
+  await expect(page.getByRole('banner', { name: 'Character HUD' })).toBeVisible();
+  await saved(page);
+  const id = decodeURIComponent(new URL(page.url()).pathname.split('/')[2]!);
+  expect(id).not.toBe(file.build.id);
+  const copied = await reviewState(page, id);
+  expect(copied.build.name).toBe('copy-from-reader (copy)');
+  expect(copied.build.partyOwner).toBeUndefined();
   expect(await reviewState(page, file.build.id)).toEqual(before);
 });

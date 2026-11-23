@@ -24,7 +24,8 @@ export function AppFrame() {
       ? store.characters[characterId]
       : undefined,
   );
-  const previous = useRef({ id: characterId, existed: !!character });
+  const partyCampaign = character?.build.partyOwner ? character.build.campaignId : undefined;
+  const previous = useRef({ id: characterId, existed: !!character, partyCampaign });
   const frame = useRef<HTMLDivElement>(null);
   const header = useRef<HTMLDivElement>(null);
   const characterExists = character !== undefined;
@@ -41,10 +42,16 @@ export function AppFrame() {
     return () => observer.disconnect();
   }, [characterId, characterExists]);
   useEffect(() => {
-    if (previous.current.id === characterId && previous.current.existed && !character)
-      navigate('/');
-    previous.current = { id: characterId, existed: !!character };
-  }, [characterId, character, navigate]);
+    if (previous.current.id === characterId && previous.current.existed && !character) {
+      const campaignId = previous.current.partyCampaign;
+      const campaign = campaignId && characterStore.getState().campaigns[campaignId];
+      navigate(
+        campaign && campaign.shared ? `/campaigns/${encodeURIComponent(campaign.id)}/party` : '/',
+        { replace: true },
+      );
+    }
+    previous.current = { id: characterId, existed: !!character, partyCampaign };
+  }, [characterId, character, navigate, partyCampaign]);
   useTourAutostart('character', characterExists && !character?.build.partyOwner);
   if (!character)
     return (

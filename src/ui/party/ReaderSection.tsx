@@ -30,11 +30,11 @@ export function ReaderSection({
   }, [restore]);
   const current = selection && detail?.(selection.id);
   return (
-    <div className="flex min-w-0 items-start gap-4 [--character-header-height:0px]">
+    <div className="flex min-w-0 gap-4 [--character-header-height:0px]">
       <section
         id={`party-reader-${id}`}
         aria-labelledby={`party-reader-${id}-title`}
-        className="grid min-w-0 flex-1 gap-4 rounded-card border border-border bg-surface p-3 sm:p-4"
+        className="grid min-w-0 flex-1 content-start gap-4 rounded-card border border-border bg-surface p-3 sm:p-4"
       >
         <h2
           ref={heading}
@@ -51,6 +51,7 @@ export function ReaderSection({
         title={current?.title ?? 'Entry unavailable'}
         onClose={close}
         restoreFocus={restore}
+        focusTitle
       >
         {current?.body ?? (
           <p className="text-sm text-text-muted">

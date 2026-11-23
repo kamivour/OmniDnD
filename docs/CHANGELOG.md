@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 13:53 — Party reader ready for review
+
+- Browse another member’s character on phone or desktop, including its cached details offline.
+- Open details update when the shared character syncs. A removed character takes you back to the Party page.
+- Check the viewer with two accounts when a test campaign is available. Checks pass.
+
 ## 2026-11-23 13:44 — Party features and companions
 
 - Open a feature to read what it does, how many uses remain and when it recharges.

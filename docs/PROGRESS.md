@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
-**Current milestone:** M41 review: infusion limits, replica recipes and companion forms fixed; reported Artificer disappearance still under investigation.
-**Next up:** Review the [M46 combat design](COMBAT_HIT_DESIGN.md). M43 needs a disposable Supabase project for live account checks. The older Artificer report still needs the affected campaign export.
+**Current milestone:** M47 party character viewer implemented.
+**Next up:** Review the [M46 combat design](COMBAT_HIT_DESIGN.md). Live M43 and M47 account checks need a disposable Supabase project. The older Artificer report still needs the affected campaign export.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -71,7 +71,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M42 | Recognizable icons and creation cards | 10 | done | Class, subclass, race and background use selection cards. Portraits, draft choices and campaign filters are preserved. |
 | M45 | Compendium | 5 | done | Browse and read spells, classes, subclasses, races, backgrounds and feats to plan characters; see [PLAN.md](PLAN.md) |
 | M46 | Combat around "I got hit" | 6 | todo | Log a hit with damage types; the app applies resistances and suggests saves and effects to confirm; design review first; see [PLAN.md](PLAN.md) |
-| M47 | Party character viewer | 5 | doing | Inspect slots, gear, spells, features and companions in a compact read-only layout. See [viewer plan](PARTY_READER_PLAN.md). |
+| M47 | Party character viewer | 5 | done | Inspect slots, gear, spells, features and companions in a compact read-only layout. Live account check pending. |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -411,7 +411,9 @@ Follow the [viewer plan](PARTY_READER_PLAN.md), one task per commit.
 - [x] T2: Show spell pools and clickable spell descriptions.
 - [x] T3: Add inventory search, containers and item details.
 - [x] T4: Add feature details and companion stat blocks.
-- [ ] T5: Verify permissions, sync, offline use and both widths.
+- [x] T5: Verify permissions, sync, offline use and both widths in browser tests.
+
+The live two-account check uses the disposable Supabase setup from M43.
 
 ## Review fixes
 
@@ -453,6 +455,7 @@ Follow the [viewer plan](PARTY_READER_PLAN.md), one task per commit.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Verified reader updates, offline details, duplication and read-only permissions at both widths. Live account check pending.
 - 2026-11-23 — Added shared feature descriptions and companion stat blocks with scaled attacks and expiry.
 - 2026-11-23 — Added searchable shared inventory with container paths, individual charge counts and item details.
 - 2026-11-23 — Added clickable spells, preparation labels and separate spell slot and Pact Magic pools to the party reader.

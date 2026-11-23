@@ -21,6 +21,10 @@ async function backend(
   let myAvatar: string | null = null;
   let joined = host;
   let myRole = host ? 'dm' : 'player';
+  let friendWand: number | undefined;
+  let friendDeleted = false;
+  let friendRevision = 1;
+  const partyWrites: unknown[] = [];
   // Without a host, the friend holds the seat unless the test leaves it empty.
   const friendRole = !host && dmTaken ? 'dm' : 'player';
   const decisions: { user: string; approve: boolean }[] = [];
@@ -138,7 +142,8 @@ async function backend(
         ...(myName ? [{ user_id: me, display_name: myName, avatar: myAvatar }] : []),
         { user_id: friend, display_name: 'Friend', avatar: null },
       ].filter((row) => !only || row.user_id === only);
-    } else if (path.endsWith('/party_entities'))
+    } else if (path.endsWith('/party_entities')) {
+      if (request.method() !== 'GET') partyWrites.push(body);
       data =
         request.method() === 'GET' && joined
           ? [
@@ -146,8 +151,8 @@ async function backend(
                 campaign_id: campaign.id,
                 entity_id: 'friend-character',
                 owner_id: friend,
-                revision: 1,
-                deleted: false,
+                revision: friendRevision,
+                deleted: friendDeleted,
                 changed_at: now,
                 schema_version: 1,
                 payload: {
@@ -157,14 +162,36 @@ async function backend(
                     campaignId: campaign.id,
                     name: 'Friend Hero',
                     journal: {},
+                    items: [
+                      ...file.build.items,
+                      ...(friendWand === undefined
+                        ? []
+                        : [{ instanceId: 'friend-wand', itemId: 'item.wand-of-magic-missiles' }]),
+                    ],
                   },
-                  live: { ...file.live, characterId: 'friend-character' },
+                  live: {
+                    ...file.live,
+                    characterId: 'friend-character',
+                    items: {
+                      ...file.live.items,
+                      ...(friendWand === undefined
+                        ? {}
+                        : {
+                            'friend-wand': {
+                              qty: 1,
+                              equipped: false,
+                              attuned: false,
+                              charges: friendWand,
+                            },
+                          }),
+                    },
+                  },
                   events: [],
                 },
               },
             ]
           : [];
-    else if (path.endsWith('/sync_entities') && request.method() !== 'GET')
+    } else if (path.endsWith('/sync_entities') && request.method() !== 'GET')
       data = [{ revision: 1 }];
     await route.fulfill({
       status: 200,
@@ -176,12 +203,54 @@ async function backend(
   return {
     requests,
     decisions,
+    partyWrites,
+    updateWand: (charges?: number) => {
+      friendWand = charges;
+      friendRevision++;
+    },
+    removeFriendCharacter: () => {
+      friendDeleted = true;
+      friendRevision++;
+    },
     approve: () => {
       joined = true;
       requests[0]!.status = 'approved';
     },
   };
 }
+
+test('a DM inspecting another character sees synced changes and returns to the party when it is removed', async ({
+  page,
+}) => {
+  const server = await backend(page, true);
+  server.updateWand(2);
+  await page.goto('/join');
+  await page.getByRole('button', { name: 'Refresh membership', exact: true }).click();
+  await page.goto('/');
+  const campaignCard = page.getByRole('article', { name: 'Shared Table Shared', exact: true });
+  await expect(campaignCard.getByText('DM: Me Player', { exact: true })).toBeVisible();
+  await page.goto('/characters/friend-character/inventory');
+  await expect(page.getByRole('note', { name: 'View only' })).toContainText('Friend');
+  await page.getByRole('button', { name: 'Wand of Magic Missiles', exact: true }).click();
+  const preview =
+    page.viewportSize()!.width < 1024
+      ? page.getByRole('dialog')
+      : page.getByRole('complementary', { name: 'Pinned detail' });
+  await expect(preview.getByText('×1 · 2/7 charges', { exact: true })).toBeVisible();
+  server.updateWand(5);
+  await page.evaluate(() => window.dispatchEvent(new Event('online')));
+  await expect(preview.getByText('×1 · 5/7 charges', { exact: true })).toBeVisible();
+  server.updateWand(undefined);
+  await page.evaluate(() => window.dispatchEvent(new Event('online')));
+  await expect(preview.getByText('This entry is no longer on the shared character.')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('heading', { name: 'Inventory', exact: true })).toBeFocused();
+  expect(server.partyWrites).toEqual([]);
+  server.removeFriendCharacter();
+  await page.evaluate(() => window.dispatchEvent(new Event('online')));
+  await expect(page).toHaveURL(/\/campaigns\/shared-test\/party$/);
+  await expect(page.getByText('Friend Hero', { exact: true })).toHaveCount(0);
+});
 
 test('request by ID, approve externally, bring an existing copy and view a friend', async ({
   page,
@@ -265,7 +334,9 @@ test('sharing lists the characters members will see and keeps unticked ones priv
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: test.info().outputPath('share-characters.png'), fullPage: true });
   await list.getByRole('button', { name: 'Share now', exact: true }).click();
-  await expect(page.getByText(/Keep 1 character private when sharing/)).toBeVisible();
+  await expect(page.getByLabel('Recent management change')).toContainText(
+    'Keep 1 character private when sharing',
+  );
   await page.goto('/');
   await expect(page.getByText(`${file.campaign.name} (private)`).first()).toBeVisible();
 });

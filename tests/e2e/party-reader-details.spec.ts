@@ -204,6 +204,10 @@ test('shared spellbook separates Pact Magic and opens prepared and unprepared sp
   const preview = detail(page, 'Sleep');
   await expect(preview).toBeVisible();
   await expect(preview.getByText(/5d8/i)).toBeVisible();
+  await page.screenshot({
+    path: test.info().outputPath('shared-spell-detail.png'),
+    animations: 'disabled',
+  });
   expect(await reviewState(page, file.build.id)).toEqual(before);
   await page.keyboard.press('Escape');
   await expect(sleep).toBeFocused();

@@ -63,15 +63,21 @@ export function DetailSurface({
   title,
   onClose,
   restoreFocus,
+  focusTitle = false,
   children,
 }: {
   open: boolean;
   title: string;
   onClose: () => void;
   restoreFocus: () => void;
+  focusTitle?: boolean;
   children: ReactNode;
 }) {
   const desktop = useMediaQuery('(min-width: 1024px)');
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (desktop && open && focusTitle) heading.current?.focus({ preventScroll: true });
+  }, [desktop, open, focusTitle]);
   useEffect(() => {
     if (!desktop || !open) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -112,7 +118,13 @@ export function DetailSurface({
     >
       <div className="sticky top-[calc(var(--character-header-height,132px)+16px)] max-h-[calc(100dvh-var(--character-header-height,132px)-32px)] overflow-y-auto">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="font-display text-base wrap-anywhere">{title}</h2>
+          <h2
+            ref={heading}
+            tabIndex={focusTitle ? -1 : undefined}
+            className="font-display text-base wrap-anywhere"
+          >
+            {title}
+          </h2>
           <button
             type="button"
             aria-label="Close details"
