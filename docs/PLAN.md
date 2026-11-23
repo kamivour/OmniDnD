@@ -251,7 +251,7 @@ Party characters open in a separate reader with no editors or gameplay controls.
 
 ## M42 — Recognizable icons and creation cards
 
-Planning only, requested 2026-11-18. Start implementation after M44; complete one task per commit. Keep 2014 rules, book filtering, engine commands, both creation modes and saved characters intact.
+Requested 2026-11-18 and implemented after M44. Both creation modes use the same cards and keep 2014 rules, campaign filtering and saved drafts.
 
 ### Intended experience
 
@@ -265,7 +265,7 @@ Use a shared class identity across creation, campaign character cards, Sheet and
 
 | Task | Deliverable | Check before closing |
 |---|---|---|
-| T1 — Visual proposal | Repo-native icon board for all 13 classes, representative subclass cards, and class/subclass creation mockups at 375 px and 1440 px | Compare silhouettes at 20 px, 40 px and card size; Paladin reads as warhammer and shield, Ranger as bow, Rogue as dagger and Bard as flute, never a diamond; labels remain visible |
+| T1 — Visual proposal | Repo-native icon board for all 13 classes, representative subclass cards, and class/subclass creation mockups at 375 px and 1440 px | Compare the Paladin hammer and shield, Ranger bow, Rogue dagger and Bard instrument at 20 px, 40 px and card size |
 | T2 — Shared icons | Class/subclass icon lookup and portrait fallback, reused in HUD, campaign cards and Sheet | Every supported class resolves to a real icon; custom portraits and The Fool's art survive; multiclass fallback is predictable |
 | T3 — Class cards | Shared accessible card picker in Step by step and One page | Radio semantics and keyboard navigation work; existing book filtering and chosen values survive back, reload and mode switches |
 | T4 — Subclass cards | Reuse the picker in creation, level-up and To do, with class identity plus a distinct subclass motif | Choices appear at the correct class level; saved choices and source restrictions remain authoritative |
@@ -275,7 +275,7 @@ Use a shared class identity across creation, campaign character cards, Sheet and
 
 ### Boundaries
 
-Reuse `Icon`, `CharacterPortrait`, `OptionGuide` and existing choice validation. Keep attribution for licensed SVGs; do not copy official class artwork. Dense spell, equipment and skill lists retain their existing useful layouts unless a later task explicitly schedules them.
+Reuse `Icon`, `CharacterPortrait`, `GuidanceCard` and existing choice validation. Keep attribution for licensed SVGs; do not copy official class artwork. Dense spell, equipment and skill lists keep their layouts.
 
 This milestone changes presentation, not ability-score rules, sync or campaign permissions. The reported Artificer disappearance remains an M41 investigation: the friend confirmed an older private campaign and an immediate same-browser change, while existing regression checks still retain the class. Recheck Point Buy → Rolled with Tasha's enabled during the UI gate, without treating it as a proven fix.
 

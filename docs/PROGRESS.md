@@ -1,7 +1,7 @@
 # OmniDnD — Progress
 
 **Current milestone:** M41 review: infusion limits, replica recipes and companion forms fixed; reported Artificer disappearance still under investigation.
-**Next up:** M42 creation cards. The deployed Artificer report needs the affected campaign export, and M43 needs a disposable Supabase project for live account checks. See [AUDIT_REPORT.md](AUDIT_REPORT.md) for class fixes.
+**Next up:** M46 combat design review. M43 needs a disposable Supabase project for live account checks. The older Artificer report still needs the affected campaign export.
 
 Status: `todo` · `doing` · `done` · `blocked`
 
@@ -68,7 +68,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M41 | Artificer equipment infusions | 3 | doing | Equipment assignment works; verify known choices and investigate the reported class disappearance |
 | M43 | Friend-testing fixes: accounts, profiles and joining | 10 | doing | Signup works, names are unique, profile with avatar, clear sync choices, explicit copy or move into shared campaigns, one DM seat; see [PLAN.md](PLAN.md) |
 | M44 | Phone navigation and screen cleanup | 7 | done | Sheet in the phone bar, grouped More menu, hidden Game Clock, no empty Details button, compact spell filters, weightless magic containers; see [PLAN.md](PLAN.md) |
-| M42 | Recognizable icons and creation cards | 10 | doing | Class and subclass choices use clear icon cards; portraits and existing creation behavior are preserved; after M44; see [PLAN.md](PLAN.md) |
+| M42 | Recognizable icons and creation cards | 10 | done | Class, subclass, race and background use selection cards. Portraits, draft choices and campaign filters are preserved. |
 | M45 | Compendium | 5 | done | Browse and read spells, classes, subclasses, races, backgrounds and feats to plan characters; see [PLAN.md](PLAN.md) |
 | M46 | Combat around "I got hit" | 6 | todo | Log a hit with damage types; the app applies resistances and suggests saves and effects to confirm; design review first; see [PLAN.md](PLAN.md) |
 
@@ -369,7 +369,7 @@ Follow [PLAN.md](PLAN.md#m44--phone-navigation-and-screen-cleanup) after M43. On
 - [x] T6: Weightless magic containers with capacity, contents and unit-based custom items
 - [x] T7: Verify at both widths and across themes
 
-### M42 — Recognizable icons and creation cards
+### M42 — Recognizable icons and creation cards (done)
 
 Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M44. One task per commit.
 
@@ -379,7 +379,7 @@ Follow [PLAN.md](PLAN.md#m42--recognizable-icons-and-creation-cards) after M44. 
 - [x] T4: Use subclass cards in creation, level-up and To do
 - [x] T5: Extend cards to race and background choices with search for larger lists
 - [x] T6: Refine guidance, review and navigation while preserving drafts
-- [ ] T7: Verify recognition, accessibility, themes and unchanged character results at both widths
+- [x] T7: Verify recognition, accessibility, themes and unchanged character results at both widths
 
 ### M45 — Compendium (done)
 
@@ -442,6 +442,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Checked creation cards at both widths and confirmed Artificer survives switching to Rolled locally and on Cloudflare.
 - 2026-11-23 — Kept Back and Next visible in the wizard and made wizard progress and review easier to scan.
 - 2026-11-23 — Added searchable race and background cards that keep the current selection visible.
 - 2026-11-23 — Shared subclass cards across creation, Level up and To do, preserving Decide later.

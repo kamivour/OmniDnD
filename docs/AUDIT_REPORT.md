@@ -129,6 +129,7 @@ The Progress, Changelog, Decisions and Data notes reflect the changes above. Slo
 
 - To do already hid learned recipes and recipes above the character’s Artificer level. At level 2, the old nine-option pool would show six choices after three picks.
 - The generic Replicate Magic Item entry missed individual recipes. The selector now offers all 49 named Tasha’s recipes at their required levels and shows the character’s known picks. Existing general picks still count toward the limit.
+- Artificer remained visible after changing Point Buy to Rolled with Tasha enabled on Cloudflare and in local checks of legacy and current records. Reproducing the friend's report still requires that campaign's export.
 - Resistant Armor also accepts force and psychic. Replica creation stays in Inventory under Q47.
 
 ## 2026-11-22 · Artificer rules and play audit

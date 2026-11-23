@@ -302,7 +302,7 @@ Check on a real phone and on a computer.
 - [ ] Assign Enhanced Weapon and Enhanced Defense; check the attack, damage and AC breakdowns, reload and Undo.
 - [ ] Compare Enhanced Arcane Focus or Repeating Shot before and after attuning and equipping the item.
 - [ ] Reach the active limit and judge the oldest-infusion warning; check that giving away gear still uses a slot.
-- [ ] Check the manual-effect reminders and the limitations for replicas, Homunculus Servant and Armorer armor components.
+- [ ] Compare a replicated bag, Homunculus Servant and the Armorer's two models with your table's 2014 rulings.
 - [ ] Change Point Buy to Rolled with Tasha's class options enabled; confirm Artificer remains available.
 
 - [ ] Compare the three cannon forms: saving throw, spell attack and temporary HP should be distinct, with a clear bonus-action cost.
@@ -345,6 +345,14 @@ Use two test accounts on a phone and a desktop, after running the three new migr
 - [ ] Feat icons and prerequisites make the results easy to compare.
 - [ ] Scan all seven tabs at 375 px and 1440 px. Check space, text wrapping and the return to results.
 - [ ] Inside a character, the campaign book scope and `Plan this` feel clear.
+
+## M42 — Creation cards
+
+- [ ] Identify Paladin, Ranger, Rogue and Bard by their icons at card and HUD size.
+- [ ] On a phone, check that long class and origin lists feel easy to scan and Back and Next stay within reach.
+- [ ] Compare checked cards and keyboard focus in Dark and Parchment.
+- [ ] Judge whether the selected guide and Decide later make the subclass choice clear.
+- [ ] Compare the class and subclass shown on Review with the character you intended to create.
 
 ## Rules review — M5
 

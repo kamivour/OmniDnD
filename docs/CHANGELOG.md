@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 12:57 — Creation cards verified
+
+- Checked icon readability, keyboard selection and the draft flow on phone and desktop.
+- Artificer stayed available when changing Point Buy to Rolled on Cloudflare and in local checks of old and new campaign records. Checks pass.
+
 ## 2026-11-23 12:56 — Creation progress and review
 
 - Back and Next stay within reach while you scroll through creation choices.

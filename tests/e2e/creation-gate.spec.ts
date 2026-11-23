@@ -12,6 +12,33 @@ async function openNewCharacter(page: Page) {
 
 const scores = { STR: 8, DEX: 14, CON: 13, INT: 15, WIS: 12, CHA: 10 };
 
+test('creation cards keep readable icons and keyboard focus in Parchment with reduced motion', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/settings');
+  await page.getByRole('radio', { name: /^Parchment/ }).check();
+  await openNewCharacter(page);
+  await page.getByRole('button', { name: 'Step by step', exact: true }).click();
+  await page.getByLabel('Name', { exact: true }).fill('Paladin Preview');
+  const next = page.getByRole('button', { name: 'Next', exact: true });
+  await next.click();
+  await identityChoice(page, 'race.human').check();
+  await next.click();
+  const classes = page.getByRole('group', { name: 'Class', exact: true });
+  const paladin = classes.getByRole('radio', { name: 'Paladin', exact: true });
+  await paladin.check();
+  await paladin.focus();
+  await expect(classes.locator('svg[data-glyph="class.paladin"]')).toBeVisible();
+  await expect(page.getByRole('article', { name: 'Paladin guide', exact: true })).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'parchment');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect(
+    await next.evaluate((button) => button.getBoundingClientRect().bottom <= innerHeight),
+  ).toBe(true);
+  await page.screenshot({ path: test.info().outputPath('creation-paladin.png'), fullPage: true });
+});
+
 test('origin card searches keep the active choice visible and cannot submit character creation', async ({
   page,
 }) => {

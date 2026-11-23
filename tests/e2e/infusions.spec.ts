@@ -261,33 +261,38 @@ test('a long rest opens infusion assignment; bonuses survive reload and Undo rem
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-test('changing Point Buy to Rolled preserves Tasha class availability', async ({ page }) => {
-  const file = reviewFile('source-artificer');
-  file.campaign.id = 'source-check';
-  file.build.campaignId = file.campaign.id;
-  file.campaign.sources = ['PHB', 'TCE'];
-  file.campaign.sourceParts = { TCE: ['options'] };
-  file.campaign.abilityMethod = 'point-buy';
-  await importReview(page, file, 'sheet');
-  await page.goto('/campaigns/source-check/characters/new');
-  await identityChoice(page, 'class.artificer').check();
-  await expect(page.getByLabel('STR base', { exact: true })).toHaveAttribute('min', '8');
-  await page.goto('/campaigns/source-check/settings');
-  await expect(
-    page.getByRole('checkbox', { name: /^Tasha's Cauldron of Everything/ }),
-  ).toBeChecked();
-  await page.locator('input[name="abilities"][value="rolled"]').check();
-  await page.getByRole('button', { name: 'Save', exact: true }).click();
-  await saved(page);
-  await page.goto('/campaigns/source-check/characters/new');
-  await expect(identityChoice(page, 'class.artificer')).toHaveCount(1);
-  await identityChoice(page, 'class.artificer').check();
-  await expect(page.getByLabel('STR base', { exact: true })).toHaveAttribute('min', '3');
-  await page.reload();
-  await expect(identityChoice(page, 'class.artificer')).toHaveCount(1);
-  await page.goto('/campaigns/source-check/settings');
-  await expect(page.locator('input[name="abilities"][value="rolled"]')).toBeChecked();
-  await expect(
-    page.getByRole('checkbox', { name: /^Tasha's Cauldron of Everything/ }),
-  ).toBeChecked();
-});
+for (const legacy of [false, true]) {
+  test(`changing Point Buy to Rolled preserves Tasha on a ${legacy ? 'legacy' : 'current'} campaign`, async ({
+    page,
+  }) => {
+    const file = reviewFile('source-artificer');
+    file.campaign.id = 'source-check';
+    file.build.campaignId = file.campaign.id;
+    file.campaign.sources = ['PHB', 'TCE'];
+    if (legacy) delete file.campaign.sourceParts;
+    else file.campaign.sourceParts = { TCE: ['options'] };
+    file.campaign.abilityMethod = 'point-buy';
+    await importReview(page, file, 'sheet');
+    await page.goto('/campaigns/source-check/characters/new');
+    await identityChoice(page, 'class.artificer').check();
+    await expect(page.getByLabel('STR base', { exact: true })).toHaveAttribute('min', '8');
+    await page.goto('/campaigns/source-check/settings');
+    await expect(
+      page.getByRole('checkbox', { name: /^Tasha's Cauldron of Everything/ }),
+    ).toBeChecked();
+    await page.locator('input[name="abilities"][value="rolled"]').check();
+    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saved(page);
+    await page.goto('/campaigns/source-check/characters/new');
+    await expect(identityChoice(page, 'class.artificer')).toHaveCount(1);
+    await identityChoice(page, 'class.artificer').check();
+    await expect(page.getByLabel('STR base', { exact: true })).toHaveAttribute('min', '3');
+    await page.reload();
+    await expect(identityChoice(page, 'class.artificer')).toHaveCount(1);
+    await page.goto('/campaigns/source-check/settings');
+    await expect(page.locator('input[name="abilities"][value="rolled"]')).toBeChecked();
+    await expect(
+      page.getByRole('checkbox', { name: /^Tasha's Cauldron of Everything/ }),
+    ).toBeChecked();
+  });
+}
