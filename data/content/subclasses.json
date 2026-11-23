@@ -68,6 +68,10 @@
         "featureId": "feature.artificer.armorer-armor-model"
       },
       {
+        "level": 3,
+        "featureId": "feature.artificer.armorer-defensive-field"
+      },
+      {
         "level": 5,
         "featureId": "feature.artificer.armorer-extra-attack"
       },

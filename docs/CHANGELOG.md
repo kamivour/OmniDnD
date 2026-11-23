@@ -4,6 +4,11 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-23 12:20 — Guardian and Infiltrator Arcane Armor
+
+- Configure an Armorer’s suit in Features and change its model during a rest.
+- Check the new attack in Combat, plus Defensive Field for Guardian or movement and Stealth for Infiltrator. Checks pass.
+
 ## 2026-11-23 12:14 — Alchemist Experimental Elixirs
 
 - Roll elixirs during Long Rest or brew a chosen elixir with a spell slot.

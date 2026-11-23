@@ -336,7 +336,8 @@ Details in [PLAN.md](PLAN.md).
 - [x] Audit the Tasha Artificer and Xanathar spell links. Correct missing spells, character calculations, limited uses and focus reminders
 - [x] Add Spell-Storing Item tracking and Arcane Firearm focus selection
 - [x] Add Experimental Elixirs and Restorative Reagents
-- [ ] Add Arcane Armor models and active replica and Homunculus tracking
+- [x] Add Guardian and Infiltrator Arcane Armor
+- [ ] Track active replica infusions and Homunculus Servant
 - [x] Add the three cannon forms, audit all bundled companion templates and compute spell-summon forms and upcasting
 - [ ] Reproduce the friend's missing Artificer using his actual campaign settings and deployed app
 
@@ -440,6 +441,7 @@ Follow [PLAN.md](PLAN.md#m46--combat-around-i-got-hit) after M45. Owner reviews 
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-23 — Added Guardian and Infiltrator Arcane Armor, Defensive Field and rest-based model changes.
 - 2026-11-23 — Added Experimental Elixir brewing, use, effects and expiration for Alchemists.
 - 2026-11-23 — Added Spell-Storing Item and Arcane Firearm through Features and the long-rest review.
 - 2026-11-23 — Added Dedicated Weapon to Monk rests and derived Martial Arts weapon attacks from the equipped gear.

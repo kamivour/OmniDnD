@@ -81,6 +81,15 @@ export const PLACES: readonly FindEntry[] = [
     needsCharacter: true,
   },
   {
+    id: 'go.arcane-armor',
+    group: 'go',
+    title: 'Arcane Armor',
+    detail: 'Features · configure Guardian or Infiltrator armor',
+    synonyms: ['armorer', 'defensive field', 'thunder gauntlets', 'lightning launcher'],
+    target: { kind: 'go', path: 'features', anchor: 'arcane-armor' },
+    needsCharacter: true,
+  },
+  {
     id: 'go.experimental-elixirs',
     group: 'go',
     title: 'Experimental Elixirs',

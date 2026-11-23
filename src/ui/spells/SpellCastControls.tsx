@@ -71,7 +71,7 @@ export function SpellCastControls({
             infusedItems: carried
               .filter(({ instanceId }) => infused.some((item) => item.instanceId === instanceId))
               .map(({ itemId }) => itemId),
-            ...(useFirearm ? { subclassFocusId: firearm.def.id } : {}),
+            subclassFocusId: useFirearm ? firearm.def.id : sheet.arcaneArmor?.def.id,
           },
         );
   const slots = entryFeat && !entryFeat.slots ? [] : model.slots;

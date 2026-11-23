@@ -9,6 +9,7 @@ import {
   weaponProficient,
 } from './monk-weapons';
 import { BLADESONG, SONG_OF_VICTORY, bladesongRestriction, hasBladesong } from './bladesong';
+import { arcaneArmor, armorWeapon, wornSuit } from './arcane-armor';
 import { attunedItems } from './attunement';
 import { wornInfusions, infusionKey, infusionBonus, magicalItem } from './infusions';
 import { recordedLevel, xpForLevel } from './advancement';
@@ -95,6 +96,7 @@ export interface WeaponAttack {
   versatile?: string;
   range?: { normal: number; long: number };
   properties: WeaponProperty[];
+  useNote?: string;
 }
 
 /** Everything the engine derives from build + live state. Display only: never stored (DATA.md §4). */
@@ -111,6 +113,8 @@ export interface Sheet {
   ac: Stat;
   speed: Stat;
   bladesong?: { concentrationBonus: number };
+  arcaneArmor?: NonNullable<ReturnType<typeof arcaneArmor>>;
+  stealthMode: 'normal' | 'advantage' | 'disadvantage';
   weaponCriticalAt?: 18 | 19;
   darkvision?: number;
   maxHp: Stat;
@@ -382,6 +386,13 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     if (!state?.equipped || state.qty <= 0) return [];
     return [{ instanceId: item.instanceId, def: registry.get('item', item.itemId) }];
   });
+  const suit = wornSuit(build, live, registry);
+  const armor = arcaneArmor(build, live, registry);
+  const infiltration = armor?.model === 'infiltrator';
+  const stealthPenalty =
+    suit?.def.armor?.stealthDisadvantage &&
+    !(suit.def.armor.category === 'medium' && featureIds.has(MEDIUM_ARMOR_MASTER));
+  const armorAttack = armor && armorWeapon(armor);
 
   const conditions = [
     ...new Set([...live.conditions, ...live.effects.flatMap((effect) => effect.conditions)]),
@@ -495,10 +506,12 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       const isDedicated = instanceId === dedicated && canDedicateWeapon(def, profs.weapons);
       return def.armor || (def.weapon && !isMonkWeapon(def, isDedicated));
     });
-  const attacks = equipped.flatMap(({ instanceId, def }) => {
+  const weapons = armorAttack ? [...equipped, armorAttack] : equipped;
+  const attacks = weapons.flatMap(({ instanceId, def }) => {
     if (!def.weapon) return [];
     const infusion = infusedItems.find((entry) => entry.instanceId === instanceId);
-    const useInt = battleReady && (magicalItem(def) || infusion !== undefined);
+    const armorWeapon = instanceId === armorAttack?.instanceId;
+    const useInt = armorWeapon || (battleReady && (magicalItem(def) || infusion !== undefined));
     const attack = weaponAttack(
       instanceId,
       def,
@@ -551,6 +564,18 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
       const type = strike?.type === 'weapon' ? attack.damage?.type : strike?.type;
       if (dice && type) extra.push({ dice, type, source: feature.name, oncePerTurn: true });
     }
+    if (armorWeapon) {
+      attack.useNote = infiltration
+        ? 'On one hit each turn, you can add the extra lightning die.'
+        : 'Use an empty gauntlet. A creature you hit has disadvantage attacking others until your next turn.';
+      if (infiltration)
+        extra.push({
+          dice: '1d6',
+          type: 'lightning',
+          source: 'Lightning Launcher',
+          oncePerTurn: true,
+        });
+    }
     if (extra.length > 0) attack.extraDamage = extra;
     const die = attack.damage?.dice?.match(/d\d+$/)?.[0];
     const crits = features.filter((feature) => feature.critDice && attack.type === 'melee');
@@ -581,6 +606,9 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
     proficiency,
     abilities,
     ...(songBonus > 0 ? { bladesong: { concentrationBonus: songBonus } } : {}),
+    ...(armor ? { arcaneArmor: armor } : {}),
+    stealthMode:
+      infiltration === !!stealthPenalty ? 'normal' : infiltration ? 'advantage' : 'disadvantage',
     ...(weaponCriticalAt === undefined ? {} : { weaponCriticalAt }),
     saves,
     skills,
@@ -639,12 +667,14 @@ function computeValues({ campaign, build, live }: CharacterState, registry: Regi
         [
           ...gearSpeedParts(features, equipped),
           ...modifierParts('speed'),
+          ...(infiltration ? [{ label: 'Infiltrator', value: 5 }] : []),
           ...wornInfusions(build, live, registry)
             .filter((i) => infusionKey(i.featureId) === 'arcane-propulsion-armor')
             .map(() => ({ label: 'Arcane Propulsion Armor', value: 5 })),
         ],
         load,
         live.combat?.economy.speedZero === true,
+        armor?.instanceId,
       ),
       { min: 0 },
     ),
@@ -907,9 +937,12 @@ function speed(
   extra: Part[],
   load: Encumbrance,
   stationary: boolean,
+  arcaneArmorId?: string,
 ): Stat {
   const parts: Part[] = [{ label: race.name, value: race.speed }, ...extra];
-  const heavy = equipped.find(({ def }) => def.armor?.category === 'heavy')?.def;
+  const heavy = equipped.find(
+    ({ instanceId, def }) => instanceId !== arcaneArmorId && def.armor?.category === 'heavy',
+  )?.def;
   // 2014 Dwarf Speed ignores heavy armor's STR penalty, including inherited subraces.
   // https://www.dndbeyond.com/sources/dnd/basic-rules-2014/races#DwarfTraits
   const dwarf = race.id === 'race.dwarf' || race.subraceOf === 'race.dwarf';

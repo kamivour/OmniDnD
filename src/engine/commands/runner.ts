@@ -1,8 +1,10 @@
 import { applyPatches, enablePatches, produceWithPatches, type Draft } from 'immer';
 import { computeSheet, type CharacterState, type Sheet } from '../calc/sheet';
 import { bladesongRestriction, endBladesong, hasBladesong } from '../calc/bladesong';
+import { arcaneArmor, wornSuit } from '../calc/arcane-armor';
 import { retainCounterCorrections } from '../calc/value-overrides';
 import { characterRegistry, type Registry } from '../registry';
+import { isDead } from './shared';
 import {
   CharacterBuildSchema,
   LiveStateSchema,
@@ -98,6 +100,21 @@ export function runCommand<Payload>(
     { build: state.build, live: state.live },
     (draft) => {
       text = command.apply(draft, payload, { ...ctx, eventId, automation });
+      if (draft.live.arcaneArmor) {
+        const suit = wornSuit(draft.build, draft.live, scoped);
+        if (isDead(draft.live) || (suit && suit.instanceId !== draft.live.arcaneArmor.instanceId)) {
+          delete draft.live.arcaneArmor;
+          text += ' · Arcane Armor ended';
+        }
+      }
+      if (draft.live.defensiveFieldArmorId) {
+        const armor = arcaneArmor(draft.build, draft.live, scoped);
+        if (draft.live.tempHp === 0 || armor?.instanceId !== draft.live.defensiveFieldArmorId) {
+          if (draft.live.tempHp > 0) text += ' · Defensive Field temporary HP ended';
+          draft.live.tempHp = 0;
+          delete draft.live.defensiveFieldArmorId;
+        }
+      }
       if (hasBladesong(draft.live)) {
         const restriction =
           oldSongRestriction ?? bladesongRestriction(draft.build, draft.live, scoped);

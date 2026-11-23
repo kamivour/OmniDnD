@@ -144,7 +144,9 @@ export const useExperimentalElixir: Command<z.infer<typeof UseSchema>> = {
         notes.push(`HP ${before} → ${after}`);
       }
       if (hasRestorativeReagents(ctx)) {
-        live.tempHp = Math.max(live.tempHp, tempHpRoll! + int);
+        const nextTempHp = Math.max(live.tempHp, tempHpRoll! + int);
+        if (nextTempHp > live.tempHp) delete live.defensiveFieldArmorId;
+        live.tempHp = nextTempHp;
         notes.push(`${live.tempHp} temporary HP`);
       }
       if (duration)

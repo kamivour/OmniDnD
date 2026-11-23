@@ -4,6 +4,8 @@ import { featureResource, writeFeatureResource } from '../calc/features';
 import { MYSTIC_ARCANUM } from '../calc/feat-spells';
 import { spellSelectionDetails } from '../calc/spell-selections';
 import { dedicatedWeaponOptions } from '../calc/monk-weapons';
+import type { ArmorModel } from '../calc/arcane-armor';
+import { armorModelChecks, changeArmorModel } from './arcane-armor';
 import { elixirRestChecks, restElixirs } from './experimental-elixirs';
 import { LONG_REST_INTERVAL_SECONDS } from '../rules2014';
 import type { HitDieName } from '../schema';
@@ -89,6 +91,7 @@ export interface ShortRestPayload {
   /** Slot levels chosen for Arcane Recovery, one entry per expended slot. */
   arcaneRecovery?: number[];
   dedicatedWeaponId?: string;
+  arcaneArmorModel?: ArmorModel;
 }
 
 /**
@@ -99,7 +102,14 @@ export const completeShortRest: Command<ShortRestPayload> = {
   name: 'completeShortRest',
   check: (
     ctx,
-    { hitDice = [], songOfRest, songOfRestSource, arcaneRecovery = [], dedicatedWeaponId },
+    {
+      hitDice = [],
+      songOfRest,
+      songOfRestSource,
+      arcaneRecovery = [],
+      dedicatedWeaponId,
+      arcaneArmorModel,
+    },
   ) => {
     const checks = restChecks(ctx);
     const counts = new Map<HitDieName, number>();
@@ -152,11 +162,19 @@ export const completeShortRest: Command<ShortRestPayload> = {
     }
     checks.push(...timeRangeChecks(ctx.live.clock.seconds, restDurations(ctx.campaign).short));
     checks.push(...dedicatedWeaponChecks(ctx, dedicatedWeaponId));
+    checks.push(...armorModelChecks(ctx, arcaneArmorModel));
     return checks;
   },
   apply: (
     { live },
-    { hitDice = [], songOfRest, songOfRestSource, arcaneRecovery = [], dedicatedWeaponId },
+    {
+      hitDice = [],
+      songOfRest,
+      songOfRestSource,
+      arcaneRecovery = [],
+      dedicatedWeaponId,
+      arcaneArmorModel,
+    },
     ctx,
   ) => {
     const duration = restDurations(ctx.campaign).short;
@@ -202,6 +220,7 @@ export const completeShortRest: Command<ShortRestPayload> = {
     }
     if (restored.length > 0) notes.push(`restored ${restored.join(', ')}`);
     notes.push(dedicateWeapon(live, ctx, dedicatedWeaponId));
+    notes.push(changeArmorModel(live, arcaneArmorModel));
     notes.push(...rechargeItems(live, ctx, ctx.live.items, ['short']));
     return withNotes(`Short rest (${formatDuration(duration)})`, notes);
   },
@@ -214,6 +233,7 @@ export const completeShortRest: Command<ShortRestPayload> = {
 export interface LongRestChoices {
   cantripSwap?: { remove: string; add: string };
   dedicatedWeaponId?: string;
+  arcaneArmorModel?: ArmorModel;
   elixirRolls?: number[];
 }
 
@@ -260,6 +280,7 @@ export const completeLongRest: Command<LongRestChoices | null> = {
     }
     checks.push(...timeRangeChecks(live.clock.seconds, duration));
     checks.push(...dedicatedWeaponChecks(ctx, choices?.dedicatedWeaponId));
+    checks.push(...armorModelChecks(ctx, choices?.arcaneArmorModel));
     checks.push(...elixirRestChecks(ctx, choices?.elixirRolls));
     return checks;
   },
@@ -328,6 +349,7 @@ export const completeLongRest: Command<LongRestChoices | null> = {
     live.lastLongRestEnd = live.clock.seconds;
     notes.push(...restElixirs(live, ctx.eventId, choices?.elixirRolls));
     notes.push(dedicateWeapon(live, ctx, choices?.dedicatedWeaponId));
+    notes.push(changeArmorModel(live, choices?.arcaneArmorModel));
     if (choices?.cantripSwap) {
       const { remove, add } = choices.cantripSwap;
       for (const list of build.spells) {

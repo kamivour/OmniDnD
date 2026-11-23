@@ -18,6 +18,7 @@ import { useCharacter } from '../hooks/useCharacter';
 import { previewShortRest, restChanges } from './rest-model';
 import { RestPreview } from './RestPreview';
 import { DedicatedWeaponSelect } from './DedicatedWeaponSelect';
+import { ArcaneArmorRestSelect } from './ArcaneArmorRestSelect';
 
 const field = 'min-h-11 w-full rounded-btn border border-border bg-surface px-3 text-text';
 
@@ -34,6 +35,7 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
   const [songRoll, setSongRoll] = useState('');
   const [slotPicks, setSlotPicks] = useState<Record<number, number>>({});
   const [dedicatedWeaponId, setDedicatedWeaponId] = useState('');
+  const [arcaneArmorModel, setArcaneArmorModel] = useState<ShortRestPayload['arcaneArmorModel']>();
   const nextId = useRef(1);
   const focusRoll = useRef<number | null>(null);
   const addButton = useRef<HTMLButtonElement>(null);
@@ -64,6 +66,7 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
     hitDice: dice,
     arcaneRecovery: recoveredSlots,
     ...(dedicatedWeaponId ? { dedicatedWeaponId } : {}),
+    ...(arcaneArmorModel ? { arcaneArmorModel } : {}),
   };
   const payload: ShortRestPayload = songEnabled
     ? {
@@ -290,6 +293,11 @@ export function ShortRestForm({ onClose }: { onClose: () => void }) {
         sheet={sheet}
         value={dedicatedWeaponId}
         onChange={setDedicatedWeaponId}
+      />
+      <ArcaneArmorRestSelect
+        armor={sheet.arcaneArmor}
+        value={arcaneArmorModel}
+        onChange={setArcaneArmorModel}
       />
       <RestPreview
         duration={formatDuration(restDurations(state.campaign).short)}

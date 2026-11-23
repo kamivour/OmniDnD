@@ -1,6 +1,54 @@
 import { expect, test } from './fixtures';
 import { importReview, reviewFile, reviewState, saved } from './review-fixtures';
 
+test('Armorer equips Guardian Arcane Armor and changes model at a short rest', async ({ page }) => {
+  const file = reviewFile('artificer-arcane-armor');
+  const classId = 'class.artificer';
+  file.campaign.sources = ['PHB', 'TCE'];
+  file.build.classes = [{ classId, level: 3, subclassId: 'subclass.artificer.armorer' }];
+  file.build.hpEntries = [1, 2, 3].map((level) => ({
+    level,
+    classId,
+    method: level === 1 ? 'max' : 'average',
+    value: level === 1 ? 8 : 5,
+  }));
+  file.build.items = [
+    { itemId: 'item.studded-leather-armor', instanceId: 'armor' },
+    { itemId: 'item.smiths-tools', instanceId: 'tools' },
+  ];
+  file.live.items = {
+    armor: { qty: 1, equipped: true, attuned: false },
+    tools: { qty: 1, equipped: false, attuned: false },
+  };
+  await importReview(page, file, 'features');
+  const panel = page.getByRole('region', { name: 'Arcane Armor', exact: true });
+  await panel.getByRole('button', { name: /^Configure/ }).click();
+  await expect(panel).toContainText('Thunder Gauntlets and Defensive Field');
+  await saved(page);
+  if (page.viewportSize()!.width < 640) {
+    await page.getByRole('button', { name: 'More', exact: true }).click();
+    await page
+      .getByRole('dialog', { name: 'More', exact: true })
+      .getByRole('button', { name: 'Short Rest', exact: true })
+      .click();
+  } else {
+    await page
+      .getByRole('button', { name: 'Short Rest', exact: true })
+      .filter({ visible: true })
+      .click();
+  }
+  const rest = page.getByRole('dialog', { name: 'Short Rest', exact: true });
+  await rest.getByLabel('Arcane Armor model').selectOption('infiltrator');
+  await rest.getByRole('button', { name: 'Apply Short Rest', exact: true }).click();
+  await expect(panel).toContainText('Lightning Launcher');
+  await saved(page);
+  expect((await reviewState(page, file.build.id)).live.arcaneArmor).toEqual({
+    instanceId: 'armor',
+    model: 'infiltrator',
+  });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
 test('Alchemist makes a rolled elixir in Long Rest and uses it in Features', async ({ page }) => {
   const file = reviewFile('alchemist-experimental-elixir');
   const classId = 'class.artificer';

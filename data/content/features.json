@@ -1631,7 +1631,7 @@
       "effect": "Turn a suit of armor you wear into arcane armor. It has no STR requirement, acts as a spellcasting focus, cannot be removed against your will, and replaces missing limbs."
     },
     "origin": "subclass",
-    "activation": "action"
+    "activation": "passive"
   },
   {
     "kind": "feature",
@@ -1646,6 +1646,20 @@
     },
     "origin": "subclass",
     "activation": "passive"
+  },
+  {
+    "kind": "feature",
+    "id": "feature.artificer.armorer-defensive-field",
+    "name": "Defensive Field",
+    "ruleset": "5e-2014",
+    "source": "TCE",
+    "srd": false,
+    "summary": {
+      "effect": "While wearing the Guardian model, gain temporary HP equal to your Artificer level as a bonus action. These points go away when you remove the armor."
+    },
+    "origin": "subclass",
+    "activation": "bonus",
+    "uses": { "max": { "proficiency": "full" }, "recharge": "long" }
   },
   {
     "kind": "feature",

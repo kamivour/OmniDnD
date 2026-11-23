@@ -176,6 +176,7 @@ export const setTempHp: Command<AmountPayload> = {
     const { amount } = AmountPayloadSchema.parse(payload);
     const before = live.tempHp;
     live.tempHp = amount;
+    delete live.defensiveFieldArmorId;
     return amount === 0 ? 'Temp HP cleared' : `Temp HP ${before} → ${amount}`;
   },
 };

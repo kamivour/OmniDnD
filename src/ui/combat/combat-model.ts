@@ -106,6 +106,7 @@ export function combatModel(state: CharacterState, sheet: Sheet, registry: Regis
         ...attack.properties,
         attack.range && `Range ${attack.range.normal}/${attack.range.long} ft`,
         attack.versatile && `Versatile ${damageText(attack.versatile, attack.damage?.bonus ?? 0)}`,
+        attack.useNote,
       ]
         .filter(Boolean)
         .join(' · '),

@@ -27,6 +27,12 @@ export function SkillList({ sheet }: { sheet: Sheet }) {
     skill,
     stat: sheet.skills[skill],
     marker: skillMarker(sheet.skills[skill]),
+    mode:
+      skill === 'acrobatics' && sheet.bladesong
+        ? ('advantage' as const)
+        : skill === 'stealth'
+          ? sheet.stealthMode
+          : ('normal' as const),
   }));
   const used = MARKERS.filter(({ marker }) => rows.some((row) => row.marker === marker));
   return (
@@ -37,7 +43,7 @@ export function SkillList({ sheet }: { sheet: Sheet }) {
         </p>
       )}
       <ul className="grid min-w-0 grid-cols-1 gap-x-4 @min-[34rem]:grid-cols-2">
-        {rows.map(({ skill, stat, marker }) => (
+        {rows.map(({ skill, stat, marker, mode }) => (
           <li
             key={skill}
             className="flex min-w-0 items-center gap-1 border-b border-border last:border-b-0 @min-[34rem]:[&:nth-last-child(2):nth-child(odd)]:border-b-0"
@@ -62,11 +68,13 @@ export function SkillList({ sheet }: { sheet: Sheet }) {
               spec={{
                 kind: 'd20',
                 bonus: stat.value,
-                mode: skill === 'acrobatics' && sheet.bladesong ? 'advantage' : 'normal',
+                mode,
               }}
             />
-            {skill === 'acrobatics' && sheet.bladesong && (
-              <span className="text-xs text-text-muted">Adv.</span>
+            {mode !== 'normal' && (
+              <span className="text-xs text-text-muted">
+                {mode === 'advantage' ? 'Adv.' : 'Dis.'}
+              </span>
             )}
           </li>
         ))}

@@ -15,7 +15,11 @@ import { changeSpellSelection } from './spell-selection';
 import { markArcaneFirearm, storeArtificerSpell, useArtificerStoredSpell } from './artificer-items';
 import { startCombat, startTurn } from './combat';
 import { brewExperimentalElixir, useExperimentalElixir } from './experimental-elixirs';
-import { completeLongRest } from './rest';
+import { completeLongRest, completeShortRest } from './rest';
+import { configureArcaneArmor } from './arcane-armor';
+import { DEFENSIVE_FIELD } from '../calc/arcane-armor';
+import { useFeature } from './features';
+import { equipItem } from './items';
 import {
   COMMON_REPLICA_PREFIX,
   INFUSION_PREFIX,
@@ -44,6 +48,53 @@ function artificer(level: number, subclassId?: string): CharacterState {
 }
 
 describe('Artificer', () => {
+  it('configures Arcane Armor, switches models at rest and removes only its own temporary HP', () => {
+    const state = artificer(5, 'subclass.artificer.armorer');
+    state.build.items = [
+      { itemId: 'item.plate-armor', instanceId: 'plate' },
+      { itemId: 'item.smiths-tools', instanceId: 'tools' },
+    ];
+    state.live.items = {
+      plate: { qty: 1, equipped: true, attuned: false },
+      tools: { qty: 1, equipped: false, attuned: false },
+    };
+    const session = new Session(state);
+    const speedWithPlate = session.sheet.speed.value;
+    session.run(configureArcaneArmor, { model: 'guardian' });
+    expect(session.sheet.speed.value).toBe(speedWithPlate + 10);
+    expect(session.sheet.attacks).toContainEqual(
+      expect.objectContaining({
+        name: 'Thunder Gauntlets',
+        ability: 'INT',
+        proficient: true,
+        damage: { dice: '1d8', type: 'thunder', bonus: 3 },
+      }),
+    );
+    expect(session.preview(configureArcaneArmor, { model: 'infiltrator' }).result).toBe('blocked');
+    session.run(useFeature, { featureId: DEFENSIVE_FIELD });
+    expect(session.live.tempHp).toBe(5);
+    session.run(equipItem, { instanceId: 'plate', equipped: false });
+    expect(session.live.tempHp).toBe(0);
+    expect(session.sheet.arcaneArmor).toBeUndefined();
+    session.undo();
+    expect(session.live.tempHp).toBe(5);
+    session.run(completeShortRest, { arcaneArmorModel: 'infiltrator' });
+    expect(session.sheet.speed.value).toBe(speedWithPlate + 15);
+    expect(session.sheet.stealthMode).toBe('normal');
+    expect(session.sheet.attacks).toContainEqual(
+      expect.objectContaining({
+        name: 'Lightning Launcher',
+        ability: 'INT',
+        range: { normal: 90, long: 300 },
+        extraDamage: [
+          { dice: '1d6', type: 'lightning', source: 'Lightning Launcher', oncePerTurn: true },
+        ],
+      }),
+    );
+    expect(session.preview(useFeature, { featureId: DEFENSIVE_FIELD }).result).toBe('blocked');
+    session.undo();
+    expect(session.sheet.arcaneArmor?.model).toBe('guardian');
+  });
   it('rolls free Alchemist elixirs at rest, brews with slots and expires unused elixirs', () => {
     const state = artificer(9, 'subclass.artificer.alchemist');
     state.build.items = [{ itemId: 'item.alchemists-supplies', instanceId: 'supplies' }];

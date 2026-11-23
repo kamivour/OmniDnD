@@ -81,15 +81,16 @@ export function armorEquipmentNotes(
       : [];
   notes.push(
     ...armor
-      .filter(({ def }) => def.armor.stealthDisadvantage)
+      .filter(({ def }) => def.armor.stealthDisadvantage && sheet.stealthMode === 'disadvantage')
       .map(({ def }) => `${def.name}: disadvantage on Stealth checks.`),
   );
-  for (const { def } of armor) {
+  for (const { def, instanceId } of armor) {
     const required = def.armor.strMin;
     const strength = sheet.abilities.STR.score.value;
     if (
       optionalRules(state.campaign).encumbrance !== 'variant' &&
       required !== undefined &&
+      instanceId !== sheet.arcaneArmor?.instanceId &&
       strength < required
     )
       notes.push(

@@ -12,6 +12,7 @@ import { useCharacter } from '../hooks/useCharacter';
 import { preparedRestClassIds, previewLongRest, restChanges } from './rest-model';
 import { RestPreview } from './RestPreview';
 import { DedicatedWeaponSelect } from './DedicatedWeaponSelect';
+import { ArcaneArmorRestSelect } from './ArcaneArmorRestSelect';
 
 export function LongRestForm({
   onClose,
@@ -31,6 +32,7 @@ export function LongRestForm({
   const [cantripOut, setCantripOut] = useState('');
   const [cantripIn, setCantripIn] = useState('');
   const [dedicatedWeaponId, setDedicatedWeaponId] = useState('');
+  const [arcaneArmorModel, setArcaneArmorModel] = useState<LongRestChoices['arcaneArmorModel']>();
   const [elixirRolls, setElixirRolls] = useState<Record<number, string>>({});
   const container = useRef<HTMLDivElement>(null);
   const formulas = wizardRestCantrips({ ...state, sheet, registry });
@@ -39,10 +41,11 @@ export function LongRestForm({
     .filter(Boolean)
     .map(Number);
   const choices: LongRestChoices | null =
-    cantripOut || dedicatedWeaponId || recordedRolls.length
+    cantripOut || dedicatedWeaponId || arcaneArmorModel || recordedRolls.length
       ? {
           ...(cantripOut ? { cantripSwap: { remove: cantripOut, add: cantripIn } } : {}),
           ...(dedicatedWeaponId ? { dedicatedWeaponId } : {}),
+          ...(arcaneArmorModel ? { arcaneArmorModel } : {}),
           ...(recordedRolls.length ? { elixirRolls: recordedRolls } : {}),
         }
       : null;
@@ -109,6 +112,11 @@ export function LongRestForm({
         sheet={sheet}
         value={dedicatedWeaponId}
         onChange={setDedicatedWeaponId}
+      />
+      <ArcaneArmorRestSelect
+        armor={sheet.arcaneArmor}
+        value={arcaneArmorModel}
+        onChange={setArcaneArmorModel}
       />
       {elixirs > 0 && (
         <fieldset className="grid gap-2">

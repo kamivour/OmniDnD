@@ -1,4 +1,5 @@
 import { featureResource, writeFeatureResource, type CharacterFeature } from '../calc/features';
+import { DEFENSIVE_FIELD } from '../calc/arcane-armor';
 import {
   BLADESONG,
   BLADESONG_SECONDS,
@@ -95,9 +96,12 @@ export function featureUseDetails(
   const bonusDef = feature?.def.dieBonus;
   const dieBonus = bonusDef === 'proficiency' ? ctx.sheet.proficiency : bonusDef;
   const tempHpDef = feature?.def.tempHp;
-  const tempHp = tempHpDef
-    ? Math.max(1, feature!.level + ctx.sheet.abilities[tempHpDef.abilityMod].mod)
-    : undefined;
+  const tempHp =
+    featureId === DEFENSIVE_FIELD
+      ? feature?.level
+      : tempHpDef
+        ? Math.max(1, feature!.level + ctx.sheet.abilities[tempHpDef.abilityMod].mod)
+        : undefined;
   let unavailableReason: string | undefined;
   if (!feature) unavailableReason = 'You do not have this feature';
   else if (isDead(ctx.live)) unavailableReason = 'You are dead';
@@ -105,6 +109,8 @@ export function featureUseDetails(
     unavailableReason = `${feature.def.name} is passive`;
   else if (featureId === BLADESONG && hasBladesong(ctx.live))
     unavailableReason = 'Bladesong is already active';
+  else if (featureId === DEFENSIVE_FIELD && ctx.sheet.arcaneArmor?.model !== 'guardian')
+    unavailableReason = 'Wear Guardian Arcane Armor to use Defensive Field';
   else if ((feature.def.usesFrom && !pool?.uses) || (alsoId && !also))
     unavailableReason = `${feature.def.name}'s required resource pool is unavailable`;
   else if (uses?.remaining === 0) unavailableReason = `No ${pool!.def.name} uses left`;
@@ -238,6 +244,9 @@ export const useFeature: Command<UseFeaturePayload> = {
       if (live.tempHp >= tempHp) notes.push(`you keep your ${live.tempHp} temp HP`);
       else {
         live.tempHp = tempHp;
+        if (featureId === DEFENSIVE_FIELD)
+          live.defensiveFieldArmorId = ctx.sheet.arcaneArmor!.instanceId;
+        else delete live.defensiveFieldArmorId;
         notes.push(`you gain ${tempHp} temp HP`);
       }
     }

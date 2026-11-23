@@ -424,6 +424,13 @@ export const LiveStateSchema = z
       })
       .optional(),
     arcaneFirearmId: z.string().min(1).optional(),
+    arcaneArmor: z
+      .strictObject({
+        instanceId: z.string().min(1),
+        model: z.enum(['guardian', 'infiltrator']),
+      })
+      .optional(),
+    defensiveFieldArmorId: z.string().min(1).optional(),
     experimentalElixirs: z
       .array(
         z.strictObject({

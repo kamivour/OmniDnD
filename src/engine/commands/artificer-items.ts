@@ -69,6 +69,7 @@ export function artificerItemOptions(ctx: ItemContext) {
           ({ def, instanceId }) =>
             def.weapon ||
             infused.has(instanceId) ||
+            ctx.sheet.arcaneArmor?.instanceId === instanceId ||
             isArtificerFocusTool(def.id, ctx.sheet.proficiencies.tools) ||
             (ctx.live.arcaneFirearmId === instanceId && firearm && firearmFits(def)),
         )
