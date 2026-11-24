@@ -15,6 +15,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "import:srd": "node scripts/import-srd.ts",
+    "monsters": "node scripts/monsters/cli.ts",
     "check:tools": "node scripts/check-tools.ts",
     "check:party": "node scripts/check-party-rls.ts",
     "e2e": "playwright test"
@@ -48,6 +49,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
     "globals": "^17.13.0",
+    "pdfjs-dist": "4.10.38",
     "prettier": "^3.9.10",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",

@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-25 00:52 — Monster books: text extraction
+
+- First step of monsters in the Compendium: a script reads the four monster book PDFs and saves their text in reading order, on this computer only.
+- It also lists the creatures each book's index names, so the next step can check that no stat block is missed.
+- Nothing changes in the app yet. Next: turn the text into stat blocks. Checks pass.
+
 ## 2026-11-24 13:56 — Character viewing links
 
 - Share a character from its Sheet or its card, including on the Bench.
