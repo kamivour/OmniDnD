@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-24 13:56 — Character viewing links
+
+- Share a character from its Sheet or its card, including on the Bench.
+- Open a link without signing in to read the sheet, spells, equipment, features and companions.
+- Update the published copy or revoke its link. Checks pass.
+
 ## 2026-11-24 13:14 — Verify character
 
 - Open Verify character on the Sheet to review saved stats, choices, spells and resources.

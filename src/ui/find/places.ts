@@ -61,6 +61,15 @@ export function campaignPlaces(campaignId: string): FindEntry[] {
  */
 export const PLACES: readonly FindEntry[] = [
   {
+    id: 'go.share-character',
+    group: 'go',
+    title: 'Share character',
+    detail: 'Sheet: publish or revoke a view-only character link',
+    synonyms: ['copy character link', 'share benched character', 'public sheet'],
+    target: { kind: 'go', path: 'sheet', anchor: 'share-character' },
+    needsCharacter: true,
+  },
+  {
     id: 'go.verify-character',
     group: 'go',
     title: 'Verify character',

@@ -31,6 +31,7 @@ describe('Supabase schema', () => {
       'campaign_invites',
       'party_entities',
       'campaign_join_requests',
+      'character_links',
     ]);
   });
 

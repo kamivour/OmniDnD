@@ -1,4 +1,5 @@
 import type { SyncKind } from '../db/sync-metadata';
+import type { CharacterLinkOwner } from './character-links';
 
 export interface Account {
   id: string;
@@ -39,6 +40,7 @@ export type SignInResult =
 
 /** Everything the app needs from a cloud backend. Supabase in production, a fake in tests. */
 export interface SyncProvider extends PartyProvider {
+  characterLinks?: CharacterLinkOwner;
   currentAccount(): Promise<Account | null>;
   signIn(email: string, password: string): Promise<SignInResult>;
   /** `displayName` is reserved with the account when the server supports it. */

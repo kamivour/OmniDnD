@@ -372,6 +372,12 @@ Use two test accounts on a phone and a desktop, after running the three new migr
 - [ ] Try an older sheet with unassigned proficiencies and a character with a noted DM override. Judge whether the language makes clear which findings need a ruling.
 - [ ] Compare a prepared caster with an always-prepared subclass list and a multiclass caster with Pact Magic. Check that the report explains the separate allowances.
 
+## M49 — Character viewing links
+
+- [ ] From the Bench and from the Sheet, judge whether it is clear which character is being published and when the shared copy was last updated.
+- [ ] Open a link in a private window on phone and desktop. Compare the reader and its spell, item and companion details with the owner's Sheet.
+- [ ] Update then revoke a link. Judge whether the owner and recipient see clear feedback when the link is reopened.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

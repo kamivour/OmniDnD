@@ -40,6 +40,7 @@ import { useManagement } from '../commands/useManagement';
 import { useTourAutostart } from '../tutorial/useTour';
 import { rulesSummary } from '../campaignOptions';
 import { syncConfig } from '../../sync/config';
+import { ShareCharacter } from '../party/ShareCharacter';
 import { dmLabel, usePartyState } from '../../state/party-store';
 
 const button =
@@ -462,6 +463,14 @@ function CampaignCard({
             )!;
             const sheet = computeSheet(state, registry);
             const line = `${registry.get('race', record.build.subraceId ?? record.build.raceId).name} · ${record.build.classes.map((entry) => `${registry.get('class', entry.classId).name} ${entry.level}`).join(' / ')}`;
+            const shareable = syncConfig && !record.build.partyOwner;
+            const actions = movable(record)
+              ? shareable
+                ? 'grid-cols-5'
+                : 'grid-cols-4'
+              : shareable
+                ? 'grid-cols-4'
+                : 'grid-cols-3';
             return (
               <li key={record.build.id}>
                 <article
@@ -492,9 +501,7 @@ function CampaignCard({
                       </span>
                     </span>
                   </Link>
-                  <div
-                    className={`grid ${movable(record) ? 'grid-cols-4' : 'grid-cols-3'} border-t border-border px-1`}
-                  >
+                  <div className={`grid ${actions} border-t border-border px-1`}>
                     <button
                       type="button"
                       aria-label={`Duplicate ${record.build.name}`}
@@ -526,6 +533,9 @@ function CampaignCard({
                       <Download size={14} aria-hidden />
                       Export
                     </button>
+                    {shareable && (
+                      <ShareCharacter id={record.build.id} name={record.build.name} compact />
+                    )}
                     {record.build.partyOwner ? (
                       <span className="flex min-h-11 items-center justify-center text-xs text-text-muted">
                         {record.build.partyOwner.name || 'Party'}

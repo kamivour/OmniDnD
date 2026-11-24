@@ -2,6 +2,8 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
 import { afterAll, beforeAll, expect, it } from 'vitest';
+import seed from '../data/characters/the-fool.json';
+import { ExportFileSchema } from '../src/engine/schema';
 
 const folder = join(import.meta.dirname, '..', 'supabase', 'migrations');
 const migration = readFileSync(join(folder, '20261117110000_join_requests.sql'), 'utf8');
@@ -273,4 +275,79 @@ it('keeps a small JPEG avatar that party members can see and nobody else can cha
   expect(
     (await db.query('select avatar from public.profiles where user_id = $1', [owner])).rows,
   ).toEqual([]);
+});
+
+it('publishes detached character links and restricts lookup, updates and revocation to their intended roles', async () => {
+  const snapshot = ExportFileSchema.parse(seed);
+  const characterId = 'benched-hero';
+  snapshot.campaign = { ...snapshot.campaign, name: 'Private campaign name', bench: true };
+  snapshot.build.journal.notes = 'Private journal note';
+  snapshot.build.items[0]!.notes = 'Private inventory note';
+  snapshot.build.choices = { private: 'private choice' };
+  snapshot.live.currency.gp = 400;
+  const get = async () =>
+    (
+      await db.query<{ link: { token: string } | null }>(
+        'select public.get_my_character_link($1) as link',
+        [characterId],
+      )
+    ).rows[0]!.link;
+  const publish = async () =>
+    (
+      await db.query<{ link: { token: string } }>(
+        'select public.publish_character_link($1,$2::jsonb) as link',
+        [characterId, JSON.stringify(snapshot)],
+      )
+    ).rows[0]!.link;
+  const read = async (token: string) =>
+    (await db.query<{ file: unknown }>('select public.read_character_link($1) as file', [token]))
+      .rows[0]!.file;
+  const revoke = () => db.query('select public.revoke_character_link($1)', [characterId]);
+
+  await asUser(owner);
+  await expect(get()).resolves.toBeNull();
+  const initial = await publish();
+  await expect(get()).resolves.toEqual(initial);
+  await expect(db.query('select * from public.character_links')).rejects.toThrow(
+    'permission denied',
+  );
+  const rejected = { ...snapshot, build: { ...snapshot.build, partyOwner: { userId: player } } };
+  await expect(
+    db.query('select public.publish_character_link($1,$2::jsonb)', [
+      characterId,
+      JSON.stringify(rejected),
+    ]),
+  ).rejects.toThrow('Invalid character snapshot');
+
+  await asUser(player);
+  await expect(get()).resolves.toBeNull();
+  await revoke();
+  const playersOwnLink = await publish();
+  expect(playersOwnLink.token).not.toBe(initial.token);
+  await revoke();
+
+  await db.exec('set role anon');
+  await expect(get()).rejects.toThrow('permission denied');
+  await expect(publish()).rejects.toThrow('permission denied');
+  await expect(revoke()).rejects.toThrow('permission denied');
+  await expect(db.query('select * from public.character_links')).rejects.toThrow(
+    'permission denied',
+  );
+  await expect(read('00000000-0000-4000-8000-000000000099')).resolves.toBeNull();
+  const publicCopy = ExportFileSchema.parse(await read(initial.token));
+  expect(publicCopy.build.journal).toEqual({});
+  expect(publicCopy.build.items[0]!.notes).toBeUndefined();
+  expect(publicCopy.build.choices).toEqual({});
+  expect(publicCopy.events).toEqual([]);
+  expect(publicCopy.campaign).toMatchObject({ id: 'shared-character', name: 'Shared character' });
+  expect(publicCopy.campaign.bench).toBeUndefined();
+  expect(publicCopy.live.currency.gp).toBe(0);
+
+  await asUser(owner);
+  snapshot.live.hp = 8;
+  expect((await publish()).token).toBe(initial.token);
+  expect(ExportFileSchema.parse(await read(initial.token)).live.hp).toBe(8);
+  await revoke();
+  await expect(read(initial.token)).resolves.toBeNull();
+  expect((await publish()).token).not.toBe(initial.token);
 });

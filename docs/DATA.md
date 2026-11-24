@@ -401,6 +401,7 @@ Dashboard and Exploration share the Game Clock, which converts chosen durations 
 - **Join requests (M40):** `campaign_join_requests` stores `{ campaign_id, user_id, character_id, character_name, requester_name, status, created_at }`, keyed by campaign and requester; status is `pending`, `approved` or `declined`. Only the requester and campaign owner or DM can read it; approval adds player membership in one transaction.
 - **Shared characters (M40):** `party_entities` contains public build and live state with an empty journal and event list; private account rows retain both. Local view-only copies carry `partyOwner`; colliding IDs use a separate cache ID, and a colliding private campaign gets a fresh local ID before the shared campaign is imported.
 - **Bring a character (M40):** after membership syncs, `copyToCampaign` creates an owned copy under the destination campaign's rules and keeps the original untouched. Creation is logged in management history and Undo removes only the copy.
+- **Character links (M49):** `character_links` stores one detached, view-only snapshot per account and character. The publish step strips the journal, private notes, history, coin totals and campaign identity, and the reader uses the exact link token.
 - **Offline app:** production builds cache app code, reference data, fonts and icons after an online visit; character data and history remain in Dexie. Updates wait for all open app windows to close (D106).
 
 ```ts

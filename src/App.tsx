@@ -1,6 +1,7 @@
-import { lazy, Suspense, type ComponentType } from 'react';
+import { lazy, Suspense, type ComponentType, type ReactNode } from 'react';
 import { syncConfig } from './sync/config';
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, Route, Routes, useMatch } from 'react-router';
+import { CHARACTER_LINK_PATH } from './sync/character-links';
 import { ToastProvider } from './ui/components/ToastProvider';
 import { AppFrame } from './ui/layout/AppFrame';
 import { HubFrame } from './ui/layout/HubFrame';
@@ -56,6 +57,10 @@ const CompendiumScreen = screen(() => import('./ui/screens/CompendiumScreen'), '
 const CreditsScreen = screen(() => import('./ui/screens/CreditsScreen'), 'CreditsScreen');
 const ToolsScreen = screen(() => import('./ui/screens/ToolsScreen'), 'ToolsScreen');
 const PartyScreen = screen(() => import('./ui/party/PartyScreen'), 'PartyScreen');
+const SharedCharacterScreen = screen(
+  () => import('./ui/party/SharedCharacterScreen'),
+  'SharedCharacterScreen',
+);
 const JoinScreen = screen(() => import('./ui/party/JoinCampaign'), 'JoinScreen');
 const ResetPasswordScreen = screen(
   () => import('./ui/screens/ResetPasswordScreen'),
@@ -80,12 +85,23 @@ const BUILT = new Set([
   'settings',
 ]);
 
+function WorkspaceOrSharedCopy({ children }: { children: ReactNode }) {
+  const shared = useMatch(CHARACTER_LINK_PATH);
+  if (shared)
+    return (
+      <Suspense fallback={null}>
+        <SharedCharacterScreen />
+      </Suspense>
+    );
+  return <StorageGate>{children}</StorageGate>;
+}
+
 /** Hub routes (no character open) and character routes under `/characters/:characterId`. */
 export function App() {
   return (
     <BrowserRouter>
       <ToastProvider>
-        <StorageGate>
+        <WorkspaceOrSharedCopy>
           <MotionPreference />
           <AmbientLayer />
           <PressEffects />
@@ -155,7 +171,7 @@ export function App() {
               <Route path="*" element={<PlaceholderScreen title="Not found" />} />
             </Route>
           </Routes>
-        </StorageGate>
+        </WorkspaceOrSharedCopy>
       </ToastProvider>
     </BrowserRouter>
   );

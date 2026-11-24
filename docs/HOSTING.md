@@ -4,6 +4,8 @@ The live app is **https://omnidnd.kamivour.workers.dev**, hosted on Cloudflare W
 
 Accounts are optional. Without the two settings in step 3, the app builds as a guest-only site and works exactly as it does locally. Do not create another Supabase project for routine site updates.
 
+**Existing installations:** Run [the character links migration](../supabase/migrations/20261124150000_character_links.sql) once in the existing project's SQL Editor. It adds the link table and functions. Deploy the updated app after the migration. An older app can still run with the added table in place.
+
 ## 1. Create the account database (Supabase, free tier)
 
 1. Sign up at supabase.com and create a project. Pick a region near your players.
@@ -53,3 +55,5 @@ For M40, use a second account to request a campaign ID, approve it in Campaign S
 The M40 migration is additive: existing invites still work, and rolling back the app does not require dropping the request table. Close old app windows, reopen the updated app and have owners sync to replace older shared snapshots with versions that omit journals and Undo patches; this migration does not rewrite old snapshots by itself.
 
 `npm run check:party` verifies live database permissions using disposable accounts in a **throwaway Supabase project only**. Browser checks use a fake backend and do not prove deployed row-level security.
+
+For M49, publish a Bench character from a signed-in session and open its link in a private window. Update the snapshot, reopen the link, then revoke it and check that the private window reports it unavailable on reload.

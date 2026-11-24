@@ -1,8 +1,9 @@
-import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useSyncExternalStore, type ReactNode } from 'react';
 import { ChevronLeft } from 'lucide-react';
 import { Link, useLocation, useSearchParams } from 'react-router';
 import { registry } from '../../data/registry';
 import { characterRegistry } from '../../engine/registry';
+import type { CharacterState, Sheet } from '../../engine/calc/sheet';
 import { useCharacter } from '../hooks/useCharacter';
 import { CharacterPortrait } from '../components/CharacterPortrait';
 import { HpBar } from '../components/HpBar';
@@ -28,15 +29,62 @@ const isOnline = () => navigator.onLine;
 
 export function PartyCharacterView() {
   const { state, sheet } = useCharacter();
-  const [params] = useSearchParams();
-  const { pathname } = useLocation();
-  const link = useRef<HTMLAnchorElement>(null);
   const online = useSyncExternalStore(subscribeOnline, isOnline);
+  const { build } = state;
+  const { pathname } = useLocation();
+  return (
+    <CharacterReader
+      state={state}
+      sheet={sheet}
+      path={`/characters/${encodeURIComponent(build.id)}`}
+      initialSection={pathname.split('/')[3]}
+      header={
+        <>
+          <Link
+            className="inline-flex min-h-11 items-center gap-1 rounded-btn pr-2 text-sm text-accent hover:bg-surface"
+            to={`/campaigns/${encodeURIComponent(build.campaignId)}/party`}
+          >
+            <ChevronLeft size={18} aria-hidden /> Back to party
+          </Link>
+          <FindLauncher withCharacter />
+        </>
+      }
+      access={
+        <>
+          <ViewOnlyBanner
+            characterId={build.id}
+            characterName={build.name}
+            ownerName={build.partyOwner?.name ?? ''}
+          />
+          {!online && <p className="text-xs text-warn">Offline · cached copy</p>}
+        </>
+      }
+    />
+  );
+}
+
+export function CharacterReader({
+  state,
+  sheet,
+  path,
+  initialSection,
+  header,
+  access,
+}: {
+  state: CharacterState;
+  sheet: Sheet;
+  path: string;
+  initialSection?: string;
+  header: ReactNode;
+  access: ReactNode;
+}) {
+  const [params] = useSearchParams();
+  const { hash } = useLocation();
+  const link = useRef<HTMLAnchorElement>(null);
   const { build, live } = state;
   const references = characterRegistry(registry, build);
-  const route = params.get('view') ?? pathname.split('/')[3];
+  const route = params.get('view') ?? initialSection;
   const section = PARTY_READER_SECTIONS.find(({ id }) => id === route) ?? PARTY_READER_SECTIONS[0];
-  const base = '/characters/' + encodeURIComponent(build.id);
   const statuses = [
     ...sheet.conditions,
     ...(live.exhaustion > 0 ? [`Exhaustion ${live.exhaustion}`] : []),
@@ -51,15 +99,7 @@ export function PartyCharacterView() {
 
   return (
     <main className="mx-auto grid min-w-0 max-w-6xl gap-3 p-3 sm:p-5">
-      <div className="flex items-center justify-between">
-        <Link
-          className="inline-flex min-h-11 items-center gap-1 rounded-btn pr-2 text-sm text-accent hover:bg-surface"
-          to={`/campaigns/${encodeURIComponent(build.campaignId)}/party`}
-        >
-          <ChevronLeft size={18} aria-hidden /> Back to party
-        </Link>
-        <FindLauncher withCharacter />
-      </div>
+      <div className="flex items-center justify-between">{header}</div>
       <header className="grid min-w-0 gap-2 rounded-card border border-border bg-surface p-3 sm:p-4">
         <div className="flex min-w-0 items-center gap-3">
           <CharacterPortrait
@@ -86,12 +126,7 @@ export function PartyCharacterView() {
             </p>
           </div>
         </div>
-        <ViewOnlyBanner
-          characterId={build.id}
-          characterName={build.name}
-          ownerName={build.partyOwner?.name ?? ''}
-        />
-        {!online && <p className="text-xs text-warn">Offline · cached copy</p>}
+        {access}
         <div className="flex min-w-0 items-center gap-2 border-t border-border pt-2 text-sm">
           <span className="font-semibold">
             HP {live.hp}/{sheet.maxHp.value}
@@ -124,7 +159,7 @@ export function PartyCharacterView() {
           <Link
             key={id}
             ref={section.id === id ? link : undefined}
-            to={`${base}?view=${id}`}
+            to={{ pathname: path, search: `?view=${id}`, hash }}
             aria-current={section.id === id ? 'page' : undefined}
             className="inline-flex min-h-11 shrink-0 items-center rounded-btn px-3 text-sm text-text-muted hover:bg-surface-2 hover:text-text aria-[current=page]:bg-surface-2 aria-[current=page]:font-semibold aria-[current=page]:text-accent"
           >

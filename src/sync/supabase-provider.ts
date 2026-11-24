@@ -2,6 +2,7 @@ import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { SyncKindSchema } from '../db/sync-metadata';
 import { authErrorText } from './auth-errors';
 import { avatarProblem, isAvatar } from './avatar';
+import { CharacterLinkSchema, type CharacterLinkOwner } from './character-links';
 import { cleanName, NAME_TAKEN, nameProblem } from './display-name';
 import type { SyncConfig } from './config';
 import type {
@@ -61,6 +62,20 @@ export class SupabaseProvider implements SyncProvider {
   constructor(client: SupabaseClient) {
     this.client = client;
   }
+
+  readonly characterLinks: CharacterLinkOwner = {
+    get: async (id) =>
+      CharacterLinkSchema.nullable().parse(
+        await this.call('get_my_character_link', { p_character: id }),
+      ),
+    publish: async (id, snapshot) =>
+      CharacterLinkSchema.parse(
+        await this.call('publish_character_link', { p_character: id, p_snapshot: snapshot }),
+      ),
+    revoke: async (id) => {
+      await this.call('revoke_character_link', { p_character: id });
+    },
+  };
 
   async currentAccount() {
     const { data } = await this.client.auth.getSession();

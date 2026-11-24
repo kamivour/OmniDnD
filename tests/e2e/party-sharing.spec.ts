@@ -1,5 +1,5 @@
 import seed from '../../data/characters/the-fool.json' with { type: 'json' };
-import { ExportFileSchema } from '../../src/engine/schema';
+import { ExportFileSchema, type ExportFile } from '../../src/engine/schema';
 import { expect, test, type Page } from './fixtures';
 
 // This file runs only with playwright.party.config.ts: all account HTTP is intercepted.
@@ -10,6 +10,7 @@ const friend = '00000000-0000-4000-8000-000000000003';
 const file = ExportFileSchema.parse(seed);
 const campaign = { ...file.campaign, id: 'shared-test', name: 'Shared Table' };
 const now = '2026-11-17T00:00:00.000Z';
+const viewToken = '644dff6a-6f50-4e81-ba42-7d402348c5c0';
 
 async function backend(
   page: Page,
@@ -24,6 +25,7 @@ async function backend(
   let friendWand: number | undefined;
   let friendDeleted = false;
   let friendRevision = 1;
+  let published: ExportFile | null = null;
   const partyWrites: unknown[] = [];
   // Without a host, the friend holds the seat unless the test leaves it empty.
   const friendRole = !host && dmTaken ? 'dm' : 'player';
@@ -85,6 +87,14 @@ async function backend(
       const item = requests.find((r) => r.user_id === body?.p_user)!;
       item.status = body?.p_approve ? 'approved' : 'declined';
       decisions.push({ user: item.user_id, approve: body?.p_approve === true });
+      data = null;
+    } else if (path.endsWith('/rpc/publish_character_link')) {
+      published = ExportFileSchema.parse(body?.p_snapshot);
+      data = { token: viewToken, updatedAt: published.exportedAt };
+    } else if (path.endsWith('/rpc/get_my_character_link'))
+      data = published ? { token: viewToken, updatedAt: published.exportedAt } : null;
+    else if (path.endsWith('/rpc/revoke_character_link')) {
+      published = null;
       data = null;
     } else if (path.endsWith('/rpc/create_invite')) data = 'INVITE-TEST';
     else if (path.endsWith('/rpc/preview_invite'))
@@ -201,6 +211,7 @@ async function backend(
     });
   });
   return {
+    getSharedCopy: () => published,
     requests,
     decisions,
     partyWrites,
@@ -218,6 +229,80 @@ async function backend(
     },
   };
 }
+
+test('publish a Bench character, open its sheet signed out, and revoke the link', async ({
+  page,
+  browser,
+}) => {
+  const server = await backend(page);
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Move The Fool', exact: true }).click();
+  const move = page.getByRole('dialog', { name: 'Move character', exact: true });
+  await move.getByLabel('Move to campaign').selectOption({ label: 'Bench · not in a campaign' });
+  await move.getByRole('button', { name: 'Move', exact: true }).click();
+  await expect(move).toBeHidden();
+  const bench = page.getByRole('article', { name: 'Bench', exact: true });
+  await bench.getByRole('button', { name: 'Share The Fool character link' }).click();
+  const sharing = page.getByRole('dialog', { name: 'Share character', exact: true });
+  await sharing.getByRole('button', { name: 'Publish view-only link' }).click();
+  const input = sharing.getByRole('textbox', { name: 'View-only link' });
+  await expect(input).toHaveValue(new RegExp(`/share/character#${viewToken}$`));
+  const link = await input.inputValue();
+  expect(server.getSharedCopy()!.campaign.bench).toBeUndefined();
+  expect(server.getSharedCopy()!.build.journal).toEqual({});
+  expect(server.getSharedCopy()!.events).toEqual([]);
+
+  const guest = await browser.newContext({ viewport: page.viewportSize()! });
+  try {
+    await guest.route('https://sync.test/**', async (route) => {
+      expect(new URL(route.request().url()).pathname).toBe('/rest/v1/rpc/read_character_link');
+      expect(route.request().postDataJSON()).toEqual({ p_token: viewToken });
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(server.getSharedCopy()),
+      });
+    });
+    const visitor = await guest.newPage();
+    await visitor.goto(link);
+    await expect(visitor.getByRole('heading', { name: 'The Fool', exact: true })).toBeVisible();
+    await expect(visitor.getByRole('note', { name: 'View only' })).toBeVisible();
+    await expect(
+      visitor.getByRole('button', { name: /Edit character|Duplicate to play|Undo/ }),
+    ).toHaveCount(0);
+    const sections = visitor.getByRole('navigation', { name: 'Character viewing sections' });
+    await sections.getByRole('link', { name: 'Spells', exact: true }).click();
+    await expect(visitor).toHaveURL(new RegExp(`view=spells#${viewToken}$`));
+    await visitor.getByRole('button', { name: 'Vicious Mockery', exact: true }).click();
+    await expect(visitor.getByText('WIS save DC 15', { exact: true })).toBeVisible();
+    await visitor.keyboard.press('Escape');
+    await sections.getByRole('link', { name: 'Inventory', exact: true }).click();
+    await visitor.getByRole('button', { name: 'Rapier', exact: true }).click();
+    await expect(visitor.getByText('Piercing', { exact: false }).first()).toBeVisible();
+    await expect(visitor.getByText('False Identity: Veyne', { exact: false })).toHaveCount(0);
+    expect(await visitor.evaluate(async () => (await indexedDB.databases()).length)).toBe(0);
+    await visitor.screenshot({
+      path: test.info().outputPath('shared-character.png'),
+      animations: 'disabled',
+    });
+
+    await page.keyboard.press('Escape');
+    await page.goto('/characters/the-fool/sheet');
+    await page.getByRole('button', { name: 'Share character', exact: true }).click();
+    await expect(sharing.getByRole('textbox', { name: 'View-only link' })).toHaveValue(link);
+    await sharing.getByRole('button', { name: 'Update shared copy' }).click();
+    await expect(sharing.getByRole('status')).toContainText('Current copy published.');
+    await expect(sharing.getByRole('textbox', { name: 'View-only link' })).toHaveValue(link);
+    await sharing.getByRole('button', { name: 'Revoke link' }).click();
+    await expect(sharing.getByRole('status')).toContainText('Link revoked.');
+    await visitor.reload();
+    await expect(
+      visitor.getByRole('heading', { name: 'Shared character unavailable' }),
+    ).toBeVisible();
+  } finally {
+    await guest.close();
+  }
+});
 
 test('a DM inspecting another character sees synced changes and returns to the party when it is removed', async ({
   page,

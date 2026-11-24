@@ -83,6 +83,10 @@ One card per campaign: name, rules summary (e.g. `Milestone · HP rolled · Abil
 - Members see each other's characters through automatic sync. The compact reader shows Sheet, Spells, Inventory, Features and Companions, with remaining slots and uses, searchable gear, and clickable descriptions and stat blocks. Campaign members and the DM can inspect the character. Editing stays with the owner.
 - Private journals and Undo history stay with the owner. The reader omits inventory notes and coin totals and works from cached data offline. Duplicate to play creates a separate editable copy. Campaigns and characters with matching IDs keep separate local records.
 
+### Character viewing links (M49)
+
+A signed-in owner can publish a read-only copy from the Sheet or a character card, including the Bench. Anyone with the link can open all five reader sections without an account. The link shows the last published copy. The owner can update it at the same link or revoke it.
+
 ### Characters
 Create blank (inside a campaign), duplicate, delete (confirm), import a character file from Settings. Full guided builder is Phase 3.
 

@@ -16,6 +16,7 @@ import { signed } from '../format';
 import { DeathSaveTracker } from '../health/DeathSaveTracker';
 import { useCharacter } from '../hooks/useCharacter';
 import { CharacterVerification } from '../sheet/CharacterVerification';
+import { ShareCharacter } from '../party/ShareCharacter';
 import { SheetBuildEditor } from '../sheet/SheetBuildEditor';
 import { SheetOverrideEditor } from '../sheet/SheetOverrideEditor';
 import { LevelUpControl } from '../level/LevelUpControl';
@@ -221,6 +222,7 @@ export function CharacterSheetScreen() {
           <h1 className="font-display text-xl text-text">Character sheet</h1>
           <div className="flex flex-wrap gap-2">
             <CharacterVerification state={state} sheet={sheet} />
+            <ShareCharacter id={build.id} name={build.name} />
             <Link
               to={`/characters/${build.id}/print`}
               className="inline-flex min-h-11 items-center rounded-btn border border-border px-3 text-sm text-accent"
