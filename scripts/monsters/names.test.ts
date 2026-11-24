@@ -23,6 +23,13 @@ describe('parseIndexLine', () => {
     expect(parseIndexLine('Reed Elk .........IO5')).toEqual([{ name: 'Reed Elk', page: 105 }]);
   });
 
+  it('reads a hyphen OCR set as a middle dot, and slashes in a name', () => {
+    expect(parseIndexLine('Mud·hopper, 44')).toEqual([{ name: 'Mud-hopper', page: 44 }]);
+    expect(parseIndexLine('Owl/Bat Hybrid ........ 70')).toEqual([
+      { name: 'Owl/Bat Hybrid', page: 70 },
+    ]);
+  });
+
   it('keeps an entry whose page number OCR lost', () => {
     expect(parseIndexLine('Bog Hound ................ Illusory Owl ........ 61')).toEqual([
       { name: 'Bog Hound' },

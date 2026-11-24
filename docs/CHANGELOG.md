@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-25 02:35 — Monster books: stat blocks and lore
+
+- Second step of monsters in the Compendium: the script now turns the extracted text into full stat blocks, with names, lore and the family each creature belongs to.
+- On the Monster Manual it matches the free SRD data on 98% of the fields it reads. Damaged or merged blocks are flagged for the review step.
+- Nothing changes in the app yet. Next: check every block with stat math and clear the review list. Checks pass.
+
 ## 2026-11-25 00:52 — Monster books: text extraction
 
 - First step of monsters in the Compendium: a script reads the four monster book PDFs and saves their text in reading order, on this computer only.

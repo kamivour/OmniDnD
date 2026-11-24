@@ -171,6 +171,28 @@ describe('stripMargins', () => {
     expect(pages[0]!.lines.map((l) => l.t)).toEqual(['body text', 'Medium beast, unaligned']);
   });
 
+  it('drops a small section name and a garbled page number at the foot', () => {
+    const pages = stripMargins(
+      Array.from({ length: 10 }, (_, i) =>
+        page(
+          i + 1,
+          String(i),
+          i === 4
+            ? [
+                { t: 'OWLBEARS', x: 50, y: 770, h: 6, c: 0 },
+                { t: 'r6g', x: 560, y: 772, h: 8, c: 1 },
+                { t: 'A SONG OF THE LONG ROAD, SUNG BADLY', x: 300, y: 765, h: 6, c: 1 },
+              ]
+            : [],
+        ),
+      ),
+    );
+    expect(pages[4]!.lines.map((l) => l.t)).toEqual([
+      'body text',
+      'A SONG OF THE LONG ROAD, SUNG BADLY',
+    ]);
+  });
+
   it('keeps a margin line that appears only once', () => {
     const pages = stripMargins(
       Array.from({ length: 10 }, (_, i) =>

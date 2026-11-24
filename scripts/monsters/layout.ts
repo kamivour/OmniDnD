@@ -243,11 +243,24 @@ export function stripMargins(pages: Page[]): Page[] {
     if (key.length < 4) return false;
     return heads.some((head) => near(key, head) || (key.length >= 6 && head.startsWith(key)));
   };
+  // Some books print the section name in small capitals under the text, one name for only a
+  // page or two, beside a page number OCR garbles ("r6g").
+  const isFoot = (page: Page, line: Line) => {
+    if (line.y <= page.h * 0.93) return false;
+    const text = line.t.trim();
+    const caps =
+      line.h < body * 0.85 &&
+      text === text.toUpperCase() &&
+      /[A-Z]{3}/.test(text) &&
+      text.split(/\s+/).length <= 4;
+    const edge = line.x < page.w * 0.1 || line.x > page.w * 0.85;
+    return caps || (edge && /^\S{2,4}$/.test(text) && /\d/.test(text));
+  };
   return pages.map((page) => {
     let printed: number | undefined;
     const lines = page.lines.filter((line) => {
       if (!inMargin(page, line)) return true;
-      if (!PAGE_NUMBER.test(line.t.trim()) && !isHead(line.t)) return true;
+      if (!PAGE_NUMBER.test(line.t.trim()) && !isHead(line.t)) return !isFoot(page, line);
       printed ??= printedNumber(line.t);
       return false;
     });

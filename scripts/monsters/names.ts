@@ -29,7 +29,7 @@ export interface IndexEntry {
  * puts any junk in a leader, splits page numbers (`32 1`), reads 1 as I or l and 0 as O, and
  * sometimes loses the number. A line can hold entries from several columns.
  */
-const NAME = String.raw`(\p{Lu}[\p{L}'’()\- ]*?[\p{L})])`;
+const NAME = String.raw`(\p{Lu}[\p{L}'’()/\- ]*?[\p{L})])`;
 const PAGE = String.raw`\s*[^\p{L}\p{N}\s()][^\p{L}\p{N}()]*?((?:[\dIlO] ?){0,2}[\dIlO])(?![\p{L}\p{N}])`;
 /** Without a number, only a long leader marks an entry (not `Courtier. See Noble.`). */
 const LOST = String.raw`\s*(?:[^\p{L}\p{N}\s()]\s*){8,}(?=\p{Lu}|$)`;
@@ -38,7 +38,9 @@ const ENTRY = new RegExp(`${NAME}(?:${PAGE}|${LOST})`, 'gu');
 const pageNumber = (digits: string) =>
   Number(digits.replace(/ /g, '').replace(/[Il]/g, '1').replace(/O/g, '0'));
 
-export function parseIndexLine(line: string): IndexEntry[] {
+export function parseIndexLine(text: string): IndexEntry[] {
+  // OCR reads some hyphens as a middle dot (`Kuo·toa`).
+  const line = text.replace(/·/g, '-');
   const out: IndexEntry[] = [];
   for (const match of line.matchAll(ENTRY)) {
     const before = line.slice(0, match.index).trimEnd();

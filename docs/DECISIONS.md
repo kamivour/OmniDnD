@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D273 | 2026-11-25 | When a stat block's printed passive Perception disagrees with its Wisdom and Perception bonus, the worked-out value wins and the block is flagged for review. | Misprints and OCR slips are more common than real exceptions |
 | D272 | 2026-11-25 | Monster packs stay on each device: imported in Settings, stored locally and never synced or bundled. The copyright question stays with the user. | The repo and the hosted app are public |
 | D271 | 2026-11-25 | Monster entries keep their lore and sidebars from every book, tagged by book. | Lore wording differs between printings |
 | D270 | 2026-11-25 | Monsters of the Multiverse is allowed. | It is a 2022 book for the 2014 rules, not part of the 2024 revision |
