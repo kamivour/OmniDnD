@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D267 | 2026-11-24 | Verify character reads the current save and leaves every choice intact. Show unexplained differences against supported rules and let the player confirm DM exceptions. | Older saves may combine originally selected choices with later feature picks. |
 | D266 | 2026-11-23 | Players and DMs use the same party reader. It shows tracked gear and charges while omitting inventory notes and coin totals. | Keep the sheet quick to scan during play. |
 | D265 | 2026-11-23 | Create a Homunculus from a gem the player confirms is worth 100 gp or more. Its death releases the infusion slot and preserves the gem; new creation uses the infusion again. | Keep the gem, companion and active limit in one record (Q47). |
 | D264 | 2026-11-23 | A replica occupies the original item’s inventory entry and uses one active infusion slot. The player confirms that the base object matches the recipe; contents of a reverted container move to Carried. | Keep the item and contents recoverable when the magic ends. |

@@ -15,6 +15,7 @@ import { OverrideMarker, StatChip } from '../components/StatChip';
 import { signed } from '../format';
 import { DeathSaveTracker } from '../health/DeathSaveTracker';
 import { useCharacter } from '../hooks/useCharacter';
+import { CharacterVerification } from '../sheet/CharacterVerification';
 import { SheetBuildEditor } from '../sheet/SheetBuildEditor';
 import { SheetOverrideEditor } from '../sheet/SheetOverrideEditor';
 import { LevelUpControl } from '../level/LevelUpControl';
@@ -218,7 +219,8 @@ export function CharacterSheetScreen() {
       <div className="flex min-w-0 flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h1 className="font-display text-xl text-text">Character sheet</h1>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
+            <CharacterVerification state={state} sheet={sheet} />
             <Link
               to={`/characters/${build.id}/print`}
               className="inline-flex min-h-11 items-center rounded-btn border border-border px-3 text-sm text-accent"

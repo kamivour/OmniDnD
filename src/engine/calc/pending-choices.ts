@@ -336,7 +336,11 @@ function classOptionTotal(family: OptionFamily, entry: CharacterState['build']['
  * What the character still has to decide, from the build alone. It only lists things the data
  * can verify; table rulings and homebrew choices are never guessed.
  */
-export function pendingChoices(state: CharacterState, registry: Registry): PendingChoice[] {
+export function pendingChoices(
+  state: CharacterState,
+  registry: Registry,
+  sheet = computeSheet(state, registry),
+): PendingChoice[] {
   const { build, campaign } = state;
   const className = (id: string) => registry.entries.get(id)?.name ?? id;
   const items: PendingChoice[] = [];
@@ -478,7 +482,6 @@ export function pendingChoices(state: CharacterState, registry: Registry): Pendi
     });
 
   // Spells
-  const sheet = computeSheet(state, registry);
   for (const entry of build.classes) {
     const details = spellSelectionDetails({ ...state, sheet, registry }, entry.classId);
     if (details.mode === 'unsupported') continue;

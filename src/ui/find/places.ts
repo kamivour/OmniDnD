@@ -61,6 +61,15 @@ export function campaignPlaces(campaignId: string): FindEntry[] {
  */
 export const PLACES: readonly FindEntry[] = [
   {
+    id: 'go.verify-character',
+    group: 'go',
+    title: 'Verify character',
+    detail: 'Sheet: check saved stats, choices, spells and resources',
+    synonyms: ['character audit', 'check build', 'missing spells', 'extra proficiencies'],
+    target: { kind: 'go', path: 'sheet', anchor: 'verify-character' },
+    needsCharacter: true,
+  },
+  {
     id: 'go.companion-forms',
     group: 'go',
     title: 'Companion forms',

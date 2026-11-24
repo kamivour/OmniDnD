@@ -48,7 +48,9 @@ export type RemoveInventoryItemPayload = z.infer<typeof RemoveInventoryItemPaylo
 
 const RESERVED_NEW_IDS = new Set(['__proto__', 'constructor', 'prototype']);
 
-function ownedItem(ctx: CommandContext, instanceId: string) {
+type InventoryContext = Pick<CommandContext, 'build' | 'live' | 'registry'>;
+
+function ownedItem(ctx: InventoryContext, instanceId: string) {
   const index = ctx.build.items.findIndex((item) => item.instanceId === instanceId);
   const item = ctx.build.items[index];
   const live = Object.hasOwn(ctx.live.items, instanceId) ? ctx.live.items[instanceId] : undefined;
@@ -67,8 +69,8 @@ function baselineChecks(
 }
 
 /** New links must have a present, usable container all the way to Carried. */
-function containerChecks(
-  ctx: CommandContext,
+export function containerChecks(
+  ctx: InventoryContext,
   instanceId: string,
   container: string | null | undefined,
 ): Check[] {

@@ -118,6 +118,7 @@ On desktop (1024 px and wider), Combat Statistics is the first section below the
 - **Combat stats:** HP, temp HP, Hit Dice, AC, initiative, speed, attacks, death saves.
 - **Breakdown on every computed number:** hover/tap shows its parts, e.g. `Initiative +3 = DEX +2, Jack of All Trades +1`.
 - **Overrides:** any current computed value can be selected for a noted override (e.g., "DM approved"); ✎ marks the result, and breakdowns retain the calculated value. Remaining resources use noted spending corrections, so later use and rest recovery continue normally (D100–D101).
+- **Verify character (M48):** Check saved stats, proficiencies, spells, features, inventory and companions against the supported 2014 rules. Show missing choices, amounts above limits and entries that need review, with links to the relevant screen.
 - View mode by default; Edit mode toggle for build changes.
 
 ### Spellbook

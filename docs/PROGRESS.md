@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M47 party character viewer implemented.
+**Current milestone:** M48 character verification implemented.
 **Next up:** Review the [M46 combat design](COMBAT_HIT_DESIGN.md). Live M43 and M47 account checks need a disposable Supabase project. The older Artificer report still needs the affected campaign export.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -72,6 +72,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M45 | Compendium | 5 | done | Browse and read spells, classes, subclasses, races, backgrounds and feats to plan characters; see [PLAN.md](PLAN.md) |
 | M46 | Combat around "I got hit" | 6 | todo | Log a hit with damage types; the app applies resistances and suggests saves and effects to confirm; design review first; see [PLAN.md](PLAN.md) |
 | M47 | Party character viewer | 5 | done | Inspect slots, gear, spells, features and companions in a compact read-only layout. Live account check pending. |
+| M48 | Verify character | 1 | done | Review saved stats, choices, spells and tracked resources on the Sheet. |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -415,6 +416,10 @@ Follow the [viewer plan](PARTY_READER_PLAN.md), one task per commit.
 
 The live two-account check uses the disposable Supabase setup from M43.
 
+### M48 — Verify character
+
+- [x] Scan the current save against supported 2014 rules and link findings to the relevant screens.
+
 ## Review fixes
 
 - [x] Audit all 12 classes across the 2014 PHB, Xanathar's and Tasha's. Restore missing subclasses, spells, picks and verified class mechanics.
@@ -455,6 +460,7 @@ The live two-account check uses the disposable Supabase setup from M43.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-24 — Added read-only character verification for saved stats, proficiencies, spell choices, resources, inventory and companions.
 - 2026-11-23 — Verified reader updates, offline details, duplication and read-only permissions at both widths. Live account check pending.
 - 2026-11-23 — Added shared feature descriptions and companion stat blocks with scaled attacks and expiry.
 - 2026-11-23 — Added searchable shared inventory with container paths, individual charge counts and item details.

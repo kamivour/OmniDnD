@@ -366,6 +366,12 @@ Use two test accounts on a phone and a desktop, after running the three new migr
 - [ ] Compare spell pools, charged gear and a scaled companion with the owner's sheet. Judge whether you can tell how many uses remain and what each entry does.
 - [ ] With the disposable two-account setup from M43, read a teammate's sheet as DM while the owner updates an open detail. Judge whether the change and subsequent cached view are clear.
 
+## M48 — Verify character
+
+- [ ] On phone and desktop, check whether the report makes the recorded value, expected limit and next screen easy to find.
+- [ ] Try an older sheet with unassigned proficiencies and a character with a noted DM override. Judge whether the language makes clear which findings need a ruling.
+- [ ] Compare a prepared caster with an always-prepared subclass list and a multiclass caster with Pact Magic. Check that the report explains the separate allowances.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-24 13:14 — Verify character
+
+- Open Verify character on the Sheet to review saved stats, choices, spells and resources.
+- See what is missing, above a limit or needs a ruling, then open the relevant screen.
+- Try an older save with extra proficiencies. The report shows what the base list and saved features contribute. Checks pass.
+
 ## 2026-11-23 13:53 — Party reader ready for review
 
 - Browse another member’s character on phone or desktop, including its cached details offline.
