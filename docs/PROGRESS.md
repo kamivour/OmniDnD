@@ -475,6 +475,7 @@ The live two-account check uses the disposable Supabase setup from M43.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-25 — Added private monster review reports and matched all indexed stat blocks across four books. Required fields still need source review before T3 passes.
 - 2026-11-25 — Parsed stat blocks, names and lore families from the four monster books; Monster Manual matches the SRD on 98.1% of fields read.
 - 2026-11-25 — Extracted reading-order text from the four monster books into private files, with chapter ranges and about 960 expected names from their indexes.
 - 2026-11-24 — Added viewing links for owned and benched characters, with signed-out viewing and controls to update or revoke the copy.

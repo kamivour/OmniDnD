@@ -60,9 +60,12 @@ const words = (text: string) => text.trim().split(/\s+/).filter(Boolean);
 /** True when the line starts with `keyword`, give or take an OCR slip or two. */
 export function startsLike(text: string, keyword: string): boolean {
   const key = letters(keyword);
-  const head = letters(text).slice(0, key.length);
-  if (head.length < key.length - 1) return false;
-  return editDistance(head, key) <= (key.length >= 9 ? 2 : 1);
+  const normalized = letters(text);
+  const limit = key.length >= 9 ? 2 : 1;
+  return [key.length, key.length - 1, key.length + 1].some(
+    (length) =>
+      normalized.length >= length && editDistance(normalized.slice(0, length), key) <= limit,
+  );
 }
 
 /**
@@ -70,16 +73,43 @@ export function startsLike(text: string, keyword: string): boolean {
  * and "(2d8 + 2) hit points." are prose.
  */
 const property = (text: string, label: string) =>
-  startsLike(text, label) && /^\W{0,2}[A-Z]/.test(text) && /^.{0,22}\d/.test(text.trim());
+  startsLike(text, label) &&
+  /^\W{0,2}[A-Z]/.test(text) &&
+  /^.{0,22}(?:\d|\s[IlOo](?:\s|[().]|$))/.test(text.trim());
 export const isArmorClass = (text: string) => property(text, 'Armor Class');
 export const isHitPoints = (text: string) => property(text, 'Hit Points');
 
+export const SIZES = ['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan'] as const;
 const SIZE = /^\W{0,3}(?:tiny|small|medium|large|huge|gargantuan)\b/i;
 const ALIGNMENT = /\b(?:lawful|chaotic|neutral|good|evil|unaligned|alignment)\b/i;
+const GLUED_TYPE =
+  /^([^\p{L}]{0,3}(?:tiny|small|medium|large|huge|gargantuan))(?=aberration|beast|celestial|construct|dragon|elemental|fey|fiend|giant|humanoid|monstrosity|ooze|plant|undead)/iu;
+export function spaceSize(text: string): string {
+  const spaced = text.replace(GLUED_TYPE, '$1 ');
+  if (SIZE.test(spaced) || !spaced.includes(',')) return spaced;
+  const tokens = words(spaced);
+  // OCR can split or damage the size adjective. The comma and alignment constrain the context.
+  if (!ALIGNMENT.test(spaced)) return spaced;
+  const choices: { size: (typeof SIZES)[number]; distance: number; span: number }[] = [];
+  for (const span of [1, 2, 3]) {
+    if (tokens.length <= span) break;
+    const read = letters(tokens.slice(0, span).join('').replace(/^11/, 'H'));
+    for (const size of SIZES) {
+      const distance = editDistance(size, read);
+      if (distance <= 2) choices.push({ size, distance, span });
+    }
+  }
+  const [first, second] = choices.sort((a, b) => a.distance - b.distance);
+  return first && first.distance !== second?.distance
+    ? `${first.size} ${tokens.slice(first.span).join(' ')}`
+    : spaced;
+}
 
 /** "Medium humanoid (any race), any alignment" or "Small or Medium Humanoid, Typically ..." */
 export const isTypeLine = (text: string) =>
-  SIZE.test(text) && (text.includes(',') || ALIGNMENT.test(text)) && words(text).length <= 14;
+  SIZE.test(spaceSize(text)) &&
+  (text.includes(',') || ALIGNMENT.test(text)) &&
+  words(text).length <= 14;
 
 export const SECTIONS = {
   actions: 'actions',
@@ -102,8 +132,17 @@ export function sectionOf(text: string): SectionKey | undefined {
 }
 
 /** "STR DEX CON INT WIS CHA", whole or in part. */
-export const isAbilityHeader = (text: string) =>
-  /^(?:STR|DEX|CON|INT|WIS|CHA){2,6}$/.test(text.replace(/[^A-Z]/g, ''));
+export function isAbilityHeader(text: string): boolean {
+  const key = text.replace(/[^A-Z]/g, '');
+  if (/^(?:STR|DEX|CON|INT|WIS|CHA){2,6}$/.test(key)) return true;
+  if (key.length < 8 || /[a-z]/.test(text)) return false;
+  const labels = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+  return labels.some((_, from) =>
+    labels
+      .slice(from + 2)
+      .some((_, k) => editDistance(key, labels.slice(from, from + k + 3).join('')) <= 1),
+  );
+}
 
 /**
  * A line with no real text: rules, leader dots, stray marks, or art read as text ("~ I •! , ,I"):
@@ -179,6 +218,10 @@ const STAT_LINE =
 
 /** A line that opens with a bold run-in name: "Keen Sight. The hawk ...". */
 const RUN_IN = /^[A-Z][\w'’-]*(?:\s+[\w'’/,-]+){0,5}(?:\s*\([^)]{1,40}\))?\.\s/;
+
+// An attack's bold run-in or separate Hit line can be as tall as surrounding lore.
+const STAT_ENTRY =
+  /^\W{0,3}(?:Hit\s*:|(?:Multiattack|False Appearance|(?:Innate )?Spellcasting)\s*[.:])|\b(?:Melee|Ranged)\s+(?:(?:or|and)\s+Ranged\s+)?(?:Weapon|Spell)\s+Attack\s*:/i;
 
 /** A name heading: short, no closing punctuation, set large or in capitals. */
 function isNameHeading(line: FlowLine): boolean {
@@ -290,16 +333,31 @@ export function segment(pages: readonly Page[]): Segmented {
       while (j >= 0 && isJunk(flow[j]!.t)) j--;
     };
     skipJunk();
-    if (j >= 0 && isTypeLine(flow[j]!.t)) {
+    const prior = flow[j];
+    const head = flow[anchor]!;
+    if (prior && prior.page === head.page && isTypeLine(prior.t)) {
       typeLine = j;
       start = j;
       j--;
       skipJunk();
+    } else if (prior && prior.page === head.page && isNameHeading(prior)) {
+      // Some narrow stat cards put the name and size on the same baseline, in reverse PDF order.
+      const before = flow[j - 1];
+      if (
+        before &&
+        before.page === head.page &&
+        before.c === prior.c &&
+        Math.abs(prior.y - before.y) <= Math.max(prior.h, before.h) * 2 &&
+        isTypeLine(before.t)
+      ) {
+        typeLine = j - 1;
+        start = typeLine;
+      }
     }
     // A name is never set smaller than the block itself (a quote's small-print byline is not one).
     if (j >= 0 && isNameHeading(flow[j]!) && flow[j]!.h >= flow[anchor]!.h * 0.9) {
       heading = j;
-      start = j;
+      start = Math.min(start, j);
     }
     return { anchor, start, typeLine, heading };
   });
@@ -322,8 +380,26 @@ export function segment(pages: readonly Page[]): Segmented {
         used.add(j);
         continue;
       }
-      if (endsBlock(line)) break;
-      if (line.lore) continue;
+      if (!STAT_ENTRY.test(line.t)) {
+        if (endsBlock(line)) {
+          // Art, a family title or a folio can sit between two columns of the same block.
+          // Only resume when the same printed page has a stat marker before the next block.
+          if (!line.lore) break;
+          const next = flow
+            .slice(j + 1, end)
+            .findIndex(
+              (candidate) =>
+                candidate.page === line.page &&
+                (sectionOf(candidate.t) ||
+                  STAT_ENTRY.test(candidate.t) ||
+                  (!candidate.lore && STAT_LINE.test(candidate.t))),
+            );
+          if (next < 0) break;
+          j += next;
+          continue;
+        }
+        if (line.lore) continue;
+      }
       lines.push(line);
       used.add(j);
     }

@@ -76,15 +76,15 @@ Each stage caches its output in `data/private/monsters/work/<book>/`. Stages can
    - Auto-fix only when exactly one OCR substitution makes every check pass. Anything else goes to review.
 8. **Cross-check.**
    - The MM blocks that are also in the SRD form a free gold set of about 330. The parser must match `data/srd/creatures.json` on at least 98% of fields before running the other books.
-   - VGM and MTF blocks that MPMM reprints unchanged are compared with each other.
-9. **Review.** `review.html` lists each flagged block with its page, the failed checks, the parsed fields and a `pdftoppm` render of only that page. Fixes go into `overrides/<book>.json` and are reapplied on every run.
+   - Compare VGM and MTF blocks with same-name MPMM reprints. Differences can come from printing changes or OCR and are listed for review.
+9. **Review.** `review.html` shows flagged blocks with their failed checks, parsed fields and printed pages. Keep verified field patches, source transcriptions and index corrections in `data/private/monsters/overrides/<book>.json` so they apply on each run.
 10. **Merge and pack.**
     - Match duplicates by normalized name, plus an alias file for renamed creatures.
     - Write `data/private/monsters/monsters.pack.json`: `{format: 1, version, extractedAt, creatures[], lore[]}`.
     - Each creature carries `books: [{source, page}]` and a `loreId`.
     - A `manifest.json` records the counts per book, how many blocks passed, how many were fixed and the hashes.
 
-Commands: `npm run monsters -- extract|build|review --book MM --pdf <path>`.
+Run `npm run monsters -- validate --book MM` for the stat and index checks. Run `npm run monsters -- review --book MM --pdf <path>` to also render the flagged pages in `data/private/monsters/work/MM/review.html`.
 
 ## App changes
 

@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-25 03:22 — Monster books: stat checks and review
+
+- Check stat blocks from all four books for missing fields and numbers that disagree.
+- Open a private review page to compare flagged entries with their printed pages.
+- Every indexed stat block is accounted for. Required fields still need review before T3 passes.
+
 ## 2026-11-25 02:35 — Monster books: stat blocks and lore
 
 - Second step of monsters in the Compendium: the script now turns the extracted text into full stat blocks, with names, lore and the family each creature belongs to.

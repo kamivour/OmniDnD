@@ -7,6 +7,8 @@
  *   npm run monsters -- names --book MM
  *   npm run monsters -- parse --book MM
  *   npm run monsters -- gold --book MM
+ *   npm run monsters -- validate --book MM
+ *   npm run monsters -- review --book MM --pdf <path to the PDF>
  *
  * `names` needs data/private/monsters/config/<book>.json (a BookConfig, see names.ts). `parse`
  * writes creatures.json and lore.json; `gold` compares creatures.json with the SRD creatures.
@@ -19,8 +21,19 @@ import { extractBook, type ExtractedBook } from './extract.ts';
 import { compareGold, formatReport, type GoldCreature } from './gold.ts';
 import { assignFamilies, nameBlocks, type NamedCreature } from './identify.ts';
 import { expectedNames, type BookConfig, type IndexEntry } from './names.ts';
+import {
+  additionalBlocks,
+  applyOverrides,
+  blockKey,
+  confirmFindings,
+  OverridesSchema,
+  reviewIndex,
+} from './overrides.ts';
 import { cleanLine, parseBlock } from './parse.ts';
-import { letters, segment } from './segment.ts';
+import { compareReprints } from './reprints.ts';
+import { renderPages, reviewHtml, reviewPages, type ReviewReport } from './review.ts';
+import { segment } from './segment.ts';
+import { indexCoverage, validateCreature } from './validate.ts';
 
 export const BOOKS = ['MM', 'VGM', 'MTF', 'MPMM'] as const;
 export type Book = (typeof BOOKS)[number];
@@ -58,6 +71,59 @@ function buildVocab(): Vocab {
 }
 
 const srdCreatures = () => readJson<GoldCreature[]>(`${DATA}srd/creatures.json`);
+const workFor = (book: Book) => `${PRIVATE}work/${book}`;
+const writeJson = (path: string, value: unknown) =>
+  writeFileSync(path, JSON.stringify(value, null, 1));
+
+function parseBook(book: Book, vocab: Vocab) {
+  const work = workFor(book);
+  const config = readJson<BookConfig>(`${PRIVATE}config/${book}.json`);
+  const groundTruth = readJson<IndexEntry[]>(`${work}/names.json`);
+  const patchPath = `${PRIVATE}overrides/${book}.json`;
+  const overrides = OverridesSchema.parse(existsSync(patchPath) ? readJson(patchPath) : {});
+  const expected = reviewIndex(groundTruth, overrides);
+  const { pages } = readJson<ExtractedBook>(`${work}/pages.json`);
+  const inBlocks = (printed: number) =>
+    config.statBlocks.some(([first, last]) => printed >= first && printed <= last);
+  const { blocks, families } = segment(
+    pages
+      .map((page) => ({ ...page, printed: page.n - config.offset }))
+      .filter((page) => inBlocks(page.printed)),
+  );
+  const parsed = blocks.map((block) => parseBlock(block, vocab));
+  const named = nameBlocks(parsed, expected, srdCreatures(), vocab);
+  const creatures = applyOverrides(named, overrides);
+  const added = additionalBlocks(overrides, config.offset, pages.length);
+  const keys = named.map(blockKey);
+  const parsedKeys = new Set(keys);
+  for (const creature of added) {
+    const key = blockKey(creature);
+    if (parsedKeys.has(key)) throw new Error(`Added block ${key} already exists in the PDF text.`);
+    keys.push(key);
+  }
+  creatures.push(...added);
+  assignFamilies(creatures, families);
+  const lore = families.map((family) => ({
+    ...(family.title !== undefined && { title: family.title }),
+    page: family.page,
+    sections: family.sections.map((section) => ({
+      ...(section.title !== undefined && { title: section.title }),
+      text: joinLines(
+        section.lines.map((line) => cleanLine(line.t, vocab)),
+        vocab,
+      ),
+    })),
+  }));
+  return {
+    creatures,
+    lore,
+    expected,
+    config,
+    pageCount: pages.length,
+    overrides,
+    keys,
+  };
+}
 
 const { positionals, values } = parseArgs({
   allowPositionals: true,
@@ -69,7 +135,7 @@ const book = values.book as Book | undefined;
 if (!book || !BOOKS.includes(book)) {
   throw new Error(`--book must be one of ${BOOKS.join(', ')}`);
 }
-const work = `${PRIVATE}work/${book}`;
+const work = workFor(book);
 
 if (command === 'extract') {
   if (!values.pdf) throw new Error('extract needs --pdf <path>');
@@ -87,42 +153,64 @@ if (command === 'extract') {
   writeFileSync(`${work}/names.json`, JSON.stringify(names, null, 1));
   console.log(`${book}: ${names.length} expected names`);
 } else if (command === 'parse') {
-  const config = readJson<BookConfig>(`${PRIVATE}config/${book}.json`);
-  const expected = readJson<IndexEntry[]>(`${work}/names.json`);
-  const inBlocks = (printed: number) =>
-    config.statBlocks.some(([first, last]) => printed >= first && printed <= last);
-  const pages = readJson<ExtractedBook>(`${work}/pages.json`)
-    .pages.map((page) => ({ ...page, printed: page.n - config.offset }))
-    .filter((page) => inBlocks(page.printed));
-  const vocab = buildVocab();
-  const { blocks, families } = segment(pages);
-  const parsed = blocks.map((block) => parseBlock(block, vocab));
-  const creatures = nameBlocks(parsed, expected, srdCreatures(), vocab);
-  assignFamilies(creatures, families);
-  const lore = families.map((family) => ({
-    ...(family.title !== undefined && { title: family.title }),
-    page: family.page,
-    sections: family.sections.map((section) => ({
-      ...(section.title !== undefined && { title: section.title }),
-      text: joinLines(
-        section.lines.map((line) => cleanLine(line.t, vocab)),
-        vocab,
-      ),
-    })),
-  }));
-  writeFileSync(`${work}/creatures.json`, JSON.stringify(creatures, null, 1));
-  writeFileSync(`${work}/lore.json`, JSON.stringify(lore, null, 1));
+  const { creatures, expected, lore } = parseBook(book, buildVocab());
+  writeJson(`${work}/creatures.json`, creatures);
+  writeJson(`${work}/lore.json`, lore);
   const named = creatures.filter((creature) => creature.name).length;
-  const found = new Set(creatures.map((creature) => letters(creature.name ?? '')));
-  const covered = expected.filter((entry) => found.has(letters(entry.name))).length;
+  const coverage = indexCoverage(creatures, expected);
   const issues = creatures.reduce((sum, creature) => sum + creature.issues.length, 0);
   console.log(
-    `${book}: ${creatures.length} blocks, ${named} named, ${covered}/${expected.length} index names ` +
-      `found, ${families.length} lore families, ${issues} issues`,
+    `${book}: ${creatures.length} blocks, ${named} named, ${coverage.matched}/${coverage.expected} index names ` +
+      `found, ${lore.length} lore families, ${issues} issues`,
   );
 } else if (command === 'gold') {
   const creatures = readJson<NamedCreature[]>(`${work}/creatures.json`);
   console.log(formatReport(compareGold(creatures, srdCreatures())));
+} else if (command === 'validate' || command === 'review') {
+  if (command === 'review' && !values.pdf) throw new Error('review needs --pdf <path>');
+  const vocab = buildVocab();
+  const parsed = parseBook(book, vocab);
+  const records = parsed.creatures.map((creature, i) => {
+    const key = parsed.keys[i]!;
+    const checked = { ...validateCreature(creature), overrideKey: key };
+    const patch = Object.hasOwn(parsed.overrides.blocks, key)
+      ? parsed.overrides.blocks[key]
+      : Object.hasOwn(parsed.overrides.added, key)
+        ? parsed.overrides.added[key]
+        : undefined;
+    return patch?.confirmed ? confirmFindings(checked, patch.confirmed) : checked;
+  });
+  const creatures = records.map(({ creature }) => creature);
+  const report: ReviewReport = {
+    book,
+    records,
+    coverage: indexCoverage(creatures, parsed.expected),
+    ...((book === 'VGM' || book === 'MTF') && {
+      reprints: compareReprints(creatures, parseBook('MPMM', vocab).creatures),
+    }),
+  };
+  writeJson(`${work}/creatures.json`, creatures);
+  writeJson(`${work}/lore.json`, parsed.lore);
+  writeJson(`${work}/review.json`, report);
+  if (command === 'review') {
+    const pages = reviewPages(report, parsed.config.offset, parsed.pageCount);
+    const images = await renderPages(work, values.pdf!, pages);
+    writeFileSync(`${work}/review.html`, reviewHtml(report, images, parsed.config.offset));
+    console.log(`${book}: review.html includes ${images.size} flagged PDF pages`);
+  }
+  const findings = records.flatMap((record) => record.findings);
+  const blocked = findings.filter(({ severity }) => severity === 'blocking').length;
+  const { matched, expected, missing, duplicates } = report.coverage;
+  console.log(
+    `${book}: ${matched}/${expected} index names, ${blocked} blocking findings, ${findings.length - blocked} to review, ${duplicates.length} duplicate names, ${records.filter((record) => record.correction).length} automatic corrections`,
+  );
+  if (report.reprints)
+    console.log(
+      `${book}: ${report.reprints.changed.length}/${report.reprints.matched} named reprints differ from MPMM`,
+    );
+  if (blocked || missing.length || duplicates.length) process.exitCode = 1;
 } else {
-  throw new Error(`Unknown command "${command ?? ''}". Try: extract, names, parse, gold`);
+  throw new Error(
+    `Unknown command "${command ?? ''}". Try: extract, names, parse, gold, validate, review`,
+  );
 }

@@ -21,11 +21,12 @@ import {
   isTypeLine,
   letters,
   sectionOf,
+  spaceSize,
+  SIZES,
   type RawBlock,
   type SectionKey,
 } from './segment.ts';
 
-export const SIZES = ['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan'] as const;
 export type Size = (typeof SIZES)[number];
 
 export interface ParsedEntry {
@@ -81,6 +82,8 @@ export interface ParsedCreature extends Record<EntryList, ParsedEntry[]> {
   hpFormula?: string;
   speed: Speed;
   abilities: Partial<Record<Ability, number>>;
+  /** Modifiers read from the ability line, for independent verification. */
+  printedModifiers?: Partial<Record<Ability, number>>;
   saves: Partial<Record<Ability, number>>;
   skills: Partial<Record<Skill, number>>;
   vulnerabilities: string[];
@@ -194,8 +197,9 @@ const SCORE =
 
 /** A line of ability scores ("21 (+5) 9 (-1) ..."), perhaps with the STR... labels. */
 function isScoreLine(text: string): boolean {
-  const rest = text.replace(SCORE, ' ').replace(/\b(?:STR|DEX|CON|INT|WIS|CHA)\b/g, ' ');
-  return rest !== text && rest.replace(/[^A-Za-z]/g, '').length < 3;
+  const normalized = scoreText(text);
+  const rest = normalized.replace(SCORE, ' ').replace(/\b(?:STR|DEX|CON|INT|WIS|CHA)\b/g, ' ');
+  return rest !== normalized && rest.replace(/[^A-Za-z]/g, '').length < 3;
 }
 
 const CONNECTIVE = 'of|the|and|or|in|to|a|an|with|from|on|for|at|by|into|vs';
@@ -260,7 +264,7 @@ function isStrongStart(start: { paren?: string; rest: string }): boolean {
 export function usageOf(paren: string): string | undefined {
   const inner = paren.replace(/^\(|\)$/g, '').trim();
   // OCR reads the slash as J, I, l, f, t or loses it: "3JDay", "3fDay".
-  const day = /^(\S{1,2}?)\s*[^\s\w]?[A-Za-z]?\s*day$/i.exec(inner);
+  const day = /^([\dlIOoS]{1,2})\s*[/fjJIl|t]?\s*day$/i.exec(inner);
   if (day) {
     const n = toNumber(day[1]!);
     return n === undefined ? undefined : `${n}/day`;
@@ -324,7 +328,7 @@ const digits = (text: string) => text.replace(/[lI]/g, '1').replace(/O/g, '0');
 
 /** OCR forms of a spell list head: "lfday each :", "lst level .(l slot):", "Cantrips (at wi ll)". */
 export function fixSpellHead(text: string): string {
-  let match = /^([\dlI])\s*[/fjJIl|]\s*day(\s+each)?\s*:\s*/.exec(text);
+  let match = /^([\dlIOoS]{1,2})\s*[/fjJIl|t]?\s*day(\s+each)?\s*:\s*/i.exec(text);
   if (match)
     return `${digits(match[1]!)}/day${match[2] ? ' each' : ''}: ${text.slice(match[0].length)}`;
   match = /^([\dlIO]{1,2})(st|nd|rd|th)\s+level\s*\.?\s*\(([\dlIO]{1,2})\s+(slots?)\)\s*:\s*/i.exec(
@@ -360,7 +364,8 @@ function entryText(lines: readonly string[], vocab: Vocab): string {
   const after: string[] = [];
   for (const line of lines) {
     if (SPELL_LIST.test(line)) items.push([line]);
-    else if (items.length > 0 && /^[a-z,]/.test(line)) items.at(-1)!.push(line);
+    else if (items.length > 0 && (/^[a-z,]/.test(line) || /[,(-]$/.test(items.at(-1)!.at(-1)!)))
+      items.at(-1)!.push(line);
     else if (items.length > 0) after.push(line);
     else prose.push(line);
   }
@@ -422,7 +427,7 @@ export function parseTypeLine(
   const match = new RegExp(
     `^\\W*${sizeWord}(?:\\s*(?:or|,)\\s*${sizeWord})?\\s+(.+?)\\s*,\\s*(.+)$`,
     'i',
-  ).exec(text.trim());
+  ).exec(spaceSize(text.trim()));
   if (!match) return {};
   const first = match[1]!.toLowerCase() as Size;
   const second = match[2]?.toLowerCase() as Size | undefined;
@@ -587,7 +592,11 @@ export function averageHp(formula: string): number | undefined {
 const modifier = (score: number) => Math.floor((score - 10) / 2);
 
 /** Ability scores from the score lines; the header says which abilities OCR kept. */
-function parseAbilities(lines: readonly string[], issues: string[]) {
+function parseAbilities(
+  lines: readonly string[],
+  issues: string[],
+  printedModifiers: NonNullable<ParsedCreature['printedModifiers']>,
+) {
   const abilities: Partial<Record<Ability, number>> = {};
   const header = lines
     .filter(isAbilityHeader)
@@ -596,7 +605,7 @@ function parseAbilities(lines: readonly string[], issues: string[]) {
     ) as Ability[];
   const scores: { score?: number; mod?: number }[] = [];
   for (const line of lines) {
-    for (const [, score, sign, mod] of line.matchAll(SCORE)) {
+    for (const [, score, sign, mod] of scoreText(line).matchAll(SCORE)) {
       const s = toNumber(score!);
       const m = toNumber(mod!);
       scores.push({
@@ -612,6 +621,7 @@ function parseAbilities(lines: readonly string[], issues: string[]) {
   }
   scores.slice(0, 6).forEach(({ score, mod }, k) => {
     const ability = order[k]!;
+    if (mod !== undefined) printedModifiers[ability] = mod;
     if (score === undefined || score < 1 || score > 30) {
       issues.push(`${ability} score not read`);
       return;
@@ -693,9 +703,13 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
     return text === undefined ? undefined : fixWords(text, vocab);
   };
 
+  const numericStart = (text: string) =>
+    text
+      .replace(/^[.,·]\s*(?=[\dlIOoS])/, '')
+      .replace(/^([\dlIOoS])\s+([\dlIOoS])(?=\s*[(.]|$)/, '$1$2');
   const ac = value('ac');
   if (ac !== undefined) {
-    const match = /^([^\s(]+)\s*(?:\((.+?)\))?\s*(.*)$/.exec(ac);
+    const match = /^([^\s(.]+)[.]?\s*(?:\((.+?)\))?\s*(.*)$/.exec(numericStart(ac));
     const number = match ? toNumber(match[1]!) : undefined;
     if (number === undefined) issues.push(`armor class not read: "${ac}"`);
     else creature.ac = number;
@@ -705,8 +719,9 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
 
   const hp = value('hp');
   if (hp !== undefined) {
-    const match = /^(\S+?)\s*\((\d+d\d+(?:\s*[+-]\s*\d+)?)\)/.exec(hp);
-    const number = toNumber(match?.[1] ?? hp.split(' ')[0] ?? '');
+    const numberText = numericStart(hp).replace(/(?<=\d+d\d+)\s+4-\s*(?=\d)/g, ' + ');
+    const match = /^([\dlIOoS]+)[.]?\s*\((\d+d\d+(?:\s*[+-]\s*\d+)?)\s*[)}]/.exec(numberText);
+    const number = toNumber(match?.[1] ?? numberText.split(' ')[0] ?? '');
     if (number === undefined) issues.push(`hit points not read: "${hp}"`);
     else creature.hp = number;
     if (match) {
@@ -721,7 +736,9 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
   if (speed !== undefined) creature.speed = parseSpeed(speed, issues);
   else issues.push('speed missing');
 
-  creature.abilities = parseAbilities(abilityLines, issues);
+  const printedModifiers: NonNullable<ParsedCreature['printedModifiers']> = {};
+  creature.abilities = parseAbilities(abilityLines, issues, printedModifiers);
+  if (Object.keys(printedModifiers).length) creature.printedModifiers = printedModifiers;
 
   const saves = value('saves');
   if (saves !== undefined) creature.saves = parseSaves(saves, issues);
@@ -752,30 +769,18 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
     .filter(Boolean)
     .join(' ');
   // "21 (33,000 XP)"; later books add "or 41,000 XP when encountered in lair" inside the brackets.
-  const cr = /^(\S+)\s*\(([\d,.\s]+)\s*XP\b[^)]*\)/i.exec(challenge);
+  const cr = /^([\dlIOoS/\s]+?)\s*[([{]\s*([\dlIOoS,.\s]+)\s*XP\b/i.exec(challenge);
   if (cr) {
-    // CR and XP check each other. When they disagree, an XP figure that is in the table names
-    // the CR (OCR reads "1/2" as "5" more often than it garbles five digits into a valid XP).
-    // A CR 0 creature with no attacks is worth 0 XP.
-    let rating = parseCr(cr[1]!);
-    const xp = Number(cr[2]!.replace(/\D/g, ''));
-    const fromXp = xp === 0 ? 0 : [...XP_BY_CR].find(([, value]) => value === xp)?.[0];
-    const fits = (r: number) => XP_BY_CR.get(r) === xp || (r === 0 && xp === 0);
-    if (rating !== undefined && XP_BY_CR.has(rating) && !fits(rating)) {
-      issues.push(`XP ${xp} does not match CR ${cr[1]}`);
-      if (fromXp !== undefined) rating = fromXp;
-    }
-    if (rating === undefined || !XP_BY_CR.has(rating)) rating = fromXp;
-    if (rating === undefined) issues.push(`challenge not read: "${challenge}"`);
-    else {
-      creature.cr = rating;
-      creature.xp = rating === 0 && xp === 0 ? 0 : XP_BY_CR.get(rating)!;
-    }
+    // Keep printed numbers independent so validation can distinguish misreads from misprints.
+    const rating = parseCr(cr[1]!);
+    const xp = toNumber(cr[2]!.replace(/[,.]/g, ''));
+    if (rating === undefined || xp === undefined) issues.push(`challenge not read: "${challenge}"`);
+    if (rating !== undefined) creature.cr = rating;
+    if (xp !== undefined) creature.xp = xp;
   } else issues.push(challenge ? `challenge not read: "${challenge}"` : 'challenge missing');
-  const pb = /Proficiency Bonus\s*\+?\s*([\dlIOoS])/i.exec(challenge);
+  const pb = /Proficiency Bonus\s*(?:\+|4-)?\s*([\dlIOoS])/i.exec(challenge);
   if (pb) creature.proficiencyBonus = toNumber(pb[1]!);
-  if (creature.cr !== undefined) {
-    creature.xp ??= XP_BY_CR.get(creature.cr);
+  if (creature.cr !== undefined && XP_BY_CR.has(creature.cr)) {
     creature.proficiencyBonus ??= proficiencyForCr(creature.cr);
   }
   // Passive Perception follows from Wisdom and the Perception skill. Early printings misprint
@@ -870,3 +875,6 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
   if (creature.actions.length === 0) issues.push('no actions');
   return creature;
 }
+
+/** Some scans read the vertical stroke of a plus as a separate 4 before the horizontal stroke. */
+const scoreText = (line: string) => line.replace(/([({])\s*4\s*-\s*(?=[\dlIOoS][)}iIl|])/g, '$1+');

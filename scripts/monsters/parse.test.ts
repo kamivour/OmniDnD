@@ -224,7 +224,7 @@ describe('parseBlock', () => {
     expect(stalker.issues).toEqual(['passive Perception read 14, worked out 15']);
   });
 
-  it('flags what OCR lost and settles CR from XP', () => {
+  it('flags what OCR lost and keeps the printed CR and XP for review', () => {
     const toad = parseBlock(
       block([
         'Armor Class 11',
@@ -241,14 +241,13 @@ describe('parseBlock', () => {
       speed: { walk: 20, swim: 30 },
       abilities: { STR: 10, DEX: 12, CON: 10, INT: 2, WIS: 8, CHA: 4 },
       languages: 'Ignan, Orc',
-      cr: 0.5,
+      cr: 5,
       xp: 100,
       senses: { passivePerception: 9 },
     });
     expect(toad.actions.map((entry) => entry.name)).toEqual(['Bite']);
     expect(toad.issues).toEqual([
       'type line missing',
-      'XP 100 does not match CR 5',
       'passive Perception worked out from Wisdom',
       'ACTIONS heading missing',
     ]);
