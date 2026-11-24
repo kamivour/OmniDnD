@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M49 character viewing links implemented.
+**Current milestone:** M50 Monsters in the Compendium.
 **Next up:** Review the [M46 combat design](COMBAT_HIT_DESIGN.md). Live M43 and M47 account checks need a disposable Supabase project. The older Artificer report still needs the affected campaign export.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -74,6 +74,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M47 | Party character viewer | 5 | done | Inspect slots, gear, spells, features and companions in a compact read-only layout. Live account check pending. |
 | M48 | Verify character | 1 | done | Review saved stats, choices, spells and tracked resources on the Sheet. |
 | M49 | Character viewing links | 1 | done | Share an owned character from its Sheet or the Bench. Live migration pending. |
+| M50 | Monsters in the Compendium | 6 | doing | Every stat block and its lore from four monster books, from a private pack each device imports; see [MONSTERS_PLAN.md](MONSTERS_PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -424,6 +425,15 @@ The live two-account check uses the disposable Supabase setup from M43.
 ### M49 — Character viewing links
 
 - [x] Publish, update and revoke a view-only snapshot for an owned character, including one on the Bench.
+
+### M50 — Monsters in the Compendium
+
+- [ ] T1: Extract text and chapters from the four PDFs
+- [ ] T2: Parse stat blocks and lore; match the SRD gold set
+- [ ] T3: Validate with stat math and clear the review queue
+- [ ] T4: Merge duplicates and load the private pack in the app
+- [ ] T5: Monsters tab in the Compendium
+- [ ] T6: Verify at both widths and across themes
 
 ## Review fixes
 

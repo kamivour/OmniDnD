@@ -6,6 +6,10 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D272 | 2026-11-25 | Monster packs stay on each device: imported in Settings, stored locally and never synced or bundled. The copyright question stays with the user. | The repo and the hosted app are public |
+| D271 | 2026-11-25 | Monster entries keep their lore and sidebars from every book, tagged by book. | Lore wording differs between printings |
+| D270 | 2026-11-25 | Monsters of the Multiverse is allowed. | It is a 2022 book for the 2014 rules, not part of the 2024 revision |
+| D269 | 2026-11-25 | Each monster appears once, tagged with every book and page that prints it. Stats come from the newest printing: MPMM before Volo's and Tome of Foes. | One list without duplicates; the campaign's books still decide what shows |
 | D268 | 2026-11-24 | Character links show a deliberately published snapshot to anyone who has the link. An owner can refresh that same link or revoke it, including for a character on the Bench. | Share a sheet without granting campaign membership. |
 | D267 | 2026-11-24 | Verify character reads the current save and leaves every choice intact. Show unexplained differences against supported rules and let the player confirm DM exceptions. | Older saves may combine originally selected choices with later feature picks. |
 | D266 | 2026-11-23 | Players and DMs use the same party reader. It shows tracked gear and charges while omitting inventory notes and coin totals. | Keep the sheet quick to scan during play. |

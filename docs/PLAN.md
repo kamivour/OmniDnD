@@ -406,6 +406,10 @@ DM outcomes stay manual: the player enters hits, saves and rulings, and every su
 
 Use the [detailed viewer plan](PARTY_READER_PLAN.md) to add a compact Sheet, Spells, Inventory, Features and Companions reader. Start with the reader frame, then deliver each section in order and verify with shared character fixtures at 375 px and 1440 px.
 
+## M50 — Monsters in the Compendium
+
+Use the [monster design](MONSTERS_PLAN.md). A local pipeline turns four monster book PDFs into one private pack in `data/private/`. Each device imports the pack, and the Compendium gets a Monsters tab with lore. Book text never enters the repo or the hosted build.
+
 ## Risks
 - **Free hosting limits:** Supabase allows 200 live connections and 500 MB of storage; records are capped at 5 MB (our limit). Long event logs grow records; a later fix is a snapshot plus trimmed history.
 - **Security:** shared access depends entirely on row-level security, so every rule gets a test. Invite codes are random, hashed and expire. Emails are never shown to other members.
