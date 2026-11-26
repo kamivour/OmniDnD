@@ -97,6 +97,14 @@ export const SOURCE_OPTIONS: { value: Source; label: string; hint: string }[] = 
     hint: 'The artificer, extra subclasses, spells and feats.',
   },
   { value: 'SCC', label: SOURCE_NAMES.SCC, hint: 'Adds the Vortex Warp spell.' },
+  {
+    value: 'MM',
+    label: SOURCE_NAMES.MM,
+    hint: 'Always on. SRD monsters are built in; the rest come from your monster pack.',
+  },
+  { value: 'VGM', label: SOURCE_NAMES.VGM, hint: 'Monsters only, from your monster pack.' },
+  { value: 'MTF', label: SOURCE_NAMES.MTF, hint: 'Monsters only, from your monster pack.' },
+  { value: 'MPMM', label: SOURCE_NAMES.MPMM, hint: 'Monsters only, from your monster pack.' },
   { value: 'HB', label: SOURCE_NAMES.HB, hint: 'Items and features your table made.' },
 ];
 

@@ -5,6 +5,7 @@ import { Lock } from 'lucide-react';
 import { registry } from '../../data/registry';
 import {
   bookParts,
+  ALWAYS_ON_SOURCES,
   normalizeSourceParts,
   optionalRules,
   sourceConflicts,
@@ -80,7 +81,7 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
   );
   // Books and parts are add-only (D202): whatever the saved campaign uses stays locked on.
   const lockedBook = (source: Source) =>
-    source === 'PHB' || (existing?.sources.includes(source) ?? false);
+    ALWAYS_ON_SOURCES.includes(source) || (existing?.sources.includes(source) ?? false);
   const lockedPart = (source: Source, part: SourcePart) =>
     existing ? bookParts(existing, source).includes(part) : false;
   const toggleSource = (source: Source, on: boolean) => {
@@ -222,7 +223,7 @@ function CampaignForm({ existing }: { existing?: Campaign }) {
           <legend className="mb-2 text-sm font-semibold text-text">Sources</legend>
           <div className="grid gap-2 sm:grid-cols-2">
             {SOURCE_OPTIONS.map((option) => {
-              const on = option.value === 'PHB' || sources.includes(option.value);
+              const on = ALWAYS_ON_SOURCES.includes(option.value) || sources.includes(option.value);
               const used = bookParts({ sources, sourceParts: parts }, option.value);
               return (
                 <div key={option.value} className="flex min-w-0 flex-col gap-1">

@@ -438,6 +438,14 @@ export const PLACES: readonly FindEntry[] = [
     target: { kind: 'go', path: 'settings', anchor: 'settings-tutorial' },
   },
   {
+    id: 'go.monster-pack',
+    group: 'go',
+    title: 'Monster pack',
+    detail: 'Settings: import monsters from your own books',
+    synonyms: ['monsters', 'import monsters', 'monster manual', 'bestiary', 'stat blocks', 'pack'],
+    target: { kind: 'go', path: 'settings', anchor: 'settings-monsters' },
+  },
+  {
     id: 'go.game-clock',
     group: 'go',
     title: 'Game clock',

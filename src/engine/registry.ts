@@ -4,6 +4,7 @@ import {
   RefEntrySchema,
   type ItemDef,
   type MechanicsOverlay,
+  type MonsterPack,
   type RefEntry,
   type RefKind,
   type SummaryOverlay,
@@ -94,4 +95,35 @@ export function characterRegistry(
   const result = lookup(entries, base);
   cache.set(items, result);
   return result;
+}
+
+/**
+ * The bundled registry plus a private monster pack (M50). Pack creatures are added; bundled
+ * creatures get the pack's book tags and lore. A pack entry whose id is already taken by a
+ * bundled entry, or a supplement for an id that is not a bundled creature, is skipped.
+ */
+export function withMonsterPack(
+  base: Registry,
+  pack: Pick<MonsterPack, 'creatures' | 'supplements'>,
+): { registry: Registry; skipped: string[] } {
+  const root = base.base ?? base;
+  const entries = new Map(root.entries);
+  const skipped: string[] = [];
+  for (const supplement of pack.supplements) {
+    const entry = entries.get(supplement.id);
+    if (entry?.kind !== 'creature') {
+      skipped.push(supplement.id);
+      continue;
+    }
+    entries.set(supplement.id, {
+      ...entry,
+      books: supplement.books,
+      ...(supplement.loreIds?.length && { loreIds: supplement.loreIds }),
+    });
+  }
+  for (const creature of pack.creatures) {
+    if (entries.has(creature.id)) skipped.push(creature.id);
+    else entries.set(creature.id, creature);
+  }
+  return { registry: lookup(entries), skipped };
 }

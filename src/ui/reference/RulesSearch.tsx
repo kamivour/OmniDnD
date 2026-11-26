@@ -4,6 +4,7 @@ import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import { searchRules } from '../../engine/calc/rules-search';
 import { characterState, characterStore } from '../../state/character-store';
+import { useMonsterPackVersion } from '../../state/monster-pack';
 import { inputClass } from '../components/fields';
 import { CreatureStatblock } from './CreatureStatblock';
 import { crText } from './creature-format';
@@ -30,6 +31,7 @@ export function RulesSearch() {
     characterStore,
     (state) => characterState(state, characterId)?.campaign.sources,
   );
+  useMonsterPackVersion();
   const hits = searchRules(registry, query, undefined, books);
   const searching = query.trim() !== '';
 

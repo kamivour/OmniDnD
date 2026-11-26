@@ -15,7 +15,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "import:srd": "node scripts/import-srd.ts",
-    "monsters": "node scripts/monsters/cli.ts",
+    "monsters": "node --import ./scripts/ts-resolve.ts scripts/monsters/cli.ts",
     "check:tools": "node scripts/check-tools.ts",
     "check:party": "node scripts/check-party-rls.ts",
     "e2e": "playwright test"

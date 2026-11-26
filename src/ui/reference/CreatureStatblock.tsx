@@ -53,13 +53,22 @@ function Facts({ creature }: { creature: CreatureDef }) {
   );
 }
 
-function TextList({ title, rows }: { title: string; rows: CreatureDef['actions'] }) {
-  if (rows.length === 0) return null;
+function TextList({
+  title,
+  rows = [],
+  intro,
+}: {
+  title: string;
+  rows: CreatureDef['actions'] | undefined;
+  intro?: string | undefined;
+}) {
+  if (rows.length === 0 && !intro) return null;
   return (
     <section className="flex flex-col gap-2">
       <h4 className="text-sm font-semibold">{title}</h4>
-      {rows.map((row) => (
-        <p key={row.name} className="text-sm text-text-muted">
+      {intro && <p className="text-sm whitespace-pre-line text-text-muted">{intro}</p>}
+      {rows.map((row, index) => (
+        <p key={`${index}-${row.name}`} className="text-sm text-text-muted">
           <span className="font-semibold text-text">
             {row.name}
             {row.usage ? ` (${row.usage})` : ''}.
@@ -73,10 +82,12 @@ function TextList({ title, rows }: { title: string; rows: CreatureDef['actions']
 
 /** A creature's full statblock, from the SRD or a campaign pack. */
 export function CreatureStatblock({ creature }: { creature: CreatureDef }) {
+  const intros = creature.intros;
   return (
     <div className="mt-2 flex flex-col gap-3">
       <p className="text-sm text-text-muted">
-        {capitalize(creature.size)} {creature.creatureType}, {creature.alignment}
+        {capitalize((creature.sizes ?? [creature.size]).join(' or '))} {creature.creatureType},{' '}
+        {creature.alignment}
       </p>
       <p className="text-sm text-text">
         <span className="font-semibold">AC {creature.ac}</span>
@@ -111,9 +122,20 @@ export function CreatureStatblock({ creature }: { creature: CreatureDef }) {
         Proficiency {signed(creature.proficiencyBonus)}
       </p>
       <TextList title="Traits" rows={creature.traits} />
-      <TextList title="Actions" rows={creature.actions} />
-      <TextList title="Reactions" rows={creature.reactions} />
-      <TextList title="Legendary actions" rows={creature.legendaryActions} />
+      <TextList title="Actions" rows={creature.actions} intro={intros?.actions} />
+      <TextList title="Bonus actions" rows={creature.bonusActions} intro={intros?.bonusActions} />
+      <TextList title="Reactions" rows={creature.reactions} intro={intros?.reactions} />
+      <TextList
+        title="Legendary actions"
+        rows={creature.legendaryActions}
+        intro={intros?.legendaryActions}
+      />
+      <TextList
+        title="Mythic actions"
+        rows={creature.mythicActions}
+        intro={intros?.mythicActions}
+      />
+      <TextList title="Lair actions" rows={creature.lairActions} intro={intros?.lairActions} />
     </div>
   );
 }

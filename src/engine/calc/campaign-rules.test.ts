@@ -5,7 +5,9 @@ import { runManagement, undoManagement, type ManagementData } from '../commands/
 import { updateCampaign, type CampaignChanges } from '../commands/campaigns';
 import { CampaignSchema } from '../schema';
 import {
+  bookOn,
   booksWithPart,
+  entryBooks,
   entryPart,
   normalizeSourceParts,
   OPTIONAL_RULE_DEFAULTS,
@@ -221,5 +223,31 @@ describe('book parts', () => {
         sourceParts: { XGE: ['options', 'feats', 'spells', 'items'] },
       }),
     ).toBeUndefined();
+  });
+});
+
+describe('monster books', () => {
+  const phbOnly = { sources: ['PHB'] } satisfies Parameters<typeof sourceAllows>[0];
+  const withVolo = { sources: ['PHB', 'VGM'] } satisfies Parameters<typeof sourceAllows>[0];
+
+  it('keeps the Monster Manual on in every campaign', () => {
+    expect(bookOn(phbOnly, 'MM')).toBe(true);
+    expect(bookOn(phbOnly, 'VGM')).toBe(false);
+    expect(sourceAllows(phbOnly, { kind: 'creature', source: 'MM' })).toBe(true);
+  });
+
+  it('shows a creature when any book it is printed in is on', () => {
+    const reprint = {
+      kind: 'creature' as const,
+      source: 'MPMM' as const,
+      books: [
+        { source: 'VGM' as const, page: 10 },
+        { source: 'MPMM' as const, page: 20 },
+      ],
+    };
+    expect(entryBooks(reprint)).toEqual(['VGM', 'MPMM']);
+    expect(sourceAllows(phbOnly, reprint)).toBe(false);
+    expect(sourceAllows(withVolo, reprint)).toBe(true);
+    expect(entryBooks({ source: 'PHB' })).toEqual(['PHB']);
   });
 });

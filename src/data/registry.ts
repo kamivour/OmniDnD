@@ -23,13 +23,14 @@ import srdMagicItems from '../../data/srd/magic-items.json';
 import srdRaces from '../../data/srd/races.json';
 import srdSpells from '../../data/srd/spells.json';
 import srdSubclasses from '../../data/srd/subclasses.json';
-import { buildRegistry, characterRegistry } from '../engine/registry';
+import { buildRegistry, characterRegistry, withMonsterPack } from '../engine/registry';
 import { COMMON_REPLICA_PREFIX, REPLICATE_RECIPES } from '../engine/calc/infusions';
 import { itemType } from '../engine/catalog';
 import {
   type CharacterBuild,
   ItemDefSchema,
   MechanicsOverlayPackSchema,
+  type MonsterPack,
   RefPackSchema,
   SummaryOverlayPackSchema,
 } from '../engine/schema';
@@ -94,13 +95,30 @@ export const mechanicsPacks = {
 };
 
 /** All bundled reference data. Throws at load if any pack or overlay is invalid. */
-export const registry = buildRegistry(
+export const bundledRegistry = buildRegistry(
   [...Object.values(srdPacks), ...Object.values(contentPacks)].map((pack) =>
     RefPackSchema.parse(pack),
   ),
   SummaryOverlayPackSchema.parse(summaries),
   Object.values(mechanicsPacks).flatMap((pack) => MechanicsOverlayPackSchema.parse(pack)),
 );
+
+/**
+ * Bundled data plus the device's private monster pack, when one is imported (M50). A live
+ * binding: `setMonsterPack` swaps it, so read it at call time rather than caching it.
+ */
+export let registry = bundledRegistry;
+
+/** Merges a validated monster pack into `registry`, or restores the bundled data. */
+export function setMonsterPack(pack: Pick<MonsterPack, 'creatures' | 'supplements'> | undefined) {
+  if (!pack) {
+    registry = bundledRegistry;
+    return { skipped: [] as string[] };
+  }
+  const merged = withMonsterPack(bundledRegistry, pack);
+  registry = merged.registry;
+  return { skipped: merged.skipped };
+}
 
 /** Bundled data plus one character's custom items. */
 export function registryFor(build: Pick<CharacterBuild, 'customItems'>) {

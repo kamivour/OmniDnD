@@ -12,6 +12,7 @@ import { ChoiceGroup, Field, inputClass } from '../components/fields';
 import { syncConfig } from '../../sync/config';
 import { TutorialSection } from '../settings/TutorialSection';
 import { BackupsSection } from '../settings/BackupsSection';
+import { MonsterPackSection } from '../settings/MonsterPackSection';
 import { ResetCharacterControl } from '../settings/ResetCharacterControl';
 import { ThemePicker } from '../settings/ThemePicker';
 import { cx } from '../cx';
@@ -234,6 +235,7 @@ export function SettingsScreen() {
       </section>
       <TutorialSection />
       <BackupsSection />
+      <MonsterPackSection />
       {syncConfig && (
         <section
           aria-labelledby="settings-profile"

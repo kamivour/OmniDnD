@@ -1,5 +1,6 @@
 import type { Registry } from '../registry';
-import type { RefKind } from '../schema';
+import type { RefKind, Source } from '../schema';
+import { ALWAYS_ON_SOURCES, entryBooks } from './campaign-rules';
 
 export interface RulesSearchHit {
   id: string;
@@ -25,8 +26,8 @@ const KIND_ORDER: RefKind[] = [
 /**
  * Finds reference entries by name. Names that start with the query come first, then names
  * that contain it; ties follow kind, then name. An empty query returns nothing.
- * With `sources`, entries from books outside that list are hidden (PHB entries always show,
- * and so do entries from the SRD or the monster list, which carry no other book).
+ * With `sources`, entries from books outside that list are hidden. Player's Handbook and
+ * Monster Manual entries always show; a creature shows when any book it is printed in is on.
  */
 export function searchRules(
   registry: Registry,
@@ -39,7 +40,13 @@ export function searchRules(
   const hits: (RulesSearchHit & { rank: number })[] = [];
   for (const entry of registry.entries.values()) {
     if (entry.kind === 'spell' && entry.retired) continue;
-    if (sources && entry.source !== 'PHB' && !sources.includes(entry.source)) continue;
+    if (
+      sources &&
+      !entryBooks(entry).some(
+        (book: Source) => ALWAYS_ON_SOURCES.includes(book) || sources.includes(book),
+      )
+    )
+      continue;
     const name = entry.name.toLowerCase();
     const at = name.indexOf(needle);
     if (at < 0) continue;

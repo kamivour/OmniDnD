@@ -65,8 +65,34 @@ export const SOURCE_NAMES: Record<Source, string> = {
   XGE: "Xanathar's Guide to Everything",
   TCE: "Tasha's Cauldron of Everything",
   SCC: 'Strixhaven: A Curriculum of Chaos',
+  MM: 'Monster Manual',
+  VGM: "Volo's Guide to Monsters",
+  MTF: "Mordenkainen's Tome of Foes",
+  MPMM: 'Mordenkainen Presents: Monsters of the Multiverse',
   HB: 'Homebrew',
 };
+
+/** Books every campaign uses: the core rules and the Monster Manual (D274). */
+export const ALWAYS_ON_SOURCES: readonly Source[] = ['PHB', 'MM'];
+
+/** Books that only add creatures. Their stat blocks come from a private monster pack (M50). */
+export const MONSTER_SOURCES: readonly Source[] = ['MM', 'VGM', 'MTF', 'MPMM'];
+
+/**
+ * True when the campaign uses the book. The Monster Manual counts as on even when older
+ * campaigns do not list it; every campaign the app makes lists the PHB itself.
+ */
+export function bookOn(campaign: Pick<Campaign, 'sources'>, source: Source): boolean {
+  return source === 'MM' || campaign.sources.includes(source);
+}
+
+/** Every book an entry is printed in: pack creatures list each one, other entries have one. */
+export function entryBooks(entry: {
+  source: Source;
+  books?: readonly { source: Source }[] | undefined;
+}): Source[] {
+  return entry.books?.length ? entry.books.map((book) => book.source) : [entry.source];
+}
 
 export const SOURCE_PARTS: readonly SourcePart[] = SourcePartSchema.options;
 
@@ -102,16 +128,25 @@ export function entryPart(
 
 /** The parts a campaign uses from a book; empty when the book is off. */
 export function bookParts(campaign: SourceRules, source: Source): readonly SourcePart[] {
-  if (!campaign.sources.includes(source)) return [];
+  if (!bookOn(campaign, source)) return [];
   return campaign.sourceParts?.[source] ?? SOURCE_PARTS;
 }
 
-/** True when the campaign's books, and the parts it uses from them, include this entry. */
+/**
+ * True when the campaign's books, and the parts it uses from them, include this entry.
+ * A creature printed in several books shows when any of them is on.
+ */
 export function sourceAllows(
   campaign: SourceRules,
-  entry: Pick<RefEntry, 'kind' | 'source'> & { origin?: string; retired?: boolean },
+  entry: Pick<RefEntry, 'kind' | 'source'> & {
+    origin?: string;
+    retired?: boolean;
+    books?: readonly { source: Source }[] | undefined;
+  },
 ): boolean {
-  if (entry.retired || !campaign.sources.includes(entry.source)) return false;
+  if (entry.retired) return false;
+  if (entry.kind === 'creature') return entryBooks(entry).some((book) => bookOn(campaign, book));
+  if (!bookOn(campaign, entry.source)) return false;
   const part = entryPart(entry);
   return part === undefined || bookParts(campaign, entry.source).includes(part);
 }

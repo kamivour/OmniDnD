@@ -80,19 +80,19 @@ Each stage caches its output in `data/private/monsters/work/<book>/`. Stages can
 9. **Review.** `review.html` shows flagged blocks with their failed checks, parsed fields and printed pages. Keep verified field patches, source transcriptions and index corrections in `data/private/monsters/overrides/<book>.json` so they apply on each run.
 10. **Merge and pack.**
     - Match duplicates by normalized name, plus an alias file for renamed creatures.
-    - Write `data/private/monsters/monsters.pack.json`: `{format: 1, version, extractedAt, creatures[], lore[]}`.
-    - Each creature carries `books: [{source, page}]` and a `loreId`.
-    - A `manifest.json` records the counts per book, how many blocks passed, how many were fixed and the hashes.
+    - Write `data/private/monsters/monsters.pack.json`: `{format: 1, version, extractedAt, canary, creatures[], lore[], supplements[]}`.
+    - Each creature carries `books: [{source, page}]` and `loreIds`. SRD creatures get only book tags and lore (`supplements`).
+    - A `manifest.json` records the counts per book, fallbacks to older printings and the creatures left out.
 
-Run `npm run monsters -- validate --book MM` for the stat and index checks. Run `npm run monsters -- review --book MM --pdf <path>` to also render the flagged pages in `data/private/monsters/work/MM/review.html`.
+Run `npm run monsters -- pack` to merge all reviewed books into the pack. Run `npm run monsters -- validate --book MM` for the stat and index checks. Run `npm run monsters -- review --book MM --pdf <path>` to also render the flagged pages in `data/private/monsters/work/MM/review.html`.
 
 ## App changes
 
 - **Sources.** Add `MM`, `VGM`, `MTF` and `MPMM` to `SourceSchema` and the campaign book choices. Retag the SRD creatures from `PHB` to `MM`, keeping `srd: true`.
 - **Pack schema.** `MonsterPackSchema` in the engine validates on import.
-- **Storage.** A local-only Dexie table `packs` holds the pack. Pack entries are marked "From your monster pack".
+- **Storage.** The local-only Dexie table `userPacks` holds the pack. Pack entries are marked "From your monster pack".
 - **Settings > Monster packs.** Import file, a list showing counts, and Remove. Import errors say plainly what is wrong.
-- **Dev only.** A dev-only `import.meta.glob` loads `data/private/monsters/*.pack.json` behind `import.meta.env.DEV`. The canary test proves the production build excludes it.
+- **Dev only.** The dev server serves `data/private/monsters/monsters.pack.json` as `virtual:dev-monster-pack` when no pack is saved; a build gets an empty module and fails on any `data/private/` import. The canary test proves the production build excludes it.
 - **Registry.** Pack creatures merge into the creature catalog, filtered by the campaign's books. The encounter tracker and Reference get them through that catalog.
 - **Compendium > Monsters tab.**
   - Search by name.

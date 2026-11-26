@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D274 | 2026-11-26 | The Monster Manual is always on, like the PHB. Volo's, Tome of Foes and Monsters of the Multiverse are campaign book choices; a monster shows when any book it is printed in is on. | Every table uses the Monster Manual; the others vary by DM |
 | D273 | 2026-11-25 | When a stat block's printed passive Perception disagrees with its Wisdom and Perception bonus, the worked-out value wins and the block is flagged for review. | Misprints and OCR slips are more common than real exceptions |
 | D272 | 2026-11-25 | Monster packs stay on each device: imported in Settings, stored locally and never synced or bundled. The copyright question stays with the user. | The repo and the hosted app are public |
 | D271 | 2026-11-25 | Monster entries keep their lore and sidebars from every book, tagged by book. | Lore wording differs between printings |

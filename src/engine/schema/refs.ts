@@ -694,13 +694,27 @@ const SensesSchema = z.strictObject({
   passivePerception: z.int().min(0),
 });
 
+const CreatureSizeSchema = z.enum(['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan']);
+const CreatureSectionSchema = z.enum([
+  'actions',
+  'bonusActions',
+  'reactions',
+  'legendaryActions',
+  'mythicActions',
+  'lairActions',
+]);
+export const CreatureBookSchema = z.strictObject({
+  source: SourceSchema,
+  page: z.int().positive(),
+});
+
 /** A statblock: monsters, animals and NPCs (SRD import, or our own words in data/content/). */
 export const CreatureDefSchema = z
   .strictObject({
     kind: z.literal('creature'),
     id: refId('creature'),
     ...refBase,
-    size: z.enum(['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan']),
+    size: CreatureSizeSchema,
     /** "beast", "humanoid (goblinoid)", "swarm of Tiny beasts". */
     creatureType: z.string().min(1),
     alignment: z.string().min(1),
@@ -744,6 +758,22 @@ export const CreatureDefSchema = z
     actions: z.array(CreatureTextSchema),
     reactions: z.array(CreatureTextSchema),
     legendaryActions: z.array(CreatureTextSchema),
+    // The rest is only set by a private monster pack (M50); bundled entries never carry it.
+    /** "Medium or Small": every size the stat block allows; `size` is the first. */
+    sizes: z.array(CreatureSizeSchema).min(2).optional(),
+    bonusActions: z.array(CreatureTextSchema).optional(),
+    mythicActions: z.array(CreatureTextSchema).optional(),
+    lairActions: z.array(CreatureTextSchema).optional(),
+    /** The paragraph under a section heading, e.g. how many legendary actions it takes. */
+    intros: z.partialRecord(CreatureSectionSchema, z.string().min(1)).optional(),
+    /** Each book and printed page the stat block appears on. */
+    books: z.array(CreatureBookSchema).min(1).optional(),
+    /** Lore families in the pack, one per book that has lore for this creature. */
+    loreIds: z.array(z.string().min(1)).optional(),
+    /** Generic NPC stat block (any race). */
+    npc: z.boolean().optional(),
+    /** What to check against the printed page: the pack could not read or verify it. */
+    review: z.array(z.string().min(1)).optional(),
   })
   .refine(srdTextOnly, SRD_TEXT_ONLY);
 

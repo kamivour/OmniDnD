@@ -1,5 +1,6 @@
 export * from './common';
 export * from './refs';
+export * from './monster-pack';
 export * from './companions';
 export * from './encounter';
 export * from './character';

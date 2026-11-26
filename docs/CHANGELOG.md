@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-26 10:43 — Monster pack import
+
+- Settings has a new Monster pack section. Import the pack file made from your own monster books, see how many monsters each book adds, or remove it.
+- The pack stays on this device. It is never synced, shared or put in backups.
+- Campaign setup now lists Volo's, Mordenkainen's Tome of Foes and Monsters of the Multiverse. The encounter tracker only offers monsters from books the campaign uses; the Monster Manual is always on.
+- Checks pass.
+
 ## 2026-11-26 10:11 — Monster books: review queue set aside
 
 - Monster checks are closed for now. Every indexed creature has a stat block.

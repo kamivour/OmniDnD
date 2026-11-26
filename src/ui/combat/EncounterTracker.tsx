@@ -29,6 +29,7 @@ import { Sheet } from '../components/Sheet';
 import { cx } from '../cx';
 import { signed } from '../format';
 import { useCharacter } from '../hooks/useCharacter';
+import { useMonsterPackVersion } from '../../state/monster-pack';
 import { CreatureStatblock } from '../reference/CreatureStatblock';
 import { crText } from '../reference/creature-format';
 
@@ -307,7 +308,9 @@ function Details({ entry, onClose }: { entry: Combatant; onClose: () => void }) 
   const value = parseWhole(amount);
   const valid = value !== null && value >= 0;
   const own = entry.side === 'ally' || entry.side === 'enemy';
-  const creature = entry.creatureId ? registry.get('creature', entry.creatureId) : undefined;
+  // A pack creature disappears when its pack is removed, so look it up without throwing.
+  const known = entry.creatureId ? registry.entries.get(entry.creatureId) : undefined;
+  const creature = known?.kind === 'creature' ? known : undefined;
   const clear = () => setAmount('');
 
   return (
@@ -450,6 +453,8 @@ function AddCombatantSheet({
   onOpenChange: (open: boolean) => void;
 }) {
   const { run } = useCommand();
+  const { state } = useCharacter();
+  useMonsterPackVersion();
   const [mode, setMode] = useState<'creature' | 'custom'>('creature');
   const [side, setSide] = useState<'enemy' | 'ally'>('enemy');
   const [query, setQuery] = useState('');
@@ -461,7 +466,7 @@ function AddCombatantSheet({
   const [bonus, setBonus] = useState('0');
 
   const hits = query.trim()
-    ? searchRules(registry, query)
+    ? searchRules(registry, query, 400, state.campaign.sources)
         .filter((hit) => hit.kind === 'creature')
         .slice(0, 8)
     : [];

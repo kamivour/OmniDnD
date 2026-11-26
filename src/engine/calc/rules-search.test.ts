@@ -35,3 +35,10 @@ describe('searchRules', () => {
     expect(searchRules(registry, 'blind', 40, ['PHB'])[0]?.id).toBe('condition.blinded');
   });
 });
+
+describe('searchRules with monster books', () => {
+  it('always shows Monster Manual creatures', () => {
+    const hits = searchRules(registry, 'aboleth', 40, ['PHB']);
+    expect(hits.some((hit) => hit.id === 'creature.aboleth' && hit.source === 'MM')).toBe(true);
+  });
+});

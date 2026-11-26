@@ -9,9 +9,11 @@
  *   npm run monsters -- gold --book MM
  *   npm run monsters -- validate --book MM
  *   npm run monsters -- review --book MM --pdf <path to the PDF>
+ *   npm run monsters -- pack
  *
  * `names` needs data/private/monsters/config/<book>.json (a BookConfig, see names.ts). `parse`
  * writes creatures.json and lore.json; `gold` compares creatures.json with the SRD creatures.
+ * `pack` merges every validated book into monsters.pack.json, the file the app imports.
  */
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -29,6 +31,7 @@ import {
   OverridesSchema,
   reviewIndex,
 } from './overrides.ts';
+import { buildPack, PACK_BOOKS, type PackLoreFamily } from './pack.ts';
 import { cleanLine, parseBlock } from './parse.ts';
 import { compareReprints } from './reprints.ts';
 import { renderPages, reviewHtml, reviewPages, type ReviewReport } from './review.ts';
@@ -132,6 +135,38 @@ const { positionals, values } = parseArgs({
 const [command] = positionals;
 const book = values.book as Book | undefined;
 
+if (command === 'pack') {
+  const books = PACK_BOOKS.filter((name) => existsSync(`${workFor(name)}/review.json`)).map(
+    (name) => ({
+      book: name,
+      offset: readJson<BookConfig>(`${PRIVATE}config/${name}.json`).offset,
+      records: readJson<ReviewReport>(`${workFor(name)}/review.json`).records,
+      lore: readJson<PackLoreFamily[]>(`${workFor(name)}/lore.json`),
+    }),
+  );
+  if (!books.length) throw new Error('No validated books yet. Run validate --book <book> first.');
+  const aliasPath = `${PRIVATE}aliases.json`;
+  const { pack, manifest } = buildPack({
+    books,
+    srd: readJson<{ id: string; name: string }[]>(`${DATA}srd/creatures.json`),
+    aliases: existsSync(aliasPath) ? readJson<Record<string, string>>(aliasPath) : {},
+    extractedAt: new Date().toISOString().slice(0, 10),
+  });
+  writeFileSync(`${PRIVATE}monsters.pack.json`, JSON.stringify(pack));
+  writeJson(`${PRIVATE}manifest.json`, manifest);
+  for (const [name, stats] of Object.entries(manifest.books)) {
+    console.log(
+      `${name}: ${stats.used}/${stats.blocks} blocks used, ${stats.unnamed} unnamed, ${stats.duplicates} duplicate names`,
+    );
+  }
+  console.log(
+    `Pack ${pack.version}: ${manifest.creatures} creatures, ${manifest.supplements} SRD creatures tagged, ` +
+      `${manifest.lore} lore families, ${manifest.flagged} flagged, ${manifest.fallbacks.length} from an older printing, ` +
+      `${manifest.excluded.length} left out (see manifest.json)`,
+  );
+  process.exit(0);
+}
+
 if (!book || !BOOKS.includes(book)) {
   throw new Error(`--book must be one of ${BOOKS.join(', ')}`);
 }
@@ -211,6 +246,6 @@ if (command === 'extract') {
   if (blocked || missing.length || duplicates.length) process.exitCode = 1;
 } else {
   throw new Error(
-    `Unknown command "${command ?? ''}". Try: extract, names, parse, gold, validate, review`,
+    `Unknown command "${command ?? ''}". Try: extract, names, parse, gold, validate, review, pack`,
   );
 }

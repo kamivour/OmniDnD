@@ -1,11 +1,40 @@
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import type { Plugin } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { defineConfig } from 'vitest/config';
 
+/**
+ * The private monster pack (M50) in development only: the dev server serves the local pack file
+ * so it need not be imported in every browser. A build gets an empty module and fails if any
+ * file under data/private/ would end up in the bundle.
+ */
+function privateMonsterPack(command: 'serve' | 'build'): Plugin {
+  const id = 'virtual:dev-monster-pack';
+  const resolved = `\0${id}`;
+  const file = fileURLToPath(
+    new URL('./data/private/monsters/monsters.pack.json', import.meta.url),
+  );
+  return {
+    name: 'omnidnd-private-monster-pack',
+    resolveId: (source) => (source === id ? resolved : undefined),
+    load(loadId) {
+      if (loadId === resolved) {
+        if (command === 'build' || !existsSync(file)) return 'export default undefined;';
+        return `export default JSON.parse(${JSON.stringify(readFileSync(file, 'utf8'))});`;
+      }
+      if (command === 'build' && /[\\/]data[\\/]private[\\/]/.test(loadId))
+        throw new Error(`Private data must never be bundled: ${loadId}`);
+      return undefined;
+    },
+  };
+}
+
 export default defineConfig(({ command }) => ({
   plugins: [
+    privateMonsterPack(command),
     react(),
     tailwindcss(),
     VitePWA({

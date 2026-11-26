@@ -975,6 +975,7 @@ export function mapCreature(raw: RawMonster): CreatureDef {
     id: `creature.${raw.index}`,
     name: raw.name,
     ...SRD,
+    source: 'MM',
     size: lower(raw.size),
     creatureType: raw.subtype ? `${raw.type} (${raw.subtype})` : raw.type,
     alignment: raw.alignment,
