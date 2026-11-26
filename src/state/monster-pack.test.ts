@@ -56,6 +56,13 @@ describe('monster pack files', () => {
     expect(checkPack({ ...pack, format: 2 })).toEqual({
       error: expect.stringContaining('different app version'),
     });
+    // A pack from a version before the canary still gets the version message.
+    const older: Record<string, unknown> = { ...pack };
+    delete older.canary;
+    expect(checkPack({ ...older, format: 0 })).toEqual({
+      error: expect.stringContaining('different app version'),
+    });
+    expect(checkPack(older)).toEqual({ error: expect.stringContaining('not a monster') });
     const broken = { ...pack, creatures: [{ ...pack.creatures[0], hp: 0 }] };
     expect(checkPack(broken)).toEqual({ error: expect.stringContaining('creatures.0.hp') });
   });

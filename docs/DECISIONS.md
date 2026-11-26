@@ -343,7 +343,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 - [ ] 24 SRD entries have no book page or lore: the lycanthrope and vampire forms, four swarms, Ice Mephit and Giant Rat (Diseased).
 - [ ] Junk lines leak into some lore, for example the Shrieker's.
 - [ ] 8 stat blocks have no name in their book's index (MM 5, VGM 1, MPMM 2).
-- [ ] A pack file with the wrong format version gets the generic "not a monster pack" error.
+- [x] A pack file with the wrong format version gets the generic "not a monster pack" error.
 
 ## How to add an entry
 

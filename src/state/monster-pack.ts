@@ -4,6 +4,7 @@ import { registry, setMonsterPack } from '../data/registry';
 import { database, parseStoredRecord, storedRecord } from '../db/database';
 import type { Registry } from '../engine/registry';
 import {
+  MONSTER_PACK_FORMAT,
   MonsterPackSchema,
   type MonsterLore,
   type MonsterPack,
@@ -88,10 +89,14 @@ export function readPackFile(text: string): { pack: MonsterPack } | { error: str
 }
 
 export function checkPack(raw: unknown): { pack: MonsterPack } | { error: string } {
-  if (typeof raw !== 'object' || raw === null || !('canary' in raw) || !('creatures' in raw))
+  if (typeof raw !== 'object' || raw === null || !('creatures' in raw))
     return { error: NOT_A_PACK };
-  if ((raw as { format?: unknown }).format !== 1)
+  // A pack from another version may lack fields this one added (the canary did not always
+  // exist), so the version is checked before the shape.
+  const format = (raw as { format?: unknown }).format;
+  if (typeof format === 'number' && format !== MONSTER_PACK_FORMAT)
     return { error: 'This pack was made by a different app version. Make the pack again.' };
+  if (!('canary' in raw) || format === undefined) return { error: NOT_A_PACK };
   const parsed = MonsterPackSchema.safeParse(raw);
   if (!parsed.success) {
     const issue = parsed.error.issues[0];
