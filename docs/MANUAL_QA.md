@@ -378,6 +378,15 @@ Use two test accounts on a phone and a desktop, after running the three new migr
 - [ ] Open a link in a private window on phone and desktop. Compare the reader and its spell, item and companion details with the owner's Sheet.
 - [ ] Update then revoke a link. Judge whether the owner and recipient see clear feedback when the link is reopened.
 
+## M50 — Monsters in the Compendium
+
+- [ ] Compare 10 random pack monsters with the printed page: size, type, AC, HP, ability scores, challenge and actions.
+- [ ] Open several monsters marked "Check against the book". Judge whether the notes say clearly what to compare.
+- [ ] Read the lore for a few families. Judge whether it is easy to read and the book and page tags are right.
+- [ ] Inside a campaign, turn its monster books on and off. Check that the list follows them and "Show all books" brings the rest back.
+- [ ] Use the Monsters tab on a phone during a fight: search, filter by challenge, add a monster to the tracker. Judge whether it is quick enough at the table.
+- [ ] Look at the list and a stat block in a light theme and a dark theme. Note anything hard to read.
+
 ## Rules review — M5
 
 Settled in M16: damage at zero HP counts as a hit even when temporary HP absorb it (D152), and instant death uses the damage left after temporary HP (D151).

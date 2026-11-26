@@ -1,6 +1,6 @@
 # OmniDnD — Progress
 
-**Current milestone:** M50 Monsters in the Compendium.
+**Current milestone:** M50 Monsters in the Compendium implemented. 289 monster findings still need a page review (Q53).
 **Next up:** Review the [M46 combat design](COMBAT_HIT_DESIGN.md). Live M43 and M47 account checks need a disposable Supabase project. The older Artificer report still needs the affected campaign export.
 
 Status: `todo` · `doing` · `done` · `blocked`
@@ -74,7 +74,7 @@ Build for multiple campaigns and characters, including friends' future character
 | M47 | Party character viewer | 5 | done | Inspect slots, gear, spells, features and companions in a compact read-only layout. Live account check pending. |
 | M48 | Verify character | 1 | done | Review saved stats, choices, spells and tracked resources on the Sheet. |
 | M49 | Character viewing links | 1 | done | Share an owned character from its Sheet or the Bench. Live migration pending. |
-| M50 | Monsters in the Compendium | 6 | doing | Every stat block and its lore from four monster books, from a private pack each device imports; see [MONSTERS_PLAN.md](MONSTERS_PLAN.md) |
+| M50 | Monsters in the Compendium | 6 | done | Every stat block and its lore from four monster books, from a private pack each device imports; see [MONSTERS_PLAN.md](MONSTERS_PLAN.md) |
 
 All remaining milestones are planned below. Still build one milestone at a time; later screens stay placeholders until their milestone starts.
 
@@ -433,7 +433,7 @@ The live two-account check uses the disposable Supabase setup from M43.
 - [x] T3: Validate with stat math and clear the review queue (289 blocking findings deferred, see Q53)
 - [x] T4: Merge duplicates and load the private pack in the app
 - [x] T5: Monsters tab in the Compendium
-- [ ] T6: Verify at both widths and across themes
+- [x] T6: Verify at both widths and across themes
 
 ## Review fixes
 
@@ -475,6 +475,7 @@ The live two-account check uses the disposable Supabase setup from M43.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-26 — Verified M50 at both widths in Dark and Parchment: import errors, campaign books, full pack (about 1 s to first rows, smooth typing). Fixed two stale e2e checks.
 - 2026-11-26 — Compendium gains a Monsters tab: challenge, type, size, book, legendary and NPC filters, challenge sort, stat block with books and lore, Add to encounter. Pages of 100 rows.
 - 2026-11-26 — Built the monster pack (386 creatures, 22 left out for review) and load it from Settings; encounter search follows campaign books.
 - 2026-11-26 — Closed monster validation with 289 blocking findings left for page-by-page review later (Q53); every indexed name has a stat block.

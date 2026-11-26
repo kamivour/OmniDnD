@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-26 11:37 — Monsters in the Compendium: done
+
+- Monsters in the Compendium are finished. The Monsters tab works on phones and computers, in light and dark themes, with the full pack loaded.
+- Inside a campaign the list follows the campaign's monster books; "Show all books" shows the rest.
+- A wrong file in Settings > Monster pack gives a clear message and leaves your current pack alone.
+- Still to do: 289 monster details need a check against the printed page (see the review list). New manual checks are in MANUAL_QA. Checks pass.
+
 ## 2026-11-26 11:05 — Monsters tab in the Compendium
 
 - The Compendium has a Monsters tab. Search by name and filter by challenge, type, size, book, legendary or NPC; sort by name or challenge.
