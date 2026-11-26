@@ -3,7 +3,7 @@ import type { NamedCreature } from './identify.ts';
 import type { IndexEntry } from './names.ts';
 import type { ValidatedCreature } from './validate.ts';
 import { nameKey } from './validate.ts';
-import { SIZES } from './segment.ts';
+import { SIZES, type LorePatch } from './segment.ts';
 
 const entry = z.strictObject({
   name: z.string().min(1),
@@ -117,12 +117,34 @@ const indexOverride = z.discriminatedUnion('kind', [
   z.strictObject({ kind: z.literal('missing'), page: z.int().positive(), reason: nonempty }),
 ]);
 
+// Keyed by printed page and the heading or first words of the line, as in segment's LorePatch.
+const loreOverride = z
+  .strictObject({
+    title: nonempty.optional(),
+    as: z.enum(['section', 'drop']).optional(),
+    reason: nonempty,
+  })
+  .refine((fix) => !(fix.as === 'drop' && fix.title), 'A dropped line takes no title.');
+
 export const OverridesSchema = z.strictObject({
   blocks: z.record(text, blockOverride).default({}),
   added: z.record(text.regex(/^\d+:.+$/), addedBlock).default({}),
   index: z.record(text, indexOverride).default({}),
+  lore: z.record(text.regex(/^\d+:.+$/), loreOverride).default({}),
 });
 export type Overrides = z.infer<typeof OverridesSchema>;
+
+export function lorePatches(overrides: Overrides): LorePatch[] {
+  return Object.entries(overrides.lore).map(([key, { title, as }]) => {
+    const separator = key.indexOf(':');
+    return {
+      page: Number(key.slice(0, separator)),
+      text: key.slice(separator + 1),
+      ...(title !== undefined && { title }),
+      ...(as !== undefined && { as }),
+    };
+  });
+}
 
 /** Match the printed page and original heading before applying any patch to the name. */
 export const blockKey = ({ printed, page, heading, name }: NamedCreature) =>

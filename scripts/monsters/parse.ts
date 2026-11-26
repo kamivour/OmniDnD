@@ -24,6 +24,7 @@ import {
   sectionOf,
   spaceSize,
   SIZES,
+  variantOf,
   type RawBlock,
   type SectionKey,
 } from './segment.ts';
@@ -161,7 +162,11 @@ type PropertyKey = (typeof PROPERTIES)[number][1];
 
 /** The stat block property a line opens, and the text after its label. */
 export function propertyOf(text: string): { key: PropertyKey; rest: string } | undefined {
-  const tokens = text.trim().split(/\s+/);
+  // "ArmorClassll": OCR glued the number to the label.
+  const tokens = text
+    .trim()
+    .replace(/^(Armor\s*Class|Hit\s*Points)(?=[\dlIOS]{1,3}\b)/i, '$1 ')
+    .split(/\s+/);
   for (const [label, key] of PROPERTIES) {
     const target = letters(label);
     let taken = '';
@@ -246,6 +251,8 @@ export function entryStart(
     if (!/^(?:Melee|Ranged)\b/.test(rest)) return undefined;
   }
   if (NOT_NAME.test(name)) return undefined;
+  // "1. Charm Ray." numbers an option of the entry above; OCR may read the 5 as S.
+  if (/^(?:\d+|[SlIO])$/.test(name)) return undefined;
   return {
     name: name.charAt(0).toUpperCase() + name.slice(1),
     ...(paren && { paren }),
@@ -323,18 +330,51 @@ export function armorNote(note: string): string {
 }
 
 const SPELL_LIST =
-  /^(?:Cantrips\s*\(at will\)|\d+(?:st|nd|rd|th)\s+level\s*\(\d+\s+slots?\)|At will|\d+\/day(?:\s+each)?)\s*:/i;
+  /^(?:Cantrips\s*\(at will\)|\d+(?:st|nd|rd|th)\s+level\s*\(\d+\s+slots?\)|\d+(?:st|nd|rd|th)-\d+(?:st|nd|rd|th)\s+level\s*\(\d+\s+\d+(?:st|nd|rd|th)-level\s+slots?\)|At will|\d+\/day(?:\s+each)?)\s*:/i;
 
-const digits = (text: string) => text.replace(/[lI]/g, '1').replace(/O/g, '0');
+/** OCR forms of a spell list head, for finding one inside a line. */
+const HEAD_FORMS = String.raw`(?:[\dlIOS]{1,2}\s*[/fjJIl|t]?\s*d\s?ay(?:\s+each)?|[\dlIOS]{1,2}\s?(?:st|nd|rd|th)(?:\s*-\s*[\dlIOS]{1,2}\s?(?:st|nd|rd|th))?\s+level\s*\.?\s*\([^)]{0,20}slots?\)|Cantrips?\s*\(at[\s-]*wi\s*ll\s*\)|At will)\s*[:;]`;
+/** OCR can merge two list lines ("mage hand lfday: fireball"), or a list line with its intro. */
+const INNER_HEAD = new RegExp(String.raw`\s(?=${HEAD_FORMS})`);
+const HEAD_AFTER_COLON = new RegExp(String.raw`(?<=:)\s(?=${HEAD_FORMS})`);
+const HEAD_LEAD = new RegExp(String.raw`^[^\w(]{1,3}(?=${HEAD_FORMS})`, 'i');
 
-/** OCR forms of a spell list head: "lfday each :", "lst level .(l slot):", "Cantrips (at wi ll)". */
-export function fixSpellHead(text: string): string {
-  let match = /^([\dlIOoS]{1,2})\s*[/fjJIl|t]?\s*day(\s+each)?\s*:\s*/i.exec(text);
+const digits = (text: string) => text.replace(/[lI]/g, '1').replace(/O/g, '0').replace(/S/g, '5');
+
+/**
+ * OCR forms of a spell list head: "lfday each :", "2fd ay each:", "lst level .(l slot):",
+ * "lst- Sth level (25th-level slots):" (a warlock's slots), "Cantrips (at wi ll)".
+ */
+export function fixSpellHead(line: string): string {
+  // A stray mark can sit before the head: ") 1fday: cloudkill".
+  const text = line.replace(HEAD_LEAD, '');
+  let match = /^([\dlIOS]{1,2})\s*[/fjJIl|t]?\s*d\s?ay(\s+each)?\s*:\s*/i.exec(text);
   if (match)
     return `${digits(match[1]!)}/day${match[2] ? ' each' : ''}: ${text.slice(match[0].length)}`;
-  match = /^([\dlIO]{1,2})(st|nd|rd|th)\s+level\s*\.?\s*\(([\dlIO]{1,2})\s+(slots?)\)\s*:\s*/i.exec(
-    text,
-  );
+  match =
+    /^([\dlIOS]{1,2})\s?(st|nd|rd|th)\s*-\s*([\dlIOS]{1,2})\s?(st|nd|rd|th)\s+level\s*\.?\s*\(\s*([\dlIOS])\s*([\dlIOS])(st|nd|rd|th)\s*-\s*level\s+(slots?)\)\s*[:;]\s*/i.exec(
+      text,
+    );
+  if (match) {
+    const [whole, low, lowEnd, high, highEnd, count, slot, slotEnd, word] = match as unknown as [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+    ];
+    const range = `${digits(low)}${lowEnd.toLowerCase()}-${digits(high)}${highEnd.toLowerCase()}`;
+    const slots = `${digits(count)} ${digits(slot)}${slotEnd.toLowerCase()}-level ${word}`;
+    return `${range} level (${slots}): ${text.slice(whole.length)}`;
+  }
+  match =
+    /^([\dlIOS]{1,2})\s?(st|nd|rd|th)\s+level\s*\.?\s*\(([\dlIO]{1,2})\s+(slots?)\)\s*:\s*/i.exec(
+      text,
+    );
   if (match) {
     const [whole, level, suffix, slots, word] = match as unknown as [
       string,
@@ -345,9 +385,9 @@ export function fixSpellHead(text: string): string {
     ];
     return `${digits(level)}${suffix.toLowerCase()} level (${digits(slots)} ${word}): ${text.slice(whole.length)}`;
   }
-  match = /^(?:Cantrips\s*\(at[\s-]*wi\s*ll\)|At will)\s*:\s*/i.exec(text);
+  match = /^(?:Cantrips?\s*\(at[\s-]*wi\s*ll\s*\)|At will)\s*:\s*/i.exec(text);
   if (match) {
-    const head = /^Cantrips/i.test(match[0]) ? 'Cantrips (at will)' : 'At will';
+    const head = /^Cantrip/i.test(match[0]) ? 'Cantrips (at will)' : 'At will';
     return `${head}: ${text.slice(match[0].length)}`;
   }
   return text;
@@ -363,12 +403,41 @@ function entryText(lines: readonly string[], vocab: Vocab): string {
   const prose: string[] = [];
   const items: string[][] = [];
   const after: string[] = [];
-  for (const line of lines) {
-    if (SPELL_LIST.test(line)) items.push([line]);
-    else if (items.length > 0 && (/^[a-z,]/.test(line) || /[,(-]$/.test(items.at(-1)!.at(-1)!)))
-      items.at(-1)!.push(line);
-    else if (items.length > 0) after.push(line);
-    else prose.push(line);
+  // A list wraps onto spell names. A line with a full stop, a verb or a long run of words between
+  // commas is prose from the column beside the list ("casting ability is Charisma (spell save").
+  const prosy = (line: string) =>
+    /\b(?:is|are|must|can|has|have)\b/.test(line.replace(/\([^()]*\)/g, '')) ||
+    line.split(',').some((part) => part.trim().split(/\s+/).length > 6);
+  const count = (text: string, mark: string) => text.split(mark).length - 1;
+  const wraps = (line: string, item: readonly string[]) => {
+    const text = item.join(' ');
+    // Inside an open bracket the line goes on: "(only self and up to one incapacitated".
+    if (count(text, '(') > count(text, ')')) return true;
+    return (
+      !prosy(line) &&
+      (/[,(-]$/.test(text) ||
+        (/^[a-z,]/.test(line) && !/[.:]$/.test(line) && !/[a-z)]\.\s+[A-Z]/.test(line)))
+    );
+  };
+  const split = lines.flatMap((line) =>
+    SPELL_LIST.test(line)
+      ? [line]
+      : line.split(HEAD_AFTER_COLON).map((part, k) => (k > 0 ? fixSpellHead(part) : part)),
+  );
+  // Once prose follows the list, later lines stay prose: they are its next lines.
+  let inList = false;
+  for (const line of split) {
+    const head = SPELL_LIST.test(line);
+    if (head || (inList && wraps(line, items.at(-1)!))) {
+      const [first, ...more] = line.split(INNER_HEAD);
+      if (head) items.push([first!]);
+      else items.at(-1)!.push(first!);
+      for (const part of more) items.push([fixSpellHead(part)]);
+      inList = true;
+    } else if (items.length > 0) {
+      after.push(line);
+      inList = false;
+    } else prose.push(line);
   }
   let text = joinLines(prose, vocab);
   items.forEach((item, k) => {
@@ -379,6 +448,8 @@ function entryText(lines: readonly string[], vocab: Vocab): string {
 }
 
 const OPTIONS_FOLLOW = /\b(?:the following|detailed below|options below)\b/i;
+/** A line ending in a short form ("5 ft.") goes on in lower case without a new sentence. */
+const ABBREVIATION_END = /\b(?:ft|lb|lbs|e\.g|i\.e|etc|vs|no|St|Mt)\.$/i;
 const NAME_SMALL = new Set(CONNECTIVE.split('|'));
 const nameStems = (name: string) =>
   name
@@ -395,15 +466,28 @@ export const sharesWord = (a: string, b: string) => {
 const DAMAGE = /(\d+)\s*\((\d+d\d+(?:\s*[+-]\s*\d+)?)\)\s*([a-z]+)\s+damage/g;
 const FLAT_DAMAGE = /Hit:\s*(\d+)\s+([a-z]+)\s+damage/;
 
-function entryOf(name: string, paren: string | undefined, text: string): ParsedEntry {
+/** An attack's head with its OCR slips: "Attack. +5", "+1 2 to hit", "+JO to hit", "+3 t0 hit". */
+const ATTACK_HEAD =
+  /\b(Weapon|Spell) Attack[:.;,]\s*([+\-–])\s*([\dlIJOoS](?: ?[\dlIJOoS])?)\s*t[o0]\s+hit\b/;
+
+function entryOf(name: string, paren: string | undefined, raw: string): ParsedEntry {
   const usage = paren ? usageOf(paren) : undefined;
+  let text = raw;
+  let attackBonus: number | undefined;
+  const head = ATTACK_HEAD.exec(text);
+  const bonus = head ? toNumber(head[3]!.replace(/J/g, '1')) : undefined;
+  if (head && bonus !== undefined) {
+    // The text is repaired too, so the reader sees the printed bonus.
+    attackBonus = head[2] === '+' ? bonus : -bonus;
+    const signed = attackBonus < 0 ? String(attackBonus) : `+${attackBonus}`;
+    text = text.replace(head[0], `${head[1]} Attack: ${signed} to hit`);
+  }
   const entry: ParsedEntry = {
     name: paren && !usage ? `${name} ${paren}` : name,
     text,
     ...(usage && { usage }),
+    ...(attackBonus !== undefined && { attackBonus }),
   };
-  const attack = /Attack:\s*([+-])\s*(\d+)\s*to\s*hit/.exec(text);
-  if (attack) entry.attackBonus = Number(attack[2]) * (attack[1] === '-' ? -1 : 1);
   const damage: { dice: string; type: string }[] = [];
   for (const [, , dice, type] of text.matchAll(DAMAGE)) {
     if (!(DAMAGE_TYPES as readonly string[]).includes(type!)) continue;
@@ -651,10 +735,13 @@ function signed(text: string): number | undefined {
   return match[1] && match[1] !== '+' ? -value : value;
 }
 
+/** OCR reads a plus sign as "4-": "Stealth 4-6" is "Stealth +6". No bonus is printed that way. */
+const plusSlip = (part: string) => part.replace(/(?<=[A-Za-z]\s+)4-\s*(?=\d)/, '+');
+
 /** "Con +6, lnt +8" -> { CON: 6, INT: 8 }. */
 function parseSaves(text: string, issues: string[]) {
   const saves: Partial<Record<Ability, number>> = {};
-  for (const part of text.split(/[,;]/)) {
+  for (const part of text.split(/[,;]/).map(plusSlip)) {
     const match = /^\s*([A-Za-z\s]+?)\s*([+\-–—−]\s*\S+)\s*$/.exec(part);
     const ability = match
       ? closest(
@@ -675,9 +762,11 @@ function parseSaves(text: string, issues: string[]) {
 
 function parseSkills(text: string, issues: string[]) {
   const skills: Partial<Record<Skill, number>> = {};
-  for (const part of text.split(/[,;]/)) {
+  for (const part of text.split(/[,;]/).map(plusSlip)) {
     const match = /^\s*([A-Za-z\s'’]+?)\s*([+\-–—−]\s*\S+)\s*$/.exec(part);
-    const skill = match ? closest(letters(match[1]!), SKILLS, 2) : undefined;
+    // Some blocks print the verb: "Intimidate +5".
+    const name = match ? letters(match[1]!).replace(/^intimidate$/, 'intimidation') : '';
+    const skill = match ? closest(name, SKILLS, 2) : undefined;
     const value = match ? signed(match[2]!) : undefined;
     if (!skill || value === undefined) {
       if (part.trim()) issues.push(`skill not read: "${part.trim()}"`);
@@ -723,7 +812,9 @@ function parseConditions(text: string, issues: string[]): string[] {
 
 function parseSpeed(text: string, issues: string[]): Speed {
   const speed: Speed = {};
-  for (const part of text.split(/[,;]/)) {
+  // A hover note can name the trait behind it: "fly 50 ft. (hover, Some Trait)". Other
+  // parentheses can hold more speeds ("30 ft. (climb 30 ft. in bear form)"), so only this one shrinks.
+  for (const part of text.replace(/\(\s*hover\b[^)]*\)/g, '(hover)').split(/[,;]/)) {
     // OCR splits the mode word ("fl y 90 ft.").
     const match =
       /^\s*((?:[A-Za-z]+\s?)*?)\s*([\dlIOoS]{1,3})\s*ft\s*\.?\s*(\(\s*hover\s*\))?/.exec(part);
@@ -963,11 +1054,17 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
     .filter(Boolean)
     .join(' ');
   // "21 (33,000 XP)"; later books add "or 41,000 XP when encountered in lair" inside the brackets.
-  const cr = /^([\dlIOoS/\s]+?)\s*[([{]\s*([\dlIOoS,.\s]+)\s*XP\b/i.exec(challenge);
+  const cr = /^([\dlIOoS/\s]*?)\s*[([{]\s*([\dlIOoS,.\s]+)\s*XP\b/i.exec(challenge);
   if (cr) {
     // Keep printed numbers independent so validation can distinguish misreads from misprints.
-    const rating = parseCr(cr[1]!);
     const xp = toNumber(cr[2]!.replace(/[,.]/g, ''));
+    let rating = parseCr(cr[1]!.trim());
+    // "Challenges (1,800 XP)": the rating merged into the label. Each XP total above 10 belongs
+    // to one rating, so the XP gives it back.
+    if (rating === undefined && xp !== undefined && xp > 10) {
+      rating = Array.from(XP_BY_CR).find(([, value]) => value === xp)?.[0];
+      if (rating !== undefined) issues.push(`challenge rating taken from the XP: "${challenge}"`);
+    }
     if (rating === undefined || xp === undefined) issues.push(`challenge not read: "${challenge}"`);
     if (rating !== undefined) creature.cr = rating;
     if (xp !== undefined) creature.xp = xp;
@@ -994,24 +1091,48 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
 
   // Entries: traits until the first section heading, then each section's entries.
   let list: EntryList = 'traits';
-  let entry: { name: string; paren?: string; lines: string[] } | undefined;
+  // `at` marks an earlier entry taken up again: flushing it replaces that entry.
+  type Draft = { name: string; paren?: string; group?: string; lines: string[]; at?: number };
+  // A variant's own actions ("ACTIONS FOR TYPE 2") carry the variant in each entry's name.
+  let group: string | undefined;
+  const made = (draft: { name: string; paren?: string; group?: string }, text: string) => {
+    const parsed = entryOf(draft.name, draft.paren, text);
+    if (!draft.group) return parsed;
+    const name = /\)$/.test(parsed.name)
+      ? parsed.name.replace(/\(([^()]*)\)$/, `(${draft.group}, $1)`)
+      : `${parsed.name} (${draft.group})`;
+    return { ...parsed, name };
+  };
+  let entry: Draft | undefined;
   let intro: string[] | undefined;
+  // An entry that broke off mid-sentence. A sidebar or another column can sit between it and the
+  // rest of its text, which then starts in lower case right after a finished sentence.
+  let unfinished: Draft | undefined;
   // An entry that lists options ("uses one of the following breath weapons") takes the entries
   // after it that share a word of its name ("Fire Breath") into its own text.
-  let parent: { name: string; paren?: string; text: string } | undefined;
+  let parent: { name: string; paren?: string; group?: string; text: string } | undefined;
   const flush = () => {
-    if (entry) {
+    if (entry?.at !== undefined) {
+      creature[list][entry.at] = made(entry, entryText(entry.lines, vocab));
+    } else if (entry) {
       const text = entryText(entry.lines, vocab);
       const label = entry.paren ? `${entry.name} ${entry.paren}` : entry.name;
+      if (!sentenceDone) unfinished = { ...entry, at: creature[list].length };
       if (parent && sharesWord(parent.name, entry.name)) {
+        unfinished = undefined;
         parent.text += `\n${label}. ${text}`;
-        creature[list][creature[list].length - 1] = entryOf(parent.name, parent.paren, parent.text);
+        creature[list][creature[list].length - 1] = made(parent, parent.text);
       } else {
-        creature[list].push(entryOf(entry.name, entry.paren, text));
+        creature[list].push(made(entry, text));
         // "can cast the following spells" lists spells, not entries.
         parent =
           OPTIONS_FOLLOW.test(text) && !/spellcasting/i.test(entry.name)
-            ? { name: entry.name, ...(entry.paren && { paren: entry.paren }), text }
+            ? {
+                name: entry.name,
+                ...(entry.paren && { paren: entry.paren }),
+                ...(entry.group && { group: entry.group }),
+                text,
+              }
             : undefined;
       }
     }
@@ -1024,6 +1145,7 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
     intro = undefined;
   };
   let sentenceDone = true;
+  let lastText = '';
   // Inside a spell list, a line can end without a stop and the next entry still begins after it.
   let inSpellList = false;
   for (; i < raw.length; i++) {
@@ -1033,17 +1155,35 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
       flushIntro();
       parent = undefined;
       list = section;
+      group = variantOf(raw[i]!);
       intro = [];
       sentenceDone = true;
       inSpellList = false;
+      unfinished = undefined;
+      lastText = '';
       continue;
     }
     const text = cleanLine(raw[i]!, vocab);
     if (!text) continue;
     const found = entryStart(text);
+    // A lower-case name only opens an entry after a finished sentence: "a flask of alchemist's"
+    // / "fire. Ranged Weapon Attack" is one sentence going on.
     const start: ReturnType<typeof entryStart> =
-      found && (sentenceDone || isStrongStart(found)) ? found : undefined;
-    if (start) {
+      found && (sentenceDone || (isStrongStart(found) && !/^[a-z]/.test(text))) ? found : undefined;
+    const resumes =
+      !start &&
+      unfinished !== undefined &&
+      entry !== undefined &&
+      entry.at === undefined &&
+      !inSpellList &&
+      /^[a-z]/.test(text) &&
+      /[.!?]["'’”]?$/.test(lastText) &&
+      !ABBREVIATION_END.test(lastText);
+    if (resumes) {
+      flush();
+      entry = { ...unfinished!, lines: [...unfinished!.lines, text] };
+      unfinished = undefined;
+    } else if (start) {
       flush();
       flushIntro();
       // OCR lost the ACTIONS heading: the first attack or Multiattack opens the actions.
@@ -1054,7 +1194,12 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
         list = 'actions';
         issues.push('ACTIONS heading missing');
       }
-      entry = { name: start.name, ...(start.paren && { paren: start.paren }), lines: [start.rest] };
+      entry = {
+        name: start.name,
+        ...(start.paren && { paren: start.paren }),
+        ...(group && { group }),
+        lines: [start.rest],
+      };
     } else if (entry) entry.lines.push(text);
     else if (intro) intro.push(text);
     else {
@@ -1063,6 +1208,7 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
     }
     inSpellList = !start && (SPELL_LIST.test(text) || (inSpellList && /^[a-z,]/.test(text)));
     sentenceDone = inSpellList || /[.:)!?]["'’”]?$/.test(text);
+    lastText = text;
   }
   flush();
   flushIntro();
@@ -1071,4 +1217,13 @@ export function parseBlock(block: RawBlock, vocab: Vocab): ParsedCreature {
 }
 
 /** Some scans read the vertical stroke of a plus as a separate 4 before the horizontal stroke. */
-const scoreText = (line: string) => line.replace(/([({])\s*4\s*-\s*(?=[\dlIOoS][)}iIl|])/g, '$1+');
+const scoreText = (line: string) =>
+  line
+    .replace(/([({])\s*4\s*-\s*(?=[\dlIOoS][)}iIl|])/g, '$1+')
+    // A quote mark before a score is a lost "1" ("’2 (+1)").
+    .replace(/(?<![\w)])[’'‘](?=\d\s*(?:\(|H\)))/g, '1')
+    // Some scans merge a modifier's sign and digit into one "H" ("7 H)", "12 H)"). The score
+    // gives the modifier back.
+    .replace(/(?<![\d(+-])\b([1-9]|[12]\d|30)\s*H\)/g, (_, score: string) => {
+      return `${score} (${modifier(Number(score))})`;
+    });

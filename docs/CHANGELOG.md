@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-26 21:49 — Cleaner monster pack text
+
+- Rebuild your monster pack to get the fixes: lost actions, cut trait names, glued words and misread spell save DCs are repaired, and no creature in the pack is flagged any more.
+- Creatures with several forms, such as the yuan-ti malison, name each action after its form. Junk lines are gone from lore such as the Shrieker's.
+- If the reader loses text in a future pack, that creature shows "Check against the book".
+- Some lore still holds stray stat lines; these wait for the page review (Q56). Checks pass.
+
 ## 2026-11-26 11:47 — Click to pin works
 
 - "Click to pin" at the bottom of a hover preview is now a real button. Clicking it pins the details in the side panel.

@@ -5,6 +5,7 @@ import {
   applyOverrides,
   blockKey,
   confirmFindings,
+  lorePatches,
   OverridesSchema,
   reviewIndex,
 } from './overrides';
@@ -120,6 +121,33 @@ describe('validateCreature', () => {
     );
     expect(result.correction).toBeUndefined();
   });
+
+  it('asks for an attack bonus only on attacks that print one', () => {
+    const creature = block();
+    creature.actions.push(
+      { name: 'Lost Tap', text: 'Melee Weapon Attack: +? to hit. A blurred number.' },
+      { name: 'Sure Tap', text: 'Melee Weapon Attack: automatic hit, reach 5 ft.' },
+    );
+    creature.traits.push({ name: 'Keen', text: 'It has advantage on melee weapon attack rolls.' });
+    expect(validateCreature(creature).findings).toEqual([
+      expect.objectContaining({ code: 'actions:1:Lost Tap:attack' }),
+    ]);
+  });
+
+  it('finds the spellcasting ability through OCR slips', () => {
+    const creature = block();
+    creature.traits[0]!.text = "Its spell casting ability i's Intelligence (spell save DC 11).";
+    creature.traits.push({
+      name: 'Etched Glow',
+      text: 'It casts glow, using Intelligence as the spellcast- ing ability (spell save DC 10).',
+    });
+    expect(validateCreature(creature).findings).toEqual([
+      expect.objectContaining({
+        code: 'traits:0:Etched Spark:spell-dc',
+        message: expect.stringContaining('read 11, expected 10'),
+      }),
+    ]);
+  });
 });
 
 it('reports missing indexed forms and duplicate blocks without merging numbered forms', () => {
@@ -178,6 +206,30 @@ it('keeps review exceptions tied to an exact finding and permits explicit index 
       OverridesSchema.parse({ index: { 'Dust Wisp': { kind: 'missing', page: 9, reason: 'x' } } }),
     ),
   ).toThrow('Index already lists Dust Wisp');
+});
+
+it('reads lore fixes keyed by printed page and line', () => {
+  const overrides = OverridesSchema.parse({
+    lore: {
+      '12:CHALK SENTRIES': { title: 'Chalk Sentries', reason: 'Damaged heading' },
+      '14:Dust wisps drift: over ruins': { reason: 'Heading lost; text is another family' },
+      '15:CHALK HOUND': { as: 'section', reason: 'Creature heading set as large as a family' },
+      '15:Chalk, 1 cp': { as: 'drop', reason: 'Price line from a table' },
+    },
+  });
+  expect(lorePatches(overrides)).toEqual([
+    { page: 12, text: 'CHALK SENTRIES', title: 'Chalk Sentries' },
+    { page: 14, text: 'Dust wisps drift: over ruins' },
+    { page: 15, text: 'CHALK HOUND', as: 'section' },
+    { page: 15, text: 'Chalk, 1 cp', as: 'drop' },
+  ]);
+  expect(OverridesSchema.safeParse({ lore: { 'CHALK SENTRIES': { reason: 'x' } } }).success).toBe(
+    false,
+  );
+  expect(
+    OverridesSchema.safeParse({ lore: { '15:Chalk': { as: 'drop', title: 'Chalk', reason: 'x' } } })
+      .success,
+  ).toBe(false);
 });
 
 it('requires the full stat card for a block missing from the PDF text', () => {

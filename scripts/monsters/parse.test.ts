@@ -61,6 +61,13 @@ describe('entryStart', () => {
     expect(entryStart('Hit. The blow lands.')).toBeUndefined();
     expect(entryStart('heals. Then it rests.')).toBeUndefined();
   });
+
+  it('keeps a numbered option inside the entry that lists it', () => {
+    expect(entryStart('1. Glare Beam. The target blinks.')).toBeUndefined();
+    expect(entryStart('10. Dust Beam. The target sneezes.')).toBeUndefined();
+    // OCR reads a 5 as an S.
+    expect(entryStart('S. Hush Beam. The target falls quiet.')).toBeUndefined();
+  });
 });
 
 describe('small readers', () => {
@@ -87,6 +94,13 @@ describe('small readers', () => {
     expect(fixSpellHead('lst level .(l slot): sleep')).toBe('1st level (1 slot): sleep');
     expect(fixSpellHead('Cantrips (at wi ll): light')).toBe('Cantrips (at will): light');
     expect(fixSpellHead('At will : mage hand')).toBe('At will: mage hand');
+    expect(fixSpellHead('2fd ay each: fear')).toBe('2/day each: fear');
+    expect(fixSpellHead('lst- Sth level (25th-level slots): blight')).toBe(
+      '1st-5th level (2 5th-level slots): blight',
+    );
+    expect(fixSpellHead('Cantrip (at will): light')).toBe('Cantrips (at will): light');
+    expect(fixSpellHead('Cantrips (at-wi ll ): light')).toBe('Cantrips (at will): light');
+    expect(fixSpellHead(') 1fday: fog cloud')).toBe('1/day: fog cloud');
   });
 
   it('runs every in-line repair', () => {
@@ -169,7 +183,7 @@ describe('parseBlock', () => {
     'Speed 30 ft., fl y 60 ft.',
     'STR DEX CON INT WIS CHA',
     '14 (+2) 16 (.+3) 12 (+1i 4. (-3) 13 (+1) 6 (-2)',
-    'Skills Perception +5, Stealth +5',
+    'Skills Intimidate +0, Perception +5, Stealth 4-5',
     'Damage Resistances cold; bludgeoning, piercing, and slashing from nonmagical attacks',
     'Condition Immunities charmed, frightened',
     'Senses darkvision 60 ft., passive Perception 14',
@@ -218,7 +232,7 @@ describe('parseBlock', () => {
       hpFormula: '6d8+6',
       speed: { walk: 30, fly: 60 },
       abilities: { STR: 14, DEX: 16, CON: 12, INT: 4, WIS: 13, CHA: 6 },
-      skills: { perception: 5, stealth: 5 },
+      skills: { intimidation: 0, perception: 5, stealth: 5 },
       resistances: ['cold', 'bludgeoning, piercing, and slashing from nonmagical attacks'],
       conditionImmunities: ['charmed', 'frightened'],
       languages: "understands Sylvan but can't speak",
@@ -260,6 +274,30 @@ describe('parseBlock', () => {
     expect(stalker.issues).toEqual(['passive Perception read 14, worked out 15']);
   });
 
+  it('splits merged spell list lines and keeps prose from beside the list out of it', () => {
+    const lines = [
+      'Armor Class 12',
+      'Hit Points 9 (2d6 + 2)',
+      'Innate Spellcasting. The wisp casts these spells, needing no components: At will: light,',
+      'mage hand lfday each: fog cloud',
+      '3fday: sleep (only on itself and one',
+      'creature that is willing)',
+      'hunters that are patient and',
+      'it regains them at dawn.',
+      'ACTIONS',
+      'Touch. Melee Spell Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) cold damage.',
+    ];
+    const local = new Vocab();
+    local.addTrusted(lines.join(' '));
+    const wisp = parseBlock(block(lines), local);
+    expect(wisp.traits[0]!.text).toBe(
+      'The wisp casts these spells, needing no components:' +
+        '\n\n- At will: light, mage hand\n- 1/day each: fog cloud' +
+        '\n- 3/day: sleep (only on itself and one creature that is willing)' +
+        '\nhunters that are patient and it regains them at dawn.',
+    );
+  });
+
   it('flags what OCR lost and keeps the printed CR and XP for review', () => {
     const toad = parseBlock(
       block([
@@ -270,9 +308,18 @@ describe('parseBlock', () => {
         'Languages lgnan, Ore',
         'Challenge 5 (100 XP)',
         'Bite. Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.',
+        'Tongue. Melee Weapon Attack. +1 2 t0 hit, reach 10 ft., one target. Hit: 2 bludgeoning damage.',
+        'Spit. Ranged Weapon Attack: +JO to hit, range 20 ft., one target. Hit: 2 acid damage.',
       ]),
       new Vocab(),
     );
+    expect(toad.actions.slice(1)).toMatchObject([
+      {
+        attackBonus: 12,
+        text: 'Melee Weapon Attack: +12 to hit, reach 10 ft., one target. Hit: 2 bludgeoning damage.',
+      },
+      { attackBonus: 10, text: expect.stringMatching(/^Ranged Weapon Attack: \+10 to hit,/) },
+    ]);
     expect(toad).toMatchObject({
       speed: { walk: 20, swim: 30 },
       abilities: { STR: 10, DEX: 12, CON: 10, INT: 2, WIS: 8, CHA: 4 },
@@ -281,12 +328,117 @@ describe('parseBlock', () => {
       xp: 100,
       senses: { passivePerception: 9 },
     });
-    expect(toad.actions.map((entry) => entry.name)).toEqual(['Bite']);
+    expect(toad.actions.map((entry) => entry.name)).toEqual(['Bite', 'Tongue', 'Spit']);
     expect(toad.issues).toEqual([
       'type line missing',
       'passive Perception worked out from Wisdom',
       'ACTIONS heading missing',
     ]);
+  });
+
+  it('mends a glued label, merged modifiers and a rating lost into its label', () => {
+    const newt = parseBlock(
+      block([
+        'ArmorClassll',
+        'Hit Points 7 (2d6)',
+        'Speed 20 ft.',
+        '10 (+0) ’2 H) 10 (+0) 2 H) 8 (-1) 4H)',
+        'Challenges (1,800 XP)',
+        'ACTIONS',
+        'Bite. Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.',
+      ]),
+      new Vocab(),
+    );
+    expect(newt).toMatchObject({
+      ac: 11,
+      abilities: { STR: 10, DEX: 12, CON: 10, INT: 2, WIS: 8, CHA: 4 },
+      printedModifiers: { DEX: 1, INT: -4, CHA: -3 },
+      cr: 5,
+      xp: 1800,
+    });
+    expect(newt.issues).toContain('challenge rating taken from the XP: "(1,800 XP)"');
+  });
+
+  it('reads a hover note that names the trait behind it', () => {
+    const kite = parseBlock(
+      block([
+        'Armor Class 12',
+        'Hit Points 9 (2d6 + 2)',
+        'Speed 10 ft., fly 40 ft. (hover, Kite Cloak), swim 20 ft.',
+        '10 (+0) 12 (+1) 10 (+0) 2 (-4) 8 (-1) 4 (-3)',
+        'Challenge 1/8 (25 XP)',
+      ]),
+      new Vocab(),
+    );
+    expect(kite.speed).toEqual({ walk: 10, fly: 40, hover: true, swim: 20 });
+    expect(kite.issues.filter((issue) => issue.startsWith('speed'))).toEqual([]);
+  });
+
+  it('takes up an entry again when its lower-case rest follows another entry', () => {
+    const lines = [
+      'Armor Class 12',
+      'Hit Points 9 (2d6 + 2)',
+      'ACTIONS',
+      'Grip. Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) bludgeoning',
+      'damage. If the target is Small or smaller,',
+      'Mire Lore (1/Day). A sidebar entry that ends in a full stop.',
+      'it is grappled (escape DC 12).',
+      'Croak. The toad croaks within 5 ft.',
+      'of a creature it can see.',
+    ];
+    const local = new Vocab();
+    local.addTrusted(lines.join(' '));
+    const toad = parseBlock(block(lines), local);
+    expect(toad.actions.map((entry) => [entry.name, entry.text])).toEqual([
+      [
+        'Grip',
+        'Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) bludgeoning ' +
+          'damage. If the target is Small or smaller, it is grappled (escape DC 12).',
+      ],
+      ['Mire Lore', 'A sidebar entry that ends in a full stop.'],
+      ['Croak', 'The toad croaks within 5 ft. of a creature it can see.'],
+    ]);
+  });
+
+  it('keeps numbered options and a sentence running onto a lower-case attack line in one entry', () => {
+    const lines = [
+      'Armor Class 12',
+      'Hit Points 9 (2d6 + 2)',
+      'ACTIONS',
+      'Tinker Kit. The gnome uses one of the following options:',
+      '1. Glue Pot. The gnome throws a pot of sticky',
+      'glue. Ranged Weapon Attack: +4 to hit, range 5/20 ft., one target. Hit: 2 (1d4) acid damage.',
+      'S. Spring Coil. The gnome bounces 10 feet.',
+      'Poke. Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage.',
+    ];
+    const local = new Vocab();
+    local.addTrusted(lines.join(' '));
+    const gnome = parseBlock(block(lines), local);
+    expect(gnome.actions.map((entry) => entry.name)).toEqual(['Tinker Kit', 'Poke']);
+    expect(gnome.actions[0]!.text).toContain('1. Glue Pot.');
+    expect(gnome.actions[0]!.text).toContain('sticky glue. Ranged Weapon Attack');
+  });
+
+  it("names each variant's actions after the variant", () => {
+    const lines = [
+      'Armor Class 12',
+      'Hit Points 9 (2d6 + 2)',
+      'ACTIONS FOR FORM 1',
+      'Peck (Bird Form Only). Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.',
+      'ACT IONS FOR F O RM 2',
+      'Kick. Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.',
+      'REACTIONS',
+      'Hop. The pooka moves 5 feet.',
+    ];
+    const local = new Vocab();
+    local.addTrusted(lines.join(' '));
+    const pooka = parseBlock(block(lines), local);
+    expect(pooka.actions.map((entry) => entry.name)).toEqual([
+      'Peck (Form 1, Bird Form Only)',
+      'Kick (Form 2)',
+    ]);
+    expect(pooka.actions[1]!.attackBonus).toBe(4);
+    expect(pooka.reactions.map((entry) => entry.name)).toEqual(['Hop']);
   });
 
   it('reads a lost language list as none, and flags a block with no actions', () => {

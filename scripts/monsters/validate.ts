@@ -227,7 +227,11 @@ function collect(creature: NamedCreature) {
   return { findings, candidates };
 }
 
-const spellAbility = (text: string): Ability | undefined => {
+const spellAbility = (raw: string): Ability | undefined => {
+  // OCR slips the text keeps: "spell casting", "spellcast- ing", "ability i's".
+  const text = raw
+    .replace(/\bspell[\s·•-]*cast[\s·•-]*ing\b/gi, 'spellcasting')
+    .replace(/\bi's\b/g, 'is');
   const match =
     /spellcasting ability (?:is|uses) (strength|dexterity|constitution|intelligence|wisdom|charisma)\b/i.exec(
       text,
@@ -250,16 +254,19 @@ function checkEntries(
   for (const list of ENTRY_LISTS) {
     for (const [i, entry] of creature[list].entries()) {
       const field = `${list}:${i}:${entry.name}`;
-      const attack = /\b(?:melee|ranged)(?:\s+or\s+ranged)?\s+(weapon|spell)\s+attack\b/i.exec(
+      // Only an entry that is an attack: a trait may mention "melee weapon attack rolls".
+      const attack = /^(?:melee|ranged)(?:\s+or\s+ranged)?\s+(weapon|spell)\s+attack\b/i.exec(
         entry.text,
       );
       if (attack) {
         const weapon = attack[1]!.toLowerCase() === 'weapon';
         const abilities = weapon ? (['STR', 'DEX'] as const) : caster.length === 1 ? caster : [];
         const mods = abilities.flatMap((ability) => mod(ability) ?? []);
-        if (entry.attackBonus === undefined)
-          add(`${field}:attack`, `${entry.name}: attack bonus was not read.`);
-        else {
+        if (entry.attackBonus === undefined) {
+          // Some attacks print no number: "automatic hit", "bonus to hit equal to ...".
+          if (!/automatic hit|to hit equal/i.test(entry.text.slice(0, 80)))
+            add(`${field}:attack`, `${entry.name}: attack bonus was not read.`);
+        } else {
           check(
             `${field}:attack`,
             entry.attackBonus,

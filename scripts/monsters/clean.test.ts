@@ -151,6 +151,11 @@ describe('fixWords', () => {
     expect(fixWords('it exbales', vocab)).toBe('it exhales');
     expect(fixWords('Exbales', vocab)).toBe('Exbales');
   });
+
+  it('reads a slash or a one inside a word as an l, only when that makes a word', () => {
+    expect(fixWords('a po/earm, it fai1s', vocab)).toBe('a polearm, it fails');
+    expect(fixWords('arm/leg and/or 1/2', vocab)).toBe('arm/leg and/or 1/2');
+  });
 });
 
 describe('joinLines', () => {
@@ -159,6 +164,13 @@ describe('joinLines', () => {
   it('drops a line-end hyphen only when the halves make a word', () => {
     expect(joinLines(['three bar-', 'ghests howl'], vocab)).toBe('three barghests howl');
     expect(joinLines(['a soul-', 'devouring blade'], vocab)).toBe('a soul-devouring blade');
+  });
+
+  it('reads a middle dot at a line end as that hyphen', () => {
+    expect(joinLines(['three bar·', 'ghests howl'], vocab)).toBe('three barghests howl');
+    expect(joinLines(['a soul•', 'devouring blade'], vocab)).toBe('a soul-devouring blade');
+    expect(joinLines(['it regains its bre·', 'eth'], vocab)).toBe('it regains its breath');
+    expect(joinLines(['it takes a pole·', 'armand'], vocab)).toBe('it takes a polearm and');
   });
 
   it('joins a word split across lines without a hyphen, unless both halves are words', () => {
@@ -178,6 +190,7 @@ describe('tidy and stripTrailingJunk', () => {
     expect(tidy("It can 't fly")).toBe("It can't fly");
     expect(tidy('{3d6} mud·eel')).toBe('(3d6) mud-eel');
     expect(tidy('15,natural')).toBe('15, natural');
+    expect(tidy('Aura ofEmbers, theRed Hall')).toBe('Aura of Embers, the Red Hall');
   });
 
   it('drops stray marks at a line end', () => {

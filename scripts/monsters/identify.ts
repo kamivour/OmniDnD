@@ -58,6 +58,14 @@ const wordShare = (name: string, vocab: Vocab) => {
 /** Singular, letters only: "Dragons" -> "dragon", "Harpies" stays near enough. */
 const stem = (word: string) => letters(word).replace(/(?:ies|es|s)$/, '');
 
+/** One form for singular and plural, for comparing words: "Ogres"/"Ogre", "Wolves"/"Wolf". */
+const singular = (word: string) =>
+  letters(word)
+    .replace(/(?<!s)s$/, '')
+    .replace(/ie$/, 'y')
+    .replace(/ve$/, 'f')
+    .replace(/(?<=s|x|ch|sh|z)e$/, '');
+
 const matchCase = (like: string, word: string) =>
   /^[A-Z]/.test(like) ? word.charAt(0).toUpperCase() + word.slice(1) : word;
 
@@ -355,7 +363,9 @@ export function nameBlocks(
 /**
  * Moves each block to the lore family whose title its name holds ("Adult Black Dragon" under
  * "Black Dragon"), looking two pages either way: books print a block before or beside its
- * family heading. Blocks with no such family keep the last heading before them.
+ * family heading. A title that is the block's whole name looks five pages: a page of short
+ * entries can come well before their blocks. Blocks with no such family keep the last heading
+ * before them.
  */
 export function assignFamilies(creatures: NamedCreature[], families: readonly LoreFamily[]): void {
   for (const creature of creatures) {
@@ -363,24 +373,113 @@ export function assignFamilies(creatures: NamedCreature[], families: readonly Lo
     const words = new Set(
       creature.name
         .split(/[\s,()-]+/)
-        .map(stem)
+        .map(singular)
         .filter(Boolean),
     );
     let best: { index: number; size: number; gap: number } | undefined;
     families.forEach((family, index) => {
       if (!family.title) return;
       const gap = Math.abs(family.page - creature.page);
-      if (gap > 2) return;
       const title = family.title
         .split(/[\s,()-]+/)
-        .map(stem)
+        .map(singular)
         .filter(Boolean);
+      if (gap > (new Set(title).size === words.size ? 5 : 2)) return;
       if (title.length === 0 || !title.every((word) => words.has(word))) return;
       const size = title.join('').length;
       if (!best || size > best.size || (size === best.size && gap < best.gap)) {
         best = { index, size, gap };
       }
     });
-    if (best) creature.family = best.index;
+    if (best) {
+      creature.family = best.index;
+      continue;
+    }
+    // Else a nearby family that gives it a section ("ARCANALOTH") or a run-in lead ("Ghasts.").
+    const own = [...words].join('');
+    if (!own) continue;
+    const named = (text: string) =>
+      text
+        .split(/[\s,()-]+/)
+        .map(singular)
+        .join('') === own;
+    let near: { index: number; gap: number } | undefined;
+    families.forEach((family, index) => {
+      const gap = Math.abs(family.page - creature.page);
+      if (gap > 2 || (near && gap >= near.gap && index !== creature.family)) return;
+      const holds = family.sections.some(
+        (section) =>
+          (section.title !== undefined && named(section.title)) ||
+          section.lines.some((line) => named(/^([^.]{1,40})\.\s/.exec(line.t)?.[1] ?? '')),
+      );
+      if (holds) near = { index, gap: index === creature.family ? -1 : gap };
+    });
+    if (near) creature.family = near.index;
   }
+}
+
+/** "Hag" -> "Hags", "Harpy" -> "Harpies", "Wolf" -> "Wolves". */
+function plural(name: string): string {
+  if (/[^aeiou]y$/i.test(name)) return `${name.slice(0, -1)}ies`;
+  if (/(?:s|x|ch|sh)$/i.test(name)) return `${name}es`;
+  if (/[^f]f$/i.test(name)) return `${name.slice(0, -1)}ves`;
+  return `${name}s`;
+}
+
+/** Every run of words in the index names, with its plural: family titles are built from them. */
+function titleCandidates(names: readonly string[]): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const name of names) {
+    const parts = name.split(/\s+/).filter(Boolean);
+    for (let from = 0; from < parts.length; from++) {
+      for (let to = from + 1; to <= parts.length; to++) {
+        const run = parts.slice(from, to).join(' ');
+        for (const form of [run, plural(run)]) {
+          if (!out.has(letters(form))) out.set(letters(form), form);
+        }
+      }
+    }
+  }
+  return out;
+}
+
+/**
+ * Repairs a family title OCR damaged ("Hippo Griff", "DEVfLS", "Ske:lie.t:,ons . . 1,'") from
+ * the book's index names. A title made of known words is left alone ("Slaadi" is not a slip for
+ * "Slaads"); a repair must be the single closest name, at most two letters off.
+ */
+export function repairTitle(title: string, names: readonly string[], vocab: Vocab): string {
+  const text = title
+    .replace(/^[^\p{L}\d]+|[^\p{L})]+$/gu, '')
+    .replace(/(?<!\p{L})0(?=\p{L})/gu, 'O')
+    .replace(/(?<=\p{L})0/gu, 'o')
+    .replace(/\s+/g, ' ');
+  const parts = text.split(' ');
+  const known = parts.every((word, k) => {
+    const core = letters(word);
+    if (!core) return true;
+    // "GNOL,LS" spells a word only once the slip inside it is dropped.
+    if (/\p{L}[^\p{L}'’-]+\p{L}/u.test(word)) return false;
+    return core.length === 1 ? k === 0 && core === 'a' : vocab.isWord(core);
+  });
+  const key = letters(text);
+  if (!known && key.length >= 4) {
+    const limit = key.length < 8 ? 1 : 2;
+    let best: { form: string; distance: number; tied: boolean } | undefined;
+    for (const [candidate, form] of titleCandidates(names)) {
+      if (Math.abs(candidate.length - key.length) > limit) continue;
+      const distance = editDistance(candidate, key);
+      if (distance > limit || (best && distance > best.distance)) continue;
+      best = { form, distance, tied: best?.distance === distance };
+    }
+    if (best && !best.tied) return best.form;
+  }
+  // "CusTOMIZING NPCs" -> "Customizing NPCs"; a capitals word with a plural s stays as it is.
+  return parts
+    .map((word) =>
+      /\p{Lu}.*\p{Lu}/u.test(word) && /\p{Ll}(?!s?\W*$)/u.test(word)
+        ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        : word,
+    )
+    .join(' ');
 }

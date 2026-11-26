@@ -297,9 +297,19 @@ export function fixWords(text: string, vocab: Vocab): string {
       i += join.span - 1;
     }
     const match = /^([^A-Za-z]*)([A-Za-z]+)([^A-Za-z]*)$/.exec(token);
-    out.push(match ? match[1]! + repairWord(match[2]!, vocab) + match[3]! : token);
+    out.push(
+      match ? match[1]! + repairWord(match[2]!, vocab) + match[3]! : slashForL(token, vocab),
+    );
   }
   return out.join(' ');
+}
+
+/** "Spel/casting", "fireba/1": OCR reads an l as a slash or a one inside a word. */
+function slashForL(token: string, vocab: Vocab): string {
+  const match = /^([^A-Za-z]*)([A-Za-z][A-Za-z/|1]*[A-Za-z/|1])([^A-Za-z/|1]*)$/.exec(token);
+  if (!match || !/[/|1]/.test(match[2]!)) return token;
+  const word = match[2]!.replace(/[/|1]/g, 'l');
+  return vocab.isTrusted(word) ? match[1]! + word + match[3]! : token;
 }
 
 /** "(Perce" "ption)" -> "(Perception)", when the pieces are not all words and the whole is. */
@@ -359,6 +369,8 @@ function repairWord(word: string, vocab: Vocab): string {
  * Joins the lines of one paragraph. A hyphen at a line end is dropped when the halves make a
  * known word ("bar-" "ghests") and kept when they do not ("soul-" "devouring"). MPMM's text
  * layer drops those hyphens, so a known word split across lines is joined too ("win" "dow").
+ * OCR can read that hyphen as a middle dot ("Cha·" "risma"). A dot also means the line was
+ * misread, so halves that make no word get the usual one-slip repair ("ne·" "erotic").
  */
 export function joinLines(lines: readonly string[], vocab: Vocab): string {
   let out = '';
@@ -369,14 +381,19 @@ export function joinLines(lines: readonly string[], vocab: Vocab): string {
       out = line;
       continue;
     }
-    const tail = /([A-Za-z]+)(-?)$/.exec(out);
+    const tail = /([A-Za-z]+)([-·•]?)$/.exec(out);
     const head = /^([a-z]+)/.exec(line);
     if (tail && head) {
       const [, before, hyphen] = tail as unknown as [string, string, string];
       const [, after] = head as unknown as [string, string];
       const whole = before + after;
+      const repaired = hyphen && hyphen !== '-' && !vocab.isWord(whole) && repairWord(whole, vocab);
+      if (repaired && repaired !== whole) {
+        out = out.slice(0, -before.length - 1) + repaired + line.slice(after.length);
+        continue;
+      }
       if (hyphen) {
-        out = vocab.isWord(whole) ? out.slice(0, -1) + line : out + line;
+        out = out.slice(0, -1) + (vocab.isWord(whole) ? '' : '-') + line;
         continue;
       }
       if (vocab.isWord(whole) && !(vocab.isTrusted(before) && vocab.isTrusted(after))) {
@@ -391,24 +408,28 @@ export function joinLines(lines: readonly string[], vocab: Vocab): string {
 
 /** Spacing and punctuation tidy-up: "40ft.," -> "40 ft.,", "( natural" -> "(natural". */
 export function tidy(text: string): string {
-  return text
-    .replace(/[{]/g, '(')
-    .replace(/[}]/g, ')')
-    .replace(/[’‘]/g, "'")
-    .replace(/[“”]/g, '"')
-    .replace(/(?<=[a-z])[·•](?=[a-z])/g, '-')
-    .replace(/([A-Za-z])\s+(n?'t)\b/g, '$1$2')
-    .replace(/([a-z]{3,})(\d)/g, '$1 $2')
-    .replace(/(\d)\s*ft\b/g, '$1 ft')
-    .replace(/(\d)feet\b/g, '$1 feet')
-    .replace(/\bft\s*\.\s*/g, 'ft. ')
-    .replace(/\(\s+/g, '(')
-    .replace(/\s+\)/g, ')')
-    .replace(/\s+([,.;:])/g, '$1')
-    .replace(/([,;:])(?=[A-Za-z(])/g, '$1 ')
-    .replace(/\s+/g, ' ')
-    .replace(/ft\. ([,;:)])/g, 'ft.$1')
-    .trim();
+  return (
+    text
+      .replace(/[{]/g, '(')
+      .replace(/[}]/g, ')')
+      .replace(/[’‘]/g, "'")
+      .replace(/[“”]/g, '"')
+      .replace(/(?<=[a-z])[·•](?=[a-z])/g, '-')
+      .replace(/([A-Za-z])\s+(n?'t)\b/g, '$1$2')
+      .replace(/([a-z]{3,})(\d)/g, '$1 $2')
+      // "Aura ofShrieks": OCR dropped the space after a small word.
+      .replace(/\b(of|the|and)(?=[A-Z][a-z])/g, '$1 ')
+      .replace(/(\d)\s*ft\b/g, '$1 ft')
+      .replace(/(\d)feet\b/g, '$1 feet')
+      .replace(/\bft\s*\.\s*/g, 'ft. ')
+      .replace(/\(\s+/g, '(')
+      .replace(/\s+\)/g, ')')
+      .replace(/\s+([,.;:])/g, '$1')
+      .replace(/([,;:])(?=[A-Za-z(])/g, '$1 ')
+      .replace(/\s+/g, ' ')
+      .replace(/ft\. ([,;:)])/g, 'ft.$1')
+      .trim()
+  );
 }
 
 /** Stray marks OCR leaves at a line end: bullets, tildes, quote marks, scraps of rules. */

@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D276 | 2026-11-26 | Monster stat blocks keep what the page prints: a spell save DC that breaks the formula but matches the page stays, and a "pick one" line (a skill choice, a challenge rating by color) becomes a short trait. | Players see what the book shows; nothing is guessed |
 | D275 | 2026-11-26 | "Add to encounter" in the Compendium adds one copy with average hit points, and only while a character's encounter tracker runs. Several copies and rolled hit points stay on the Combat screen. | Keeps one simple button; the tracker already handles the rest |
 | D274 | 2026-11-26 | The Monster Manual is always on, like the PHB. Volo's, Tome of Foes and Monsters of the Multiverse are campaign book choices; a monster shows when any book it is printed in is on. | Every table uses the Monster Manual; the others vary by DM |
 | D273 | 2026-11-25 | When a stat block's printed passive Perception disagrees with its Wisdom and Perception bonus, the worked-out value wins and the block is flagged for review. | Misprints and OCR slips are more common than real exceptions |
@@ -333,15 +334,16 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q53 | When will someone check the 289 monster stat block findings that need the printed page (lost type lines, ability scores, challenge)? | Before relying on the monster pack | Use the SRD or a newer printing when one exists. Mark other flagged creatures "Check against the book". Leave out creatures still missing core stats, and list them in the pack manifest. | User |
 | Q54 | About 16 pack creatures have a damaged type line (for example "ciant"). Fix them by hand, or wait for the Q53 page review? | Q53 review | Show them under the "Other" type filter until the page review fixes them | User |
 | Q55 | Monster pack issues found after M50, beyond Q53 and Q54 (checklist below). Which can be fixed before the page review? | Before relying on the monster pack | Fix what the parser and the private overrides can fix. Mark the rest "Check against the book". | User |
+| Q56 | Monster pack leftovers after Q55: stat lines still leak into about 10 lore entries (for example the Firenewts and the Morkoth), a few blocks show a sidebar, another creature's lair action or a damaged title, and many printed skill and attack slips are only in the review report. Fix them in the page review? | Q53 review | Ship as is; the review report lists them | User |
 
 ### Q55 checklist
 
-- [ ] About 85 pack creatures have lost or misplaced text with no flag: a missing ACTIONS heading, a cut trait start, unread skills, saves or attack bonuses. Some notes are false alarms.
-- [ ] About 20 spell save DCs do not match the formula, and spell lists may have OCR slips.
+- [x] About 85 pack creatures have lost or misplaced text with no flag: a missing ACTIONS heading, a cut trait start, unread skills, saves or attack bonuses. Some notes are false alarms. Fixed or confirmed against the page; text the reader still loses now shows "Check against the book" (none in the current pack).
+- [x] About 20 spell save DCs do not match the formula, and spell lists may have OCR slips. OCR slips fixed; DCs that match the page stay as printed (D276).
 - [x] 13 subtypes are cut or misspelled, for example "(mind flayer", and lycanthropes lose "shapechanger". Misread alignments ("urraligned") are fixed too.
 - [x] Lycanthropes show twice: the pack's full entry and the SRD entry for each form.
 - [x] 24 SRD entries have no book page or lore: the lycanthrope and vampire forms, four swarms, Ice Mephit and Giant Rat (Diseased).
-- [ ] Junk lines leak into some lore, for example the Shrieker's.
+- [x] Junk lines leak into some lore, for example the Shrieker's. Art labels and stray stat lines are dropped; the leftovers are in Q56.
 - [x] 8 stat blocks have no name in their book's index (MM 5, VGM 1, MPMM 2). The Half-Ogre, unnamed before, now ships too.
 - [x] A pack file with the wrong format version gets the generic "not a monster pack" error.
 - [x] About 40 creature names were damaged ("Ore War Chief", "Drow Priestess oflolth") or kept an older printing's short name beside the newer one ("Bronze Scout" and "Clockwork Bronze Scout").

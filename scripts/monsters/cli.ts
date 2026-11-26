@@ -18,25 +18,27 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { joinLines, Vocab } from './clean.ts';
+import { Vocab } from './clean.ts';
 import { extractBook, type ExtractedBook } from './extract.ts';
 import { compareGold, formatReport, type GoldCreature } from './gold.ts';
-import { assignFamilies, nameBlocks, type NamedCreature } from './identify.ts';
+import { assignFamilies, nameBlocks, repairTitle, type NamedCreature } from './identify.ts';
 import { expectedNames, type BookConfig, type IndexEntry } from './names.ts';
 import {
   additionalBlocks,
   applyOverrides,
   blockKey,
   confirmFindings,
+  lorePatches,
   OverridesSchema,
   reviewIndex,
 } from './overrides.ts';
 import { buildPack, PACK_BOOKS, type PackLoreFamily } from './pack.ts';
-import { cleanLine, parseBlock } from './parse.ts';
+import { buildLore } from './lore.ts';
+import { parseBlock } from './parse.ts';
 import { compareReprints } from './reprints.ts';
 import { renderPages, reviewHtml, reviewPages, type ReviewReport } from './review.ts';
 import { segment } from './segment.ts';
-import { indexCoverage, validateCreature } from './validate.ts';
+import { indexCoverage, nameKey, validateCreature } from './validate.ts';
 
 export const BOOKS = ['MM', 'VGM', 'MTF', 'MPMM'] as const;
 export type Book = (typeof BOOKS)[number];
@@ -88,15 +90,20 @@ function parseBook(book: Book, vocab: Vocab) {
   const { pages } = readJson<ExtractedBook>(`${work}/pages.json`);
   const inBlocks = (printed: number) =>
     config.statBlocks.some(([first, last]) => printed >= first && printed <= last);
-  const { blocks, families } = segment(
+  const segmented = segment(
     pages
       .map((page) => ({ ...page, printed: page.n - config.offset }))
       .filter((page) => inBlocks(page.printed)),
+    lorePatches(overrides),
   );
+  const { blocks } = segmented;
   const parsed = blocks.map((block) => parseBlock(block, vocab));
-  const named = nameBlocks(parsed, expected, srdCreatures(), vocab);
-  const creatures = applyOverrides(named, overrides);
   const added = additionalBlocks(overrides, config.offset, pages.length);
+  // A hand-restored card already holds its index name, so no unheaded block may take it.
+  const restored = new Set(added.map((creature) => nameKey(creature.name ?? '')));
+  const open = expected.filter((entry) => !restored.has(nameKey(entry.name)));
+  const named = nameBlocks(parsed, open, srdCreatures(), vocab);
+  const creatures = applyOverrides(named, overrides);
   const keys = named.map(blockKey);
   const parsedKeys = new Set(keys);
   for (const creature of added) {
@@ -105,18 +112,13 @@ function parseBook(book: Book, vocab: Vocab) {
     keys.push(key);
   }
   creatures.push(...added);
+  // Titles are repaired from the cleaned creature names: index lines carry OCR slips too.
+  const names = creatures.flatMap((creature) => (creature.name ? [creature.name] : []));
+  const families = segmented.families.map((family) =>
+    family.title ? { ...family, title: repairTitle(family.title, names, vocab) } : family,
+  );
   assignFamilies(creatures, families);
-  const lore = families.map((family) => ({
-    ...(family.title !== undefined && { title: family.title }),
-    page: family.page,
-    sections: family.sections.map((section) => ({
-      ...(section.title !== undefined && { title: section.title }),
-      text: joinLines(
-        section.lines.map((line) => cleanLine(line.t, vocab)),
-        vocab,
-      ),
-    })),
-  }));
+  const lore = buildLore(families, vocab, names);
   return {
     creatures,
     lore,

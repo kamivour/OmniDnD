@@ -52,6 +52,22 @@ export interface Segmented {
   families: LoreFamily[];
 }
 
+/**
+ * A reviewer's fix for a family heading that OCR lost, damaged or made up. `text` is the
+ * heading as OCR read it, or the first words of the lore line that opens a family whose heading
+ * was lost. With a `title`, the heading is renamed or the line opens a family of that name.
+ * Without one, the heading line is dropped or the line opens an untitled family that no creature
+ * links to. `as: 'section'` keeps the line as a section heading of the family before it (a
+ * creature heading OCR set as large as a family's), and `as: 'drop'` drops any line.
+ */
+export interface LorePatch {
+  /** Printed page of the line. */
+  page: number;
+  text: string;
+  title?: string;
+  as?: 'section' | 'drop';
+}
+
 /** Letters only, lower case: OCR splits words and drops punctuation unpredictably. */
 export const letters = (text: string) => text.toLowerCase().replace(/[^a-z]/g, '');
 
@@ -70,12 +86,13 @@ export function startsLike(text: string, keyword: string): boolean {
 
 /**
  * A property line: opens with a capital, with its number close behind. "hit points or fewer"
- * and "(2d8 + 2) hit points." are prose.
+ * and "(2d8 + 2) hit points." are prose. OCR can read the number as letters glued to the label
+ * ("Armor Classll").
  */
 const property = (text: string, label: string) =>
   startsLike(text, label) &&
   /^\W{0,2}[A-Z]/.test(text) &&
-  /^.{0,22}(?:\d|\s[IlOo](?:\s|[().]|$))/.test(text.trim());
+  /^.{0,22}(?:\d|\s[IlOo](?:\s|[().]|$)|(?:ss|ts)[IlO]{1,2}(?=[\s(]|$))/.test(text.trim());
 export const isArmorClass = (text: string) => property(text, 'Armor Class');
 export const isHitPoints = (text: string) => property(text, 'Hit Points');
 
@@ -121,9 +138,17 @@ export const SECTIONS = {
 } as const;
 export type SectionKey = (typeof SECTIONS)[keyof typeof SECTIONS];
 
+/** "ACTIONS FOR TYPE 2" heads one variant's actions; OCR can space it apart. Returns "Type 2". */
+export function variantOf(text: string): string | undefined {
+  const match = /^ACTIONSFOR([A-Z]+)(\d+)$/.exec(text.replace(/\s+/g, ''));
+  return match ? `${match[1]![0]}${match[1]!.slice(1).toLowerCase()} ${match[2]}` : undefined;
+}
+
 /** The block section a heading line opens ("ACT IONS", "Legendary Actions"), if any. */
 export function sectionOf(text: string): SectionKey | undefined {
-  if (words(text).length > 4) return undefined;
+  if (variantOf(text)) return 'actions';
+  // OCR can break a capitals heading into letter pairs ("A CT IO N S").
+  if (words(text).length > (isCaps(text) ? 6 : 4)) return undefined;
   const key = letters(text);
   for (const [name, section] of Object.entries(SECTIONS)) {
     if (editDistance(key, name) <= (name.length >= 12 ? 2 : 1)) return section;
@@ -155,6 +180,19 @@ export function isJunk(text: string): boolean {
   return !/[\p{L}\p{N}]{3}/u.test(text) && marks >= core;
 }
 
+/**
+ * Art or handwriting read as a few short words among marks no stat block prints ("i - -5 # zq
+ * tr: ¥4ii"). A real word of four letters or more means a text line with a junk tail
+ * ("Hit Points 45 (6d8) ~ ••"). A damaged title or a contents line can look alike, so only
+ * lines inside a block's span are checked.
+ */
+export function isNoise(text: string): boolean {
+  if (/\p{L}{4}/u.test(text)) return false;
+  const odd = text.match(/[#¥§~·•=<>_^*\\©®¢£€|¼½]/gu)?.length ?? 0;
+  const letters = text.replace(/[^\p{L}]/gu, '').length;
+  return odd >= 2 && letters < text.replace(/\s/g, '').length * 0.6;
+}
+
 /** Mostly capital letters, short: a heading or sidebar title in small caps. */
 export function isCaps(text: string): boolean {
   const all = text.replace(/[^\p{L}]/gu, '');
@@ -171,10 +209,16 @@ export function isCaps(text: string): boolean {
 export function pageLevels(page: Page): { split: number; big: number; lore: number } {
   const body = page.lines.filter((line) => words(line.t).length >= 3).map((line) => line.h);
   const all = median(body.length > 0 ? body : page.lines.map((line) => line.h));
-  // Bold or italic runs (entry names, type lines) set a line a little taller than plain text of
-  // the same size, so they would blur the two clusters.
+  // Bold or italic runs (entry names, type lines, spell lists) set a line a little taller than
+  // plain text of the same size, so they would blur the two clusters: a page holding only stat
+  // blocks would split its spell lists off as lore.
   const plain = page.lines.filter(
-    (line) => words(line.t).length >= 3 && !isTypeLine(line.t) && !RUN_IN.test(line.t),
+    (line) =>
+      words(line.t).length >= 3 &&
+      !isTypeLine(line.t) &&
+      !RUN_IN.test(line.t) &&
+      !SPELL_HEAD.test(line.t) &&
+      !STAT_ENTRY.test(line.t),
   );
   const heights = plain
     .map((line) => line.h)
@@ -217,11 +261,18 @@ const STAT_LINE =
   /^(?:Armou?r Class|Hit Points|Speed|Saving Throws|Skills|Damage|Condition|Senses|Languages|Challenge|STR\b)|^\d+\s*\(\s*[+-]/;
 
 /** A line that opens with a bold run-in name: "Keen Sight. The hawk ...". */
-const RUN_IN = /^[A-Z][\w'’-]*(?:\s+[\w'’/,-]+){0,5}(?:\s*\([^)]{1,40}\))?\.\s/;
+const RUN_IN = /^[A-Z][\w'’/-]*(?:\s+[\w'’/,-]+){0,5}(?:\s*\([^)]{1,40}\))?\.\s/;
 
 // An attack's bold run-in or separate Hit line can be as tall as surrounding lore.
 const STAT_ENTRY =
   /^\W{0,3}(?:Hit\s*:|(?:Multiattack|False Appearance|(?:Innate )?Spellcasting)\s*[.:])|\b(?:Melee|Ranged)\s+(?:(?:or|and)\s+Ranged\s+)?(?:Weapon|Spell)\s+Attack\s*:/i;
+
+/**
+ * The head of a spell list line, OCR forms included: "At will:", "lfday each :", "1st level (4
+ * slots):". Spell names are set in italics, so a long list can read as tall as lore text.
+ */
+export const SPELL_HEAD =
+  /^\W{0,2}(?:At will|Cantrips?\s*\(at[\s-]*wi\s*ll\s*\)|[\dlIOS]{1,2}\s*[/fjJIl|t]?\s*d\s?ay(?:\s+each)?|[\dlIOS]{1,2}\s*(?:st|nd|rd|th)(?:\s*-\s*[\dlIOS]{1,2}\s*(?:st|nd|rd|th))?\s+level\s*\.?\s*\([^)]{0,20}slots?\))\s*[:;]/i;
 
 /** A name heading: short, no closing punctuation, set large or in capitals. */
 function isNameHeading(line: FlowLine): boolean {
@@ -237,6 +288,53 @@ function isNameHeading(line: FlowLine): boolean {
 function endsBlock(line: FlowLine): boolean {
   if (sectionOf(line.t) || isAbilityHeader(line.t)) return false;
   return line.big || isCaps(line.t);
+}
+
+/**
+ * Where a block goes on after a break: the run of lines just above the stat marker at `marker`
+ * that read as block text. The run stops at junk, a title, small print, lore prose (spell lists
+ * excepted), a column change or a gap wider than the space between two traits.
+ */
+function resumeAt(flow: readonly FlowLine[], after: number, marker: number, size: number): number {
+  let at = marker;
+  for (let k = marker - 1; k > after; k--) {
+    const line = flow[k]!;
+    const below = flow[at]!;
+    if (isJunk(line.t) || line.page !== below.page || line.c !== below.c) break;
+    // A section heading has more space above it than two lines of one trait.
+    if (below.y - line.y > size * (at === marker ? 3 : 2.3)) break;
+    // Small print (a margin quote) can sit between two lines of the block.
+    if (line.h < size * 0.72 && !endsBlock(line)) continue;
+    // Text right under a title is a sidebar's, so the block goes on at the marker itself.
+    if (endsBlock(line)) return marker;
+    if (line.h < size * 0.9) break;
+    const wrapsSpell = /^[a-z(]/.test(line.t.trim()) && SPELL_HEAD.test(flow[k - 1]?.t ?? '');
+    if (line.lore && !SPELL_HEAD.test(line.t) && !wrapsSpell) break;
+    at = k;
+  }
+  return at;
+}
+
+/** A block part heading OCR broke past `sectionOf` ("A CTIO ~·"), or a lair's own heading. */
+function isPartHeading(text: string): boolean {
+  const key = letters(text);
+  if (key === 'lairactions' || key === 'regionaleffects') return true;
+  return key.length >= 4 && Object.keys(SECTIONS).some((name) => name.startsWith(key));
+}
+
+/**
+ * A stat-sized title a block may go on past: small print (a margin quote or a running header),
+ * a part heading or stat line OCR read as a title, or the creature's own name set as a family
+ * title. `size` is the block's text height and `name` its heading.
+ */
+function mayResume(line: FlowLine, size: number, name: string): boolean {
+  const text = line.t.trim();
+  return (
+    line.h < size * 0.72 ||
+    isPartHeading(text) ||
+    STAT_LINE.test(text) ||
+    (letters(name).length >= 3 && letters(text) === letters(name))
+  );
 }
 
 /** A heading, type or Armor Class line that belongs to a stat block's head. */
@@ -302,7 +400,7 @@ export function toFlow(pages: readonly Page[]): FlowLine[] {
       page: page.n,
       ...(page.printed !== undefined && { printed: page.printed }),
       // A bold run-in line counts as lore only when it is as tall as the lore text itself.
-      lore: line.h > split && (!RUN_IN.test(line.t) || line.h >= lore * 0.98),
+      lore: line.h > split && (!RUN_IN.test(line.t) || line.h >= lore * 0.99),
       big: line.h >= big,
     }));
   });
@@ -313,7 +411,7 @@ export function toFlow(pages: readonly Page[]): FlowLine[] {
  * block or to a heading. Lore-sized lines inside that span belong to the lore: some books set a
  * block in a box that the lore text flows around.
  */
-export function segment(pages: readonly Page[]): Segmented {
+export function segment(pages: readonly Page[], patches: readonly LorePatch[] = []): Segmented {
   const flow = toFlow(pages);
   const anchors: number[] = [];
   flow.forEach((line, i) => {
@@ -369,22 +467,61 @@ export function segment(pages: readonly Page[]): Segmented {
     used.add(anchor);
     if (typeLine !== undefined) used.add(typeLine);
     if (heading !== undefined) used.add(heading);
+    // The block's text height, from its first lines: OCR can set one of them too tall.
+    const size =
+      median(
+        flow
+          .slice(anchor, Math.min(end, anchor + 10))
+          .filter((line) => !line.lore && !isJunk(line.t))
+          .map((line) => line.h),
+      ) || flow[anchor]!.h;
+    // A spell list line, and the lines its list wraps onto, belong to the block at any height.
+    let inSpells = false;
     for (let j = anchor + 1; j < end; j++) {
       const line = flow[j]!;
       if (isJunk(line.t)) {
         used.add(j);
         continue;
       }
-      if (sectionOf(line.t)) {
-        lines.push(line);
+      // Stat-sized noise is skipped but left to the lore, where a fix may name a damaged running
+      // header. A damaged family title is taller and still ends the block.
+      if (isNoise(line.t) && !line.lore && line.h <= size * 1.15) continue;
+      const last = lines[lines.length - 1]!;
+      const turned = line.page !== last.page;
+      // A stat line on a later page, after the challenge, opens a card that lost its name.
+      if (turned && STAT_LINE.test(line.t) && lines.some((taken) => /^Challenge\b/.test(taken.t))) {
+        break;
+      }
+      // OCR can split a heading into two pieces on one baseline ("A CTIO ~·" and "N S").
+      const beside = flow[j + 1];
+      const split =
+        !sectionOf(line.t) &&
+        beside !== undefined &&
+        j + 1 < end &&
+        beside.page === line.page &&
+        Math.abs(beside.y - line.y) < line.h / 2 &&
+        sectionOf(`${line.t} ${beside.t}`) !== undefined;
+      if (split || sectionOf(line.t)) {
+        lines.push(split ? { ...line, t: `${line.t} ${beside.t}` } : line);
         used.add(j);
+        if (split) used.add(++j);
+        inSpells = false;
         continue;
       }
-      if (!STAT_ENTRY.test(line.t)) {
+      const spells: boolean =
+        SPELL_HEAD.test(line.t) ||
+        (inSpells && /^[a-z(]/.test(line.t.trim()) && !/\.\s+[A-Z]/.test(line.t));
+      inSpells = spells && !/\.\s*$/.test(line.t);
+      // The bold first option after a list's colon ("1. Glare Ray.") can be as tall as lore.
+      const option = /^\d+\.\s+[A-Z]/.test(line.t) && /:\s*$/.test(last.t);
+      if (!spells && !option && !STAT_ENTRY.test(line.t)) {
         if (endsBlock(line)) {
-          // Art, a family title or a folio can sit between two columns of the same block.
-          // Only resume when the same printed page has a stat marker before the next block.
-          if (!line.lore) break;
+          // Art, a family title, a margin quote or a folio can sit between two columns of the
+          // same block. Only resume when the same printed page has a stat marker before the next
+          // block. A stat-sized title (a variant sidebar, a template, another family) ends it.
+          if (!line.lore && !mayResume(line, size, heading === undefined ? '' : flow[heading]!.t)) {
+            break;
+          }
           const next = flow
             .slice(j + 1, end)
             .findIndex(
@@ -395,10 +532,25 @@ export function segment(pages: readonly Page[]): Segmented {
                   (!candidate.lore && STAT_LINE.test(candidate.t))),
             );
           if (next < 0) break;
-          j += next;
+          // On the block's own page, the block goes on at the run of block lines above that
+          // marker. On a later page the lines above it open the next family's sidebar.
+          const marker = j + 1 + next;
+          j = (line.page === flow[anchor]!.page ? resumeAt(flow, j, marker, size) : marker) - 1;
           continue;
         }
-        if (line.lore) continue;
+        // Small print inside a block's span is a margin quote or a running header.
+        if (line.lore || line.h < size * 0.72) continue;
+      }
+      if (turned) {
+        // On a later page the block goes on with an entry, a stat line or the rest of a
+        // sentence. Anything else there is a margin note or a sidebar. An entry's name ends on a
+        // capital or a usage note ("Nest in a Bag.", "Bite (Toad Form Only)."); "Or a crook." does not.
+        const name = RUN_IN.exec(line.t)?.[0];
+        const opens =
+          STAT_ENTRY.test(line.t) ||
+          STAT_LINE.test(line.t) ||
+          (name !== undefined && /(?:^|\s)[A-Z]\S*\.\s$|\)\.\s$/.test(name));
+        if (!opens && !spells && /[.!?:]["”’)]?\s*$/.test(last.t)) continue;
       }
       lines.push(line);
       used.add(j);
@@ -428,6 +580,46 @@ export function segment(pages: readonly Page[]): Segmented {
     families.push(next);
     return next;
   };
+  // A family title opens with a capital and is never a stat line ("Languages Common").
+  const isTitle = (line: FlowLine) =>
+    line.big &&
+    isNameHeading(line) &&
+    /^\P{L}*\p{Lu}/u.test(line.t) &&
+    !STAT_LINE.test(line.t.trim());
+  const lorePage = (line: FlowLine) => line.printed ?? line.page;
+  const lore = flow.filter((line, i) => !used.has(i) && !isJunk(line.t));
+  // A fix names a title when one matches it whole, else the line its words open. Matching
+  // keeps capitals, so "MERFOLK~" picks the heading and not "Merfolk tribes ...".
+  const key = (text: string) => text.replace(/[^A-Za-z]/g, '');
+  const forTitle = new Set(
+    patches.filter((patch) =>
+      lore.some(
+        (line) => isTitle(line) && lorePage(line) === patch.page && key(line.t) === key(patch.text),
+      ),
+    ),
+  );
+  // A fix that spells a whole line matches that line only: "EVOKER." beside "EVOKER".
+  const exact = new Set(
+    patches.filter((patch) =>
+      lore.some((line) => lorePage(line) === patch.page && line.t.trim() === patch.text),
+    ),
+  );
+  const matched = new Map<LorePatch, number>();
+  const patchFor = (line: FlowLine, heading: boolean) => {
+    const text = key(line.t);
+    const patch = patches.find(
+      (candidate) =>
+        candidate.page === lorePage(line) &&
+        forTitle.has(candidate) === heading &&
+        (exact.has(candidate)
+          ? line.t.trim() === candidate.text
+          : heading
+            ? text === key(candidate.text)
+            : text.startsWith(key(candidate.text))),
+    );
+    if (patch) matched.set(patch, (matched.get(patch) ?? 0) + 1);
+    return patch;
+  };
   flow.forEach((line, i) => {
     const k = blockAt.get(i);
     if (k !== undefined) {
@@ -435,7 +627,30 @@ export function segment(pages: readonly Page[]): Segmented {
       blocks[k]!.family = families.indexOf(family);
     }
     if (used.has(i) || isJunk(line.t)) return;
-    if (line.big && isNameHeading(line)) {
+    const heading = isTitle(line);
+    const patch = patchFor(line, heading);
+    if (patch?.as === 'drop' || (!patch && !line.big && isNoise(line.t))) return;
+    if (patch?.as === 'section') {
+      family ??= open(line);
+      family.sections.push({ title: patch.title ?? line.t.trim(), lines: [] });
+      return;
+    }
+    if (patch && heading) {
+      if (patch.title !== undefined) family = open(line, patch.title);
+      return;
+    }
+    if (patch) {
+      const previous = family;
+      family = open(line, patch.title);
+      // A large or capitals line the fix names is the lost heading itself, not lore text.
+      if (line.big || (isCaps(line.t) && words(line.t).length <= 8)) return;
+      // A heading left with no text just above the fixed lore line belongs to the new family.
+      const last = previous?.sections.at(-1);
+      if (last?.title !== undefined && !last.lines.length) {
+        previous!.sections.pop();
+        family.sections.push(last);
+      }
+    } else if (heading) {
       family = open(line, line.t.trim());
       return;
     }
@@ -446,6 +661,14 @@ export function segment(pages: readonly Page[]): Segmented {
     } else if (section) section.lines.push(line);
     else family.sections.push({ lines: [line] });
   });
+
+  for (const patch of patches) {
+    const count = matched.get(patch) ?? 0;
+    if (count !== 1)
+      throw new Error(
+        `${count ? 'More than one' : 'No'} lore line matches override ${patch.page}:${patch.text}.`,
+      );
+  }
 
   // `family` here is only the last heading before the block. A block printed before its
   // family's heading (or in the other column) is moved by the identify step, which knows names.

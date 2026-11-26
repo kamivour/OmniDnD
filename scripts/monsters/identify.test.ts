@@ -4,6 +4,7 @@ import {
   assignFamilies,
   cleanName,
   nameBlocks,
+  repairTitle,
   selfName,
   titleCase,
   type NamedCreature,
@@ -179,6 +180,29 @@ describe('nameBlocks', () => {
   });
 });
 
+describe('repairTitle', () => {
+  const vocab = makeVocab();
+  vocab.addTrusted('the gloomkin gather');
+  const names = ['Gloom Wisp', 'Bog Hound', 'Oak Strider', 'Horned Devil'];
+
+  it('rebuilds a damaged title from the index names', () => {
+    expect(repairTitle('Gloom Wis p', names, vocab)).toBe('Gloom Wisp');
+    expect(repairTitle('B0g Hounds', names, vocab)).toBe('Bog Hounds');
+    expect(repairTitle("0ak Striders . . 1,'", names, vocab)).toBe('Oak Striders');
+    expect(repairTitle('DEVfLS', names, vocab)).toBe('Devils');
+    expect(repairTitle('SPECT,ATOR', ['Spectator'], vocab)).toBe('Spectator');
+  });
+
+  it('leaves a title of known words or with no single closest name', () => {
+    expect(repairTitle('Gloomkin', ['Gloomkind'], vocab)).toBe('Gloomkin');
+    expect(repairTitle('Xog Hound', ['Bog Hound', 'Fog Hound'], vocab)).toBe('Xog Hound');
+  });
+
+  it('evens out mixed capitals but keeps a capitals word with a plural s', () => {
+    expect(repairTitle('CusTOMIZING NPCs', names, vocab)).toBe('Customizing NPCs');
+  });
+});
+
 describe('assignFamilies', () => {
   it('moves a block to the nearby family whose title its name holds, longest title first', () => {
     const families: LoreFamily[] = [
@@ -192,5 +216,63 @@ describe('assignFamilies', () => {
     ];
     assignFamilies(blocks, families);
     expect(blocks.map((block) => block.family)).toEqual([1, 0, 0]);
+  });
+
+  it('looks farther for a title that is the whole name', () => {
+    const families: LoreFamily[] = [
+      { title: 'Bog Witch', page: 10, sections: [] },
+      { title: 'Marsh Witch', page: 10, sections: [] },
+    ];
+    const blocks: NamedCreature[] = [
+      { ...creature({ page: 14, family: 1 }), name: 'Bog Witch' },
+      { ...creature({ page: 14, family: 1 }), name: 'Bog Witch Elder' },
+    ];
+    assignFamilies(blocks, families);
+    expect(blocks.map((block) => block.family)).toEqual([0, 1]);
+  });
+
+  it('matches plural titles to singular names', () => {
+    const families: LoreFamily[] = [
+      { title: 'MOSS', page: 10, sections: [] },
+      { title: 'GLOOMOGRES', page: 10, sections: [] },
+      { title: 'REED PIXIES', page: 10, sections: [] },
+      { title: 'ASH WOLVES', page: 10, sections: [] },
+    ];
+    const blocks: NamedCreature[] = [
+      { ...creature({ page: 10, family: 0 }), name: 'Gloomogre' },
+      { ...creature({ page: 10, family: 0 }), name: 'Reed Pixie' },
+      { ...creature({ page: 10, family: 0 }), name: 'Ash Wolf Pup' },
+    ];
+    assignFamilies(blocks, families);
+    expect(blocks.map((block) => block.family)).toEqual([1, 2, 3]);
+  });
+
+  it('else moves a block to the nearby family that gives it a section or a run-in lead', () => {
+    const line = (t: string) => ({
+      t,
+      x: 0,
+      y: 0,
+      h: 9,
+      c: 0 as const,
+      page: 10,
+      lore: true,
+      big: false,
+    });
+    const families: LoreFamily[] = [
+      {
+        title: 'BOGLINS',
+        page: 10,
+        sections: [{ lines: [line('Mudlings. A boglin left in mud becomes a mudling.')] }],
+      },
+      { title: 'REEDKIN', page: 10, sections: [{ title: 'MARSH SHA DE', lines: [] }] },
+      { title: 'STONEFOLK', page: 11, sections: [] },
+    ];
+    const blocks: NamedCreature[] = [
+      { ...creature({ page: 11, family: 2 }), name: 'Mudling' },
+      { ...creature({ page: 11, family: 2 }), name: 'Marsh Shade' },
+      { ...creature({ page: 11, family: 2 }), name: 'Pebble Imp' },
+    ];
+    assignFamilies(blocks, families);
+    expect(blocks.map((block) => block.family)).toEqual([0, 1, 2]);
   });
 });

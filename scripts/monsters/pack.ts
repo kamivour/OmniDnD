@@ -21,7 +21,7 @@ import {
 } from '../../src/engine/schema/index.ts';
 import { titleCase, type NamedCreature } from './identify.ts';
 import { ENTRY_LISTS, proficiencyForCr, XP_BY_CR, type ParsedEntry } from './parse.ts';
-import { nameKey, type ValidatedCreature } from './validate.ts';
+import { nameKey, type Finding, type ValidatedCreature } from './validate.ts';
 
 /** Printing order, oldest first. */
 export const PACK_BOOKS = ['MM', 'VGM', 'MTF', 'MPMM'] as const;
@@ -186,8 +186,33 @@ function toDef(id: string, name: string, copy: Copy): Record<string, unknown> {
 const problemsOf = (error: { issues: { path: PropertyKey[]; message: string }[] }) =>
   error.issues.map((issue) => `${issue.path.map(String).join('.') || 'entry'}: ${issue.message}`);
 
-const blockingNotes = (record: ValidatedCreature) =>
-  record.findings.filter((f) => f.severity === 'blocking').map((f) => f.message);
+/**
+ * A review finding the reader still needs (Q55): text the parser lost or could not place, or a
+ * spell save DC that disagrees with the block's own numbers. Other review findings are math
+ * checks a printed block may fail on purpose, so they stay in the review report only.
+ */
+function lostTextNote({ code, message }: Finding): string | undefined {
+  if (code.startsWith('parse:')) {
+    if (message === 'ACTIONS heading missing')
+      return 'The Actions heading was not found, so some actions may be listed as traits.';
+    const start = /^text before the first entry: (".*")$/s.exec(message);
+    if (start) return `A trait lost its name or first words: ${start[1]}.`;
+    const part = /^(\w+(?: \w+)?) not read: (".*")$/s.exec(message);
+    if (part) return `Part of the ${part[1]} line was not read: ${part[2]}.`;
+    return undefined;
+  }
+  if (code.endsWith(':attack') && message.endsWith(': attack bonus was not read.'))
+    return message.replace(': attack bonus', ': the attack bonus');
+  const dc = /^\w+:\d+:(.+):spell-dc: read (\d+), expected (\d+)\.$/.exec(message);
+  if (dc)
+    return `${dc[1]}: the spell save DC reads ${dc[2]}, but the block's numbers give ${dc[3]}.`;
+  return undefined;
+}
+
+const reviewNotes = (record: ValidatedCreature) => [
+  ...record.findings.filter((f) => f.severity === 'blocking').map((f) => f.message),
+  ...record.findings.flatMap((f) => (f.severity === 'review' && lostTextNote(f)) || []),
+];
 
 /** Lore headings are printed in capitals: "KRUTHIKS" reads better as "Kruthiks". */
 const loreTitle = (title: string) => (title === title.toUpperCase() ? titleCase(title) : title);
@@ -224,7 +249,9 @@ export function buildPack(input: PackInput): { pack: MonsterPack; manifest: Pack
       for (const section of sections) seenText.add(textKey(section.text));
       const page = family.page - offset;
       const id = `lore.${book.toLowerCase()}.${index}`;
-      if (!sections.length || page < 1) return familyId.set(`${book}:${index}`, undefined);
+      // An untitled family is lore whose heading OCR lost: no creature can claim it.
+      if (!sections.length || page < 1 || !family.title?.trim())
+        return familyId.set(`${book}:${index}`, undefined);
       familyId.set(`${book}:${index}`, id);
       loreById.set(id, {
         id,
@@ -331,7 +358,7 @@ export function buildPack(input: PackInput): { pack: MonsterPack; manifest: Pack
     }
     usedIds.add(id);
     for (const copy of copies) manifestBooks[copy.book]!.used++;
-    const review = blockingNotes(chosen.copy.record);
+    const review = reviewNotes(chosen.copy.record);
     if (chosen.copy !== ranked[0]) {
       manifest.fallbacks.push(name);
       review.unshift(

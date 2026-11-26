@@ -105,7 +105,13 @@ describe('buildPack', () => {
       book(
         'VGM',
         [record(creature('Test Gnasher', { ac: 13, family: 0 }))],
-        [{ page: 19, sections: [{ text: 'Shared lore.' }, { text: 'Older lore only.' }] }],
+        [
+          {
+            title: 'Test Gnashers',
+            page: 19,
+            sections: [{ text: 'Shared lore.' }, { text: 'Older lore only.' }],
+          },
+        ],
       ),
     ]);
     expect(pack.creatures).toHaveLength(1);
@@ -124,6 +130,7 @@ describe('buildPack', () => {
         id: 'lore.vgm.0',
         source: 'VGM',
         page: 9,
+        title: 'Test Gnashers',
         sections: [{ text: 'Shared lore.' }, { text: 'Older lore only.' }],
       },
     ]);
@@ -153,13 +160,55 @@ describe('buildPack', () => {
     expect(manifest.books.MM).toMatchObject({ blocks: 3, unnamed: 1, used: 1 });
   });
 
+  it('flags lost text and odd spell save DCs, but not other math checks', () => {
+    const review = (code: string, message: string) => ({
+      code,
+      severity: 'review' as const,
+      message,
+    });
+    const { pack, manifest } = build([
+      book('MM', [
+        {
+          creature: creature('Test Gnasher'),
+          findings: [
+            review('parse:0', 'ACTIONS heading missing'),
+            review('parse:1', 'text before the first entry: "can see in the dark"'),
+            review('parse:2', 'skill not read: "Stealth +4 Perc"'),
+            review('actions:0:Claw:attack', 'Claw: attack bonus was not read.'),
+            review(
+              'traits:1:Spellcasting:spell-dc',
+              'traits:1:Spellcasting:spell-dc: read 12, expected 13.',
+            ),
+            review('skill:stealth', 'skill:stealth: read 6, expected 4 or 6.'),
+            review('parse:3', 'no heading; name taken from the index by page'),
+          ],
+        },
+      ]),
+    ]);
+    expect(pack.creatures[0]!.review).toEqual([
+      'The Actions heading was not found, so some actions may be listed as traits.',
+      'A trait lost its name or first words: "can see in the dark".',
+      'Part of the skill line was not read: "Stealth +4 Perc".',
+      'Claw: the attack bonus was not read.',
+      "Spellcasting: the spell save DC reads 12, but the block's numbers give 13.",
+    ]);
+    expect(manifest.flagged).toBe(1);
+  });
+
   it('tags bundled SRD creatures instead of copying their stats, and applies renames', () => {
     const { pack } = build(
       [
         book(
           'MM',
-          [record(creature('Test Wolf', { family: 0 }))],
-          [{ page: 15, sections: [{ text: 'Wolf lore.' }] }],
+          [
+            record(creature('Test Wolf', { family: 0 })),
+            record(creature('Test Gnawer', { printed: 12, family: 1 })),
+          ],
+          [
+            { title: 'Test Wolf', page: 15, sections: [{ text: 'Wolf lore.' }] },
+            // Lore whose heading OCR lost belongs to no one.
+            { page: 17, sections: [{ text: 'Lore of something else.' }] },
+          ],
         ),
         book('VGM', [record(creature('Old Gnasher'))]),
         book('MPMM', [record(creature('New Gnasher', { printed: 30 }))]),
@@ -169,7 +218,10 @@ describe('buildPack', () => {
     expect(pack.supplements).toEqual([
       { id: 'creature.test-wolf', books: [{ source: 'MM', page: 10 }], loreIds: ['lore.mm.0'] },
     ]);
-    expect(pack.creatures.map((c) => [c.name, c.books?.length])).toEqual([['New Gnasher', 2]]);
+    expect(pack.creatures.map((c) => [c.name, c.books?.length, c.loreIds])).toEqual([
+      ['New Gnasher', 2, undefined],
+      ['Test Gnawer', 1, undefined],
+    ]);
   });
 
   it('gives SRD forms and variants their parent block page and lore, with no duplicate', () => {
@@ -182,7 +234,7 @@ describe('buildPack', () => {
             record(creature('Test Wolf', { printed: 11 })),
             record(creature('Swarm of Insects', { printed: 12 })),
           ],
-          [{ page: 15, sections: [{ text: 'Badger lore.' }] }],
+          [{ title: 'Werebadger', page: 15, sections: [{ text: 'Badger lore.' }] }],
         ),
       ],
       srd: [
