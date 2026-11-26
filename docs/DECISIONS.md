@@ -332,6 +332,18 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q52 | How strictly should the app enforce subclass spell schools, discipline prerequisites and situational limits? | Class mechanics follow-up | Keep existing picks. Warn about verified limits and let the DM confirm exceptions. | User / DM |
 | Q53 | When will someone check the 289 monster stat block findings that need the printed page (lost type lines, ability scores, challenge)? | Before relying on the monster pack | Use the SRD or a newer printing when one exists. Mark other flagged creatures "Check against the book". Leave out creatures still missing core stats, and list them in the pack manifest. | User |
 | Q54 | About 16 pack creatures have a damaged type line (for example "ciant"). Fix them by hand, or wait for the Q53 page review? | Q53 review | Show them under the "Other" type filter until the page review fixes them | User |
+| Q55 | Monster pack issues found after M50, beyond Q53 and Q54 (checklist below). Which can be fixed before the page review? | Before relying on the monster pack | Fix what the parser and the private overrides can fix. Mark the rest "Check against the book". | User |
+
+### Q55 checklist
+
+- [ ] About 85 pack creatures have lost or misplaced text with no flag: a missing ACTIONS heading, a cut trait start, unread skills, saves or attack bonuses. Some notes are false alarms.
+- [ ] About 20 spell save DCs do not match the formula, and spell lists may have OCR slips.
+- [ ] 13 subtypes are cut or misspelled, for example "(mind flayer", and lycanthropes lose "shapechanger".
+- [ ] Lycanthropes show twice: the pack's full entry and the SRD entry for each form.
+- [ ] 24 SRD entries have no book page or lore: the lycanthrope and vampire forms, four swarms, Ice Mephit and Giant Rat (Diseased).
+- [ ] Junk lines leak into some lore, for example the Shrieker's.
+- [ ] 8 stat blocks have no name in their book's index (MM 5, VGM 1, MPMM 2).
+- [ ] A pack file with the wrong format version gets the generic "not a monster pack" error.
 
 ## How to add an entry
 
