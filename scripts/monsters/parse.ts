@@ -3,6 +3,7 @@
  * OCR loses lines and letters, so every field is optional and each gap or doubtful value is
  * written to `issues` for the review step instead of being guessed.
  */
+import { CREATURE_TYPES } from '../../src/engine/bestiary.ts';
 import { ABILITIES, type Ability } from '../../src/engine/calc/abilities.ts';
 import { CONDITIONS, DAMAGE_TYPES, SKILLS, type Skill } from '../../src/engine/rules2014.ts';
 import {
@@ -424,19 +425,212 @@ export function parseTypeLine(
   text: string,
 ): Pick<ParsedCreature, 'size' | 'sizes' | 'creatureType' | 'alignment'> {
   const sizeWord = `(${SIZES.join('|')})`;
-  const match = new RegExp(
-    `^\\W*${sizeWord}(?:\\s*(?:or|,)\\s*${sizeWord})?\\s+(.+?)\\s*,\\s*(.+)$`,
-    'i',
-  ).exec(spaceSize(text.trim()));
-  if (!match) return {};
+  const match = new RegExp(`^\\W*${sizeWord}(?:\\s*(?:or|,)\\s*${sizeWord})?\\s+(.+)$`, 'i').exec(
+    spaceSize(text.trim()),
+  );
+  const parts = match && splitTypeLine(match[3]!.toLowerCase());
+  if (!parts) return {};
   const first = match[1]!.toLowerCase() as Size;
   const second = match[2]?.toLowerCase() as Size | undefined;
   return {
     size: first,
     ...(second && { sizes: [first, second] }),
-    creatureType: match[3]!.toLowerCase(),
-    alignment: match[4]!.toLowerCase().replace(/[.\s]+$/, ''),
+    creatureType: cleanType(parts[0]),
+    alignment: cleanAlignment(parts[1]),
   };
+}
+
+/**
+ * Type and alignment split at the first comma outside the subtype brackets, so
+ * "humanoid (human, shapechanger), neutral" keeps both tags. A lost ")" falls back to the first comma.
+ */
+function splitTypeLine(rest: string): [string, string] | undefined {
+  let depth = 0;
+  let cut = -1;
+  for (let i = 0; i < rest.length && cut < 0; i++) {
+    const char = rest[i];
+    if (char === '(') depth++;
+    else if (char === ')') depth = Math.max(0, depth - 1);
+    else if ((char === ',' || char === ';') && depth === 0) cut = i;
+  }
+  if (cut < 0) cut = rest.indexOf(',');
+  const type = rest.slice(0, cut).trim();
+  const alignment = rest.slice(cut + 1).trim();
+  return cut > 0 && type && alignment ? [type, alignment] : undefined;
+}
+
+/** Letters only, after the usual OCR swaps for "l" and "o". */
+const letterKey = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[1|/!]/g, 'l')
+    .replace(/0/g, 'o')
+    .replace(/[^a-z]/g, '');
+
+/** The one option whose letters are nearest, within the tolerance; none on a tie. */
+function nearestOption<T extends string>(key: string, options: readonly T[], tolerance: number) {
+  let best: T | undefined;
+  let bestDistance = Infinity;
+  let tie = false;
+  for (const option of options) {
+    const distance = editDistance(key, letterKey(option));
+    if (distance < bestDistance) [best, bestDistance, tie] = [option, distance, false];
+    else if (distance === bestDistance) tie = true;
+  }
+  return bestDistance <= tolerance && !tie ? best : undefined;
+}
+
+/** Longer words can take more OCR slips before they could be mistaken for another. */
+const slipsFor = (key: string) =>
+  key.length >= 8 ? 3 : key.length >= 5 ? 2 : key.length >= 3 ? 1 : 0;
+
+/** Subtype tags the 2014 books print. An unknown tag is kept as read. */
+const TAGS = [
+  'aarakocra',
+  'any race',
+  'beholder',
+  'bullywug',
+  'cattle',
+  'cleric',
+  'cloud giant',
+  'demon',
+  'derro',
+  'devil',
+  'dinosaur',
+  'druid',
+  'dwarf',
+  'elf',
+  'fire giant',
+  'firenewt',
+  'frost giant',
+  'gith',
+  'gnoll',
+  'gnome',
+  'goblinoid',
+  'grimlock',
+  'grung',
+  'hill giant',
+  'human',
+  'inevitable',
+  'kenku',
+  'kobold',
+  'kuo-toa',
+  'lizardfolk',
+  'meazel',
+  'merfolk',
+  'mind flayer',
+  'nagpa',
+  'orc',
+  'paladin',
+  'quaggoth',
+  'sahuagin',
+  'shapechanger',
+  'sorcerer',
+  'stone giant',
+  'storm giant',
+  'thri-kreen',
+  'titan',
+  'tortle',
+  'troglodyte',
+  'warlock',
+  'wizard',
+  'xvart',
+  'yuan-ti',
+  'yugoloth',
+] as const;
+
+/** A tag fixed to a known one a single slip away ("cith" to "gith"), else tidied. */
+function cleanTag(text: string): string {
+  const key = letterKey(text);
+  return (
+    nearestOption(key, TAGS, key.length >= 3 ? 1 : 0) ??
+    text
+      .replace(/^[^a-z]+|[^a-z]+$/g, '')
+      .replace(/\s*-\s*/g, '-')
+      .replace(/\s+/g, ' ')
+  );
+}
+
+/**
+ * "humarroid (cith)" to "humanoid (gith)": the base word goes to the nearest of the fourteen
+ * types, and each tag to a known tag. OCR can turn a letter into a comma ("any ra,e"), so the
+ * whole bracket is tried as one tag before it is split.
+ */
+export function cleanType(text: string): string {
+  const match = /^([^(]*)(?:\(([^)]*)\)?)?/.exec(text)!;
+  const base = match[1]!.trim();
+  const spaced = base.replace(/[^a-z]+/g, ' ').trim();
+  const key = letterKey(base).replace(/rn/g, 'm');
+  const type = /^swarm\b/.test(spaced)
+    ? spaced
+    : (nearestOption(key, CREATURE_TYPES, slipsFor(key)) ?? base);
+  if (match[2] === undefined) return type;
+  const whole = letterKey(match[2]);
+  const tags =
+    nearestOption(whole, TAGS, whole.length >= 3 ? 1 : 0) ??
+    match[2].split(/[,;]/).map(cleanTag).filter(Boolean).join(', ');
+  return tags ? `${type} (${tags})` : type;
+}
+
+const ALIGNMENT_WORDS = [
+  'typically',
+  'any',
+  'alignment',
+  'lawful',
+  'chaotic',
+  'neutral',
+  'good',
+  'evil',
+  'unaligned',
+  'non-good',
+  'non-lawful',
+  'non-evil',
+  'non-chaotic',
+  'or',
+] as const;
+const HYPHENED = ALIGNMENT_WORDS.filter((word) => word.includes('-'));
+
+/** One alignment word, trying the hyphened words first for a hyphened token ("mn-good"). */
+function alignmentWord(token: string): string | undefined {
+  const key = letterKey(token);
+  if (token.includes('-')) {
+    const word = nearestOption(key, HYPHENED, slipsFor(key));
+    if (word) return word;
+    const parts = token.split('-').map(alignmentWord);
+    return parts.every(Boolean) ? parts.join(' ') : undefined;
+  }
+  const word = nearestOption(key, ALIGNMENT_WORDS, slipsFor(key));
+  if (word) return word;
+  // Two words OCR glued together ("chaoticevil"), only when both are spelled right.
+  for (let cut = 2; cut <= key.length - 2; cut++) {
+    const [head, tail] = [key.slice(0, cut), key.slice(cut)];
+    if (ALIGNMENT_WORDS.includes(head as never) && ALIGNMENT_WORDS.includes(tail as never))
+      return `${head} ${tail}`;
+  }
+  return undefined;
+}
+
+/**
+ * "urraligned" to "unaligned" and ", chaotic' evil" to "chaotic evil". Each word goes to the
+ * nearest alignment word, or joins the next token when OCR split it ("unaligi; led"). Stray
+ * letters and marks are dropped; any other unknown word is kept.
+ */
+export function cleanAlignment(text: string): string {
+  const tokens = text.split(/\s+/).filter(Boolean);
+  const out: string[] = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i]!;
+    if (/\d\s*%/.test(token)) {
+      out.push(token);
+      continue;
+    }
+    const word = alignmentWord(token);
+    const joined = word ? undefined : tokens[i + 1] && alignmentWord(token + tokens[i + 1]);
+    if (word || joined) out.push((word ?? joined)!);
+    if (joined) i++;
+    if (!word && !joined && letterKey(token).length > 2) out.push(token.replace(/[^a-z'’-]/g, ''));
+  }
+  return out.join(' ');
 }
 
 const closest = <T extends string>(word: string, options: readonly T[], tolerance: number) => {

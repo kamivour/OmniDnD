@@ -338,7 +338,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 
 - [ ] About 85 pack creatures have lost or misplaced text with no flag: a missing ACTIONS heading, a cut trait start, unread skills, saves or attack bonuses. Some notes are false alarms.
 - [ ] About 20 spell save DCs do not match the formula, and spell lists may have OCR slips.
-- [ ] 13 subtypes are cut or misspelled, for example "(mind flayer", and lycanthropes lose "shapechanger".
+- [x] 13 subtypes are cut or misspelled, for example "(mind flayer", and lycanthropes lose "shapechanger". Misread alignments ("urraligned") are fixed too.
 - [x] Lycanthropes show twice: the pack's full entry and the SRD entry for each form.
 - [x] 24 SRD entries have no book page or lore: the lycanthrope and vampire forms, four swarms, Ice Mephit and Giant Rat (Diseased).
 - [ ] Junk lines leak into some lore, for example the Shrieker's.

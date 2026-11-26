@@ -3,7 +3,9 @@ import { Vocab } from './clean.ts';
 import {
   armorNote,
   averageHp,
+  cleanAlignment,
   cleanLine,
+  cleanType,
   entryStart,
   fixSpellHead,
   parseBlock,
@@ -111,6 +113,40 @@ describe('small readers', () => {
       creatureType: 'humanoid (any race)',
       alignment: 'typically neutral',
     });
+  });
+
+  it('keeps every subtype tag when the brackets hold a comma', () => {
+    expect(parseTypeLine('Large monstrosity (shapechanger, yuan -ti), neutral evil')).toEqual({
+      size: 'large',
+      creatureType: 'monstrosity (shapechanger, yuan-ti)',
+      alignment: 'neutral evil',
+    });
+    expect(parseTypeLine('Medium humanoid (any ra,e); any alignment')).toMatchObject({
+      creatureType: 'humanoid (any race)',
+      alignment: 'any alignment',
+    });
+  });
+
+  it('repairs OCR slips in the type, its tags and the alignment', () => {
+    expect(cleanType('humarroid (cith)')).toBe('humanoid (gith)');
+    expect(cleanType('abe rratio~ (shapechanger)')).toBe('aberration (shapechanger)');
+    expect(cleanType('ciant')).toBe('giant');
+    expect(cleanType('fiend (gno/1)')).toBe('fiend (gnoll)');
+    expect(cleanType('humanoid (<thri-kreen)')).toBe('humanoid (thri-kreen)');
+    expect(cleanType('swarm.of.tiny beasts')).toBe('swarm of tiny beasts');
+    // A real tag the list does not know is kept, and a near one is not forced onto it.
+    expect(cleanType('beast (mire toad)')).toBe('beast (mire toad)');
+    expect(cleanType('humanoid (gnome)')).toBe('humanoid (gnome)');
+    expect(cleanAlignment('urraligned')).toBe('unaligned');
+    expect(cleanAlignment(", chaotic' evil")).toBe('chaotic evil');
+    expect(cleanAlignment('any mn-good alignment')).toBe('any non-good alignment');
+    expect(cleanAlignment('unaligi; led')).toBe('unaligned');
+    expect(cleanAlignment('unaligned., ~;: r')).toBe('unaligned');
+    expect(cleanAlignment('chaoticevil')).toBe('chaotic evil');
+    expect(cleanAlignment("the mire toad's alignment")).toBe("the mire toad's alignment");
+    expect(cleanAlignment('chaotic good (75%) or neutral evil (25%)')).toBe(
+      'chaotic good (75%) or neutral evil (25%)',
+    );
   });
 
   it('works out hit point averages and proficiency', () => {
