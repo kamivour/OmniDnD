@@ -68,6 +68,31 @@ describe('cleanName', () => {
     expect(cleanName('Spectator l', vocab)).toBe('Spectator');
     expect(cleanName('Spectatar', vocab)).toBe('Spectator');
   });
+
+  it('never turns a name into the plural the text uses', () => {
+    const local = makeVocab();
+    local.addBook('toad collectors toad collectors toad collectors');
+    expect(cleanName('Toad Collector', local)).toBe('Toad Collector');
+  });
+
+  it('puts back a letter split off the end of a word', () => {
+    const local = makeVocab();
+    local.addTrusted('a mire toad and a bog hound');
+    expect(cleanName('Mir e-toad Elder', local)).toBe('Mire-toad Elder');
+    expect(cleanName('Bog-houn d', local)).toBe('Bog-hound');
+  });
+
+  it('never glues a small word to the capital after it, even when OCR often does', () => {
+    const local = makeVocab();
+    local.addBook('ofzorg ofzorg ofzorg');
+    expect(cleanName('Priest ofZorg', local)).toBe('Priest of Zorg');
+    expect(cleanName('Priest of Zorg', local)).toBe('Priest of Zorg');
+  });
+
+  it('starts each word but a small one with a capital', () => {
+    expect(cleanName('Eye of the spectator', vocab)).toBe('Eye of the Spectator');
+    expect(cleanName('Yuan-ti spectator', vocab)).toBe('Yuan-ti Spectator');
+  });
 });
 
 describe('selfName', () => {
@@ -102,23 +127,26 @@ describe('nameBlocks', () => {
   });
 
   it('keeps the index capitals but takes the heading when the index lost a space', () => {
-    const [toad, swarm, hound] = nameBlocks(
+    const [toad, swarm, hound, collector] = nameBlocks(
       [
         creature({ heading: 'MIRE-TOAD', printed: 41 }),
         creature({ heading: 'SWARM OF MIRE TOADS', printed: 42 }),
         creature({ heading: 'BOG HOUND •, ~', printed: 43 }),
+        creature({ heading: 'TOAD COLLECT OR', printed: 44 }),
       ],
       [
         { name: 'Mire-toad', page: 41 },
         { name: 'Swarm ofmire toads', page: 42 },
         { name: 'Bog hound', page: 43 },
+        { name: 'Toad Collector', page: 44 },
       ],
       [],
       vocab,
     );
     expect(toad!.name).toBe('Mire-toad');
     expect(swarm!.name).toBe('Swarm of Mire Toads');
-    expect(hound!.name).toBe('Bog hound');
+    expect(hound!.name).toBe('Bog Hound');
+    expect(collector!.name).toBe('Toad Collector');
   });
 
   it('names a block with no heading by page, then by known stats, then by its own text', () => {

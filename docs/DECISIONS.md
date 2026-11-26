@@ -344,6 +344,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 - [ ] Junk lines leak into some lore, for example the Shrieker's.
 - [ ] 8 stat blocks have no name in their book's index (MM 5, VGM 1, MPMM 2).
 - [x] A pack file with the wrong format version gets the generic "not a monster pack" error.
+- [x] About 40 creature names were damaged ("Ore War Chief", "Drow Priestess oflolth") or kept an older printing's short name beside the newer one ("Bronze Scout" and "Clockwork Bronze Scout").
 
 ## How to add an entry
 

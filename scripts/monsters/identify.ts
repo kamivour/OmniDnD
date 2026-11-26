@@ -63,22 +63,39 @@ const matchCase = (like: string, word: string) =>
 
 /**
  * Repairs a name OCR split or glued: "S pec tator" -> "Spectator", "Yuan -ti" -> "Yuan-ti",
- * "Eye ofGruumsh" -> "Eye of Gruumsh". Pieces join when the whole is a known word (or one slip
- * from one) and the pieces are not all words; a stray single letter left over is dropped.
+ * "Yua n-ti" -> "Yuan-ti", "Eye ofGruumsh" -> "Eye of Gruumsh". Pieces join when the whole is a
+ * known word (or one slip from one) and the pieces are not all words, but never into a capital
+ * ("of Lolth" stays apart); a stray single letter left over is dropped. Each word but a small
+ * one then starts with a capital, as the book's headings do: "Bronze scout" -> "Bronze Scout".
  */
 export function cleanName(name: string, vocab: Vocab): string {
-  const tokens = name
+  const tokens: string[] = [];
+  for (const token of name
     .replace(/\s*-\s*/g, '-')
     .replace(/([a-z])([A-Z])/g, '$1 $2')
     .split(/\s+/)
-    .filter(Boolean);
+    .filter(Boolean)) {
+    // A letter split off the end of a word: "Yua n-ti", "Thri-kree n".
+    const before = tokens.at(-1)?.split('-').at(-1) ?? '';
+    const letter = /^([a-z])(?:-|$)/.exec(token)?.[1];
+    if (letter && /^[A-Za-z]+$/.test(before) && !vocab.isWord(before)) {
+      if (vocab.isWord(before + letter)) {
+        tokens[tokens.length - 1] += token;
+        continue;
+      }
+    }
+    tokens.push(token);
+  }
   const plain = (token: string) => /^[A-Za-z]+$/.test(token);
+  const intoCapital = (pieces: readonly string[]) =>
+    pieces.some((piece, k) => k > 0 && /^[A-Z]/.test(piece) && /[a-z]$/.test(pieces[k - 1]!));
   const out: string[] = [];
   for (let i = 0; i < tokens.length; i++) {
     let joined: { word: string; span: number } | undefined;
     for (let span = Math.min(4, tokens.length - i); span >= 2 && !joined; span--) {
       const pieces = tokens.slice(i, i + span);
       if (!pieces.every(plain) || pieces.every((piece) => vocab.isTrusted(piece))) continue;
+      if (intoCapital(pieces)) continue;
       const whole = pieces.join('').toLowerCase();
       if (vocab.isWord(whole)) joined = { word: whole, span };
       else if (span === 2 && pieces.some((piece) => piece.length <= 2) && whole.length >= 6) {
@@ -95,9 +112,17 @@ export function cleanName(name: string, vocab: Vocab): string {
     if (plain(token) && token.length === 1 && !/^[aA]$/.test(token)) continue;
     const near =
       plain(token) && token.length >= 5 && !vocab.isWord(token) ? vocab.nearest(token) : undefined;
-    out.push(near ? matchCase(token, near) : token);
+    // A plural the text uses more is no slip: "Collector" stays, not "Collectors".
+    const slip = near && near.replace(/s$/, '') !== token.toLowerCase().replace(/s$/, '');
+    out.push(slip ? matchCase(token, near) : token);
   }
-  return out.join(' ');
+  return out
+    .map((word, k) =>
+      k > 0 && SMALL.has(word.toLowerCase())
+        ? word.toLowerCase()
+        : word.charAt(0).toUpperCase() + word.slice(1),
+    )
+    .join(' ');
 }
 
 /** A known creature's stats confirm a block: the same hit points, else (none read) the same AC. */
@@ -182,11 +207,24 @@ export function nameBlocks(
       creature.name = heading ?? index;
       return;
     }
-    // Same letters: the index has the book's capitals ("Yuan-ti"), unless it glued two words
-    // ("Swarm ofbats") and reads worse. Else the more readable one.
-    const sameLetters = letters(heading) === letters(index);
-    const share = wordShare(index, vocab) - wordShare(heading, vocab);
-    creature.name = share > 0 || (sameLetters && share === 0) ? index : heading;
+    // Same letters: the index has the book's capitals ("Yuan-ti") and spacing ("Collector", where
+    // a heading may read "COLLECT OR"), unless it glued a small word on ("Swarm ofbats"). Else
+    // the more readable one.
+    if (letters(heading) === letters(index)) {
+      creature.name = glued(index, heading) ? heading : index;
+      return;
+    }
+    creature.name = wordShare(index, vocab) > wordShare(heading, vocab) ? index : heading;
+  };
+
+  /** True when `name` holds an unknown word the other spelling splits into a small word and a rest. */
+  const glued = (name: string, other: string) => {
+    const parts = nameWords(other);
+    return nameWords(name).some(
+      (word) =>
+        !vocab.isWord(word) &&
+        parts.some((part, k) => SMALL.has(part) && part + (parts[k + 1] ?? '') === word),
+    );
   };
 
   const cleaned = expected.map((entry) => cleanName(entry.name, vocab));
