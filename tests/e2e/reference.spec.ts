@@ -140,9 +140,14 @@ test('Credits has required SRD, icon and font attribution and returns to its own
     await expect(
       page.locator('main a[href="https://creativecommons.org/licenses/by/4.0/legalcode"]'),
     ).toBeVisible();
-    await expect(
-      page.locator('main a[href="https://creativecommons.org/licenses/by/3.0/"]'),
-    ).toBeVisible();
+    // Item art and game-icons.net each credit CC BY 3.0.
+    for (const section of ['credits-item-art', 'credits-game-icons']) {
+      await expect(
+        page.locator(
+          `main section[aria-labelledby="${section}"] a[href="https://creativecommons.org/licenses/by/3.0/"]`,
+        ),
+      ).toBeVisible();
+    }
     await expect(
       page.locator('main a[href="https://github.com/flamableconcrete/awesome-dnd"]'),
     ).toBeVisible();

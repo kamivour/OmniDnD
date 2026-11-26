@@ -101,8 +101,10 @@ test('new campaign saves the 2014 defaults and standard-array creation validates
   await expect(page.getByRole('radio', { name: /^Standard array/ })).toBeChecked();
   await expect(page.getByText('D&D 5e (2014)', { exact: true })).toBeVisible();
   const sources = page.getByRole('group', { name: 'Sources', exact: true });
-  await expect(sources.getByRole('checkbox', { checked: true })).toHaveCount(1);
+  // The PHB and the Monster Manual are always on (D274).
+  await expect(sources.getByRole('checkbox', { checked: true })).toHaveCount(2);
   await expect(sources.getByRole('checkbox', { name: /Player's Handbook/ })).toBeDisabled();
+  await expect(sources.getByRole('checkbox', { name: /Monster Manual/ })).toBeDisabled();
   const rules = page.getByRole('group', { name: 'Optional rules', exact: true });
   await expect(rules.getByRole('checkbox', { checked: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Create campaign', exact: true })).toBeDisabled();
@@ -203,8 +205,8 @@ test('editing campaign methods preserves existing choices, current HP and histor
   await expect(existing).toContainText(/XP/);
   await expect(existing).toContainText(/not tracked|untracked/i);
   const sources = page.getByRole('group', { name: 'Sources', exact: true });
-  // PHB, XGE and TCE, plus the four parts of each expansion.
-  await expect(sources.getByRole('checkbox', { checked: true })).toHaveCount(11);
+  // PHB, XGE and TCE, plus the four parts of each expansion, and the always-on Monster Manual.
+  await expect(sources.getByRole('checkbox', { checked: true })).toHaveCount(12);
   expect(await readDatabase(page)).toEqual(before);
   await expectNoOverflow(page);
   await page.screenshot({ path: testInfo.outputPath('campaign-settings.png'), fullPage: true });
