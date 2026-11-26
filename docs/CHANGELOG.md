@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-26 11:47 — Click to pin works
+
+- "Click to pin" at the bottom of a hover preview is now a real button. Clicking it pins the details in the side panel.
+- Clicking the row itself still pins too, and Enter still pins from the keyboard.
+- Closing the pinned details puts focus back on the row you opened.
+- Checks pass.
+
 ## 2026-11-26 11:37 — Monsters in the Compendium: done
 
 - Monsters in the Compendium are finished. The Monsters tab works on phones and computers, in light and dark themes, with the full pack loaded.

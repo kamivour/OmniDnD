@@ -15,6 +15,7 @@ import {
   useRole,
   useTransitionStyles,
 } from '@floating-ui/react';
+import { Pin } from 'lucide-react';
 import { POPOVER_QUERY, useMediaQuery, useReducedMotion } from '../hooks/useMediaQuery';
 import { Sheet } from './Sheet';
 
@@ -130,7 +131,24 @@ export function Preview({ title, content, sheetFooter, onPin, children }: Previe
               className="rounded-card border border-border bg-surface-2 p-3 shadow-pop"
             >
               {content}
-              {onPin && <p className="mt-2 text-xs text-text-muted">Click to pin</p>}
+              {onPin && (
+                // Mouse shortcut only: keyboard users pin with Enter on the row. Focus the row first
+                // so closing the pinned panel returns there.
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => {
+                    const row = domReference.current;
+                    if (row instanceof HTMLElement) row.focus({ preventScroll: true });
+                    setOpen(false);
+                    onPin();
+                  }}
+                  className="mt-2 inline-flex min-h-8 items-center gap-1.5 rounded-btn text-xs text-accent hover:underline"
+                >
+                  <Pin size={14} aria-hidden />
+                  Click to pin
+                </button>
+              )}
             </div>
           </div>
         </FloatingPortal>

@@ -475,6 +475,7 @@ The live two-account check uses the disposable Supabase setup from M43.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-26 — User feedback: "Click to pin" in hover previews was plain text. Made it a button that pins the details; added an e2e check.
 - 2026-11-26 — Verified M50 at both widths in Dark and Parchment: import errors, campaign books, full pack (about 1 s to first rows, smooth typing). Fixed two stale e2e checks.
 - 2026-11-26 — Compendium gains a Monsters tab: challenge, type, size, book, legendary and NPC filters, challenge sort, stat block with books and lore, Add to encounter. Pages of 100 rows.
 - 2026-11-26 — Built the monster pack (386 creatures, 22 left out for review) and load it from Settings; encounter search follows campaign books.

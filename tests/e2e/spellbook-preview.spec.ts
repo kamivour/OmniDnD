@@ -67,7 +67,7 @@ test.describe('desktop previews', () => {
     await trigger.hover();
     const preview = page.getByRole('tooltip');
     await expectWhispersMetadata(preview);
-    await expect(preview).toContainText('Click to pin');
+    await expect(preview.getByRole('button', { name: 'Click to pin' })).toBeVisible();
     await expect(panel(page)).toBeHidden();
     await page.screenshot({
       path: info.outputPath('hover-preview-1440.png'),
@@ -90,6 +90,20 @@ test.describe('desktop previews', () => {
       path: info.outputPath('pinned-preview-1440.png'),
       animations: 'disabled',
     });
+    await panel(page).getByRole('button', { name: 'Close details', exact: true }).click();
+    await expect(panel(page)).toBeHidden();
+    await expect(trigger).toBeFocused();
+  });
+
+  test('Click to pin in the hover preview pins the spell', async ({ page }) => {
+    await page.goto(spellPath);
+    await expectSaved(page);
+    const trigger = row(page, 'Dissonant Whispers');
+    await trigger.hover();
+    const preview = page.getByRole('tooltip');
+    await preview.getByRole('button', { name: 'Click to pin' }).click();
+    await expect(preview).toBeHidden();
+    await expectWhispersMetadata(panel(page));
     await panel(page).getByRole('button', { name: 'Close details', exact: true }).click();
     await expect(panel(page)).toBeHidden();
     await expect(trigger).toBeFocused();
