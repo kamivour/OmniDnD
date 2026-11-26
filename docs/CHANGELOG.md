@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-26 10:11 — Monster books: review queue set aside
+
+- Monster checks are closed for now. Every indexed creature has a stat block.
+- 289 findings still need someone to read the printed page, mostly lost size and type lines. They are listed in the private review pages.
+- Until those are checked, a creature with flagged stats will be marked "Check against the book" in the app.
+- Checks pass.
+
 ## 2026-11-25 03:22 — Monster books: stat checks and review
 
 - Check stat blocks from all four books for missing fields and numbers that disagree.

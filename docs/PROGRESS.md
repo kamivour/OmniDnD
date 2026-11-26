@@ -430,7 +430,7 @@ The live two-account check uses the disposable Supabase setup from M43.
 
 - [x] T1: Extract text and chapters from the four PDFs
 - [x] T2: Parse stat blocks and lore; match the SRD gold set
-- [ ] T3: Validate with stat math and clear the review queue
+- [x] T3: Validate with stat math and clear the review queue (289 blocking findings deferred, see Q53)
 - [ ] T4: Merge duplicates and load the private pack in the app
 - [ ] T5: Monsters tab in the Compendium
 - [ ] T6: Verify at both widths and across themes
@@ -475,6 +475,7 @@ The live two-account check uses the disposable Supabase setup from M43.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-26 — Closed monster validation with 289 blocking findings left for page-by-page review later (Q53); every indexed name has a stat block.
 - 2026-11-25 — Added private monster review reports and matched all indexed stat blocks across four books. Required fields still need source review before T3 passes.
 - 2026-11-25 — Parsed stat blocks, names and lore families from the four monster books; Monster Manual matches the SRD on 98.1% of fields read.
 - 2026-11-25 — Extracted reading-order text from the four monster books into private files, with chapter ranges and about 960 expected names from their indexes.

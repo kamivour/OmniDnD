@@ -328,6 +328,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q48 | How should Armorer's armor components be represented for its two extra armor-only infusions? | After M41 | Standard active limit only, with a visible reminder; do not grant two unrestricted slots or invent separate equipment | User |
 | Q49 | Should the already-bundled Summon Draconic Spirit move from the Tasha filter to a separate Fizban's book option? | Next source review | Preserve existing spell visibility; identify Fizban's 2014 source on its companion card | User |
 | Q52 | How strictly should the app enforce subclass spell schools, discipline prerequisites and situational limits? | Class mechanics follow-up | Keep existing picks. Warn about verified limits and let the DM confirm exceptions. | User / DM |
+| Q53 | When will someone check the 289 monster stat block findings that need the printed page (lost type lines, ability scores, challenge)? | Before relying on the monster pack | Use the SRD or a newer printing when one exists. Mark other flagged creatures "Check against the book". Leave out creatures still missing core stats, and list them in the pack manifest. | User |
 
 ## How to add an entry
 
