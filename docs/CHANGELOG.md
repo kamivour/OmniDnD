@@ -4,6 +4,12 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-26 22:31 — Alignment as a 3×3 grid
+
+- New character now shows alignment as a 3×3 grid: Lawful to Chaotic across, Good to Evil down. Tap a cell to pick it.
+- Alignment stays optional: "Clear alignment" removes a pick. The sheet editor still takes free text.
+- Checks pass.
+
 ## 2026-11-26 21:49 — Cleaner monster pack text
 
 - Rebuild your monster pack to get the fixes: lost actions, cut trait names, glued words and misread spell save DCs are repaired, and no creature in the pack is flagged any more.

@@ -25,7 +25,8 @@ import { Icon } from '../components/Icon';
 import { cx } from '../cx';
 import { AbilityBaseInput } from '../components/AbilityBaseInput';
 import { SectionLabel } from '../components/SectionLabel';
-import { ALIGNMENTS, alignmentLabel } from '../fixtures/new-character';
+import { alignmentLabel } from '../fixtures/new-character';
+import { AlignmentGrid } from '../components/AlignmentGrid';
 import { signed } from '../format';
 import { computeSheet } from '../../engine/calc/sheet';
 import { GuidedChoicesSection } from './GuidedChoicesSection';
@@ -643,13 +644,7 @@ function NewCharacterForm({
             />
           )}
           {show('name') && (
-            <Select
-              id="nc-alignment"
-              label="Alignment"
-              options={ALIGNMENTS.map((name) => ({ id: name, name }))}
-              value={alignment}
-              onChange={setAlignment}
-            />
+            <AlignmentGrid value={alignment} onChange={setAlignment} className="sm:col-span-2" />
           )}
         </div>
       </section>
@@ -1050,43 +1045,6 @@ function abilityHint(c: Campaign): string {
   if (c.abilityMethod === 'standard-array')
     return `Assign ${STANDARD_ARRAY.join(', ')} as Base, each once. Race bonuses are computed.`;
   return 'Point buy: Base 8–15, spending up to 27 points. Race bonuses are computed separately.';
-}
-
-function Select({
-  id,
-  label,
-  options,
-  value,
-  onChange,
-  required = false,
-}: {
-  id: string;
-  label: string;
-  options: { id: string; name: string }[];
-  value: string;
-  onChange: (value: string) => void;
-  required?: boolean;
-}) {
-  return (
-    <Field label={label} htmlFor={id}>
-      <select
-        id={id}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        required={required}
-        className={inputClass}
-      >
-        <option value="" disabled={required}>
-          {required ? 'Choose…' : 'Choose… (optional)'}
-        </option>
-        {options.map((o) => (
-          <option key={o.id} value={o.id}>
-            {o.name}
-          </option>
-        ))}
-      </select>
-    </Field>
-  );
 }
 
 function rulesSummary(campaign: Campaign): string {

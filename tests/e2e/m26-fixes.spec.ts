@@ -49,11 +49,15 @@ test('number fields ignore letters and signs they cannot hold', async ({ page })
   await expect(level).toHaveValue('3');
 });
 
-test('alignment list says True Neutral', async ({ page }) => {
+test('alignment grid says True Neutral, picks one cell and clears', async ({ page }) => {
   await openNewCharacter(page);
-  await expect(
-    page.getByLabel('Alignment', { exact: true }).locator('option', { hasText: 'True Neutral' }),
-  ).toHaveCount(1);
+  const grid = page.getByRole('group', { name: 'Alignment', exact: true });
+  await expect(grid.getByRole('radio')).toHaveCount(9);
+  const neutral = grid.getByRole('radio', { name: 'True Neutral', exact: true });
+  await grid.getByText('True Neutral', { exact: true }).click();
+  await expect(neutral).toBeChecked();
+  await grid.getByRole('button', { name: 'Clear alignment' }).click();
+  await expect(neutral).not.toBeChecked();
 });
 
 test('Pending at level 1 lists first-level spells, not cantrips, until Show all', async ({
