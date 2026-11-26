@@ -164,10 +164,20 @@ it('keeps review exceptions tied to an exact finding and permits explicit index 
       index: {
         Sentries: { kind: 'heading', reason: 'Family heading' },
         Chalk: { kind: 'alias', name: 'Chalk Sentry', page: 3, reason: 'Abbreviation in index' },
+        'Dust Wisp': { kind: 'missing', page: 9, reason: 'Index line lost to OCR' },
       },
     }),
   );
-  expect(names).toEqual([{ name: 'Chalk Sentry', page: 3 }]);
+  expect(names).toEqual([
+    { name: 'Chalk Sentry', page: 3 },
+    { name: 'Dust Wisp', page: 9 },
+  ]);
+  expect(() =>
+    reviewIndex(
+      [{ name: 'Dust Wisp' }],
+      OverridesSchema.parse({ index: { 'Dust Wisp': { kind: 'missing', page: 9, reason: 'x' } } }),
+    ),
+  ).toThrow('Index already lists Dust Wisp');
 });
 
 it('requires the full stat card for a block missing from the PDF text', () => {

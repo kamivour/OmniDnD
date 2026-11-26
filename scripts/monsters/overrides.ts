@@ -113,6 +113,8 @@ const indexOverride = z.discriminatedUnion('kind', [
     reason: nonempty,
   }),
   z.strictObject({ kind: z.literal('heading'), reason: nonempty }),
+  // A name the printed index has but OCR lost, checked against the page by hand.
+  z.strictObject({ kind: z.literal('missing'), page: z.int().positive(), reason: nonempty }),
 ]);
 
 export const OverridesSchema = z.strictObject({
@@ -197,9 +199,14 @@ export function confirmFindings(
 
 export function reviewIndex(expected: readonly IndexEntry[], overrides: Overrides) {
   const matches = new Set<string>();
-  const names = new Map(
-    Object.entries(overrides.index).map(([name, patch]) => [nameKey(name), patch]),
-  );
+  const names = new Map<string, Overrides['index'][string]>();
+  const added: IndexEntry[] = [];
+  const listed = new Set(expected.map((entry) => nameKey(entry.name)));
+  for (const [name, patch] of Object.entries(overrides.index)) {
+    if (patch.kind !== 'missing') names.set(nameKey(name), patch);
+    else if (listed.has(nameKey(name))) throw new Error(`Index already lists ${name}.`);
+    else added.push({ name, page: patch.page });
+  }
   const entries = expected.flatMap((entry): IndexEntry[] => {
     const key = nameKey(entry.name);
     const patch = names.get(key);
@@ -211,5 +218,5 @@ export function reviewIndex(expected: readonly IndexEntry[], overrides: Override
   });
   for (const key of names.keys())
     if (!matches.has(key)) throw new Error(`No index entry matches override ${key}.`);
-  return entries;
+  return [...entries, ...added];
 }

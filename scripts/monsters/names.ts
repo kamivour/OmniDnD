@@ -26,17 +26,19 @@ export interface IndexEntry {
 
 /**
  * One entry is a name, a leader, and a page: `Giant Frog, 325` or `Gauth ........ 125`. OCR
- * puts any junk in a leader, splits page numbers (`32 1`), reads 1 as I or l and 0 as O, and
- * sometimes loses the number. A line can hold entries from several columns.
+ * puts any junk in a leader, splits page numbers (`32 1`), reads 1 as I, i or l, 5 as S and 0
+ * as O, and sometimes loses the number. A line can hold entries from several columns. Some
+ * indexes put the family first (`Kruthik, Young ..... 168`): that entry is the Young Kruthik.
  */
 const NAME = String.raw`(\p{Lu}[\p{L}'’()/\- ]*?[\p{L})])`;
-const PAGE = String.raw`\s*[^\p{L}\p{N}\s()][^\p{L}\p{N}()]*?((?:[\dIlO] ?){0,2}[\dIlO])(?![\p{L}\p{N}])`;
+const PAGE = String.raw`\s*[^\p{L}\p{N}\s()][^\p{L}\p{N}()]*?((?:[\dIilOS] ?){0,2}[\dIilOS])(?![\p{L}\p{N}])`;
 /** Without a number, only a long leader marks an entry (not `Courtier. See Noble.`). */
 const LOST = String.raw`\s*(?:[^\p{L}\p{N}\s()]\s*){8,}(?=\p{Lu}|$)`;
 const ENTRY = new RegExp(`${NAME}(?:${PAGE}|${LOST})`, 'gu');
+const FAMILY = /^\s*(\p{Lu}[\p{L}'’\- ]*\p{L}),\s*$/u;
 
 const pageNumber = (digits: string) =>
-  Number(digits.replace(/ /g, '').replace(/[Il]/g, '1').replace(/O/g, '0'));
+  Number(digits.replace(/ /g, '').replace(/[Iil]/g, '1').replace(/S/g, '5').replace(/O/g, '0'));
 
 export function parseIndexLine(text: string): IndexEntry[] {
   // OCR reads some hyphens as a middle dot (`Kuo·toa`).
@@ -46,7 +48,8 @@ export function parseIndexLine(text: string): IndexEntry[] {
     const before = line.slice(0, match.index).trimEnd();
     // `Chapter 2: Bestiary .... 37` and `App. C: Monster Lists` are contents, not creatures.
     if (before.endsWith(':')) continue;
-    const name = match[1]!.replace(/\s+/g, ' ').trim();
+    const family = FAMILY.exec(line.slice(0, match.index))?.[1];
+    const name = [match[1], family].join(' ').replace(/\s+/g, ' ').trim();
     if (name.replace(/[^\p{L}]/gu, '').length < 3) continue;
     const digits = match[2];
     out.push(digits === undefined ? { name } : { name, page: pageNumber(digits) });

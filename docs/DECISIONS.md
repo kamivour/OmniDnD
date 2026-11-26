@@ -342,7 +342,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 - [x] Lycanthropes show twice: the pack's full entry and the SRD entry for each form.
 - [x] 24 SRD entries have no book page or lore: the lycanthrope and vampire forms, four swarms, Ice Mephit and Giant Rat (Diseased).
 - [ ] Junk lines leak into some lore, for example the Shrieker's.
-- [ ] 8 stat blocks have no name in their book's index (MM 5, VGM 1, MPMM 2).
+- [x] 8 stat blocks have no name in their book's index (MM 5, VGM 1, MPMM 2). The Half-Ogre, unnamed before, now ships too.
 - [x] A pack file with the wrong format version gets the generic "not a monster pack" error.
 - [x] About 40 creature names were damaged ("Ore War Chief", "Drow Priestess oflolth") or kept an older printing's short name beside the newer one ("Bronze Scout" and "Clockwork Bronze Scout").
 

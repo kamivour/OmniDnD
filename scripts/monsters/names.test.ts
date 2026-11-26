@@ -21,6 +21,23 @@ describe('parseIndexLine', () => {
     expect(parseIndexLine('Ash Imp, Il')).toEqual([{ name: 'Ash Imp', page: 11 }]);
     expect(parseIndexLine('Stone-eel, 32 1')).toEqual([{ name: 'Stone-eel', page: 321 }]);
     expect(parseIndexLine('Reed Elk .........IO5')).toEqual([{ name: 'Reed Elk', page: 105 }]);
+    expect(parseIndexLine('Moss Crab, liS Fen Hare, ISS')).toEqual([
+      { name: 'Moss Crab', page: 115 },
+      { name: 'Fen Hare', page: 155 },
+    ]);
+  });
+
+  it('puts a family listed first after the variant', () => {
+    expect(parseIndexLine('Wisp, Dust ............ 120')).toEqual([
+      { name: 'Dust Wisp', page: 120 },
+    ]);
+    expect(parseIndexLine('Bog Rats, Swarm of ..... 83')).toEqual([
+      { name: 'Swarm of Bog Rats', page: 83 },
+    ]);
+    expect(parseIndexLine('Bog Hound, 52 Glass Moth, 61')).toEqual([
+      { name: 'Bog Hound', page: 52 },
+      { name: 'Glass Moth', page: 61 },
+    ]);
   });
 
   it('reads a hyphen OCR set as a middle dot, and slashes in a name', () => {
