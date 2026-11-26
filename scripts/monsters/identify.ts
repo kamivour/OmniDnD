@@ -182,10 +182,11 @@ export function nameBlocks(
       creature.name = heading ?? index;
       return;
     }
-    // Same letters: the index has the book's capitals ("Yuan-ti"). Else the more readable one.
+    // Same letters: the index has the book's capitals ("Yuan-ti"), unless it glued two words
+    // ("Swarm ofbats") and reads worse. Else the more readable one.
     const sameLetters = letters(heading) === letters(index);
-    creature.name =
-      sameLetters || wordShare(index, vocab) > wordShare(heading, vocab) ? index : heading;
+    const share = wordShare(index, vocab) - wordShare(heading, vocab);
+    creature.name = share > 0 || (sameLetters && share === 0) ? index : heading;
   };
 
   const cleaned = expected.map((entry) => cleanName(entry.name, vocab));

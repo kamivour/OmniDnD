@@ -4,7 +4,8 @@
  *
  * One entry per creature (D269). Copies match by name, after optional renames from aliases.json.
  * Stats come from the newest printing that passes the schema; the entry lists every book and
- * printed page. Creatures the SRD already bundles get only their book tags and lore.
+ * printed page. Creatures the SRD already bundles, including each SRD form of a book creature,
+ * get only their book tags and lore.
  */
 import { createHash } from 'node:crypto';
 import { abilityModifier } from '../../src/engine/calc/abilities.ts';
@@ -83,6 +84,23 @@ const slug = (name: string) =>
     .replace(/['’]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
+
+/** SRD entries the book prints as variants inside another creature's block. */
+const SRD_VARIANT_OF: Readonly<Record<string, string>> = {
+  'Swarm of Beetles': 'Swarm of Insects',
+  'Swarm of Centipedes': 'Swarm of Insects',
+  'Swarm of Spiders': 'Swarm of Insects',
+  'Swarm of Wasps': 'Swarm of Insects',
+};
+
+/**
+ * The book creature an SRD entry is a form or variant of: "Werebear, Bear Form" and
+ * "Giant Rat (Diseased)" share their parent's page and lore.
+ */
+const srdParent = (name: string) =>
+  SRD_VARIANT_OF[name] ??
+  name.match(/^(.+?),\s*[^,]+ Form$/)?.[1] ??
+  name.match(/^(.+?)\s*\([^)]*\)$/)?.[1];
 
 const DICE = /^\d+(?:d\d+)?(?:[+-]\d+)?$/;
 const isDamageType = (type: string): type is (typeof DAMAGE_TYPES)[number] =>
@@ -182,9 +200,13 @@ export function buildPack(input: PackInput): { pack: MonsterPack; manifest: Pack
   );
   const srdIds = new Set(input.srd.map((creature) => creature.id));
   const srdByKey = new Map<string, string>();
+  const srdForms = new Map<string, string[]>();
   for (const creature of input.srd) {
     srdByKey.set(nameKey(creature.name), creature.id);
     srdByKey.set(nameKey(creature.id.replace(/^creature\./, '')), creature.id);
+    const parent = srdParent(creature.name);
+    if (parent)
+      srdForms.set(nameKey(parent), [...(srdForms.get(nameKey(parent)) ?? []), creature.id]);
   }
   const order = [...input.books].sort(
     (a, b) => PACK_BOOKS.indexOf(a.book) - PACK_BOOKS.indexOf(b.book),
@@ -278,9 +300,13 @@ export function buildPack(input: PackInput): { pack: MonsterPack; manifest: Pack
     const books = copies.map((copy) => ({ source: copy.book, page: copy.printed }));
     const name = copies.at(-1)!.creature.name;
     const srdId = srdByKey.get(key) ?? srdByKey.get(nameKey(slug(name)));
-    if (srdId) {
+    // The SRD splits some creatures into forms ("Werebear, Bear Form"); those replace the
+    // book's single block rather than sitting beside it.
+    const srdIdsFor = [...(srdId ? [srdId] : []), ...(srdForms.get(key) ?? [])];
+    if (srdIdsFor.length) {
       const loreIds = loreFor(copies);
-      supplements.push({ id: srdId, books, ...(loreIds.length && { loreIds }) });
+      for (const id of srdIdsFor)
+        supplements.push({ id, books, ...(loreIds.length && { loreIds }) });
       for (const copy of copies) manifestBooks[copy.book]!.used++;
       continue;
     }

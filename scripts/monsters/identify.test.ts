@@ -101,6 +101,26 @@ describe('nameBlocks', () => {
     expect(hound!.issues).toEqual(['heading "BOG HOUNO" is not in the book\'s index']);
   });
 
+  it('keeps the index capitals but takes the heading when the index lost a space', () => {
+    const [toad, swarm, hound] = nameBlocks(
+      [
+        creature({ heading: 'MIRE-TOAD', printed: 41 }),
+        creature({ heading: 'SWARM OF MIRE TOADS', printed: 42 }),
+        creature({ heading: 'BOG HOUND •, ~', printed: 43 }),
+      ],
+      [
+        { name: 'Mire-toad', page: 41 },
+        { name: 'Swarm ofmire toads', page: 42 },
+        { name: 'Bog hound', page: 43 },
+      ],
+      [],
+      vocab,
+    );
+    expect(toad!.name).toBe('Mire-toad');
+    expect(swarm!.name).toBe('Swarm of Mire Toads');
+    expect(hound!.name).toBe('Bog hound');
+  });
+
   it('names a block with no heading by page, then by known stats, then by its own text', () => {
     const named = nameBlocks(
       [

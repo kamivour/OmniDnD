@@ -172,6 +172,40 @@ describe('buildPack', () => {
     expect(pack.creatures.map((c) => [c.name, c.books?.length])).toEqual([['New Gnasher', 2]]);
   });
 
+  it('gives SRD forms and variants their parent block page and lore, with no duplicate', () => {
+    const { pack } = buildPack({
+      books: [
+        book(
+          'MM',
+          [
+            record(creature('Werebadger', { family: 0 })),
+            record(creature('Test Wolf', { printed: 11 })),
+            record(creature('Swarm of Insects', { printed: 12 })),
+          ],
+          [{ page: 15, sections: [{ text: 'Badger lore.' }] }],
+        ),
+      ],
+      srd: [
+        { id: 'creature.werebadger-badger', name: 'Werebadger, Badger Form' },
+        { id: 'creature.werebadger-human', name: 'Werebadger, Human Form' },
+        { id: 'creature.test-wolf', name: 'Test Wolf' },
+        { id: 'creature.test-wolf-rabid', name: 'Test Wolf (Rabid)' },
+        { id: 'creature.swarm-of-insects', name: 'Swarm of Insects' },
+        { id: 'creature.swarm-of-wasps', name: 'Swarm of Wasps' },
+      ],
+      extractedAt: '2026-11-26',
+    });
+    expect(pack.creatures).toEqual([]);
+    expect(pack.supplements.map((s) => [s.id, s.books?.[0]?.page, s.loreIds])).toEqual([
+      ['creature.swarm-of-insects', 12, undefined],
+      ['creature.swarm-of-wasps', 12, undefined],
+      ['creature.test-wolf', 11, undefined],
+      ['creature.test-wolf-rabid', 11, undefined],
+      ['creature.werebadger-badger', 10, ['lore.mm.0']],
+      ['creature.werebadger-human', 10, ['lore.mm.0']],
+    ]);
+  });
+
   it('marks generic NPC blocks and keeps a stable version for the same input', () => {
     const input = [
       book('VGM', [record(creature('Test Mage', { creatureType: 'humanoid (any race)' }))]),
