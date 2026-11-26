@@ -24,6 +24,15 @@ export const KIND_LABELS: Record<CatalogKind, string> = {
   equipment: 'Equipment',
 };
 
+/** Compendium tabs: the catalog kinds, then monsters (M50), which have their own filters. */
+export const COMPENDIUM_TABS = [...CATALOG_KINDS, 'monsters'] as const;
+export type CompendiumTab = (typeof COMPENDIUM_TABS)[number];
+
+export const TAB_LABELS: Record<CompendiumTab, string> = { ...KIND_LABELS, monsters: 'Monsters' };
+
+export const readTab = (params: URLSearchParams): CompendiumTab =>
+  params.get('kind') === 'monsters' ? 'monsters' : readQuery(params).kind;
+
 /** Singular kind names, e.g. for the Journal's plans. */
 export const KIND_NAMES: Record<CatalogKind, string> = {
   spells: 'Spell',
@@ -140,7 +149,7 @@ export function toggleParam(params: URLSearchParams, key: string, value: string)
 }
 
 /** Switching tabs keeps the search text and books but drops kind-specific filters. */
-export function switchKind(params: URLSearchParams, kind: CatalogKind): URLSearchParams {
+export function switchKind(params: URLSearchParams, kind: CompendiumTab): URLSearchParams {
   const next = new URLSearchParams();
   for (const key of ['q', 'book', 'books']) {
     const value = params.get(key);
@@ -152,12 +161,25 @@ export function switchKind(params: URLSearchParams, kind: CatalogKind): URLSearc
 
 /** True when any filter beyond the tab and the books is on. */
 export function hasFilters(params: URLSearchParams): boolean {
-  return ['q', 'level', 'school', 'class', 'tier', 'type', 'book'].some((key) => params.get(key));
+  return [
+    'q',
+    'level',
+    'school',
+    'class',
+    'tier',
+    'type',
+    'book',
+    'crmin',
+    'crmax',
+    'size',
+    'legendary',
+    'npc',
+  ].some((key) => params.get(key));
 }
 
 export function clearFilters(params: URLSearchParams): URLSearchParams {
   const next = new URLSearchParams();
-  for (const key of ['kind', 'books']) {
+  for (const key of ['kind', 'books', 'sort']) {
     const value = params.get(key);
     if (value) next.set(key, value);
   }

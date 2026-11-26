@@ -99,7 +99,7 @@ Run `npm run monsters -- pack` to merge all reviewed books into the pack. Run `n
   - Filters: CR range, type, size, book, legendary, NPC.
   - Sort by name or CR, grouped by CR.
   - The detail view uses `CreatureStatblock`, with book and page tags, the family lore below and "Add to encounter" when a fight is open.
-  - The list is virtualized.
+  - The list shows 100 rows at a time with "Show more", like the other tabs.
   - Without a pack, the tab shows the SRD monsters and a one-line import hint.
 - **Find.** Add an entry in `places.ts` for Compendium Monsters, with the synonyms monster, npc, creature and stat block.
 

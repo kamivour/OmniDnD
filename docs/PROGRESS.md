@@ -432,7 +432,7 @@ The live two-account check uses the disposable Supabase setup from M43.
 - [x] T2: Parse stat blocks and lore; match the SRD gold set
 - [x] T3: Validate with stat math and clear the review queue (289 blocking findings deferred, see Q53)
 - [x] T4: Merge duplicates and load the private pack in the app
-- [ ] T5: Monsters tab in the Compendium
+- [x] T5: Monsters tab in the Compendium
 - [ ] T6: Verify at both widths and across themes
 
 ## Review fixes
@@ -475,6 +475,7 @@ The live two-account check uses the disposable Supabase setup from M43.
 
 Newest first. One line per task, about 25 words at most.
 
+- 2026-11-26 — Compendium gains a Monsters tab: challenge, type, size, book, legendary and NPC filters, challenge sort, stat block with books and lore, Add to encounter. Pages of 100 rows.
 - 2026-11-26 — Built the monster pack (386 creatures, 22 left out for review) and load it from Settings; encounter search follows campaign books.
 - 2026-11-26 — Closed monster validation with 289 blocking findings left for page-by-page review later (Q53); every indexed name has a stat block.
 - 2026-11-25 — Added private monster review reports and matched all indexed stat blocks across four books. Required fields still need source review before T3 passes.

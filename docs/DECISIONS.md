@@ -6,6 +6,7 @@ Two lists: what is decided, and what is still open. When an open question is ans
 
 | ID | Date | Decision | Why |
 |---|---|---|---|
+| D275 | 2026-11-26 | "Add to encounter" in the Compendium adds one copy with average hit points, and only while a character's encounter tracker runs. Several copies and rolled hit points stay on the Combat screen. | Keeps one simple button; the tracker already handles the rest |
 | D274 | 2026-11-26 | The Monster Manual is always on, like the PHB. Volo's, Tome of Foes and Monsters of the Multiverse are campaign book choices; a monster shows when any book it is printed in is on. | Every table uses the Monster Manual; the others vary by DM |
 | D273 | 2026-11-25 | When a stat block's printed passive Perception disagrees with its Wisdom and Perception bonus, the worked-out value wins and the block is flagged for review. | Misprints and OCR slips are more common than real exceptions |
 | D272 | 2026-11-25 | Monster packs stay on each device: imported in Settings, stored locally and never synced or bundled. The copyright question stays with the user. | The repo and the hosted app are public |
@@ -330,6 +331,7 @@ Each has a default the agent uses until the user answers. Defaults must be easy 
 | Q49 | Should the already-bundled Summon Draconic Spirit move from the Tasha filter to a separate Fizban's book option? | Next source review | Preserve existing spell visibility; identify Fizban's 2014 source on its companion card | User |
 | Q52 | How strictly should the app enforce subclass spell schools, discipline prerequisites and situational limits? | Class mechanics follow-up | Keep existing picks. Warn about verified limits and let the DM confirm exceptions. | User / DM |
 | Q53 | When will someone check the 289 monster stat block findings that need the printed page (lost type lines, ability scores, challenge)? | Before relying on the monster pack | Use the SRD or a newer printing when one exists. Mark other flagged creatures "Check against the book". Leave out creatures still missing core stats, and list them in the pack manifest. | User |
+| Q54 | About 16 pack creatures have a damaged type line (for example "ciant"). Fix them by hand, or wait for the Q53 page review? | Q53 review | Show them under the "Other" type filter until the page review fixes them | User |
 
 ## How to add an entry
 

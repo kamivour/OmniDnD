@@ -694,7 +694,14 @@ const SensesSchema = z.strictObject({
   passivePerception: z.int().min(0),
 });
 
-const CreatureSizeSchema = z.enum(['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan']);
+export const CreatureSizeSchema = z.enum([
+  'tiny',
+  'small',
+  'medium',
+  'large',
+  'huge',
+  'gargantuan',
+]);
 const CreatureSectionSchema = z.enum([
   'actions',
   'bonusActions',
@@ -859,6 +866,7 @@ export type ItemCharges = z.infer<typeof ItemChargesSchema>;
 export type ItemRarity = z.infer<typeof ItemRaritySchema>;
 export type ConditionDef = z.infer<typeof ConditionDefSchema>;
 export type CreatureDef = z.infer<typeof CreatureDefSchema>;
+export type CreatureSize = z.infer<typeof CreatureSizeSchema>;
 export type RefEntry = z.infer<typeof RefEntrySchema>;
 export type SummaryOverlay = z.infer<typeof SummaryOverlaySchema>;
 export type MechanicsOverlay = z.infer<typeof MechanicsOverlaySchema>;

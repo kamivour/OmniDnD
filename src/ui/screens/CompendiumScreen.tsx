@@ -4,7 +4,6 @@ import { Check, ChevronRight, Search, SlidersHorizontal, X } from 'lucide-react'
 import { useStore } from 'zustand';
 import { registry } from '../../data/registry';
 import {
-  CATALOG_KINDS,
   ITEM_TIERS,
   ITEM_TYPES,
   campaignAllows,
@@ -19,16 +18,26 @@ import {
   type CatalogFilter,
   type CatalogKind,
 } from '../../engine/catalog';
-import { SOURCE_NAMES } from '../../engine/calc/campaign-rules';
+import {
+  CR_STEPS,
+  CREATURE_SIZES,
+  compareMonsters,
+  creatureBaseType,
+  matchesMonster,
+  monsterEntries,
+} from '../../engine/bestiary';
+import { MONSTER_SOURCES, SOURCE_NAMES, entryBooks } from '../../engine/calc/campaign-rules';
 import { SCHOOLS } from '../../engine/rules2014';
-import type { Source } from '../../engine/schema';
+import type { CreatureDef, Source } from '../../engine/schema';
 import { CompendiumDetail } from '../compendium/CompendiumDetail';
 import { CompendiumArt } from '../compendium/CompendiumArt';
+import { AddToEncounter, MonsterDetail } from '../compendium/MonsterDetail';
 import { PlanButton } from '../compendium/PlanButton';
 import { featPrerequisite } from '../compendium/compendium-facts';
 import { equipmentBases, equipmentProfile } from '../compendium/equipment-reference';
 import {
-  KIND_LABELS,
+  COMPENDIUM_TABS,
+  TAB_LABELS,
   TIER_LABELS,
   TYPE_LABELS,
   TYPE_NAMES,
@@ -36,17 +45,32 @@ import {
   groupLabel,
   hasFilters,
   readQuery,
+  readTab,
   rowMeta,
   switchKind,
   toggleParam,
   titleCase,
 } from '../compendium/compendium-model';
+import {
+  SIZE_LABELS,
+  TYPE_FILTERS,
+  monsterActiveFilters,
+  monsterGroup,
+  monsterMeta,
+  readMonsterQuery,
+  typeLabel,
+} from '../compendium/monster-model';
 import { inputClass } from '../components/fields';
 import { Sheet } from '../components/Sheet';
+import { scrollToAnchor } from '../find/anchor';
 import { useMediaQuery } from '../hooks/useMediaQuery';
+import { crText } from '../reference/creature-format';
 import { cx } from '../cx';
 import { characterState, characterStore } from '../../state/character-store';
+import { useMonsterPack, useRegistry } from '../../state/monster-pack';
 import '../compendium/compendium.css';
+
+type ListEntry = CatalogEntry | CreatureDef;
 
 const PAGE = 100;
 
@@ -74,6 +98,11 @@ export function CompendiumScreen() {
   const listScrollTop = useRef<number>(null);
   const query = useMemo(() => readQuery(params), [params]);
   const { kind, filter, entryId, allBooks } = query;
+  const tab = readTab(params);
+  const monsters = tab === 'monsters';
+  const monsterQuery = useMemo(() => readMonsterQuery(params), [params]);
+  const live = useRegistry();
+  const packMissing = useMonsterPack((s) => !s.summary && s.status !== 'loading');
   const campaign = useStore(characterStore, (s) =>
     characterId ? characterState(s, characterId)?.campaign : undefined,
   );
@@ -100,8 +129,23 @@ export function CompendiumScreen() {
   }, [entryId, inlineDetail]);
 
   const all = useMemo(
-    () => catalogEntries(registry, kind).filter((e) => !scope || campaignAllows(scope, e)),
-    [kind, scope],
+    () =>
+      monsters
+        ? []
+        : catalogEntries(registry, kind).filter((e) => !scope || campaignAllows(scope, e)),
+    [kind, scope, monsters],
+  );
+  // Monsters (M50): the SRD stat blocks plus a loaded pack, in the campaign's books.
+  const allMonsters = useMemo(
+    () => (monsters ? monsterEntries(live, scope) : []),
+    [live, scope, monsters],
+  );
+  const monsterResults = useMemo(
+    () =>
+      allMonsters
+        .filter((c) => matchesMonster(c, monsterQuery.filter))
+        .sort(compareMonsters(monsterQuery.sort)),
+    [allMonsters, monsterQuery],
   );
   const results = useMemo(
     () =>
@@ -119,13 +163,24 @@ export function CompendiumScreen() {
     [all, filter, scope],
   );
   const books = useMemo(
-    () => (Object.keys(SOURCE_NAMES) as Source[]).filter((b) => all.some((e) => e.source === b)),
-    [all],
+    () =>
+      monsters
+        ? MONSTER_SOURCES.filter((b) => allMonsters.some((c) => entryBooks(c).includes(b)))
+        : (Object.keys(SOURCE_NAMES) as Source[]).filter((b) => all.some((e) => e.source === b)),
+    [all, allMonsters, monsters],
   );
-  const entry = entryId ? registry.entries.get(entryId) : undefined;
-  const open = entry && entryKind(entry) ? (entry as CatalogEntry) : undefined;
-  const active = activeFilters(filter);
+  const entry = entryId ? live.entries.get(entryId) : undefined;
+  const open = !monsters && entry && entryKind(entry) ? (entry as CatalogEntry) : undefined;
+  const openMonster = monsters && entry?.kind === 'creature' ? entry : undefined;
+  const shown: ListEntry | undefined = open ?? openMonster;
+  const active = monsters ? monsterActiveFilters(monsterQuery.filter) : activeFilters(filter);
+  const chosenBooks = monsters ? monsterQuery.filter.books : filter.books;
+  const listed = monsters ? monsterResults : results;
+  const total = monsters ? allMonsters.length : all.length;
+  const group = (e: ListEntry) =>
+    e.kind === 'creature' ? monsterGroup(monsterQuery.sort)(e) : groupLabel(e);
   const filterable =
+    monsters ||
     kind === 'equipment' ||
     kind === 'spells' ||
     kind === 'subclasses' ||
@@ -158,7 +213,7 @@ export function CompendiumScreen() {
   };
 
   const listKey = [...params.entries()].filter(([k]) => k !== 'entry').join('&');
-  const detail = open && (
+  const detail = open ? (
     <CompendiumDetail
       key={open.id}
       entry={open}
@@ -166,7 +221,16 @@ export function CompendiumScreen() {
       action={characterId && <PlanButton characterId={characterId} entryId={open.id} />}
       titleInSheet={!inlineDetail}
     />
-  );
+  ) : openMonster ? (
+    <MonsterDetail
+      key={openMonster.id}
+      creature={openMonster}
+      action={
+        characterId && <AddToEncounter characterId={characterId} creatureId={openMonster.id} />
+      }
+      titleInSheet={!inlineDetail}
+    />
+  ) : undefined;
 
   return (
     <section
@@ -186,23 +250,36 @@ export function CompendiumScreen() {
         aria-label="Kinds"
         className="flex flex-wrap gap-1 rounded-card border border-border bg-surface p-1"
       >
-        {CATALOG_KINDS.map((k) => (
+        {COMPENDIUM_TABS.map((k) => (
           <button
             key={k}
             type="button"
-            aria-pressed={k === kind}
+            aria-pressed={k === tab}
             onClick={() => update(switchKind(params, k))}
             className={cx(
               'inline-flex min-h-11 items-center rounded-btn border px-3 text-sm',
-              k === kind
+              k === tab
                 ? 'border-accent bg-surface-2 font-semibold text-accent'
                 : 'border-transparent text-text-muted hover:bg-surface-2 hover:text-text',
             )}
           >
-            {KIND_LABELS[k]}
+            {TAB_LABELS[k]}
           </button>
         ))}
       </div>
+      {monsters && packMissing && (
+        <p className="text-sm text-text-muted">
+          Only the free SRD monsters are here.{' '}
+          <Link
+            to={`${base}/settings`}
+            onClick={() => scrollToAnchor('settings-monsters')}
+            className="text-accent underline"
+          >
+            Import your monster pack in Settings
+          </Link>{' '}
+          to add the rest.
+        </p>
+      )}
 
       <div className="flex flex-col gap-3 rounded-card border border-border bg-surface p-3">
         <div className="flex min-w-0 items-center gap-2">
@@ -215,8 +292,8 @@ export function CompendiumScreen() {
             <input
               type="search"
               value={params.get('q') ?? ''}
-              placeholder={`Search ${KIND_LABELS[kind].toLowerCase()}`}
-              aria-label={`Search ${KIND_LABELS[kind].toLowerCase()}`}
+              placeholder={`Search ${TAB_LABELS[tab].toLowerCase()}`}
+              aria-label={`Search ${TAB_LABELS[tab].toLowerCase()}`}
               onChange={(e) => {
                 const next = new URLSearchParams(params);
                 if (e.target.value) next.set('q', e.target.value);
@@ -238,7 +315,7 @@ export function CompendiumScreen() {
             </button>
           )}
         </div>
-        {kind === 'equipment' && (
+        {!monsters && kind === 'equipment' && (
           <ChipRow label="Tier">
             {ITEM_TIERS.filter(
               (tier) =>
@@ -272,17 +349,21 @@ export function CompendiumScreen() {
             hidden={!filtersOpen}
             className={filtersOpen ? 'flex flex-col gap-3 border-t border-border pt-3' : undefined}
           >
-            <KindFilters kind={kind} all={all} params={params} update={update} />
-            {books.length > 1 || filter.books?.length ? (
+            {monsters ? (
+              <MonsterFilters all={allMonsters} params={params} update={update} />
+            ) : (
+              <KindFilters kind={kind} all={all} params={params} update={update} />
+            )}
+            {books.length > 1 || chosenBooks?.length ? (
               <ChipRow label="Books">
-                {[...new Set([...books, ...(filter.books ?? [])])].map((book) => (
+                {[...new Set([...books, ...(chosenBooks ?? [])])].map((book) => (
                   <button
                     key={book}
                     type="button"
-                    aria-pressed={filter.books?.includes(book) ?? false}
+                    aria-pressed={chosenBooks?.includes(book) ?? false}
                     title={SOURCE_NAMES[book]}
                     onClick={() => update(toggleParam(params, 'book', book))}
-                    className={chip(filter.books?.includes(book) ?? false)}
+                    className={chip(chosenBooks?.includes(book) ?? false)}
                   >
                     {book}
                   </button>
@@ -325,7 +406,7 @@ export function CompendiumScreen() {
         )}
         <div className="flex flex-wrap items-center gap-2 text-sm text-text-muted">
           <span aria-live="polite">
-            {results.length} of {all.length} {KIND_LABELS[kind].toLowerCase()}
+            {listed.length} of {total} {TAB_LABELS[tab].toLowerCase()}
           </span>
           {hasFilters(params) && (
             <button
@@ -341,11 +422,17 @@ export function CompendiumScreen() {
 
       <div
         ref={columns}
-        data-inline-detail={inlineDetail && Boolean(open)}
+        data-inline-detail={inlineDetail && Boolean(shown)}
         className="compendium-columns grid min-w-0 gap-5"
       >
-        <ResultList key={listKey} results={results} selected={open?.id} onOpen={openEntry} />
-        {inlineDetail && open && (
+        <ResultList
+          key={listKey}
+          results={listed}
+          group={group}
+          selected={shown?.id}
+          onOpen={openEntry}
+        />
+        {inlineDetail && shown && (
           <aside
             ref={readingPanel}
             tabIndex={-1}
@@ -366,9 +453,9 @@ export function CompendiumScreen() {
       </div>
       {!inlineDetail && (
         <Sheet
-          open={!!open}
+          open={!!shown}
           onOpenChange={(next) => !next && closeEntry()}
-          title={open?.name ?? 'Entry'}
+          title={shown?.name ?? 'Entry'}
           className="compendium-sheet max-h-[92dvh] sm:w-xl"
           onCloseAutoFocus={(event) => {
             event.preventDefault();
@@ -384,16 +471,18 @@ export function CompendiumScreen() {
 
 function ResultList({
   results,
+  group: groupOf,
   selected,
   onOpen,
 }: {
-  results: readonly CatalogEntry[];
+  results: readonly ListEntry[];
+  group: (entry: ListEntry) => string;
   selected: string | undefined;
   onOpen: (id: string, opener: HTMLButtonElement) => void;
 }) {
   const [limit, setLimit] = useState(PAGE);
   const shown = results.slice(0, limit);
-  const groups = groupBy(shown, groupLabel);
+  const groups = groupBy(shown, groupOf);
   if (results.length === 0)
     return <p className="text-sm text-text-muted">Nothing matches. Try fewer filters.</p>;
   return (
@@ -427,13 +516,24 @@ function ResultList({
                       entry.id === selected && 'border-l-accent bg-surface-2',
                     )}
                   >
-                    <CompendiumArt entry={entry} />
+                    {entry.kind === 'creature' ? (
+                      <span
+                        aria-hidden
+                        className="grid size-10 shrink-0 place-items-center rounded-btn border border-border bg-surface-2 text-xs font-semibold"
+                      >
+                        {crText(entry.cr)}
+                      </span>
+                    ) : (
+                      <CompendiumArt entry={entry} />
+                    )}
                     <span className="min-w-0 flex-1">
                       <span className="block font-medium wrap-anywhere">{entry.name}</span>
-                      <span className="block text-xs text-text-muted">{resultMeta(entry)}</span>
+                      <span className="block text-xs text-text-muted">
+                        {entry.kind === 'creature' ? monsterMeta(entry) : resultMeta(entry)}
+                      </span>
                     </span>
                     <span className="inline-flex shrink-0 items-center gap-1 text-xs text-text-muted">
-                      {entry.source}
+                      {entry.kind === 'creature' ? entryBooks(entry).join(' · ') : entry.source}
                       <ChevronRight size={14} aria-hidden />
                     </span>
                   </button>
@@ -509,6 +609,119 @@ function ChipRow({ label, children }: { label: string; children: React.ReactNode
       <span className="mr-1 text-xs text-text-muted">{label}</span>
       {children}
     </div>
+  );
+}
+
+function MonsterFilters({
+  all,
+  params,
+  update,
+}: {
+  all: readonly CreatureDef[];
+  params: URLSearchParams;
+  update: (next: URLSearchParams) => void;
+}) {
+  const { filter, sort } = readMonsterQuery(params);
+  const present = useMemo(
+    () => ({
+      types: new Set(all.map((c) => creatureBaseType(c.creatureType))),
+      sizes: new Set(all.flatMap((c) => c.sizes ?? [c.size])),
+    }),
+    [all],
+  );
+  const select = (key: string, value: string) => {
+    const next = new URLSearchParams(params);
+    if (value) next.set(key, value);
+    else next.delete(key);
+    update(next);
+  };
+  const crSelect = (key: 'crmin' | 'crmax', label: string, value: number | undefined) => (
+    <label className="flex flex-col gap-1 text-xs text-text-muted">
+      {label}
+      <select
+        value={value === undefined ? '' : String(value)}
+        onChange={(e) => select(key, e.target.value)}
+        className={inputClass}
+      >
+        <option value="">Any</option>
+        {CR_STEPS.map((cr) => (
+          <option key={cr} value={cr}>
+            {crText(cr)}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+  return (
+    <>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        {crSelect('crmin', 'Challenge from', filter.crMin)}
+        {crSelect('crmax', 'Challenge to', filter.crMax)}
+        <label className="col-span-2 flex flex-col gap-1 text-xs text-text-muted sm:col-span-1">
+          Sort
+          <select
+            value={sort}
+            onChange={(e) => select('sort', e.target.value === 'cr' ? 'cr' : '')}
+            className={inputClass}
+          >
+            <option value="name">Name</option>
+            <option value="cr">Challenge</option>
+          </select>
+        </label>
+      </div>
+      <ChipRow label="Type">
+        {TYPE_FILTERS.filter((t) => present.types.has(t) || filter.types?.includes(t)).map((t) => {
+          const on = filter.types?.includes(t) ?? false;
+          return (
+            <button
+              key={t}
+              type="button"
+              aria-pressed={on}
+              onClick={() => update(toggleParam(params, 'type', t))}
+              className={chip(on)}
+            >
+              {typeLabel(t)}
+            </button>
+          );
+        })}
+      </ChipRow>
+      <ChipRow label="Size">
+        {CREATURE_SIZES.filter((s) => present.sizes.has(s) || filter.sizes?.includes(s)).map(
+          (s) => {
+            const on = filter.sizes?.includes(s) ?? false;
+            return (
+              <button
+                key={s}
+                type="button"
+                aria-pressed={on}
+                onClick={() => update(toggleParam(params, 'size', s))}
+                className={chip(on)}
+              >
+                {SIZE_LABELS[s]}
+              </button>
+            );
+          },
+        )}
+      </ChipRow>
+      <ChipRow label="Only">
+        {(
+          [
+            ['legendary', 'Legendary', filter.legendary],
+            ['npc', 'NPC', filter.npc],
+          ] as const
+        ).map(([key, label, on]) => (
+          <button
+            key={key}
+            type="button"
+            aria-pressed={on ?? false}
+            onClick={() => update(toggleParam(params, key, '1'))}
+            className={chip(on ?? false)}
+          >
+            {label}
+          </button>
+        ))}
+      </ChipRow>
+    </>
   );
 }
 

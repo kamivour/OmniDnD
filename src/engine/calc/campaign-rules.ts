@@ -103,7 +103,7 @@ export const SOURCE_PART_NAMES: Record<SourcePart, string> = {
   items: 'Magic items',
 };
 
-type SourceRules = Pick<Campaign, 'sources'> & Partial<Pick<Campaign, 'sourceParts'>>;
+export type SourceRules = Pick<Campaign, 'sources'> & Partial<Pick<Campaign, 'sourceParts'>>;
 
 /** Which part of its book an entry belongs to; conditions and creatures come with the book itself. */
 export function entryPart(

@@ -1,7 +1,8 @@
 import { useStore } from 'zustand';
 import { createStore } from 'zustand/vanilla';
-import { setMonsterPack } from '../data/registry';
+import { registry, setMonsterPack } from '../data/registry';
 import { database, parseStoredRecord, storedRecord } from '../db/database';
+import type { Registry } from '../engine/registry';
 import {
   MonsterPackSchema,
   type MonsterLore,
@@ -141,4 +142,10 @@ export function useMonsterPack<T>(selector: (state: MonsterPackState) => T): T {
 /** Subscribes a component to registry swaps; call it where creatures are listed. */
 export function useMonsterPackVersion(): number {
   return useStore(monsterPackStore, (state) => state.version);
+}
+
+/** The live registry, re-read after a pack loads or is removed. Use it as a memo dependency. */
+export function useRegistry(): Registry {
+  useMonsterPackVersion();
+  return registry;
 }

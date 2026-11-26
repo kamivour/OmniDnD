@@ -257,3 +257,57 @@ test('compendium: Plan this adds to the Journal plans and Undo removes it', asyn
   await expect(entryPanel(page, isMobile).getByText('Prerequisite', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Plan this' })).toHaveCount(0);
 });
+
+test('compendium: Monsters tab filters SRD stat blocks and adds one to the open fight', async ({
+  page,
+  isMobile,
+}) => {
+  // The production build has no monster pack, so only the SRD list shows, with a hint.
+  await page.goto('/compendium?kind=monsters');
+  await expect(page.getByRole('button', { name: 'Monsters', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await expect(page.getByText('Only the free SRD monsters are here.')).toBeVisible();
+  await expect(
+    page.getByRole('link', { name: 'Import your monster pack in Settings', exact: true }),
+  ).toHaveAttribute('href', '/settings');
+  await page.getByRole('button', { name: 'Filters', exact: true }).click();
+  await page
+    .getByRole('group', { name: 'Type', exact: true })
+    .getByRole('button', { name: 'Dragon', exact: true })
+    .click();
+  await expect(page).toHaveURL(/type=dragon/);
+  await page
+    .getByRole('group', { name: 'Only', exact: true })
+    .getByRole('button', { name: 'Legendary', exact: true })
+    .click();
+  await expect(page).toHaveURL(/legendary=1/);
+  await page.getByRole('combobox', { name: /^Sort/ }).selectOption('cr');
+  await expect(page.getByRole('region', { name: 'Challenge 24', exact: true })).toContainText(
+    'Ancient Red Dragon',
+  );
+  await expect(page.getByRole('button', { name: 'Remove filter Legendary' })).toBeVisible();
+  await noOverflow(page);
+
+  // Inside a character with the tracker running, a stat block can join the fight.
+  await page.goto(`/characters/${ID}/combat`);
+  await saved(page);
+  const main = page.getByRole('main');
+  await main.getByRole('button', { name: 'Start combat', exact: true }).click();
+  await saved(page);
+  const tracker = main.getByRole('region', { name: 'Encounter tracker' });
+  await tracker.getByRole('button', { name: 'Start tracker', exact: true }).click();
+  await saved(page);
+  await page.goto(`/characters/${ID}/compendium?kind=monsters&q=goblin`);
+  await saved(page);
+  await page.getByRole('button', { name: /^Goblin CR 1\/4/ }).click();
+  const panel = entryPanel(page, isMobile);
+  await expect(panel.getByText('SRD 5.1', { exact: true })).toBeVisible();
+  await panel.getByRole('button', { name: 'Add to encounter', exact: true }).click();
+  await expect(panel.getByText('Added as an enemy.')).toBeVisible();
+  await panel.getByRole('link', { name: 'Open Combat', exact: true }).click();
+  await expect(page).toHaveURL(`/characters/${ID}/combat`);
+  await expect(tracker).toContainText('Goblin');
+  await noOverflow(page);
+});

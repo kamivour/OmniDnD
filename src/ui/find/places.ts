@@ -371,6 +371,14 @@ export const PLACES: readonly FindEntry[] = [
     target: { kind: 'go', path: 'compendium' },
   },
   {
+    id: 'go.compendium-monsters',
+    group: 'go',
+    title: 'Monsters',
+    detail: 'Compendium: stat blocks, lore and books',
+    synonyms: ['monster', 'npc', 'creature', 'stat block', 'bestiary', 'challenge rating'],
+    target: { kind: 'go', path: 'compendium?kind=monsters' },
+  },
+  {
     id: 'go.tools',
     group: 'go',
     title: 'Tools',

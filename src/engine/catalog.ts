@@ -155,7 +155,8 @@ export function campaignAllows(
   return sourceAllows(campaign, entry);
 }
 
-const fold = (text: string) =>
+/** Lower case, no accents or apostrophes, hyphens between letters as spaces: for name search. */
+export const fold = (text: string) =>
   text
     .toLowerCase()
     .normalize('NFKD')

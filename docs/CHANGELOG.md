@@ -4,6 +4,13 @@ What changed, newest first. Times are local (UTC+7).
 
 Entries before 2026-11-02 02:30 were recorded later; their times were not saved.
 
+## 2026-11-26 11:05 — Monsters tab in the Compendium
+
+- The Compendium has a Monsters tab. Search by name and filter by challenge, type, size, book, legendary or NPC; sort by name or challenge.
+- Opening a monster shows its stat block, every book and page it appears in, and the lore from your pack. Inside a character with the encounter tracker running, "Add to encounter" puts it straight into the fight.
+- Without a pack you see the free SRD monsters and a link to import yours in Settings.
+- Please check: a few pack monsters with a damaged type line sit under "Other" for now. Checks pass.
+
 ## 2026-11-26 10:43 — Monster pack import
 
 - Settings has a new Monster pack section. Import the pack file made from your own monster books, see how many monsters each book adds, or remove it.
